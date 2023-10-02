@@ -24,7 +24,7 @@
     "humps": "^2.0.1",
     "json-schema": "^0.3.0",
     "json2csv": "^5.0.6",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.2",
     "react-dom": "^17.0.1",
