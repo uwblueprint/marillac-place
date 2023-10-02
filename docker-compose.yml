@@ -1,0 +1,57 @@
+version: "3.7"
+
+services:
+  frontend:
+    # TODO: rename container for your project
+    container_name: scv2_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    env_file:
+      - ./frontend/.env
+  ts-backend:
+    # TODO: rename container for your project
+    container_name: scv2_ts_backend
+    build:
+      context: ./backend/typescript
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/typescript:/app
+      - /app/node_modules
+    ports:
+      - 5000:5000
+    dns:
+      - 8.8.8.8
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./.env
+  db:
+    # TODO: rename container for your project
+    container_name: scv2_db
+    image: postgres:12-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./db-init:/docker-entrypoint-initdb.d
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=${POSTGRES_DB_DEV},${POSTGRES_DB_TEST}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
