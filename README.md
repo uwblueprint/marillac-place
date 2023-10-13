@@ -21,7 +21,24 @@ The provided frontend is a React application written in TypeScript.
 
 ### Prerequisites
 
-- Install Docker Desktop ([MacOS](https://docs.docker.com/docker-for-mac/install/) | [Windows (Home)](https://docs.docker.com/docker-for-windows/install-windows-home/) | [Windows (Pro, Enterprise, Education)](https://docs.docker.com/docker-for-windows/install/) | [Linux](https://docs.docker.com/engine/install/#server)) and ensure that it is running
+1. Comment out one of the backend services in `docker-compose.yml`
+2. In the root `.env` file, change the name of the MongoDB database according to the backend you're using: either `typescript-test` or `python-test`
+3. Go into ./backend/typescript and create a .env file
+4. In the .env file add the DATABASE_URL
+   - If on MacOS replace username with your user which can be found in Finder (Finder -> Go -> Home)
+   - If on Windows replace '<USERNAME' with 'postgres'
+
+```
+DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@localhost:5432/scv2
+```
+
+1. Run the application
+
+```bash
+docker-compose up --build
+```
+
+The backend runs at http://localhost:5000 and the frontend runs at http://localhost:3000. By default, we use GraphQL (with TypeScript backend), REST (with Python backend), MongoDB, with user auth.
 
 ## Useful Commands
 
