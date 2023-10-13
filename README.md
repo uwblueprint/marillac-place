@@ -83,8 +83,14 @@ vault kv get -format=json kv/internal-tools | python update_secret_files.py
 3. Generate a Firebase service account private key. Go to our project in the [Firebase console](https://console.firebase.google.com), click "Project settings" > "Service accounts" > "Generate private key", wait for a file to be downloaded. Copy the file into `/backend/typescript/` **and** `/backend/python`, and rename both to **`firebaseServiceAccount.json`**
 4. Comment out one of the backend services in `docker-compose.yml`
 5. In the root `.env` file, change the name of the MongoDB database according to the backend you're using: either `typescript-test` or `python-test`
-6. If using the Python backend, update the email address and display name on lines 23-24 in `backend/python/app/rest/auth_routes.py` to be `internaltools@uwblueprint.org` and `Internal Tools` respectively
-7. Run the application
+6. Go into ./backend/typescript and create a .env file
+7. In the .env file add the DATABASE_URL
+   * If on MacOS replace username with your user which can be found in Finder (Finder ->  Go -> Home)
+   * If on Windows replace '<USERNAME' with 'postgres'
+```
+DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@localhost:5432/scv2
+```
+1. Run the application
 ```bash
 docker-compose up --build
 ```
