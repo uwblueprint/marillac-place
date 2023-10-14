@@ -34,6 +34,7 @@ services:
         condition: service_healthy
     env_file:
       - ./.env
+      - ./backend/typescript/.env
   db:
     # TODO: rename container for your project
     container_name: scv2_db
