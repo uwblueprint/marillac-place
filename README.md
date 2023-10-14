@@ -10,6 +10,7 @@ The provided frontend is a React application written in TypeScript.
 
 ## Table of Contents
 
+- 🔧[Setup](#setup)
 - 🧰 [Useful Commands](#useful-commands)
   - ℹ️ [Get Names & Statuses of Running Containers](#get-names--statuses-of-running-containers)
   - 💽 [Accessing PostgreSQL Database](#accessing-postgresql-database)
@@ -21,18 +22,44 @@ The provided frontend is a React application written in TypeScript.
 
 ### Prerequisites
 
-1. Comment out one of the backend services in `docker-compose.yml`
-2. In the root `.env` file, change the name of the MongoDB database according to the backend you're using: either `typescript-test` or `python-test`
-3. Go into ./backend/typescript and create a .env file
-4. In the .env file add the DATABASE_URL
+- Install Docker Desktop ([MacOS](https://docs.docker.com/docker-for-mac/install/) | [Windows (Home)](https://docs.docker.com/docker-for-windows/install-windows-home/) | [Windows (Pro, Enterprise, Education)](https://docs.docker.com/docker-for-windows/install/) | [Linux](https://docs.docker.com/engine/install/#server)) and ensure that it is running
+
+### Setup
+
+1. Git clone this repository
+
+```bash
+git clone https://github.com/uwblueprint/marillac-place.git
+cd marillac-place
+```
+
+2. Go into ./backend/typescript and create a .env file
+3. In the .env file add the DATABASE_URL
+
    - If on MacOS replace username with your user which can be found in Finder (Finder -> Go -> Home)
-   - If on Windows replace '<USERNAME' with 'postgres'
+   - If on Windows replace '<USERNAME>' with 'postgres'
 
 ```
 DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@localhost:5432/scv2
 ```
 
-1. Run the application
+4. Create a .env file at the root with this information
+
+```
+ POSTGRES_DB_DEV=scv2
+ POSTGRES_DB_TEST=scv2_test
+ POSTGRES_USER=postgres
+ POSTGRES_PASSWORD=postgres
+ DB_HOST=scv2_db
+```
+
+5. Create a .env file in ./frontend with
+
+```bash
+REACT_APP_BACKEND_URL=http://localhost:5000
+```
+
+6. Run docker compose
 
 ```bash
 docker-compose up --build
