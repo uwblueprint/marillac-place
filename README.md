@@ -36,11 +36,11 @@ cd marillac-place
 2. Go into ./backend/typescript and create a .env file
 3. In the .env file add the DATABASE_URL
 
-   - If on MacOS replace username with your user which can be found in Finder (Finder -> Go -> Home)
+   - If on (Only if running manual prisma setup) MacOS replace username with your user which can be found in Finder (Finder -> Go -> Home)
    - If on Windows replace '<USERNAME>' with 'postgres'
 
 ```
-DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@localhost:5432/scv2
+DATABASE_URL=postgresql://postgres:postgres@scv2_db:5432/scv2
 ```
 
 4. Create a .env file at the root with this information
@@ -67,6 +67,13 @@ docker-compose up --build
 
 Note: Manual Database Setup
 If for some reason docker container is not syncing with your prisma models in backend/typescript/prisma/schema
+
+Update .env file in /backend/typescript to be
+(Use different username for Mac)
+
+```bash
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/scv2
+```
 
 Try running (when the docker container is up):
 
