@@ -1,0 +1,31 @@
+model User
+{
+	“id”: ID
+	"first_name": string
+	"last_name": 	string
+	"email": string
+	"phone_number"?: string
+	"display_name": string
+	"profile_picture_link"?: string
+}
+
+model Staff extends User
+{
+	"role": StaffRoles
+}
+
+enum StaffRoles
+{
+	ADMIN
+	CORE
+	RELIEF
+}
+
+model Resident extends User
+{
+	"birthdate"?: Date
+	"credits": decimal
+	"date_joined": Date
+	"date_left": Date
+	"pregancy_status": 
+}
