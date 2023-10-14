@@ -32,3 +32,47 @@ model User {
   posts   Post[]
   profile Profile?
 }
+
+model Task {
+    id        Int      @id @default(autoincrement())
+    category  Categories 
+    title     String   
+    status    Statuses
+    description String
+
+    // TODO: CHANGE THESE AFTER USER MODELS HAVE BEEN MADE
+    assignee String
+    assigner String
+
+    credit_value Float
+    start_date DateTime
+    end_date DateTime?
+    comments String
+    recurrence_frequency String?
+    // recurrence_days String // store days a comma separted string to be parsed for usage
+    warnings Warning[]
+}
+
+enum Categories {
+    HOUSEHOLD
+    CHORES
+    FINANCE
+    // other categories
+}
+
+enum Statuses {
+    PENDING_APPROVAL
+    INCOMPLETE
+    COMPLETE
+    EXCUSED
+}
+
+model Warning {
+    resident_id Int @id @default(autoincrement())
+    title String
+    description String
+    assigned_by String // change this to be Staff
+    date_issued DateTime
+    related_task Task?     @relation(fields: [related_task_id], references: [id])
+    related_task_id Int?
+}
