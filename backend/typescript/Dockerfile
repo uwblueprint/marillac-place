@@ -18,7 +18,5 @@ COPY . ./
 
 EXPOSE 5000
 
-ENTRYPOINT ["yarn", "dev"]
-
-ENTRYPOINT ["yarn", "prismaInit"]
+ENTRYPOINT ["yarn", "prismaInitAndRun"]
 
