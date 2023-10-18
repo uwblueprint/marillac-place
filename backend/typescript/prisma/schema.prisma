@@ -34,20 +34,80 @@ model User {
 }
 
 model Task {
-  id                   Int                  @id @default(autoincrement())
-  category             Category             @relation(fields: [category_id], references: [id])
-  category_id          Int
+  id                   Int        @id @default(autoincrement())
+  category             Categories
   title                String
   status               Statuses
   description          String
-  assignee             Resident             @relation(fields: [assignee_id], references: [id])
+  assignee             Resident   @relation(fields: [assignee_id], references: [id])
   assignee_id          Int
-  assigner             Staff                @relation(fields: [assigner_id], references: [id])
+  assigner             Staff      @relation(fields: [assigner_id], references: [id])
   assigner_id          Int
   credit_value         Float
   start_date           DateTime
   end_date             DateTime?
   comments             String
-  recurrence_frequency Recurrence_Frequency
+  recurrence_frequency String?
+  // recurrence_days String // store days a comma separted string to be parsed for usage
   warnings             Warning[]
+}
+
+enum Categories {
+  HOUSEHOLD
+  CHORES
+  FINANCE
+  // other categories
+}
+
+enum Statuses {
+  PENDING_APPROVAL
+  INCOMPLETE
+  COMPLETE
+  EXCUSED
+}
+
+model Warning {
+  resident_id     Int      @id @default(autoincrement())
+  title           String
+  description     String
+  assigner        Staff    @relation(fields: [assigner_id], references: [id])
+  assigner_id     Int
+  date_issued     DateTime
+  related_task    Task?    @relation(fields: [related_task_id], references: [id])
+  related_task_id Int?
+}
+
+model Staff {
+  id                   Int       @id @default(autoincrement())
+  roleId               Int
+  role                 Role      @relation(fields: [roleId], references: [id])
+  first_name           String
+  last_name            String
+  email                String
+  phone_number         String?
+  display_name         String
+  profile_picture_link String?
+  tasks_assigned       Task[]
+  warnings_assigned    Warning[]
+}
+
+model Role {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  staff Staff[]
+}
+
+model Resident {
+  id                   Int       @id @default(autoincrement())
+  first_name           String
+  last_name            String
+  email                String
+  phone_number         String?
+  display_name         String
+  profile_picture_link String?
+  birthdate            DateTime?
+  credits              Float
+  date_joined          DateTime
+  date_left            DateTime?
+  tasks                Task[]
 }
