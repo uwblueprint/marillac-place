@@ -83,7 +83,7 @@ model Staff {
   role                 Role      @relation(fields: [roleId], references: [id])
   first_name           String
   last_name            String
-  email                String
+  email                String    @unique
   phone_number         String?
   display_name         String
   profile_picture_link String?
@@ -101,7 +101,7 @@ model Resident {
   id                   Int       @id @default(autoincrement())
   first_name           String
   last_name            String
-  email                String
+  email                String    @unique
   phone_number         String?
   display_name         String
   profile_picture_link String?
