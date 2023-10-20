@@ -30,6 +30,7 @@ model User {
   email   String   @unique
   name    String?
   posts   Post[]
+  notifications Notification_User[]
   profile Profile?
 }
 
@@ -118,4 +119,21 @@ model Resident {
   date_left            DateTime?
   tasks                Task[]
   warnings             Warning[]
+}
+
+model Notification {
+  id        Int       @id @default(autoincrement())
+  message   String 
+  authorId  Int
+  author    Staff     @relation(fields: [authorId], references: [id])
+  createdAt DateTime  @default(now())
+  users     Notification_User[]
+}
+
+model Notification_User {
+  notification    Notification  @relation(fields: [notificationId], references: [id])
+  notificationId  Int
+  recipient       User          @relation(fields: [recipientId], references: [id])
+  recipientId     Int
+  seen            Boolean       @default(false)
 }
