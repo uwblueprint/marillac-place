@@ -2,7 +2,6 @@ import { resolve } from "path";
 
 import { Sequelize } from "sequelize-typescript";
 
-
 const DATABASE_URL =
   process.env.NODE_ENV === "production"
     ? /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
