@@ -7,25 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
+model post {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   title     String   @db.VarChar(255)
   content   String?
   published Boolean  @default(false)
-  authorId  Int
+  author_id  Int
   author    User     @relation(fields: [authorId], references: [id])
 }
 
-model Profile {
+model profile {
   id     Int     @id @default(autoincrement())
   bio    String?
-  userId Int     @unique
+  user_id Int     @unique
   user   User    @relation(fields: [userId], references: [id])
 }
 
-model User {
+model user {
   id      Int      @id @default(autoincrement())
   email   String   @unique
   name    String?
@@ -33,7 +33,7 @@ model User {
   profile Profile?
 }
 
-model Task {
+model task {
   id                   Int                  @id @default(autoincrement())
   category             Category             @relation(fields: [category_id], references: [id])
   category_id          Int
@@ -58,7 +58,7 @@ enum Recurrence_Frequency {
   BI_WEEKLY
 }
 
-model Category {
+model category {
   id   Int    @id @default(autoincrement())
   name String
   task Task[]
@@ -71,7 +71,7 @@ enum Statuses {
   EXCUSED
 }
 
-model Warning {
+model warning {
   id              Int      @id @default(autoincrement())
   resident        Resident @relation(fields: [resident_id], references: [id])
   resident_id     Int
@@ -84,7 +84,7 @@ model Warning {
   related_task_id Int?
 }
 
-model Staff {
+model staff {
   id                   Int       @id @default(autoincrement())
   roleId               Int
   role                 Role      @relation(fields: [roleId], references: [id])
@@ -98,13 +98,13 @@ model Staff {
   warnings_assigned    Warning[]
 }
 
-model Role {
+model role {
   id    Int     @id @default(autoincrement())
   title String  @unique
   staff Staff[]
 }
 
-model Resident {
+model resident {
   id                   Int       @id @default(autoincrement())
   first_name           String
   last_name            String
