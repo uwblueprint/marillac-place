@@ -86,8 +86,8 @@ model Warning {
 
 model Staff {
   id                   Int       @id @default(autoincrement())
-  roleId               Int
-  role                 Role      @relation(fields: [roleId], references: [id])
+  role_id              Int
+  role                 Role      @relation(fields: [role_id], references: [id])
   first_name           String
   last_name            String
   email                String    @unique
@@ -99,9 +99,16 @@ model Staff {
 }
 
 model Role {
-  id    Int     @id @default(autoincrement())
-  title String  @unique
-  staff Staff[]
+  id                        Int     @id @default(autoincrement())
+  title                     String  @unique
+  can_modify_roles          Boolean
+  can_modify_tasks          Boolean
+  can_give_warnings         Boolean
+  can_modify_credits        Boolean
+  can_view_statistics       Boolean
+  can_modify_resident_tasks Boolean
+  can_assign_resident_tasks Boolean
+  staff                     Staff[]
 }
 
 model Resident {
