@@ -1,5 +1,5 @@
 export interface ResidentDTO {
-    id: string; //string or number?
+    id: number;
     firstName: string;
     lastName: string;
     email: string;
@@ -15,24 +15,24 @@ export interface ResidentDTO {
 }
 
 export interface CreateResidentDTO {
-    firstName: String;
-    lastName: String;
-    email: String;
-    phoneNumber: String;
-    displayName: String;
-    profilePictureLink: String;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    displayName: string;
+    profilePictureLink: string;
     birthdate: Date;
     credits: number;
     dateJoined: Date;
 }
 
 export interface UpdateResidentDTO {
-    firstName: String;
-    lastName: String;
-    email: String;
-    phoneNumber: String;
-    displayName: String;
-    profilePictureLink: String;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    displayName: string;
+    profilePictureLink: string;
     birthdate: Date;
     credits: number;
     dateJoined: Date;
@@ -54,14 +54,15 @@ interface IResidenceService {
      * @param residentInfo: Update ResidentDTO of the resident with this information
      * @returns: a ResidentDTO with resident's updated info
      */
-    update_resident(residentId: string, residentInfo: UpdateResidentDTO): Promise<ResidentDTO>;
+    update_resident(residentId: number, residentInfo: UpdateResidentDTO): Promise<ResidentDTO>;
 
     /**
      * Deletes a resident by id
      * @param id: resident id of resident to be deleted
+     * @returns: a ResidentDTO with deleted resident's info
      * @throws Error if resident deletion fails
      */
-    delete_resident(id: string): Promise<void>;
+    delete_resident(id: number): Promise<ResidentDTO>;
 
     /**
      * Gets all residents
@@ -76,6 +77,6 @@ interface IResidenceService {
      * @returns: array of ResidentDTO's with residents information
      * @throws Error if retrieval fails
      */
-    get_residents_by_id(residentId: Array<string>): Promise<Array<ResidentDTO>>;
+    get_residents_by_id(residentId: number[]): Promise<Array<ResidentDTO>>;
 }
 
