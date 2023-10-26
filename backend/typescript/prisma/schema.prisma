@@ -8,21 +8,21 @@ datasource db {
 }
 
 model post {
-  id        Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author_id  Int
-  author    user     @relation(fields: [author_id], references: [id])
+  id          Int      @id @default(autoincrement())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  title       String   @db.VarChar(255)
+  content     String?
+  published   Boolean  @default(false)
+  author_id   Int
+  author      user     @relation(fields: [author_id], references: [id])
 }
 
 model profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
+  id      Int     @id @default(autoincrement())
+  bio     String?
   user_id Int     @unique
-  user   user    @relation(fields: [user_id], references: [id])
+  user    user    @relation(fields: [user_id], references: [id])
 }
 
 model user {
@@ -85,17 +85,18 @@ model warning {
 }
 
 model staff {
-  id                   Int       @id @default(autoincrement())
-  roleId               Int
-  role                 role      @relation(fields: [roleId], references: [id])
+  id                   Int            @id @default(autoincrement())
+  role_id              Int
+  role                 role           @relation(fields: [role_id], references: [id])
   first_name           String
   last_name            String
-  email                String    @unique
+  email                String         @unique
   phone_number         String?
   display_name         String
   profile_picture_link String?
   tasks_assigned       task[]
   warnings_assigned    warning[]
+  notifications        notification[]
 }
 
 model role {
@@ -118,4 +119,22 @@ model resident {
   date_left            DateTime?
   tasks                task[]
   warnings             warning[]
+  notifications        notification_user[]
+}
+
+model notification {
+  id          Int                 @id @default(autoincrement())
+  message     String 
+  author_id   Int
+  author      staff               @relation(fields: [author_id], references: [id])
+  created_at  DateTime            @default(now())
+  residents   notification_user[]
+}
+
+model notification_user {
+  notification     notification  @relation(fields: [notification_id], references: [id])
+  notification_id  Int
+  recipient        resident      @relation(fields: [recipient_id], references: [id])
+  recipient_id     Int
+  seen             Boolean       @default(false)
 }
