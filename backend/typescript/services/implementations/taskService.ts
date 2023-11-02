@@ -2,26 +2,35 @@ import ITaskService from "../interfaces/taskService";
 import {TaskDTO, Status} from "../interfaces/taskService";
 import { Prisma } from "@prisma/client";
 import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient();
+import prisma from "../../prisma"
 
 class TaskService implements ITaskService {
-    async getTaskById(id: string): Promise<Prisma.taskCreateInput>{
-
-        // search through the task database and find the task with the matching input taskId
-
+   async getTaskById(id: string): Promise<Prisma.taskCreateInput> {
+    try {
         const task = await prisma.task.findUnique({
             where: {
-              id: Number(id),
+                id: Number(id),
             },
-          })
+            include: {
+                category: true,
+                assignee: true,
+                assigner: true,
+                warnings: true,
+            }
+        });
 
         if (!task) {
-            throw new Error('error')
+            throw new Error(`help`);
         }
 
-        return task
-        
+        return task;
+    } catch (error: unknown) {
+        throw error;
     }
+}
+
+
+
 
     async getTasksByCategoryId(categoryId: string): Promise<TaskDTO>{
         return {

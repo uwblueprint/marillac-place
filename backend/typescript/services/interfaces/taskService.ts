@@ -24,7 +24,7 @@ interface ITaskService {
    * @returns a TaskDTO associated with the task id
    * @throws Error if task retrieval fails
    */
-  getTaskById(taskId: string): Promise<Prisma.taskCreateInput>;
+  getTaskById(taskId: string): Promise<Prisma.taskCreateInput | null>;
 
   /**
    * Get all tasks belonging to a category
