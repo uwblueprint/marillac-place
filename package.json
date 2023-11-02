@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@prisma/client": "^5.5.2",
+    "graphql-tag": "^2.12.6"
+  }
+}

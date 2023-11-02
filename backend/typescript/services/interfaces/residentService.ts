@@ -1,45 +1,44 @@
 export interface ResidentDTO {
     id: number;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     email: string;
-    phoneNumber: string;
-    displayName: string;
-    profilePictureLink: string;
-    birthdate: Date;
+    phone_number?: string | null;
+    display_name: string;
+    profile_picture_link?: string | null;
+    birthdate?: Date | null;
     credits: number;
-    dateJoined: Date;
-    dateLeft:  Date;
-    // tasks: [Task]
-    // warnings: [Warning]
+    date_joined: Date;
+    date_left?:  Date | null;
 }
 
 export interface CreateResidentDTO {
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     email: string;
-    phoneNumber: string;
-    displayName: string;
-    profilePictureLink: string;
-    birthdate: Date;
+    phone_number?: string | null;
+    display_name: string;
+    profile_picture_link?: string | null;
+    birthdate?: Date | null;
     credits: number;
-    dateJoined: Date;
+    date_joined: Date;
 }
 
 export interface UpdateResidentDTO {
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     email: string;
-    phoneNumber: string;
-    displayName: string;
-    profilePictureLink: string;
-    birthdate: Date;
+    phone_number?: string | null;
+    display_name: string;
+    profile_picture_link?: string | null;
+    birthdate?: Date | null;
     credits: number;
-    dateJoined: Date;
-    dateLeft: Date;
+    date_joined: Date;
+    date_left?:  Date | null;
 }
 
-interface IResidenceService {
+interface IResidentService {
+    
     /**
      * Adds a resident
      * @param residentInfo: a CreateResidentDTO with the new resident's information
@@ -62,7 +61,7 @@ interface IResidenceService {
      * @returns: a ResidentDTO with deleted resident's info
      * @throws Error if resident deletion fails
      */
-    delete_resident(id: number): Promise<ResidentDTO>;
+    delete_resident(residentId: number): Promise<ResidentDTO>;
 
     /**
      * Gets all residents
@@ -80,3 +79,4 @@ interface IResidenceService {
     get_residents_by_id(residentId: number[]): Promise<Array<ResidentDTO>>;
 }
 
+export default IResidentService;
