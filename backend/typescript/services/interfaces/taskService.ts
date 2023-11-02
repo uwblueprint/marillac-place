@@ -1,7 +1,7 @@
-type Status = "Pending Approval" | "Incomplete" | "Complete" | "Excused";
+export type Status = "Pending Approval" | "Incomplete" | "Complete" | "Excused";
 
-type TaskDTO = {
-  id: string;
+export type TaskDTO = {
+  taskid: string;
   categoryId: string;
   title: string;
   status: Status;
@@ -15,14 +15,16 @@ type TaskDTO = {
   warnings: string [];
 }
 
-interface TaskService {
+import {Prisma} from "@prisma/client"
+
+interface ITaskService {
   /**
    * Get the task corresponding to the taskId
    * @param id task id
    * @returns a TaskDTO associated with the task id
    * @throws Error if task retrieval fails
    */
-  getTaskById(id: string): Promise<TaskDTO>;
+  getTaskById(taskId: string): Promise<Prisma.taskCreateInput>;
 
   /**
    * Get all tasks belonging to a category
@@ -73,3 +75,5 @@ interface TaskService {
    */
   deleteTaskById(taskId: string): Promise<TaskDTO>;
 }
+
+export default ITaskService

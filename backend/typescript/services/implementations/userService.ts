@@ -24,6 +24,7 @@ class UserService implements IUserService {
     } catch (error: unknown) {
       Logger.error(`Failed to get user. Reason = ${getErrorMessage(error)}`);
       throw error;
+      
     }
 
     return {
