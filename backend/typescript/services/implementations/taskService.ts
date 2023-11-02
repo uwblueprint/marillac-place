@@ -9,14 +9,9 @@ class TaskService implements ITaskService {
     try {
         const task = await prisma.task.findUnique({
             where: {
-                id: Number(id),
+                id: Number(id)
             },
-            include: {
-                category: true,
-                assignee: true,
-                assigner: true,
-                warnings: true,
-            }
+
         });
 
         if (!task) {
