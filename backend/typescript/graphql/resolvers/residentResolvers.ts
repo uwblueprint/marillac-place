@@ -1,3 +1,4 @@
+import ResidentService from "../../services/implementations/residentService";
 import type IResidentService from "../../services/interfaces/residentService";
 import type { ResidentDTO, CreateResidentDTO, UpdateResidentDTO } from "../../services/interfaces/residentService";
 
