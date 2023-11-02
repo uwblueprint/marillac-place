@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 export interface NotificationRequestDTO {
     message: string;
     created_at: Date;
@@ -8,17 +9,17 @@ export interface NotificationResponseDTO {
     author_id: number; 
     message: string;
     created_at: Date;
-    residents: ResidentDTO[]; //might need to change when integrated 
+    // residents: ResidentDTO[]; //might need to change when integrated 
 }
 
-interface IAdminServce {
+export interface IAdminService {
     /**
      * Get a notification by a defined id
      * @param id notification id
      * @returns a NotificationResponseDTO associated with the notification id
      * @throws Error if retrieval fails
      */
-    getNotificationById(id: number): Promise<NotificationResponseDTO>;
+    getNotificationById(id: number): Promise<Prisma.notificationCreateInput>;
 
     /**
      * Post a notification to the specified resident
@@ -27,7 +28,7 @@ interface IAdminServce {
      * @returns a NotificationResponseDTO associated with the posted notification
      * @throws Error if creation fails
      */
-    sendNotification(notif_obj: NotificationRequestDTO, resident_id: number): Promise<NotificationResponseDTO>;
+    sendNotification(notif_obj: NotificationRequestDTO, resident_id: number): Promise<void>;
     
     /**
      * Post the announcement notif_obj to all active residents
@@ -35,7 +36,5 @@ interface IAdminServce {
      * @returns the new updated NotificationResponseDTO
      * @throws Error if creation fails
      */
-    sendAnnouncement(notif_obj: NotificationRequestDTO): Promise<NotificationResponseDTO>;     
+    sendAnnouncement(notif_obj: NotificationRequestDTO): Promise<void>;     
 }
-
-export default IAdminServce;

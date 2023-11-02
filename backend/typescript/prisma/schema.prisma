@@ -126,15 +126,17 @@ model notification {
   id          Int                 @id @default(autoincrement())
   message     String 
   author_id   Int
-  author      staff               @relation(fields: [author_id], references: [id])
+  author      staff?              @relation(fields: [author_id], references: [id])
   created_at  DateTime            @default(now())
   residents   notification_user[]
 }
 
 model notification_user {
-  notification     notification  @relation(fields: [notification_id], references: [id])
+  notification     notification? @relation(fields: [notification_id], references: [id])
   notification_id  Int
-  recipient        resident      @relation(fields: [recipient_id], references: [id])
+  recipient        resident?     @relation(fields: [recipient_id], references: [id])
   recipient_id     Int
   seen             Boolean       @default(false)
+
+  @@id([recipient_id, notification_id])
 }
