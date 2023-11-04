@@ -1,5 +1,5 @@
 import ITaskService from "../interfaces/taskService";
-import {TaskDTO, Status} from "../interfaces/taskService";
+import {TaskDTO, InputTaskDTO, Status} from "../interfaces/taskService";
 import prisma from '../../prisma';
 import { Prisma } from "@prisma/client";
 
@@ -41,9 +41,9 @@ class TaskService implements ITaskService {
     }
 }
 
-    async getTasksByCategoryId(categoryId: string): Promise<TaskDTO []>{
+    async getTasksByCategoryId(categoryId: string): Promise<Prisma.taskCreateInput []>{
         try {
-            const tasks = await Prisma.task.findMany({
+            const tasks = await prisma.task.findMany({
                 where: {
                     id: Number(categoryId)
                 }
@@ -59,9 +59,9 @@ class TaskService implements ITaskService {
         }
     }
   
-    async getTasksByAssigneeId(assigneeId: string): Promise<TaskDTO>{
+    async getTasksByAssigneeId(assigneeId: string): Promise<Prisma.taskCreateInput>{
         try {
-            const task = await Prisma.task.findUnique({
+            const task = await prisma.task.findUnique({
                 where: {
                     id: Number(assigneeId)
                 }
@@ -77,9 +77,9 @@ class TaskService implements ITaskService {
         }
     }
 
-    async getTasksByAssignerId(assignerId: string): Promise<TaskDTO>{
+    async getTasksByAssignerId(assignerId: string): Promise<Prisma.taskCreateInput>{
         try {
-            const task = await Prisma.task.findUnique({
+            const task = await prisma.task.findUnique({
                 where: {
                     id: Number(assignerId)
                 }
@@ -95,16 +95,40 @@ class TaskService implements ITaskService {
         }
     }
 
-    async createTask(task: TaskDTO): Promise<TaskDTO>{
-        try {
-            const newTask = await Prisma.task.create({
-                data: task,
-            });
-            return newTask;
-        } catch (error: unknown) {
-            throw error;
-        }
+    async createTask(task: InputTaskDTO): Promise<Prisma.taskCreateInput> {
+    try {
+        const newTask = await prisma.task.create({
+            data: {
+                title: task.title,
+                status: task.status,
+                description: task.description,
+                credit_value: task.credit_value,
+                start_date: task.start_date,
+                end_date: task.end_date,
+                comments: task.comments,
+                recurrence_frequency: task.recurrence_frequency,
+                category: {
+                    connect: {
+                        id: task.category_id,
+                    },
+                },
+                assignee: {
+                    connect: {
+                        id: task.assignee_id,
+                    },
+                },
+                assigner: {
+                    connect: {
+                        id: task.assigner_id,
+                    },
+                },
+            },
+        });
+        return newTask;
+    } catch (error) {
+        throw error;
     }
+}
   
     async updateTaskById(taskId: string, task: TaskDTO): Promise<TaskDTO>{
         return {

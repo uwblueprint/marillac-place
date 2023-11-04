@@ -1,20 +1,37 @@
-export type Status = "Pending Approval" | "Incomplete" | "Complete" | "Excused";
+export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 
-export interface TaskDTO {
-  id: number;
-  category?: string;
+export type Recurrence_Frequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
+
+export interface InputTaskDTO {
   category_id: number;
-  status: string;
+  title: string;
+  status: Status;
   description: string;
   assignee_id: number;
-  assignee?: string;
   assigner_id: number;
-  assigner?: string;
   credit_value: number;
   start_date: Date;
   end_date?: Date | null;
   comments: string;
-  recurrence_frequency: string;
+  recurrence_frequency: Recurrence_Frequency;
+}
+
+export interface TaskDTO {
+  id: number;
+  category: string;
+  category_id: number;
+  title: string;
+  status: Status;
+  description: string;
+  assignee_id: number;
+  assignee: string;
+  assigner_id: number;
+  assigner: string;
+  credit_value: number;
+  start_date: Date;
+  end_date?: Date | null;
+  comments: string;
+  recurrence_frequency: Recurrence_Frequency;
   // warnings: warning []
 }
 
@@ -35,7 +52,7 @@ export interface ITaskService {
    * @returns a TaskDTO with category information
    * @throws Error if task retrieval fails
    */
-  getTasksByCategoryId(categoryId: string): Promise<TaskDTO []>;
+  getTasksByCategoryId(categoryId: string): Promise<Prisma.taskCreateInput []>;
   
   /**
    * Get all tasks assigned to a resident
@@ -43,7 +60,7 @@ export interface ITaskService {
    * @returns a TaskDTO with task's information
    * @throws Error if task retrieval fails
    */
-  getTasksByAssigneeId(assigneeId: string): Promise<TaskDTO>;
+  getTasksByAssigneeId(assigneeId: string): Promise<Prisma.taskCreateInput>;
 
   /**
    * Get all tasks assigned by a staff member
@@ -51,7 +68,7 @@ export interface ITaskService {
    * @returns a TaskDTO with task's information
    * @throws Error if task retrieval fails
    */
-  getTasksByAssignerId(assignerId: string): Promise<TaskDTO>;
+  getTasksByAssignerId(assignerId: string): Promise<Prisma.taskCreateInput>;
 
   /**
    * Create a task
@@ -59,7 +76,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the created task's information
    * @throws Error if task creation fails
    */
-  createTask(task: TaskDTO): Promise<TaskDTO>;
+  createTask(task: TaskDTO): Promise<Prisma.taskCreateInput>;
   
   /**
    * Update a task.
