@@ -2,32 +2,32 @@ export type Status = "Pending Approval" | "Incomplete" | "Complete" | "Excused";
 
 export interface TaskDTO {
   id: number;
-  //category: string;
+  category?: string;
   category_id: number;
   status: string;
   description: string;
   assignee_id: number;
-  //assignee: string;
+  assignee?: string;
   assigner_id: number;
-  //assigner: string;
+  assigner?: string;
   credit_value: number;
   start_date: Date;
-  end_date: Date | null;
+  end_date?: Date | null;
   comments: string;
   recurrence_frequency: string;
-  //warnings
+  // warnings: warning []
 }
 
-import {Prisma} from "@prisma/client"
+import {Prisma, category} from "@prisma/client"
 
-interface ITaskService {
+export interface ITaskService {
   /**
    * Get the task corresponding to the taskId
    * @param id task id
    * @returns a TaskDTO associated with the task id
    * @throws Error if task retrieval fails
    */
-  getTaskById(taskId: string): Promise<TaskDTO>;
+  getTaskById(taskId: string): Promise<Prisma.taskCreateInput>;
 
   /**
    * Get all tasks belonging to a category
@@ -35,7 +35,7 @@ interface ITaskService {
    * @returns a TaskDTO with category information
    * @throws Error if task retrieval fails
    */
-  getTasksByCategoryId(categoryId: string): Promise<TaskDTO>;
+  getTasksByCategoryId(categoryId: string): Promise<TaskDTO []>;
   
   /**
    * Get all tasks assigned to a resident
