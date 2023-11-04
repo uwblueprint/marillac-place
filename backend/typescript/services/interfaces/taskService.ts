@@ -93,7 +93,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the deleted task's information
    * @throws Error if task deletion fails
    */
-  deleteTaskById(taskId: string): Promise<TaskDTO>;
+  deleteTaskById(taskId: string): Promise<Prisma.taskCreateInput>;
 }
 
 export default ITaskService

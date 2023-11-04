@@ -5,6 +5,7 @@ import type {
     TaskDTO,
     ITaskService,
 } from '../../services/interfaces/taskService'
+import {Prisma} from '@prisma/client'
 
 const taskService : ITaskService = new TaskService();
 const userService : IUserService = new UserService();
@@ -13,11 +14,9 @@ const taskResolvers = {
     Query: {
         task: async (
             _parent: undefined,
-            { id }: { id: string },
-            { categoryId }: {categoryId: string},
-            {}
-        ): Promise<TaskDTO> => {
-            return taskService.getTaskById(id);
+            { id }: { id: string }
+        ): Promise<Prisma.taskCreateInput> => {
+            return await taskService.getTaskById(id);
         }
     }
 }
