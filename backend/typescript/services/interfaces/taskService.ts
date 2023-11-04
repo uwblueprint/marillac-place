@@ -85,7 +85,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the updated task's information
    * @throws Error if task update fails
    */
-  updateTaskById(taskId: string, task: TaskDTO): Promise<TaskDTO>;
+  updateTaskById(taskId: string, task: TaskDTO): Promise<Prisma.taskUpdateInput>;
 
   /**
    * Delete a task by id

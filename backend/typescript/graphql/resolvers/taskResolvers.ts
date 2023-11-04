@@ -7,13 +7,14 @@ import type {
 } from '../../services/interfaces/taskService'
 
 const taskService : ITaskService = new TaskService();
+const userService : IUserService = new UserService();
 
 const taskResolvers = {
     Query: {
         task: async (
             _parent: undefined,
             { id }: { id: string },
-            { categoryId}: {categoryId: string},
+            { categoryId }: {categoryId: string},
             {}
         ): Promise<TaskDTO> => {
             return taskService.getTaskById(id);

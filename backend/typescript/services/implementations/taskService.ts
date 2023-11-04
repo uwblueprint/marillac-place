@@ -96,43 +96,75 @@ class TaskService implements ITaskService {
     }
 
     async createTask(task: InputTaskDTO): Promise<Prisma.taskCreateInput> {
-    try {
-        const newTask = await prisma.task.create({
-            data: {
-                title: task.title,
-                status: task.status,
-                description: task.description,
-                credit_value: task.credit_value,
-                start_date: task.start_date,
-                end_date: task.end_date,
-                comments: task.comments,
-                recurrence_frequency: task.recurrence_frequency,
-                category: {
-                    connect: {
-                        id: task.category_id,
+        try {
+            const newTask = await prisma.task.create({
+                data: {
+                    title: task.title,
+                    status: task.status,
+                    description: task.description,
+                    credit_value: task.credit_value,
+                    start_date: task.start_date,
+                    end_date: task.end_date,
+                    comments: task.comments,
+                    recurrence_frequency: task.recurrence_frequency,
+                    category: {
+                        connect: {
+                            id: task.category_id,
+                        },
+                    },
+                    assignee: {
+                        connect: {
+                            id: task.assignee_id,
+                        },
+                    },
+                    assigner: {
+                        connect: {
+                            id: task.assigner_id,
+                        },
                     },
                 },
-                assignee: {
-                    connect: {
-                        id: task.assignee_id,
-                    },
-                },
-                assigner: {
-                    connect: {
-                        id: task.assigner_id,
-                    },
-                },
-            },
-        });
-        return newTask;
-    } catch (error) {
-        throw error;
+            });
+            return newTask;
+        } catch (error: unknown) {
+            throw error;
+        }
     }
-}
   
-    async updateTaskById(taskId: string, task: TaskDTO): Promise<TaskDTO>{
-        return {
-            
+    async updateTaskById(taskId: string, task: TaskDTO): Promise<Prisma.taskUpdateInput>{
+        try {
+            const updatedTask = await prisma.task.update({
+                where: {
+                    id: Number(taskId)
+                },
+                data: {
+                    title: task.title,
+                    status: task.status,
+                    description: task.description,
+                    credit_value: task.credit_value,
+                    start_date: task.start_date,
+                    end_date: task.end_date,
+                    comments: task.comments,
+                    recurrence_frequency: task.recurrence_frequency,
+                    category: {
+                        connect: {
+                            id: task.category_id,
+                        },
+                    },
+                    assignee: {
+                        connect: {
+                            id: task.assignee_id,
+                        },
+                    },
+                    assigner: {
+                        connect: {
+                            id: task.assigner_id,
+                        },
+                    },
+                },
+            });
+            return updatedTask;
+        } catch (error: unknown) {
+            throw error;
         }
     }
     
