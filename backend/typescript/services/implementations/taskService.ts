@@ -1,15 +1,15 @@
 import ITaskService from "../interfaces/taskService";
 import {TaskDTO, Status} from "../interfaces/taskService";
-import { Prisma } from "@prisma/client";
 import { PrismaClient } from '@prisma/client'
-import prisma from "../../prisma"
+
+const Prisma = new PrismaClient();
 
 class TaskService implements ITaskService {
-   async getTaskById(id: string): Promise<Prisma.taskCreateInput> {
+   async getTaskById(taskId: string): Promise<TaskDTO> {
     try {
-        const task = await prisma.task.findUnique({
+        const task = await Prisma.task.findUnique({
             where: {
-                id: Number(id)
+                id: Number(taskId)
             },
 
         });
@@ -24,12 +24,16 @@ class TaskService implements ITaskService {
     }
 }
 
-
-
-
     async getTasksByCategoryId(categoryId: string): Promise<TaskDTO>{
-        return {
-            
+        try {
+            const tasks = await Prisma.task.findMany({
+                where: {
+                    id: Number(categoryId)
+                }
+            })
+            return tasks;
+        } catch (error: unknown) {
+            throw error;
         }
     }
   

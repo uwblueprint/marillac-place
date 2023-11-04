@@ -1,18 +1,21 @@
 export type Status = "Pending Approval" | "Incomplete" | "Complete" | "Excused";
 
-export type TaskDTO = {
-  taskid: string;
-  categoryId: string;
-  title: string;
-  status: Status;
+export interface TaskDTO {
+  id: number;
+  //category: string;
+  category_id: number;
+  status: string;
   description: string;
-  assigneeId: string;
-  creditValue: string;
-  startDate: string;
-  endDate: string;
+  assignee_id: number;
+  //assignee: string;
+  assigner_id: number;
+  //assigner: string;
+  credit_value: number;
+  start_date: Date;
+  end_date: Date | null;
   comments: string;
-  recurrenceFrequency: string;
-  warnings: string [];
+  recurrence_frequency: string;
+  //warnings
 }
 
 import {Prisma} from "@prisma/client"
@@ -24,7 +27,7 @@ interface ITaskService {
    * @returns a TaskDTO associated with the task id
    * @throws Error if task retrieval fails
    */
-  getTaskById(taskId: string): Promise<Prisma.taskCreateInput | null>;
+  getTaskById(taskId: string): Promise<TaskDTO>;
 
   /**
    * Get all tasks belonging to a category
