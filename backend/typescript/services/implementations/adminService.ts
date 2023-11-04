@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../prisma";
 import type {
-    NotificationResponseDTO,
     IAdminService
   } from "../interfaces/adminService";
 // import type ResidentDTO from "../interfaces/FILEOFDTO";
@@ -34,25 +33,35 @@ class AdminService implements IAdminService {
     }
   }
 
-  async sendNotification(notif_message: String, resident_id: number): Promise<void>{
-    let newNotificationUserLink: Prisma.notification_userUncheckedCreateInput; 
-    let newNotification: Prisma.notificationUncheckedCreateInput; 
+  async sendNotification(notif_message: String, resident_id: number): Promise<Prisma.notificationCreateInput>{
+    // let newNotificationUserLink: Prisma.notification_userCreateInput; 
+    let newNotification: Prisma.notificationCreateInput; 
     try{
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
           author_id: this.staffId,
-          residents: undefined //help :(
+          residents: {
+            create: [
+              { recipient: {
+                connect: {
+                  id: resident_id
+                }
+              }}
+            ],
+          }
         }
       })
 
       // ASK WILLIAM ABOUT ADDING THINGS TO THE LIST OF RESIDENTS IN NOTIFICATION 
-      newNotificationUserLink = await prisma.notification_user.create({
-        data: {
-          recipient_id: resident_id,
-          notification_id: Number(newNotification.id),
-        }
-      })
+      // newNotificationUserLink = await prisma.notification_user.create({
+      //   data: {
+      //     recipient_id: resident_id,
+      //     notification_id: Number(newNotification.id),
+      //   }
+      // })
+
+      return newNotification;
       //add list(newNotificationUserLink) to newNotification ?
       
     }catch(error){
@@ -73,35 +82,47 @@ class AdminService implements IAdminService {
       
       return residents
     } catch (error) {
-      Logger.error(`Frailed to get all active Residents. Readon = ${getErrorMessage(error)}`);
+      Logger.error(`Failed to get all active Residents. Readon = ${getErrorMessage(error)}`);
       throw error;
     }
   }
   
   
-  async sendAnnouncement(notif_message: String): Promise<void>{
-    let newNotificationUserLink: Prisma.notification_userUncheckedCreateInput; 
-    let newNotification: Prisma.notificationUncheckedCreateInput; 
+  async sendAnnouncement(notif_message: String): Promise<Prisma.notificationCreateInput>{
+    // let newNotificationUserLink: Prisma.notification_userCreateInput; 
+    let newNotification: Prisma.notificationCreateInput; 
     try{
+      const activeResidents = await this.getActiveResidents()
+
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
           author_id: this.staffId,
-          residents: undefined //help :(
+          residents: {
+            create:  activeResidents.map(resident => ({
+              recipient: {
+                connect: {
+                  id: resident.id
+                }
+              }
+            }))
+          }
         }
       })
 
-      let resident: Prisma.residentUncheckedCreateInput;
-      // create notification_user for each active resident 
-      const activeResidents = await this.getActiveResidents()
-      for(let resident of activeResidents){
-        newNotificationUserLink = await prisma.notification_user.create({
-          data: {
-            recipient_id: Number(resident.id),
-            notification_id: Number(newNotification.id),
-          }
-        })
-      }
+      // let resident: Prisma.residentUncheckedCreateInput;
+      // // create notification_user for each active resident 
+      
+      // for(let resident of activeResidents){
+      //   newNotificationUserLink = await prisma.notification_user.create({
+      //     data: {
+      //       recipient_id: Number(resident.id),
+      //       notification_id: Number(newNotification.id),
+      //     }
+      //   })
+      // }
+
+      return newNotification; 
 
     }catch(error){
       Logger.error(`Failed to create Notification. Reason = ${getErrorMessage(error)}`)
