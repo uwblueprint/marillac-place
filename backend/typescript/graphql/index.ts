@@ -15,6 +15,8 @@ import simpleEntityResolvers from "./resolvers/simpleEntityResolvers";
 import simpleEntityType from "./types/simpleEntityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
+import residentResolvers from "./resolvers/residentResolvers";
+import residentType from "./types/residentType";
 
 const query = gql`
   type Query {
@@ -29,10 +31,11 @@ const mutation = gql`
 `;
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [query, mutation, authType, entityType, simpleEntityType, userType],
+  typeDefs: [query, mutation, authType, entityType, residentType, simpleEntityType, userType],
   resolvers: merge(
     authResolvers,
     entityResolvers,
+    residentResolvers,
     simpleEntityResolvers,
     userResolvers,
   ),

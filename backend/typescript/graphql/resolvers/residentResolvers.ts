@@ -9,9 +9,9 @@ const residentResolvers = {
   Query: {
     residentsById: async (
         _parent: undefined,
-        { id }: { id: number[] },
+        { id }: { id: string[] },
     ): Promise<Array<ResidentDTO>> => {
-        return residentService.get_residents_by_id(id);
+        return residentService.get_residents_by_id(id.map(Number));
     },
     allResidents: async (): Promise<Array<ResidentDTO>> => {
         return residentService.get_all_residents();
@@ -27,16 +27,16 @@ const residentResolvers = {
     },
     updateResident: async (
         _parent: undefined,
-        { id, resident }: { id: number, resident: UpdateResidentDTO },
+        { id, resident }: { id: string, resident: UpdateResidentDTO },
     ): Promise<ResidentDTO> => {
-        const newResident = await residentService.update_resident(id, resident);
+        const newResident = await residentService.update_resident(parseInt(id), resident);
         return newResident;
     },
     deleteResident: async (
         _parent: undefined,
-        { id }: { id: number },
+        { id }: { id: string },
     ): Promise<ResidentDTO> => {
-        const deletedResident = await residentService.delete_resident(id);
+        const deletedResident = await residentService.delete_resident(parseInt(id));
         return deletedResident;
     },
   },

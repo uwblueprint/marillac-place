@@ -8,10 +8,10 @@ const Prisma = new PrismaClient();
 //const Logger = logger(__filename); 
 
 class ResidentService implements IResidentService {
-    async add_resident(residentInfo: CreateResidentDTO): Promise<ResidentDTO> {
+    async add_resident(resident: CreateResidentDTO): Promise<ResidentDTO> {
         try {
             let newResident = await Prisma.resident.create({
-              data: residentInfo,
+              data: resident,
             });
             return newResident;
         } catch (error: unknown) {
@@ -19,11 +19,11 @@ class ResidentService implements IResidentService {
             throw error;
         }
     }
-    async update_resident(residentId: number, residentInfo: UpdateResidentDTO): Promise<ResidentDTO> {
+    async update_resident(id: number, resident: UpdateResidentDTO): Promise<ResidentDTO> {
         try {
             let updatedResident = await Prisma.resident.update({
-              where: {id: residentId},
-              data: residentInfo,
+              where: {id: id},
+              data: resident,
             });
             return updatedResident;
         } catch (error: unknown) {
@@ -31,10 +31,10 @@ class ResidentService implements IResidentService {
             throw error;
         }
     }
-    async delete_resident(residentId: number): Promise<ResidentDTO> {
+    async delete_resident(id: number): Promise<ResidentDTO> {
         try {
             let deletedResident = await Prisma.resident.delete({
-              where: {id: residentId}
+              where: {id: id}
             });
             return deletedResident;
         } catch (error: unknown) {
@@ -51,10 +51,10 @@ class ResidentService implements IResidentService {
             throw error;
         }
     }
-    async get_residents_by_id(residentId: number[]): Promise<ResidentDTO[]> {
+    async get_residents_by_id(id: number[]): Promise<ResidentDTO[]> {
         try {
             let allResidentsById = await Prisma.resident.findMany({
-                where: {id: {in: residentId}}
+                where: {id: {in: id}}
             });
             return allResidentsById;
         } catch (error: unknown) {
