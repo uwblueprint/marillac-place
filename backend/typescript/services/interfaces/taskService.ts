@@ -35,8 +35,6 @@ export interface TaskDTO {
   // warnings: warning []
 }
 
-import {Prisma, category} from "@prisma/client"
-
 export interface ITaskService {
   /**
    * Get the task corresponding to the taskId
@@ -44,7 +42,7 @@ export interface ITaskService {
    * @returns a TaskDTO associated with the task id
    * @throws Error if task retrieval fails
    */
-  getTaskById(taskId: string): Promise<Prisma.taskCreateInput>;
+  getTaskById(taskId: string): Promise<TaskDTO>;
 
   /**
    * Get all tasks belonging to a category
@@ -52,7 +50,7 @@ export interface ITaskService {
    * @returns a TaskDTO with category information
    * @throws Error if task retrieval fails
    */
-  getTasksByCategoryId(categoryId: string): Promise<Prisma.taskCreateInput []>;
+  getTasksByCategoryId(categoryId: string): Promise<TaskDTO []>;
   
   /**
    * Get all tasks assigned to a resident
@@ -60,7 +58,7 @@ export interface ITaskService {
    * @returns a TaskDTO with task's information
    * @throws Error if task retrieval fails
    */
-  getTasksByAssigneeId(assigneeId: string): Promise<Prisma.taskCreateInput>;
+  getTasksByAssigneeId(assigneeId: string): Promise<TaskDTO []>;
 
   /**
    * Get all tasks assigned by a staff member
@@ -68,7 +66,7 @@ export interface ITaskService {
    * @returns a TaskDTO with task's information
    * @throws Error if task retrieval fails
    */
-  getTasksByAssignerId(assignerId: string): Promise<Prisma.taskCreateInput>;
+  getTasksByAssignerId(assignerId: string): Promise<TaskDTO []>;
 
   /**
    * Create a task
@@ -76,7 +74,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the created task's information
    * @throws Error if task creation fails
    */
-  createTask(task: TaskDTO): Promise<Prisma.taskCreateInput>;
+  createTask(task: InputTaskDTO): Promise<TaskDTO>;
   
   /**
    * Update a task.
@@ -85,7 +83,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the updated task's information
    * @throws Error if task update fails
    */
-  updateTaskById(taskId: string, task: TaskDTO): Promise<Prisma.taskUpdateInput>;
+  updateTaskById(taskId: string, task: InputTaskDTO): Promise<TaskDTO>;
 
   /**
    * Delete a task by id
@@ -93,7 +91,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the deleted task's information
    * @throws Error if task deletion fails
    */
-  deleteTaskById(taskId: string): Promise<Prisma.taskCreateInput>;
+  deleteTaskById(taskId: string): Promise<TaskDTO>;
 }
 
 export default ITaskService

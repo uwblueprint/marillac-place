@@ -1,34 +1,16 @@
 import ITaskService from "../interfaces/taskService";
 import {TaskDTO, InputTaskDTO, Status} from "../interfaces/taskService";
-import prisma from '../../prisma';
-import { Prisma } from "@prisma/client";
+import Prisma from '../../prisma';
+// import { Prisma } from "@prisma/client";
 
 class TaskService implements ITaskService {
-//    async getTaskById(taskId: string): Promise<TaskDTO> {
-//     try {
-//         const task = await Prisma.task.findUnique({
-//             where: {
-//                 id: Number(taskId)
-//             },
-
-//         });
-
-//         if (!task) {
-//             throw new Error(`help`);
-//         }
-
-//         return task;
-//     } catch (error: unknown) {
-//         throw error;
-//     }
-// }
-
-   async getTaskById(taskId: string): Promise<Prisma.taskCreateInput> {
+   async getTaskById(taskId: string): Promise<TaskDTO> {
     try {
-        const task = await prisma.task.findUnique({
+        const task = await Prisma.task.findUnique({
             where: {
                 id: Number(taskId)
             },
+
         });
 
         if (!task) {
@@ -41,9 +23,27 @@ class TaskService implements ITaskService {
     }
 }
 
-    async getTasksByCategoryId(categoryId: string): Promise<Prisma.taskCreateInput []>{
+//    async getTaskById(taskId: string): Promise<Prisma.taskCreateInput> {
+//     try {
+//         const task = await prisma.task.findUnique({
+//             where: {
+//                 id: Number(taskId)
+//             },
+//         });
+
+//         if (!task) {
+//             throw new Error(`help`);
+//         }
+
+//         return task;
+//     } catch (error: unknown) {
+//         throw error;
+//     }
+// }
+
+    async getTasksByCategoryId(categoryId: string): Promise<TaskDTO []>{
         try {
-            const tasks = await prisma.task.findMany({
+            const tasks = await Prisma.task.findMany({
                 where: {
                     id: Number(categoryId)
                 }
@@ -59,9 +59,9 @@ class TaskService implements ITaskService {
         }
     }
   
-    async getTasksByAssigneeId(assigneeId: string): Promise<Prisma.taskCreateInput>{
+    async getTasksByAssigneeId(assigneeId: string): Promise<TaskDTO []>{
         try {
-            const task = await prisma.task.findUnique({
+            const task = await Prisma.task.findUnique({
                 where: {
                     id: Number(assigneeId)
                 }
@@ -77,9 +77,9 @@ class TaskService implements ITaskService {
         }
     }
 
-    async getTasksByAssignerId(assignerId: string): Promise<Prisma.taskCreateInput>{
+    async getTasksByAssignerId(assignerId: string): Promise<TaskDTO []>{
         try {
-            const task = await prisma.task.findUnique({
+            const task = await Prisma.task.findUnique({
                 where: {
                     id: Number(assignerId)
                 }
@@ -95,9 +95,9 @@ class TaskService implements ITaskService {
         }
     }
 
-    async createTask(task: InputTaskDTO): Promise<Prisma.taskCreateInput> {
+    async createTask(task: InputTaskDTO): Promise<TaskDTO> {
         try {
-            const newTask = await prisma.task.create({
+            const newTask = await Prisma.task.create({
                 data: {
                     title: task.title,
                     status: task.status,
@@ -130,9 +130,9 @@ class TaskService implements ITaskService {
         }
     }
   
-    async updateTaskById(taskId: string, task: TaskDTO): Promise<Prisma.taskUpdateInput>{
+    async updateTaskById(taskId: string, task: InputTaskDTO): Promise<TaskDTO>{
         try {
-            const updatedTask = await prisma.task.update({
+            const updatedTask = await Prisma.task.update({
                 where: {
                     id: Number(taskId)
                 },
@@ -168,9 +168,9 @@ class TaskService implements ITaskService {
         }
     }
     
-    async deleteTaskById(taskId: string): Promise<Prisma.taskCreateInput>{
+    async deleteTaskById(taskId: string): Promise<TaskDTO>{
         try {
-            const task = await prisma.task.delete({
+            const task = await Prisma.task.delete({
                 where: {
                     id: Number(taskId)
                 }
