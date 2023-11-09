@@ -5,17 +5,19 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // uncomment this for neon db
+  // directUrl = env("DIRECT_URL")
 }
 
 model post {
-  id          Int      @id @default(autoincrement())
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  title       String   @db.VarChar(255)
-  content     String?
-  published   Boolean  @default(false)
-  author_id   Int
-  author      user     @relation(fields: [author_id], references: [id])
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  title      String   @db.VarChar(255)
+  content    String?
+  published  Boolean  @default(false)
+  author_id  Int
+  author     user     @relation(fields: [author_id], references: [id])
 }
 
 model profile {
@@ -106,10 +108,10 @@ model role {
 }
 
 model resident {
-  id                   Int       @id @default(autoincrement())
+  id                   Int                 @id @default(autoincrement())
   first_name           String
   last_name            String
-  email                String    @unique
+  email                String              @unique
   phone_number         String?
   display_name         String
   profile_picture_link String?
@@ -123,18 +125,20 @@ model resident {
 }
 
 model notification {
-  id          Int                 @id @default(autoincrement())
-  message     String 
-  author_id   Int
-  author      staff               @relation(fields: [author_id], references: [id])
-  created_at  DateTime            @default(now())
-  residents   notification_user[]
+  id         Int                 @id @default(autoincrement())
+  message    String
+  author_id  Int
+  author     staff               @relation(fields: [author_id], references: [id])
+  created_at DateTime            @default(now())
+  residents  notification_user[]
 }
 
 model notification_user {
-  notification     notification  @relation(fields: [notification_id], references: [id])
-  notification_id  Int
-  recipient        resident      @relation(fields: [recipient_id], references: [id])
-  recipient_id     Int
-  seen             Boolean       @default(false)
+  notification    notification @relation(fields: [notification_id], references: [id])
+  notification_id Int
+  recipient       resident     @relation(fields: [recipient_id], references: [id])
+  recipient_id    Int
+  seen            Boolean      @default(false)
+
+  @@id([notification_id, recipient_id])
 }
