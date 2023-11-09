@@ -3,7 +3,7 @@ import AdminService from "../../services/implementations/adminService"
 import {IAdminService} from "../../services/interfaces/adminService"
 
 // change staff_id to StaffService when its done 
-const adminService: IAdminService = new AdminService()
+const adminService: IAdminService = new AdminService(1)
 
 const adminResolvers = { 
     Query: {
@@ -21,7 +21,7 @@ const adminResolvers = {
         }
     },
 
-    Mutations: {
+    Mutation: {
         sendNotification: async (
             _parent: undefined,
             {message, resident_id}: {message: String; resident_id: number},
@@ -38,3 +38,4 @@ const adminResolvers = {
         }
     }
 }
+export default adminResolvers;

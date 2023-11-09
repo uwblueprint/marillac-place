@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "tsc",
-    "prismaInitAndRun": "npx prisma migrate deploy && nodemon -L"
+    "prismaInitAndRun": "npx prisma migrate deploy && npx prisma generate && nodemon -L"
   },
   "keywords": [],
   "author": "",
@@ -74,7 +74,7 @@
     "mongodb-memory-server": "^6.9.6",
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
-    "prisma": "^5.4.2",
+    "prisma": "5.5.2",
     "ts-jest": "^27.0.3",
     "typescript": "^4.1.5"
   },
