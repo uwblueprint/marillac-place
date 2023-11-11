@@ -1,21 +1,25 @@
 import { Prisma } from "@prisma/client"
 import AdminService from "../../services/implementations/adminService"
-import {IAdminService} from "../../services/interfaces/adminService"
+import {
+    IAdminService,
+    ResidentDTO,
+    NotificationDTO
+} from "../../services/interfaces/adminService"
 
 // change staff_id to StaffService when its done 
-const adminService: IAdminService = new AdminService(1)
+const adminService: IAdminService = new AdminService(3)
 
 const adminResolvers = { 
     Query: {
         notificationById: async (
             _parent: undefined,
             { id }: { id: number},
-        ): Promise<Prisma.notificationCreateInput> => {
+        ): Promise<NotificationDTO> => {
             return await adminService.getNotificationById(id)
         },
         activeResidents: async (
             _parent: undefined,
-        ): Promise<Prisma.residentUncheckedCreateInput[]> => {
+        ): Promise<ResidentDTO[]> => {
             const activeResidents = await adminService.getActiveResidents()
             return activeResidents
         }
@@ -25,14 +29,14 @@ const adminResolvers = {
         sendNotification: async (
             _parent: undefined,
             {message, resident_id}: {message: String; resident_id: number},
-        ): Promise<Prisma.notificationCreateInput> => {
+        ): Promise<NotificationDTO> => {
             const newNotification = await adminService.sendNotification(message, resident_id)
             return newNotification
         },
         sendAnnouncement: async ( 
             _parent: undefined,
             {message}: {message: String},
-        ): Promise<Prisma.notificationCreateInput> => {
+        ): Promise<NotificationDTO> => {
             const newAnnouncement = await adminService.sendAnnouncement(message);
             return newAnnouncement
         }

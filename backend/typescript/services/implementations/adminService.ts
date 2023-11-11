@@ -1,10 +1,12 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../prisma";
 import type {
-    IAdminService
+    IAdminService,
+    ResidentDTO,
+    NotificationDTO,
   } from "../interfaces/adminService";
 // import type ResidentDTO from "../interfaces/FILEOFDTO";
-// import type IStaffService from "../interfaces/FILEOFDTO";
+//import type IStaffService from "../interfaces/FILEOFDTO";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
@@ -17,7 +19,7 @@ class AdminService implements IAdminService {
     this.staffId = staffId
   }
 
-  async getNotificationById(id: number): Promise<Prisma.notificationCreateInput>{
+  async getNotificationById(id: number): Promise<NotificationDTO>{
     try {
       const notification = await prisma.notification.findUnique({
         where : {
@@ -33,19 +35,21 @@ class AdminService implements IAdminService {
     }
   }
 
-  async sendNotification(notif_message: String, resident_id: number): Promise<Prisma.notificationCreateInput>{
+  async sendNotification(notif_message: String, resident_id: number): Promise<NotificationDTO>{
     // let newNotificationUserLink: Prisma.notification_userCreateInput; 
-    let newNotification: Prisma.notificationCreateInput; 
+    let newNotification: NotificationDTO; 
     try{
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
-          author_id: this.staffId,
+          author: {
+            connect: {id: this.staffId}
+          },
           residents: {
             create: [
               { recipient: {
                 connect: {
-                  id: resident_id
+                  id: Number(resident_id)
                 }
               }}
             ],
@@ -70,7 +74,7 @@ class AdminService implements IAdminService {
     }
   }
     
-  async getActiveResidents(): Promise<Prisma.residentUncheckedCreateInput[]>{
+  async getActiveResidents(): Promise<ResidentDTO[]>{
     try{
       const residents = await prisma.resident.findMany({
         where: {
@@ -88,16 +92,18 @@ class AdminService implements IAdminService {
   }
   
   
-  async sendAnnouncement(notif_message: String): Promise<Prisma.notificationCreateInput>{
+  async sendAnnouncement(notif_message: String): Promise<NotificationDTO>{
     // let newNotificationUserLink: Prisma.notification_userCreateInput; 
-    let newNotification: Prisma.notificationCreateInput; 
+    let newNotification: NotificationDTO; 
     try{
       const activeResidents = await this.getActiveResidents()
 
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
-          author_id: this.staffId,
+          author: {
+            connect: {id: this.staffId}
+          },
           residents: {
             create:  activeResidents.map(resident => ({
               recipient: {
