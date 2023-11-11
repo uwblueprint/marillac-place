@@ -2,13 +2,13 @@ import { Prisma } from "@prisma/client";
 import prisma from "../../prisma";
 import type {
     IAdminService,
-    ResidentDTO,
     NotificationDTO,
   } from "../interfaces/adminService";
 // import type ResidentDTO from "../interfaces/FILEOFDTO";
 //import type IStaffService from "../interfaces/FILEOFDTO";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
+import { ResidentDTO } from "../interfaces/residentService"
 
 const Logger = logger(__filename);
 
@@ -42,9 +42,9 @@ class AdminService implements IAdminService {
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
-          author: {
-            connect: {id: this.staffId}
-          },
+          // author: {
+          //   connect: {id: this.staffId}
+          // },
           residents: {
             create: [
               { recipient: {
@@ -101,9 +101,9 @@ class AdminService implements IAdminService {
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
-          author: {
-            connect: {id: this.staffId}
-          },
+          // author: {
+          //   connect: {id: this.staffId}
+          // },
           residents: {
             create:  activeResidents.map(resident => ({
               recipient: {

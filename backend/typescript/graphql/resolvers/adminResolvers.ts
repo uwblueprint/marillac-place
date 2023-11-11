@@ -2,9 +2,9 @@ import { Prisma } from "@prisma/client"
 import AdminService from "../../services/implementations/adminService"
 import {
     IAdminService,
-    ResidentDTO,
     NotificationDTO
 } from "../../services/interfaces/adminService"
+import { ResidentDTO } from "../../services/interfaces/residentService";
 
 // change staff_id to StaffService when its done 
 const adminService: IAdminService = new AdminService(3)

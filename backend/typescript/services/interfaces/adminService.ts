@@ -1,12 +1,14 @@
 import { Prisma } from "@prisma/client";
-
+import { ResidentDTO } from "./residentService"
 // export interface NotificationRequestDTO {
 //     message: string;
 // }
 
+
+
 export interface NotificationDTO {
     id: number;
-    author_id: number; 
+    // author_id: number; 
     message: string;
     created_at: Date;
     residents?: NotificationUserDTO[]; //might need to change when integrated 
@@ -17,19 +19,19 @@ export interface NotificationUserDTO {
     recipient_id: number;
 }
 
-export interface ResidentDTO {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone_number?: string | null;
-    display_name: string;
-    profile_picture_link?: string | null;
-    birthdate?: Date | null;
-    credits: number;
-    date_joined: Date;
-    date_left?:  Date | null;
-}
+// export interface ResidentDTO {
+//     id: number;
+//     first_name: string;
+//     last_name: string;
+//     email: string;
+//     phone_number?: string | null;
+//     display_name: string;
+//     profile_picture_link?: string | null;
+//     birthdate?: Date | null;
+//     credits: number;
+//     date_joined: Date;
+//     date_left?:  Date | null;
+// }
 
 export interface IAdminService {
 

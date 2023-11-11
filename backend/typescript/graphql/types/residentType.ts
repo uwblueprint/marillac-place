@@ -13,7 +13,7 @@ const residentType = gql`
     profile_picture_link: String
     birthdate: String
     credits: Float
-    date_joined: String!
+    date_joined: String
     date_left: String
   }
 
@@ -26,7 +26,7 @@ const residentType = gql`
     profile_picture_link: String
     birthdate: String
     credits: Float
-    date_joined: String!
+    date_joined: String
   }
 
   input UpdateResidentDTO {

@@ -96,7 +96,7 @@ model staff {
   profile_picture_link String?
   tasks_assigned       task[]
   warnings_assigned    warning[]
-  notifications        notification[]
+//  notifications        notification[]
 }
 
 model role {
@@ -125,8 +125,8 @@ model resident {
 model notification {
   id          Int                 @id @default(autoincrement())
   message     String 
-  author_id   Int
-  author      staff?              @relation(fields: [author_id], references: [id])
+ // author_id   Int
+ // author      staff?              @relation(fields: [author_id], references: [id])
   created_at  DateTime            @default(now())
   residents   notification_user[]
 }
