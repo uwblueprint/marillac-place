@@ -2,10 +2,11 @@ import { PrismaClient } from '@prisma/client';
 import type IResidentService from "../interfaces/residentService";
 import type { ResidentDTO, CreateResidentDTO, UpdateResidentDTO } from "../../services/interfaces/residentService";
 import logger from "../../utilities/logger";
+import { getErrorMessage } from "../../utilities/errorUtils";
 
 const Prisma = new PrismaClient();
-//TODO: do logging
-//const Logger = logger(__filename); 
+const Logger = logger(__filename); 
+
 
 class ResidentService implements IResidentService {
     async add_resident(resident: CreateResidentDTO): Promise<ResidentDTO> {
@@ -15,7 +16,7 @@ class ResidentService implements IResidentService {
             });
             return newResident;
         } catch (error: unknown) {
-            //log it
+            Logger.error(`Failed to create resident. Reason = ${getErrorMessage(error)}`);
             throw error;
         }
     }
@@ -27,7 +28,7 @@ class ResidentService implements IResidentService {
             });
             return updatedResident;
         } catch (error: unknown) {
-            //log it
+            Logger.error(`Failed to update resident #${id}. Reason = ${getErrorMessage(error)}`);
             throw error;
         }
     }
@@ -38,7 +39,7 @@ class ResidentService implements IResidentService {
             });
             return deletedResident;
         } catch (error: unknown) {
-            //log it
+            Logger.error(`Failed to delete resident #${id}. Reason = ${getErrorMessage(error)}`);
             throw error;
         }
     }
@@ -47,7 +48,7 @@ class ResidentService implements IResidentService {
             let allResidents = await Prisma.resident.findMany();
             return allResidents;
         } catch (error: unknown) {
-            //log it
+            Logger.error(`Failed to get all residents. Reason = ${getErrorMessage(error)}`);
             throw error;
         }
     }
@@ -58,7 +59,7 @@ class ResidentService implements IResidentService {
             });
             return allResidentsById;
         } catch (error: unknown) {
-            //log it
+            Logger.error(`Failed to get residents by IDs. IDs = ${id}. Reason = ${getErrorMessage(error)}`);
             throw error;
         }
     }
