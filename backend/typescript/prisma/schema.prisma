@@ -36,25 +36,25 @@ model user {
 }
 
 model task {
-  id                  Int                  @id @default(autoincrement())
-  category            category             @relation(fields: [categoryId], references: [id])
-  categoryId          Int                  @map("category_id")
+  id                  Int                 @id @default(autoincrement())
+  category            category            @relation(fields: [categoryId], references: [id])
+  categoryId          Int                 @map("category_id")
   title               String
   status              Statuses
   description         String
-  assignee            resident             @relation(fields: [assigneeId], references: [id])
-  assigneeId          Int                  @map("assignee_id")
-  assigner            staff                @relation(fields: [assignerId], references: [id])
-  assignerId          Int                  @map("assigner_id")
-  creditValue         Float                @map("credit_value")
-  startDate           DateTime             @map("start_date")
-  endDate             DateTime?            @map("end_date")
+  assignee            resident            @relation(fields: [assigneeId], references: [id])
+  assigneeId          Int                 @map("assignee_id")
+  assigner            staff               @relation(fields: [assignerId], references: [id])
+  assignerId          Int                 @map("assigner_id")
+  creditValue         Float               @map("credit_value")
+  startDate           DateTime            @map("start_date")
+  endDate             DateTime?           @map("end_date")
   comments            String
-  recurrenceFrequency Recurrence_Frequency @map("recurrence_frequency")
+  recurrenceFrequency RecurrenceFrequency @map("recurrence_frequency")
   warnings            warning[]
 }
 
-enum Recurrence_Frequency {
+enum RecurrenceFrequency {
   DAILY
   WEEKLY
   BI_WEEKLY
