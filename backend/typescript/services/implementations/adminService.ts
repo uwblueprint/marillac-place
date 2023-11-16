@@ -19,12 +19,26 @@ class AdminService implements IAdminService {
     this.staffId = staffId
   }
 
+  async getAllNotifications(): Promise<NotificationDTO[]>{
+    try {
+      const notifications = await prisma.notification.findMany()
+      if(!notifications) throw new Error(`No residents found.`);
+      return notifications;
+    } catch (error) {
+      Logger.error(`Failed to get all active Residents. Readon = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
+  
   async getNotificationById(id: number): Promise<NotificationDTO>{
     try {
       const notification = await prisma.notification.findUnique({
         where : {
-          id
+          id: Number(id)
         },
+        include: {
+          residents: true
+        }
       });
       if(!notification) throw new Error(`notification id ${id} not found`); 
       
@@ -46,14 +60,14 @@ class AdminService implements IAdminService {
           //   connect: {id: this.staffId}
           // },
           residents: {
-            create: [
-              { recipient: {
-                connect: {
-                  id: Number(resident_id)
-                }
-              }}
-            ],
+            connect: {
+                id: Number(resident_id), 
+            },
+            
           }
+        },
+        include: {
+          residents: true
         }
       })
 
@@ -105,14 +119,13 @@ class AdminService implements IAdminService {
           //   connect: {id: this.staffId}
           // },
           residents: {
-            create:  activeResidents.map(resident => ({
-              recipient: {
-                connect: {
-                  id: resident.id
-                }
-              }
+            connect:  activeResidents.map(resident => ({
+              id: resident.id
             }))
           }
+        },
+        include: {
+          residents: true
         }
       })
 

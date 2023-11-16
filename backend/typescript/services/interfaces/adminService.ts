@@ -11,13 +11,13 @@ export interface NotificationDTO {
     // author_id: number; 
     message: string;
     created_at: Date;
-    residents?: NotificationUserDTO[]; //might need to change when integrated 
+    residents?: ResidentDTO[]; //might need to change when integrated 
 }
 
-export interface NotificationUserDTO {
-    notification_id: number;
-    recipient_id: number;
-}
+// export interface NotificationUserDTO {
+//     notification_id: number;
+//     recipient_id: number;
+// }
 
 // export interface ResidentDTO {
 //     id: number;
@@ -55,8 +55,7 @@ export interface IAdminService {
      */
     sendNotification(notif_message: String, resident_id: number): Promise<NotificationDTO>;
     
-
-    
+    getAllNotifications(): Promise<NotificationDTO[]>;
     /**
      * Post the announcement notif_obj to all active residents
      * @param notif_obj notification 

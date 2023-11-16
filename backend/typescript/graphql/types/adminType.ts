@@ -7,17 +7,13 @@ const adminType = gql`
     id: ID!
     message: String!
     created_at: String!
-    residents: [NotificationUserDTO]!
-  }
-
-  type NotificationUserDTO {
-    notification_id: ID!
-    recipient_id: ID!
+    residents: [ResidentDTO!]
   }
 
   extend type Query {
     notificationById(id: ID!): NotificationDTO!
     activeResidents: [ResidentDTO]
+    getAllNotifications: [NotificationDTO]
   }
 
   extend type Mutation {
@@ -27,3 +23,9 @@ const adminType = gql`
 `;
 
 export default adminType;
+/*
+type NotificationUserDTO {
+    notification_id: ID!
+    recipient_id: ID!
+  }
+*/

@@ -119,7 +119,7 @@ model resident {
   date_left            DateTime?
   tasks                task[]
   warnings             warning[]
-  notifications        notification_user[]
+  notifications        notification[]
 }
 
 model notification {
@@ -128,15 +128,15 @@ model notification {
  // author_id   Int
  // author      staff?              @relation(fields: [author_id], references: [id])
   created_at  DateTime            @default(now())
-  residents   notification_user[]
+  residents   resident[]
 }
 
-model notification_user {
-  notification     notification? @relation(fields: [notification_id], references: [id]) 
-  notification_id  Int
-  recipient        resident?     @relation(fields: [recipient_id], references: [id])
-  recipient_id     Int
-  seen             Boolean       @default(false)
+//model notification_user {
+//  notification     notification? @relation(fields: [notification_id], references: [id]) 
+//  notification_id  Int
+//  recipient        resident?     @relation(fields: [recipient_id], references: [id])
+//  recipient_id     Int
+//  seen             Boolean       @default(false)
 
-  @@id([recipient_id, notification_id])
-}
+//  @@id([recipient_id, notification_id])
+//}

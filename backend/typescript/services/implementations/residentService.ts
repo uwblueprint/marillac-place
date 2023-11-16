@@ -11,17 +11,8 @@ class ResidentService implements IResidentService {
     async add_resident(resident: CreateResidentDTO): Promise<ResidentDTO> {
         try {
             let newResident = await Prisma.resident.create({
-              data: {
-                first_name: resident.first_name,
-                last_name: resident.last_name,
-                email: resident.email,
-                phone_number: resident.phone_number,
-                display_name: resident.display_name,
-                profile_picture_link: resident.profile_picture_link,
-                birthdate: resident.birthdate,
-                credits: resident.credits,
-                date_joined: resident.date_joined
-              }
+              data: resident,
+              include: { notifications: true }
             });
             return newResident;
         } catch (error: unknown) {
@@ -34,6 +25,7 @@ class ResidentService implements IResidentService {
             let updatedResident = await Prisma.resident.update({
               where: {id: id},
               data: resident,
+              include: { notifications: true }
             });
             return updatedResident;
         } catch (error: unknown) {
@@ -54,7 +46,9 @@ class ResidentService implements IResidentService {
     }
     async get_all_residents(): Promise<ResidentDTO[]> {
         try {
-            let allResidents = await Prisma.resident.findMany();
+            let allResidents = await Prisma.resident.findMany({
+                include: { notifications: true }
+            });
             return allResidents;
         } catch (error: unknown) {
             //log it
@@ -64,7 +58,8 @@ class ResidentService implements IResidentService {
     async get_residents_by_id(id: number[]): Promise<ResidentDTO[]> {
         try {
             let allResidentsById = await Prisma.resident.findMany({
-                where: {id: {in: id}}
+                where: {id: {in: id}},
+                include: { notifications: true }
             });
             return allResidentsById;
         } catch (error: unknown) {
