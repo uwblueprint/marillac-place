@@ -88,8 +88,8 @@ This may require you to upgrade your node version locally so try (only if it tel
 (https://www.freecodecamp.org/news/node-version-manager-nvm-install-guide/) If you don't have nvm
 
 ```
-nvm install 18.16.0
-nvm use 18.16.0
+nvm install 18.18.2
+nvm use 18.18.2
 ```
 
 ## Creating Prisma Migration
