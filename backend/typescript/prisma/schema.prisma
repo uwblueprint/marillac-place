@@ -10,14 +10,14 @@ datasource db {
 }
 
 model post {
-  id          Int      @id @default(autoincrement())
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  title       String   @db.VarChar(255)
-  content     String?
-  published   Boolean  @default(false)
-  author_id   Int
-  author      user     @relation(fields: [author_id], references: [id])
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  title      String   @db.VarChar(255)
+  content    String?
+  published  Boolean  @default(false)
+  author_id  Int
+  author     user     @relation(fields: [author_id], references: [id])
 }
 
 model profile {
@@ -125,18 +125,20 @@ model resident {
 }
 
 model notification {
-  id          Int                 @id @default(autoincrement())
-  message     String 
-  author_id   Int
-  author      staff               @relation(fields: [author_id], references: [id])
-  created_at  DateTime            @default(now())
-  residents   notification_user[]
+  id         Int                 @id @default(autoincrement())
+  message    String
+  author_id  Int
+  author     staff               @relation(fields: [author_id], references: [id])
+  created_at DateTime            @default(now())
+  residents  notification_user[]
 }
 
 model notification_user {
-  notification     notification  @relation(fields: [notification_id], references: [id])
-  notification_id  Int           @id @default(autoincrement()) 
-  recipient        resident      @relation(fields: [recipient_id], references: [id])
-  recipient_id     Int
-  seen             Boolean       @default(false)
+  notification    notification @relation(fields: [notification_id], references: [id])
+  notification_id Int
+  recipient       resident     @relation(fields: [recipient_id], references: [id])
+  recipient_id    Int
+  seen            Boolean      @default(false)
+
+  @@id([notification_id, recipient_id])
 }
