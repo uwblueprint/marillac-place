@@ -1,40 +1,37 @@
 import TaskService from "../../services/implementations/taskService";
-import ITaskService, {
+import {
+  ITaskService,
   TaskDTO,
   InputTaskDTO,
 } from "../../services/interfaces/taskService";
-import UserService from "../../services/implementations/userService";
-import IUserService from "../../services/interfaces/userService";
-
-import prisma from "../../prisma";
 
 const taskService: ITaskService = new TaskService();
 // const userService : IUserService = new UserService();
 
 const taskResolvers = {
   Query: {
-    taskById: async (
+    getTaskById: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<TaskDTO> => {
       const task = await taskService.getTaskById(id);
       return task;
     },
-    tasksByCategoryId: async (
+    getTasksByCategoryId: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<TaskDTO[]> => {
       const tasks = await taskService.getTasksByCategoryId(id);
       return tasks;
     },
-    tasksByAssigneeId: async (
+    getTasksByAssigneeId: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<TaskDTO[]> => {
       const tasks = await taskService.getTasksByAssigneeId(id);
       return tasks;
     },
-    tasksByAssignerId: async (
+    getTasksByAssignerId: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<TaskDTO[]> => {

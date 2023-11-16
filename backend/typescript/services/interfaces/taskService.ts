@@ -18,15 +18,12 @@ export interface InputTaskDTO {
 
 export interface TaskDTO {
   id: number;
-  // category: string;
-  category_name: string;
+  category_name?: string;
   title: string;
   status: Status;
   description: string;
-  assignee_name: string;
-  // assignee: string;
-  assigner_name: string;
-  // assigner: string;
+  assignee_name?: string;
+  assigner_name?: string;
   credit_value: number;
   start_date: Date;
   end_date?: Date | null;
@@ -93,5 +90,3 @@ export interface ITaskService {
    */
   deleteTaskById(taskId: string): Promise<TaskDTO>;
 }
-
-export default ITaskService;

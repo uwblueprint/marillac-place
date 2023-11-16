@@ -33,23 +33,25 @@ model user {
   profile profile?
 }
 
-model task {
+model Task {
   id                   Int                  @id @default(autoincrement())
-  category             category?             @relation(fields: [category_id], references: [id])
-  category_id          Int                  
+  category             Category?            @relation(fields: [category_id], references: [id])
+  category_id          Int
   title                String
   status               Statuses
   description          String
-  assignee             resident?             @relation(fields: [assignee_id], references: [id])
-  assignee_id          Int                  
-  assigner             staff?                @relation(fields: [assigner_id], references: [id])
-  assigner_id          Int                  
+  assignee             Resident?            @relation(fields: [assignee_id], references: [id])
+  assignee_id          Int
+  assigner             Staff?               @relation(fields: [assigner_id], references: [id])
+  assigner_id          Int
   credit_value         Float
   start_date           DateTime
   end_date             DateTime?
   comments             String
   recurrence_frequency Recurrence_Frequency
-  warnings             warning[]
+  warnings             Warning[]
+
+  @@map("task")
 }
 
 enum Recurrence_Frequency {
@@ -58,10 +60,12 @@ enum Recurrence_Frequency {
   BI_WEEKLY
 }
 
-model category {
+model Category {
   id   Int    @id @default(autoincrement())
   name String
-  task task[]
+  task Task[]
+
+  @@map("category")
 }
 
 enum Statuses {
@@ -71,41 +75,47 @@ enum Statuses {
   EXCUSED
 }
 
-model warning {
+model Warning {
   id              Int      @id @default(autoincrement())
-  resident        resident @relation(fields: [resident_id], references: [id])
+  resident        Resident @relation(fields: [resident_id], references: [id])
   resident_id     Int
   title           String
   description     String
-  assigner        staff    @relation(fields: [assigner_id], references: [id])
+  assigner        Staff    @relation(fields: [assigner_id], references: [id])
   assigner_id     Int
   date_issued     DateTime @default(now())
-  related_task    task?    @relation(fields: [related_task_id], references: [id])
+  related_task    Task?    @relation(fields: [related_task_id], references: [id])
   related_task_id Int?
+
+  @@map("warning")
 }
 
-model staff {
+model Staff {
   id                   Int            @id @default(autoincrement())
   role_id              Int
-  role                 role           @relation(fields: [role_id], references: [id])
+  role                 Role           @relation(fields: [role_id], references: [id])
   first_name           String
   last_name            String
   email                String         @unique
   phone_number         String?
   display_name         String
   profile_picture_link String?
-  tasks_assigned       task[]
-  warnings_assigned    warning[]
-  notifications        notification[]
+  tasks_assigned       Task[]
+  warnings_assigned    Warning[]
+  notifications        Notification[]
+
+  @@map("staff")
 }
 
-model role {
+model Role {
   id    Int     @id @default(autoincrement())
   title String  @unique
-  staff staff[]
+  staff Staff[]
+
+  @@map("role")
 }
 
-model resident {
+model Resident {
   id                   Int                 @id @default(autoincrement())
   first_name           String
   last_name            String
@@ -117,25 +127,29 @@ model resident {
   credits              Float
   date_joined          DateTime
   date_left            DateTime?
-  tasks                task[]
-  warnings             warning[]
+  tasks                Task[]
+  warnings             Warning[]
   notifications        notification_user[]
+
+  @@map("resident")
 }
 
-model notification {
+model Notification {
   id         Int                 @id @default(autoincrement())
   message    String
   author_id  Int
-  author     staff               @relation(fields: [author_id], references: [id])
+  author     Staff               @relation(fields: [author_id], references: [id])
   created_at DateTime            @default(now())
   residents  notification_user[]
+
+  @@map("notification")
 }
 
 model notification_user {
   id              Int          @id @default(autoincrement())
-  notification    notification @relation(fields: [notification_id], references: [id])
+  notification    Notification @relation(fields: [notification_id], references: [id])
   notification_id Int
-  recipient       resident     @relation(fields: [recipient_id], references: [id])
+  recipient       Resident     @relation(fields: [recipient_id], references: [id])
   recipient_id    Int
   seen            Boolean      @default(false)
 }

@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "tsc",
-    "prismaInitAndRun": "npx prisma migrate deploy && npx prisma generate && nodemon -L"
+    "prismaInitAndRun": "yarn prisma migrate deploy && yarn prisma generate && nodemon -L"
   },
   "keywords": [],
   "author": "",
