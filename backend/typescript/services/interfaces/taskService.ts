@@ -1,6 +1,6 @@
 export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 
-export type Recurrence_Frequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
+export type RecurrenceFrequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
 
 export interface InputTaskDTO {
   category_id: number;
@@ -13,7 +13,7 @@ export interface InputTaskDTO {
   start_date: Date;
   end_date?: Date | null;
   comments: string;
-  recurrence_frequency: Recurrence_Frequency;
+  recurrence_frequency: RecurrenceFrequency;
 }
 
 export interface TaskDTO {
@@ -31,7 +31,7 @@ export interface TaskDTO {
   start_date: Date;
   end_date?: Date | null;
   comments: string;
-  recurrence_frequency: Recurrence_Frequency;
+  recurrence_frequency: RecurrenceFrequency;
   // warnings: warning []
 }
 
@@ -50,15 +50,15 @@ export interface ITaskService {
    * @returns a TaskDTO with category information
    * @throws Error if task retrieval fails
    */
-  getTasksByCategoryId(categoryId: string): Promise<TaskDTO []>;
-  
+  getTasksByCategoryId(categoryId: string): Promise<TaskDTO[]>;
+
   /**
    * Get all tasks assigned to a resident
    * @param assigneeId assignee's id
    * @returns a TaskDTO with task's information
    * @throws Error if task retrieval fails
    */
-  getTasksByAssigneeId(assigneeId: string): Promise<TaskDTO []>;
+  getTasksByAssigneeId(assigneeId: string): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks assigned by a staff member
@@ -66,7 +66,7 @@ export interface ITaskService {
    * @returns a TaskDTO with task's information
    * @throws Error if task retrieval fails
    */
-  getTasksByAssignerId(assignerId: string): Promise<TaskDTO []>;
+  getTasksByAssignerId(assignerId: string): Promise<TaskDTO[]>;
 
   /**
    * Create a task
@@ -75,7 +75,7 @@ export interface ITaskService {
    * @throws Error if task creation fails
    */
   createTask(task: InputTaskDTO): Promise<TaskDTO>;
-  
+
   /**
    * Update a task.
    * @param taskId task's id
@@ -94,4 +94,4 @@ export interface ITaskService {
   deleteTaskById(taskId: string): Promise<TaskDTO>;
 }
 
-export default ITaskService
+export default ITaskService;

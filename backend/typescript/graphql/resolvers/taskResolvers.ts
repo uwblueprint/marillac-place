@@ -1,63 +1,72 @@
 import TaskService from "../../services/implementations/taskService";
-import ITaskService from "../../services/interfaces/taskService";
-import { TaskDTO, InputTaskDTO} from "../../services/interfaces/taskService";
+import ITaskService, {
+  TaskDTO,
+  InputTaskDTO,
+} from "../../services/interfaces/taskService";
 import UserService from "../../services/implementations/userService";
 import IUserService from "../../services/interfaces/userService";
 
-import prisma from '../../prisma'
+import prisma from "../../prisma";
 
-const taskService : ITaskService = new TaskService();
+const taskService: ITaskService = new TaskService();
 // const userService : IUserService = new UserService();
 
 const taskResolvers = {
-    Query: {
-        taskById: async (
-            _parent: undefined,
-            { id }: { id: string }
-        ): Promise<TaskDTO> => {
-            return await taskService.getTaskById(id);
-        },
-        tasksByCategoryId: async (
-            _parent: undefined,
-            { id }: { id: string }
-        ): Promise<TaskDTO []> => {
-            return await taskService.getTasksByCategoryId(id);
-        },
-        tasksByAssigneeId: async (
-            _parent: undefined,
-            { id }: { id: string }
-        ): Promise<TaskDTO []> => {
-            return await taskService.getTasksByAssigneeId(id);
-        },
-        tasksByAssignerId: async (
-            _parent: undefined,
-            { id }: { id: string }
-        ): Promise<TaskDTO []> => {
-            return await taskService.getTasksByAssignerId(id);
-        },
+  Query: {
+    taskById: async (
+      _parent: undefined,
+      { id }: { id: string },
+    ): Promise<TaskDTO> => {
+      const task = await taskService.getTaskById(id);
+      return task;
     },
-    Mutation: {
-        addTask: async (
-            _parent: undefined,
-            {task} : {task: InputTaskDTO},
-        ): Promise <TaskDTO> => {
-            return await taskService.createTask(task);
-        },
-        updateTask: async (
-            _parent: undefined,
-            {id} : {id: string},
-            {task} : {task: InputTaskDTO}
-        ): Promise <TaskDTO> => {
-            return await taskService.updateTaskById(id, task);
-        },
-        deleteTask: async (
-            _parent: undefined,
-            { id }: { id: string }
-        ): Promise<TaskDTO> => {
-            return await taskService.deleteTaskById(id);
-        }
-    }
-}
+    tasksByCategoryId: async (
+      _parent: undefined,
+      { id }: { id: string },
+    ): Promise<TaskDTO[]> => {
+      const tasks = await taskService.getTasksByCategoryId(id);
+      return tasks;
+    },
+    tasksByAssigneeId: async (
+      _parent: undefined,
+      { id }: { id: string },
+    ): Promise<TaskDTO[]> => {
+      const tasks = await taskService.getTasksByAssigneeId(id);
+      return tasks;
+    },
+    tasksByAssignerId: async (
+      _parent: undefined,
+      { id }: { id: string },
+    ): Promise<TaskDTO[]> => {
+      const tasks = await taskService.getTasksByAssignerId(id);
+      return tasks;
+    },
+  },
+  Mutation: {
+    addTask: async (
+      _parent: undefined,
+      { task }: { task: InputTaskDTO },
+    ): Promise<TaskDTO> => {
+      const newTask = await taskService.createTask(task);
+      return newTask;
+    },
+    updateTask: async (
+      _parent: undefined,
+      { id }: { id: string },
+      { task }: { task: InputTaskDTO },
+    ): Promise<TaskDTO> => {
+      const updatedTask = await taskService.updateTaskById(id, task);
+      return updatedTask;
+    },
+    deleteTask: async (
+      _parent: undefined,
+      { id }: { id: string },
+    ): Promise<TaskDTO> => {
+      const deletedTask = await taskService.deleteTaskById(id);
+      return deletedTask;
+    },
+  },
+};
 
 // import ResidentService from "../../services/implementations/residentService";
 // import type IResidentService from "../../services/interfaces/residentService";
