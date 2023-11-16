@@ -17,6 +17,7 @@ module.exports = {
   ],
   rules: {
     "prettier/prettier": ["error", { endOfLine: "auto" }],
+    "class-methods-use-this": 0,
   },
   ignorePatterns: ["build/*"],
 };

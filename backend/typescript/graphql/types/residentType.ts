@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 
-//TODO: Look into custom types for dates and date time types  
+// TODO: Look into custom types for dates and date time types
 
 const residentType = gql`
   type ResidentDTO {

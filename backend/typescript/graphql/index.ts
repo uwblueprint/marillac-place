@@ -31,7 +31,15 @@ const mutation = gql`
 `;
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [query, mutation, authType, entityType, residentType, simpleEntityType, userType],
+  typeDefs: [
+    query,
+    mutation,
+    authType,
+    entityType,
+    residentType,
+    simpleEntityType,
+    userType,
+  ],
   resolvers: merge(
     authResolvers,
     entityResolvers,
