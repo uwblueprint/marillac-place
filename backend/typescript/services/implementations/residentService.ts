@@ -11,7 +11,17 @@ class ResidentService implements IResidentService {
     async add_resident(resident: CreateResidentDTO): Promise<ResidentDTO> {
         try {
             let newResident = await Prisma.resident.create({
-              data: resident,
+              data: {
+                first_name: resident.first_name,
+                last_name: resident.last_name,
+                email: resident.email,
+                phone_number: resident.phone_number,
+                display_name: resident.display_name,
+                profile_picture_link: resident.profile_picture_link,
+                birthdate: resident.birthdate,
+                credits: resident.credits,
+                date_joined: resident.date_joined
+              },
               include: { notifications: true }
             });
             return newResident;

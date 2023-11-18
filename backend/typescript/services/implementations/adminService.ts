@@ -21,7 +21,9 @@ class AdminService implements IAdminService {
 
   async getAllNotifications(): Promise<NotificationDTO[]>{
     try {
-      const notifications = await prisma.notification.findMany()
+      const notifications = await prisma.notification.findMany({
+        // include: {residents: true}
+      })
       if(!notifications) throw new Error(`No residents found.`);
       return notifications;
     } catch (error) {
@@ -36,9 +38,9 @@ class AdminService implements IAdminService {
         where : {
           id: Number(id)
         },
-        include: {
-          residents: true
-        }
+        // include: {
+        //   residents: true
+        // }
       });
       if(!notification) throw new Error(`notification id ${id} not found`); 
       
@@ -56,19 +58,20 @@ class AdminService implements IAdminService {
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
-          // author: {
-          //   connect: {id: this.staffId}
-          // },
-          residents: {
-            connect: {
-                id: Number(resident_id), 
-            },
+          author: {
+            // connect: {id: this.staffId}
+            connect: {id: Number(resident_id)}
+          },
+          // residents: {
+          //   connect: {
+          //       id: Number(resident_id), 
+          //   },
             
-          }
+          // }
         },
-        include: {
-          residents: true
-        }
+        // include: {
+        //   residents: true
+        // }
       })
 
       // ASK WILLIAM ABOUT ADDING THINGS TO THE LIST OF RESIDENTS IN NOTIFICATION 
@@ -93,7 +96,8 @@ class AdminService implements IAdminService {
       const residents = await prisma.resident.findMany({
         where: {
           date_left: null //check how we are implementing date_left
-        }
+        },
+        // include : { notifications: true }
       })
 
       if(!residents) throw new Error(`No residents found.`);
@@ -115,18 +119,18 @@ class AdminService implements IAdminService {
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
+          author: {
+            connect: {id: this.staffId}
+          },
           // author: {
-          //   connect: {id: this.staffId}
-          // },
-          residents: {
-            connect:  activeResidents.map(resident => ({
-              id: resident.id
-            }))
-          }
+          //   connect:  activeResidents.map(resident => ({
+          //     id: resident.id
+          //   }))
+          // }
         },
-        include: {
-          residents: true
-        }
+        // include: {
+        //   residents: true
+        // }
       })
 
       // let resident: Prisma.residentUncheckedCreateInput;
