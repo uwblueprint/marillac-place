@@ -1,45 +1,45 @@
 import { gql } from "apollo-server-express";
 
-//TODO: Look into custom types for dates and date time types  
+// TODO: Look into custom types for dates and date time types
 
 const residentType = gql`
   type ResidentDTO {
     id: ID!
-    first_name: String!
-    last_name: String!
+    firstName: String!
+    lastName: String!
     email: String!
-    phone_number: String
-    display_name: String!
-    profile_picture_link: String
-    birthdate: String
+    phoneNumber: String
+    displayName: String!
+    profilePictureLink: String
+    birthdate: Date
     credits: Float
-    date_joined: String!
-    date_left: String
+    dateJoined: DateTime!
+    dateLeft: DateTime
   }
 
   input CreateResidentDTO {
-    first_name: String!
-    last_name: String!
+    firstName: String!
+    lastName: String!
     email: String!
-    phone_number: String
-    display_name: String!
-    profile_picture_link: String
-    birthdate: String
+    phoneNumber: String
+    displayName: String!
+    profilePictureLink: String
+    birthdate: Date
     credits: Float
-    date_joined: String!
+    dateJoined: DateTime!
   }
 
   input UpdateResidentDTO {
-    first_name: String
-    last_name: String
+    firstName: String
+    lastName: String
     email: String
-    phone_number: String
-    display_name: String
-    profile_picture_link: String
-    birthdate: String
+    phoneNumber: String
+    displayName: String
+    profilePictureLink: String
+    birthdate: Date
     credits: Float
-    date_joined: String
-    date_left: String
+    dateJoined: DateTime
+    dateLeft: DateTime
   }
 
   extend type Query {
