@@ -3,33 +3,32 @@ export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 export type RecurrenceFrequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
 
 export interface InputTaskDTO {
-  category_id: number;
+  categoryId: number;
   title: string;
   status: Status;
   description: string;
-  assignee_id: number;
-  assigner_id: number;
-  credit_value: number;
-  start_date: Date;
-  end_date?: Date | null;
+  assigneeId: number;
+  assignerId: number;
+  creditValue: number;
+  startDate: Date;
+  endDate?: Date | null;
   comments: string;
-  recurrence_frequency: RecurrenceFrequency;
+  recurrenceFrequency: RecurrenceFrequency;
 }
 
 export interface TaskDTO {
   id: number;
-  category_name?: string;
+  categoryName?: string;
   title: string;
   status: Status;
   description: string;
-  assignee_name?: string;
-  assigner_name?: string;
-  credit_value: number;
-  start_date: Date;
-  end_date?: Date | null;
+  assigneeName?: string;
+  assignerName?: string;
+  creditValue: number;
+  startDate: Date;
+  endDate?: Date | null;
   comments: string;
-  recurrence_frequency: RecurrenceFrequency;
-  // warnings: warning []
+  recurrenceFrequency: RecurrenceFrequency;
 }
 
 export interface ITaskService {
@@ -39,7 +38,7 @@ export interface ITaskService {
    * @returns a TaskDTO associated with the task id
    * @throws Error if task retrieval fails
    */
-  getTaskById(taskId: string): Promise<TaskDTO>;
+  getTaskById(taskId: number): Promise<TaskDTO>;
 
   /**
    * Get all tasks belonging to a category
@@ -47,7 +46,7 @@ export interface ITaskService {
    * @returns a TaskDTO with category information
    * @throws Error if task retrieval fails
    */
-  getTasksByCategoryId(categoryId: string): Promise<TaskDTO[]>;
+  getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks assigned to a resident
@@ -55,7 +54,7 @@ export interface ITaskService {
    * @returns a TaskDTO with task's information
    * @throws Error if task retrieval fails
    */
-  getTasksByAssigneeId(assigneeId: string): Promise<TaskDTO[]>;
+  getTasksByAssigneeId(assigneeId: number): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks assigned by a staff member
@@ -63,7 +62,7 @@ export interface ITaskService {
    * @returns a TaskDTO with task's information
    * @throws Error if task retrieval fails
    */
-  getTasksByAssignerId(assignerId: string): Promise<TaskDTO[]>;
+  getTasksByAssignerId(assignerId: number): Promise<TaskDTO[]>;
 
   /**
    * Create a task
@@ -80,7 +79,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the updated task's information
    * @throws Error if task update fails
    */
-  updateTaskById(taskId: string, task: InputTaskDTO): Promise<TaskDTO>;
+  updateTaskById(taskId: number, task: InputTaskDTO): Promise<TaskDTO>;
 
   /**
    * Delete a task by id
@@ -88,5 +87,5 @@ export interface ITaskService {
    * @returns a TaskDTO with the deleted task's information
    * @throws Error if task deletion fails
    */
-  deleteTaskById(taskId: string): Promise<TaskDTO>;
+  deleteTaskById(taskId: number): Promise<TaskDTO>;
 }
