@@ -128,7 +128,7 @@ model notification {
   id        Int                 @id @default(autoincrement())
   message   String
   authorId  Int                 @map("author_id")
-  author    staff               @relation(fields: [author_id], references: [id])
+  author    staff               @relation(fields: [authorId], references: [id])
   createdAt DateTime            @default(now()) @map("created_at")
   residents notification_user[]
 }
