@@ -12,7 +12,7 @@ const Prisma = new PrismaClient();
 const Logger = logger(__filename);
 
 class ResidentService implements IResidentService {
-  async add_resident(resident: CreateResidentDTO): Promise<ResidentDTO> {
+  async addResident(resident: CreateResidentDTO): Promise<ResidentDTO> {
     try {
       const newResident = await Prisma.resident.create({
         data: { ...resident, credits: resident.credits ?? 0 },
@@ -26,7 +26,7 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async update_resident(
+  async updateResident(
     id: number,
     resident: UpdateResidentDTO,
   ): Promise<ResidentDTO> {
@@ -44,7 +44,7 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async delete_resident(id: number): Promise<ResidentDTO> {
+  async deleteResident(id: number): Promise<ResidentDTO> {
     try {
       const deletedResident = await Prisma.resident.delete({
         where: { id },
@@ -58,7 +58,7 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async get_all_residents(): Promise<ResidentDTO[]> {
+  async getAllResidents(): Promise<ResidentDTO[]> {
     try {
       const allResidents = await Prisma.resident.findMany();
       return allResidents;
@@ -70,7 +70,7 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async get_residents_by_id(id: number[]): Promise<ResidentDTO[]> {
+  async getResidentsById(id: number[]): Promise<ResidentDTO[]> {
     try {
       const allResidentsById = await Prisma.resident.findMany({
         where: { id: { in: id } },

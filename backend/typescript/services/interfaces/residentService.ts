@@ -44,7 +44,7 @@ export interface IResidentService {
    * @returns a ResidentDTO with created resident info
    * @throws Error if resident reation fails
    */
-  add_resident(residentInfo: CreateResidentDTO): Promise<ResidentDTO>;
+  addResident(residentInfo: CreateResidentDTO): Promise<ResidentDTO>;
 
   /**
    * Update a resident's details
@@ -52,7 +52,7 @@ export interface IResidentService {
    * @param residentInfo: Update ResidentDTO of the resident with this information
    * @returns: a ResidentDTO with resident's updated info
    */
-  update_resident(
+  updateResident(
     residentId: number,
     residentInfo: UpdateResidentDTO,
   ): Promise<ResidentDTO>;
@@ -63,14 +63,14 @@ export interface IResidentService {
    * @returns: a ResidentDTO with deleted resident's info
    * @throws Error if resident deletion fails
    */
-  delete_resident(residentId: number): Promise<ResidentDTO>;
+  deleteResident(residentId: number): Promise<ResidentDTO>;
 
   /**
    * Gets all residents
    * @returns: array of ResidentDTO's with all residents
    * @throws Error if retrieval fails
    */
-  get_all_residents(): Promise<Array<ResidentDTO>>;
+  getAllResidents(): Promise<Array<ResidentDTO>>;
 
   /**
    * Gets certain residents based on resident id
@@ -78,5 +78,5 @@ export interface IResidentService {
    * @returns: array of ResidentDTO's with residents information
    * @throws Error if retrieval fails
    */
-  get_residents_by_id(residentId: number[]): Promise<Array<ResidentDTO>>;
+  getResidentsById(residentId: number[]): Promise<Array<ResidentDTO>>;
 }
