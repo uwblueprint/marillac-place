@@ -1,7 +1,10 @@
 import { makeExecutableSchema, gql } from "apollo-server-express";
 import { applyMiddleware } from "graphql-middleware";
 import { merge } from "lodash";
-import { typeDefs as scalarTypeDefs, resolvers as scalarResolvers } from "graphql-scalars";
+import {
+  typeDefs as scalarTypeDefs,
+  resolvers as scalarResolvers,
+} from "graphql-scalars";
 
 import {
   isAuthorizedByEmail,

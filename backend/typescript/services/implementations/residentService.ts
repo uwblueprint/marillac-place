@@ -15,7 +15,7 @@ class ResidentService implements IResidentService {
   async add_resident(resident: CreateResidentDTO): Promise<ResidentDTO> {
     try {
       const newResident = await Prisma.resident.create({
-        data: {...resident, credits: resident.credits ?? 0},
+        data: { ...resident, credits: resident.credits ?? 0 },
       });
       return newResident;
     } catch (error: unknown) {
