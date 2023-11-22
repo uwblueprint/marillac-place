@@ -15,35 +15,35 @@ const taskType = gql`
   }
 
   input InputTaskDTO {
-    category_id: Int!
+    categoryId: Int!
     title: String!
     status: Status
     description: String!
-    assignee_id: Int!
-    assigner_id: Int!
-    credit_value: Int!
-    start_date: String!
-    end_date: String
+    assigneeId: Int!
+    assignerId: Int!
+    creditValue: Int!
+    startDate: String!
+    endDate: String
     comments: String!
-    recurrence_frequency: Recurrence_Frequency!
+    recurrenceFrequency: Recurrence_Frequency!
   }
 
   type TaskDTO {
     id: Int!
     category: String!
-    category_id: Int!
+    categoryId: Int!
     title: String!
     status: Status!
     description: String!
-    assignee_id: Int!
+    assigneeId: Int!
     assignee: String!
-    assigner_id: Int!
+    assignerId: Int!
     assigner: String!
-    credit_value: Int!
-    start_date: String!
-    end_date: String
+    creditValue: Int!
+    startDate: String!
+    endDate: String
     comments: String!
-    recurrence_frequency: Recurrence_Frequency!
+    recurrenceFrequency: Recurrence_Frequency!
   }
 `;
 
