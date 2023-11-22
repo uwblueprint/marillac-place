@@ -14,28 +14,28 @@ const taskResolvers = {
       _parent: undefined,
       { id }: { id: string },
     ): Promise<TaskDTO> => {
-      const task = await taskService.getTaskById(id);
+      const task = await taskService.getTaskById(Number(id));
       return task;
     },
     getTasksByCategoryId: async (
       _parent: undefined,
       { id }: { id: string },
-    ): Promise<TaskDTO[]> => {
-      const tasks = await taskService.getTasksByCategoryId(id);
+    ): Promise<Array<TaskDTO>> => {
+      const tasks = await taskService.getTasksByCategoryId(Number(id));
       return tasks;
     },
     getTasksByAssigneeId: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<TaskDTO[]> => {
-      const tasks = await taskService.getTasksByAssigneeId(id);
+      const tasks = await taskService.getTasksByAssigneeId(Number(id));
       return tasks;
     },
     getTasksByAssignerId: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<TaskDTO[]> => {
-      const tasks = await taskService.getTasksByAssignerId(id);
+      const tasks = await taskService.getTasksByAssignerId(Number(id));
       return tasks;
     },
   },
@@ -52,63 +52,17 @@ const taskResolvers = {
       { id }: { id: string },
       { task }: { task: InputTaskDTO },
     ): Promise<TaskDTO> => {
-      const updatedTask = await taskService.updateTaskById(id, task);
+      const updatedTask = await taskService.updateTaskById(Number(id), task);
       return updatedTask;
     },
     deleteTask: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<TaskDTO> => {
-      const deletedTask = await taskService.deleteTaskById(id);
+      const deletedTask = await taskService.deleteTaskById(Number(id));
       return deletedTask;
     },
   },
 };
-
-// import ResidentService from "../../services/implementations/residentService";
-// import type IResidentService from "../../services/interfaces/residentService";
-// import type { ResidentDTO, CreateResidentDTO, UpdateResidentDTO } from "../../services/interfaces/residentService";
-
-// const residentService: IResidentService = new ResidentService();
-// //const authService: IAuthService = new AuthService(userService, emailService);
-
-// const residentResolvers = {
-//   Query: {
-//     residentsById: async (
-//         _parent: undefined,
-//         { id }: { id: string[] },
-//     ): Promise<Array<ResidentDTO>> => {
-//         return residentService.get_residents_by_id(id.map(Number));
-//     },
-//     allResidents: async (): Promise<Array<ResidentDTO>> => {
-//         return residentService.get_all_residents();
-//     }
-//   },
-//   Mutation: {
-//     addResident: async (
-//         _parent: undefined,
-//         { resident }: { resident: CreateResidentDTO },
-//     ): Promise<ResidentDTO> => {
-//         const newResident = await residentService.add_resident(resident);
-//         return newResident;
-//     },
-//     updateResident: async (
-//         _parent: undefined,
-//         { id, resident }: { id: string, resident: UpdateResidentDTO },
-//     ): Promise<ResidentDTO> => {
-//         const newResident = await residentService.update_resident(parseInt(id), resident);
-//         return newResident;
-//     },
-//     deleteResident: async (
-//         _parent: undefined,
-//         { id }: { id: string },
-//     ): Promise<ResidentDTO> => {
-//         const deletedResident = await residentService.delete_resident(parseInt(id));
-//         return deletedResident;
-//     },
-//   },
-// };
-
-// export default residentResolvers;
 
 export default taskResolvers;

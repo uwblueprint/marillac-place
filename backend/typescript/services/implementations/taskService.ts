@@ -153,11 +153,11 @@ class TaskService implements ITaskService {
           title: task.title,
           status: task.status,
           description: task.description,
-          credit_value: task.creditValue,
-          start_date: task.startDate,
-          end_date: task.endDate,
+          creditValue: task.creditValue,
+          startDate: task.startDate,
+          endDate: task.endDate,
           comments: task.comments,
-          recurrence_frequency: task.recurrenceFrequency,
+          recurrenceFrequency: task.recurrenceFrequency,
           category: {
             connect: {
               id: task.categoryId,
@@ -200,11 +200,11 @@ class TaskService implements ITaskService {
           title: task.title,
           status: task.status,
           description: task.description,
-          credit_value: task.creditValue,
-          start_date: task.startDate,
-          end_date: task.endDate,
+          creditValue: task.creditValue,
+          startDate: task.startDate,
+          endDate: task.endDate,
           comments: task.comments,
-          recurrence_frequency: task.recurrenceFrequency,
+          recurrenceFrequency: task.recurrenceFrequency,
           category: {
             connect: {
               id: task.categoryId,
