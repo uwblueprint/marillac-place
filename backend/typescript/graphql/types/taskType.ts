@@ -8,7 +8,7 @@ const taskType = gql`
     EXCUSED
   }
 
-  enum Recurrence_Frequency {
+  enum RecurrenceFrequency {
     DAILY
     WEEKLY
     BI_WEEKLY
@@ -25,7 +25,7 @@ const taskType = gql`
     startDate: String!
     endDate: String
     comments: String!
-    recurrenceFrequency: Recurrence_Frequency!
+    recurrenceFrequency: RecurrenceFrequency!
   }
 
   type TaskDTO {
@@ -43,7 +43,7 @@ const taskType = gql`
     startDate: String!
     endDate: String
     comments: String!
-    recurrenceFrequency: Recurrence_Frequency!
+    recurrenceFrequency: RecurrenceFrequency!
   }
 
   extend type Query {
