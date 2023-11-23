@@ -13,7 +13,7 @@ export interface InputTaskDTO {
   startDate: Date;
   endDate?: Date | null;
   comments: string;
-  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceFrequency: Status;
 }
 
 export interface TaskDTO {
@@ -28,7 +28,7 @@ export interface TaskDTO {
   startDate: Date;
   endDate?: Date | null;
   comments: string;
-  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceFrequency: Status;
 }
 
 export interface ITaskService {

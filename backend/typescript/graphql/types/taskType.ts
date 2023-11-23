@@ -25,7 +25,7 @@ const taskType = gql`
     startDate: String!
     endDate: String
     comments: String!
-    recurrenceFrequency: RecurrenceFrequency!
+    recurrenceFrequency: Status!
   }
 
   type TaskDTO {
@@ -43,7 +43,7 @@ const taskType = gql`
     startDate: String!
     endDate: String
     comments: String!
-    recurrenceFrequency: RecurrenceFrequency!
+    recurrenceFrequency: Status!
   }
 
   extend type Query {
