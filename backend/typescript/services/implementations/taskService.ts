@@ -157,7 +157,7 @@ class TaskService implements ITaskService {
           startDate: task.startDate,
           endDate: task.endDate,
           comments: task.comments,
-          recurrenceFrequency: task.status,
+          recurrenceFrequency: task.recurrenceFrequency,
           category: {
             connect: {
               id: task.categoryId,
@@ -204,7 +204,7 @@ class TaskService implements ITaskService {
           startDate: task.startDate,
           endDate: task.endDate,
           comments: task.comments,
-          recurrenceFrequency: task.status,
+          recurrenceFrequency: task.recurrenceFrequency,
           category: {
             connect: {
               id: task.categoryId,
