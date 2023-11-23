@@ -88,16 +88,16 @@ model warning {
 
 model staff {
   id                   Int            @id @default(autoincrement())
-  role_id              Int
-  role                 role           @relation(fields: [role_id], references: [id])
-  first_name           String
-  last_name            String
+  roleId              Int
+  role                 role           @relation(fields: [roleId], references: [id])
+  firstName           String
+  lastName            String
   email                String         @unique
-  phone_number         String?
-  display_name         String
-  profile_picture_link String?
-  tasks_assigned       task[]
-  warnings_assigned    warning[]
+  phoneNumber         String?
+  displayName         String?
+  profilePictureLink String?
+  tasksAssigned       task[]
+  warningsAssigned    warning[]
   notifications        notification[]
 }
 
