@@ -1,6 +1,6 @@
 export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 
-export type RecurrenceFrequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
+export type Recurrence_Frequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
 
 export interface InputTaskDTO {
   categoryId: number;
@@ -13,7 +13,7 @@ export interface InputTaskDTO {
   startDate: Date;
   endDate?: Date | null;
   comments: string;
-  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceFrequency: Recurrence_Frequency;
 }
 
 export interface TaskDTO {
@@ -28,7 +28,7 @@ export interface TaskDTO {
   startDate: Date;
   endDate?: Date | null;
   comments: string;
-  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceFrequency: Recurrence_Frequency;
 }
 
 export interface ITaskService {
