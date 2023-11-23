@@ -78,6 +78,35 @@ class ResidentService implements IResidentService {
         }
     }
 
+    async create_resident_with_notification(email: String, notif_id: number): Promise<ResidentDTO> {
+        let newResident: ResidentDTO; 
+        try{
+            newResident = await Prisma.resident.create({
+                data: {
+                    first_name: "first",
+                    last_name: "last",
+                    email: String(email),
+                    phone_number: "1231234123",
+                    display_name: "display",
+                    credits: 1.0,
+                    date_joined: "2011-10-05T14:48:00.000Z",
+                    notifications: {
+                        connect: {
+                            id: 3, 
+                        }, 
+                    }
+                },
+                include: {
+                    notifications: true
+                }
+            })
+
+            return newResident;
+
+        }catch(error){
+            throw error;
+        }
+    }
 }
 
 export default ResidentService;

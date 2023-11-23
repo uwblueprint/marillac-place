@@ -15,7 +15,7 @@ const residentType = gql`
     credits: Float
     date_joined: String
     date_left: String
-    notification: [NotificationDTO!]
+    notifications: [NotificationDTO!]
   }
 
   input CreateResidentDTO {
@@ -52,6 +52,7 @@ const residentType = gql`
     updateResident(id: ID!, resident: UpdateResidentDTO!): ResidentDTO!
     addResident(resident: CreateResidentDTO!): ResidentDTO!
     deleteResident(id: ID!): ResidentDTO!
+    createResidentWithNotification(email: String, notif_id: ID): ResidentDTO!
   }
 `;
 

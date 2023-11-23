@@ -39,6 +39,13 @@ const residentResolvers = {
         const deletedResident = await residentService.delete_resident(parseInt(id));
         return deletedResident;
     },
+    createResidentWithNotification: async (
+        _parent: undefined,
+        { email, id }: { email: String, id: number },
+    ): Promise<ResidentDTO> => {
+        const newResident = await residentService.create_resident_with_notification(email, id);
+        return newResident;
+    },
   },
 };
 

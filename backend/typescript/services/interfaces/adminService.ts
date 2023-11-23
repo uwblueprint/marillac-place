@@ -8,10 +8,10 @@ import { ResidentDTO } from "./residentService"
 
 export interface NotificationDTO {
     id: number;
-    author_id: number; 
+    //author_id: number; 
     message: string;
     created_at: Date;
-    // residents?: ResidentDTO[]; //might need to change when integrated 
+    residents?: ResidentDTO[]; //might need to change when integrated 
 }
 
 // export interface NotificationUserDTO {

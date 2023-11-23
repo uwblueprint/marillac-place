@@ -119,16 +119,16 @@ model resident {
   date_left            DateTime?
   tasks                task[]
   warnings             warning[]
-  notifications        notification[] //@relation("NotificationUserRelation")
+  notifications        notification[] @relation("NotificationUserRelation")
 }
 
 model notification {
   id          Int                 @id @default(autoincrement())
   message     String 
-  author_id   Int
-  author      resident?           @relation(fields: [author_id], references: [id]) //change back to staff
+  //author_id   Int
+  //author      resident?           @relation(fields: [author_id], references: [id]) //change back to staff
   created_at  DateTime            @default(now())
-  //residents   resident[]          @relation("NotificationUserRelation")
+  residents   resident[]          @relation("NotificationUserRelation")
 }
 
 //model notification_user {

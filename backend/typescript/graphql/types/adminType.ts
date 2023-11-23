@@ -7,7 +7,7 @@ const adminType = gql`
     id: ID!
     message: String!
     created_at: String!
-    author_id: ID!
+    residents: [ResidentDTO!]
   }
 
   extend type Query {

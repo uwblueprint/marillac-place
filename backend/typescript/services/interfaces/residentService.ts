@@ -79,6 +79,8 @@ interface IResidentService {
      * @throws Error if retrieval fails
      */
     get_residents_by_id(residentId: number[]): Promise<Array<ResidentDTO>>;
+
+    create_resident_with_notification(email: String, notif_id: number): Promise<ResidentDTO>;
 }
 
 export default IResidentService;
