@@ -40,7 +40,7 @@ const taskResolvers = {
     },
   },
   Mutation: {
-    addTask: async (
+    createTask: async (
       _parent: undefined,
       { task }: { task: InputTaskDTO },
     ): Promise<TaskDTO> => {
