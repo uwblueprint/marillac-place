@@ -15,7 +15,13 @@ const residentResolvers = {
     },
     allResidents: async (): Promise<Array<ResidentDTO>> => {
         return residentService.get_all_residents();
-    }
+    },
+    activeResidents: async (
+        _parent: undefined,
+    ): Promise<ResidentDTO[]> => {
+        const activeResidents = await residentService.getActiveResidents()
+        return activeResidents
+    },
   },
   Mutation: {
     addResident: async (
@@ -38,13 +44,6 @@ const residentResolvers = {
     ): Promise<ResidentDTO> => {
         const deletedResident = await residentService.delete_resident(parseInt(id));
         return deletedResident;
-    },
-    createResidentWithNotification: async (
-        _parent: undefined,
-        { email, id }: { email: String, id: number },
-    ): Promise<ResidentDTO> => {
-        const newResident = await residentService.create_resident_with_notification(email, id);
-        return newResident;
     },
   },
 };

@@ -17,12 +17,6 @@ const adminResolvers = {
         ): Promise<NotificationDTO> => {
             return await adminService.getNotificationById(id)
         },
-        activeResidents: async (
-            _parent: undefined,
-        ): Promise<ResidentDTO[]> => {
-            const activeResidents = await adminService.getActiveResidents()
-            return activeResidents
-        },
         getAllNotifications: async (
             _parent: undefined,
         ): Promise<NotificationDTO[]> => {

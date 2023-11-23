@@ -12,7 +12,6 @@ const adminType = gql`
 
   extend type Query {
     notificationById(id: ID!): NotificationDTO!
-    activeResidents: [ResidentDTO]
     getAllNotifications: [NotificationDTO]
   }
 
@@ -23,9 +22,3 @@ const adminType = gql`
 `;
 
 export default adminType;
-/*
-type NotificationUserDTO {
-    notification_id: ID!
-    recipient_id: ID!
-  }
-*/

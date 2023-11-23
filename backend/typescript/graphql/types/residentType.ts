@@ -46,13 +46,13 @@ const residentType = gql`
   extend type Query {
     residentsById(id: [ID!]): [ResidentDTO!]
     allResidents: [ResidentDTO!]
+    activeResidents: [ResidentDTO!]
   }
 
   extend type Mutation {
     updateResident(id: ID!, resident: UpdateResidentDTO!): ResidentDTO!
     addResident(resident: CreateResidentDTO!): ResidentDTO!
     deleteResident(id: ID!): ResidentDTO!
-    createResidentWithNotification(email: String, notif_id: ID): ResidentDTO!
   }
 `;
 

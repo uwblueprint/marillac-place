@@ -77,34 +77,22 @@ class ResidentService implements IResidentService {
             throw error;
         }
     }
-
-    async create_resident_with_notification(email: String, notif_id: number): Promise<ResidentDTO> {
-        let newResident: ResidentDTO; 
+    
+    async getActiveResidents(): Promise<ResidentDTO[]>{
         try{
-            newResident = await Prisma.resident.create({
-                data: {
-                    first_name: "first",
-                    last_name: "last",
-                    email: String(email),
-                    phone_number: "1231234123",
-                    display_name: "display",
-                    credits: 1.0,
-                    date_joined: "2011-10-05T14:48:00.000Z",
-                    notifications: {
-                        connect: {
-                            id: 3, 
-                        }, 
-                    }
-                },
-                include: {
-                    notifications: true
-                }
-            })
-
-            return newResident;
-
-        }catch(error){
-            throw error;
+          const residents = await Prisma.resident.findMany({
+            where: {
+              date_left: null //check how we are implementing date_left
+            },
+            include : { notifications: true }
+          })
+    
+          if(!residents) throw new Error(`No residents found.`);
+          
+          return residents
+        } catch (error) {
+        //   Logger.error(`Failed to get all active Residents. Readon = ${getErrorMessage(error)}`);
+          throw error;
         }
     }
 }

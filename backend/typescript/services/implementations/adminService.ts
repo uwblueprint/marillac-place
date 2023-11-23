@@ -9,7 +9,10 @@ import type {
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import { ResidentDTO } from "../interfaces/residentService"
+import IResidentService from "../interfaces/residentService"
+import ResidentService from "./residentService";
 
+const residentService: IResidentService = new ResidentService();
 const Logger = logger(__filename);
 
 class AdminService implements IAdminService {
@@ -52,23 +55,13 @@ class AdminService implements IAdminService {
   }
 
   async sendNotification(notif_message: String, resident_id: number): Promise<NotificationDTO>{
-    // let newNotificationUserLink: Prisma.notification_userCreateInput; 
     let newNotification: NotificationDTO; 
     try{
       newNotification = await prisma.notification.create({
         data: {
           message: String(notif_message),
           // author: {
-          //   // connect: {id: this.staffId}
-          //   connect: {id: Number(resident_id)}
-          //   // create: {
-          //   //   first_name: "TOM",
-          //   //   last_name: "BOB",
-          //   //   email: "sdiofha@gmail.com",
-          //   //   credits: 1.0,
-          //   //   date_joined: "2011-10-05T14:48:00.000Z",
-          //   //   display_name: "Display_Name"
-          //   // }
+          //   connect: {id: this.staffId}
           // },
           residents: {
             connect: {
@@ -82,47 +75,18 @@ class AdminService implements IAdminService {
         }
       })
 
-      // ASK WILLIAM ABOUT ADDING THINGS TO THE LIST OF RESIDENTS IN NOTIFICATION 
-      // newNotificationUserLink = await prisma.notification_user.create({
-      //   data: {
-      //     recipient_id: resident_id,
-      //     notification_id: Number(newNotification.id),
-      //   }
-      // })
-
       return newNotification;
-      //add list(newNotificationUserLink) to newNotification ?
       
     }catch(error){
       Logger.error(`Failed to create Notification. Reason = ${getErrorMessage(error)}`)
       throw error;
     }
   }
-    
-  async getActiveResidents(): Promise<ResidentDTO[]>{
-    try{
-      const residents = await prisma.resident.findMany({
-        where: {
-          date_left: null //check how we are implementing date_left
-        },
-        include : { notifications: true }
-      })
-
-      if(!residents) throw new Error(`No residents found.`);
-      
-      return residents
-    } catch (error) {
-      Logger.error(`Failed to get all active Residents. Readon = ${getErrorMessage(error)}`);
-      throw error;
-    }
-  }
-  
   
   async sendAnnouncement(notif_message: String): Promise<NotificationDTO>{
-    // let newNotificationUserLink: Prisma.notification_userCreateInput; 
     let newNotification: NotificationDTO; 
     try{
-      const activeResidents = await this.getActiveResidents()
+      const activeResidents = await residentService.getActiveResidents()
 
       newNotification = await prisma.notification.create({
         data: {
@@ -140,18 +104,6 @@ class AdminService implements IAdminService {
           residents: true
         }
       })
-
-      // let resident: Prisma.residentUncheckedCreateInput;
-      // // create notification_user for each active resident 
-      
-      // for(let resident of activeResidents){
-      //   newNotificationUserLink = await prisma.notification_user.create({
-      //     data: {
-      //       recipient_id: Number(resident.id),
-      //       notification_id: Number(newNotification.id),
-      //     }
-      //   })
-      // }
 
       return newNotification; 
 

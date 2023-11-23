@@ -80,7 +80,12 @@ interface IResidentService {
      */
     get_residents_by_id(residentId: number[]): Promise<Array<ResidentDTO>>;
 
-    create_resident_with_notification(email: String, notif_id: number): Promise<ResidentDTO>;
+    /**
+     * Gets certain residents based on resident id
+     * @returns: array of ResidentDTO's of only residents currently at Marillac Place 
+     * @throws Error if retrieval fails
+     */
+    getActiveResidents(): Promise<ResidentDTO[]>;
 }
 
 export default IResidentService;
