@@ -45,6 +45,20 @@ const taskType = gql`
     comments: String!
     recurrenceFrequency: Recurrence_Frequency!
   }
+
+  extend type Query {
+    getTaskById(id: Int!): TaskDTO!
+    getTasksByCategoryId(categoryId: Int!): [TaskDTO!]
+    getTasksByAssigneeId(assigneeId: Int!): [TaskDTO!]
+    getTasksByAssignerId(assignerId: Int!): [TaskDTO!]
+  }
+
+  extend type Mutation {
+    addTask(id: Int!): TaskDTO!
+    updateTask(id: Int!, task: InputTaskDTO!): TaskDTO!
+    deleteTask(id: Int!): TaskDTO!
+  }
+
 `;
 
 export default taskType;
