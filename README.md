@@ -68,6 +68,7 @@ docker-compose up --build
 The backend runs at http://localhost:5000 and the frontend runs at http://localhost:3000. By default, we use GraphQL (with TypeScript backend), REST (with Python backend), MongoDB, with user auth.
 
 ### Note: Manual Database Setup
+
 If for some reason docker container is not syncing with your prisma models in backend/typescript/prisma/schema
 
 Update .env file in /backend/typescript to be
@@ -87,10 +88,15 @@ This may require you to upgrade your node version locally so try (only if it tel
 (https://www.freecodecamp.org/news/node-version-manager-nvm-install-guide/) If you don't have nvm
 
 ```
-nvm install 18.16.0
-nvm use 18.16.0
+nvm install 18.18.2
+nvm use 18.18.2
 ```
 
+## Creating Prisma Migration
+
+Go to `backend/typescript` and run
+
+npx prisma migrate dev
 
 ## Useful Commands
 
