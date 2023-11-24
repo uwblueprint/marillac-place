@@ -20,6 +20,7 @@ import adminResolvers from "./resolvers/adminResolvers";
 import simpleEntityType from "./types/simpleEntityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
+import adminType from "./types/adminType";
 import residentResolvers from "./resolvers/residentResolvers";
 import residentType from "./types/residentType";
 
@@ -45,6 +46,7 @@ const executableSchema = makeExecutableSchema({
     residentType,
     simpleEntityType,
     userType,
+    adminType
   ],
   resolvers: merge(
     scalarResolvers,

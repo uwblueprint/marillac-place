@@ -1,45 +1,20 @@
 import { Prisma } from "@prisma/client";
-
-// export interface NotificationRequestDTO {
-//     message: string;
-// }
+import { ResidentDTO } from "./residentService"
 
 export interface NotificationDTO {
     id: number;
-    author_id: number; 
+    //author_id: number;  //STAFF NOT IMPLEMENTED AT THIS POINT
     message: string;
-    created_at: Date;
-    residents?: NotificationUserDTO[]; //might need to change when integrated 
-}
-
-export interface NotificationUserDTO {
-    notification_id: number;
-    recipient_id: number;
-}
-
-export interface ResidentDTO {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone_number?: string | null;
-    display_name: string;
-    profile_picture_link?: string | null;
-    birthdate?: Date | null;
-    credits: number;
-    date_joined: Date;
-    date_left?:  Date | null;
+    createdAt: Date;
+    residents?: ResidentDTO[]; //might need to change when integrated 
 }
 
 export interface IAdminService {
 
-    //Move to Residents Service when its done 
-    getActiveResidents(): Promise<ResidentDTO[]>;
-    
     /**
      * Get a notification by a defined id
      * @param id notification id
-     * @returns a notificationCreateInput associated with the notification id
+     * @returns a NotificationDTO associated with the notification id
      * @throws Error if retrieval fails
      */
     getNotificationById(id: number): Promise<NotificationDTO>;
@@ -48,17 +23,22 @@ export interface IAdminService {
      * Post a notification to the specified resident
      * @param notif_obj notification id
      * @param resident_id resident id
-     * @returns a notificationCreateInput associated with the posted notification
+     * @returns a NotificationDTO associated with the posted notification
      * @throws Error if creation fails
      */
     sendNotification(notif_message: String, resident_id: number): Promise<NotificationDTO>;
     
+    /**
+     * Post a notification to the specified resident
+     * @returns a list of NotificationDTOs containing all notifications/ announcements 
+     * @throws Error if creation fails
+     */
+    getAllNotifications(): Promise<NotificationDTO[]>;
 
-    
     /**
      * Post the announcement notif_obj to all active residents
      * @param notif_obj notification 
-     * @returns the new updated notificationCreateInput
+     * @returns the new updated NotificationDTO
      * @throws Error if creation fails
      */
     sendAnnouncement(notif_messagej: String ): Promise<NotificationDTO>;     

@@ -2,9 +2,9 @@ import { Prisma } from "@prisma/client"
 import AdminService from "../../services/implementations/adminService"
 import {
     IAdminService,
-    ResidentDTO,
     NotificationDTO
 } from "../../services/interfaces/adminService"
+import { ResidentDTO } from "../../services/interfaces/residentService";
 
 // change staff_id to StaffService when its done 
 const adminService: IAdminService = new AdminService(3)
@@ -17,12 +17,11 @@ const adminResolvers = {
         ): Promise<NotificationDTO> => {
             return await adminService.getNotificationById(id)
         },
-        activeResidents: async (
+        getAllNotifications: async (
             _parent: undefined,
-        ): Promise<ResidentDTO[]> => {
-            const activeResidents = await adminService.getActiveResidents()
-            return activeResidents
-        }
+        ): Promise<NotificationDTO[]> => {
+            return await adminService.getAllNotifications()
+        },
     },
 
     Mutation: {
