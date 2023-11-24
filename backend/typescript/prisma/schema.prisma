@@ -98,7 +98,7 @@ model staff {
   profilePictureLink String?        @map("profile_picture_link")
   tasks_assigned     task[]
   warnings_assigned  warning[]
-  notifications      notification[]
+  // notifications      notification[]
 }
 
 model role {
@@ -121,14 +121,14 @@ model resident {
   dateLeft           DateTime?           @map("date_left")
   tasks              task[]
   warnings           warning[]
-  notifications      notification_user[] @relation("NotificationUserRelation")
+  notifications      notification[] @relation("NotificationUserRelation")
 }
 
 model notification {
-  id        Int                 @id @default(autoincrement())
-  message   String
-  // authorId  Int                 @map("author_id")
-  // author    staff               @relation(fields: [authorId], references: [id])
-  createdAt DateTime            @default(now()) @map("created_at")
-  residents notification_user[] @relation("NotificationUserRelation")
+  id          Int                 @id @default(autoincrement())
+  message     String
+  // authorId  Int                @map("author_id")
+  // author    staff              @relation(fields: [authorId], references: [id])
+  createdAt   DateTime            @default(now()) @map("created_at")
+  residents   resident[]          @relation("NotificationUserRelation")
 }

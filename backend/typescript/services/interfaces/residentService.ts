@@ -81,4 +81,12 @@ export interface IResidentService {
    * @throws Error if retrieval fails
    */
   getResidentsById(residentId: number[]): Promise<Array<ResidentDTO>>;
+
+  /**
+   * Gets all residents that are currently active
+   * @returns: array of ResidentDTO's with all active residents
+   * @throws Error if retrieval fails
+   */
+  getActiveResidents(): Promise<Array<ResidentDTO>>;
+
 }

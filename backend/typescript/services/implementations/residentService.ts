@@ -95,7 +95,7 @@ class ResidentService implements IResidentService {
     try{
       const residents = await Prisma.resident.findMany({
         where: {
-          date_left: null
+          dateLeft: null
         },
         include : { notifications: true }
       })

@@ -8,8 +8,7 @@ import type {
 //import type IStaffService from "../interfaces/FILEOFDTO";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
-import { ResidentDTO } from "../interfaces/residentService"
-import IResidentService from "../interfaces/residentService"
+import { ResidentDTO, IResidentService } from "../interfaces/residentService"
 import ResidentService from "./residentService";
 
 const residentService: IResidentService = new ResidentService();

@@ -5,7 +5,7 @@ export interface NotificationDTO {
     id: number;
     //author_id: number;  //STAFF NOT IMPLEMENTED AT THIS POINT
     message: string;
-    created_at: Date;
+    createdAt: Date;
     residents?: ResidentDTO[]; //might need to change when integrated 
 }
 
