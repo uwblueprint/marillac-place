@@ -32,19 +32,14 @@ const staffResolvers = {
       _parent: undefined,
       { id, staff }: { id: string; staff: UpdateStaffDTO },
     ): Promise<StaffDTO> => {
-      const newStaff = await staffService.updateStaff(
-        parseInt(id, 10),
-        staff,
-      );
+      const newStaff = await staffService.updateStaff(parseInt(id, 10), staff);
       return newStaff;
     },
     deleteStaff: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<StaffDTO> => {
-      const deletedStaff = await staffService.deleteStaff(
-        parseInt(id, 10),
-      );
+      const deletedStaff = await staffService.deleteStaff(parseInt(id, 10));
       return deletedStaff;
     },
   },

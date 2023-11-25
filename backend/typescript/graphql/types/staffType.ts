@@ -1,6 +1,6 @@
-import { gql } from "apollo-server-express"
+import { gql } from "apollo-server-express";
 
-const staffType = gql `
+const staffType = gql`
   type StaffDTO {
     id: ID!
     roleId: Float!
@@ -42,4 +42,3 @@ const staffType = gql `
 `;
 
 export default staffType;
-
