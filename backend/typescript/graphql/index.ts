@@ -1,6 +1,10 @@
 import { makeExecutableSchema, gql } from "apollo-server-express";
 import { applyMiddleware } from "graphql-middleware";
 import { merge } from "lodash";
+import {
+  typeDefs as scalarTypeDefs,
+  resolvers as scalarResolvers,
+} from "graphql-scalars";
 
 import {
   isAuthorizedByEmail,
@@ -17,6 +21,8 @@ import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
 import staffType from "./types/staffType";
 import staffResolver from "./resolvers/staffResolver";
+import residentResolvers from "./resolvers/residentResolvers";
+import residentType from "./types/residentType";
 
 const query = gql`
   type Query {
@@ -31,10 +37,22 @@ const mutation = gql`
 `;
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [query, mutation, authType, entityType, simpleEntityType, userType, staffType],
+  typeDefs: [
+    ...scalarTypeDefs,
+    query,
+    mutation,
+    authType,
+    entityType,
+    residentType,
+    simpleEntityType,
+    userType,
+    staffType,
+  ],
   resolvers: merge(
+    scalarResolvers,
     authResolvers,
     entityResolvers,
+    residentResolvers,
     simpleEntityResolvers,
     userResolvers,
     staffResolver,
