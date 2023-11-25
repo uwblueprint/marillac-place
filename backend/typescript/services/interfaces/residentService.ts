@@ -1,4 +1,5 @@
 import { NotificationResidentDTO } from "./adminService";
+
 export interface ResidentDTO {
   id: number;
   firstName: string;
@@ -11,7 +12,7 @@ export interface ResidentDTO {
   credits: number;
   dateJoined: Date;
   dateLeft?: Date | null;
-  notifications?: NotificationResidentDTO[]; 
+  notifications?: NotificationResidentDTO[];
 }
 
 export interface CreateResidentDTO {
@@ -88,5 +89,4 @@ export interface IResidentService {
    * @throws Error if retrieval fails
    */
   getActiveResidents(): Promise<Array<ResidentDTO>>;
-
 }

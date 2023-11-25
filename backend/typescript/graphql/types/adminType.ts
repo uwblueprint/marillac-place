@@ -1,8 +1,6 @@
 import { gql } from "apollo-server-express";
-import { Prisma } from "@prisma/client"
 
 const adminType = gql`
-
   type NotificationDTO {
     id: ID!
     message: String!
@@ -15,7 +13,7 @@ const adminType = gql`
     residentId: ID!
     seen: Boolean!
   }
-  
+
   extend type Query {
     notificationById(id: ID!): NotificationDTO!
     getAllNotifications: [NotificationDTO]

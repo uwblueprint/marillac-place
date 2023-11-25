@@ -46,7 +46,7 @@ const executableSchema = makeExecutableSchema({
     residentType,
     simpleEntityType,
     userType,
-    adminType
+    adminType,
   ],
   resolvers: merge(
     scalarResolvers,
@@ -55,7 +55,7 @@ const executableSchema = makeExecutableSchema({
     residentResolvers,
     simpleEntityResolvers,
     userResolvers,
-    adminResolvers
+    adminResolvers,
   ),
 });
 

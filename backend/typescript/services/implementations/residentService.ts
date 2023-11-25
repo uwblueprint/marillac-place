@@ -60,7 +60,9 @@ class ResidentService implements IResidentService {
 
   async getAllResidents(): Promise<ResidentDTO[]> {
     try {
-      const allResidents = await Prisma.resident.findMany({include: { notifications: true }});
+      const allResidents = await Prisma.resident.findMany({
+        include: { notifications: true },
+      });
       return allResidents;
     } catch (error: unknown) {
       Logger.error(
@@ -74,7 +76,7 @@ class ResidentService implements IResidentService {
     try {
       const allResidentsById = await Prisma.resident.findMany({
         where: { id: { in: id } },
-        include: { notifications: true }
+        include: { notifications: true },
       });
       return allResidentsById;
     } catch (error: unknown) {
@@ -87,24 +89,27 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async getActiveResidents(): Promise<ResidentDTO[]>{
-    try{
+  async getActiveResidents(): Promise<ResidentDTO[]> {
+    try {
       const residents = await Prisma.resident.findMany({
         where: {
-          dateLeft: null
+          dateLeft: null,
         },
-        include: { notifications: true }
-      })
+        include: { notifications: true },
+      });
 
-      if(!residents) throw new Error(`No residents found.`);
-      
-      return residents
+      if (!residents) throw new Error(`No residents found.`);
+
+      return residents;
     } catch (error) {
-        Logger.error(
-            `Failed to get all active Residents. Readon = ${getErrorMessage(error)}`);
+      Logger.error(
+        `Failed to get all active Residents. Readon = ${getErrorMessage(
+          error,
+        )}`,
+      );
       throw error;
     }
-}
+  }
 }
 
 export default ResidentService;
