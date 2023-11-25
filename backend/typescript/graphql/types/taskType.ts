@@ -16,15 +16,15 @@ const taskType = gql`
 
   input InputTaskDTO {
     categoryId: Int!
-    title: String!
+    title: String
     status: Status
-    description: String!
+    description: String
     assigneeId: Int!
     assignerId: Int!
-    creditValue: Int!
-    startDate: String!
-    endDate: String
-    comments: String!
+    creditValue: Int
+    startDate: DateTime!
+    endDate: DateTime
+    comments: String
     recurrenceFrequency: Recurrence_Frequency
   }
 
@@ -32,17 +32,17 @@ const taskType = gql`
     id: Int!
     category: String!
     categoryId: Int!
-    title: String!
-    status: Status!
-    description: String!
+    title: String
+    status: Status
+    description: String
     assigneeId: Int!
     assignee: String!
     assignerId: Int!
     assigner: String!
-    creditValue: Int!
-    startDate: String!
-    endDate: String
-    comments: String!
+    creditValue: Int
+    startDate: DateTime!
+    endDate: DateTime
+    comments: String
     recurrenceFrequency: Recurrence_Frequency
   }
 
