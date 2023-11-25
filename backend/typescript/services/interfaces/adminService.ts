@@ -6,7 +6,13 @@ export interface NotificationDTO {
     //author_id: number;  //STAFF NOT IMPLEMENTED AT THIS POINT
     message: string;
     createdAt: Date;
-    residents?: ResidentDTO[]; //might need to change when integrated 
+    residents?: NotificationResidentDTO[]; //might need to change when integrated 
+}
+
+export interface NotificationResidentDTO {
+    notificationId: number
+    residentId: number
+    seen: boolean
 }
 
 export interface IAdminService {

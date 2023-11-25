@@ -7,9 +7,15 @@ const adminType = gql`
     id: ID!
     message: String!
     createdAt: String!
-    residents: [ResidentDTO!]
+    residents: [NotificationResidentDTO!]
   }
 
+  type NotificationResidentDTO {
+    notificationId: ID!
+    residentId: ID!
+    seen: Boolean!
+  }
+  
   extend type Query {
     notificationById(id: ID!): NotificationDTO!
     getAllNotifications: [NotificationDTO]

@@ -63,10 +63,13 @@ class AdminService implements IAdminService {
           //   connect: {id: this.staffId}
           // },
           residents: {
-            connect: {
-                id: Number(resident_id), 
-            },
-            
+            create: [
+              { resident: {
+                connect: {
+                  id: Number(resident_id)
+                }
+              }}
+            ],
           }
         },
         include: {
@@ -94,8 +97,12 @@ class AdminService implements IAdminService {
           //   connect: {id: this.staffId}
           // },
           residents: {
-            connect:  activeResidents.map(resident => ({
-              id: resident.id
+            create:  activeResidents.map(resident => ({
+              resident: {
+                connect: {
+                  id: Number(resident.id)
+                }
+              }
             }))
           }
         },
@@ -112,4 +119,4 @@ class AdminService implements IAdminService {
     }
   }
 }
-export  default AdminService
+export default AdminService

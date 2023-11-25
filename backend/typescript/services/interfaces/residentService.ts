@@ -1,4 +1,4 @@
-import { NotificationDTO } from "./adminService";
+import { NotificationResidentDTO } from "./adminService";
 export interface ResidentDTO {
   id: number;
   firstName: string;
@@ -11,7 +11,7 @@ export interface ResidentDTO {
   credits: number;
   dateJoined: Date;
   dateLeft?: Date | null;
-  notifications?: NotificationDTO[]; 
+  notifications?: NotificationResidentDTO[]; 
 }
 
 export interface CreateResidentDTO {
