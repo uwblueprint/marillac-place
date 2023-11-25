@@ -37,6 +37,13 @@ export interface UpdateResidentDTO {
   dateLeft?: Date | null;
 }
 
+// Have to manually map enums as ts treats enums as numbers
+export enum RedeemCreditsResponse {
+  SUCCESS = "SUCCESS",
+  NOT_ENOUGH_CREDITS = "NOT_ENOUGH_CREDITS",
+  INVALID_ID = "INVALID_ID",
+}
+
 export interface IResidentService {
   /**
    * Adds a resident
@@ -79,4 +86,13 @@ export interface IResidentService {
    * @throws Error if retrieval fails
    */
   getResidentsById(residentId: number[]): Promise<Array<ResidentDTO>>;
+
+  /**
+   * Redeems certain resident's credits based on resident id
+   * @param residentId: resident id whose credits are to be redeemed
+   *                    and number of credits to be redeemed
+   * @returns: Enum of success or not enough credits
+   * @throws Error if retrieval fails
+   */
+  redeemCredits(id: number, credits: number): Promise<RedeemCreditsResponse>;
 }
