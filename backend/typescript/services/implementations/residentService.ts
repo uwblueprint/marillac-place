@@ -16,7 +16,6 @@ class ResidentService implements IResidentService {
     try {
       const newResident = await Prisma.resident.create({
         data: { ...resident, credits: resident.credits ?? 0 },
-        include: { notifications: true }
       });
       return newResident;
     } catch (error: unknown) {
@@ -34,7 +33,6 @@ class ResidentService implements IResidentService {
     try {
       const updatedResident = await Prisma.resident.update({
         where: { id },
-        include: { notifications: true },
         data: resident,
       });
       return updatedResident;
@@ -62,9 +60,7 @@ class ResidentService implements IResidentService {
 
   async getAllResidents(): Promise<ResidentDTO[]> {
     try {
-      const allResidents = await Prisma.resident.findMany({
-        include: { notifications: true }
-      });
+      const allResidents = await Prisma.resident.findMany();
       return allResidents;
     } catch (error: unknown) {
       Logger.error(
@@ -97,7 +93,6 @@ class ResidentService implements IResidentService {
         where: {
           dateLeft: null
         },
-        include : { notifications: true }
       })
 
       if(!residents) throw new Error(`No residents found.`);
