@@ -19,18 +19,12 @@ const convertTaskRelation = (taskExtended: TaskExtended): TaskDTO => {
   if (!taskExtended) {
     throw new Error("null taskRelation passed to convertTaskRelation");
   }
-
-  const { category, assignee, assigner } = taskExtended;
-
-  const category_name = category == null ? undefined : category.name;
+  const { category: theCategory, assignee, assigner } = taskExtended;
+  const category_name = theCategory == null ? undefined : theCategory.name;
   const assignee_name =
-    assignee == null
-      ? undefined
-      : `${assignee.firstName} ${assignee.lastName}`;
+    assignee == null ? undefined : `${assignee.firstName} ${assignee.lastName}`;
   const assigner_name =
-    assigner == null
-      ? undefined
-      : `${assigner.firstName} ${assigner.lastName}`;
+    assigner == null ? undefined : `${assigner.firstName} ${assigner.lastName}`;
 
   const taskDTO: TaskDTO = {
     ...taskExtended,
@@ -146,31 +140,31 @@ class TaskService implements ITaskService {
     }
   }
 
-  async createTask(task: InputTaskDTO): Promise<TaskDTO> {
+  async createTask(cTask: InputTaskDTO): Promise<TaskDTO> {
     try {
       const newTask: TaskExtended = await prisma.task.create({
         data: {
-          title: task.title,
-          status: task.status,
-          description: task.description,
-          creditValue: task.creditValue,
-          startDate: task.startDate,
-          endDate: task.endDate,
-          comments: task.comments,
-          recurrenceFrequency: task.recurrenceFrequency,
+          title: cTask.title,
+          status: cTask.status,
+          description: cTask.description,
+          creditValue: cTask.creditValue,
+          startDate: cTask.startDate,
+          endDate: cTask.endDate,
+          comments: cTask.comments,
+          recurrenceFrequency: cTask.recurrenceFrequency,
           category: {
             connect: {
-              id: task.categoryId,
+              id: cTask.categoryId,
             },
           },
           assignee: {
             connect: {
-              id: task.assigneeId,
+              id: cTask.assigneeId,
             },
           },
           assigner: {
             connect: {
-              id: task.assignerId,
+              id: cTask.assignerId,
             },
           },
         },
@@ -190,34 +184,37 @@ class TaskService implements ITaskService {
     }
   }
 
-  async updateTaskById(taskId: number, task: InputTaskDTO): Promise<TaskDTO> {
+  async updateTaskById(
+    taskId: number,
+    updateTask: InputTaskDTO,
+  ): Promise<TaskDTO> {
     try {
       const updatedTask: TaskExtended = await prisma.task.update({
         where: {
           id: Number(taskId),
         },
         data: {
-          title: task.title,
-          status: task.status,
-          description: task.description,
-          creditValue: task.creditValue,
-          startDate: task.startDate,
-          endDate: task.endDate,
-          comments: task.comments,
-          recurrenceFrequency: task.recurrenceFrequency,
+          title: updateTask.title,
+          status: updateTask.status,
+          description: updateTask.description,
+          creditValue: updateTask.creditValue,
+          startDate: updateTask.startDate,
+          endDate: updateTask.endDate,
+          comments: updateTask.comments,
+          recurrenceFrequency: updateTask.recurrenceFrequency,
           category: {
             connect: {
-              id: task.categoryId,
+              id: updateTask.categoryId,
             },
           },
           assignee: {
             connect: {
-              id: task.assigneeId,
+              id: updateTask.assigneeId,
             },
           },
           assigner: {
             connect: {
-              id: task.assignerId,
+              id: updateTask.assignerId,
             },
           },
         },
@@ -239,7 +236,7 @@ class TaskService implements ITaskService {
 
   async deleteTaskById(taskId: number): Promise<TaskDTO> {
     try {
-      const task = await prisma.task.delete({
+      const taskDel = await prisma.task.delete({
         where: {
           id: Number(taskId),
         },
@@ -250,7 +247,7 @@ class TaskService implements ITaskService {
         },
       });
 
-      const dto = convertTaskRelation(task);
+      const dto = convertTaskRelation(taskDel);
 
       return dto;
     } catch (error: unknown) {

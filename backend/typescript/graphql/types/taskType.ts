@@ -58,7 +58,6 @@ const taskType = gql`
     updateTask(id: Int!, task: InputTaskDTO!): TaskDTO!
     deleteTask(id: Int!): TaskDTO!
   }
-
 `;
 
 export default taskType;
