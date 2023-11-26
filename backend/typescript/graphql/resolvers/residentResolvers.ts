@@ -4,6 +4,7 @@ import type {
   ResidentDTO,
   CreateResidentDTO,
   UpdateResidentDTO,
+  RedeemCreditsResponse,
 } from "../../services/interfaces/residentService";
 
 const residentService: IResidentService = new ResidentService();
@@ -47,6 +48,12 @@ const residentResolvers = {
         parseInt(id, 10),
       );
       return deletedResident;
+    },
+    redeemCredits: async (
+      _parent: undefined,
+      { id, credits }: { id: string; credits: number },
+    ): Promise<RedeemCreditsResponse> => {
+      return residentService.redeemCredits(parseInt(id, 10), credits);
     },
   },
 };

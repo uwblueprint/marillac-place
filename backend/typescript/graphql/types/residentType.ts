@@ -42,6 +42,12 @@ const residentType = gql`
     dateLeft: DateTime
   }
 
+  enum RedeemCreditResponse {
+    SUCCESS
+    NOT_ENOUGH_CREDITS
+    INVALID_ID
+  }
+
   extend type Query {
     residentsById(id: [ID!]): [ResidentDTO!]
     allResidents: [ResidentDTO!]
@@ -51,6 +57,7 @@ const residentType = gql`
     updateResident(id: ID!, resident: UpdateResidentDTO!): ResidentDTO!
     addResident(resident: CreateResidentDTO!): ResidentDTO!
     deleteResident(id: ID!): ResidentDTO!
+    redeemCredits(id: ID!, credits: Float!): RedeemCreditResponse!
   }
 `;
 
