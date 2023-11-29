@@ -8,7 +8,8 @@ import { getErrorMessage } from "../../utilities/errorUtils";
 const Logger = logger(__filename);
 
 type TaskExtended =
-  null | (task & {
+  | null
+  | (task & {
       category?: category | null;
       assignee?: resident | null;
       assigner?: staff | null;
