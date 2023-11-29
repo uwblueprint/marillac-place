@@ -8,8 +8,7 @@ import { getErrorMessage } from "../../utilities/errorUtils";
 const Logger = logger(__filename);
 
 type TaskExtended =
-  | null
-  | (task & {
+  null | (task & {
       category?: category | null;
       assignee?: resident | null;
       assigner?: staff | null;
@@ -140,31 +139,31 @@ class TaskService implements ITaskService {
     }
   }
 
-  async createTask(cTask: InputTaskDTO): Promise<TaskDTO> {
+  async createTask(inputTask: InputTaskDTO): Promise<TaskDTO> {
     try {
       const newTask: TaskExtended = await prisma.task.create({
         data: {
-          title: cTask.title,
-          status: cTask.status,
-          description: cTask.description,
-          creditValue: cTask.creditValue,
-          startDate: cTask.startDate,
-          endDate: cTask.endDate,
-          comments: cTask.comments,
-          recurrenceFrequency: cTask.recurrenceFrequency,
+          title: inputTask.title,
+          status: inputTask.status,
+          description: inputTask.description,
+          creditValue: inputTask.creditValue,
+          startDate: inputTask.startDate,
+          endDate: inputTask.endDate,
+          comments: inputTask.comments,
+          recurrenceFrequency: inputTask.recurrenceFrequency,
           category: {
             connect: {
-              id: cTask.categoryId,
+              id: inputTask.categoryId,
             },
           },
           assignee: {
             connect: {
-              id: cTask.assigneeId,
+              id: inputTask.assigneeId,
             },
           },
           assigner: {
             connect: {
-              id: cTask.assignerId,
+              id: inputTask.assignerId,
             },
           },
         },
@@ -236,7 +235,7 @@ class TaskService implements ITaskService {
 
   async deleteTaskById(taskId: number): Promise<TaskDTO> {
     try {
-      const taskDel = await prisma.task.delete({
+      const deletedTask = await prisma.task.delete({
         where: {
           id: Number(taskId),
         },
@@ -247,7 +246,7 @@ class TaskService implements ITaskService {
         },
       });
 
-      const dto = convertTaskRelation(taskDel);
+      const dto = convertTaskRelation(deletedTask);
 
       return dto;
     } catch (error: unknown) {

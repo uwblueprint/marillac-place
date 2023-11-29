@@ -58,7 +58,6 @@ enum RecurrenceFrequency {
   DAILY
   WEEKLY
   BI_WEEKLY
-	//@@map("RecurrenceFrequency")
 }
 
 model category {
