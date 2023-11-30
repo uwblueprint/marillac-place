@@ -1,3 +1,5 @@
+import {WarningDTO} from "./warningService"
+
 export interface ResidentDTO {
   id: number;
   firstName: string;
@@ -10,6 +12,7 @@ export interface ResidentDTO {
   credits: number;
   dateJoined: Date;
   dateLeft?: Date | null;
+  warnings?: WarningDTO[];
 }
 
 export interface CreateResidentDTO {

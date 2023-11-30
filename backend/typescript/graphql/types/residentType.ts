@@ -15,6 +15,7 @@ const residentType = gql`
     credits: Float
     dateJoined: DateTime!
     dateLeft: DateTime
+    warnings: [WarningDTO!]
   }
 
   input CreateResidentDTO {
