@@ -96,7 +96,7 @@ export interface IResidentService {
    * @throws Error if retrieval fails
    */
   getActiveResidents(): Promise<Array<ResidentDTO>>;
-  
+
   /**
    * Redeems certain resident's credits based on resident id
    * @param residentId: resident id whose credits are to be redeemed

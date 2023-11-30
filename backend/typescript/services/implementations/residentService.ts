@@ -111,7 +111,7 @@ class ResidentService implements IResidentService {
       throw error;
     }
   }
-  
+
   async redeemCredits(
     id: number,
     credits: number,
