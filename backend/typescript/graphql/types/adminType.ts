@@ -16,7 +16,7 @@ const adminType = gql`
 
   extend type Query {
     notificationById(id: ID!): NotificationDTO!
-    getAllNotifications: [NotificationDTO]
+    getAllNotifications: [NotificationDTO!]
   }
 
   extend type Mutation {

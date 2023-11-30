@@ -3,8 +3,6 @@ import type {
   IAdminService,
   NotificationDTO,
 } from "../interfaces/adminService";
-// import type ResidentDTO from "../interfaces/FILEOFDTO";
-// import type IStaffService from "../interfaces/FILEOFDTO";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import { IResidentService } from "../interfaces/residentService";
@@ -41,7 +39,7 @@ class AdminService implements IAdminService {
     try {
       const notification = await prisma.notification.findUnique({
         where: {
-          id: Number(id),
+          id: id,
         },
         include: {
           residents: true,
@@ -66,7 +64,8 @@ class AdminService implements IAdminService {
     try {
       newNotification = await prisma.notification.create({
         data: {
-          message: String(notif_message),
+          message: notif_message,
+          // TODO: Re-implement author
           // author: {
           //   connect: {id: this.staffId}
           // },
@@ -75,7 +74,7 @@ class AdminService implements IAdminService {
               {
                 resident: {
                   connect: {
-                    id: Number(resident_id),
+                    id: resident_id,
                   },
                 },
               },
@@ -103,7 +102,8 @@ class AdminService implements IAdminService {
 
       newNotification = await prisma.notification.create({
         data: {
-          message: String(notif_message),
+          message: notif_message,
+          // TODO: Re-implement author
           // author: {
           //   connect: {id: this.staffId}
           // },
@@ -111,7 +111,7 @@ class AdminService implements IAdminService {
             create: activeResidents.map((resident) => ({
               resident: {
                 connect: {
-                  id: Number(resident.id),
+                  id: resident.id,
                 },
               },
             })),

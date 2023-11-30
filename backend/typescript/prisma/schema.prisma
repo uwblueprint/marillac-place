@@ -98,6 +98,8 @@ model staff {
   profilePictureLink String?        @map("profile_picture_link")
   tasks_assigned     task[]
   warnings_assigned  warning[]
+  // TODO:
+  // Uncomment notifications in model staff
   // notifications      notification[]
 }
 
