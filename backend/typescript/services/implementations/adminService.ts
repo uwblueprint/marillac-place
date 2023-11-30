@@ -39,7 +39,7 @@ class AdminService implements IAdminService {
     try {
       const notification = await prisma.notification.findUnique({
         where: {
-          id: id,
+          id,
         },
         include: {
           residents: true,

@@ -13,10 +13,10 @@ const adminResolvers = {
       _parent: undefined,
       { id }: { id: number },
     ): Promise<NotificationDTO> => {
-      return await adminService.getNotificationById(Number(id));
+      return adminService.getNotificationById(Number(id));
     },
     getAllNotifications: async (): Promise<NotificationDTO[]> => {
-      return await adminService.getAllNotifications();
+      return adminService.getAllNotifications();
     },
   },
 
