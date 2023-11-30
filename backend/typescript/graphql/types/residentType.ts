@@ -16,6 +16,7 @@ const residentType = gql`
     dateJoined: DateTime!
     dateLeft: DateTime
     notifications: [NotificationResidentDTO!]
+    warnings: [WarningDTO!]
   }
 
   input CreateResidentDTO {
