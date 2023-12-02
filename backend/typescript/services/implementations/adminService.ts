@@ -27,9 +27,7 @@ class AdminService implements IAdminService {
       return notifications;
     } catch (error) {
       Logger.error(
-        `Failed to get all Notifications. Readon = ${getErrorMessage(
-          error,
-        )}`,
+        `Failed to get all Notifications. Readon = ${getErrorMessage(error)}`,
       );
       throw error;
     }
@@ -125,7 +123,9 @@ class AdminService implements IAdminService {
       return newNotification;
     } catch (error) {
       Logger.error(
-        `Failed to create Notification for Announcement. Reason = ${getErrorMessage(error)}`,
+        `Failed to create Notification for Announcement. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
