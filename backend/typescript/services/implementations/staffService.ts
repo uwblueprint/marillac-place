@@ -45,8 +45,10 @@ class StaffService implements IStaffService {
         where: { id },
       });
       return deletedStaff;
-    } catch(error) {
-      Logger.error(`Failed to delete staff #${id} because ${getErrorMessage(error)}`);
+    } catch (error) {
+      Logger.error(
+        `Failed to delete staff #${id} because ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }
