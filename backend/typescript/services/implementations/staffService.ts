@@ -67,6 +67,9 @@ class StaffService implements IStaffService {
     try {
       const getStaffById = await Prisma.staff.findMany({
         where: { id: { in: id } },
+        include: {
+          notifications: true,
+        },
       });
       return getStaffById;
     } catch (error: unknown) {

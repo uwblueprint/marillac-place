@@ -63,10 +63,9 @@ class AdminService implements IAdminService {
       newNotification = await prisma.notification.create({
         data: {
           message: notif_message,
-          // TODO: Re-implement author
-          // author: {
-          //   connect: {id: this.staffId}
-          // },
+          author: {
+            connect: { id: this.staffId },
+          },
           residents: {
             create: [
               {
@@ -101,10 +100,9 @@ class AdminService implements IAdminService {
       newNotification = await prisma.notification.create({
         data: {
           message: notif_message,
-          // TODO: Re-implement author
-          // author: {
-          //   connect: {id: this.staffId}
-          // },
+          author: {
+            connect: { id: this.staffId },
+          },
           residents: {
             create: activeResidents.map((resident) => ({
               resident: {

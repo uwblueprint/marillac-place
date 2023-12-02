@@ -10,6 +10,7 @@ const staffType = gql`
     phoneNumber: String
     displayName: String!
     profilePictureLink: String
+    notifications: [NotificationDTO!]
   }
   input CreateStaffDTO {
     roleId: Int!

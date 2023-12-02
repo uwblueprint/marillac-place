@@ -1,3 +1,5 @@
+import { NotificationDTO } from "./adminService";
+
 export interface StaffDTO {
   id: number;
   roleId: number;
@@ -7,6 +9,7 @@ export interface StaffDTO {
   phoneNumber: string | null;
   displayName: string | null;
   profilePictureLink: string | null;
+  notifications?: NotificationDTO[];
 }
 
 export interface CreateStaffDTO {
