@@ -94,11 +94,11 @@ model staff {
   lastName           String         @map("last_name")
   email              String         @unique
   phoneNumber        String?        @map("phone_number")
-  displayName        String         @map("display_name")
+  displayName        String?        @map("display_name")
   profilePictureLink String?        @map("profile_picture_link")
-  tasks_assigned     task[]
-  warnings_assigned  warning[]
-  notifications      notification[]
+  tasksAssigned      task[]
+  warningsAssigned   warning[]
+  notifications      notification[] 
 }
 
 model role {
