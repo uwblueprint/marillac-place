@@ -88,7 +88,7 @@ class TaskService implements ITaskService {
     try {
       const tasksResponse: TaskExtended[] = await prisma.task.findMany({
         where: {
-          id: Number(assigneeId),
+          assigneeId: assigneeId,
         },
         include: {
           category: true,
@@ -115,7 +115,7 @@ class TaskService implements ITaskService {
     try {
       const tasksResponse: TaskExtended[] = await prisma.task.findMany({
         where: {
-          id: Number(assignerId),
+          assignerId: assignerId,
         },
         include: {
           category: true,

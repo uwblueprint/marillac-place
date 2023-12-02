@@ -25,16 +25,16 @@ const taskResolvers = {
     },
     getTasksByAssigneeId: async (
       _parent: undefined,
-      { id }: { id: string },
+      { assigneeId }: { assigneeId: number },
     ): Promise<TaskDTO[]> => {
-      const tasks = await taskService.getTasksByAssigneeId(Number(id));
+      const tasks = await taskService.getTasksByAssigneeId(assigneeId);
       return tasks;
     },
     getTasksByAssignerId: async (
       _parent: undefined,
-      { id }: { id: string },
+      { assignerId }: { assignerId: number },
     ): Promise<TaskDTO[]> => {
-      const tasks = await taskService.getTasksByAssignerId(Number(id));
+      const tasks = await taskService.getTasksByAssignerId(assignerId);
       return tasks;
     },
   },
