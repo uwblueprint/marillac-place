@@ -15,6 +15,7 @@ const residentType = gql`
     credits: Float
     dateJoined: DateTime!
     dateLeft: DateTime
+    notifications: [NotificationResidentDTO!]
   }
 
   input CreateResidentDTO {
@@ -51,6 +52,7 @@ const residentType = gql`
   extend type Query {
     residentsById(id: [ID!]): [ResidentDTO!]
     allResidents: [ResidentDTO!]
+    activeResidents: [ResidentDTO!]
   }
 
   extend type Mutation {

@@ -21,6 +21,10 @@ const residentResolvers = {
     allResidents: async (): Promise<Array<ResidentDTO>> => {
       return residentService.getAllResidents();
     },
+    activeResidents: async (): Promise<ResidentDTO[]> => {
+      const activeResidents = await residentService.getActiveResidents();
+      return activeResidents;
+    },
   },
   Mutation: {
     addResident: async (
