@@ -27,7 +27,7 @@ class AdminService implements IAdminService {
       return notifications;
     } catch (error) {
       Logger.error(
-        `Failed to get all Notifications. Readon = ${getErrorMessage(error)}`,
+        `Failed to get all Notifications. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
