@@ -31,11 +31,10 @@ export interface UpdateStaffDTO {
   profilePictureLink: string | null;
 }
 
-
 export interface IStaffService {
   addStaff(reidentInfo: CreateStaffDTO): Promise<StaffDTO>;
-  updateStaff(staffId: number, staffInfo: UpdateStaffDTO): Promise<StaffDTO>
-  deleteStaff(residentId: number): Promise <StaffDTO>;
+  updateStaff(staffId: number, staffInfo: UpdateStaffDTO): Promise<StaffDTO>;
+  deleteStaff(residentId: number): Promise<StaffDTO>;
   getAllStaff(): Promise<Array<StaffDTO>>;
   getStaffById(staffId: number[]): Promise<Array<StaffDTO>>;
 }
