@@ -15,6 +15,7 @@ const residentType = gql`
     credits: Float
     dateJoined: DateTime!
     dateLeft: DateTime
+    notifications: [NotificationResidentDTO!]
   }
 
   input CreateResidentDTO {
@@ -42,15 +43,23 @@ const residentType = gql`
     dateLeft: DateTime
   }
 
+  enum RedeemCreditResponse {
+    SUCCESS
+    NOT_ENOUGH_CREDITS
+    INVALID_ID
+  }
+
   extend type Query {
     residentsById(id: [ID!]): [ResidentDTO!]
     allResidents: [ResidentDTO!]
+    activeResidents: [ResidentDTO!]
   }
 
   extend type Mutation {
     updateResident(id: ID!, resident: UpdateResidentDTO!): ResidentDTO!
     addResident(resident: CreateResidentDTO!): ResidentDTO!
     deleteResident(id: ID!): ResidentDTO!
+    redeemCredits(id: ID!, credits: Float!): RedeemCreditResponse!
   }
 `;
 

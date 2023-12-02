@@ -121,24 +121,24 @@ model resident {
   dateLeft           DateTime?           @map("date_left")
   tasks              task[]
   warnings           warning[]
-  notifications      notification_user[]
+  notifications      notificationResident[]
 }
 
 model notification {
-  id        Int                 @id @default(autoincrement())
-  message   String
-  authorId  Int                 @map("author_id")
-  author    staff               @relation(fields: [authorId], references: [id])
-  createdAt DateTime            @default(now()) @map("created_at")
-  residents notification_user[]
+  id          Int                 @id @default(autoincrement())
+  message     String
+  // authorId  Int                @map("author_id")
+  // author    staff              @relation(fields: [authorId], references: [id])
+  createdAt   DateTime            @default(now()) @map("created_at")
+  residents   notificationResident[]  
 }
 
-model notification_user {
+model notificationResident {
   notification   notification @relation(fields: [notificationId], references: [id])
   notificationId Int          @map("notification_id")
-  recipient      resident     @relation(fields: [recipientId], references: [id])
-  recipientId    Int          @map("recipient_id")
+  resident       resident     @relation(fields: [residentId], references: [id])
+  residentId     Int          @map("resident_id")
   seen           Boolean      @default(false)
 
-  @@id([notificationId, recipientId])
+  @@id([notificationId, residentId])
 }

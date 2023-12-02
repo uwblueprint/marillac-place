@@ -16,11 +16,13 @@ import authType from "./types/authType";
 import entityResolvers from "./resolvers/entityResolvers";
 import entityType from "./types/entityType";
 import simpleEntityResolvers from "./resolvers/simpleEntityResolvers";
+import adminResolvers from "./resolvers/adminResolvers";
 import simpleEntityType from "./types/simpleEntityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
 import staffType from "./types/staffType";
 import staffResolver from "./resolvers/staffResolver";
+import adminType from "./types/adminType";
 import residentResolvers from "./resolvers/residentResolvers";
 import residentType from "./types/residentType";
 
@@ -47,6 +49,7 @@ const executableSchema = makeExecutableSchema({
     simpleEntityType,
     userType,
     staffType,
+    adminType,
   ],
   resolvers: merge(
     scalarResolvers,
@@ -56,6 +59,7 @@ const executableSchema = makeExecutableSchema({
     simpleEntityResolvers,
     userResolvers,
     staffResolver,
+    adminResolvers,
   ),
 });
 
