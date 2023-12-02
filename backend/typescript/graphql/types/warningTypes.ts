@@ -14,6 +14,8 @@ const warningType = gql`
     description: String!
     dateIssued: String
     residentId: ID!
+    assignerId: ID!
+    relatedTaskId: ID
   }
 
   input CreateWarningDTO {
@@ -21,6 +23,8 @@ const warningType = gql`
     description: String!
     dateIssued: String
     residentId: ID!
+    assignerId: ID!
+    relatedTaskId: ID
   }
 
   extend type Mutation {
