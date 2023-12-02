@@ -50,14 +50,16 @@ model task {
   startDate           DateTime            @map("start_date")
   endDate             DateTime?           @map("end_date")
   comments            String
-  recurrenceFrequency RecurrenceFrequency @map("recurrence_frequency")
+  recurrenceFrequency Recurrence_Frequency @map("recurrence_frequency")
   warnings            warning[]
 }
 
-enum RecurrenceFrequency {
+//TODO: figure out why this won't work if it's RecurrenceFrequency
+enum Recurrence_Frequency {
   DAILY
   WEEKLY
   BI_WEEKLY
+  //@@map("recurrence_frequency")
 }
 
 model category {
