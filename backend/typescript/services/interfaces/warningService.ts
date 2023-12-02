@@ -4,8 +4,8 @@ export interface WarningDTO {
     description: string;
     dateIssued?: Date;
     residentId?: number;
-    // assignerId?: number;
-    // relatedTaskId?: number | null;
+    assignerId?: number;
+    relatedTaskId?: number | null;
 }
 
 export interface CreateWarningDTO {
@@ -13,8 +13,8 @@ export interface CreateWarningDTO {
     description: string;
     dateIssued?: Date;
     residentId?: number;
-    // assignerId?: number;
-    // relatedTaskId?: number | null;
+    assignerId?: number;
+    relatedTaskId?: number | null;
 }
 
 export interface IWarningService {

@@ -13,6 +13,14 @@ const Logger = logger(__filename);
 class WarningService implements IWarningService {
     async addWarning(warning: CreateWarningDTO): Promise<WarningDTO> {
         try {
+            var relatedTask = {};
+            if(warning.relatedTaskId != undefined && warning.relatedTaskId != null){
+                relatedTask = {
+                    connect: {
+                        id: warning.relatedTaskId == undefined? undefined: Number(warning.relatedTaskId)
+                    }
+                }
+            }
             const newWarning = await Prisma.warning.create({
                 data: {
                     title: warning.title,
@@ -23,21 +31,17 @@ class WarningService implements IWarningService {
                             id: Number(warning.residentId)
                         }
                     },
-                    // assigner: {
-                    //     connect: {
-                    //         id: warning.residentId
-                    //     }
-                    // },
-                    // relatedTask: {
-                    //     connect: {
-                    //         id: warning.residentId
-                    //     }
-                    // },
+                    assigner: {
+                        connect: {
+                            id: Number(warning.assignerId)
+                        }
+                    },
+                    relatedTask: relatedTask
                 },
-                include: {
+                include: { //ARE THESE NECESSARY? 
                     resident: true,
-                    // assigner: true,
-                    // relatedTask: true
+                    assigner: true,
+                    relatedTask: true
                 }
             });
             return newWarning;
@@ -57,8 +61,8 @@ class WarningService implements IWarningService {
                 },
                 include: {
                     resident: true,
-                    // assigner: true,
-                    // relatedTask: true
+                    assigner: true,
+                    relatedTask: true
                 }
             });
             return deletedWarning;
