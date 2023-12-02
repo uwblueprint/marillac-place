@@ -6,22 +6,21 @@ import {
 } from "../../services/interfaces/taskService";
 
 const taskService: ITaskService = new TaskService();
-// const userService : IUserService = new UserService();
 
 const taskResolvers = {
   Query: {
     getTaskById: async (
       _parent: undefined,
-      { id }: { id: string },
+      { id }: { id: number },
     ): Promise<TaskDTO> => {
-      const task = await taskService.getTaskById(Number(id));
+      const task = await taskService.getTaskById(id);
       return task;
     },
     getTasksByCategoryId: async (
       _parent: undefined,
-      { id }: { id: string },
+      { categoryId }: { categoryId: number },
     ): Promise<Array<TaskDTO>> => {
-      const tasks = await taskService.getTasksByCategoryId(Number(id));
+      const tasks = await taskService.getTasksByCategoryId(categoryId);
       return tasks;
     },
     getTasksByAssigneeId: async (

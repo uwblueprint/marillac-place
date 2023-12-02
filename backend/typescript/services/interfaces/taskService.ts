@@ -18,12 +18,15 @@ export interface InputTaskDTO {
 
 export interface TaskDTO {
   id: number;
-  category_name?: string;
+  categoryId: number;
+  categoryName: string;
   title: string;
   status: Status;
   description: string;
-  assignee_name?: string;
-  assigner_name?: string;
+  assigneeId: number;
+  assigneeName: string;
+  assignerId: number;
+  assignerName: string;
   creditValue: number;
   startDate: Date;
   endDate?: Date | null;

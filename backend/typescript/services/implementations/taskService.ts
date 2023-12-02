@@ -20,17 +20,17 @@ const convertTaskRelation = (taskExtended: TaskExtended): TaskDTO => {
     throw new Error("null taskRelation passed to convertTaskRelation");
   }
   const { category: theCategory, assignee, assigner } = taskExtended;
-  const category_name = theCategory == null ? undefined : theCategory.name;
+  const category_name = theCategory == null ? "" : theCategory.name;
   const assignee_name =
-    assignee == null ? undefined : `${assignee.firstName} ${assignee.lastName}`;
+    assignee == null ? "" : `${assignee.firstName} ${assignee.lastName}`;
   const assigner_name =
-    assigner == null ? undefined : `${assigner.firstName} ${assigner.lastName}`;
+    assigner == null ? "" : `${assigner.firstName} ${assigner.lastName}`;
 
   const taskDTO: TaskDTO = {
     ...taskExtended,
-    category_name,
-    assignee_name,
-    assigner_name,
+    categoryName: category_name,
+    assigneeName: assignee_name,
+    assignerName: assigner_name,
   };
 
   return taskDTO;
@@ -41,7 +41,7 @@ class TaskService implements ITaskService {
     try {
       const taskExtended: TaskExtended = await prisma.task.findUnique({
         where: {
-          id: Number(taskId),
+          id: taskId,
         },
         include: {
           category: true,
@@ -61,10 +61,8 @@ class TaskService implements ITaskService {
 
   async getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]> {
     try {
-      const tasksResponse: TaskExtended[] = await prisma.task.findMany({
-        where: {
-          id: Number(categoryId),
-        },
+      const tasksResponse = await prisma.task.findMany({
+        where: { categoryId: categoryId },
         include: {
           category: true,
           assignee: true,
