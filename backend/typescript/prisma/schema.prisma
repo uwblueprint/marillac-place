@@ -98,9 +98,7 @@ model staff {
   profilePictureLink String?        @map("profile_picture_link")
   tasks_assigned     task[]
   warnings_assigned  warning[]
-  // TODO:
-  // Uncomment notifications in model staff
-  // notifications      notification[]
+  notifications      notification[]
 }
 
 model role {
@@ -129,8 +127,8 @@ model resident {
 model notification {
   id          Int                 @id @default(autoincrement())
   message     String
-  // authorId  Int                @map("author_id")
-  // author    staff              @relation(fields: [authorId], references: [id])
+  authorId    Int                 @map("author_id")
+  author      staff               @relation(fields: [authorId], references: [id])
   createdAt   DateTime            @default(now()) @map("created_at")
   residents   notificationResident[]  
 }

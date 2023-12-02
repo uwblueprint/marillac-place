@@ -12,12 +12,6 @@ const residentService: IResidentService = new ResidentService();
 const Logger = logger(__filename);
 
 class AdminService implements IAdminService {
-  staffId: number;
-
-  constructor(staffId: number) {
-    this.staffId = staffId;
-  }
-
   async getAllNotifications(): Promise<NotificationDTO[]> {
     try {
       const notifications = await prisma.notification.findMany({
@@ -55,24 +49,24 @@ class AdminService implements IAdminService {
   }
 
   async sendNotification(
-    notif_message: string,
-    resident_id: number,
+    notifMessage: string,
+    residentId: number,
+    staffId: number,
   ): Promise<NotificationDTO> {
     let newNotification: NotificationDTO;
     try {
       newNotification = await prisma.notification.create({
         data: {
-          message: notif_message,
-          // TODO: Re-implement author
-          // author: {
-          //   connect: {id: this.staffId}
-          // },
+          message: notifMessage,
+          author: {
+            connect: { id: staffId },
+          },
           residents: {
             create: [
               {
                 resident: {
                   connect: {
-                    id: resident_id,
+                    id: residentId,
                   },
                 },
               },
@@ -93,18 +87,20 @@ class AdminService implements IAdminService {
     }
   }
 
-  async sendAnnouncement(notif_message: string): Promise<NotificationDTO> {
+  async sendAnnouncement(
+    notifMessage: string,
+    staffId: number,
+  ): Promise<NotificationDTO> {
     let newNotification: NotificationDTO;
     try {
       const activeResidents = await residentService.getActiveResidents();
 
       newNotification = await prisma.notification.create({
         data: {
-          message: notif_message,
-          // TODO: Re-implement author
-          // author: {
-          //   connect: {id: this.staffId}
-          // },
+          message: notifMessage,
+          author: {
+            connect: { id: staffId },
+          },
           residents: {
             create: activeResidents.map((resident) => ({
               resident: {

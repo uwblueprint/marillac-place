@@ -5,7 +5,7 @@ import {
 } from "../../services/interfaces/adminService";
 
 // TODO: change staff_id to StaffService when its done
-const adminService: IAdminService = new AdminService(3);
+const adminService: IAdminService = new AdminService();
 
 const adminResolvers = {
   Query: {
@@ -23,19 +23,27 @@ const adminResolvers = {
   Mutation: {
     sendNotification: async (
       _parent: undefined,
-      { message, resident_id }: { message: string; resident_id: number },
+      {
+        message,
+        residentId,
+        staffId,
+      }: { message: string; residentId: number; staffId: number },
     ): Promise<NotificationDTO> => {
       const newNotification = await adminService.sendNotification(
         message,
-        Number(resident_id),
+        Number(residentId),
+        Number(staffId),
       );
       return newNotification;
     },
     sendAnnouncement: async (
       _parent: undefined,
-      { message }: { message: string },
+      { message, staffId }: { message: string; staffId: number },
     ): Promise<NotificationDTO> => {
-      const newAnnouncement = await adminService.sendAnnouncement(message);
+      const newAnnouncement = await adminService.sendAnnouncement(
+        message,
+        Number(staffId),
+      );
       return newAnnouncement;
     },
   },
