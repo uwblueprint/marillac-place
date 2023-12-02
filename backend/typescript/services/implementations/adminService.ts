@@ -23,11 +23,11 @@ class AdminService implements IAdminService {
       const notifications = await prisma.notification.findMany({
         include: { residents: true },
       });
-      if (!notifications) throw new Error(`No residents found.`);
+      if (!notifications) throw new Error(`No Notifications found.`);
       return notifications;
     } catch (error) {
       Logger.error(
-        `Failed to get all active Residents. Readon = ${getErrorMessage(
+        `Failed to get all Notifications. Readon = ${getErrorMessage(
           error,
         )}`,
       );
@@ -125,7 +125,7 @@ class AdminService implements IAdminService {
       return newNotification;
     } catch (error) {
       Logger.error(
-        `Failed to create Notification. Reason = ${getErrorMessage(error)}`,
+        `Failed to create Notification for Announcement. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
