@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express"
 const staffType = gql `
   type StaffDTO {
     id: ID!
-    roleId: Float!
+    roleId: Int!
     firstName: String!
     lastName: String!
     email: String!
@@ -12,7 +12,7 @@ const staffType = gql `
     profilePictureLink: String
   }
   input CreateStaffDTO {
-    roleId: Float!
+    roleId: Int!
     firstName: String!
     lastName: String!
     email: String!
@@ -21,7 +21,7 @@ const staffType = gql `
     profilePictureLink: String
   }
   input UpdateStaffDTO {
-    roleId: Float!
+    roleId: Int!
     firstName: String!
     lastName: String!
     email: String!

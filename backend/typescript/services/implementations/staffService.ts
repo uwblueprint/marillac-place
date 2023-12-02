@@ -42,7 +42,7 @@ class StaffService implements IStaffService {
       });
       return deletedStaff;
     } catch(error) {
-      Logger.error(`Failed to update staff #${id} because ${getErrorMessage(error)}`);
+      Logger.error(`Failed to delete staff #${id} because ${getErrorMessage(error)}`);
       throw error;
     }
   }
