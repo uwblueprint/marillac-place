@@ -1,5 +1,6 @@
 export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export type Recurrence_Frequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
 
 export interface InputTaskDTO {

@@ -62,7 +62,7 @@ class TaskService implements ITaskService {
   async getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]> {
     try {
       const tasksResponse = await prisma.task.findMany({
-        where: { categoryId: categoryId },
+        where: { categoryId },
         include: {
           category: true,
           assignee: true,
@@ -88,7 +88,7 @@ class TaskService implements ITaskService {
     try {
       const tasksResponse: TaskExtended[] = await prisma.task.findMany({
         where: {
-          assigneeId: assigneeId,
+          assigneeId,
         },
         include: {
           category: true,
@@ -115,7 +115,7 @@ class TaskService implements ITaskService {
     try {
       const tasksResponse: TaskExtended[] = await prisma.task.findMany({
         where: {
-          assignerId: assignerId,
+          assignerId,
         },
         include: {
           category: true,
@@ -158,7 +158,10 @@ class TaskService implements ITaskService {
     }
   }
 
-  async updateTaskById(taskId: number, updateTask: InputTaskDTO): Promise<TaskDTO> {
+  async updateTaskById(
+    taskId: number,
+    updateTask: InputTaskDTO,
+  ): Promise<TaskDTO> {
     try {
       const updatedTask: TaskExtended = await prisma.task.update({
         where: {
@@ -185,7 +188,7 @@ class TaskService implements ITaskService {
     try {
       const deletedTask = await prisma.task.delete({
         where: {
-          id: taskId
+          id: taskId,
         },
         include: {
           category: true,

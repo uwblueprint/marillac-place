@@ -2,7 +2,7 @@ import TaskService from "../../services/implementations/taskService";
 import {
   ITaskService,
   TaskDTO,
-  InputTaskDTO
+  InputTaskDTO,
 } from "../../services/interfaces/taskService";
 
 const taskService: ITaskService = new TaskService();
