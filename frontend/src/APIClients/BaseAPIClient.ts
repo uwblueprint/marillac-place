@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 import jwt from "jsonwebtoken";
 
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
@@ -9,11 +9,11 @@ const baseAPIClient = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL,
 });
 
-baseAPIClient.interceptors.request.use(async (config: AxiosRequestConfig) => {
+baseAPIClient.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   const newConfig = { ...config };
 
   // if access token in header has expired, do a refresh
-  const authHeaderParts = config.headers.Authorization?.split(" ");
+  const authHeaderParts = [""]
   if (
     authHeaderParts &&
     authHeaderParts.length >= 2 &&
