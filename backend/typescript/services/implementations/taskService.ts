@@ -141,31 +141,7 @@ class TaskService implements ITaskService {
   async createTask(inputTask: InputTaskDTO): Promise<TaskDTO> {
     try {
       const newTask: TaskExtended = await prisma.task.create({
-        data: {
-          title: inputTask.title,
-          status: inputTask.status,
-          description: inputTask.description,
-          creditValue: inputTask.creditValue,
-          startDate: inputTask.startDate,
-          endDate: inputTask.endDate,
-          comments: inputTask.comments,
-          recurrenceFrequency: inputTask.recurrenceFrequency,
-          category: {
-            connect: {
-              id: inputTask.categoryId,
-            },
-          },
-          assignee: {
-            connect: {
-              id: inputTask.assigneeId,
-            },
-          },
-          assigner: {
-            connect: {
-              id: inputTask.assignerId,
-            },
-          },
-        },
+        data: inputTask,
         include: {
           category: true,
           assignee: true,
@@ -182,40 +158,13 @@ class TaskService implements ITaskService {
     }
   }
 
-  async updateTaskById(
-    taskId: number,
-    updateTask: InputTaskDTO,
-  ): Promise<TaskDTO> {
+  async updateTaskById(taskId: number, updateTask: InputTaskDTO): Promise<TaskDTO> {
     try {
       const updatedTask: TaskExtended = await prisma.task.update({
         where: {
-          id: Number(taskId),
+          id: taskId,
         },
-        data: {
-          title: updateTask.title,
-          status: updateTask.status,
-          description: updateTask.description,
-          creditValue: updateTask.creditValue,
-          startDate: updateTask.startDate,
-          endDate: updateTask.endDate,
-          comments: updateTask.comments,
-          recurrenceFrequency: updateTask.recurrenceFrequency,
-          category: {
-            connect: {
-              id: updateTask.categoryId,
-            },
-          },
-          assignee: {
-            connect: {
-              id: updateTask.assigneeId,
-            },
-          },
-          assigner: {
-            connect: {
-              id: updateTask.assignerId,
-            },
-          },
-        },
+        data: updateTask,
         include: {
           category: true,
           assignee: true,
@@ -236,7 +185,7 @@ class TaskService implements ITaskService {
     try {
       const deletedTask = await prisma.task.delete({
         where: {
-          id: Number(taskId),
+          id: taskId
         },
         include: {
           category: true,

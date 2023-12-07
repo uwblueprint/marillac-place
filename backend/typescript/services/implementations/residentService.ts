@@ -26,10 +26,7 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async updateResident(
-    id: number,
-    resident: UpdateResidentDTO,
-  ): Promise<ResidentDTO> {
+  async updateResident(id: number, resident: UpdateResidentDTO): Promise<ResidentDTO> {
     try {
       const updatedResident = await Prisma.resident.update({
         where: { id },

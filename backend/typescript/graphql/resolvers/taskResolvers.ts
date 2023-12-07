@@ -2,7 +2,7 @@ import TaskService from "../../services/implementations/taskService";
 import {
   ITaskService,
   TaskDTO,
-  InputTaskDTO,
+  InputTaskDTO
 } from "../../services/interfaces/taskService";
 
 const taskService: ITaskService = new TaskService();
@@ -48,17 +48,16 @@ const taskResolvers = {
     },
     updateTask: async (
       _parent: undefined,
-      { id }: { id: string },
-      { task }: { task: InputTaskDTO },
+      { id, task }: { id: number; task: InputTaskDTO },
     ): Promise<TaskDTO> => {
-      const updatedTask = await taskService.updateTaskById(Number(id), task);
+      const updatedTask = await taskService.updateTaskById(id, task);
       return updatedTask;
     },
     deleteTask: async (
       _parent: undefined,
-      { id }: { id: string },
+      { id }: { id: number },
     ): Promise<TaskDTO> => {
-      const deletedTask = await taskService.deleteTaskById(Number(id));
+      const deletedTask = await taskService.deleteTaskById(id);
       return deletedTask;
     },
   },
