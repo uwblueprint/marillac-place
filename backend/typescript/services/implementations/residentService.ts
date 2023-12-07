@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import type {
+import {
   IResidentService,
   ResidentDTO,
   CreateResidentDTO,
   UpdateResidentDTO,
+  RedeemCreditsResponse,
 } from "../interfaces/residentService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
@@ -57,7 +58,9 @@ class ResidentService implements IResidentService {
 
   async getAllResidents(): Promise<ResidentDTO[]> {
     try {
-      const allResidents = await Prisma.resident.findMany();
+      const allResidents = await Prisma.resident.findMany({
+        include: { notifications: true },
+      });
       return allResidents;
     } catch (error: unknown) {
       Logger.error(
@@ -71,11 +74,71 @@ class ResidentService implements IResidentService {
     try {
       const allResidentsById = await Prisma.resident.findMany({
         where: { id: { in: id } },
+        include: { notifications: true },
       });
       return allResidentsById;
     } catch (error: unknown) {
       Logger.error(
         `Failed to get residents by IDs. IDs = ${id}. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+  }
+
+  async getActiveResidents(): Promise<ResidentDTO[]> {
+    try {
+      const residents = await Prisma.resident.findMany({
+        where: {
+          dateLeft: null,
+        },
+        include: { notifications: true },
+      });
+
+      if (!residents) throw new Error(`No residents found.`);
+
+      return residents;
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get all active residents. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+  }
+
+  async redeemCredits(
+    id: number,
+    credits: number,
+  ): Promise<RedeemCreditsResponse> {
+    try {
+      const currentCredits = await Prisma.resident.findUnique({
+        where: { id },
+        select: {
+          credits: true,
+        },
+      });
+
+      if (!currentCredits) {
+        return RedeemCreditsResponse.INVALID_ID;
+      }
+      if (currentCredits.credits >= credits) {
+        await Prisma.resident.update({
+          where: { id },
+          data: {
+            credits: {
+              decrement: credits,
+            },
+          },
+        });
+        return RedeemCreditsResponse.SUCCESS;
+      }
+      return RedeemCreditsResponse.NOT_ENOUGH_CREDITS;
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to redeem resident's credits by IDs. IDs = ${id}. Reason = ${getErrorMessage(
           error,
         )}`,
       );
