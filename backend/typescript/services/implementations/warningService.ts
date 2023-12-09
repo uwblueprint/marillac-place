@@ -50,7 +50,6 @@ class WarningService implements IWarningService {
           relatedTask,
         },
         include: {
-          // ARE THESE NECESSARY?
           resident: true,
           assigner: true,
           relatedTask: true,
