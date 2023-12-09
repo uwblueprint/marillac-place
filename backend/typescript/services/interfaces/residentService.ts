@@ -1,4 +1,4 @@
-import {WarningDTO} from "./warningService"
+import { WarningDTO } from "./warningService";
 import { NotificationResidentDTO } from "./adminService";
 
 export interface ResidentDTO {
