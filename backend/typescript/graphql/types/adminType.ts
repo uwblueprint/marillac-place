@@ -3,9 +3,9 @@ import { gql } from "apollo-server-express";
 const adminType = gql`
   type NotificationDTO {
     id: ID!
+    authorId: ID!
     message: String!
     createdAt: String!
-    authorId: ID!
     residents: [NotificationResidentDTO!]
   }
 
@@ -21,8 +21,12 @@ const adminType = gql`
   }
 
   extend type Mutation {
-    sendNotification(message: String, resident_id: ID): NotificationDTO!
-    sendAnnouncement(message: String): NotificationDTO!
+    sendNotification(
+      message: String
+      residentId: ID
+      staffId: ID
+    ): NotificationDTO!
+    sendAnnouncement(message: String, staffId: ID): NotificationDTO!
   }
 `;
 
