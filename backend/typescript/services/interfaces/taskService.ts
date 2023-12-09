@@ -77,6 +77,14 @@ export interface ITaskService {
   getTasksByStartDate(startDate: Date): Promise<TaskDTO[]>;
 
   /**
+   * Get all tasks by a status
+   * @param status status
+   * @returns a TaskDTO with task's information
+   * @throws Error if task retrieval fails
+   */
+  getTasksByStatus(status: Status): Promise<TaskDTO[]>;
+
+  /**
    * Create a task
    * @param task the user to be created
    * @returns a TaskDTO with the created task's information

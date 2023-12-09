@@ -40,7 +40,7 @@ model task {
   category            category              @relation(fields: [categoryId], references: [id])
   categoryId          Int                   @map("category_id")
   title               String
-  status              Statuses
+  status              Status
   description         String
   assignee            resident              @relation(fields: [assigneeId], references: [id])
   assigneeId          Int                   @map("assignee_id")
@@ -70,7 +70,7 @@ model category {
   @@map("category")
 }
 
-enum Statuses {
+enum Status {
   PENDING_APPROVAL
   INCOMPLETE
   COMPLETE

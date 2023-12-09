@@ -17,7 +17,7 @@ const taskType = gql`
   input InputTaskDTO {
     categoryId: Int!
     title: String!
-    status: Status
+    status: Status!
     description: String!
     assigneeId: Int!
     assignerId: Int!
@@ -33,7 +33,7 @@ const taskType = gql`
     categoryName: String!
     categoryId: Int!
     title: String!
-    status: Status
+    status: Status!
     description: String!
     assigneeId: Int!
     assigneeName: String!
@@ -52,6 +52,7 @@ const taskType = gql`
     getTasksByAssigneeId(assigneeId: Int!): [TaskDTO!]
     getTasksByAssignerId(assignerId: Int!): [TaskDTO!]
     getTasksByStartDate(startDate: Date!): [TaskDTO!]
+    getTasksByStatus(status: Status!): [TaskDTO!]
   }
 
   extend type Mutation {
