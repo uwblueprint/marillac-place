@@ -25,6 +25,8 @@ import staffResolver from "./resolvers/staffResolver";
 import adminType from "./types/adminType";
 import residentResolvers from "./resolvers/residentResolvers";
 import residentType from "./types/residentType";
+import taskResolvers from "./resolvers/taskResolvers";
+import taskType from "./types/taskType";
 
 const query = gql`
   type Query {
@@ -48,6 +50,7 @@ const executableSchema = makeExecutableSchema({
     residentType,
     simpleEntityType,
     userType,
+    taskType,
     staffType,
     adminType,
   ],
@@ -58,6 +61,7 @@ const executableSchema = makeExecutableSchema({
     residentResolvers,
     simpleEntityResolvers,
     userResolvers,
+    taskResolvers,
     staffResolver,
     adminResolvers,
   ),
