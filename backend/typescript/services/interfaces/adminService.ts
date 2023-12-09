@@ -3,7 +3,7 @@ export interface NotificationDTO {
   authorId: number;
   message: string;
   createdAt: Date;
-  residents?: NotificationResidentDTO[]; // might need to change when integrated
+  residents?: NotificationResidentDTO[];
 }
 
 export interface NotificationResidentDTO {
@@ -29,8 +29,9 @@ export interface IAdminService {
    * @throws Error if creation fails
    */
   sendNotification(
-    notif_message: string,
-    resident_id: number,
+    notifMessage: string,
+    residentId: number,
+    staffId: number,
   ): Promise<NotificationDTO>;
 
   /**
@@ -46,5 +47,8 @@ export interface IAdminService {
    * @returns the new updated NotificationDTO
    * @throws Error if creation fails
    */
-  sendAnnouncement(notif_messagej: string): Promise<NotificationDTO>;
+  sendAnnouncement(
+    notifMessage: string,
+    staffId: number,
+  ): Promise<NotificationDTO>;
 }
