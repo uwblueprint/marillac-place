@@ -36,21 +36,21 @@ model user {
 }
 
 model task {
-  id                  Int                 @id @default(autoincrement())
-  category            category            @relation(fields: [categoryId], references: [id])
-  categoryId          Int                 @map("category_id")
+  id                  Int                   @id @default(autoincrement())
+  category            category              @relation(fields: [categoryId], references: [id])
+  categoryId          Int                   @map("category_id")
   title               String
   status              Statuses
   description         String
-  assignee            resident            @relation(fields: [assigneeId], references: [id])
-  assigneeId          Int                 @map("assignee_id")
-  assigner            staff               @relation(fields: [assignerId], references: [id])
-  assignerId          Int                 @map("assigner_id")
-  creditValue         Float               @map("credit_value")
-  startDate           DateTime            @map("start_date")
-  endDate             DateTime?           @map("end_date")
-  comments            String
-  recurrenceFrequency Recurrence_Frequency @map("recurrence_frequency")
+  assignee            resident              @relation(fields: [assigneeId], references: [id])
+  assigneeId          Int                   @map("assignee_id")
+  assigner            staff                 @relation(fields: [assignerId], references: [id])
+  assignerId          Int                   @map("assigner_id")
+  creditValue         Float                 @map("credit_value")
+  startDate           DateTime              @map("start_date")
+  endDate             DateTime?             @map("end_date")
+  comments            String?
+  recurrenceFrequency Recurrence_Frequency? @map("recurrence_frequency")
   warnings            warning[]
 }
 
@@ -102,7 +102,7 @@ model staff {
   profilePictureLink String?        @map("profile_picture_link")
   tasksAssigned      task[]
   warningsAssigned   warning[]
-  notifications      notification[] 
+  notifications      notification[]
 }
 
 model role {
@@ -114,29 +114,29 @@ model role {
 }
 
 model resident {
-  id                 Int                 @id @default(autoincrement())
-  firstName          String              @map("first_name")
-  lastName           String              @map("last_name")
-  email              String              @unique
-  phoneNumber        String?             @map("phone_number")
-  displayName        String              @map("display_name")
-  profilePictureLink String?             @map("profile_picture_link")
+  id                 Int                    @id @default(autoincrement())
+  firstName          String                 @map("first_name")
+  lastName           String                 @map("last_name")
+  email              String                 @unique
+  phoneNumber        String?                @map("phone_number")
+  displayName        String                 @map("display_name")
+  profilePictureLink String?                @map("profile_picture_link")
   birthdate          DateTime?
   credits            Float
-  dateJoined         DateTime            @map("date_joined")
-  dateLeft           DateTime?           @map("date_left")
+  dateJoined         DateTime               @map("date_joined")
+  dateLeft           DateTime?              @map("date_left")
   tasks              task[]
   warnings           warning[]
   notifications      notificationResident[]
 }
 
 model notification {
-  id          Int                 @id @default(autoincrement())
-  message     String
-  authorId    Int                 @map("author_id")
-  author      staff               @relation(fields: [authorId], references: [id])
-  createdAt   DateTime            @default(now()) @map("created_at")
-  residents   notificationResident[]  
+  id        Int                    @id @default(autoincrement())
+  message   String
+  authorId  Int                    @map("author_id")
+  author    staff                  @relation(fields: [authorId], references: [id])
+  createdAt DateTime               @default(now()) @map("created_at")
+  residents notificationResident[]
 }
 
 model notificationResident {

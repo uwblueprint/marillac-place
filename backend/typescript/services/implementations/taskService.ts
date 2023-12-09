@@ -138,6 +138,33 @@ class TaskService implements ITaskService {
     }
   }
 
+  async getTasksByStartDate(startDate: Date): Promise<TaskDTO[]> {
+    try {
+      const tasksResponse: TaskExtended[] = await prisma.task.findMany({
+        where: {
+          startDate,
+        },
+        include: {
+          category: true,
+          assignee: true,
+          assigner: true,
+        },
+      });
+
+      const tasks: TaskDTO[] = [];
+
+      tasksResponse.forEach((taskExtended) => {
+        const dto = convertTaskRelation(taskExtended);
+        tasks.push(dto);
+      });
+
+      return tasks;
+    } catch (error: unknown) {
+      Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
+
   async createTask(inputTask: InputTaskDTO): Promise<TaskDTO> {
     try {
       const newTask: TaskExtended = await prisma.task.create({

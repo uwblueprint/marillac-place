@@ -37,6 +37,13 @@ const taskResolvers = {
       const tasks = await taskService.getTasksByAssignerId(assignerId);
       return tasks;
     },
+    getTasksByStartDate: async (
+      _parent: undefined,
+      { startDate }: { startDate: Date },
+    ): Promise<TaskDTO[]> => {
+      const tasks = await taskService.getTasksByStartDate(startDate);
+      return tasks;
+    },
   },
   Mutation: {
     createTask: async (

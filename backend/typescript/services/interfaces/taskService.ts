@@ -13,8 +13,8 @@ export interface InputTaskDTO {
   creditValue: number;
   startDate: Date;
   endDate?: Date | null;
-  comments: string;
-  recurrenceFrequency: Recurrence_Frequency;
+  comments?: string | null;
+  recurrenceFrequency?: Recurrence_Frequency | null;
 }
 
 export interface TaskDTO {
@@ -31,8 +31,8 @@ export interface TaskDTO {
   creditValue: number;
   startDate: Date;
   endDate?: Date | null;
-  comments: string;
-  recurrenceFrequency: Recurrence_Frequency;
+  comments?: string | null;
+  recurrenceFrequency?: Recurrence_Frequency | null;
 }
 
 export interface ITaskService {
@@ -67,6 +67,14 @@ export interface ITaskService {
    * @throws Error if task retrieval fails
    */
   getTasksByAssignerId(assignerId: number): Promise<TaskDTO[]>;
+
+  /**
+   * Get all tasks by a start date
+   * @param startDate start date
+   * @returns a TaskDTO with task's information
+   * @throws Error if task retrieval fails
+   */
+  getTasksByStartDate(startDate: Date): Promise<TaskDTO[]>;
 
   /**
    * Create a task

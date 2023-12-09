@@ -16,14 +16,14 @@ const taskType = gql`
 
   input InputTaskDTO {
     categoryId: Int!
-    title: String
+    title: String!
     status: Status
-    description: String
+    description: String!
     assigneeId: Int!
     assignerId: Int!
-    creditValue: Int
-    startDate: DateTime!
-    endDate: DateTime
+    creditValue: Float!
+    startDate: Date!
+    endDate: Date
     comments: String
     recurrenceFrequency: Recurrence_Frequency
   }
@@ -32,16 +32,16 @@ const taskType = gql`
     id: Int!
     categoryName: String!
     categoryId: Int!
-    title: String
+    title: String!
     status: Status
-    description: String
+    description: String!
     assigneeId: Int!
     assigneeName: String!
     assignerId: Int!
     assignerName: String!
-    creditValue: Int
-    startDate: DateTime!
-    endDate: DateTime
+    creditValue: Float!
+    startDate: Date!
+    endDate: Date
     comments: String
     recurrenceFrequency: Recurrence_Frequency
   }
@@ -51,6 +51,7 @@ const taskType = gql`
     getTasksByCategoryId(categoryId: Int!): [TaskDTO!]
     getTasksByAssigneeId(assigneeId: Int!): [TaskDTO!]
     getTasksByAssignerId(assignerId: Int!): [TaskDTO!]
+    getTasksByStartDate(startDate: Date!): [TaskDTO!]
   }
 
   extend type Mutation {
