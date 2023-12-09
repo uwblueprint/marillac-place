@@ -16,6 +16,7 @@ const residentType = gql`
     dateJoined: DateTime!
     dateLeft: DateTime
     warnings: [WarningDTO!]
+    notifications: [NotificationResidentDTO!]
   }
 
   input CreateResidentDTO {
@@ -52,6 +53,7 @@ const residentType = gql`
   extend type Query {
     residentsById(id: [ID!]): [ResidentDTO!]
     allResidents: [ResidentDTO!]
+    activeResidents: [ResidentDTO!]
   }
 
   extend type Mutation {
