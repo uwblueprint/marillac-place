@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import {
-    IWarningService,
-    WarningDTO,
-    CreateWarningDTO,
+  IWarningService,
+  WarningDTO,
+  CreateWarningDTO,
 } from "../interfaces/warningService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
@@ -27,16 +27,13 @@ class WarningService implements IWarningService {
           },
         };
       }
+
       const newWarning = await Prisma.warning.create({
         data: {
           title: warning.title,
           description: warning.description,
           dateIssued:
-            warning.dateIssued == null ||
-            warning.dateIssued ||
-            warning.dateIssued === 0
-              ? undefined
-              : warning.dateIssued,
+            warning.dateIssued == null ? undefined : warning.dateIssued,
           resident: {
             connect: {
               id: Number(warning.residentId),
@@ -47,7 +44,7 @@ class WarningService implements IWarningService {
               id: Number(warning.assignerId),
             },
           },
-          relatedTask: relatedTask,
+          relatedTask,
         },
         include: {
           resident: true,
@@ -63,26 +60,29 @@ class WarningService implements IWarningService {
       throw error;
     }
   }
-    async deleteWarning(warningId: number): Promise<WarningDTO> {
-        try {
-            const deletedWarning = await Prisma.warning.delete({
-                where: {
-                    id: warningId
-                },
-                include: {
-                    resident: true,
-                    assigner: true,
-                    relatedTask: true
-                }
-            });
-            return deletedWarning;
-        } catch (error: unknown) {
-            Logger.error(
-                `Failed to delete warning #${warningId}. Reason = ${getErrorMessage(error)}`,
-            );
-            throw error;
-        }
+
+  async deleteWarning(warningId: number): Promise<WarningDTO> {
+    try {
+      const deletedWarning = await Prisma.warning.delete({
+        where: {
+          id: warningId,
+        },
+        include: {
+          resident: true,
+          assigner: true,
+          relatedTask: true,
+        },
+      });
+      return deletedWarning;
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to delete warning #${warningId}. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
     }
+  }
 }
 
 export default WarningService;

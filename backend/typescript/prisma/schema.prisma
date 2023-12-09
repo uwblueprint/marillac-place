@@ -50,7 +50,7 @@ model task {
   startDate           DateTime            @map("start_date")
   endDate             DateTime?           @map("end_date")
   comments            String
-  recurrenceFrequency RecurrenceFrequency @map("recurrence_frequency")
+  recurrenceFrequency Recurrence_Frequency @map("recurrence_frequency")
   warnings            warning[]
 }
 

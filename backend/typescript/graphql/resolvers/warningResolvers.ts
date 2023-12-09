@@ -2,7 +2,7 @@ import WarningService from "../../services/implementations/warningService";
 import type {
   WarningDTO,
   CreateWarningDTO,
-  IWarningService
+  IWarningService,
 } from "../../services/interfaces/warningService";
 
 const warningService: IWarningService = new WarningService();

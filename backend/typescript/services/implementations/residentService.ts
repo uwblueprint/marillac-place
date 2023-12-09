@@ -62,9 +62,9 @@ class ResidentService implements IResidentService {
   async getAllResidents(): Promise<ResidentDTO[]> {
     try {
       const allResidents = await Prisma.resident.findMany({
-        include: { 
+        include: {
           notifications: true,
-          warnings: true, 
+          warnings: true,
         },
       });
       return allResidents;

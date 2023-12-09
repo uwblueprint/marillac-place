@@ -1,5 +1,5 @@
 import { NotificationResidentDTO } from "./adminService";
-import {WarningDTO} from "./warningService"
+import { WarningDTO } from "./warningService";
 
 export interface ResidentDTO {
   id: number;
