@@ -21,7 +21,7 @@ const warningResolvers = {
       _parent: undefined,
       { id }: { id: number },
     ): Promise<WarningDTO> => {
-      const deletedWarning = await warningService.deleteWarning(id);
+      const deletedWarning = await warningService.deleteWarning(Number(id));
       return deletedWarning;
     },
   },
