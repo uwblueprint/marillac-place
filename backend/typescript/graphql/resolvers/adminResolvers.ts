@@ -4,7 +4,6 @@ import {
   NotificationDTO,
 } from "../../services/interfaces/adminService";
 
-// TODO: change staff_id to StaffService when its done
 const adminService: IAdminService = new AdminService();
 
 const adminResolvers = {
