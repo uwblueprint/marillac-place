@@ -77,6 +77,14 @@ export interface ITaskService {
   getTasksByStartDate(startDate: Date): Promise<TaskDTO[]>;
 
   /**
+   * Get all tasks by an end date
+   * @param endDate end date
+   * @returns a TaskDTO with task's information
+   * @throws Error if task retrieval fails
+   */
+  getTasksByEndDate(endDate: Date): Promise<TaskDTO[]>;
+
+  /**
    * Get all tasks by a status
    * @param status status
    * @returns a TaskDTO with task's information

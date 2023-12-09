@@ -52,6 +52,7 @@ const taskType = gql`
     getTasksByAssigneeId(assigneeId: Int!): [TaskDTO!]
     getTasksByAssignerId(assignerId: Int!): [TaskDTO!]
     getTasksByStartDate(startDate: Date!): [TaskDTO!]
+    getTasksByEndDate(endDate: Date!): [TaskDTO!]
     getTasksByStatus(status: Status!): [TaskDTO!]
   }
 
