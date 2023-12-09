@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { task, category, resident, staff } from "@prisma/client";
 import prisma from "../../prisma";
-import { ITaskService, TaskDTO, InputTaskDTO, Status } from "../interfaces/taskService";
+import {
+  ITaskService,
+  TaskDTO,
+  InputTaskDTO,
+  Status,
+} from "../interfaces/taskService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
@@ -192,7 +197,7 @@ class TaskService implements ITaskService {
     }
   }
 
-   async getTasksByStatus(status: Status): Promise<TaskDTO[]> {
+  async getTasksByStatus(status: Status): Promise<TaskDTO[]> {
     try {
       const tasksResponse: TaskExtended[] = await prisma.task.findMany({
         where: {
