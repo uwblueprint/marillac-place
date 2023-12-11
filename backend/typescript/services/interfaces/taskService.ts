@@ -47,7 +47,7 @@ export interface ITaskService {
   /**
    * Get all tasks belonging to a category
    * @param categoryId category's id
-   * @returns a TaskDTO with category information
+   * @returns a list of TaskDTOs with a given category
    * @throws Error if task retrieval fails
    */
   getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]>;
@@ -55,7 +55,7 @@ export interface ITaskService {
   /**
    * Get all tasks assigned to a resident
    * @param assigneeId assignee's id
-   * @returns a TaskDTO with task's information
+   * @returns a list of TaskDTOs with a given assignee
    * @throws Error if task retrieval fails
    */
   getTasksByAssigneeId(assigneeId: number): Promise<TaskDTO[]>;
@@ -63,7 +63,7 @@ export interface ITaskService {
   /**
    * Get all tasks assigned by a staff member
    * @param assignerId assigner's id
-   * @returns a TaskDTO with task's information
+   * @returns a list of TaskDTOs with a given assigner
    * @throws Error if task retrieval fails
    */
   getTasksByAssignerId(assignerId: number): Promise<TaskDTO[]>;
@@ -71,7 +71,7 @@ export interface ITaskService {
   /**
    * Get all tasks by a start date
    * @param startDate start date
-   * @returns a TaskDTO with task's information
+   * @returns a list of TaskDTOs starting on the provided date
    * @throws Error if task retrieval fails
    */
   getTasksByStartDate(startDate: Date): Promise<TaskDTO[]>;
@@ -79,7 +79,7 @@ export interface ITaskService {
   /**
    * Get all tasks by an end date
    * @param endDate end date
-   * @returns a TaskDTO with task's information
+   * @returns a list of TaskDTOs ending on the provided date
    * @throws Error if task retrieval fails
    */
   getTasksByEndDate(endDate: Date): Promise<TaskDTO[]>;
@@ -87,7 +87,7 @@ export interface ITaskService {
   /**
    * Get all tasks by a status
    * @param status status
-   * @returns a TaskDTO with task's information
+   * @returns a list of TaskDTO with a given status
    * @throws Error if task retrieval fails
    */
   getTasksByStatus(status: Status): Promise<TaskDTO[]>;
