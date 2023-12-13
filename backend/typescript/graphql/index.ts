@@ -13,11 +13,7 @@ import {
 } from "../middlewares/auth";
 import authResolvers from "./resolvers/authResolvers";
 import authType from "./types/authType";
-import entityResolvers from "./resolvers/entityResolvers";
-import entityType from "./types/entityType";
-import simpleEntityResolvers from "./resolvers/simpleEntityResolvers";
 import adminResolvers from "./resolvers/adminResolvers";
-import simpleEntityType from "./types/simpleEntityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
 import staffType from "./types/staffType";
@@ -46,9 +42,7 @@ const executableSchema = makeExecutableSchema({
     query,
     mutation,
     authType,
-    entityType,
     residentType,
-    simpleEntityType,
     userType,
     taskType,
     staffType,
@@ -57,9 +51,7 @@ const executableSchema = makeExecutableSchema({
   resolvers: merge(
     scalarResolvers,
     authResolvers,
-    entityResolvers,
     residentResolvers,
-    simpleEntityResolvers,
     userResolvers,
     taskResolvers,
     staffResolver,
@@ -73,21 +65,11 @@ const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
 
 const graphQLMiddlewares = {
   Query: {
-    entity: authorizedByAllRoles(),
-    entities: authorizedByAllRoles(),
-    simpleEntity: authorizedByAllRoles(),
-    simpleEntities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),
     userByEmail: authorizedByAdmin(),
     users: authorizedByAdmin(),
   },
   Mutation: {
-    createEntity: authorizedByAllRoles(),
-    updateEntity: authorizedByAllRoles(),
-    deleteEntity: authorizedByAllRoles(),
-    createSimpleEntity: authorizedByAllRoles(),
-    updateSimpleEntity: authorizedByAllRoles(),
-    deleteSimpleEntity: authorizedByAllRoles(),
     createUser: authorizedByAdmin(),
     updateUser: authorizedByAdmin(),
     deleteUserById: authorizedByAdmin(),
