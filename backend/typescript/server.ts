@@ -4,7 +4,8 @@ import express from "express";
 import * as firebaseAdmin from "firebase-admin";
 
 import { ApolloServer } from "apollo-server-express";
-import { sequelize } from "./models";
+// TODO: verify can delete
+//import { sequelize } from "./models";
 import schema from "./graphql";
 
 const CORS_ALLOW_LIST = [
@@ -41,7 +42,8 @@ server.applyMiddleware({
   cors: { origin: CORS_ALLOW_LIST, credentials: true },
 });
 
-sequelize.authenticate();
+// TODO: verify can delete
+//sequelize.authenticate();
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert({
