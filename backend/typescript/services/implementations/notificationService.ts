@@ -2,7 +2,7 @@ import prisma from "../../prisma";
 import type {
   IAdminService,
   NotificationDTO,
-} from "../interfaces/adminService";
+} from "../interfaces/notificationService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import { IResidentService } from "../interfaces/residentService";
