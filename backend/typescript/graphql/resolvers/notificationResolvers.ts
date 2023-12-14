@@ -1,8 +1,8 @@
-import AdminService from "../../services/implementations/adminService";
+import AdminService from "../../services/implementations/notificationService";
 import {
   IAdminService,
   NotificationDTO,
-} from "../../services/interfaces/adminService";
+} from "../../services/interfaces/notificationService";
 
 const adminService: IAdminService = new AdminService();
 
