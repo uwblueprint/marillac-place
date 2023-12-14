@@ -5,7 +5,7 @@ const adminType = gql`
     id: ID!
     authorId: ID!
     message: String!
-    createdAt: String!
+    createdAt: DateTime!
     residents: [NotificationResidentDTO!]
   }
 
