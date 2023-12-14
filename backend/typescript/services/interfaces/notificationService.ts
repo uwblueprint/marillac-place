@@ -63,7 +63,7 @@ export interface IAdminService {
    * @throws Error if update fails
    */
   deleteNotificationForResident(
-    notifId: number,
+    notificationId: number,
     residentId: number,
   ): Promise<NotificationDTO>;
 
@@ -75,7 +75,7 @@ export interface IAdminService {
    * @throws Error if update fails
    */
   updateSeenForResident(
-    notifId: number,
+    notificationId: number,
     residentId: number,
   ): Promise<NotificationDTO>;
 }
