@@ -2,7 +2,6 @@ import prisma from "../../prisma";
 import type {
   IAdminService,
   NotificationDTO,
-  NotificationResidentDTO,
 } from "../interfaces/notificationService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
@@ -133,35 +132,34 @@ class AdminService implements IAdminService {
     residentId: number,
   ): Promise<NotificationDTO> {
     try {
-      const updateNotificationResident: NotificationResidentDTO = await prisma.notificationResident.update({
+      await prisma.notificationResident.update({
         where: {
           notificationId_residentId: {
             notificationId: notifId,
-            residentId: residentId,
-          }
+            residentId,
+          },
         },
         data: {
-          isDeleted: true
-        }
+          isDeleted: true,
+        },
       });
 
       const updatedNotification = await prisma.notification.findUnique({
-        where : {
+        where: {
           id: notifId,
         },
         include: {
-          residents: true
-        }
+          residents: true,
+        },
       });
 
-      if (!updatedNotification) throw new Error(`notification id ${notifId} not found`);
+      if (!updatedNotification)
+        throw new Error(`notification id ${notifId} not found`);
 
       return updatedNotification;
     } catch (error) {
       Logger.error(
-        `Failed to set isDelete flag. Reason = ${getErrorMessage(
-          error,
-        )}`,
+        `Failed to set isDelete flag. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
@@ -169,38 +167,37 @@ class AdminService implements IAdminService {
 
   async updateSeenForResident(
     notifId: number,
-    residentId: number
-  ): Promise<NotificationDTO>{
+    residentId: number,
+  ): Promise<NotificationDTO> {
     try {
-      const updateNotificationResident: NotificationResidentDTO = await prisma.notificationResident.update({
+      await prisma.notificationResident.update({
         where: {
           notificationId_residentId: {
             notificationId: notifId,
-            residentId: residentId,
-          }
+            residentId,
+          },
         },
         data: {
-          seen: true
-        }
+          seen: true,
+        },
       });
 
       const updatedNotification = await prisma.notification.findUnique({
-        where : {
+        where: {
           id: notifId,
         },
         include: {
-          residents: true
-        }
+          residents: true,
+        },
       });
 
-      if (!updatedNotification) throw new Error(`notification id ${notifId} not found`);
+      if (!updatedNotification)
+        throw new Error(`notification id ${notifId} not found`);
 
       return updatedNotification;
     } catch (error) {
       Logger.error(
-        `Failed to set seen flag. Reason = ${getErrorMessage(
-          error,
-        )}`,
+        `Failed to set seen flag. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
