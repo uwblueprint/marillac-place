@@ -3,6 +3,7 @@ import {
   ITaskService,
   TaskDTO,
   InputTaskDTO,
+  Status,
 } from "../../services/interfaces/taskService";
 
 const taskService: ITaskService = new TaskService();
@@ -35,6 +36,27 @@ const taskResolvers = {
       { assignerId }: { assignerId: number },
     ): Promise<TaskDTO[]> => {
       const tasks = await taskService.getTasksByAssignerId(assignerId);
+      return tasks;
+    },
+    getTasksByStartDate: async (
+      _parent: undefined,
+      { startDate }: { startDate: Date },
+    ): Promise<TaskDTO[]> => {
+      const tasks = await taskService.getTasksByStartDate(startDate);
+      return tasks;
+    },
+    getTasksByEndDate: async (
+      _parent: undefined,
+      { endDate }: { endDate: Date },
+    ): Promise<TaskDTO[]> => {
+      const tasks = await taskService.getTasksByEndDate(endDate);
+      return tasks;
+    },
+    getTasksByStatus: async (
+      _parent: undefined,
+      { status }: { status: Status },
+    ): Promise<TaskDTO[]> => {
+      const tasks = await taskService.getTasksByStatus(status);
       return tasks;
     },
   },
