@@ -1,9 +1,7 @@
-import { resolve } from "path";
 import AdminService from "../../services/implementations/notificationService";
 import {
   IAdminService,
   NotificationDTO,
-  NotificationResidentDTO,
 } from "../../services/interfaces/notificationService";
 
 const adminService: IAdminService = new AdminService();

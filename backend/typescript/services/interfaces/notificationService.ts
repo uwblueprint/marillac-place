@@ -24,9 +24,9 @@ export interface IAdminService {
 
   /**
    * Post a notification to the specified resident
-   * @param notifMessage notification message that is to be sent 
+   * @param notifMessage notification message that is to be sent
    * @param residentId resident id
-   * @param staffId staff id 
+   * @param staffId staff id
    * @returns a NotificationDTO associated with the posted notification
    * @throws Error if creation fails
    */
@@ -45,8 +45,8 @@ export interface IAdminService {
 
   /**
    * Post the announcement notifMessage to all active residents
-   * @param notifMessage notification message that is to be sent 
-   * @param staffId staff id 
+   * @param notifMessage notification message that is to be sent
+   * @param staffId staff id
    * @returns the new updated NotificationDTO
    * @throws Error if creation fails
    */
@@ -56,11 +56,11 @@ export interface IAdminService {
   ): Promise<NotificationDTO>;
 
   /**
-   * set a notification with notifId id to isDeleted for resident with id residentId 
+   * set a notification with notifId id to isDeleted for resident with id residentId
    * @param notifId notification id
-   * @param residentId resident id 
+   * @param residentId resident id
    * @returns updated NotificationDTO with the isDeleted flag set to true for resident associated with residentId
-   * @throws Error if update fails or the resident does not have notification with notifId 
+   * @throws Error if update fails
    */
   deleteNotificationForResident(
     notifId: number,
@@ -68,11 +68,11 @@ export interface IAdminService {
   ): Promise<NotificationDTO>;
 
   /**
-   * update the seen flag of notification notifId for resident residentId 
+   * update the seen flag of notification notifId for resident residentId
    * @param notifId notification id
-   * @param residentId resident id 
-   * @returns updated NotificationDTO with the seen flag set to true for resident associated with residentId
-   * @throws Error if update fails or the resident does not have notification with notifId 
+   * @param residentId resident id
+   * @returns updated NotificationDTO with the seen flag set to true for resident associated with residentId
+   * @throws Error if update fails
    */
   updateSeenForResident(
     notifId: number,
