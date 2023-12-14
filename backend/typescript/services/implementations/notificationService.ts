@@ -2,6 +2,7 @@ import prisma from "../../prisma";
 import type {
   IAdminService,
   NotificationDTO,
+  NotificationResidentDTO,
 } from "../interfaces/notificationService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
@@ -120,6 +121,84 @@ class AdminService implements IAdminService {
     } catch (error) {
       Logger.error(
         `Failed to create Notification for Announcement. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+  }
+
+  async deleteNotificationForResident(
+    notifId: number,
+    residentId: number,
+  ): Promise<NotificationDTO> {
+    try {
+      const updateNotificationResident: NotificationResidentDTO = await prisma.notificationResident.update({
+        where: {
+          notificationId_residentId: {
+            notificationId: notifId,
+            residentId: residentId,
+          }
+        },
+        data: {
+          isDeleted: true
+        }
+      });
+
+      const updatedNotification = await prisma.notification.findUnique({
+        where : {
+          id: notifId,
+        },
+        include: {
+          residents: true
+        }
+      });
+
+      if (!updatedNotification) throw new Error(`notification id ${notifId} not found`);
+
+      return updatedNotification;
+    } catch (error) {
+      Logger.error(
+        `Failed to set isDelete flag. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateSeenForResident(
+    notifId: number,
+    residentId: number
+  ): Promise<NotificationDTO>{
+    try {
+      const updateNotificationResident: NotificationResidentDTO = await prisma.notificationResident.update({
+        where: {
+          notificationId_residentId: {
+            notificationId: notifId,
+            residentId: residentId,
+          }
+        },
+        data: {
+          seen: true
+        }
+      });
+
+      const updatedNotification = await prisma.notification.findUnique({
+        where : {
+          id: notifId,
+        },
+        include: {
+          residents: true
+        }
+      });
+
+      if (!updatedNotification) throw new Error(`notification id ${notifId} not found`);
+
+      return updatedNotification;
+    } catch (error) {
+      Logger.error(
+        `Failed to set seen flag. Reason = ${getErrorMessage(
           error,
         )}`,
       );
