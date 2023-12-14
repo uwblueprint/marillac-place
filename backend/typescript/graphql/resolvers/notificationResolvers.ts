@@ -47,20 +47,26 @@ const adminResolvers = {
     },
     deleteNotificationForResident: async (
       _parent: undefined,
-      { notifId, residentId }: { notifId: number; residentId: number },
+      {
+        notificationId,
+        residentId,
+      }: { notificationId: number; residentId: number },
     ): Promise<NotificationDTO> => {
       const updatedNotification = await adminService.deleteNotificationForResident(
-        Number(notifId),
+        Number(notificationId),
         Number(residentId),
       );
       return updatedNotification;
     },
     updateSeenForResident: async (
       _parent: undefined,
-      { notifId, residentId }: { notifId: number; residentId: number },
+      {
+        notificationId,
+        residentId,
+      }: { notificationId: number; residentId: number },
     ): Promise<NotificationDTO> => {
       const updatedNotification = await adminService.updateSeenForResident(
-        Number(notifId),
+        Number(notificationId),
         Number(residentId),
       );
       return updatedNotification;

@@ -128,14 +128,14 @@ class AdminService implements IAdminService {
   }
 
   async deleteNotificationForResident(
-    notifId: number,
+    notificationId: number,
     residentId: number,
   ): Promise<NotificationDTO> {
     try {
       await prisma.notificationResident.update({
         where: {
           notificationId_residentId: {
-            notificationId: notifId,
+            notificationId,
             residentId,
           },
         },
@@ -146,7 +146,7 @@ class AdminService implements IAdminService {
 
       const updatedNotification = await prisma.notification.findUnique({
         where: {
-          id: notifId,
+          id: notificationId,
         },
         include: {
           residents: true,
@@ -154,7 +154,7 @@ class AdminService implements IAdminService {
       });
 
       if (!updatedNotification)
-        throw new Error(`notification id ${notifId} not found`);
+        throw new Error(`notification id ${notificationId} not found`);
 
       return updatedNotification;
     } catch (error) {
@@ -166,14 +166,14 @@ class AdminService implements IAdminService {
   }
 
   async updateSeenForResident(
-    notifId: number,
+    notificationId: number,
     residentId: number,
   ): Promise<NotificationDTO> {
     try {
       await prisma.notificationResident.update({
         where: {
           notificationId_residentId: {
-            notificationId: notifId,
+            notificationId,
             residentId,
           },
         },
@@ -184,7 +184,7 @@ class AdminService implements IAdminService {
 
       const updatedNotification = await prisma.notification.findUnique({
         where: {
-          id: notifId,
+          id: notificationId,
         },
         include: {
           residents: true,
@@ -192,7 +192,7 @@ class AdminService implements IAdminService {
       });
 
       if (!updatedNotification)
-        throw new Error(`notification id ${notifId} not found`);
+        throw new Error(`notification id ${notificationId} not found`);
 
       return updatedNotification;
     } catch (error) {

@@ -28,8 +28,11 @@ const adminType = gql`
       staffId: ID
     ): NotificationDTO!
     sendAnnouncement(message: String, staffId: ID): NotificationDTO!
-    deleteNotificationForResident(notifId: ID, residentId: ID): NotificationDTO!
-    updateSeenForResident(notifId: ID, residentId: ID): NotificationDTO!
+    deleteNotificationForResident(
+      notificationId: ID
+      residentId: ID
+    ): NotificationDTO!
+    updateSeenForResident(notificationId: ID, residentId: ID): NotificationDTO!
   }
 `;
 
