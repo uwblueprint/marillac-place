@@ -86,7 +86,7 @@ model warning {
   assigner      staff    @relation(fields: [assignerId], references: [id])
   assignerId    Int      @map("assigner_id")
   dateIssued    DateTime @default(now()) @map("date_issued")
-  related_task  task?    @relation(fields: [relatedTaskId], references: [id])
+  relatedTask   task?    @relation(fields: [relatedTaskId], references: [id])
   relatedTaskId Int?     @map("related_task_id")
 }
 
