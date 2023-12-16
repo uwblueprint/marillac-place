@@ -2,7 +2,7 @@ import prisma from "../../prisma";
 import type {
   IAdminService,
   NotificationDTO,
-} from "../interfaces/adminService";
+} from "../interfaces/notificationService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import { IResidentService } from "../interfaces/residentService";
@@ -122,6 +122,82 @@ class AdminService implements IAdminService {
         `Failed to create Notification for Announcement. Reason = ${getErrorMessage(
           error,
         )}`,
+      );
+      throw error;
+    }
+  }
+
+  async deleteNotificationForResident(
+    notificationId: number,
+    residentId: number,
+  ): Promise<NotificationDTO> {
+    try {
+      await prisma.notificationResident.update({
+        where: {
+          notificationId_residentId: {
+            notificationId,
+            residentId,
+          },
+        },
+        data: {
+          isDeleted: true,
+        },
+      });
+
+      const updatedNotification = await prisma.notification.findUnique({
+        where: {
+          id: notificationId,
+        },
+        include: {
+          residents: true,
+        },
+      });
+
+      if (!updatedNotification)
+        throw new Error(`notification id ${notificationId} not found`);
+
+      return updatedNotification;
+    } catch (error) {
+      Logger.error(
+        `Failed to set isDelete flag. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateSeenForResident(
+    notificationId: number,
+    residentId: number,
+  ): Promise<NotificationDTO> {
+    try {
+      await prisma.notificationResident.update({
+        where: {
+          notificationId_residentId: {
+            notificationId,
+            residentId,
+          },
+        },
+        data: {
+          seen: true,
+        },
+      });
+
+      const updatedNotification = await prisma.notification.findUnique({
+        where: {
+          id: notificationId,
+        },
+        include: {
+          residents: true,
+        },
+      });
+
+      if (!updatedNotification)
+        throw new Error(`notification id ${notificationId} not found`);
+
+      return updatedNotification;
+    } catch (error) {
+      Logger.error(
+        `Failed to set seen flag. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }

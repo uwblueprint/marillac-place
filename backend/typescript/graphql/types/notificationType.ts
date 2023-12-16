@@ -5,7 +5,7 @@ const adminType = gql`
     id: ID!
     authorId: ID!
     message: String!
-    createdAt: String!
+    createdAt: DateTime!
     residents: [NotificationResidentDTO!]
   }
 
@@ -13,6 +13,7 @@ const adminType = gql`
     notificationId: ID!
     residentId: ID!
     seen: Boolean!
+    isDeleted: Boolean!
   }
 
   extend type Query {
@@ -22,11 +23,19 @@ const adminType = gql`
 
   extend type Mutation {
     sendNotification(
-      message: String
-      residentId: ID
-      staffId: ID
+      message: String!
+      residentId: ID!
+      staffId: ID!
     ): NotificationDTO!
-    sendAnnouncement(message: String, staffId: ID): NotificationDTO!
+    sendAnnouncement(message: String!, staffId: ID!): NotificationDTO!
+    deleteNotificationForResident(
+      notificationId: ID!
+      residentId: ID!
+    ): NotificationDTO!
+    updateSeenForResident(
+      notificationId: ID!
+      residentId: ID!
+    ): NotificationDTO!
   }
 `;
 

@@ -145,6 +145,7 @@ model notificationResident {
   resident       resident     @relation(fields: [residentId], references: [id])
   residentId     Int          @map("resident_id")
   seen           Boolean      @default(false)
+  isDeleted      Boolean      @default(false)
 
   @@id([notificationId, residentId])
 }

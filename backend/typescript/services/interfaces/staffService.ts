@@ -1,4 +1,4 @@
-import { NotificationDTO } from "./adminService";
+import { NotificationDTO } from "./notificationService";
 
 export interface StaffDTO {
   id: number;
