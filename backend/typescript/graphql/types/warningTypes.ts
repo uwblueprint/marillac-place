@@ -1,11 +1,5 @@
 import { gql } from "apollo-server-express";
 
-// TODO: Look into custom types for dates and date time types
-
-/*
-    assignerId: ID!
-    relatedTaskId: ID
-*/
 const warningType = gql`
   type WarningDTO {
     id: ID!

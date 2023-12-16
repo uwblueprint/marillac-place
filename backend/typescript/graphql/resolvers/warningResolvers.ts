@@ -6,7 +6,6 @@ import type {
 } from "../../services/interfaces/warningService";
 
 const warningService: IWarningService = new WarningService();
-// const authService: IAuthService = new AuthService(userService, emailService);
 
 const warningResolvers = {
   Mutation: {
