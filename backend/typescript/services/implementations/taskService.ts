@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { task, category, resident, staff } from "@prisma/client";
 import prisma from "../../prisma";
-import { ITaskService, TaskDTO, InputTaskDTO } from "../interfaces/taskService";
+import {
+  ITaskService,
+  TaskDTO,
+  InputTaskDTO,
+  Status,
+} from "../interfaces/taskService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
@@ -116,6 +121,87 @@ class TaskService implements ITaskService {
       const tasksResponse: TaskExtended[] = await prisma.task.findMany({
         where: {
           assignerId,
+        },
+        include: {
+          category: true,
+          assignee: true,
+          assigner: true,
+        },
+      });
+
+      const tasks: TaskDTO[] = [];
+
+      tasksResponse.forEach((taskExtended) => {
+        const dto = convertTaskRelation(taskExtended);
+        tasks.push(dto);
+      });
+
+      return tasks;
+    } catch (error: unknown) {
+      Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
+
+  async getTasksByStartDate(startDate: Date): Promise<TaskDTO[]> {
+    try {
+      const tasksResponse: TaskExtended[] = await prisma.task.findMany({
+        where: {
+          startDate,
+        },
+        include: {
+          category: true,
+          assignee: true,
+          assigner: true,
+        },
+      });
+
+      const tasks: TaskDTO[] = [];
+
+      tasksResponse.forEach((taskExtended) => {
+        const dto = convertTaskRelation(taskExtended);
+        tasks.push(dto);
+      });
+
+      return tasks;
+    } catch (error: unknown) {
+      Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
+
+  async getTasksByEndDate(endDate: Date): Promise<TaskDTO[]> {
+    try {
+      const tasksResponse: TaskExtended[] = await prisma.task.findMany({
+        where: {
+          endDate,
+        },
+        include: {
+          category: true,
+          assignee: true,
+          assigner: true,
+        },
+      });
+
+      const tasks: TaskDTO[] = [];
+
+      tasksResponse.forEach((taskExtended) => {
+        const dto = convertTaskRelation(taskExtended);
+        tasks.push(dto);
+      });
+
+      return tasks;
+    } catch (error: unknown) {
+      Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
+
+  async getTasksByStatus(status: Status): Promise<TaskDTO[]> {
+    try {
+      const tasksResponse: TaskExtended[] = await prisma.task.findMany({
+        where: {
+          status,
         },
         include: {
           category: true,
