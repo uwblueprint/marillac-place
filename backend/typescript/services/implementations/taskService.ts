@@ -52,6 +52,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -72,6 +73,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -99,6 +101,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -126,6 +129,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -153,6 +157,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -180,6 +185,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -207,6 +213,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -232,6 +239,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -258,6 +266,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 
@@ -280,6 +289,7 @@ class TaskService implements ITaskService {
           category: true,
           assignee: true,
           assigner: true,
+          warnings: true,
         },
       });
 

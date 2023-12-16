@@ -1,3 +1,5 @@
+import { WarningDTO } from "./warningService";
+
 export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -33,6 +35,7 @@ export interface TaskDTO {
   endDate?: Date | null;
   comments?: string | null;
   recurrenceFrequency?: Recurrence_Frequency | null;
+  warnings?: WarningDTO[];
 }
 
 export interface ITaskService {
