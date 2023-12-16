@@ -23,16 +23,19 @@ const adminType = gql`
 
   extend type Mutation {
     sendNotification(
-      message: String
-      residentId: ID
-      staffId: ID
+      message: String!
+      residentId: ID!
+      staffId: ID!
     ): NotificationDTO!
-    sendAnnouncement(message: String, staffId: ID): NotificationDTO!
+    sendAnnouncement(message: String!, staffId: ID!): NotificationDTO!
     deleteNotificationForResident(
-      notificationId: ID
-      residentId: ID
+      notificationId: ID!
+      residentId: ID!
     ): NotificationDTO!
-    updateSeenForResident(notificationId: ID, residentId: ID): NotificationDTO!
+    updateSeenForResident(
+      notificationId: ID!
+      residentId: ID!
+    ): NotificationDTO!
   }
 `;
 
