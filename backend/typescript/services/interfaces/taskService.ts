@@ -3,6 +3,11 @@ export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type Recurrence_Frequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
 
+// refactor InputTaskDTO, delete unnecessary fields
+// edit TaskDTO to follow task in schema
+// create new TaskAssignedDTO that follows Task_Assigned schema
+
+/*
 export interface InputTaskDTO {
   categoryId: number;
   title: string;
@@ -33,6 +38,29 @@ export interface TaskDTO {
   endDate?: Date | null;
   comments?: string | null;
   recurrenceFrequency?: Recurrence_Frequency | null;
+}
+*/
+
+export interface TaskDTO {
+  id: number;
+  categoryId: number; // do we need to add category as well
+  title: string;
+  description: string;
+  creditValue: number;
+  recurrenceFrequency?: Recurrence_Frequency | null;
+  tasksAssigned: TaskAssignedDTO[];
+}
+
+export interface TaskAssignedDTO {
+  id: number;
+  taskId: number;
+  status: Status;
+  assigneeId: number;
+  assignerId: number;
+  startDate: Date;
+  endDate?: Date;
+  comments?: string;
+  // warnings   warning[]
 }
 
 export interface ITaskService {
