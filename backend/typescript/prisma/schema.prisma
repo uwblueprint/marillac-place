@@ -68,7 +68,7 @@ model Permission {
 model Resident {
   user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int  @id @map("user_id")
-  residentId Int  @unique @map("resident_id")
+  residentId Int  @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
 
   birthDate  DateTime  @map("birth_date")
   roomNumber Int       @map("room_number")
