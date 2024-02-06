@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
@@ -53,7 +53,7 @@ const App = (): React.ReactElement => {
           value={{ authenticatedUser, setAuthenticatedUser }}
         >
           <Router>
-            <Switch>
+            <Routes>
               <Route exact path={Routes.LOGIN_PAGE} component={Login} />
               <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
               <PrivateRoute exact path={Routes.HOME_PAGE} component={Default} />
@@ -98,7 +98,7 @@ const App = (): React.ReactElement => {
                 component={HooksDemo}
               />
               <Route exact path="*" component={NotFound} />
-            </Switch>
+            </Routes>
           </Router>
         </AuthContext.Provider>
       </SampleContextDispatcherContext.Provider>

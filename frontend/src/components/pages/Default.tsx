@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Routes from "../../constants/Routes";
 import SampleContext from "../../contexts/SampleContext";
 
@@ -10,7 +10,7 @@ import ResetPassword from "../auth/ResetPassword";
 type ButtonProps = { text: string; path: string };
 
 const Button = ({ text, path }: ButtonProps) => {
-  const history = useHistory();
+  const history = useNavigate();
   const navigateTo = () => history.push(path);
   return (
     <button className="btn btn-primary" onClick={navigateTo} type="button">

@@ -1,9 +1,9 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HOME_PAGE } from "../../constants/Routes";
 
 const MainPageButton = (): React.ReactElement => {
-  const history = useHistory();
+  const history = useNavigate();
   const navigateTo = () => history.push(HOME_PAGE);
   return (
     <div>

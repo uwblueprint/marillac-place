@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useNavigate } from "react-router-dom";
 import {
   GoogleLogin,
   GoogleLoginResponse,
@@ -49,7 +49,7 @@ const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  const history = useNavigate();
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
   const [loginWithGoogle] = useMutation<{ loginWithGoogle: AuthenticatedUser }>(
