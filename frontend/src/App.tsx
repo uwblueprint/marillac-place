@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes as Switch } from "react-router-dom";
 
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
@@ -54,50 +54,18 @@ const App = (): React.ReactElement => {
         >
           <Router>
             <Switch>
-              <Route exact path={Routes.LOGIN_PAGE} component={Login} />
-              <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
-              <PrivateRoute exact path={Routes.HOME_PAGE} component={Default} />
-              <PrivateRoute
-                exact
-                path={Routes.CREATE_ENTITY_PAGE}
-                component={CreatePage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.UPDATE_ENTITY_PAGE}
-                component={UpdatePage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.DISPLAY_ENTITY_PAGE}
-                component={DisplayPage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.CREATE_SIMPLE_ENTITY_PAGE}
-                component={SimpleEntityCreatePage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.UPDATE_SIMPLE_ENTITY_PAGE}
-                component={SimpleEntityUpdatePage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.DISPLAY_SIMPLE_ENTITY_PAGE}
-                component={SimpleEntityDisplayPage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.EDIT_TEAM_PAGE}
-                component={EditTeamInfoPage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.HOOKS_PAGE}
-                component={HooksDemo}
-              />
-              <Route exact path="*" component={NotFound} />
+              <Route path={Routes.LOGIN_PAGE} element={<Login/>} />
+              <Route path={Routes.SIGNUP_PAGE} element={<Signup/>} />
+              <Route path={Routes.HOME_PAGE} element={<Default />} />
+              <Route path={Routes.CREATE_ENTITY_PAGE} element={<CreatePage />} />
+              <Route path={Routes.UPDATE_ENTITY_PAGE} element={<UpdatePage />} />
+              <Route path={Routes.DISPLAY_ENTITY_PAGE} element={<DisplayPage/>} />
+              <Route path={Routes.CREATE_SIMPLE_ENTITY_PAGE} element={<SimpleEntityCreatePage/>} />
+              <Route path={Routes.UPDATE_SIMPLE_ENTITY_PAGE} element={<SimpleEntityUpdatePage/>} />
+              <Route path={Routes.DISPLAY_SIMPLE_ENTITY_PAGE} element={<SimpleEntityDisplayPage/>} />
+              <Route path={Routes.EDIT_TEAM_PAGE} element={<EditTeamInfoPage/>}/>
+              <Route path={Routes.HOOKS_PAGE} element={<HooksDemo/>} />
+              <Route path="*" element={<NotFound/>} />
             </Switch>
           </Router>
         </AuthContext.Provider>

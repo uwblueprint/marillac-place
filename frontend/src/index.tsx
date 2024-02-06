@@ -1,10 +1,10 @@
 import axios from "axios";
-import jwt from "jsonwebtoken";
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
+import { ChakraProvider } from "@chakra-ui/react";
 
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import { AuthenticatedUser, DecodedJWT } from "./types/AuthTypes";
@@ -36,7 +36,7 @@ const authLink = setContext(async (_, { headers }) => {
   >(AUTHENTICATED_USER_KEY, "accessToken");
 
   if (token) {
-    const decodedToken = jwt.decode(token) as DecodedJWT;
+    const decodedToken = "" as DecodedJWT;
 
     // refresh if decodedToken has expired
     if (
@@ -74,13 +74,15 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+root.render(
   <React.StrictMode>
-    <ApolloProvider client={apolloClient}>
-      <App />
-    </ApolloProvider>
-  </React.StrictMode>,
-  document.getElementById("root"),
+    <ChakraProvider>
+      <ApolloProvider client={apolloClient}>
+        <App />
+      </ApolloProvider>
+    </ChakraProvider>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
   GoogleLogin,
   GoogleLoginResponse,
@@ -49,7 +49,7 @@ const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  const history = useNavigate();
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
   const [loginWithGoogle] = useMutation<{ loginWithGoogle: AuthenticatedUser }>(
@@ -66,7 +66,7 @@ const Login = (): React.ReactElement => {
   };
 
   const onSignUpClick = () => {
-    history.push(SIGNUP_PAGE);
+    history(SIGNUP_PAGE);
   };
 
   const onGoogleLoginSuccess = async (idToken: string) => {
@@ -78,7 +78,7 @@ const Login = (): React.ReactElement => {
   };
 
   if (authenticatedUser) {
-    return <Redirect to={HOME_PAGE} />;
+    return <Navigate to={HOME_PAGE} />;
   }
 
   return (
