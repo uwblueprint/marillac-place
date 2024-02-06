@@ -14,36 +14,24 @@ const taskType = gql`
     BI_WEEKLY
   }
 
-  input InputTaskDTO {
-    categoryId: Int!
-    title: String!
-    status: Status!
-    description: String!
-    assigneeId: Int!
-    assignerId: Int!
-    creditValue: Float!
-    startDate: Date!
-    endDate: Date
-    comments: String
-    recurrenceFrequency: Recurrence_Frequency
-  }
-
   type TaskDTO {
     id: Int!
-    categoryName: String!
     categoryId: Int!
     title: String!
-    status: Status!
     description: String!
-    assigneeId: Int!
-    assigneeName: String!
-    assignerId: Int!
-    assignerName: String!
     creditValue: Float!
+    recurrenceFrequency?: Recurrence_Frequency
+    tasksAssigned?: [TaskAssignedDTO!]
+  }
+  
+  type TaskAssignedDTO {
+    id: Int!
+    taskId: Int!
+    status: Status!
+    assigneeId: Int!
+    assignerId: Int!
     startDate: Date!
     endDate: Date
-    comments: String
-    recurrenceFrequency: Recurrence_Frequency
   }
 
   extend type Query {
@@ -57,7 +45,7 @@ const taskType = gql`
   }
 
   extend type Mutation {
-    createTask(task: InputTaskDTO!): TaskDTO!
+    createTask(task: TaskDTO!): TaskDTO!
     updateTask(id: Int!, task: InputTaskDTO!): TaskDTO!
     deleteTask(id: Int!): TaskDTO!
   }

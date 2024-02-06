@@ -84,7 +84,7 @@ model Task {
   title               String
   description         String
   creditValue         Int
-  comments            String?
+  comments            String? // move to TaskAssigned?
   recurrenceFrequency RecurrenceFrequency?
 
   tasksAssigned   TaskAssigned[]

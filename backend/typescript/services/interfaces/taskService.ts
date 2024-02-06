@@ -47,19 +47,18 @@ export interface TaskDTO {
   title: string;
   description: string;
   creditValue: number;
+  comments?: string | null;
   recurrenceFrequency?: Recurrence_Frequency | null;
-  tasksAssigned: TaskAssignedDTO[];
+  tasksAssigned?: TaskAssignedDTO[];
 }
 
 export interface TaskAssignedDTO {
-  id: number;
   taskId: number;
   status: Status;
   assigneeId: number;
   assignerId: number;
   startDate: Date;
   endDate?: Date;
-  comments?: string;
   // warnings   warning[]
 }
 
@@ -70,7 +69,7 @@ export interface ITaskService {
    * @returns a TaskDTO associated with the task id
    * @throws Error if task retrieval fails
    */
-  getTaskById(taskId: number): Promise<TaskDTO>;
+  // getTaskById(taskId: number): Promise<TaskDTO>;
 
   /**
    * Get all tasks belonging to a category
@@ -78,7 +77,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs with a given category
    * @throws Error if task retrieval fails
    */
-  getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]>;
+  // getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks assigned to a resident
@@ -86,7 +85,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs with a given assignee
    * @throws Error if task retrieval fails
    */
-  getTasksByAssigneeId(assigneeId: number): Promise<TaskDTO[]>;
+  // getTasksByAssigneeId(assigneeId: number): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks assigned by a staff member
@@ -94,7 +93,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs with a given assigner
    * @throws Error if task retrieval fails
    */
-  getTasksByAssignerId(assignerId: number): Promise<TaskDTO[]>;
+  // getTasksByAssignerId(assignerId: number): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks by a start date
@@ -102,7 +101,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs starting on the provided date
    * @throws Error if task retrieval fails
    */
-  getTasksByStartDate(startDate: Date): Promise<TaskDTO[]>;
+  // getTasksByStartDate(startDate: Date): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks by an end date
@@ -110,7 +109,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs ending on the provided date
    * @throws Error if task retrieval fails
    */
-  getTasksByEndDate(endDate: Date): Promise<TaskDTO[]>;
+  // getTasksByEndDate(endDate: Date): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks by a status
@@ -118,7 +117,7 @@ export interface ITaskService {
    * @returns a list of TaskDTO with a given status
    * @throws Error if task retrieval fails
    */
-  getTasksByStatus(status: Status): Promise<TaskDTO[]>;
+  // getTasksByStatus(status: Status): Promise<TaskDTO[]>;
 
   /**
    * Create a task
@@ -126,7 +125,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the created task's information
    * @throws Error if task creation fails
    */
-  createTask(task: InputTaskDTO): Promise<TaskDTO>;
+  createTask(task: TaskDTO): Promise<TaskDTO>;
 
   /**
    * Update a task.
@@ -135,7 +134,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the updated task's information
    * @throws Error if task update fails
    */
-  updateTaskById(taskId: number, task: InputTaskDTO): Promise<TaskDTO>;
+  // updateTaskById(taskId: number, task: TaskDTO): Promise<TaskDTO>;
 
   /**
    * Delete a task by id
@@ -143,5 +142,5 @@ export interface ITaskService {
    * @returns a TaskDTO with the deleted task's information
    * @throws Error if task deletion fails
    */
-  deleteTaskById(taskId: number): Promise<TaskDTO>;
+  // deleteTaskById(taskId: number): Promise<TaskDTO>;
 }
