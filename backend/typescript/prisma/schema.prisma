@@ -34,7 +34,7 @@ model User {
 }
 
 model Staff {
-  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId           Int            @id @map("user_id")
   isAdmin          Boolean        @default(false) @map("is_admin")
   tasksAssigned    TaskAssigned[]
@@ -44,7 +44,7 @@ model Staff {
 }
 
 model Resident {
-  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId     Int            @id @map("user_id")
   residentId Int            @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
   birthDate  DateTime       @map("birth_date")
@@ -72,7 +72,7 @@ model Task {
   title           String
   description     String
   creditValue     Int            @map("credit_value")
-  location        TaskLocation   @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  location        TaskLocation   @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   locationId      Int            @map("location_id")
   tasksAssigned   TaskAssigned[]
   relatedWarnings Warning[]
@@ -107,9 +107,9 @@ model TaskAssigned {
   id                  Int                  @id @default(autoincrement())
   task                Task                 @relation(fields: [taskId], references: [id])
   taskId              Int                  @map("task_id")
-  assigner            Staff?               @relation(fields: [assignerId], references: [userId], onDelete: SetNull)
+  assigner            Staff?               @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   assignerId          Int?                 @map("assigner_id")
-  assignee            Resident             @relation(fields: [assigneeId], references: [userId], onDelete: Cascade)
+  assignee            Resident             @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   assigneeId          Int                  @map("assignee_id")
   status              Status
   startDate           DateTime             @map("start_date")
@@ -122,11 +122,11 @@ model TaskAssigned {
 
 model Warning {
   id            Int      @id @default(autoincrement())
-  assigner      Staff?   @relation(fields: [assignerId], references: [userId], onDelete: SetNull)
+  assigner      Staff?   @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   assignerId    Int?     @map("assigner_id")
-  resident      Resident @relation(fields: [residentId], references: [userId], onDelete: Cascade)
-  residentId    Int      @map("resident_id")
-  relatedTask   Task?    @relation(fields: [relatedTaskId], references: [id], onDelete: SetNull)
+  assignee      Resident @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  assigneeId    Int      @map("resident_id")
+  relatedTask   Task?    @relation(fields: [relatedTaskId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   relatedTaskId Int?     @map("related_task_id")
   title         String
   description   String
@@ -137,7 +137,7 @@ model Warning {
 
 model Notification {
   id         Int                @id @default(autoincrement())
-  author     User?              @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  author     User?              @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   authorId   Int?               @map("author_id")
   title      String
   message    String
@@ -149,9 +149,9 @@ model Notification {
 
 model NotificationSent {
   id             Int          @id @default(autoincrement())
-  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   notificationId Int          @map("notification_id")
-  recipient      User         @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  recipient      User         @relation(fields: [recipientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   recipientId    Int          @map("recipient_id")
   seen           Boolean      @default(false)
 
