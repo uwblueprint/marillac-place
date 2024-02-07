@@ -36,29 +36,11 @@ model User {
 model Staff {
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           Int            @id @map("user_id")
-  role             Role           @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  roleId           Int            @map("role_id")
+  isAdmin          Boolean        @default(false) @map("is_admin")
   tasksAssigned    TaskAssigned[]
   warningsAssigned Warning[]
 
   @@map("staff")
-}
-
-model Role {
-  id          Int          @id @default(autoincrement())
-  title       String       @unique
-  permissions Permission[]
-  staff       Staff[]
-
-  @@map("roles")
-}
-
-model Permission {
-  id    Int    @id @default(autoincrement())
-  title String @unique
-  roles Role[]
-
-  @@map("permissions")
 }
 
 model Resident {
@@ -157,6 +139,7 @@ model Notification {
   id         Int                @id @default(autoincrement())
   author     User?              @relation(fields: [authorId], references: [id], onDelete: SetNull)
   authorId   Int?               @map("author_id")
+  title      String
   message    String
   createdAt  DateTime           @default(now()) @map("created_at")
   recipients NotificationSent[]
