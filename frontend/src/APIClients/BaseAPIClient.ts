@@ -1,6 +1,5 @@
 import axios, {
   AxiosRequestConfig,
-  InternalAxiosRequestConfig,
   AxiosRequestHeaders,
 } from "axios";
 // import jwt from "jsonwebtoken";
