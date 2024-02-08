@@ -49,7 +49,7 @@ const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
   const [loginWithGoogle] = useMutation<{ loginWithGoogle: AuthenticatedUser }>(
@@ -66,7 +66,7 @@ const Login = (): React.ReactElement => {
   };
 
   const onSignUpClick = () => {
-    history(SIGNUP_PAGE);
+    navigate(SIGNUP_PAGE);
   };
 
   const onGoogleLoginSuccess = async (idToken: string) => {

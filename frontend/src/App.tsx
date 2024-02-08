@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
   Route,
@@ -48,53 +49,55 @@ const App = (): React.ReactElement => {
   );
 
   return (
-    <SampleContext.Provider value={sampleContext}>
-      <SampleContextDispatcherContext.Provider
-        value={dispatchSampleContextUpdate}
-      >
-        <AuthContext.Provider
-          value={{ authenticatedUser, setAuthenticatedUser }}
+    <ChakraProvider>
+      <SampleContext.Provider value={sampleContext}>
+        <SampleContextDispatcherContext.Provider
+          value={dispatchSampleContextUpdate}
         >
-          <Router>
-            <Switch>
-              <Route path={Routes.LOGIN_PAGE} element={<Login />} />
-              <Route path={Routes.SIGNUP_PAGE} element={<Signup />} />
-              <Route path={Routes.HOME_PAGE} element={<Default />} />
-              <Route
-                path={Routes.CREATE_ENTITY_PAGE}
-                element={<CreatePage />}
-              />
-              <Route
-                path={Routes.UPDATE_ENTITY_PAGE}
-                element={<UpdatePage />}
-              />
-              <Route
-                path={Routes.DISPLAY_ENTITY_PAGE}
-                element={<DisplayPage />}
-              />
-              <Route
-                path={Routes.CREATE_SIMPLE_ENTITY_PAGE}
-                element={<SimpleEntityCreatePage />}
-              />
-              <Route
-                path={Routes.UPDATE_SIMPLE_ENTITY_PAGE}
-                element={<SimpleEntityUpdatePage />}
-              />
-              <Route
-                path={Routes.DISPLAY_SIMPLE_ENTITY_PAGE}
-                element={<SimpleEntityDisplayPage />}
-              />
-              <Route
-                path={Routes.EDIT_TEAM_PAGE}
-                element={<EditTeamInfoPage />}
-              />
-              <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
-              <Route path="*" element={<NotFound />} />
-            </Switch>
-          </Router>
-        </AuthContext.Provider>
-      </SampleContextDispatcherContext.Provider>
-    </SampleContext.Provider>
+          <AuthContext.Provider
+            value={{ authenticatedUser, setAuthenticatedUser }}
+          >
+            <Router>
+              <Switch>
+                <Route path={Routes.LOGIN_PAGE} element={<Login />} />
+                <Route path={Routes.SIGNUP_PAGE} element={<Signup />} />
+                <Route path={Routes.HOME_PAGE} element={<Default />} />
+                <Route
+                  path={Routes.CREATE_ENTITY_PAGE}
+                  element={<CreatePage />}
+                />
+                <Route
+                  path={Routes.UPDATE_ENTITY_PAGE}
+                  element={<UpdatePage />}
+                />
+                <Route
+                  path={Routes.DISPLAY_ENTITY_PAGE}
+                  element={<DisplayPage />}
+                />
+                <Route
+                  path={Routes.CREATE_SIMPLE_ENTITY_PAGE}
+                  element={<SimpleEntityCreatePage />}
+                />
+                <Route
+                  path={Routes.UPDATE_SIMPLE_ENTITY_PAGE}
+                  element={<SimpleEntityUpdatePage />}
+                />
+                <Route
+                  path={Routes.DISPLAY_SIMPLE_ENTITY_PAGE}
+                  element={<SimpleEntityDisplayPage />}
+                />
+                <Route
+                  path={Routes.EDIT_TEAM_PAGE}
+                  element={<EditTeamInfoPage />}
+                />
+                <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
+                <Route path="*" element={<NotFound />} />
+              </Switch>
+            </Router>
+          </AuthContext.Provider>
+        </SampleContextDispatcherContext.Provider>
+      </SampleContext.Provider>
+    </ChakraProvider>
   );
 };
 

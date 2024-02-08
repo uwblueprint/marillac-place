@@ -10,8 +10,8 @@ import ResetPassword from "../auth/ResetPassword";
 type ButtonProps = { text: string; path: string };
 
 const Button = ({ text, path }: ButtonProps) => {
-  const history = useNavigate();
-  const navigateTo = () => history(path);
+  const navigate = useNavigate();
+  const navigateTo = () => navigate(path);
   return (
     <button className="btn btn-primary" onClick={navigateTo} type="button">
       {text}
