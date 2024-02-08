@@ -75,26 +75,32 @@ enum RecurrenceFrequency {
   BI_WEEKLY
 }
 
-model Task {
-  id Int @id @default(autoincrement())
-
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId Int
-
-  title               String
-  description         String
-  creditValue         Int
-  comments            String? // move to TaskAssigned?
-  recurrenceFrequency RecurrenceFrequency?
-
-  tasksAssigned   TaskAssigned[]
-  relatedWarnings Warning[]
+enum TaskType {
+  REQUIRED
+  OPTIONAL
+  CHORE
+  CUSTOM
 }
 
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  tasks Task[]
+model Task {
+  id              Int            @id @default(autoincrement())
+  type            TaskType
+  title           String
+  description     String
+  creditValue     Int            @map("credit_value")
+  location        TaskLocation   @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  locationId      Int            @map("location_id")
+  tasksAssigned   TaskAssigned[]
+  relatedWarnings Warning[]
+  @@map("tasks")
+}
+
+model TaskLocation {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  tasks       Task[]
+  @@map("task_locations")
 }
 
 enum Status {
@@ -106,20 +112,19 @@ enum Status {
 }
 
 model TaskAssigned {
-  task   Task @relation(fields: [taskId], references: [id])
-  taskId Int
-
-  assigner   Staff? @relation(fields: [assignerId], references: [userId], onDelete: SetNull)
-  assignerId Int?
-
-  assignee   Resident @relation(fields: [assigneeId], references: [userId], onDelete: Cascade)
-  assigneeId Int
-
-  status    Status
-  startDate DateTime
-  endDate   DateTime?
-
-  @@id([taskId, assigneeId])
+  id                  Int                  @id @default(autoincrement())
+  task                Task                 @relation(fields: [taskId], references: [id])
+  taskId              Int                  @map("task_id")
+  assigner            Staff?               @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  assignerId          Int?                 @map("assigner_id")
+  assignee            Resident             @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  assigneeId          Int                  @map("assignee_id")
+  status              Status
+  startDate           DateTime             @map("start_date")
+  endDate             DateTime?            @map("end_date")
+  recurrenceFrequency RecurrenceFrequency? @map("recurrence_frequency")
+  comments            String?
+  @@map("tasks_assigned")
 }
 
 model Warning {
