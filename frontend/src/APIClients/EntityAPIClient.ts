@@ -2,6 +2,8 @@ import baseAPIClient from "./BaseAPIClient";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 enum EnumField {
   "A",
   "B",
@@ -119,3 +121,5 @@ const update = async (
 };
 
 export default { create, get, getFile, getCSV, update };
+
+/* eslint-enable @typescript-eslint/no-explicit-any */

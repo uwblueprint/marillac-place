@@ -9,6 +9,8 @@ import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { DecodedJWT } from "../types/AuthTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
   headers: AxiosRequestHeaders;
 }
@@ -58,3 +60,5 @@ baseAPIClient.interceptors.request.use(
 );
 
 export default baseAPIClient;
+
+/* eslint-enable @typescript-eslint/no-explicit-any */
