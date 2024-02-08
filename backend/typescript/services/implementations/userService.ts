@@ -1,76 +1,131 @@
+import Prisma from "../../prisma";
 import * as firebaseAdmin from "firebase-admin";
-import IUserService from "../interfaces/userService";
-import { CreateUserDTO, Role, UpdateUserDTO, UserDTO } from "../../types";
+import { IUserService, UserDTO, CreateUserDTO, UpdateUserDTO } from "../interfaces/userService";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
-import User from "../../models/user.model";
 
 const Logger = logger(__filename);
 
 class UserService implements IUserService {
   /* eslint-disable class-methods-use-this */
 
-  async getUserById(userId: string): Promise<UserDTO> {
-    let user: User | null;
+  async createUser ( 
+    user: CreateUserDTO ,
+    authId?: string,
+    ): Promise<UserDTO> {
+    let newUser;
     let firebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
-      user = await User.findByPk(Number(userId));
-
-      if (!user) {
-        throw new Error(`userId ${userId} not found.`);
+      firebaseUser = await firebaseAdmin.auth().createUser({
+        email: user.email,
+        password: user.password,
+      });
+      
+      try {
+        newUser = await Prisma.user.create({
+          data: {
+            authId: firebaseUser.uid,
+            type: user.type, 
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            displayName: user.displayName,
+            profilePictureURL: user.profilePictureURL,
+          },
+          // include: {}
+        });
+      } catch (postgresError) {
+        try {
+          await firebaseAdmin.auth().deleteUser(firebaseUser.uid);
+        } catch (firebaseError) {
+          const errorMessage = [
+            "Failed to rollback Firebase user creation after Postgres user creation failure. Reason =",
+            getErrorMessage(firebaseError),
+            "Orphaned authId (Firebase uid) =",
+            firebaseUser.uid,
+          ];
+          Logger.error(errorMessage.join(" "));
+        }
+        throw postgresError;
       }
-      firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
+    } catch (error) {
+      Logger.error(`Failed to create user. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+
+    return newUser; 
+  }
+
+  async getUserById(userId: number): Promise<UserDTO> {
+    let user; 
+    let firebaseUser: firebaseAdmin.auth.UserRecord;
+
+    try {
+      user = await Prisma.user.findUnique({
+        where: { id: Number(userId) }
+      });
+
+      if (!user) { throw new Error(`userId ${userId} not found.`); }
+
+      firebaseUser = await firebaseAdmin.auth().getUser(user.authId);
     } catch (error: unknown) {
       Logger.error(`Failed to get user. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
     return {
-      id: String(user.id),
-      firstName: user.first_name,
-      lastName: user.last_name,
-      email: firebaseUser.email ?? "",
-      role: user.role,
+      id: user.id,
+      authId: user.authId,
+      type: user.type,
+      email: user.email, 
+      phoneNumber: user.phoneNumber,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      displayName: user.displayName,
+      profilePictureURL: user.profilePictureURL,
+      isActive: user.isActive
     };
   }
 
   async getUserByEmail(email: string): Promise<UserDTO> {
-    let user: User | null;
+    let user;
     let firebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
       firebaseUser = await firebaseAdmin.auth().getUserByEmail(email);
-      user = await User.findOne({
-        where: { auth_id: firebaseUser.uid },
+      user = await Prisma.user.findUnique({
+        where: { authId: firebaseUser.uid },
       });
 
-      if (!user) {
-        throw new Error(`userId with authID ${firebaseUser.uid} not found.`);
-      }
+      if (!user) { throw new Error(`userId with authID ${firebaseUser.uid} not found.`); }
     } catch (error: unknown) {
       Logger.error(`Failed to get user. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
     return {
-      id: String(user.id),
-      firstName: user.first_name,
-      lastName: user.last_name,
-      email: firebaseUser.email ?? "",
-      role: user.role,
+      id: user.id,
+      authId: user.authId,
+      type: user.type,
+      email: user.email, 
+      phoneNumber: user.phoneNumber,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      displayName: user.displayName,
+      profilePictureURL: user.profilePictureURL,
+      isActive: user.isActive
     };
   }
 
-  async getUserRoleByAuthId(authId: string): Promise<Role> {
+  async getUserRoleByAuthId(authId: string): Promise<Role> { // ?!?!?!?!?!????????????????????????????????????????????????
     try {
-      const user: User | null = await User.findOne({
-        where: { auth_id: authId },
+      const user = await Prisma.user.findUnique({
+        where: { authId: authId },
       });
-      if (!user) {
-        throw new Error(`userId with authId ${authId} not found.`);
-      }
-      return user.role;
+      if (!user) { throw new Error(`userId with authId ${authId} not found.`); }
+      return user.type;
     } catch (error: unknown) {
       Logger.error(
         `Failed to get user role. Reason = ${getErrorMessage(error)}`,
@@ -79,28 +134,30 @@ class UserService implements IUserService {
     }
   }
 
-  async getUserIdByAuthId(authId: string): Promise<string> {
+  async getUserIdByAuthId(authId: string): Promise<number> {
+    let user;
     try {
-      const user: User | null = await User.findOne({
-        where: { auth_id: authId },
+      user = await Prisma.user.findUnique({
+        where: { authId: authId }
       });
-      if (!user) {
-        throw new Error(`user with authId ${authId} not found.`);
-      }
-      return String(user.id);
+
+      if (!user) { throw new Error(`userId ${authId} not found.`); }
+      return user.id;
     } catch (error: unknown) {
-      Logger.error(`Failed to get user id. Reason = ${getErrorMessage(error)}`);
+      Logger.error(`Failed to get user. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
   }
+  
 
-  async getAuthIdById(userId: string): Promise<string> {
+  async getAuthIdById(userId: number): Promise<string> {
     try {
-      const user: User | null = await User.findByPk(Number(userId));
-      if (!user) {
-        throw new Error(`userId ${userId} not found.`);
-      }
-      return user.auth_id;
+      const user = await Prisma.user.findUnique({
+        where: { id: userId }
+      });
+      if (!user) { throw new Error(`userId ${userId} not found.`); }
+      
+      return user.authId;
     } catch (error: unknown) {
       Logger.error(`Failed to get authId. Reason = ${getErrorMessage(error)}`);
       throw error;
@@ -110,7 +167,7 @@ class UserService implements IUserService {
   async getUsers(): Promise<Array<UserDTO>> {
     let userDtos: Array<UserDTO> = [];
     try {
-      const users: Array<User> = await User.findAll();
+      const users: Array<UserDTO> = await Prisma.user.findMany();
 
       userDtos = await Promise.all(
         users.map(async (user) => {
@@ -142,76 +199,15 @@ class UserService implements IUserService {
     return userDtos;
   }
 
-  async createUser(
-    user: CreateUserDTO,
-    authId?: string,
-    signUpMethod = "PASSWORD",
-  ): Promise<UserDTO> {
-    let newUser: User;
-    let firebaseUser: firebaseAdmin.auth.UserRecord;
-
-    try {
-      if (signUpMethod === "GOOGLE") {
-        /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-        firebaseUser = await firebaseAdmin.auth().getUser(authId!);
-      } else {
-        // signUpMethod === PASSWORD
-        firebaseUser = await firebaseAdmin.auth().createUser({
-          email: user.email,
-          password: user.password,
-        });
-      }
-
-      try {
-        newUser = await User.create({
-          first_name: user.firstName,
-          last_name: user.lastName,
-          auth_id: firebaseUser.uid,
-          role: user.role,
-        });
-      } catch (postgresError) {
-        try {
-          await firebaseAdmin.auth().deleteUser(firebaseUser.uid);
-        } catch (firebaseError: unknown) {
-          const errorMessage = [
-            "Failed to rollback Firebase user creation after Postgres user creation failure. Reason =",
-            getErrorMessage(firebaseError),
-            "Orphaned authId (Firebase uid) =",
-            firebaseUser.uid,
-          ];
-          Logger.error(errorMessage.join(" "));
-        }
-
-        throw postgresError;
-      }
-    } catch (error: unknown) {
-      Logger.error(`Failed to create user. Reason = ${getErrorMessage(error)}`);
-      throw error;
-    }
-
-    return {
-      id: String(newUser.id),
-      firstName: newUser.first_name,
-      lastName: newUser.last_name,
-      email: firebaseUser.email ?? "",
-      role: newUser.role,
-    };
-  }
-
-  async updateUserById(userId: string, user: UpdateUserDTO): Promise<UserDTO> {
+  async updateUserById(userId: number, user: UpdateUserDTO): Promise<UserDTO> {
     let updatedFirebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
-      const updateResult = await User.update(
+      const updateResult = await Prisma.user.update(
         {
-          first_name: user.firstName,
-          last_name: user.lastName,
-          role: user.role,
-        },
-        {
-          where: { id: userId },
-          returning: true,
-        },
+          where: {id: userId},
+          data: user
+        }
       );
 
       // check number of rows affected

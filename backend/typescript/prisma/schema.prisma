@@ -9,31 +9,64 @@ datasource db {
   // directUrl = env("DIRECT_URL")
 }
 
-model post {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  title      String   @db.VarChar(255)
-  content    String?
-  published  Boolean  @default(false)
-  author_id  Int
-  author     user     @relation(fields: [author_id], references: [id])
-}
+//model post {
+  //id         Int      @id @default(autoincrement())
+  //created_at DateTime @default(now())
+  //updated_at DateTime @updatedAt
+  //title      String   @db.VarChar(255)
+  //content    String?
+  //published  Boolean  @default(false)
+  //author_id  Int
+  //author     user     @relation(fields: [author_id], references: [id])
+//}
 
-model profile {
-  id      Int     @id @default(autoincrement())
-  bio     String?
-  user_id Int     @unique
-  user    user    @relation(fields: [user_id], references: [id])
+//model profile {
+  //id      Int     @id @default(autoincrement())
+  //bio     String?
+  //user_id Int     @unique
+  //user    user    @relation(fields: [user_id], references: [id])
+//}
+
+enum UserType {
+  STAFF
+  RESIDENT
 }
 
 model user {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   post[]
-  profile profile?
+  id                      Int           @id           @default(autoincrement())
+  authId                  String        @unique  @map("authId")
+  type                    UserType
+  // staff                   Staff? 
+  // resident                Resident?
+  
+  email                   String        @unique
+  phoneNumber             String?       @map("phoneNumber")
+  firstName               String        @map("firstName")
+  lastName                String        @map("lastName")
+  displayName             String?       @map("displayName")
+  profilePictureURL       String?       @map("profilePictureLink")
+  isActive                Boolean       @default(true)
+  
+  // notifications        Notification[]
+  // notificationsSent    NotificationSent[]
+
 }
+
+// model User {
+//   id       Int       @id @default(autoincrement())
+//   type     UserType
+//   staff    Staff?
+//   resident Resident?
+//   email             String  @unique
+//   phoneNumber       String?
+//   firstName         String
+//   lastName          String
+//   displayName       String?
+//   profilePictureURL String?
+//   isActive          Boolean @default(true)
+//   notifications     Notification[]
+//   notificationsSent NotificationSent[]
+// }
 
 model task {
   id                  Int                   @id @default(autoincrement())
