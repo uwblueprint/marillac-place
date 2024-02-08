@@ -1,9 +1,6 @@
 import baseAPIClient from "./BaseAPIClient";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
-import logger from "../../../backend/typescript/utilities/logger"; 
-
-const Logger = logger(__filename);
 
 enum EnumField {
   "A",
@@ -44,7 +41,7 @@ const create = async ({
     });
     return data;
   } catch (error: unknown) {
-    Logger.error("Unknown error creating simple Entity");
+    console.log("Unknown error creating simple Entity");
     throw error;
   }
 };
@@ -60,7 +57,7 @@ const get = async (): Promise<SimpleEntityResponse[]> => {
     });
     return data;
   } catch (error: unknown) {
-    Logger.error("Unknown error getting simple entity");
+    console.log("Unknown error getting simple entity");
     throw error;
   }
 };
@@ -79,7 +76,7 @@ const getCSV = async (): Promise<string> => {
     });
     return data;
   } catch (error: unknown) {
-    Logger.error("Unknown error getting CSV");
+    console.log("Unknown error getting CSV");
     throw error;
   }
 };
@@ -106,7 +103,7 @@ const update = async (
     );
     return data;
   } catch (error: unknown) {
-    Logger.error("Unknown error updating simple entity");
+    console.log("Unknown error updating simple entity");
     throw error;
   }
 };

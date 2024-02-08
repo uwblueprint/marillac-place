@@ -1,10 +1,6 @@
 import baseAPIClient from "./BaseAPIClient";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
-import logger from "../../../backend/typescript/utilities/logger"; 
-
-const Logger = logger(__filename);
-
 
 enum EnumField {
   "A",
@@ -46,7 +42,7 @@ const create = async ({
     });
     return data;
   } catch (error: unknown) {
-    Logger.error("Unknown error creating entity");
+    console.log("Unknown error creating entity");
     throw error;
   }
 };
@@ -62,7 +58,7 @@ const get = async (): Promise<EntityResponse[]> => {
     });
     return data;
   } catch (error: unknown) {
-    Logger.error("Unknown error getting entity");
+    console.log("Unknown error getting entity");
     throw error;
   }
 };
@@ -79,7 +75,7 @@ const getFile = async (uuid: string): Promise<string> => {
 
     return data.fileURL;
   } catch (error: unknown) {
-    Logger.error("Unknown error getting file");
+    console.log("Unknown error getting file");
     throw error;
   }
 };
@@ -99,7 +95,7 @@ const getCSV = async (): Promise<string> => {
 
     return data;
   } catch (error: unknown) {
-    Logger.error("Unknown error getting CSV");
+    console.log("Unknown error getting CSV");
     throw error;
   }
 };
@@ -122,7 +118,7 @@ const update = async (
     });
     return data;
   } catch (error: unknown) {
-    Logger.error("Error getting entity update");
+    console.log("Error getting entity update");
     throw error; 
   }
 };
