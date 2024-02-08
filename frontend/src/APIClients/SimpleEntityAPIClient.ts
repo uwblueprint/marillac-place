@@ -1,8 +1,9 @@
 import baseAPIClient from "./BaseAPIClient";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
+import logger from "../../../backend/typescript/utilities/logger"; 
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+const Logger = logger(__filename);
 
 enum EnumField {
   "A",
@@ -42,8 +43,9 @@ const create = async ({
       headers: { Authorization: bearerToken },
     });
     return data;
-  } catch (error: any) {
-    return error;
+  } catch (error: unknown) {
+    Logger.error("Unknown error creating simple Entity");
+    throw error;
   }
 };
 
@@ -57,8 +59,9 @@ const get = async (): Promise<SimpleEntityResponse[]> => {
       headers: { Authorization: bearerToken },
     });
     return data;
-  } catch (error: any) {
-    return error;
+  } catch (error: unknown) {
+    Logger.error("Unknown error getting simple entity");
+    throw error;
   }
 };
 
@@ -75,8 +78,9 @@ const getCSV = async (): Promise<string> => {
       headers: { Authorization: bearerToken, "Content-Type": "text/csv" },
     });
     return data;
-  } catch (error: any) {
-    return error;
+  } catch (error: unknown) {
+    Logger.error("Unknown error getting CSV");
+    throw error;
   }
 };
 
@@ -101,11 +105,10 @@ const update = async (
       },
     );
     return data;
-  } catch (error: any) {
-    return error;
+  } catch (error: unknown) {
+    Logger.error("Unknown error updating simple entity");
+    throw error;
   }
 };
 
 export default { create, get, getCSV, update };
-
-/* eslint-enable @typescript-eslint/no-explicit-any */
