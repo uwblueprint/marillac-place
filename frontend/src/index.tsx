@@ -35,9 +35,7 @@ const authLink = setContext(async (_, { headers }) => {
   >(AUTHENTICATED_USER_KEY, "accessToken");
 
   if (token) {
-    const decodedToken = "" as DecodedJWT;
-
-    // TODO: JWT token needs to be decoded
+    const decodedToken = "" as DecodedJWT; // TODO: JWT token needs to be decoded
 
     // refresh if decodedToken has expired
     if (

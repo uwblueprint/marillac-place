@@ -25,7 +25,7 @@ baseAPIClient.interceptors.request.use(
       authHeaderParts.length >= 2 &&
       authHeaderParts[0].toLowerCase() === "bearer"
     ) {
-      const decodedToken = "" as DecodedJWT;
+      const decodedToken = "" as DecodedJWT; // TODO: JWT token needs to be decoded
 
       if (
         decodedToken &&
