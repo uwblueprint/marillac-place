@@ -2,28 +2,31 @@ import TaskService from "../../services/implementations/taskService";
 import {
   ITaskService,
   TaskDTO,
+  InputTaskDTO,
+  InputTaskAssignedDTO,
   TaskAssignedDTO,
   Status,
+  TaskType
 } from "../../services/interfaces/taskService";
 
 const taskService: ITaskService = new TaskService();
 
 const taskResolvers = {
-  // Query: {
-  //   getTaskById: async (
-  //     _parent: undefined,
-  //     { id }: { id: number },
-  //   ): Promise<TaskDTO> => {
-  //     const task = await taskService.getTaskById(id);
-  //     return task;
-  //   },
-  //   getTasksByCategoryId: async (
-  //     _parent: undefined,
-  //     { categoryId }: { categoryId: number },
-  //   ): Promise<Array<TaskDTO>> => {
-  //     const tasks = await taskService.getTasksByCategoryId(categoryId);
-  //     return tasks;
-  //   },
+  Query: {
+    getTaskById: async (
+      _parent: undefined,
+      { taskId }: { taskId: number },
+    ): Promise<TaskDTO> => {
+      const task = await taskService.getTaskById(taskId);
+      return task;
+    },
+    getTasksByType: async (
+      _parent: undefined,
+      { type }: { type: TaskType },
+    ): Promise<Array<TaskDTO>> => {
+      const tasks = await taskService.getTasksByType(type);
+      return tasks;
+    },
   //   getTasksByAssigneeId: async (
   //     _parent: undefined,
   //     { assigneeId }: { assigneeId: number },
@@ -59,29 +62,36 @@ const taskResolvers = {
   //     const tasks = await taskService.getTasksByStatus(status);
   //     return tasks;
   //   },
-  // },
+  },
   Mutation: {
     createTask: async (
       _parent: undefined,
-      { task }: { task: TaskDTO },
+      { task }: { task: InputTaskDTO },
     ): Promise<TaskDTO> => {
       const newTask = await taskService.createTask(task);
       return newTask;
     },
-    // updateTask: async (
-    //   _parent: undefined,
-    //   { id, task }: { id: number; task: TaskDTO },
-    // ): Promise<TaskDTO> => {
-    //   const updatedTask = await taskService.updateTaskById(id, task);
-    //   return updatedTask;
-    // },
-    // deleteTask: async (
-    //   _parent: undefined,
-    //   { id }: { id: number },
-    // ): Promise<TaskDTO> => {
-    //   const deletedTask = await taskService.deleteTaskById(id);
-    //   return deletedTask;
-    // },
+    assignTask: async (
+      _parent: undefined,
+      { taskAssigned }: { taskAssigned: InputTaskAssignedDTO },
+    ): Promise<TaskDTO> => {
+      const newTask = await taskService.assignTask(taskAssigned);
+      return newTask;
+    },
+     updateTask: async (
+      _parent: undefined,
+      { taskId, task }: { taskId: number; task: InputTaskDTO },
+    ): Promise<TaskDTO> => {
+      const updatedTask = await taskService.updateTaskById(taskId, task);
+      return updatedTask;
+    },
+    deleteTask: async (
+      _parent: undefined,
+      { taskId }: { taskId: number },
+    ): Promise<TaskDTO> => {
+      const deletedTask = await taskService.deleteTaskById(taskId);
+      return deletedTask;
+    },
   },
 };
 

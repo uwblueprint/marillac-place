@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Task, Category, Resident, Staff } from "@prisma/client";
+import { Task, Resident, Staff } from "@prisma/client";
 import prisma from "../../prisma";
 import {
   ITaskService,
+  InputTaskDTO,
   TaskDTO,
+  InputTaskAssignedDTO,
   TaskAssignedDTO,
-  //InputTaskDTO,
   Status,
+  TaskType
 } from "../interfaces/taskService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
@@ -16,7 +18,6 @@ const Logger = logger(__filename);
 type TaskExtended =
   | null
   | (Task & {
-      category?: Category | null;
       assignee?: Resident | null;
       assigner?: Staff | null;
     });
@@ -43,52 +44,49 @@ type TaskExtended =
 // };
 
 class TaskService implements ITaskService {
-  // async getTaskById(taskId: number): Promise<TaskDTO> {
-  //   try {
-  //     const taskExtended: TaskExtended = await prisma.task.findUnique({
-  //       where: {
-  //         id: taskId,
-  //       },
-  //       include: {
-  //         category: true,
-  //         assignee: true,
-  //         assigner: true,
-  //       },
-  //     });
+  async getTaskById(taskId: number): Promise<TaskDTO> {
+    try {
+      const task = await prisma.task.findUnique({
+        where: {
+          id: taskId,
+        },
+        include: {
+          location: true,
+        },
+      });
+      if (!task) throw new Error(`task id ${taskId} not found`);
 
-  //     const dto = convertTaskRelation(taskExtended);
+      return task;
+    } catch (error: unknown) {
+      Logger.error(`Failed to get task. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
 
-  //     return dto;
-  //   } catch (error: unknown) {
-  //     Logger.error(`Failed to get task. Reason = ${getErrorMessage(error)}`);
-  //     throw error;
-  //   }
-  // }
+  async getTasksByType(type: TaskType): Promise<TaskDTO[]> {
+    try {
+      const tasks = await prisma.task.findMany({
+        where: { type: type },
+        include: {
+          location: true
+        },
+      });
+      console.log('tasks', tasks);
+      if (!tasks) throw new Error(`task type ${type} not found`);
 
-  // async getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]> {
-  //   try {
-  //     const tasksResponse = await prisma.task.findMany({
-  //       where: { categoryId },
-  //       include: {
-  //         category: true,
-  //         assignee: true,
-  //         assigner: true,
-  //       },
-  //     });
+      //const tasks: TaskDTO[] = [];
 
-  //     const tasks: TaskDTO[] = [];
+      //tasksResponse.forEach((task) => {
+        // const dto = convertTaskRelation(taskExtended);
+        //tasks.push(task);
+      // });
 
-  //     tasksResponse.forEach((taskExtended) => {
-  //       const dto = convertTaskRelation(taskExtended);
-  //       tasks.push(dto);
-  //     });
-
-  //     return tasks;
-  //   } catch (error: unknown) {
-  //     Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
-  //     throw error;
-  //   }
-  // }
+      return tasks;
+    } catch (error: unknown) {
+      Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
 
   // async getTasksByAssigneeId(assigneeId: number): Promise<TaskDTO[]> {
   //   try {
@@ -225,12 +223,20 @@ class TaskService implements ITaskService {
   //   }
   // }
 
-  async createTask(task: TaskDTO): Promise<TaskDTO> {
+  async createTask(task: InputTaskDTO): Promise<TaskDTO> {
     try {
       const newTask = await prisma.task.create({
-        data: task,
+        data: {
+          title: task.title,
+          type: task.type,
+          description: task.description,
+          creditValue: task.creditValue,
+          location: {
+            connect: {id: task.locationId}
+          }
+        },
         include: {
-          category: true,
+          location: true
         }
       });
 
@@ -241,53 +247,71 @@ class TaskService implements ITaskService {
     }
   }
 
-  // async updateTaskById(
-  //   taskId: number,
-  //   updateTask: TaskDTO,
-  // ): Promise<TaskDTO> {
-  //   try {
-  //     const updatedTask: TaskExtended = await prisma.task.update({
-  //       where: {
-  //         id: taskId,
-  //       },
-  //       data: updateTask,
-  //       include: {
-  //         category: true,
-  //         assignee: true,
-  //         assigner: true,
-  //       },
-  //     });
+  async updateTaskById(
+  taskId: number,
+  updateTask: InputTaskDTO,
+): Promise<TaskDTO> {
+  try {
+    const updatedTask = await prisma.task.update({
+      where: {
+        id: taskId,
+      },
+      data: updateTask,
+      include: {
+        location: true
+      }
+    });
+    return updatedTask;
+  } catch (error: unknown) {
+    Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
+    throw error;
+  }
+}
 
-  //     const dto = convertTaskRelation(updatedTask);
+  async deleteTaskById(taskId: number): Promise<TaskDTO> {
+    try {
+      const deletedTask = await prisma.task.delete({
+        where: {
+          id: taskId,
+        },
+        include: {
+          location: true
+        },
+      });
 
-  //     return dto;
-  //   } catch (error: unknown) {
-  //     Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
-  //     throw error;
-  //   }
-  // }
+      return deletedTask;
+    } catch (error: unknown) {
+      Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
 
-  // async deleteTaskById(taskId: number): Promise<TaskDTO> {
-  //   try {
-  //     const deletedTask = await prisma.task.delete({
-  //       where: {
-  //         id: taskId,
-  //       },
-  //       include: {
-  //         category: true,
-  //         assignee: true,
-  //         assigner: true,
-  //       },
-  //     });
+  async assignTask(taskAssigned: InputTaskAssignedDTO): Promise<TaskAssignedDTO> {
+    try {
+      const newTaskAssigned = await prisma.taskAssigned.create({
+        data: {
+          task: {
+            connect: {id: taskAssigned.taskId}
+          },
+          assigner: {
+            connect: {userId: taskAssigned.assignerId}
+          },
+          assignee: {
+            connect: {userId: taskAssigned.assigneeId}
+          },
+          status: taskAssigned.status,
+          startDate: taskAssigned.startDate,
+          endDate: taskAssigned.endDate,
+          recurrenceFrequency: taskAssigned.recurrenceFrequency,
+          comments: taskAssigned.comments
+        }
+      });
 
-  //     const dto = convertTaskRelation(deletedTask);
-
-  //     return dto;
-  //   } catch (error: unknown) {
-  //     Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
-  //     throw error;
-  //   }
-  // }
+      return newTaskAssigned
+    } catch (error: unknown) {
+      Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
+      throw error;
+  }
 }
 
 export default TaskService;

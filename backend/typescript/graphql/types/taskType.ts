@@ -14,14 +14,29 @@ const taskType = gql`
     BI_WEEKLY
   }
 
+  enum TaskType {
+    REQUIRED
+    OPTIONAL
+    CHORE
+    CUSTOM
+  }
+
   type TaskDTO {
     id: Int!
-    categoryId: Int!
+    type: TaskType!
     title: String!
     description: String!
-    creditValue: Float!
-    recurrenceFrequency?: Recurrence_Frequency
-    tasksAssigned?: [TaskAssignedDTO!]
+    creditValue: Int!
+    location: TaskLocationDTO!
+    tasksAssigned: [TaskAssignedDTO!]
+  }
+
+  input InputTaskDTO {
+    type: TaskType!
+    title: String!
+    description: String!
+    creditValue: Int!
+    locationId: Int!
   }
   
   type TaskAssignedDTO {
@@ -34,20 +49,22 @@ const taskType = gql`
     endDate: Date
   }
 
+  type TaskLocationDTO {
+    id: Int!
+    title: String!
+    description: String!
+  }
+
   extend type Query {
-    getTaskById(id: Int!): TaskDTO!
-    getTasksByCategoryId(categoryId: Int!): [TaskDTO!]
-    getTasksByAssigneeId(assigneeId: Int!): [TaskDTO!]
-    getTasksByAssignerId(assignerId: Int!): [TaskDTO!]
-    getTasksByStartDate(startDate: Date!): [TaskDTO!]
-    getTasksByEndDate(endDate: Date!): [TaskDTO!]
-    getTasksByStatus(status: Status!): [TaskDTO!]
+    getTaskById(taskId: Int!): TaskDTO!
+    getTasksByType(type: TaskType!): [TaskDTO!]
   }
 
   extend type Mutation {
-    createTask(task: TaskDTO!): TaskDTO!
-    updateTask(id: Int!, task: InputTaskDTO!): TaskDTO!
-    deleteTask(id: Int!): TaskDTO!
+    createTask(task: InputTaskDTO!): TaskDTO!
+    updateTask(taskId: Int, task: InputTaskDTO!): TaskDTO!
+    deleteTask(taskId: Int): TaskDTO!
+    assignTask(taskAssigned: InputTaskAssignedDTO): TaskDTO
   }
 `;
 

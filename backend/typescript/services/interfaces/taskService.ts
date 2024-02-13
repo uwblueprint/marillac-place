@@ -1,65 +1,55 @@
 export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type Recurrence_Frequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
+export type RecurrenceFrequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
 
-// refactor InputTaskDTO, delete unnecessary fields
-// edit TaskDTO to follow task in schema
-// create new TaskAssignedDTO that follows Task_Assigned schema
+export type TaskType = "REQUIRED" | "OPTIONAL" | "CHORE" | "CUSTOM";
 
-/*
+export interface TaskLocationDTO {
+  id: number;
+  title: string;
+  description: string;
+}
+
 export interface InputTaskDTO {
-  categoryId: number;
+  type: TaskType;
   title: string;
-  status: Status;
   description: string;
-  assigneeId: number;
-  assignerId: number;
   creditValue: number;
-  startDate: Date;
-  endDate?: Date | null;
-  comments?: string | null;
-  recurrenceFrequency?: Recurrence_Frequency | null;
+  locationId: number;
 }
 
 export interface TaskDTO {
   id: number;
-  categoryId: number;
-  categoryName: string;
-  title: string;
-  status: Status;
-  description: string;
-  assigneeId: number;
-  assigneeName: string;
-  assignerId: number;
-  assignerName: string;
-  creditValue: number;
-  startDate: Date;
-  endDate?: Date | null;
-  comments?: string | null;
-  recurrenceFrequency?: Recurrence_Frequency | null;
-}
-*/
-
-export interface TaskDTO {
-  id: number;
-  categoryId: number; // do we need to add category as well
+  type: TaskType;
   title: string;
   description: string;
   creditValue: number;
-  comments?: string | null;
-  recurrenceFrequency?: Recurrence_Frequency | null;
+  locationId: number;
   tasksAssigned?: TaskAssignedDTO[];
 }
 
-export interface TaskAssignedDTO {
+export interface InputTaskAssignedDTO {
   taskId: number;
-  status: Status;
   assigneeId: number;
   assignerId: number;
+  status: Status;
   startDate: Date;
   endDate?: Date;
-  // warnings   warning[]
+  recurrenceFrequency?: RecurrenceFrequency | null;
+  comments?: string | null;
+}
+
+export interface TaskAssignedDTO {
+  id: number;
+  taskId: number;
+  assigneeId: number;
+  assignerId: number;
+  status: Status;
+  startDate: Date;
+  endDate?: Date;
+  recurrenceFrequency?: RecurrenceFrequency | null;
+  comments?: string | null;
 }
 
 export interface ITaskService {
@@ -69,15 +59,15 @@ export interface ITaskService {
    * @returns a TaskDTO associated with the task id
    * @throws Error if task retrieval fails
    */
-  // getTaskById(taskId: number): Promise<TaskDTO>;
+  getTaskById(taskId: number): Promise<TaskDTO>;
 
   /**
    * Get all tasks belonging to a category
-   * @param categoryId category's id
-   * @returns a list of TaskDTOs with a given category
+   * @param type task type
+   * @returns a list of TaskDTOs with a given type
    * @throws Error if task retrieval fails
    */
-  // getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]>;
+  getTasksByType(type: TaskType): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks assigned to a resident
@@ -125,7 +115,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the created task's information
    * @throws Error if task creation fails
    */
-  createTask(task: TaskDTO): Promise<TaskDTO>;
+  createTask(task: InputTaskDTO): Promise<TaskDTO>;
 
   /**
    * Update a task.
@@ -134,7 +124,7 @@ export interface ITaskService {
    * @returns a TaskDTO with the updated task's information
    * @throws Error if task update fails
    */
-  // updateTaskById(taskId: number, task: TaskDTO): Promise<TaskDTO>;
+  updateTaskById(taskId: number, task: InputTaskDTO): Promise<TaskDTO>;
 
   /**
    * Delete a task by id
@@ -142,5 +132,13 @@ export interface ITaskService {
    * @returns a TaskDTO with the deleted task's information
    * @throws Error if task deletion fails
    */
-  // deleteTaskById(taskId: number): Promise<TaskDTO>;
+  deleteTaskById(taskId: number): Promise<TaskDTO>;
+
+    /**
+   * Assign a task to a resident
+   * @param taskAssigned the task to be assigned
+   * @returns a TaskAssignedDTO with the TaskAssigned's information
+   * @throws Error if task assignment fails
+   */
+  assignTask(taskAssigned: InputTaskAssignedDTO): Promise<TaskAssignedDTO>;
 }
