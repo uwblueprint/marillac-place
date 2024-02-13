@@ -1,43 +1,34 @@
 import { NotificationResidentDTO } from "./adminService";
 
 export interface ResidentDTO {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber?: string | null;
-  displayName: string;
-  profilePictureLink?: string | null;
-  birthdate?: Date | null;
+  userId: number;
+  residentId: number;
+  birthDate?: Date | null;
+  roomNumber: number;
   credits: number;
   dateJoined: Date;
   dateLeft?: Date | null;
-  notifications?: NotificationResidentDTO[];
+  notes?: string | null;
 }
 
 export interface CreateResidentDTO {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber?: string | null;
-  displayName: string;
-  profilePictureLink?: string | null;
-  birthdate?: Date | null;
-  credits: number;
-  dateJoined: Date;
-}
-
-export interface UpdateResidentDTO {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber?: string | null;
-  displayName: string;
-  profilePictureLink?: string | null;
-  birthdate?: Date | null;
+  residentId: number;
+  birthDate?: Date | null;
+  roomNumber: number;
   credits: number;
   dateJoined: Date;
   dateLeft?: Date | null;
+  notes?: string | null;
+}
+
+export interface UpdateResidentDTO {
+  residentId: number;
+  birthDate?: Date | null;
+  roomNumber: number;
+  credits: number;
+  dateJoined: Date;
+  dateLeft?: Date | null;
+  notes?: string | null;
 }
 
 // Have to manually map enums as ts treats enums as numbers
