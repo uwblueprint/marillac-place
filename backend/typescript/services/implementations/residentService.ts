@@ -6,6 +6,7 @@ import {
   UpdateResidentDTO,
   RedeemCreditsResponse,
 } from "../interfaces/residentService";
+import { getUserById } from "./userService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
@@ -15,8 +16,9 @@ const Logger = logger(__filename);
 class ResidentService implements IResidentService {
   async addResident(resident: CreateResidentDTO): Promise<ResidentDTO> {
     try {
+      const newUser = getUserById(resident.userId);
       const newResident = await Prisma.resident.create({
-        data: { ...resident, credits: resident.credits ?? 0 },
+        data: { ...resident },
       });
       return newResident;
     } catch (error: unknown) {

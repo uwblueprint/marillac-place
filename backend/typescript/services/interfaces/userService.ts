@@ -6,7 +6,7 @@ export type UserTypes = "STAFF" | "RESIDENT";
 export interface UserDTO {
   id: number;
   type: UserTypes;
-  staffId: number; 
+  staffId: number;
   residentId: number;
   email: string;
   phoneNumber: string | null;
@@ -14,11 +14,11 @@ export interface UserDTO {
   lastName: string;
   displayName: string | null;
   profilePictureURL: string | null;
-  isActive: Boolean;
+  isActive: boolean;
 }
 
 export interface CreateUserDTO {
-  id: Number; 
+  id: number;
   type: UserTypes;
   email: string;
   password: string;
@@ -32,13 +32,13 @@ export interface CreateUserDTO {
 export interface UpdateUserDTO {
   type: UserTypes;
   email: string;
-  password: string; 
+  password: string;
   phoneNumber: string | null;
   firstName: string;
   lastName: string;
   displayName: string | null;
   profilePictureURL: string | null;
-  isActive: Boolean;
+  isActive: boolean;
 }
 
 export interface IUserService {
