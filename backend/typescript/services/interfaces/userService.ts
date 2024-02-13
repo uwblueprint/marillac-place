@@ -6,7 +6,7 @@ export type UserTypes = "STAFF" | "RESIDENT";
 export interface UserDTO {
   id: number;
   type: UserTypes;
-  staffId: number; 
+  staffId: number;
   residentId: number;
   email: string;
   phoneNumber: string | null;
@@ -32,7 +32,7 @@ export interface CreateUserDTO {
 export interface UpdateUserDTO {
   type: UserTypes;
   email: string;
-  password: string; 
+  password: string;
   phoneNumber: string | null;
   firstName: string;
   lastName: string;
