@@ -49,7 +49,7 @@ model Resident {
   residentId Int            @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
   birthDate  DateTime       @map("birth_date")
   roomNumber Int            @map("room_number")
-  credits    Int            @default(0)
+  credits    Float          @default(0)
   dateJoined DateTime       @default(now()) @map("date_joined")
   dateLeft   DateTime?      @map("date_left")
   notes      String?
@@ -71,7 +71,7 @@ model Task {
   type            TaskType
   title           String
   description     String
-  creditValue     Int            @map("credit_value")
+  creditValue     Float          @map("credit_value")
   location        TaskLocation   @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   locationId      Int            @map("location_id")
   tasksAssigned   TaskAssigned[]
