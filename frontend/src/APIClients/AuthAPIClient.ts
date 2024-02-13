@@ -176,5 +176,3 @@ const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
 };
 
 export default { login, logout, loginWithGoogle, register, refresh };
-
-
