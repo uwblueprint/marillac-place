@@ -4,8 +4,6 @@ import { Route, Navigate } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 import { LOGIN_PAGE } from "../../constants/Routes";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 type PrivateRouteProps = {
   component: React.ReactNode;
   path: string;
@@ -27,5 +25,3 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 };
 
 export default PrivateRoute;
-
-/* eslint-enable @typescript-eslint/no-explicit-any */

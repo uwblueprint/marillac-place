@@ -42,6 +42,7 @@ const create = async ({
     });
     return data;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Unknown error creating entity");
     throw error;
   }
@@ -58,6 +59,7 @@ const get = async (): Promise<EntityResponse[]> => {
     });
     return data;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Unknown error getting entity");
     throw error;
   }
@@ -75,6 +77,7 @@ const getFile = async (uuid: string): Promise<string> => {
 
     return data.fileURL;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Unknown error getting file");
     throw error;
   }
@@ -95,6 +98,7 @@ const getCSV = async (): Promise<string> => {
 
     return data;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Unknown error getting CSV");
     throw error;
   }
@@ -118,10 +122,10 @@ const update = async (
     });
     return data;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Error getting entity update");
-    throw error; 
+    throw error;
   }
 };
 
 export default { create, get, getFile, getCSV, update };
-

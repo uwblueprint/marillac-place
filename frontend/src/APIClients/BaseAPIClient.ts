@@ -1,13 +1,9 @@
-import axios, {
-  AxiosRequestConfig,
-  AxiosRequestHeaders,
-} from "axios";
+import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 // import jwt from "jsonwebtoken";
 
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { DecodedJWT } from "../types/AuthTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
-
 
 interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
   headers: AxiosRequestHeaders;

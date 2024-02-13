@@ -41,6 +41,7 @@ const create = async ({
     });
     return data;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Unknown error creating simple Entity");
     throw error;
   }
@@ -57,6 +58,7 @@ const get = async (): Promise<SimpleEntityResponse[]> => {
     });
     return data;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Unknown error getting simple entity");
     throw error;
   }
@@ -76,6 +78,7 @@ const getCSV = async (): Promise<string> => {
     });
     return data;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Unknown error getting CSV");
     throw error;
   }
@@ -103,6 +106,7 @@ const update = async (
     );
     return data;
   } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
     console.log("Unknown error updating simple entity");
     throw error;
   }
