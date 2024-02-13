@@ -18,7 +18,7 @@ export interface UserDTO {
 }
 
 export interface CreateUserDTO {
-  id: Number; 
+  id: number; 
   type: UserTypes;
   email: string;
   password: string;
