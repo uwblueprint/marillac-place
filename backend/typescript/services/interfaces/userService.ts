@@ -1,58 +1,47 @@
-import {
-  CreateUserDTO,
-  Role,
-  SignUpMethod,
-  UpdateUserDTO,
-  UserDTO,
-} from "../../types";
 
-interface IUserService {
-  /**
-   * Get user associated with id
-   * @param id user's id
-   * @returns a UserDTO with user's information
-   * @throws Error if user retrieval fails
-   */
-  getUserById(userId: string): Promise<UserDTO>;
+import { NotificationResidentDTO, NotificationDTO } from "./adminService";
 
-  /**
-   * Get user associated with email
-   * @param email user's email
-   * @returns a UserDTO with user's information
-   * @throws Error if user retrieval fails
-   */
-  getUserByEmail(email: string): Promise<UserDTO>;
+export type UserTypes = "STAFF" | "RESIDENT";
 
-  /**
-   * Get role of user associated with authId
-   * @param authId user's authId
-   * @returns role of the user
-   * @throws Error if user role retrieval fails
-   */
-  getUserRoleByAuthId(authId: string): Promise<Role>;
+export interface UserDTO {
+  id: number;
+  type: UserTypes;
+  staffId: number; 
+  residentId: number;
+  email: string;
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
+  displayName: string | null;
+  profilePictureURL: string | null;
+  isActive: Boolean;
+}
 
-  /**
-   * Get id of user associated with authId
-   * @param authId user's authId
-   * @returns id of the user
-   * @throws Error if user id retrieval fails
-   */
-  getUserIdByAuthId(authId: string): Promise<string>;
+export interface CreateUserDTO {
+  id: Number; 
+  type: UserTypes;
+  email: string;
+  password: string;
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
+  displayName: string | null;
+  profilePictureURL: string | null;
+}
 
-  /**
-   * Get authId of user associated with id
-   * @param userId user's id
-   * @returns user's authId
-   * @throws Error if user authId retrieval fails
-   */
-  getAuthIdById(userId: string): Promise<string>;
+export interface UpdateUserDTO {
+  type: UserTypes;
+  email: string;
+  password: string; 
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
+  displayName: string | null;
+  profilePictureURL: string | null;
+  isActive: Boolean;
+}
 
-  /**
-   * Get all user information (possibly paginated in the future)
-   * @returns array of UserDTOs
-   * @throws Error if user retrieval fails
-   */
-  getUsers(): Promise<Array<UserDTO>>;
+export interface IUserService {
 
   /**
    * Create a user, email verification configurable
@@ -64,9 +53,47 @@ interface IUserService {
    */
   createUser(
     user: CreateUserDTO,
-    authId?: string,
-    signUpMethod?: SignUpMethod,
+    // authId?: string,
   ): Promise<UserDTO>;
+
+  /**
+   * Get user associated with id
+   * @param id user's id
+   * @returns a UserDTO with user's information
+   * @throws Error if user retrieval fails
+   */
+  getUserById(userId: number): Promise<UserDTO>;
+
+  /**
+   * Get user associated with email
+   * @param email user's email
+   * @returns a UserDTO with user's information
+   * @throws Error if user retrieval fails
+   */
+  getUserByEmail(email: string): Promise<UserDTO>;
+
+  /**
+   * Get id of user associated with authId
+   * @param authId user's authId
+   * @returns id of the user
+   * @throws Error if user id retrieval fails
+   */
+  getUserIdByAuthId(authId: string): Promise<number>;
+
+  /**
+   * Get authId of user associated with id
+   * @param userId user's id
+   * @returns user's authId
+   * @throws Error if user authId retrieval fails
+   */
+  getAuthIdById(userId: number): Promise<string>;
+
+  /**
+   * Get all user information (possibly paginated in the future)
+   * @returns array of UserDTOs
+   * @throws Error if user retrieval fails
+   */
+  getUsers(): Promise<Array<UserDTO>>;
 
   /**
    * Update a user.
@@ -76,14 +103,14 @@ interface IUserService {
    * @returns a UserDTO with the updated user's information
    * @throws Error if user update fails
    */
-  updateUserById(userId: string, user: UpdateUserDTO): Promise<UserDTO>;
+  updateUserById(userId: number, user: UpdateUserDTO): Promise<UserDTO>;
 
   /**
    * Delete a user by id
    * @param userId user's userId
    * @throws Error if user deletion fails
    */
-  deleteUserById(userId: string): Promise<void>;
+  deleteUserById(userId: number): Promise<void>;
 
   /**
    * Delete a user by email
