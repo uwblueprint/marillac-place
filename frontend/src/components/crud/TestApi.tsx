@@ -44,7 +44,7 @@ const TestApi = (): React.ReactElement => {
   if (error) return <h1>{`Error! ${error.message}`}</h1>
 
   console.log(data)
-  return <Button onClick={sendApi}></Button>
+  return <Button onClick={sendApi} />
 
   
 

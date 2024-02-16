@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
+import { jwtDecode } from "jwt-decode";
 
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import { AuthenticatedUser, DecodedJWT } from "./types/AuthTypes";
@@ -33,9 +34,10 @@ const authLink = setContext(async (_, { headers }) => {
     NonNullable<AuthenticatedUser>,
     string
   >(AUTHENTICATED_USER_KEY, "accessToken");
-
   if (token) {
-    const decodedToken = "" as DecodedJWT; // TODO: JWT token needs to be decoded
+    const decodedToken = jwtDecode(token) as DecodedJWT;
+
+    // TODO: JWT token needs to be decoded
 
     // refresh if decodedToken has expired
     if (
@@ -78,9 +80,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <ApolloProvider client={apolloClient}>
-      <App />
-    </ApolloProvider>
+      <ApolloProvider client={apolloClient}>
+        <App />
+      </ApolloProvider>
   </React.StrictMode>,
 );
 
