@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 const taskType = gql`
   enum Status {
     PENDING_APPROVAL
+    ASSIGNED
     INCOMPLETE
     COMPLETE
     EXCUSED
@@ -38,6 +39,17 @@ const taskType = gql`
     creditValue: Int!
     locationId: Int!
   }
+
+  input InputTaskAssignedDTO {
+    taskId: Int
+    assigneeId: Int
+    assignerId: Int
+    status: Status
+    startDate: Date
+    endDate: Date
+    recurrenceFrequency: Recurrence_Frequency
+    comments: String
+  }
   
   type TaskAssignedDTO {
     id: Int!
@@ -64,7 +76,7 @@ const taskType = gql`
     createTask(task: InputTaskDTO!): TaskDTO!
     updateTask(taskId: Int, task: InputTaskDTO!): TaskDTO!
     deleteTask(taskId: Int): TaskDTO!
-    assignTask(taskAssigned: InputTaskAssignedDTO): TaskDTO
+    assignTask(taskAssigned: InputTaskAssignedDTO): TaskAssignedDTO
   }
 `;
 

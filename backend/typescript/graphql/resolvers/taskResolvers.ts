@@ -74,7 +74,7 @@ const taskResolvers = {
     assignTask: async (
       _parent: undefined,
       { taskAssigned }: { taskAssigned: InputTaskAssignedDTO },
-    ): Promise<TaskDTO> => {
+    ): Promise<TaskAssignedDTO> => {
       const newTask = await taskService.assignTask(taskAssigned);
       return newTask;
     },

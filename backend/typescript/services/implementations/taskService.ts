@@ -71,15 +71,7 @@ class TaskService implements ITaskService {
           location: true
         },
       });
-      console.log('tasks', tasks);
       if (!tasks) throw new Error(`task type ${type} not found`);
-
-      //const tasks: TaskDTO[] = [];
-
-      //tasksResponse.forEach((task) => {
-        // const dto = convertTaskRelation(taskExtended);
-        //tasks.push(task);
-      // });
 
       return tasks;
     } catch (error: unknown) {
@@ -247,26 +239,23 @@ class TaskService implements ITaskService {
     }
   }
 
-  async updateTaskById(
-  taskId: number,
-  updateTask: InputTaskDTO,
-): Promise<TaskDTO> {
-  try {
-    const updatedTask = await prisma.task.update({
-      where: {
-        id: taskId,
-      },
-      data: updateTask,
-      include: {
-        location: true
-      }
-    });
-    return updatedTask;
-  } catch (error: unknown) {
-    Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
-    throw error;
+  async updateTaskById(taskId: number, updateTask: InputTaskDTO): Promise<TaskDTO> {
+    try {
+      const updatedTask = await prisma.task.update({
+        where: {
+          id: taskId,
+        },
+        data: updateTask,
+        include: {
+          location: true
+        }
+      });
+      return updatedTask;
+    } catch (error: unknown) {
+      Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
   }
-}
 
   async deleteTaskById(taskId: number): Promise<TaskDTO> {
     try {
@@ -311,6 +300,7 @@ class TaskService implements ITaskService {
     } catch (error: unknown) {
       Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
       throw error;
+    }
   }
 }
 

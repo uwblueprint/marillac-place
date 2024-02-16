@@ -1,4 +1,4 @@
-export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
+export type Status = "PENDING_APPROVAL" | "ASSIGNED" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type RecurrenceFrequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
@@ -32,24 +32,24 @@ export interface TaskDTO {
 export interface InputTaskAssignedDTO {
   taskId: number;
   assigneeId: number;
-  assignerId: number;
+  assignerId?: number;
   status: Status;
   startDate: Date;
   endDate?: Date;
-  recurrenceFrequency?: RecurrenceFrequency | null;
-  comments?: string | null;
+  recurrenceFrequency?: RecurrenceFrequency;
+  comments?: string;
 }
 
 export interface TaskAssignedDTO {
   id: number;
   taskId: number;
   assigneeId: number;
-  assignerId: number;
+  assignerId: number | null;
   status: Status;
   startDate: Date;
-  endDate?: Date;
-  recurrenceFrequency?: RecurrenceFrequency | null;
-  comments?: string | null;
+  endDate: Date | null;
+  recurrenceFrequency: RecurrenceFrequency | null;
+  comments: string | null;
 }
 
 export interface ITaskService {
