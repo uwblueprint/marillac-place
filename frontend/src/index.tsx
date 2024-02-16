@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
+import { jwtDecode } from "jwt-decode";
 
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import { AuthenticatedUser, DecodedJWT } from "./types/AuthTypes";
@@ -33,9 +34,9 @@ const authLink = setContext(async (_, { headers }) => {
     NonNullable<AuthenticatedUser>,
     string
   >(AUTHENTICATED_USER_KEY, "accessToken");
-
   if (token) {
-    const decodedToken = "" as DecodedJWT;
+    const decodedToken = jwtDecode(token) as DecodedJWT;
+    console.log(decodedToken)
 
     // TODO: JWT token needs to be decoded
 

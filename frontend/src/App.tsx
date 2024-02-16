@@ -64,32 +64,32 @@ const App = (): React.ReactElement => {
                 <Route path={Routes.HOME_PAGE} element={<Default />} />
                 <Route
                   path={Routes.CREATE_ENTITY_PAGE}
-                  element={<CreatePage />}
-                />
+                  element={<PrivateRoute/>}
+                ><Route path="" element={<CreatePage />}/></Route>
                 <Route
                   path={Routes.UPDATE_ENTITY_PAGE}
-                  element={<UpdatePage />}
-                />
+                  element={<PrivateRoute />}
+                ><Route path="" element={<UpdatePage />}/></Route>
                 <Route
                   path={Routes.DISPLAY_ENTITY_PAGE}
-                  element={<DisplayPage />}
-                />
+                  element={<PrivateRoute />}
+                ><Route path="" element={<DisplayPage />}/></Route>
                 <Route
                   path={Routes.CREATE_SIMPLE_ENTITY_PAGE}
-                  element={<SimpleEntityCreatePage />}
-                />
+                  element={<PrivateRoute />}
+                ><Route path="" element={<SimpleEntityCreatePage />}/></Route>
                 <Route
                   path={Routes.UPDATE_SIMPLE_ENTITY_PAGE}
-                  element={<SimpleEntityUpdatePage />}
-                />
+                  element={<PrivateRoute />}
+                ><Route path="" element={<SimpleEntityUpdatePage />}/></Route>
                 <Route
                   path={Routes.DISPLAY_SIMPLE_ENTITY_PAGE}
-                  element={<SimpleEntityDisplayPage />}
-                />
+                  element={<PrivateRoute />}
+                ><Route path="" element={<SimpleEntityDisplayPage />}/></Route>
                 <Route
                   path={Routes.EDIT_TEAM_PAGE}
-                  element={<EditTeamInfoPage />}
-                />
+                  element={<PrivateRoute />}
+                ><Route path="" element={<EditTeamInfoPage />}/></Route>
                 <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
                 <Route path="*" element={<NotFound />} />
               </Switch>

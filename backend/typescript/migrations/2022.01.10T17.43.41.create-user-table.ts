@@ -12,7 +12,7 @@ export const up: Migration = async ({ context: sequelize }) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    firstName: {
+    first_name: {
       type: DataType.STRING,
       allowNull: false,
     },

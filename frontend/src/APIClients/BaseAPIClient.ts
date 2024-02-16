@@ -6,6 +6,7 @@ import axios, {
 
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { DecodedJWT } from "../types/AuthTypes";
+import { jwtDecode } from "jwt-decode";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
 
@@ -21,15 +22,19 @@ baseAPIClient.interceptors.request.use(
   async (config: AdaptAxiosRequestConfig) => {
     const newConfig = { ...config };
 
+    let authHeaderParts = [""]
     // if access token in header has expired, do a refresh
-    const authHeaderParts = [""];
+    if (typeof(config.headers.Authorization) === "string") {
+      authHeaderParts = config.headers.Authorization?.split(" ");
+    }
+    
     // config.headers.Authorization?.split(" ");
     if (
       authHeaderParts &&
       authHeaderParts.length >= 2 &&
       authHeaderParts[0].toLowerCase() === "bearer"
     ) {
-      const decodedToken = "" as DecodedJWT;
+      const decodedToken = jwtDecode(authHeaderParts[1]) as DecodedJWT;
 
       if (
         decodedToken &&
