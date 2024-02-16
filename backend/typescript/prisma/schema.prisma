@@ -9,32 +9,6 @@ datasource db {
   // directUrl = env("DIRECT_URL")
 }
 
-model post {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  title      String   @db.VarChar(255)
-  content    String?
-  published  Boolean  @default(false)
-  author_id  Int
-  author     user     @relation(fields: [author_id], references: [id])
-}
-
-model profile {
-  id      Int     @id @default(autoincrement())
-  bio     String?
-  user_id Int     @unique
-  user    user    @relation(fields: [user_id], references: [id])
-}
-
-model user {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   post[]
-  profile profile?
-}
-
 model task {
   id                  Int                   @id @default(autoincrement())
   category            category              @relation(fields: [categoryId], references: [id])

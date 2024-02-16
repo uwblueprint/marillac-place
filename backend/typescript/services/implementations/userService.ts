@@ -15,12 +15,12 @@ class UserService implements IUserService {
     let firebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
-      user = await User.findByPk(Number(userId));
+      user = await User.findByPk(Number(userId)); // sequelize
 
       if (!user) {
         throw new Error(`userId ${userId} not found.`);
       }
-      firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
+      firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id); 
     } catch (error: unknown) {
       Logger.error(`Failed to get user. Reason = ${getErrorMessage(error)}`);
       throw error;
@@ -64,7 +64,7 @@ class UserService implements IUserService {
 
   async getUserRoleByAuthId(authId: string): Promise<Role> {
     try {
-      const user: User | null = await User.findOne({
+      const user: User | null = await User.findOne({ // sequelize
         where: { auth_id: authId },
       });
       if (!user) {
@@ -81,7 +81,7 @@ class UserService implements IUserService {
 
   async getUserIdByAuthId(authId: string): Promise<string> {
     try {
-      const user: User | null = await User.findOne({
+      const user: User | null = await User.findOne({ // sequelize
         where: { auth_id: authId },
       });
       if (!user) {
@@ -96,7 +96,7 @@ class UserService implements IUserService {
 
   async getAuthIdById(userId: string): Promise<string> {
     try {
-      const user: User | null = await User.findByPk(Number(userId));
+      const user: User | null = await User.findByPk(Number(userId)); // sequelize
       if (!user) {
         throw new Error(`userId ${userId} not found.`);
       }
@@ -110,7 +110,7 @@ class UserService implements IUserService {
   async getUsers(): Promise<Array<UserDTO>> {
     let userDtos: Array<UserDTO> = [];
     try {
-      const users: Array<User> = await User.findAll();
+      const users: Array<User> = await User.findAll(); // sequelize
 
       userDtos = await Promise.all(
         users.map(async (user) => {
@@ -163,7 +163,7 @@ class UserService implements IUserService {
       }
 
       try {
-        newUser = await User.create({
+        newUser = await User.create({ // sequelize
           first_name: user.firstName,
           last_name: user.lastName,
           auth_id: firebaseUser.uid,
@@ -202,7 +202,7 @@ class UserService implements IUserService {
     let updatedFirebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
-      const updateResult = await User.update(
+      const updateResult = await User.update( // sequelize
         {
           first_name: user.firstName,
           last_name: user.lastName,
@@ -231,7 +231,7 @@ class UserService implements IUserService {
       } catch (error) {
         // rollback Postgres user updates
         try {
-          await User.update(
+          await User.update( // sequelize
             {
               first_name: oldUser.first_name,
               last_name: oldUser.last_name,
@@ -270,13 +270,13 @@ class UserService implements IUserService {
   async deleteUserById(userId: string): Promise<void> {
     try {
       // Sequelize doesn't provide a way to atomically find, delete, and return deleted row
-      const deletedUser: User | null = await User.findByPk(Number(userId));
+      const deletedUser: User | null = await User.findByPk(Number(userId)); // sequelize
 
       if (!deletedUser) {
         throw new Error(`userid ${userId} not found.`);
       }
 
-      const numDestroyed: number = await User.destroy({
+      const numDestroyed: number = await User.destroy({ // sequelize
         where: { id: userId },
       });
 
@@ -318,7 +318,7 @@ class UserService implements IUserService {
       const firebaseUser: firebaseAdmin.auth.UserRecord = await firebaseAdmin
         .auth()
         .getUserByEmail(email);
-      const deletedUser: User | null = await User.findOne({
+      const deletedUser: User | null = await User.findOne({ // sequelize
         where: { auth_id: firebaseUser.uid },
       });
 
@@ -326,7 +326,7 @@ class UserService implements IUserService {
         throw new Error(`userid ${firebaseUser.uid} not found.`);
       }
 
-      const numDestroyed: number = await User.destroy({
+      const numDestroyed: number = await User.destroy({ // sequelize
         where: { auth_id: firebaseUser.uid },
       });
 
@@ -341,7 +341,7 @@ class UserService implements IUserService {
       } catch (error) {
         // rollback user deletion in Postgres
         try {
-          await User.create({
+          await User.create({ // sequelize
             first_name: deletedUser.first_name,
             last_name: deletedUser.last_name,
             auth_id: deletedUser.auth_id,
