@@ -1,9 +1,14 @@
-import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
+import axios, {
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+} from "axios";
 // import jwt from "jsonwebtoken";
 
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { DecodedJWT } from "../types/AuthTypes";
+import { jwtDecode } from "jwt-decode";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
+
 
 interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
   headers: AxiosRequestHeaders;
@@ -17,15 +22,19 @@ baseAPIClient.interceptors.request.use(
   async (config: AdaptAxiosRequestConfig) => {
     const newConfig = { ...config };
 
+    let authHeaderParts = [""]
     // if access token in header has expired, do a refresh
-    const authHeaderParts = [""];
+    if (typeof(config.headers.Authorization) === "string") {
+      authHeaderParts = config.headers.Authorization?.split(" ");
+    }
+    
     // config.headers.Authorization?.split(" ");
     if (
       authHeaderParts &&
       authHeaderParts.length >= 2 &&
       authHeaderParts[0].toLowerCase() === "bearer"
     ) {
-      const decodedToken = "" as DecodedJWT; // TODO: JWT token needs to be decoded
+      const decodedToken = jwtDecode(authHeaderParts[1]) as DecodedJWT;
 
       if (
         decodedToken &&

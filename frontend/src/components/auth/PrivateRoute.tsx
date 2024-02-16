@@ -1,27 +1,21 @@
 import React, { useContext } from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Route, Navigate, Outlet } from "react-router-dom";
 
 import AuthContext from "../../contexts/AuthContext";
 import { LOGIN_PAGE } from "../../constants/Routes";
 
-type PrivateRouteProps = {
-  component: React.ReactNode;
-  path: string;
-  exact: boolean;
-};
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({
-  component,
-  exact,
-  path,
-}: PrivateRouteProps) => {
+const PrivateRoute: React.FC = () => {
   const { authenticatedUser } = useContext(AuthContext);
 
   return authenticatedUser ? (
-    <Route path={path} element={component} />
+    <Outlet />
   ) : (
     <Navigate to={LOGIN_PAGE} />
   );
-};
+}
 
 export default PrivateRoute;
+
+/* eslint-enable @typescript-eslint/no-explicit-any */
