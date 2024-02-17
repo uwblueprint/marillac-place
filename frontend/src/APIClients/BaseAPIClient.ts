@@ -1,14 +1,10 @@
-import axios, {
-  AxiosRequestConfig,
-  AxiosRequestHeaders,
-} from "axios";
+import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 // import jwt from "jsonwebtoken";
 
+import { jwtDecode } from "jwt-decode";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { DecodedJWT } from "../types/AuthTypes";
-import { jwtDecode } from "jwt-decode";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
-
 
 interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
   headers: AxiosRequestHeaders;
@@ -22,12 +18,12 @@ baseAPIClient.interceptors.request.use(
   async (config: AdaptAxiosRequestConfig) => {
     const newConfig = { ...config };
 
-    let authHeaderParts = [""]
+    let authHeaderParts = [""];
     // if access token in header has expired, do a refresh
-    if (typeof(config.headers.Authorization) === "string") {
+    if (typeof config.headers.Authorization === "string") {
       authHeaderParts = config.headers.Authorization?.split(" ");
     }
-    
+
     // config.headers.Authorization?.split(" ");
     if (
       authHeaderParts &&

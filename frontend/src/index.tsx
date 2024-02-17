@@ -36,7 +36,7 @@ const authLink = setContext(async (_, { headers }) => {
   >(AUTHENTICATED_USER_KEY, "accessToken");
   if (token) {
     const decodedToken = jwtDecode(token) as DecodedJWT;
-    console.log(decodedToken)
+    console.log(decodedToken);
 
     // TODO: JWT token needs to be decoded
 
@@ -81,9 +81,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-      <ApolloProvider client={apolloClient}>
-        <App />
-      </ApolloProvider>
+    <ApolloProvider client={apolloClient}>
+      <App />
+    </ApolloProvider>
   </React.StrictMode>,
 );
 

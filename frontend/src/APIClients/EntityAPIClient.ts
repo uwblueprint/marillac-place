@@ -119,9 +119,8 @@ const update = async (
     return data;
   } catch (error: unknown) {
     console.log("Error getting entity update");
-    throw error; 
+    throw error;
   }
 };
 
 export default { create, get, getFile, getCSV, update };
-
