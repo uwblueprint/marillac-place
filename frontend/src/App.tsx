@@ -64,32 +64,43 @@ const App = (): React.ReactElement => {
                 <Route path={Routes.HOME_PAGE} element={<Default />} />
                 <Route
                   path={Routes.CREATE_ENTITY_PAGE}
-                  element={<PrivateRoute/>}
-                ><Route path="" element={<CreatePage />}/></Route>
+                  element={<PrivateRoute />}
+                >
+                  <Route path="" element={<CreatePage />} />
+                </Route>
                 <Route
                   path={Routes.UPDATE_ENTITY_PAGE}
                   element={<PrivateRoute />}
-                ><Route path="" element={<UpdatePage />}/></Route>
+                >
+                  <Route path="" element={<UpdatePage />} />
+                </Route>
                 <Route
                   path={Routes.DISPLAY_ENTITY_PAGE}
                   element={<PrivateRoute />}
-                ><Route path="" element={<DisplayPage />}/></Route>
+                >
+                  <Route path="" element={<DisplayPage />} />
+                </Route>
                 <Route
                   path={Routes.CREATE_SIMPLE_ENTITY_PAGE}
                   element={<PrivateRoute />}
-                ><Route path="" element={<SimpleEntityCreatePage />}/></Route>
+                >
+                  <Route path="" element={<SimpleEntityCreatePage />} />
+                </Route>
                 <Route
                   path={Routes.UPDATE_SIMPLE_ENTITY_PAGE}
                   element={<PrivateRoute />}
-                ><Route path="" element={<SimpleEntityUpdatePage />}/></Route>
+                >
+                  <Route path="" element={<SimpleEntityUpdatePage />} />
+                </Route>
                 <Route
                   path={Routes.DISPLAY_SIMPLE_ENTITY_PAGE}
                   element={<PrivateRoute />}
-                ><Route path="" element={<SimpleEntityDisplayPage />}/></Route>
-                <Route
-                  path={Routes.EDIT_TEAM_PAGE}
-                  element={<PrivateRoute />}
-                ><Route path="" element={<EditTeamInfoPage />}/></Route>
+                >
+                  <Route path="" element={<SimpleEntityDisplayPage />} />
+                </Route>
+                <Route path={Routes.EDIT_TEAM_PAGE} element={<PrivateRoute />}>
+                  <Route path="" element={<EditTeamInfoPage />} />
+                </Route>
                 <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
                 <Route path="*" element={<NotFound />} />
               </Switch>

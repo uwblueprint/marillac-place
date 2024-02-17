@@ -9,12 +9,8 @@ import { LOGIN_PAGE } from "../../constants/Routes";
 const PrivateRoute: React.FC = () => {
   const { authenticatedUser } = useContext(AuthContext);
 
-  return authenticatedUser ? (
-    <Outlet />
-  ) : (
-    <Navigate to={LOGIN_PAGE} />
-  );
-}
+  return authenticatedUser ? <Outlet /> : <Navigate to={LOGIN_PAGE} />;
+};
 
 export default PrivateRoute;
 
