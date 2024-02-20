@@ -70,6 +70,11 @@ const taskType = gql`
   extend type Query {
     getTaskById(taskId: Int!): TaskDTO!
     getTasksByType(type: TaskType!): [TaskDTO!]
+    getTasksByAssigneeId(assigneeId: Int!): [TaskAssignedDTO]
+    getTasksByAssignerId(assignerId: Int!): [TaskAssignedDTO]
+    getTasksByStartDate(startDate: Date!): [TaskAssignedDTO]
+    getTasksByEndDate(endDate: Date!): [TaskAssignedDTO]
+    getTasksByStatus(status: Status!): [TaskAssignedDTO]
   }
 
   extend type Mutation {
@@ -77,6 +82,7 @@ const taskType = gql`
     updateTask(taskId: Int, task: InputTaskDTO!): TaskDTO!
     deleteTask(taskId: Int): TaskDTO!
     assignTask(taskAssigned: InputTaskAssignedDTO): TaskAssignedDTO
+    changeTaskStatus(taskAssignedId: Int!, status: Status!): TaskAssignedDTO
   }
 `;
 

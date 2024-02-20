@@ -27,41 +27,41 @@ const taskResolvers = {
       const tasks = await taskService.getTasksByType(type);
       return tasks;
     },
-  //   getTasksByAssigneeId: async (
-  //     _parent: undefined,
-  //     { assigneeId }: { assigneeId: number },
-  //   ): Promise<TaskDTO[]> => {
-  //     const tasks = await taskService.getTasksByAssigneeId(assigneeId);
-  //     return tasks;
-  //   },
-  //   getTasksByAssignerId: async (
-  //     _parent: undefined,
-  //     { assignerId }: { assignerId: number },
-  //   ): Promise<TaskDTO[]> => {
-  //     const tasks = await taskService.getTasksByAssignerId(assignerId);
-  //     return tasks;
-  //   },
-  //   getTasksByStartDate: async (
-  //     _parent: undefined,
-  //     { startDate }: { startDate: Date },
-  //   ): Promise<TaskDTO[]> => {
-  //     const tasks = await taskService.getTasksByStartDate(startDate);
-  //     return tasks;
-  //   },
-  //   getTasksByEndDate: async (
-  //     _parent: undefined,
-  //     { endDate }: { endDate: Date },
-  //   ): Promise<TaskDTO[]> => {
-  //     const tasks = await taskService.getTasksByEndDate(endDate);
-  //     return tasks;
-  //   },
-  //   getTasksByStatus: async (
-  //     _parent: undefined,
-  //     { status }: { status: Status },
-  //   ): Promise<TaskDTO[]> => {
-  //     const tasks = await taskService.getTasksByStatus(status);
-  //     return tasks;
-  //   },
+    getTasksByAssigneeId: async (
+      _parent: undefined,
+      { assigneeId }: { assigneeId: number },
+    ): Promise<TaskAssignedDTO[]> => {
+      const tasks = await taskService.getTasksByAssigneeId(assigneeId);
+      return tasks;
+    },
+    getTasksByAssignerId: async (
+      _parent: undefined,
+      { assignerId }: { assignerId: number },
+    ): Promise<TaskAssignedDTO[]> => {
+      const tasks = await taskService.getTasksByAssignerId(assignerId);
+      return tasks;
+    },
+    getTasksByStartDate: async (
+      _parent: undefined,
+      { startDate }: { startDate: Date },
+    ): Promise<TaskAssignedDTO[]> => {
+      const tasks = await taskService.getTasksByStartDate(startDate);
+      return tasks;
+    },
+    getTasksByEndDate: async (
+      _parent: undefined,
+      { endDate }: { endDate: Date },
+    ): Promise<TaskAssignedDTO[]> => {
+      const tasks = await taskService.getTasksByEndDate(endDate);
+      return tasks;
+    },
+    getTasksByStatus: async (
+      _parent: undefined,
+      { status }: { status: Status },
+    ): Promise<TaskAssignedDTO[]> => {
+      const tasks = await taskService.getTasksByStatus(status);
+      return tasks;
+    }
   },
   Mutation: {
     createTask: async (
@@ -92,6 +92,13 @@ const taskResolvers = {
       const deletedTask = await taskService.deleteTaskById(taskId);
       return deletedTask;
     },
+    changeTaskStatus: async (
+      _parent: undefined,
+      { taskAssignedId, status }: { taskAssignedId: number; status: Status},
+      ): Promise<TaskAssignedDTO> => {
+        const updatedTask = await taskService.changeTaskStatus(taskAssignedId, status);
+        return updatedTask;
+    }
   },
 };
 

@@ -75,7 +75,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs with a given assignee
    * @throws Error if task retrieval fails
    */
-  // getTasksByAssigneeId(assigneeId: number): Promise<TaskDTO[]>;
+  getTasksByAssigneeId(assigneeId: number): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks assigned by a staff member
@@ -83,7 +83,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs with a given assigner
    * @throws Error if task retrieval fails
    */
-  // getTasksByAssignerId(assignerId: number): Promise<TaskDTO[]>;
+  getTasksByAssignerId(assignerId: number): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks by a start date
@@ -91,7 +91,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs starting on the provided date
    * @throws Error if task retrieval fails
    */
-  // getTasksByStartDate(startDate: Date): Promise<TaskDTO[]>;
+  getTasksByStartDate(startDate: Date): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks by an end date
@@ -99,7 +99,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs ending on the provided date
    * @throws Error if task retrieval fails
    */
-  // getTasksByEndDate(endDate: Date): Promise<TaskDTO[]>;
+  getTasksByEndDate(endDate: Date): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks by a status
@@ -107,7 +107,7 @@ export interface ITaskService {
    * @returns a list of TaskDTO with a given status
    * @throws Error if task retrieval fails
    */
-  // getTasksByStatus(status: Status): Promise<TaskDTO[]>;
+  getTasksByStatus(status: Status): Promise<TaskAssignedDTO[]>;
 
   /**
    * Create a task
@@ -141,4 +141,12 @@ export interface ITaskService {
    * @throws Error if task assignment fails
    */
   assignTask(taskAssigned: InputTaskAssignedDTO): Promise<TaskAssignedDTO>;
+
+      /**
+   * Changes the status of an assigned task
+   * @param taskAssigned the task to have its status changed
+   * @returns a TaskAssignedDTO with the TaskAssigned's information
+   * @throws Error if task status change fails
+   */
+  changeTaskStatus(taskAssignedId: number, status: Status): Promise<TaskAssignedDTO>;
 }
