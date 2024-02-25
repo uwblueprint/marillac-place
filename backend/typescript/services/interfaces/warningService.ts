@@ -3,8 +3,8 @@ export interface WarningDTO {
   title: string;
   description: string;
   dateIssued?: Date;
-  residentId: number;
-  assignerId: number;
+  assigneeId: number;
+  assignerId: number | null;
   relatedTaskId?: number | null;
 }
 
@@ -12,8 +12,8 @@ export interface CreateWarningDTO {
   title: string;
   description: string;
   dateIssued?: Date;
-  residentId: number;
-  assignerId: number;
+  assigneeId: number;
+  assignerId: number | null;
   relatedTaskId?: number | null;
 }
 

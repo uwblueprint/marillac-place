@@ -6,8 +6,8 @@ const warningType = gql`
     title: String!
     description: String!
     dateIssued: DateTime
-    residentId: ID!
-    assignerId: ID!
+    assigneeId: ID!
+    assignerId: ID
     relatedTaskId: ID
   }
 
@@ -15,8 +15,8 @@ const warningType = gql`
     title: String!
     description: String!
     dateIssued: DateTime
-    residentId: ID!
-    assignerId: ID!
+    assigneeId: ID!
+    assignerId: ID
     relatedTaskId: ID
   }
 
