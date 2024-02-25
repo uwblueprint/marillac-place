@@ -41,8 +41,10 @@ const create = async ({
       headers: { Authorization: bearerToken },
     });
     return data;
-  } catch (error) {
-    return error;
+  } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
+    console.log("Unknown error creating entity");
+    throw error;
   }
 };
 
@@ -56,8 +58,10 @@ const get = async (): Promise<EntityResponse[]> => {
       headers: { Authorization: bearerToken },
     });
     return data;
-  } catch (error) {
-    return error;
+  } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
+    console.log("Unknown error getting entity");
+    throw error;
   }
 };
 
@@ -71,9 +75,11 @@ const getFile = async (uuid: string): Promise<string> => {
       headers: { Authorization: bearerToken },
     });
 
-    return data.fileURL
-  } catch (error) {
-    return error;
+    return data.fileURL;
+  } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
+    console.log("Unknown error getting file");
+    throw error;
   }
 };
 
@@ -91,8 +97,10 @@ const getCSV = async (): Promise<string> => {
     });
 
     return data;
-  } catch (error) {
-    return error;
+  } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
+    console.log("Unknown error getting CSV");
+    throw error;
   }
 };
 
@@ -113,8 +121,10 @@ const update = async (
       headers: { Authorization: bearerToken },
     });
     return data;
-  } catch (error) {
-    return error;
+  } catch (error: unknown) {
+    /* eslint-disable-next-line no-console */
+    console.log("Error getting entity update");
+    throw error;
   }
 };
 

@@ -178,7 +178,6 @@ const DisplayTableContainer: React.FC = (): React.ReactElement | null => {
       variables: { fileUUID },
     });
     downloadFile(data.file, "file");
-
   };
 
   const downloadEntitiesCSV = async () => {

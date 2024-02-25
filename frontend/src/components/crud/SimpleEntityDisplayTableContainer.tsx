@@ -130,40 +130,41 @@ const SIMPLE_ENTITIESCSV = gql`
   }
 `;
 
-const SimpleEntityDisplayTableContainer: React.FC = (): React.ReactElement | null => {
-  const [entities, setEntities] = useState<EntityData[] | null>(null);
+const SimpleEntityDisplayTableContainer: React.FC =
+  (): React.ReactElement | null => {
+    const [entities, setEntities] = useState<EntityData[] | null>(null);
 
-  const apolloClient = useApolloClient();
+    const apolloClient = useApolloClient();
 
-  useQuery(SIMPLE_ENTITIES, {
-    fetchPolicy: "cache-and-network",
-    onCompleted: (data) => {
-      setEntities(
-        data.simpleEntities.map((d: SimpleEntityResponse) => convert(d)),
-      );
-    },
-  });
+    useQuery(SIMPLE_ENTITIES, {
+      fetchPolicy: "cache-and-network",
+      onCompleted: (data) => {
+        setEntities(
+          data.simpleEntities.map((d: SimpleEntityResponse) => convert(d)),
+        );
+      },
+    });
 
-  const downloadEntitiesCSV = async () => {
-    if (entities) {
-      const { data } = await apolloClient.query({
-        query: SIMPLE_ENTITIESCSV,
-      });
-      downloadCSV(data.simpleEntitiesCSV, "export.csv");
-      // Use the following lines to download CSV using frontend CSV generation instead of API
-      // const csvString = await generateCSV<EntityData>({ data: entities });
-      // downloadCSV(csvString, "export.csv");
-    }
+    const downloadEntitiesCSV = async () => {
+      if (entities) {
+        const { data } = await apolloClient.query({
+          query: SIMPLE_ENTITIESCSV,
+        });
+        downloadCSV(data.simpleEntitiesCSV, "export.csv");
+        // Use the following lines to download CSV using frontend CSV generation instead of API
+        // const csvString = await generateCSV<EntityData>({ data: entities });
+        // downloadCSV(csvString, "export.csv");
+      }
+    };
+
+    return (
+      <>
+        <button type="button" onClick={downloadEntitiesCSV}>
+          Download CSV
+        </button>
+        {entities && <SimpleEntityDisplayTable data={entities} />}
+      </>
+    );
   };
-
-  return (
-    <>
-      <button type="button" onClick={downloadEntitiesCSV}>
-        Download CSV
-      </button>
-      {entities && <SimpleEntityDisplayTable data={entities} />}
-    </>
-  );
-};
 
 export default SimpleEntityDisplayTableContainer;
