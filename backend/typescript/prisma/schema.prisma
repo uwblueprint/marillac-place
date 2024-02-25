@@ -35,39 +35,62 @@ model user {
   profile profile?
 }
 
-model task {
-  id                  Int                   @id @default(autoincrement())
-  category            category              @relation(fields: [categoryId], references: [id])
-  categoryId          Int                   @map("category_id")
-  title               String
-  status              Status
-  description         String
-  assignee            resident              @relation(fields: [assigneeId], references: [id])
-  assigneeId          Int                   @map("assignee_id")
-  assigner            staff                 @relation(fields: [assignerId], references: [id])
-  assignerId          Int                   @map("assigner_id")
-  creditValue         Float                 @map("credit_value")
-  startDate           DateTime              @map("start_date")
-  endDate             DateTime?             @map("end_date")
-  comments            String?
-  recurrenceFrequency Recurrence_Frequency? @map("recurrence_frequency")
-  warnings            warning[]
+enum TaskType {
+  REQUIRED
+  OPTIONAL
+  CHORE
+  CUSTOM
 }
 
-//TODO: figure out why this won't work if it's RecurrenceFrequency
-enum Recurrence_Frequency {
+model TaskLocation {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  tasks       Task[]
+
+  @@map("task_locations")
+}
+
+model Task {
+  id              Int            @id @default(autoincrement())
+  type            TaskType
+  title           String
+  description     String
+  creditValue     Float          @map("credit_value")
+  location        TaskLocation   @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  locationId      Int            @map("location_id")
+  tasksAssigned   TaskAssigned[]
+  relatedWarnings Warning[]
+
+  @@map("tasks")
+}
+
+model TaskAssigned {
+  id                  Int                  @id @default(autoincrement())
+  task                Task                 @relation(fields: [taskId], references: [id])
+  taskId              Int                  @map("task_id")
+  assigner            Staff?               @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  assignerId          Int?                 @map("assigner_id")
+  assignee            Resident             @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  assigneeId          Int                  @map("assignee_id")
+  status              Status
+  startDate           DateTime             @map("start_date")
+  endDate             DateTime?            @map("end_date")
+  recurrenceFrequency RecurrenceFrequency? @map("recurrence_frequency")
+  comments            String?
+
+  @@map("tasks_assigned")
+}
+
+enum RecurrenceFrequency {
   DAILY
   WEEKLY
   BI_WEEKLY
-  //@@map("recurrence_frequency")
 }
 
-model category {
-  id   Int    @id @default(autoincrement())
-  name String
-  task task[]
-
-  @@map("category")
+enum UserType {
+  STAFF
+  RESIDENT
 }
 
 enum Status {
@@ -77,74 +100,85 @@ enum Status {
   EXCUSED
 }
 
-model warning {
+model Warning {
   id            Int      @id @default(autoincrement())
-  resident      resident @relation(fields: [residentId], references: [id])
-  residentId    Int      @map("resident_id")
+  assigner      Staff?   @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  assignerId    Int?     @map("assigner_id")
+  assignee      Resident @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  assigneeId    Int      @map("resident_id")
+  relatedTask   Task?    @relation(fields: [relatedTaskId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  relatedTaskId Int?     @map("related_task_id")
   title         String
   description   String
-  assigner      staff    @relation(fields: [assignerId], references: [id])
-  assignerId    Int      @map("assigner_id")
   dateIssued    DateTime @default(now()) @map("date_issued")
-  relatedTask   task?    @relation(fields: [relatedTaskId], references: [id])
-  relatedTaskId Int?     @map("related_task_id")
+
+  @@map("warnings")
 }
 
-model staff {
-  id                 Int            @id @default(autoincrement())
-  roleId             Int            @map("role_id")
-  role               role           @relation(fields: [roleId], references: [id])
-  firstName          String         @map("first_name")
-  lastName           String         @map("last_name")
-  email              String         @unique
-  phoneNumber        String?        @map("phone_number")
-  displayName        String?        @map("display_name")
-  profilePictureLink String?        @map("profile_picture_link")
-  tasksAssigned      task[]
-  warningsAssigned   warning[]
-  notifications      notification[]
+model User {
+  id                Int                @id @default(autoincrement())
+  type              UserType
+  staff             Staff?
+  resident          Resident?
+  authId            String             @unique @map("auth_id")
+  email             String             @unique
+  phoneNumber       String?            @map("phone_number")
+  firstName         String             @map("first_name")
+  lastName          String             @map("last_name")
+  displayName       String?            @map("display_name")
+  profilePictureURL String?            @map("profile_picture_url")
+  isActive          Boolean            @default(true) @map("is_active")
+  notifications     Notification[]
+  notificationsSent NotificationSent[]
+
+  @@map("users")
 }
 
-model role {
-  id    Int     @id @default(autoincrement())
-  title String  @unique
-  staff staff[]
+model Staff {
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId           Int            @id @map("user_id")
+  isAdmin          Boolean        @default(false) @map("is_admin")
+  tasksAssigned    TaskAssigned[]
+  warningsAssigned Warning[]
 
-  @@map("role")
+  @@map("staff")
 }
 
-model resident {
-  id                 Int                    @id @default(autoincrement())
-  firstName          String                 @map("first_name")
-  lastName           String                 @map("last_name")
-  email              String                 @unique
-  phoneNumber        String?                @map("phone_number")
-  displayName        String                 @map("display_name")
-  profilePictureLink String?                @map("profile_picture_link")
-  birthdate          DateTime?
-  credits            Float
-  dateJoined         DateTime               @map("date_joined")
-  dateLeft           DateTime?              @map("date_left")
-  tasks              task[]
-  warnings           warning[]
-  notifications      notificationResident[]
+model Resident {
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId     Int            @id @map("user_id")
+  residentId Int            @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
+  birthDate  DateTime       @map("birth_date")
+  roomNumber Int            @map("room_number")
+  credits    Float          @default(0)
+  dateJoined DateTime       @default(now()) @map("date_joined")
+  dateLeft   DateTime?      @map("date_left")
+  notes      String?
+  tasks      TaskAssigned[]
+  warnings   Warning[]
+
+  @@map("residents")
 }
 
-model notification {
-  id        Int                    @id @default(autoincrement())
-  message   String
-  authorId  Int                    @map("author_id")
-  author    staff                  @relation(fields: [authorId], references: [id])
-  createdAt DateTime               @default(now()) @map("created_at")
-  residents notificationResident[]
+model Notification {
+  id         Int                @id @default(autoincrement())
+  author     User?              @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  authorId   Int?               @map("author_id")
+  title      String
+  message    String
+  createdAt  DateTime           @default(now()) @map("created_at")
+  recipients NotificationSent[]
+
+  @@map("notifications")
 }
 
-model notificationResident {
-  notification   notification @relation(fields: [notificationId], references: [id])
+model NotificationSent {
+  id             Int          @id @default(autoincrement())
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   notificationId Int          @map("notification_id")
-  resident       resident     @relation(fields: [residentId], references: [id])
-  residentId     Int          @map("resident_id")
+  recipient      User         @relation(fields: [recipientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  recipientId    Int          @map("recipient_id")
   seen           Boolean      @default(false)
 
-  @@id([notificationId, residentId])
+  @@map("notifications_sent")
 }
