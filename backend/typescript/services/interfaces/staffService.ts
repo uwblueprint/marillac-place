@@ -1,13 +1,23 @@
-import { NotificationDTO } from "./adminService";
-import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
+import { NotificationResidentDTO, NotificationDTO } from "./adminService";
+import { UserDTO, CreateUserDTO, UpdateUserDTO, UserTypes} from "./userService";
 import { TaskDTO } from "./taskService";
 // import { WarningDTO } from "./warningService";
 
 export interface StaffDTO {
   userId: number;
   isAdmin: boolean; 
+  type: UserTypes;
+  email: string;
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
+  displayName: string | null;
+  profilePictureURL: string | null;
+  isActive: boolean;
   // tasksAssigned: TaskDTO[]; 
-  // warningsAssigned: WarningDTO[]
+  // warningsAssigned: WarningDTO[];
+  // notifications     NotificationDTO[]
+  // notificationsSent NotificationResidentDTO[]
 }
 
 export interface IStaffService {
@@ -19,16 +29,17 @@ export interface IStaffService {
    * @returns a StaffDTO with the created user's information
    * @throws Error if user creation fails
    */
-  addStaff(userInfo: CreateUserDTO, isAdmin: Boolean): Promise<StaffDTO>;
+  addStaff(userInfo: CreateUserDTO, isAdmin: boolean): Promise<StaffDTO>;
 
   /**
    * Update a staff.
+   * @param staffId staff id 
    * @param userInfo the staff to be updated
    * @param isAdmin if the staff is an admin or not 
    * @returns a StaffDTO with the updated staff's information
    * @throws Error if staff update fails
    */
-  updateStaff(userInfo: UpdateUserDTO, isAdmin: Boolean): Promise<StaffDTO>;
+  updateStaff(staffId: number, userInfo: UpdateUserDTO, isAdmin?: boolean): Promise<StaffDTO>;
 
   /**
    * Delete a staff by id
@@ -50,5 +61,5 @@ export interface IStaffService {
    * @returns a StaffDTO with staff's information
    * @throws Error if staff retrieval fails
    */
-  getStaffByIds(staffId: number[]): Promise<Array<StaffDTO>>;
+  getStaffByIds(staffIds: number[]): Promise<Array<StaffDTO>>;
 }

@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import * as firebaseAdmin from "firebase-admin";
 import type {
   IStaffService,
-  StaffDTO,
-  CreateStaffDTO,
-  UpdateStaffDTO,
+  StaffDTO
 } from "../interfaces/staffService";
+import { UserDTO, CreateUserDTO, UpdateUserDTO } from "../interfaces/userService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
@@ -12,42 +12,183 @@ const Prisma = new PrismaClient();
 const Logger = logger(__filename);
 
 class StaffService implements IStaffService {
-  async addStaff(staff: CreateStaffDTO): Promise<StaffDTO> {
+  async addStaff(userInfo: CreateUserDTO, isAdmin: boolean): Promise<StaffDTO>{
     try {
-      const newStaff = await Prisma.staff.create({
-        data: { ...staff },
+      const firebaseUser = await firebaseAdmin.auth().createUser({
+        email: userInfo.email,
+        password: userInfo.password,
       });
-      return newStaff;
+
+      try {
+        const newStaff = await Prisma.staff.create({
+          data: { 
+            isAdmin: isAdmin,
+            user: {
+              create: {
+                authId: firebaseUser.uid,
+                ...userInfo
+              }
+            }
+          },
+          include: { user: true }
+        });
+
+        return {
+          userId: newStaff.userId,
+          isAdmin: newStaff.isAdmin, 
+          type: newStaff.user.type,
+          email: firebaseUser.email ?? "",
+          phoneNumber: newStaff.user.phoneNumber,
+          firstName: newStaff.user.firstName,
+          lastName: newStaff.user.lastName,
+          displayName: newStaff.user.displayName,
+          profilePictureURL: newStaff.user.profilePictureURL,
+          isActive: newStaff.user.isActive
+        };
+      } catch (postgresError) {
+        try {
+          await firebaseAdmin.auth().deleteUser(firebaseUser.uid);
+        } catch (firebaseError: unknown) {
+          const errorMessage = [
+            "Failed to rollback Firebase user creation after Postgres user creation failure. Reason =",
+            getErrorMessage(firebaseError),
+            "Orphaned authId (Firebase uid) =",
+            firebaseUser.uid,
+          ];
+          Logger.error(errorMessage.join(" "));
+        }
+
+        throw postgresError;
+      }
+      
     } catch (error) {
       Logger.error(`Failed to create staff because ${getErrorMessage(error)}`);
       throw error;
     }
   }
 
-  async updateStaff(id: number, staffInfo: UpdateStaffDTO): Promise<StaffDTO> {
+  async getStaffAuthId(staffId: number): Promise<string> {
+    try {
+      const user = await Prisma.user.findUnique( {
+        where: {staffId},
+      } );
+      
+      if (!user) {
+        throw new Error(`staff ${staffId} not found.`);
+      }
+      return user.authId;
+    } catch (error: unknown) {
+      Logger.error(`Failed to get authId. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+  }
+
+  async updateStaff(staffId: number, userInfo: UpdateUserDTO, isAdmin: boolean): Promise<StaffDTO> {
     try {
       const updatedStaff = await Prisma.staff.update({
-        where: { id },
-        data: staffInfo,
+        where: { userId: staffId },
+        data: {
+          isAdmin: isAdmin,
+          ...userInfo,
+        },
+        include: { user: true }
       });
-      return updatedStaff;
+      
+      const authId = await this.getStaffAuthId(staffId);
+      const [oldStaff] = await this.getStaffByIds([staffId]);
+
+      try {
+        await firebaseAdmin.auth().updateUser(authId, {email: userInfo.email});
+      } catch (error) { 
+        try {
+          await Prisma.staff.update({
+            where: {userId: staffId},
+            data: {
+              ...oldStaff
+            }
+          });
+        } catch (postgresError: unknown) {
+          const errorMessage = [
+            "Failed to rollback Postgres user update after Firebase user update failure. Reason =",
+            getErrorMessage(postgresError),
+            "Postgres user id with possibly inconsistent data =",
+            staffId,
+          ];
+          Logger.error(errorMessage.join(" "));
+        }
+      }
+
+      return {
+        userId: updatedStaff.userId,
+        isAdmin: updatedStaff.isAdmin, 
+        type: updatedStaff.user.type,
+        email: updatedStaff.user.email,
+        phoneNumber: updatedStaff.user.phoneNumber,
+        firstName: updatedStaff.user.firstName,
+        lastName: updatedStaff.user.lastName,
+        displayName: updatedStaff.user.displayName,
+        profilePictureURL: updatedStaff.user.profilePictureURL,
+        isActive: updatedStaff.user.isActive
+      };
     } catch (error) {
       Logger.error(
-        `Failed to update staff #${id} because ${getErrorMessage(error)}`,
+        `Failed to update staff #${staffId} because ${getErrorMessage(error)}`,
       );
       throw error;
     }
   }
 
-  async deleteStaff(id: number): Promise<StaffDTO> {
+  async deleteStaff(staffId: number): Promise<StaffDTO> {
     try {
       const deletedStaff = await Prisma.staff.delete({
-        where: { id },
+        where: { userId: staffId }
       });
-      return deletedStaff;
+
+      const deletedUser = await Prisma.user.delete({
+        where: { id: staffId },
+      })
+
+      const [authId] = await this.getStaffAuthId(staffId);
+      try {
+        await firebaseAdmin.auth().deleteUser(authId);
+      } catch (error) {
+        try {
+          await Prisma.staff.create({
+            data: {
+              isAdmin: deletedStaff.isAdmin,
+              user: {
+                create: {
+                  ...deletedUser
+                }
+              }
+            }
+          });
+        } catch (postgresError: unknown) {
+          const errorMessage = [
+            "Failed to rollback Postgres user deletion after Firebase user deletion failure. Reason =",
+            getErrorMessage(postgresError),
+            "Firebase uid with non-existent Postgres record =",
+            authId,
+          ];
+          Logger.error(errorMessage.join(" "));
+        }
+      }
+      
+      return {
+        userId: deletedStaff.userId,
+        isAdmin: deletedStaff.isAdmin, 
+        type: deletedUser.type,
+        email: deletedUser.email,
+        phoneNumber: deletedUser.phoneNumber,
+        firstName: deletedUser.firstName,
+        lastName: deletedUser.lastName,
+        displayName: deletedUser.displayName,
+        profilePictureURL: deletedUser.profilePictureURL,
+        isActive: deletedUser.isActive
+      };
     } catch (error) {
       Logger.error(
-        `Failed to delete staff #${id} because ${getErrorMessage(error)}`,
+        `Failed to delete staff #${staffId} because ${getErrorMessage(error)}`,
       );
       throw error;
     }
@@ -55,26 +196,54 @@ class StaffService implements IStaffService {
 
   async getAllStaff(): Promise<Array<StaffDTO>> {
     try {
-      const allStaff = await Prisma.staff.findMany();
-      return allStaff;
+      const allStaff = await Prisma.staff.findMany({
+        include: { user: true }
+      });
+      
+      return allStaff.map((staff) => {
+        return {
+          userId: staff.userId,
+          isAdmin: staff.isAdmin, 
+          type: staff.user.type,
+          email: staff.user.email,
+          phoneNumber: staff.user.phoneNumber,
+          firstName: staff.user.firstName,
+          lastName: staff.user.lastName,
+          displayName: staff.user.displayName,
+          profilePictureURL: staff.user.profilePictureURL,
+          isActive: staff.user.isActive
+        }
+      });
     } catch (error: unknown) {
       Logger.error(`Failed to get all Staff because ${getErrorMessage(error)}`);
       throw error;
     }
   }
 
-  async getStaffById(id: number[]): Promise<Array<StaffDTO>> {
+  async getStaffByIds(staffIds: number[]): Promise<Array<StaffDTO>> {
     try {
       const getStaffById = await Prisma.staff.findMany({
-        where: { id: { in: id } },
-        include: {
-          notifications: true,
-        },
+        where: { userId: { in: staffIds } },
+        include: { user: true }
       });
-      return getStaffById;
+
+      return getStaffById.map((staff) => {
+        return {
+          userId: staff.userId,
+          isAdmin: staff.isAdmin, 
+          type: staff.user.type,
+          email: staff.user.email,
+          phoneNumber: staff.user.phoneNumber,
+          firstName: staff.user.firstName,
+          lastName: staff.user.lastName,
+          displayName: staff.user.displayName,
+          profilePictureURL: staff.user.profilePictureURL,
+          isActive: staff.user.isActive
+        }
+      });
     } catch (error: unknown) {
       Logger.error(
-        `Failed to get staff by IDs. IDs = ${id} because ${getErrorMessage(
+        `Failed to get staff by IDs. IDs = ${staffIds} because ${getErrorMessage(
           error,
         )}`,
       );

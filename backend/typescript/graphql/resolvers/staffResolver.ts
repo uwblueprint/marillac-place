@@ -2,19 +2,21 @@ import StaffService from "../../services/implementations/staffService";
 import type {
   IStaffService,
   StaffDTO,
-  CreateStaffDTO,
-  UpdateStaffDTO,
 } from "../../services/interfaces/staffService";
+import type {
+  UpdateUserDTO,
+  CreateUserDTO,
+} from "../../services/interfaces/userService";
 
 const staffService: IStaffService = new StaffService();
 
 const staffResolvers = {
   Query: {
-    getStaffById: async (
+    getStaffByIds: async (
       _parent: undefined,
-      { id }: { id: string[] },
+      { staffIds }: { staffIds: string[] },
     ): Promise<Array<StaffDTO>> => {
-      return staffService.getStaffById(id.map(Number));
+      return staffService.getStaffByIds(staffIds.map(Number));
     },
     getAllStaff: async (): Promise<Array<StaffDTO>> => {
       return staffService.getAllStaff();
@@ -23,23 +25,23 @@ const staffResolvers = {
   Mutation: {
     addStaff: async (
       _parent: undefined,
-      { staff }: { staff: CreateStaffDTO },
+      { userInfo, isAdmin }: { userInfo: CreateUserDTO, isAdmin: boolean},
     ): Promise<StaffDTO> => {
-      const newStaff = await staffService.addStaff(staff);
+      const newStaff = await staffService.addStaff(userInfo, isAdmin);
       return newStaff;
     },
     updateStaff: async (
       _parent: undefined,
-      { id, staff }: { id: string; staff: UpdateStaffDTO },
+      { staffId, staff, isAdmin }: { staffId: string; staff: UpdateUserDTO, isAdmin: boolean | undefined },
     ): Promise<StaffDTO> => {
-      const newStaff = await staffService.updateStaff(parseInt(id, 10), staff);
+      const newStaff = await staffService.updateStaff(parseInt(staffId, 10), staff, isAdmin);
       return newStaff;
     },
     deleteStaff: async (
       _parent: undefined,
-      { id }: { id: string },
+      { staffId }: { staffId: string },
     ): Promise<StaffDTO> => {
-      const deletedStaff = await staffService.deleteStaff(parseInt(id, 10));
+      const deletedStaff = await staffService.deleteStaff(parseInt(staffId, 10));
       return deletedStaff;
     },
   },
