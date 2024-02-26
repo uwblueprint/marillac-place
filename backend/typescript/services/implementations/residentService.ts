@@ -3,14 +3,14 @@ import * as firebaseAdmin from "firebase-admin";
 import {
   IResidentService,
   ResidentDTO,
-  CreateResidentDTO,
-  UpdateResidentDTO,
+  // CreateResidentDTO,
+  // UpdateResidentDTO,
   RedeemCreditsResponse,
 } from "../interfaces/residentService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import {
-  UserDTO,
+  // UserDTO,
   CreateUserDTO,
   UpdateUserDTO,
 } from "../interfaces/userService";

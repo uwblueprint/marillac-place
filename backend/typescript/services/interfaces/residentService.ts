@@ -1,5 +1,5 @@
-import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
-import { NotificationResidentDTO } from "./adminService";
+import { CreateUserDTO, UpdateUserDTO } from "./userService";
+// import { NotificationResidentDTO } from "./adminService";
 
 export interface ResidentDTO {
   userId: number;

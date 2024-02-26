@@ -38,7 +38,11 @@ const staffType = gql`
   }
 
   extend type Mutation {
-    updateStaff(staffId: ID!, userInfo: UpdateUserDTO!, isAdmin: Boolean!): StaffDTO!
+    updateStaff(
+      staffId: ID!
+      userInfo: UpdateUserDTO!
+      isAdmin: Boolean!
+    ): StaffDTO!
     addStaff(userInfo: CreateUserDTO!, isAdmin: Boolean!): StaffDTO!
     deleteStaff(staffId: ID!): StaffDTO!
   }

@@ -1,10 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import * as firebaseAdmin from "firebase-admin";
-import type {
-  IStaffService,
-  StaffDTO
-} from "../interfaces/staffService";
-import { UserDTO, CreateUserDTO, UpdateUserDTO } from "../interfaces/userService";
+import type { IStaffService, StaffDTO } from "../interfaces/staffService";
+import {
+  // UserDTO,
+  CreateUserDTO,
+  UpdateUserDTO,
+} from "../interfaces/userService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
@@ -12,7 +13,7 @@ const Prisma = new PrismaClient();
 const Logger = logger(__filename);
 
 class StaffService implements IStaffService {
-  async addStaff(userInfo: CreateUserDTO, isAdmin: boolean): Promise<StaffDTO>{
+  async addStaff(userInfo: CreateUserDTO, isAdmin: boolean): Promise<StaffDTO> {
     try {
       const firebaseUser = await firebaseAdmin.auth().createUser({
         email: userInfo.email,
@@ -21,21 +22,21 @@ class StaffService implements IStaffService {
 
       try {
         const newStaff = await Prisma.staff.create({
-          data: { 
-            isAdmin: isAdmin,
+          data: {
+            isAdmin,
             user: {
               create: {
                 authId: firebaseUser.uid,
-                ...userInfo
-              }
-            }
+                ...userInfo,
+              },
+            },
           },
-          include: { user: true }
+          include: { user: true },
         });
 
         return {
           userId: newStaff.userId,
-          isAdmin: newStaff.isAdmin, 
+          isAdmin: newStaff.isAdmin,
           type: newStaff.user.type,
           email: firebaseUser.email ?? "",
           phoneNumber: newStaff.user.phoneNumber,
@@ -43,7 +44,7 @@ class StaffService implements IStaffService {
           lastName: newStaff.user.lastName,
           displayName: newStaff.user.displayName,
           profilePictureURL: newStaff.user.profilePictureURL,
-          isActive: newStaff.user.isActive
+          isActive: newStaff.user.isActive,
         };
       } catch (postgresError) {
         try {
@@ -60,7 +61,6 @@ class StaffService implements IStaffService {
 
         throw postgresError;
       }
-      
     } catch (error) {
       Logger.error(`Failed to create staff because ${getErrorMessage(error)}`);
       throw error;
@@ -69,10 +69,10 @@ class StaffService implements IStaffService {
 
   async getStaffAuthId(staffId: number): Promise<string> {
     try {
-      const user = await Prisma.user.findUnique( {
-        where: {staffId},
-      } );
-      
+      const user = await Prisma.user.findUnique({
+        where: { staffId },
+      });
+
       if (!user) {
         throw new Error(`staff ${staffId} not found.`);
       }
@@ -83,29 +83,35 @@ class StaffService implements IStaffService {
     }
   }
 
-  async updateStaff(staffId: number, userInfo: UpdateUserDTO, isAdmin: boolean): Promise<StaffDTO> {
+  async updateStaff(
+    staffId: number,
+    userInfo: UpdateUserDTO,
+    isAdmin: boolean,
+  ): Promise<StaffDTO> {
     try {
       const updatedStaff = await Prisma.staff.update({
         where: { userId: staffId },
         data: {
-          isAdmin: isAdmin,
+          isAdmin,
           ...userInfo,
         },
-        include: { user: true }
+        include: { user: true },
       });
-      
+
       const authId = await this.getStaffAuthId(staffId);
       const [oldStaff] = await this.getStaffByIds([staffId]);
 
       try {
-        await firebaseAdmin.auth().updateUser(authId, {email: userInfo.email});
-      } catch (error) { 
+        await firebaseAdmin
+          .auth()
+          .updateUser(authId, { email: userInfo.email });
+      } catch (error) {
         try {
           await Prisma.staff.update({
-            where: {userId: staffId},
+            where: { userId: staffId },
             data: {
-              ...oldStaff
-            }
+              ...oldStaff,
+            },
           });
         } catch (postgresError: unknown) {
           const errorMessage = [
@@ -120,7 +126,7 @@ class StaffService implements IStaffService {
 
       return {
         userId: updatedStaff.userId,
-        isAdmin: updatedStaff.isAdmin, 
+        isAdmin: updatedStaff.isAdmin,
         type: updatedStaff.user.type,
         email: updatedStaff.user.email,
         phoneNumber: updatedStaff.user.phoneNumber,
@@ -128,7 +134,7 @@ class StaffService implements IStaffService {
         lastName: updatedStaff.user.lastName,
         displayName: updatedStaff.user.displayName,
         profilePictureURL: updatedStaff.user.profilePictureURL,
-        isActive: updatedStaff.user.isActive
+        isActive: updatedStaff.user.isActive,
       };
     } catch (error) {
       Logger.error(
@@ -141,12 +147,12 @@ class StaffService implements IStaffService {
   async deleteStaff(staffId: number): Promise<StaffDTO> {
     try {
       const deletedStaff = await Prisma.staff.delete({
-        where: { userId: staffId }
+        where: { userId: staffId },
       });
 
       const deletedUser = await Prisma.user.delete({
         where: { id: staffId },
-      })
+      });
 
       const [authId] = await this.getStaffAuthId(staffId);
       try {
@@ -158,10 +164,10 @@ class StaffService implements IStaffService {
               isAdmin: deletedStaff.isAdmin,
               user: {
                 create: {
-                  ...deletedUser
-                }
-              }
-            }
+                  ...deletedUser,
+                },
+              },
+            },
           });
         } catch (postgresError: unknown) {
           const errorMessage = [
@@ -173,10 +179,10 @@ class StaffService implements IStaffService {
           Logger.error(errorMessage.join(" "));
         }
       }
-      
+
       return {
         userId: deletedStaff.userId,
-        isAdmin: deletedStaff.isAdmin, 
+        isAdmin: deletedStaff.isAdmin,
         type: deletedUser.type,
         email: deletedUser.email,
         phoneNumber: deletedUser.phoneNumber,
@@ -184,7 +190,7 @@ class StaffService implements IStaffService {
         lastName: deletedUser.lastName,
         displayName: deletedUser.displayName,
         profilePictureURL: deletedUser.profilePictureURL,
-        isActive: deletedUser.isActive
+        isActive: deletedUser.isActive,
       };
     } catch (error) {
       Logger.error(
@@ -197,13 +203,13 @@ class StaffService implements IStaffService {
   async getAllStaff(): Promise<Array<StaffDTO>> {
     try {
       const allStaff = await Prisma.staff.findMany({
-        include: { user: true }
+        include: { user: true },
       });
-      
+
       return allStaff.map((staff) => {
         return {
           userId: staff.userId,
-          isAdmin: staff.isAdmin, 
+          isAdmin: staff.isAdmin,
           type: staff.user.type,
           email: staff.user.email,
           phoneNumber: staff.user.phoneNumber,
@@ -211,8 +217,8 @@ class StaffService implements IStaffService {
           lastName: staff.user.lastName,
           displayName: staff.user.displayName,
           profilePictureURL: staff.user.profilePictureURL,
-          isActive: staff.user.isActive
-        }
+          isActive: staff.user.isActive,
+        };
       });
     } catch (error: unknown) {
       Logger.error(`Failed to get all Staff because ${getErrorMessage(error)}`);
@@ -224,13 +230,13 @@ class StaffService implements IStaffService {
     try {
       const getStaffById = await Prisma.staff.findMany({
         where: { userId: { in: staffIds } },
-        include: { user: true }
+        include: { user: true },
       });
 
       return getStaffById.map((staff) => {
         return {
           userId: staff.userId,
-          isAdmin: staff.isAdmin, 
+          isAdmin: staff.isAdmin,
           type: staff.user.type,
           email: staff.user.email,
           phoneNumber: staff.user.phoneNumber,
@@ -238,8 +244,8 @@ class StaffService implements IStaffService {
           lastName: staff.user.lastName,
           displayName: staff.user.displayName,
           profilePictureURL: staff.user.profilePictureURL,
-          isActive: staff.user.isActive
-        }
+          isActive: staff.user.isActive,
+        };
       });
     } catch (error: unknown) {
       Logger.error(

@@ -25,23 +25,37 @@ const staffResolvers = {
   Mutation: {
     addStaff: async (
       _parent: undefined,
-      { userInfo, isAdmin }: { userInfo: CreateUserDTO, isAdmin: boolean},
+      { userInfo, isAdmin }: { userInfo: CreateUserDTO; isAdmin: boolean },
     ): Promise<StaffDTO> => {
       const newStaff = await staffService.addStaff(userInfo, isAdmin);
       return newStaff;
     },
     updateStaff: async (
       _parent: undefined,
-      { staffId, staff, isAdmin }: { staffId: string; staff: UpdateUserDTO, isAdmin: boolean | undefined },
+      {
+        staffId,
+        staff,
+        isAdmin,
+      }: {
+        staffId: string;
+        staff: UpdateUserDTO;
+        isAdmin: boolean | undefined;
+      },
     ): Promise<StaffDTO> => {
-      const newStaff = await staffService.updateStaff(parseInt(staffId, 10), staff, isAdmin);
+      const newStaff = await staffService.updateStaff(
+        parseInt(staffId, 10),
+        staff,
+        isAdmin,
+      );
       return newStaff;
     },
     deleteStaff: async (
       _parent: undefined,
       { staffId }: { staffId: string },
     ): Promise<StaffDTO> => {
-      const deletedStaff = await staffService.deleteStaff(parseInt(staffId, 10));
+      const deletedStaff = await staffService.deleteStaff(
+        parseInt(staffId, 10),
+      );
       return deletedStaff;
     },
   },

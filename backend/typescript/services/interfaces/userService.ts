@@ -1,4 +1,4 @@
-import { NotificationResidentDTO, NotificationDTO } from "./adminService";
+// import { NotificationResidentDTO, NotificationDTO } from "./adminService";
 
 export type UserTypes = "STAFF" | "RESIDENT";
 
