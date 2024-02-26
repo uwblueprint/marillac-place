@@ -1,4 +1,3 @@
-
 import { NotificationResidentDTO, NotificationDTO } from "./adminService";
 
 export type UserTypes = "STAFF" | "RESIDENT";
@@ -18,7 +17,7 @@ export interface UserDTO {
 }
 
 export interface CreateUserDTO {
-  id: number; 
+  id: number;
   type: UserTypes;
   email: string;
   password: string;
@@ -42,7 +41,6 @@ export interface UpdateUserDTO {
 }
 
 export interface IUserService {
-
   /**
    * Create a user, email verification configurable
    * @param user the user to be created

@@ -1,9 +1,10 @@
+import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
 import { NotificationResidentDTO } from "./adminService";
 
 export interface ResidentDTO {
   userId: number;
   residentId: number;
-  birthDate?: Date | null;
+  birthDate: Date;
   roomNumber: number;
   credits: number;
   dateJoined: Date;
@@ -13,7 +14,7 @@ export interface ResidentDTO {
 
 export interface CreateResidentDTO {
   residentId: number;
-  birthDate?: Date | null;
+  birthDate: Date;
   roomNumber: number;
   credits: number;
   dateJoined: Date;
@@ -23,7 +24,7 @@ export interface CreateResidentDTO {
 
 export interface UpdateResidentDTO {
   residentId: number;
-  birthDate?: Date | null;
+  birthDate: Date;
   roomNumber: number;
   credits: number;
   dateJoined: Date;
@@ -41,11 +42,16 @@ export enum RedeemCreditsResponse {
 export interface IResidentService {
   /**
    * Adds a resident
-   * @param residentInfo: a CreateResidentDTO with the new resident's information
+   * @param userInfo: a CreateResidentDTO with the new resident's information
    * @returns a ResidentDTO with created resident info
    * @throws Error if resident reation fails
    */
-  addResident(residentInfo: CreateResidentDTO): Promise<ResidentDTO>;
+  addResident(
+    userInfo: CreateUserDTO,
+    residentId: number,
+    birthDate: string,
+    roomNumber: number,
+  ): Promise<ResidentDTO>;
 
   /**
    * Update a resident's details
@@ -54,8 +60,10 @@ export interface IResidentService {
    * @returns: a ResidentDTO with resident's updated info
    */
   updateResident(
+    userInfo: UpdateUserDTO,
     residentId: number,
-    residentInfo: UpdateResidentDTO,
+    birthDate: string,
+    roomNumber: number,
   ): Promise<ResidentDTO>;
 
   /**
