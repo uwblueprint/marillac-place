@@ -7,9 +7,9 @@ import {
 } from "graphql-scalars";
 
 import {
-  isAuthorizedByEmail,
-  isAuthorizedByRole,
-  isAuthorizedByUserId,
+  // isAuthorizedByEmail,
+  // isAuthorizedByRole,
+  // isAuthorizedByUserId,
 } from "../middlewares/auth";
 import authResolvers from "./resolvers/authResolvers";
 import authType from "./types/authType";
@@ -71,33 +71,33 @@ const executableSchema = makeExecutableSchema({
   ),
 });
 
-const authorizedByAllRoles = () =>
-  isAuthorizedByRole(new Set(["User", "Admin"]));
-const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
+// const authorizedByAllRoles = () =>
+//   isAuthorizedByRole(new Set(["User", "Admin"]));
+// const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
 
 const graphQLMiddlewares = {
   Query: {
-    entity: authorizedByAllRoles(),
-    entities: authorizedByAllRoles(),
-    simpleEntity: authorizedByAllRoles(),
-    simpleEntities: authorizedByAllRoles(),
-    userById: authorizedByAdmin(),
-    userByEmail: authorizedByAdmin(),
-    users: authorizedByAdmin(),
+    // entity: authorizedByAllRoles(),
+    // entities: authorizedByAllRoles(),
+    // simpleEntity: authorizedByAllRoles(),
+    // simpleEntities: authorizedByAllRoles(),
+    // userById: authorizedByAdmin(),
+    // userByEmail: authorizedByAdmin(),
+    // users: authorizedByAdmin(),
   },
   Mutation: {
-    createEntity: authorizedByAllRoles(),
-    updateEntity: authorizedByAllRoles(),
-    deleteEntity: authorizedByAllRoles(),
-    createSimpleEntity: authorizedByAllRoles(),
-    updateSimpleEntity: authorizedByAllRoles(),
-    deleteSimpleEntity: authorizedByAllRoles(),
-    createUser: authorizedByAdmin(),
-    updateUser: authorizedByAdmin(),
-    deleteUserById: authorizedByAdmin(),
-    deleteUserByEmail: authorizedByAdmin(),
-    logout: isAuthorizedByUserId("userId"),
-    resetPassword: isAuthorizedByEmail("email"),
+    // createEntity: authorizedByAllRoles(),
+    // updateEntity: authorizedByAllRoles(),
+    // deleteEntity: authorizedByAllRoles(),
+    // createSimpleEntity: authorizedByAllRoles(),
+    // updateSimpleEntity: authorizedByAllRoles(),
+    // deleteSimpleEntity: authorizedByAllRoles(),
+    // createUser: authorizedByAdmin(),
+    // updateUser: authorizedByAdmin(),
+    // deleteUserById: authorizedByAdmin(),
+    // deleteUserByEmail: authorizedByAdmin(),
+    // logout: isAuthorizedByUserId("userId"),
+    // resetPassword: isAuthorizedByEmail("email"),
   },
 };
 
