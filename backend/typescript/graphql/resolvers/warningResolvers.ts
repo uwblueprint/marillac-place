@@ -12,7 +12,7 @@ const warningResolvers = {
     addWarning: async (
       _parent: undefined,
       { warning }: { warning: CreateWarningDTO },
-    ): Promise<WarningDTO> => {
+    ): Promise<WarningDTO> => {      
       const newWarning = await warningService.addWarning(warning);
       return newWarning;
     },
@@ -20,7 +20,7 @@ const warningResolvers = {
       _parent: undefined,
       { id }: { id: number },
     ): Promise<WarningDTO> => {
-      const deletedWarning = await warningService.deleteWarning(Number(id));
+      const deletedWarning = await warningService.deleteWarning(id);
       return deletedWarning;
     },
   },

@@ -2,27 +2,27 @@ import { gql } from "apollo-server-express";
 
 const warningType = gql`
   type WarningDTO {
-    id: ID!
+    id: Int!
     title: String!
     description: String!
     dateIssued: DateTime
-    assigneeId: ID!
-    assignerId: ID
-    relatedTaskId: ID
+    assigneeId: Int!
+    assignerId: Int
+    relatedTaskId: Int
   }
 
   input CreateWarningDTO {
     title: String!
     description: String!
     dateIssued: DateTime
-    assigneeId: ID!
-    assignerId: ID
-    relatedTaskId: ID
+    assigneeId: Int!
+    assignerId: Int
+    relatedTaskId: Int
   }
 
   extend type Mutation {
     addWarning(warning: CreateWarningDTO!): WarningDTO!
-    deleteWarning(id: ID!): WarningDTO!
+    deleteWarning(id: Int!): WarningDTO!
   }
 `;
 

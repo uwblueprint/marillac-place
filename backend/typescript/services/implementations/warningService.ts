@@ -14,45 +14,6 @@ const Logger = logger(__filename);
 class WarningService implements IWarningService {
   async addWarning(warning: CreateWarningDTO): Promise<WarningDTO> {
     try {
-      // let relatedTask = {};
-      // if (
-      //   warning.relatedTaskId !== undefined &&
-      //   warning.relatedTaskId !== null
-      // ) {
-      //   relatedTask = {
-      //     connect: {
-      //       id:
-      //         warning.relatedTaskId === undefined
-      //           ? undefined
-      //           : Number(warning.relatedTaskId),
-      //     },
-      //   };
-      // }
-
-      // const newWarning = await Prisma.warning.create({
-      //   data: {
-      //     title: warning.title,
-      //     description: warning.description,
-      //     dateIssued:
-      //       warning.dateIssued == null ? undefined : warning.dateIssued,
-      //     assignee: {
-      //         id: Number(warning.assigneeId),          
-      //     },
-      //     assigner: {
-      //       connect: {
-      //         id: Number(warning.assignerId),
-      //       },
-      //     },
-      //     // relatedTask.id,
-      //   },
-      //   include: {
-      //     resident: true,
-      //     assigner: true,
-      //     // relatedTask: true,
-      //   },
-      // });
-      // return newWarning;
-
       const newWarning = await Prisma.warning.create({
         data: { ...warning, },
         include: {
