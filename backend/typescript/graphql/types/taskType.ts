@@ -44,6 +44,7 @@ const taskType = gql`
     endDate: Date
     comments: String
     recurrenceFrequency: Recurrence_Frequency
+    warnings: [WarningDTO!]
   }
 
   extend type Query {

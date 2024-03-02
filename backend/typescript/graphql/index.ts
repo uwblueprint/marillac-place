@@ -7,9 +7,9 @@ import {
 } from "graphql-scalars";
 
 import {
-  isAuthorizedByEmail,
-  isAuthorizedByRole,
-  isAuthorizedByUserId,
+  // isAuthorizedByEmail,
+  // isAuthorizedByRole,
+  // isAuthorizedByUserId,
 } from "../middlewares/auth";
 import authResolvers from "./resolvers/authResolvers";
 import authType from "./types/authType";
@@ -27,6 +27,8 @@ import residentResolvers from "./resolvers/residentResolvers";
 import residentType from "./types/residentType";
 import taskResolvers from "./resolvers/taskResolvers";
 import taskType from "./types/taskType";
+import warningType from "./types/warningTypes";
+import warningResolvers from "./resolvers/warningResolvers";
 
 const query = gql`
   type Query {
@@ -53,6 +55,7 @@ const executableSchema = makeExecutableSchema({
     taskType,
     staffType,
     adminType,
+    warningType,
   ],
   resolvers: merge(
     scalarResolvers,
@@ -64,36 +67,37 @@ const executableSchema = makeExecutableSchema({
     taskResolvers,
     staffResolver,
     adminResolvers,
+    warningResolvers,
   ),
 });
 
-const authorizedByAllRoles = () =>
-  isAuthorizedByRole(new Set(["User", "Admin"]));
-const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
+// const authorizedByAllRoles = () =>
+//   isAuthorizedByRole(new Set(["User", "Admin"]));
+// const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
 
 const graphQLMiddlewares = {
   Query: {
-    entity: authorizedByAllRoles(),
-    entities: authorizedByAllRoles(),
-    simpleEntity: authorizedByAllRoles(),
-    simpleEntities: authorizedByAllRoles(),
-    userById: authorizedByAdmin(),
-    userByEmail: authorizedByAdmin(),
-    users: authorizedByAdmin(),
+    // entity: authorizedByAllRoles(),
+    // entities: authorizedByAllRoles(),
+    // simpleEntity: authorizedByAllRoles(),
+    // simpleEntities: authorizedByAllRoles(),
+    // userById: authorizedByAdmin(),
+    // userByEmail: authorizedByAdmin(),
+    // users: authorizedByAdmin(),
   },
   Mutation: {
-    createEntity: authorizedByAllRoles(),
-    updateEntity: authorizedByAllRoles(),
-    deleteEntity: authorizedByAllRoles(),
-    createSimpleEntity: authorizedByAllRoles(),
-    updateSimpleEntity: authorizedByAllRoles(),
-    deleteSimpleEntity: authorizedByAllRoles(),
-    createUser: authorizedByAdmin(),
-    updateUser: authorizedByAdmin(),
-    deleteUserById: authorizedByAdmin(),
-    deleteUserByEmail: authorizedByAdmin(),
-    logout: isAuthorizedByUserId("userId"),
-    resetPassword: isAuthorizedByEmail("email"),
+    // createEntity: authorizedByAllRoles(),
+    // updateEntity: authorizedByAllRoles(),
+    // deleteEntity: authorizedByAllRoles(),
+    // createSimpleEntity: authorizedByAllRoles(),
+    // updateSimpleEntity: authorizedByAllRoles(),
+    // deleteSimpleEntity: authorizedByAllRoles(),
+    // createUser: authorizedByAdmin(),
+    // updateUser: authorizedByAdmin(),
+    // deleteUserById: authorizedByAdmin(),
+    // deleteUserByEmail: authorizedByAdmin(),
+    // logout: isAuthorizedByUserId("userId"),
+    // resetPassword: isAuthorizedByEmail("email"),
   },
 };
 

@@ -35,9 +35,9 @@ export interface UpdateStaffDTO {
 }
 
 export interface IStaffService {
-  addStaff(reidentInfo: CreateStaffDTO): Promise<StaffDTO>;
-  updateStaff(staffId: number, staffInfo: UpdateStaffDTO): Promise<StaffDTO>;
-  deleteStaff(residentId: number): Promise<StaffDTO>;
-  getAllStaff(): Promise<Array<StaffDTO>>;
-  getStaffById(staffId: number[]): Promise<Array<StaffDTO>>;
+  // addStaff(reidentInfo: CreateStaffDTO): Promise<StaffDTO>;
+  // updateStaff(staffId: number, staffInfo: UpdateStaffDTO): Promise<StaffDTO>;
+  // deleteStaff(residentId: number): Promise<StaffDTO>;
+  // getAllStaff(): Promise<Array<StaffDTO>>;
+  // getStaffById(staffId: number[]): Promise<Array<StaffDTO>>;
 }
