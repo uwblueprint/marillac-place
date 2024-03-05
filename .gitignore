@@ -10,3 +10,4 @@
 **/*.cache
 **/*.egg-info
 **/prisma/migrations
+**/.eslintcache
