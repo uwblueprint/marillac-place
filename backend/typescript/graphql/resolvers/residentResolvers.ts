@@ -2,10 +2,12 @@ import ResidentService from "../../services/implementations/residentService";
 import type {
   IResidentService,
   ResidentDTO,
-  CreateResidentDTO,
-  UpdateResidentDTO,
   RedeemCreditsResponse,
 } from "../../services/interfaces/residentService";
+import type {
+  UpdateUserDTO,
+  CreateUserDTO,
+} from "../../services/interfaces/userService";
 
 const residentService: IResidentService = new ResidentService();
 // const authService: IAuthService = new AuthService(userService, emailService);
@@ -29,18 +31,45 @@ const residentResolvers = {
   Mutation: {
     addResident: async (
       _parent: undefined,
-      { resident }: { resident: CreateResidentDTO },
+      {
+        userInfo,
+        residentId,
+        birthDate,
+        roomNumber,
+      }: {
+        userInfo: CreateUserDTO;
+        residentId: number;
+        birthDate: string;
+        roomNumber: number;
+      },
     ): Promise<ResidentDTO> => {
-      const newResident = await residentService.addResident(resident);
+      const newResident = await residentService.addResident(
+        userInfo,
+        residentId,
+        birthDate,
+        roomNumber,
+      );
       return newResident;
     },
     updateResident: async (
       _parent: undefined,
-      { id, resident }: { id: string; resident: UpdateResidentDTO },
+      {
+        userInfo,
+        residentId,
+        birthDate,
+        roomNumber,
+      }: {
+        userInfo: UpdateUserDTO;
+        residentId: number;
+        birthDate: string;
+        roomNumber: number;
+      },
     ): Promise<ResidentDTO> => {
       const newResident = await residentService.updateResident(
-        parseInt(id, 10),
-        resident,
+        userInfo,
+        residentId,
+        birthDate,
+        roomNumber,
       );
       return newResident;
     },
