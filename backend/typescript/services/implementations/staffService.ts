@@ -13,7 +13,10 @@ const Prisma = new PrismaClient();
 const Logger = logger(__filename);
 
 class StaffService implements IStaffService {
-  async addStaff(userInfo: CreateUserDTO, isAdmin: boolean): Promise<StaffDTO> {
+  async addStaff(
+    userInfo: CreateUserDTO,
+    isAdmin: boolean = false,
+  ): Promise<StaffDTO> {
     try {
       const firebaseUser = await firebaseAdmin.auth().createUser({
         email: userInfo.email,
@@ -27,7 +30,14 @@ class StaffService implements IStaffService {
             user: {
               create: {
                 authId: firebaseUser.uid,
-                ...userInfo,
+                id: userInfo.id ? Number(userInfo.id) : undefined,
+                type: "STAFF",
+                email: userInfo.email,
+                phoneNumber: userInfo.phoneNumber,
+                firstName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                displayName: userInfo.displayName,
+                profilePictureURL: userInfo.profilePictureURL,
               },
             },
           },
@@ -67,50 +77,65 @@ class StaffService implements IStaffService {
     }
   }
 
-  async getStaffAuthId(staffId: number): Promise<string> {
-    try {
-      const user = await Prisma.user.findUnique({
-        where: { staffId },
-      });
-
-      if (!user) {
-        throw new Error(`staff ${staffId} not found.`);
-      }
-      return user.authId;
-    } catch (error: unknown) {
-      Logger.error(`Failed to get authId. Reason = ${getErrorMessage(error)}`);
-      throw error;
-    }
-  }
-
   async updateStaff(
     staffId: number,
     userInfo: UpdateUserDTO,
-    isAdmin: boolean,
+    isAdmin: boolean = false,
   ): Promise<StaffDTO> {
     try {
+      const oldStaff = await Prisma.staff.findUnique({
+        where: { userId: staffId },
+        include: { user: true },
+      });
+
+      if (!oldStaff) {
+        throw new Error(`staff ${staffId} not found.`);
+      }
+
       const updatedStaff = await Prisma.staff.update({
         where: { userId: staffId },
         data: {
           isAdmin,
-          ...userInfo,
+          user: {
+            update: {
+              data: {
+                email: userInfo.email,
+                phoneNumber: userInfo.phoneNumber,
+                firstName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                displayName: userInfo.displayName,
+                profilePictureURL: userInfo.profilePictureURL,
+              },
+            },
+          },
         },
         include: { user: true },
       });
 
-      const authId = await this.getStaffAuthId(staffId);
-      const [oldStaff] = await this.getStaffByIds([staffId]);
+      const { authId } = updatedStaff.user;
 
       try {
-        await firebaseAdmin
-          .auth()
-          .updateUser(authId, { email: userInfo.email });
+        if ("password" in userInfo) {
+          await firebaseAdmin.auth().updateUser(authId, {
+            email: updatedStaff.user.email,
+            password: userInfo.password,
+          });
+        } else {
+          await firebaseAdmin
+            .auth()
+            .updateUser(authId, { email: updatedStaff.user.email });
+        }
       } catch (error) {
         try {
           await Prisma.staff.update({
             where: { userId: staffId },
             data: {
-              ...oldStaff,
+              isAdmin: oldStaff.isAdmin,
+              user: {
+                update: {
+                  data: { ...oldStaff.user },
+                },
+              },
             },
           });
         } catch (postgresError: unknown) {
@@ -122,6 +147,8 @@ class StaffService implements IStaffService {
           ];
           Logger.error(errorMessage.join(" "));
         }
+
+        throw new Error(`failed to update firebase: ${error}`);
       }
 
       return {
@@ -146,17 +173,22 @@ class StaffService implements IStaffService {
 
   async deleteStaff(staffId: number): Promise<StaffDTO> {
     try {
+      const deletedUser = await Prisma.user.findUnique({
+        where: { id: staffId },
+        include: { staff: true },
+      });
+
+      if (!deletedUser) {
+        throw new Error(`staff ${staffId} not found.`);
+      }
+
       const deletedStaff = await Prisma.staff.delete({
         where: { userId: staffId },
+        include: { user: true },
       });
-
-      const deletedUser = await Prisma.user.delete({
-        where: { id: staffId },
-      });
-
-      const [authId] = await this.getStaffAuthId(staffId);
+      
       try {
-        await firebaseAdmin.auth().deleteUser(authId);
+        await firebaseAdmin.auth().deleteUser(deletedUser.authId);
       } catch (error) {
         try {
           await Prisma.staff.create({
@@ -174,7 +206,7 @@ class StaffService implements IStaffService {
             "Failed to rollback Postgres user deletion after Firebase user deletion failure. Reason =",
             getErrorMessage(postgresError),
             "Firebase uid with non-existent Postgres record =",
-            authId,
+            deletedUser.authId,
           ];
           Logger.error(errorMessage.join(" "));
         }

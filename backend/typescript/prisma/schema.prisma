@@ -18,7 +18,6 @@ model User {
   id                Int                @id @default(autoincrement())
   type              UserType
   staff             Staff?
-  staffId           Int?               @unique @map("staff_id")
   resident          Resident?
   residentId        Int?               @unique @map("resident_id")
   authId            String             @unique @map("auth_id")

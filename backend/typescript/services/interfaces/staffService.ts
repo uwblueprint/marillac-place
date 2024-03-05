@@ -28,7 +28,7 @@ export interface IStaffService {
    * @returns a StaffDTO with the created user's information
    * @throws Error if user creation fails
    */
-  addStaff(userInfo: CreateUserDTO, isAdmin: boolean): Promise<StaffDTO>;
+  addStaff(userInfo: CreateUserDTO, isAdmin?: boolean): Promise<StaffDTO>;
 
   /**
    * Update a staff.

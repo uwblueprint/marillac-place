@@ -33,7 +33,7 @@ const staffType = gql`
   #   profilePictureLink: String
   # }
   extend type Query {
-    getStaffById(staffIds: [ID!]): [StaffDTO!]
+    getStaffByIds(staffIds: [ID!]): [StaffDTO!]
     getAllStaff: [StaffDTO!]
   }
 
@@ -41,9 +41,9 @@ const staffType = gql`
     updateStaff(
       staffId: ID!
       userInfo: UpdateUserDTO!
-      isAdmin: Boolean!
+      isAdmin: Boolean
     ): StaffDTO!
-    addStaff(userInfo: CreateUserDTO!, isAdmin: Boolean!): StaffDTO!
+    addStaff(userInfo: CreateUserDTO!, isAdmin: Boolean): StaffDTO!
     deleteStaff(staffId: ID!): StaffDTO!
   }
 `;

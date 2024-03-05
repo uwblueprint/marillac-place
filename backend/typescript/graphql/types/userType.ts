@@ -15,8 +15,7 @@ const userType = gql`
   }
 
   input CreateUserDTO {
-    id: number;
-    type: UserTypes!
+    id: ID
     email: String!
     password: String!
     phoneNumber: String
@@ -27,15 +26,14 @@ const userType = gql`
   }
 
   input UpdateUserDTO {
-    type: UserTypes!
-    email: String!
-    password: String!
+    email: String
+    password: String
     phoneNumber: String
-    firstName: String!
-    lastName: String!
+    firstName: String
+    lastName: String
     displayName: String
     profilePictureLink: String
-    isActive: Boolean!
+    isActive: Boolean
   }
 
   extend type Query {
