@@ -27,6 +27,7 @@ const TestApi = (): React.ReactElement => {
   const { loading, error, data } = useQuery(GET_USERS);
 
   const sendApi = async () => {
+    // eslint-disable-next-line no-console
     console.log(data);
   };
   if (loading) return <h1>Loading</h1>;
