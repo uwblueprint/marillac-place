@@ -64,31 +64,59 @@ const App = (): React.ReactElement => {
                 <Route path={Routes.HOME_PAGE} element={<Default />} />
                 <Route
                   path={Routes.CREATE_ENTITY_PAGE}
-                  element={<CreatePage />}
+                  element={
+                    <PrivateRoute>
+                      <CreatePage />
+                    </PrivateRoute>
+                  }
                 />
                 <Route
                   path={Routes.UPDATE_ENTITY_PAGE}
-                  element={<UpdatePage />}
+                  element={
+                    <PrivateRoute>
+                      <UpdatePage />
+                    </PrivateRoute>
+                  }
                 />
                 <Route
                   path={Routes.DISPLAY_ENTITY_PAGE}
-                  element={<DisplayPage />}
+                  element={
+                    <PrivateRoute>
+                      <DisplayPage />
+                    </PrivateRoute>
+                  }
                 />
                 <Route
                   path={Routes.CREATE_SIMPLE_ENTITY_PAGE}
-                  element={<SimpleEntityCreatePage />}
+                  element={
+                    <PrivateRoute>
+                      <SimpleEntityCreatePage />
+                    </PrivateRoute>
+                  }
                 />
                 <Route
                   path={Routes.UPDATE_SIMPLE_ENTITY_PAGE}
-                  element={<SimpleEntityUpdatePage />}
+                  element={
+                    <PrivateRoute>
+                      <SimpleEntityUpdatePage />
+                    </PrivateRoute>
+                  }
                 />
                 <Route
                   path={Routes.DISPLAY_SIMPLE_ENTITY_PAGE}
-                  element={<SimpleEntityDisplayPage />}
+                  element={
+                    <PrivateRoute>
+                      <SimpleEntityDisplayPage />
+                    </PrivateRoute>
+                  }
                 />
                 <Route
                   path={Routes.EDIT_TEAM_PAGE}
-                  element={<EditTeamInfoPage />}
+                  element={
+                    <PrivateRoute>
+                      <EditTeamInfoPage />
+                    </PrivateRoute>
+                  }
                 />
                 <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
                 <Route path="*" element={<NotFound />} />
