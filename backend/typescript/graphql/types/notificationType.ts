@@ -1,26 +1,29 @@
 import { gql } from "apollo-server-express";
 
-const adminType = gql`
+const notificationType = gql`
   type NotificationDTO {
     id: ID!
-    authorId: ID!
+    authorId: ID
+    title: String!
     message: String!
     createdAt: String!
-    residents: [NotificationResidentDTO!]
+    residents: [NotificationSentDTO!]
   }
 
-  type NotificationResidentDTO {
+  type NotificationSentDTO {
+    id: ID!
     notificationId: ID!
-    residentId: ID!
+    recipientId: ID!
     seen: Boolean!
   }
 
   extend type Query {
+    
     notificationById(id: ID!): NotificationDTO!
-    getAllNotifications: [NotificationDTO!]
   }
 
   extend type Mutation {
+
     sendNotification(
       message: String
       residentId: ID
@@ -30,4 +33,4 @@ const adminType = gql`
   }
 `;
 
-export default adminType;
+export default notificationType;

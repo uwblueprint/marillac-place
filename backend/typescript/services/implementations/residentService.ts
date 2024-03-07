@@ -11,7 +11,7 @@ import { getErrorMessage } from "../../utilities/errorUtils";
 
 const Prisma = new PrismaClient();
 const Logger = logger(__filename);
-
+/*
 class ResidentService implements IResidentService {
   async addResident(resident: CreateResidentDTO): Promise<ResidentDTO> {
     try {
@@ -151,3 +151,4 @@ class ResidentService implements IResidentService {
 }
 
 export default ResidentService;
+*/

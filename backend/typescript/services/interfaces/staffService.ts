@@ -1,4 +1,4 @@
-import { NotificationDTO } from "./adminService";
+import { notificationDTO } from "./notificationService";
 
 export interface StaffDTO {
   id: number;
@@ -9,7 +9,7 @@ export interface StaffDTO {
   phoneNumber: string | null;
   displayName: string | null;
   profilePictureLink: string | null;
-  notifications?: NotificationDTO[];
+  notifications?: notificationDTO[];
 }
 
 export interface CreateStaffDTO {

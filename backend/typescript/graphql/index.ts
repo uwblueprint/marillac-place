@@ -16,17 +16,17 @@ import authType from "./types/authType";
 import entityResolvers from "./resolvers/entityResolvers";
 import entityType from "./types/entityType";
 import simpleEntityResolvers from "./resolvers/simpleEntityResolvers";
-import adminResolvers from "./resolvers/adminResolvers";
+import notificationResolvers from "./resolvers/notificationResolvers";
 import simpleEntityType from "./types/simpleEntityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
 import staffType from "./types/staffType";
-import staffResolver from "./resolvers/staffResolver";
-import adminType from "./types/adminType";
-import residentResolvers from "./resolvers/residentResolvers";
+//import staffResolver from "./resolvers/staffResolver";
+//import residentResolvers from "./resolvers/residentResolvers";
 import residentType from "./types/residentType";
 import taskResolvers from "./resolvers/taskResolvers";
 import taskType from "./types/taskType";
+import notificationType from "./types/notificationType";
 
 const query = gql`
   type Query {
@@ -47,23 +47,17 @@ const executableSchema = makeExecutableSchema({
     mutation,
     authType,
     entityType,
-    residentType,
-    simpleEntityType,
     userType,
-    taskType,
-    staffType,
-    adminType,
+    simpleEntityType,
+    notificationType,
   ],
   resolvers: merge(
     scalarResolvers,
     authResolvers,
     entityResolvers,
-    residentResolvers,
-    simpleEntityResolvers,
     userResolvers,
-    taskResolvers,
-    staffResolver,
-    adminResolvers,
+    simpleEntityResolvers,
+    notificationResolvers,
   ),
 });
 
