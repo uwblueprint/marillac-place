@@ -16,15 +16,15 @@ import authType from "./types/authType";
 import entityResolvers from "./resolvers/entityResolvers";
 import entityType from "./types/entityType";
 import simpleEntityResolvers from "./resolvers/simpleEntityResolvers";
-// import adminResolvers from "./resolvers/adminResolvers";
+import adminResolvers from "./resolvers/adminResolvers";
 import simpleEntityType from "./types/simpleEntityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
-// import staffType from "./types/staffType";
-// import staffResolver from "./resolvers/staffResolver";
-// import adminType from "./types/adminType";
-// import residentResolvers from "./resolvers/residentResolvers";
-// import residentType from "./types/residentType";
+import staffType from "./types/staffType";
+import staffResolver from "./resolvers/staffResolver";
+import adminType from "./types/adminType";
+import residentResolvers from "./resolvers/residentResolvers";
+import residentType from "./types/residentType";
 import taskResolvers from "./resolvers/taskResolvers";
 import taskType from "./types/taskType";
 
@@ -47,23 +47,23 @@ const executableSchema = makeExecutableSchema({
     mutation,
     authType,
     entityType,
-    // residentType,
+    residentType,
     simpleEntityType,
     userType,
     taskType,
-    // staffType,
-    // adminType,
+    staffType,
+    adminType,
   ],
   resolvers: merge(
     scalarResolvers,
     authResolvers,
     entityResolvers,
-    // residentResolvers,
+    residentResolvers,
     simpleEntityResolvers,
     userResolvers,
     taskResolvers,
-    // staffResolver,
-    // adminResolvers,
+    staffResolver,
+    adminResolvers,
   ),
 });
 
