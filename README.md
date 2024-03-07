@@ -81,7 +81,7 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/scv2
 Try running (when the docker container is up):
 
 ```
-nvm prisma migrate dev
+npx prisma migrate dev
 ```
 
 This may require you to upgrade your node version locally so try (only if it tells you the node version is insufficient)
