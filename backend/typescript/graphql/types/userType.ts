@@ -15,7 +15,6 @@ const userType = gql`
   }
 
   input CreateUserDTO {
-    id: ID
     email: String!
     password: String!
     phoneNumber: String

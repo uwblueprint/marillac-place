@@ -40,7 +40,6 @@ class ResidentService implements IResidentService {
             user: {
               create: {
                 authId: firebaseUser.uid,
-                id: userInfo.id,
                 type: "RESIDENT",
                 email: userInfo.email,
                 phoneNumber: userInfo.phoneNumber,
