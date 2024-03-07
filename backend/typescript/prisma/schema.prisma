@@ -63,7 +63,7 @@ enum TaskType {
   REQUIRED
   OPTIONAL
   CHORE
-  CUSTOM
+  ACHIEVEMENT
 }
 
 model Task {
