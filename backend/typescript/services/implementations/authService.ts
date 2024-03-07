@@ -58,17 +58,13 @@ class AuthService implements IAuthService {
         /* eslint-disable-next-line no-empty */
       } catch (error) {}
 
-      const user = await this.userService.createUser(
-        {
-          firstName: googleUser.firstName,
-          lastName: googleUser.lastName,
-          email: googleUser.email,
-          role: "User",
-          password: "",
-        },
-        googleUser.localId,
-        "GOOGLE",
-      );
+      const user = await this.userService.createUser({
+        firstName: googleUser.firstName,
+        lastName: googleUser.lastName,
+        email: googleUser.email,
+        role: "User",
+        password: "",
+      });
 
       return { ...token, ...user };
     } catch (error) {
