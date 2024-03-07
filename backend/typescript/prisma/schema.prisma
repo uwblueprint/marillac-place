@@ -15,20 +15,20 @@ enum UserType {
 }
 
 model User {
-  id                Int                @id @default(autoincrement())
-  type              UserType
-  staff             Staff?
-  resident          Resident?
-  authId            String             @unique @map("auth_id")
-  email             String             @unique
-  phoneNumber       String?            @map("phone_number")
-  firstName         String             @map("first_name")
-  lastName          String             @map("last_name")
-  displayName       String?            @map("display_name")
-  profilePictureURL String?            @map("profile_picture_url")
-  isActive          Boolean            @default(true) @map("is_active")
-  notifications     Notification[]
-  notificationsSent NotificationSent[]
+  id                    Int                    @id @default(autoincrement())
+  type                  UserType
+  staff                 Staff?
+  resident              Resident?
+  authId                String                 @unique @map("auth_id")
+  email                 String                 @unique
+  phoneNumber           String?                @map("phone_number")
+  firstName             String                 @map("first_name")
+  lastName              String                 @map("last_name")
+  displayName           String?                @map("display_name")
+  profilePictureURL     String?                @map("profile_picture_url")
+  isActive              Boolean                @default(true) @map("is_active")
+  notificationsSent     Notification[]
+  notificationsReceived NotificationReceived[]
 
   @@map("users")
 }
@@ -136,18 +136,18 @@ model Warning {
 }
 
 model Notification {
-  id         Int                @id @default(autoincrement())
-  author     User?              @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  authorId   Int?               @map("author_id")
+  id         Int                    @id @default(autoincrement())
+  author     User?                  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  authorId   Int?                   @map("author_id")
   title      String
   message    String
-  createdAt  DateTime           @default(now()) @map("created_at")
-  recipients NotificationSent[]
+  createdAt  DateTime               @default(now()) @map("created_at")
+  recipients NotificationReceived[]
 
   @@map("notifications")
 }
 
-model NotificationSent {
+model NotificationReceived {
   id             Int          @id @default(autoincrement())
   notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   notificationId Int          @map("notification_id")
@@ -155,5 +155,5 @@ model NotificationSent {
   recipientId    Int          @map("recipient_id")
   seen           Boolean      @default(false)
 
-  @@map("notifications_sent")
+  @@map("notifications_received")
 }
