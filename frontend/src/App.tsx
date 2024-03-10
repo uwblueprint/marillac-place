@@ -131,14 +131,14 @@ const App = (): React.ReactElement => {
                 />
                 <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
                 <Route path={Routes.TASKS_PAGE} element={<TasksPage />} />
-                {/* <Route
+                <Route
                   path={Routes.TASKS_PAGE}
                   element={
                     <PrivateRoute>
                       <TasksPage />
                     </PrivateRoute>
                   }
-                /> */}
+                />
                 <Route path="*" element={<NotFound />} />
               </Switch>
             </Router>
