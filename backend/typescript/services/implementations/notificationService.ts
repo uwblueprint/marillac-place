@@ -2,6 +2,7 @@ import prisma from "../../prisma";
 import type {
   INotificationService,
   NotificationDTO,
+  NotificationRecievedDTO,
 } from "../interfaces/notificationService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
@@ -13,16 +14,18 @@ const Logger = logger(__filename);
 
 class NotificationService implements INotificationService {
 
-  async getNotificationsByUserId(id: number): Promise<NotificationDTO[]> {
+  async getNotificationsByUserId(id: number): Promise<NotificationRecievedDTO[]> {
     try {
-      const notifications = await prisma.notification.findMany({
+      const user = await prisma.userStub.findUnique({
         where: {
           id,
         },
-        include: { recipients: true },
+        include: {
+          notificationsReceived: true
+        }
       });
-      if (!notifications) throw new Error(`No Notifications found.`);
-      return notifications;
+      if (!user) throw new Error(`No User found.`);
+      return user.notificationsReceived;
     } catch (error) {
       Logger.error(
         `Failed to get Notification. Reason = ${getErrorMessage(error)}`,
@@ -32,14 +35,11 @@ class NotificationService implements INotificationService {
   }
 
 
-  async getNotificationById(id: number): Promise<NotificationDTO> {
+  async getNotificationById(id: number): Promise<NotificationRecievedDTO> {
     try {
-      const notification = await prisma.notification.findUnique({
+      const notification = await prisma.notificationReceived.findUnique({
         where: {
           id,
-        },
-        include: {
-          recipients: true,
         },
       });
       if (!notification) throw new Error(`notification id ${id} not found`);
@@ -95,20 +95,59 @@ class NotificationService implements INotificationService {
     return test as Promise<NotificationDTO>;
   }
 
-  deleteUserNotification(
-    userId: number, 
+  async deleteUserNotification(
     notificationId: number
   ): Promise<NotificationDTO> {
-    const test:any = "what"; 
-    return test as Promise<NotificationDTO>;
+    try {
+
+      const deletedNotification = await prisma.notification.delete({
+        where: {
+          id: notificationId,
+        },
+        include: {recipients: true}
+      });
+
+      if (!deletedNotification)
+        throw new Error(`notification id ${notificationId} not found`);
+
+      return deletedNotification;
+    } catch (error) {
+      Logger.error(
+        `Failed to set isDelete flag. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
   }
 
-  updateSeenNotification(
-    userId: number, 
-    notificationId: number
-  ): Promise<NotificationDTO> {
-    const test:any = "what"; 
-    return test as Promise<NotificationDTO>;
+  async updateSeenNotification( 
+    notificationRecievedId: number
+  ): Promise<NotificationRecievedDTO> {
+    try {
+      await prisma.notificationReceived.update({
+        where: {
+          id: notificationRecievedId,
+        },
+        data: {
+          seen: true,
+        },
+      });
+
+      const updatedNotification = await prisma.notificationReceived.findUnique({
+        where: {
+          id: notificationRecievedId,
+        },
+      });
+
+      if (!updatedNotification)
+        throw new Error(`notification id ${notificationRecievedId} not found`);
+
+      return updatedNotification;
+    } catch (error) {
+      Logger.error(
+        `Failed to set seen flag. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
   }
 
   async sendAnnouncement(
@@ -116,28 +155,31 @@ class NotificationService implements INotificationService {
     message: string,
     userId: number,
   ): Promise<NotificationDTO> {
-    /*let newNotification: NotificationDTO;
+    let newNotification: NotificationDTO;
     try {
-      const activeResidents = await residentService.getActiveResidents();
+      //const activeResidents = await residentService.getActiveResidents();
+
+      const activeUsers = await prisma.userStub.findMany()
 
       newNotification = await prisma.notification.create({
         data: {
-          message: notifMessage,
+          title: title,
+          message: message,
           author: {
-            connect: { id: staffId },
+            connect: { id: userId },
           },
-          residents: {
-            create: activeResidents.map((resident) => ({
-              resident: {
+          recipients: {
+            create: activeUsers.map((recipient) => ({
+              recipient: {
                 connect: {
-                  id: resident.id,
+                  id: recipient.id,
                 },
               },
             })),
           },
         },
         include: {
-          residents: true,
+          recipients: true,
         },
       });
 
@@ -149,9 +191,7 @@ class NotificationService implements INotificationService {
         )}`,
       );
       throw error;
-    }*/
-    const test:any = "what"; 
-    return test as Promise<NotificationDTO>;
+    }
   }
 }
 export default NotificationService;

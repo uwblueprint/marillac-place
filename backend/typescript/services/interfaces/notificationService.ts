@@ -4,26 +4,10 @@ export interface NotificationDTO {
   title: string;
   message: string;
   createdAt: Date;
-  recipients?: NotificationSentDTO[];
+  recipients?: NotificationRecievedDTO[];
 }
 
-// Remove for ACTUAL PR
-export interface notificationDTO {
-  id: number;
-  authorId: number;
-  message: string;
-  createdAt: Date;
-  residents?: NotificationResidentDTO[];
-}
-
-// REMOVE FOR ACTUAL PR (Kept to let residentService not break)
-export interface NotificationResidentDTO {
-  notificationId: number;
-  residentId: number;
-  seen: boolean;
-}
-
-export interface NotificationSentDTO {
+export interface NotificationRecievedDTO {
   id: number;
   notificationId: number;
   recipientId: number;
@@ -38,7 +22,7 @@ export interface INotificationService {
    * @returns a NotificationDTO[] associated with that users notifications
    * @throws Error if retrieval fails
    */
-  getNotificationsByUserId(id: number): Promise<NotificationDTO[]>;
+  getNotificationsByUserId(id: number): Promise<NotificationRecievedDTO[]>;
 
   /**
    * Get a notification by a defined id
@@ -46,7 +30,7 @@ export interface INotificationService {
    * @returns a NotificationDTO associated with the notification id
    * @throws Error if retrieval fails
    */
-  getNotificationById(id: number): Promise<NotificationDTO>;
+  getNotificationById(id: number): Promise<NotificationRecievedDTO>;
 
   /**
    * Post a notification to a specified resident or residents
@@ -72,7 +56,6 @@ export interface INotificationService {
    * @throws Error if retrieval fails
    */
   deleteUserNotification(
-    userId: number, 
     notificationId: number
   ): Promise<NotificationDTO>;
 
@@ -84,9 +67,8 @@ export interface INotificationService {
    * @throws Error if retrieval fails
    */
   updateSeenNotification(
-    userId: number, 
     notificationId: number
-  ): Promise<NotificationDTO>;
+  ): Promise<NotificationRecievedDTO>;
 
 
   /**

@@ -7,10 +7,10 @@ const notificationType = gql`
     title: String!
     message: String!
     createdAt: String!
-    residents: [NotificationSentDTO!]
+    recipients: [NotificationRecievedDTO!]
   }
 
-  type NotificationSentDTO {
+  type NotificationRecievedDTO {
     id: ID!
     notificationId: ID!
     recipientId: ID!
@@ -18,18 +18,28 @@ const notificationType = gql`
   }
 
   extend type Query {
-    
-    notificationById(id: ID!): NotificationDTO!
+    notificationsByUserId(id: ID!): [NotificationRecievedDTO!]
+    notificationById(id: ID!): NotificationRecievedDTO!
   }
 
   extend type Mutation {
-
     sendNotification(
-      message: String
-      residentId: ID
-      staffId: ID
+      authorId: ID!,
+      title: String!,
+      message: String!,
+      recipientId: [ID!]
     ): NotificationDTO!
-    sendAnnouncement(message: String, staffId: ID): NotificationDTO!
+    deleteUserNotification(
+      notificationId: ID!
+    ): NotificationDTO!
+    updateSeenNotification(
+      notificationId: ID!
+    ): NotificationRecievedDTO!
+    sendAnnouncement(
+      title: String,
+      message: String, 
+      userId: ID
+    ): NotificationDTO!
   }
 `;
 

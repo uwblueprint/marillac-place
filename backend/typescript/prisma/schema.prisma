@@ -36,12 +36,12 @@ model user {
 }
 
 // STUB IMPLEMENTATION FOR REFACTORING CHANGES ()
-model User {
+model UserStub {
   id      Int      @id @default(autoincrement())
   email   String   @unique
   name    String?
-  notifications     Notification[]
-  notificationsSent NotificationSent[]
+  notificationsSent     Notification[]
+  notificationsReceived NotificationReceived[]
 }
 
 model task {
@@ -138,24 +138,22 @@ model resident {
 }
 
 model Notification {
-  id         Int                @id @default(autoincrement())
-  author     User?              @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  authorId   Int?               @map("author_id")
+  id         Int                    @id @default(autoincrement())
+  author     UserStub?                  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  authorId   Int?                   @map("author_id")
   title      String
   message    String
-  createdAt  DateTime           @default(now()) @map("created_at")
-  recipients NotificationSent[]
-
+  createdAt  DateTime               @default(now()) @map("created_at")
+  recipients NotificationReceived[]
   @@map("notifications")
 }
 
-model NotificationSent {
+model NotificationReceived {
   id             Int          @id @default(autoincrement())
   notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   notificationId Int          @map("notification_id")
-  recipient      User         @relation(fields: [recipientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  recipient      UserStub         @relation(fields: [recipientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   recipientId    Int          @map("recipient_id")
   seen           Boolean      @default(false)
-
-  @@map("notifications_sent")
+  @@map("notifications_received")
 }

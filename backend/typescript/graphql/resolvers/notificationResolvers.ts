@@ -3,6 +3,7 @@ import NotificationService from "../../services/implementations/notificationServ
 import {
   INotificationService,
   NotificationDTO,
+  NotificationRecievedDTO,
 } from "../../services/interfaces/notificationService";
 
 const notificationService: INotificationService = new NotificationService();
@@ -12,13 +13,13 @@ const notificationResolvers = {
     notificationsByUserId: async ( 
       _parent: undefined,
       { id }: { id: number },
-    ): Promise<NotificationDTO[]> => {
+    ): Promise<NotificationRecievedDTO[]> => {
       return notificationService.getNotificationsByUserId(Number(id));
     },
     notificationById: async (
       _parent: undefined,
       { id }: { id: number },
-    ): Promise<NotificationDTO> => {
+    ): Promise<NotificationRecievedDTO> => {
       return notificationService.getNotificationById(Number(id));
     },
   },
@@ -50,7 +51,6 @@ const notificationResolvers = {
       }: { userId: number, notificationId: number },
     ): Promise<NotificationDTO> => {
       const deletedNotification = await notificationService.deleteUserNotification(
-        Number(userId), 
         Number(notificationId)
       );
       return deletedNotification;
@@ -61,9 +61,8 @@ const notificationResolvers = {
         userId, 
         notificationId
       }: { userId: number, notificationId: number },
-    ): Promise<NotificationDTO> => {
+    ): Promise<NotificationRecievedDTO> => {
       const updatedNotification = await notificationService.updateSeenNotification(
-        Number(userId), 
         Number(notificationId)
       );
       return updatedNotification;
