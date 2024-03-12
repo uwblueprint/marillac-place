@@ -1,11 +1,11 @@
-//import StaffService from "../../services/implementations/staffService";
+import StaffService from "../../services/implementations/staffService";
 import type {
   IStaffService,
   StaffDTO,
   CreateStaffDTO,
   UpdateStaffDTO,
 } from "../../services/interfaces/staffService";
-/*
+
 const staffService: IStaffService = new StaffService();
 
 const staffResolvers = {
@@ -46,4 +46,3 @@ const staffResolvers = {
 };
 
 export default staffResolvers;
-*/

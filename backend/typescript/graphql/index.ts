@@ -21,8 +21,7 @@ import simpleEntityType from "./types/simpleEntityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
 import staffType from "./types/staffType";
-//import staffResolver from "./resolvers/staffResolver";
-//import residentResolvers from "./resolvers/residentResolvers";
+import staffResolver from "./resolvers/staffResolver";
 import residentType from "./types/residentType";
 import taskResolvers from "./resolvers/taskResolvers";
 import taskType from "./types/taskType";
@@ -71,6 +70,7 @@ const graphQLMiddlewares = {
     entities: authorizedByAllRoles(),
     simpleEntity: authorizedByAllRoles(),
     simpleEntities: authorizedByAllRoles(),
+    allResidents: authorizedByAllRoles(),
     userById: authorizedByAdmin(),
     userByEmail: authorizedByAdmin(),
     users: authorizedByAdmin(),

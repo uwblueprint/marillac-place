@@ -1,4 +1,4 @@
-//import ResidentService from "../../services/implementations/residentService";
+import ResidentService from "../../services/implementations/residentService";
 import type {
   IResidentService,
   ResidentDTO,
@@ -7,9 +7,9 @@ import type {
   RedeemCreditsResponse,
 } from "../../services/interfaces/residentService";
 
-//const residentService: IResidentService = new ResidentService();
-// const authService: IAuthService = new AuthService(userService, emailService);
-/*
+const residentService: IResidentService = new ResidentService();
+const authService: IAuthService = new AuthService(userService, emailService);
+
 const residentResolvers = {
   Query: {
     residentsById: async (
@@ -62,6 +62,4 @@ const residentResolvers = {
   },
 };
 
-
 export default residentResolvers;
-*/

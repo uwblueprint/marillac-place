@@ -10,7 +10,7 @@ import { getErrorMessage } from "../../utilities/errorUtils";
 
 const Prisma = new PrismaClient();
 const Logger = logger(__filename);
-/*
+
 class StaffService implements IStaffService {
   async addStaff(staff: CreateStaffDTO): Promise<StaffDTO> {
     try {
@@ -84,4 +84,3 @@ class StaffService implements IStaffService {
 }
 
 export default StaffService;
-*/
