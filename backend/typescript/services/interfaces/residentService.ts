@@ -31,11 +31,11 @@ export interface CreateResidentDTO {
 }
 
 export interface UpdateResidentDTO {
-  residentId: number;
-  birthDate: Date;
-  roomNumber: number;
-  credits: number;
-  dateJoined: Date;
+  residentId: number | null;
+  birthDate: Date | null;
+  roomNumber: number | null;
+  credits: number | null;
+  dateJoined: Date | null;
   dateLeft?: Date | null;
   notes?: string | null;
 }

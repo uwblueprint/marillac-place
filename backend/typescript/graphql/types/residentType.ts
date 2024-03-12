@@ -32,11 +32,11 @@ const residentType = gql`
   }
 
   input UpdateResidentDTO {
-    residentId: Int!
-    birthDate: Date!
-    roomNumber: Int!
-    credits: Float!
-    dateJoined: DateTime!
+    residentId: Int
+    birthDate: Date
+    roomNumber: Int
+    credits: Float
+    dateJoined: DateTime
     dateLeft: DateTime
     notes: String
   }
