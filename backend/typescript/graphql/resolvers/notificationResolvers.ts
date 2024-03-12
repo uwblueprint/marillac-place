@@ -1,4 +1,3 @@
-import { update } from "lodash";
 import NotificationService from "../../services/implementations/notificationService";
 import {
   INotificationService,
@@ -10,7 +9,7 @@ const notificationService: INotificationService = new NotificationService();
 
 const notificationResolvers = {
   Query: {
-    notificationsByUserId: async ( 
+    notificationsByUserId: async (
       _parent: undefined,
       { id }: { id: number },
     ): Promise<NotificationRecievedDTO[]> => {
@@ -32,45 +31,44 @@ const notificationResolvers = {
         title,
         message,
         recipientIds,
-      }: { authorId: number, title: string; message: string; recipientIds: number[] },
+      }: {
+        authorId: number;
+        title: string;
+        message: string;
+        recipientIds: number[];
+      },
     ): Promise<NotificationDTO> => {
-      recipientIds = recipientIds.map(id => Number(id));
+      const Ids = recipientIds.map((id) => Number(id));
       const newNotification = await notificationService.sendNotification(
         Number(authorId),
         title,
         message,
-        recipientIds
+        Ids,
       );
       return newNotification;
     },
     deleteUserNotification: async (
       _parent: undefined,
-      {
-        userId, 
-        notificationId
-      }: { userId: number, notificationId: number },
+      { notificationId }: { notificationId: number },
     ): Promise<NotificationDTO> => {
       const deletedNotification = await notificationService.deleteUserNotification(
-        Number(notificationId)
+        Number(notificationId),
       );
       return deletedNotification;
     },
     updateSeenNotification: async (
       _parent: undefined,
-      {
-        userId, 
-        notificationId
-      }: { userId: number, notificationId: number },
+      { notificationId }: { notificationId: number },
     ): Promise<NotificationRecievedDTO> => {
       const updatedNotification = await notificationService.updateSeenNotification(
-        Number(notificationId)
+        Number(notificationId),
       );
       return updatedNotification;
     },
-    
+
     sendAnnouncement: async (
       _parent: undefined,
-      { 
+      {
         title,
         message,
         userId,

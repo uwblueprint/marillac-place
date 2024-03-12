@@ -6,23 +6,24 @@ import type {
 } from "../interfaces/notificationService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
-import { IResidentService } from "../interfaces/residentService";
-//import ResidentService from "./residentService";
+// import { IResidentService } from "../interfaces/residentService";
+// import ResidentService from "./residentService";
 
-//const residentService: IResidentService = new ResidentService();
+// const residentService: IResidentService = new ResidentService();
 const Logger = logger(__filename);
 
 class NotificationService implements INotificationService {
-
-  async getNotificationsByUserId(id: number): Promise<NotificationRecievedDTO[]> {
+  async getNotificationsByUserId(
+    id: number,
+  ): Promise<NotificationRecievedDTO[]> {
     try {
       const user = await prisma.userStub.findUnique({
         where: {
           id,
         },
         include: {
-          notificationsReceived: true
-        }
+          notificationsReceived: true,
+        },
       });
       if (!user) throw new Error(`No User found.`);
       return user.notificationsReceived;
@@ -33,7 +34,6 @@ class NotificationService implements INotificationService {
       throw error;
     }
   }
-
 
   async getNotificationById(id: number): Promise<NotificationRecievedDTO> {
     try {
@@ -59,28 +59,26 @@ class NotificationService implements INotificationService {
     message: string,
     recipientIds: number[],
   ): Promise<NotificationDTO> {
-    /*let newNotification: NotificationDTO;
     try {
-      newNotification = await prisma.notification.create({
+      const newNotification = await prisma.notification.create({
         data: {
-          message: notifMessage,
+          title,
+          message,
           author: {
             connect: { id: authorId },
           },
-          residents: {
-            create: [
-              {
-                resident: {
-                  connect: {
-                    id: residentId,
-                  },
+          recipients: {
+            create: recipientIds.map((recipient) => ({
+              recipient: {
+                connect: {
+                  id: recipient,
                 },
               },
-            ],
+            })),
           },
         },
         include: {
-          residents: true,
+          recipients: true,
         },
       });
 
@@ -90,21 +88,18 @@ class NotificationService implements INotificationService {
         `Failed to create Notification. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
-    } */
-    const test:any = "what"; 
-    return test as Promise<NotificationDTO>;
+    }
   }
 
   async deleteUserNotification(
-    notificationId: number
+    notificationId: number,
   ): Promise<NotificationDTO> {
     try {
-
       const deletedNotification = await prisma.notification.delete({
         where: {
           id: notificationId,
         },
-        include: {recipients: true}
+        include: { recipients: true },
       });
 
       if (!deletedNotification)
@@ -119,8 +114,8 @@ class NotificationService implements INotificationService {
     }
   }
 
-  async updateSeenNotification( 
-    notificationRecievedId: number
+  async updateSeenNotification(
+    notificationRecievedId: number,
   ): Promise<NotificationRecievedDTO> {
     try {
       await prisma.notificationReceived.update({
@@ -157,14 +152,14 @@ class NotificationService implements INotificationService {
   ): Promise<NotificationDTO> {
     let newNotification: NotificationDTO;
     try {
-      //const activeResidents = await residentService.getActiveResidents();
+      // const activeResidents = await residentService.getActiveResidents();
 
-      const activeUsers = await prisma.userStub.findMany()
+      const activeUsers = await prisma.userStub.findMany();
 
       newNotification = await prisma.notification.create({
         data: {
-          title: title,
-          message: message,
+          title,
+          message,
           author: {
             connect: { id: userId },
           },

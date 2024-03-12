@@ -27,7 +27,7 @@ const notificationType = gql`
       authorId: ID!,
       title: String!,
       message: String!,
-      recipientId: [ID!]
+      recipientIds: [ID!]
     ): NotificationDTO!
     deleteUserNotification(
       notificationId: ID!
