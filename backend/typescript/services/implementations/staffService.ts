@@ -87,6 +87,8 @@ class StaffService implements IStaffService {
 
       if (!originalUser) {
         throw new Error(`staff ${staffId} not found.`);
+      } else if (originalUser.type != "STAFF") {
+        throw new Error(`id ${staffId} is not a staff.`);
       }
 
       const { authId } = originalUser;
@@ -114,6 +116,7 @@ class StaffService implements IStaffService {
                 lastName: userInfo.lastName,
                 displayName: userInfo.displayName,
                 profilePictureURL: userInfo.profilePictureURL,
+                isActive: userInfo.isActive
               },
             },
           },
@@ -151,6 +154,8 @@ class StaffService implements IStaffService {
 
       if (!deletedUser) {
         throw new Error(`staff ${staffId} not found.`);
+      } else if (deletedUser.type != "STAFF") {
+        throw new Error(`id ${staffId} is not a staff.`);
       }
 
       await firebaseAdmin.auth().deleteUser(deletedUser.authId);
