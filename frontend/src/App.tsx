@@ -11,7 +11,6 @@ import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import CreatePage from "./components/pages/CreatePage";
-import TasksPage from "./components/pages/TasksPage";
 import Default from "./components/pages/Default";
 import DisplayPage from "./components/pages/DisplayPage";
 import SimpleEntityCreatePage from "./components/pages/SimpleEntityCreatePage";
@@ -51,13 +50,10 @@ const App = (): React.ReactElement => {
 
   const theme = extendTheme({
     colors: {
-      brand: {
-        100: "#f7fafc",
-        // ...
-        900: "#1a202c",
-      },
+      purple: "#57469D",
+      grey: "#C5C8D8",
     },
-  })
+  });
 
   return (
     <ChakraProvider theme={theme}>
@@ -130,15 +126,6 @@ const App = (): React.ReactElement => {
                   }
                 />
                 <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
-                <Route path={Routes.TASKS_PAGE} element={<TasksPage />} />
-                <Route
-                  path={Routes.TASKS_PAGE}
-                  element={
-                    <PrivateRoute>
-                      <TasksPage />
-                    </PrivateRoute>
-                  }
-                />
                 <Route path="*" element={<NotFound />} />
               </Switch>
             </Router>

@@ -9,7 +9,11 @@ const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({
   children,
 }) => {
   const { authenticatedUser } = useContext(AuthContext);
-  return authenticatedUser ? <SideBar>{children}</SideBar> : <Navigate to={LOGIN_PAGE} />;
+  return authenticatedUser ? (
+    <SideBar>{children}</SideBar>
+  ) : (
+    <Navigate to={LOGIN_PAGE} />
+  );
 };
 
 export default PrivateRoute;
