@@ -111,6 +111,10 @@ class ResidentService implements IResidentService {
         throw new Error(`resident ${residentId} not found.`);
       }
 
+      if (oldUser.type !== "RESIDENT") {
+        throw new Error(`${residentId} is not a resident.`);
+      }
+
       const { authId } = oldUser;
       const email = "email" in userInfo ? userInfo.email : oldUser.email;
 
@@ -186,6 +190,10 @@ class ResidentService implements IResidentService {
 
       if (!deletedUser) {
         throw new Error(`resident ${residentId} not found.`);
+      }
+
+      if (deletedUser.type !== "RESIDENT") {
+        throw new Error(`${residentId} is not a resident.`);
       }
 
       await firebaseAdmin.auth().deleteUser(deletedUser.authId);
