@@ -14,36 +14,18 @@ const staffType = gql`
     isActive: Boolean!
   }
 
-  # input CreateStaffDTO {
-  #   roleId: Int!
-  #   firstName: String!
-  #   lastName: String!
-  #   email: String!
-  #   phoneNumber: String
-  #   displayName: String!
-  #   profilePictureURL: String
-  # }
-  # input UpdateStaffDTO {
-  #   roleId: Int!
-  #   firstName: String!
-  #   lastName: String!
-  #   email: String!
-  #   phoneNumber: String
-  #   displayName: String!
-  #   profilePictureURL: String
-  # }
   extend type Query {
-    getStaffByIds(staffIds: [ID!]): [StaffDTO!]
     getAllStaff: [StaffDTO!]
+    getStaffByIds(staffIds: [ID!]): [StaffDTO!]
   }
 
   extend type Mutation {
+    addStaff(userInfo: CreateUserDTO!, isAdmin: Boolean): StaffDTO!
     updateStaff(
       staffId: ID!
       userInfo: UpdateUserDTO!
       isAdmin: Boolean
     ): StaffDTO!
-    addStaff(userInfo: CreateUserDTO!, isAdmin: Boolean): StaffDTO!
     deleteStaff(staffId: ID!): StaffDTO!
   }
 `;

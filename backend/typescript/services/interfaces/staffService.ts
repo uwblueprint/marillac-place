@@ -1,7 +1,7 @@
-// import { NotificationResidentDTO, NotificationDTO } from "./adminService";
 import { CreateUserDTO, UpdateUserDTO, UserTypes } from "./userService";
 // import { TaskDTO } from "./taskService";
 // import { WarningDTO } from "./warningService";
+// import { NotificationReceivedDTO, NotificationDTO } from "./adminService";
 
 export interface StaffDTO {
   userId: number;
@@ -16,8 +16,8 @@ export interface StaffDTO {
   isActive: boolean;
   // tasksAssigned: TaskDTO[];
   // warningsAssigned: WarningDTO[];
-  // notifications     NotificationDTO[]
-  // notificationsSent NotificationResidentDTO[]
+  // notificationsSent: NotificationDTO[];
+  // notificationsReceived: NotificationReceivedDTO[];
 }
 
 export interface IStaffService {

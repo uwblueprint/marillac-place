@@ -3,23 +3,7 @@ import { UserDTO, Role } from "../../types";
 
 export type UserTypes = "STAFF" | "RESIDENT";
 
-// export interface UserDTO {
-//   id: number;
-//   type: UserTypes;
-//   staffId: number;
-//   residentId: number;
-//   email: string;
-//   phoneNumber: string | null;
-//   firstName: string;
-//   lastName: string;
-//   displayName: string | null;
-//   profilePictureURL: string | null;
-//   isActive: boolean;
-//   role: Role;
-// }
-
 export interface CreateUserDTO {
-  id: number;
   email: string;
   password: string;
   phoneNumber: string | null;
