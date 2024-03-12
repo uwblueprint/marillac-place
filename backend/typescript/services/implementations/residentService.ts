@@ -96,36 +96,32 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async getResidentAuthId(residentId: number): Promise<string> {
-    try {
-      const user = await Prisma.user.findUnique({
-        where: { residentId },
-      });
-
-      if (!user) {
-        throw new Error(`resident ${residentId} not found.`);
-      }
-      return user.authId;
-    } catch (error: unknown) {
-      Logger.error(`Failed to get authId. Reason = ${getErrorMessage(error)}`);
-      throw error;
-    }
-  }
-
   async updateResident(
     residentId: number,
     userInfo: UpdateUserDTO,
     resident: UpdateResidentDTO,
   ): Promise<ResidentDTO> {
     try {
-      const oldResident = await Prisma.resident.findUnique({
-        where: { userId: residentId },
-        include: { user: true },
+      const oldUser = await Prisma.user.findUnique({
+        where: { id: residentId },
       });
 
-      if (!oldResident) {
+      if (!oldUser) {
         throw new Error(`resident ${residentId} not found.`);
       }
+
+      const { authId } = oldUser;
+      const email = "email" in userInfo ? userInfo.email : oldUser.email;
+
+      if ("password" in userInfo) {
+        await firebaseAdmin.auth().updateUser(authId, {
+          email,
+          password: userInfo.password,
+        });
+      } else {
+        await firebaseAdmin.auth().updateUser(authId, { email });
+      }
+
       const updatedResident = await Prisma.resident.update({
         where: { userId: residentId },
         data: {
@@ -151,50 +147,6 @@ class ResidentService implements IResidentService {
         },
         include: { user: true },
       });
-
-      const { authId } = updatedResident.user;
-      try {
-        if ("password" in userInfo) {
-          await firebaseAdmin.auth().updateUser(authId, {
-            email: updatedResident.user.email,
-            password: userInfo.password,
-          });
-        } else {
-          await firebaseAdmin
-            .auth()
-            .updateUser(authId, { email: updatedResident.user.email });
-        }
-      } catch (error) {
-        try {
-          await Prisma.resident.update({
-            where: { userId: residentId },
-            data: {
-              residentId: oldResident.residentId,
-              birthDate: oldResident.birthDate,
-              roomNumber: oldResident.roomNumber,
-              credits: oldResident.credits,
-              dateJoined: oldResident.dateJoined,
-              dateLeft: oldResident.dateLeft,
-              notes: oldResident.notes,
-              user: {
-                update: {
-                  data: { ...oldResident.user },
-                },
-              },
-            },
-          });
-        } catch (postgresError: unknown) {
-          const errorMessage = [
-            "Failed to rollback Postgres user update after Firebase user update failure. Reason =",
-            getErrorMessage(postgresError),
-            "Postgres user id with possibly inconsistent data =",
-            residentId,
-          ];
-          Logger.error(errorMessage.join(" "));
-        }
-
-        throw new Error(`failed to update firebase: ${error}`);
-      }
 
       return {
         userId: updatedResident.userId,
@@ -228,47 +180,23 @@ class ResidentService implements IResidentService {
     try {
       const deletedUser = await Prisma.user.findUnique({
         where: { id: residentId },
-        include: { resident: true },
       });
 
       if (!deletedUser) {
         throw new Error(`resident ${residentId} not found.`);
       }
 
+      await firebaseAdmin.auth().deleteUser(deletedUser.authId);
+
       const deletedResident = await Prisma.resident.delete({
         where: { userId: residentId },
         include: { user: true },
       });
-      try {
-        await firebaseAdmin.auth().deleteUser(deletedUser.authId);
-      } catch (error) {
-        try {
-          await Prisma.resident.create({
-            data: {
-              residentId: deletedResident.residentId,
-              birthDate: deletedResident.birthDate,
-              roomNumber: deletedResident.roomNumber,
-              credits: deletedResident.credits,
-              dateJoined: deletedResident.dateJoined,
-              dateLeft: deletedResident.dateLeft,
-              notes: deletedResident.notes,
-              user: {
-                create: {
-                  ...deletedUser,
-                },
-              },
-            },
-          });
-        } catch (postgresError: unknown) {
-          const errorMessage = [
-            "Failed to rollback Postgres user deletion after Firebase user deletion failure. Reason =",
-            getErrorMessage(postgresError),
-            "Firebase uid with non-existent Postgres record =",
-            deletedUser.authId,
-          ];
-          Logger.error(errorMessage.join(" "));
-        }
-      }
+
+      await Prisma.user.delete({
+        where: { id: residentId },
+      });
+
       return {
         userId: deletedResident.userId,
         residentId: deletedResident.residentId,
