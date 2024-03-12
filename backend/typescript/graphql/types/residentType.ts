@@ -4,43 +4,41 @@ import { gql } from "apollo-server-express";
 
 const residentType = gql`
   type ResidentDTO {
-    id: ID!
-    firstName: String!
-    lastName: String!
-    email: String!
-    phoneNumber: String
-    displayName: String!
-    profilePictureLink: String
-    birthdate: Date
-    credits: Float
+    userId: Int!
+    residentId: Int!
+    birthDate: Date!
+    roomNumber: Int!
+    credits: Float!
     dateJoined: DateTime!
     dateLeft: DateTime
-    notifications: [NotificationResidentDTO!]
+    notes: String
+    email: String!
+    phoneNumber: String
+    firstName: String!
+    lastName: String!
+    displayName: String
+    profilePictureURL: String
+    isActive: Boolean!
   }
 
   input CreateResidentDTO {
-    firstName: String!
-    lastName: String!
-    email: String!
-    phoneNumber: String
-    displayName: String!
-    profilePictureLink: String
-    birthdate: Date
-    credits: Float
+    residentId: Int!
+    birthDate: Date!
+    roomNumber: Int!
+    credits: Float!
     dateJoined: DateTime!
+    dateLeft: DateTime
+    notes: String
   }
 
   input UpdateResidentDTO {
-    firstName: String
-    lastName: String
-    email: String
-    phoneNumber: String
-    displayName: String
-    profilePictureLink: String
-    birthdate: Date
-    credits: Float
-    dateJoined: DateTime
+    residentId: Int!
+    birthDate: Date!
+    roomNumber: Int!
+    credits: Float!
+    dateJoined: DateTime!
     dateLeft: DateTime
+    notes: String
   }
 
   enum RedeemCreditResponse {
@@ -56,8 +54,15 @@ const residentType = gql`
   }
 
   extend type Mutation {
-    updateResident(id: ID!, resident: UpdateResidentDTO!): ResidentDTO!
-    addResident(resident: CreateResidentDTO!): ResidentDTO!
+    updateResident(
+      residentId: ID!
+      userInfo: UpdateUserDTO!
+      resident: UpdateResidentDTO!
+    ): ResidentDTO!
+    addResident(
+      userInfo: CreateUserDTO!
+      resident: CreateResidentDTO!
+    ): ResidentDTO!
     deleteResident(id: ID!): ResidentDTO!
     redeemCredits(id: ID!, credits: Float!): RedeemCreditResponse!
   }

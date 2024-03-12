@@ -3,8 +3,8 @@ import * as firebaseAdmin from "firebase-admin";
 import {
   IResidentService,
   ResidentDTO,
-  // CreateResidentDTO,
-  // UpdateResidentDTO,
+  CreateResidentDTO,
+  UpdateResidentDTO,
   RedeemCreditsResponse,
 } from "../interfaces/residentService";
 import logger from "../../utilities/logger";
@@ -21,9 +21,7 @@ const Logger = logger(__filename);
 class ResidentService implements IResidentService {
   async addResident(
     userInfo: CreateUserDTO,
-    residentId: number,
-    birthDate: string,
-    roomNumber: number,
+    resident: CreateResidentDTO,
   ): Promise<ResidentDTO> {
     try {
       const firebaseUser = await firebaseAdmin.auth().createUser({
@@ -34,13 +32,17 @@ class ResidentService implements IResidentService {
       try {
         const newResident = await Prisma.resident.create({
           data: {
-            residentId,
-            birthDate,
-            roomNumber,
+            residentId: resident.residentId,
+            birthDate: resident.birthDate,
+            roomNumber: resident.roomNumber,
+            credits: resident.credits,
+            dateJoined: resident.dateJoined,
+            dateLeft: resident.dateLeft,
+            notes: resident.notes,
             user: {
               create: {
                 authId: firebaseUser.uid,
-                id: userInfo.id,
+                id: userInfo.id ? Number(userInfo.id) : undefined,
                 type: "RESIDENT",
                 email: userInfo.email,
                 phoneNumber: userInfo.phoneNumber,
@@ -63,6 +65,14 @@ class ResidentService implements IResidentService {
           dateJoined: newResident.dateJoined,
           dateLeft: newResident.dateLeft,
           notes: newResident.notes,
+          type: newResident.user.type,
+          email: newResident.user.email,
+          phoneNumber: newResident.user.phoneNumber,
+          firstName: newResident.user.firstName,
+          lastName: newResident.user.lastName,
+          displayName: newResident.user.displayName,
+          profilePictureURL: newResident.user.profilePictureURL,
+          isActive: newResident.user.isActive,
         };
       } catch (postgresError) {
         try {
@@ -80,7 +90,9 @@ class ResidentService implements IResidentService {
         throw postgresError;
       }
     } catch (error) {
-      Logger.error(`Failed to create staff because ${getErrorMessage(error)}`);
+      Logger.error(
+        `Failed to create resident because ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }
@@ -92,7 +104,7 @@ class ResidentService implements IResidentService {
       });
 
       if (!user) {
-        throw new Error(`staff ${residentId} not found.`);
+        throw new Error(`resident ${residentId} not found.`);
       }
       return user.authId;
     } catch (error: unknown) {
@@ -102,36 +114,74 @@ class ResidentService implements IResidentService {
   }
 
   async updateResident(
-    userInfo: UpdateUserDTO,
     residentId: number,
-    birthDate: string,
-    roomNumber: number,
+    userInfo: UpdateUserDTO,
+    resident: UpdateResidentDTO,
   ): Promise<ResidentDTO> {
     try {
+      const oldResident = await Prisma.resident.findUnique({
+        where: { userId: residentId },
+        include: { user: true },
+      });
+
+      if (!oldResident) {
+        throw new Error(`resident ${residentId} not found.`);
+      }
       const updatedResident = await Prisma.resident.update({
         where: { userId: residentId },
         data: {
-          residentId,
-          birthDate,
-          roomNumber,
-          ...userInfo,
+          residentId: resident.residentId,
+          birthDate: resident.birthDate,
+          roomNumber: resident.roomNumber,
+          credits: resident.credits,
+          dateJoined: resident.dateJoined,
+          dateLeft: resident.dateLeft,
+          notes: resident.notes,
+          user: {
+            update: {
+              data: {
+                email: userInfo.email,
+                phoneNumber: userInfo.phoneNumber,
+                firstName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                displayName: userInfo.displayName,
+                profilePictureURL: userInfo.profilePictureURL,
+              },
+            },
+          },
         },
         include: { user: true },
       });
 
-      const authId = await this.getResidentAuthId(residentId);
-      const [oldResident] = await this.getResidentsById([residentId]);
-
+      const { authId } = updatedResident.user;
       try {
-        await firebaseAdmin
-          .auth()
-          .updateUser(authId, { email: userInfo.email });
+        if ("password" in userInfo) {
+          await firebaseAdmin.auth().updateUser(authId, {
+            email: updatedResident.user.email,
+            password: userInfo.password,
+          });
+        } else {
+          await firebaseAdmin
+            .auth()
+            .updateUser(authId, { email: updatedResident.user.email });
+        }
       } catch (error) {
         try {
           await Prisma.resident.update({
             where: { userId: residentId },
             data: {
-              ...oldResident,
+              residentId: oldResident.residentId,
+              birthDate: oldResident.birthDate,
+              roomNumber: oldResident.roomNumber,
+              credits: oldResident.credits,
+              dateJoined: oldResident.dateJoined,
+              dateLeft: oldResident.dateLeft,
+              notes: oldResident.notes,
+              user: {
+                update: {
+                  data: { ...oldResident.user },
+                },
+              },
             },
           });
         } catch (postgresError: unknown) {
@@ -143,6 +193,8 @@ class ResidentService implements IResidentService {
           ];
           Logger.error(errorMessage.join(" "));
         }
+
+        throw new Error(`failed to update firebase: ${error}`);
       }
 
       return {
@@ -154,10 +206,18 @@ class ResidentService implements IResidentService {
         dateJoined: updatedResident.dateJoined,
         dateLeft: updatedResident.dateLeft,
         notes: updatedResident.notes,
+        type: updatedResident.user.type,
+        email: updatedResident.user.email,
+        phoneNumber: updatedResident.user.phoneNumber,
+        firstName: updatedResident.user.firstName,
+        lastName: updatedResident.user.lastName,
+        displayName: updatedResident.user.displayName,
+        profilePictureURL: updatedResident.user.profilePictureURL,
+        isActive: updatedResident.user.isActive,
       };
     } catch (error) {
       Logger.error(
-        `Failed to update staff #${residentId} because ${getErrorMessage(
+        `Failed to update resident #${residentId} because ${getErrorMessage(
           error,
         )}`,
       );
@@ -167,24 +227,32 @@ class ResidentService implements IResidentService {
 
   async deleteResident(residentId: number): Promise<ResidentDTO> {
     try {
-      const deleteResident = await Prisma.resident.delete({
-        where: { userId: residentId },
-      });
-
-      const deletedUser = await Prisma.user.delete({
+      const deletedUser = await Prisma.user.findUnique({
         where: { id: residentId },
+        include: { resident: true },
       });
 
-      const [authId] = await this.getResidentAuthId(residentId);
+      if (!deletedUser) {
+        throw new Error(`resident ${residentId} not found.`);
+      }
+
+      const deletedResident = await Prisma.resident.delete({
+        where: { userId: residentId },
+        include: { user: true },
+      });
       try {
-        await firebaseAdmin.auth().deleteUser(authId);
+        await firebaseAdmin.auth().deleteUser(deletedUser.authId);
       } catch (error) {
         try {
           await Prisma.resident.create({
             data: {
-              residentId: deleteResident.residentId,
-              birthDate: deleteResident.birthDate,
-              roomNumber: deleteResident.roomNumber,
+              residentId: deletedResident.residentId,
+              birthDate: deletedResident.birthDate,
+              roomNumber: deletedResident.roomNumber,
+              credits: deletedResident.credits,
+              dateJoined: deletedResident.dateJoined,
+              dateLeft: deletedResident.dateLeft,
+              notes: deletedResident.notes,
               user: {
                 create: {
                   ...deletedUser,
@@ -197,25 +265,32 @@ class ResidentService implements IResidentService {
             "Failed to rollback Postgres user deletion after Firebase user deletion failure. Reason =",
             getErrorMessage(postgresError),
             "Firebase uid with non-existent Postgres record =",
-            authId,
+            deletedUser.authId,
           ];
           Logger.error(errorMessage.join(" "));
         }
       }
-
       return {
-        userId: deleteResident.userId,
-        residentId: deleteResident.residentId,
-        birthDate: deleteResident.birthDate,
-        roomNumber: deleteResident.roomNumber,
-        credits: deleteResident.credits,
-        dateJoined: deleteResident.dateJoined,
-        dateLeft: deleteResident.dateLeft,
-        notes: deleteResident.notes,
+        userId: deletedResident.userId,
+        residentId: deletedResident.residentId,
+        birthDate: deletedResident.birthDate,
+        roomNumber: deletedResident.roomNumber,
+        credits: deletedResident.credits,
+        dateJoined: deletedResident.dateJoined,
+        dateLeft: deletedResident.dateLeft,
+        notes: deletedResident.notes,
+        type: deletedResident.user.type,
+        email: deletedResident.user.email,
+        phoneNumber: deletedResident.user.phoneNumber,
+        firstName: deletedResident.user.firstName,
+        lastName: deletedResident.user.lastName,
+        displayName: deletedResident.user.displayName,
+        profilePictureURL: deletedResident.user.profilePictureURL,
+        isActive: deletedResident.user.isActive,
       };
     } catch (error) {
       Logger.error(
-        `Failed to delete staff #${residentId} because ${getErrorMessage(
+        `Failed to delete resident #${residentId} because ${getErrorMessage(
           error,
         )}`,
       );
@@ -238,6 +313,14 @@ class ResidentService implements IResidentService {
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
           notes: resident.notes,
+          type: resident.user.type,
+          email: resident.user.email,
+          phoneNumber: resident.user.phoneNumber,
+          firstName: resident.user.firstName,
+          lastName: resident.user.lastName,
+          displayName: resident.user.displayName,
+          profilePictureURL: resident.user.profilePictureURL,
+          isActive: resident.user.isActive,
         };
       });
     } catch (error: unknown) {
@@ -264,6 +347,14 @@ class ResidentService implements IResidentService {
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
           notes: resident.notes,
+          type: resident.user.type,
+          email: resident.user.email,
+          phoneNumber: resident.user.phoneNumber,
+          firstName: resident.user.firstName,
+          lastName: resident.user.lastName,
+          displayName: resident.user.displayName,
+          profilePictureURL: resident.user.profilePictureURL,
+          isActive: resident.user.isActive,
         };
       });
     } catch (error: unknown) {
@@ -297,6 +388,14 @@ class ResidentService implements IResidentService {
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
           notes: resident.notes,
+          type: resident.user.type,
+          email: resident.user.email,
+          phoneNumber: resident.user.phoneNumber,
+          firstName: resident.user.firstName,
+          lastName: resident.user.lastName,
+          displayName: resident.user.displayName,
+          profilePictureURL: resident.user.profilePictureURL,
+          isActive: resident.user.isActive,
         };
       });
     } catch (error: unknown) {

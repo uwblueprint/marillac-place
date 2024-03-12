@@ -186,7 +186,6 @@ class StaffService implements IStaffService {
         where: { userId: staffId },
         include: { user: true },
       });
-      
       try {
         await firebaseAdmin.auth().deleteUser(deletedUser.authId);
       } catch (error) {

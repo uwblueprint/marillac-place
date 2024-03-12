@@ -10,7 +10,7 @@ const staffType = gql`
     lastName: String!
     phoneNumber: String
     displayName: String
-    profilePictureLink: String
+    profilePictureURL: String
     isActive: Boolean!
   }
 
@@ -21,7 +21,7 @@ const staffType = gql`
   #   email: String!
   #   phoneNumber: String
   #   displayName: String!
-  #   profilePictureLink: String
+  #   profilePictureURL: String
   # }
   # input UpdateStaffDTO {
   #   roleId: Int!
@@ -30,7 +30,7 @@ const staffType = gql`
   #   email: String!
   #   phoneNumber: String
   #   displayName: String!
-  #   profilePictureLink: String
+  #   profilePictureURL: String
   # }
   extend type Query {
     getStaffByIds(staffIds: [ID!]): [StaffDTO!]

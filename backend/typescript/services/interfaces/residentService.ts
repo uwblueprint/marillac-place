@@ -1,4 +1,4 @@
-import { CreateUserDTO, UpdateUserDTO } from "./userService";
+import { CreateUserDTO, UpdateUserDTO, UserTypes } from "./userService";
 // import { NotificationResidentDTO } from "./adminService";
 
 export interface ResidentDTO {
@@ -10,6 +10,14 @@ export interface ResidentDTO {
   dateJoined: Date;
   dateLeft?: Date | null;
   notes?: string | null;
+  type: UserTypes;
+  email: string;
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
+  displayName: string | null;
+  profilePictureURL: string | null;
+  isActive: boolean;
 }
 
 export interface CreateResidentDTO {
@@ -48,9 +56,7 @@ export interface IResidentService {
    */
   addResident(
     userInfo: CreateUserDTO,
-    residentId: number,
-    birthDate: string,
-    roomNumber: number,
+    resident: CreateResidentDTO,
   ): Promise<ResidentDTO>;
 
   /**
@@ -60,10 +66,9 @@ export interface IResidentService {
    * @returns: a ResidentDTO with resident's updated info
    */
   updateResident(
-    userInfo: UpdateUserDTO,
     residentId: number,
-    birthDate: string,
-    roomNumber: number,
+    userInfo: UpdateUserDTO,
+    resident: UpdateResidentDTO,
   ): Promise<ResidentDTO>;
 
   /**

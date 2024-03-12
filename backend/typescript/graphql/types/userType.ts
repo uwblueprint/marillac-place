@@ -5,6 +5,10 @@ const userType = gql`
     STAFF
     RESIDENT
   }
+  enum Role {
+    USER
+    ADMIN
+  }
 
   type UserDTO {
     id: ID!
@@ -22,7 +26,7 @@ const userType = gql`
     firstName: String!
     lastName: String!
     displayName: String
-    profilePictureLink: String
+    profilePictureURL: String
   }
 
   input UpdateUserDTO {

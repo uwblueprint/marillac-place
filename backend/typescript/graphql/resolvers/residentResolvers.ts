@@ -3,6 +3,8 @@ import type {
   IResidentService,
   ResidentDTO,
   RedeemCreditsResponse,
+  CreateResidentDTO,
+  UpdateResidentDTO,
 } from "../../services/interfaces/residentService";
 import type {
   UpdateUserDTO,
@@ -33,43 +35,31 @@ const residentResolvers = {
       _parent: undefined,
       {
         userInfo,
-        residentId,
-        birthDate,
-        roomNumber,
+        resident,
       }: {
         userInfo: CreateUserDTO;
-        residentId: number;
-        birthDate: string;
-        roomNumber: number;
+        resident: CreateResidentDTO;
       },
     ): Promise<ResidentDTO> => {
-      const newResident = await residentService.addResident(
-        userInfo,
-        residentId,
-        birthDate,
-        roomNumber,
-      );
+      const newResident = await residentService.addResident(userInfo, resident);
       return newResident;
     },
     updateResident: async (
       _parent: undefined,
       {
-        userInfo,
         residentId,
-        birthDate,
-        roomNumber,
+        userInfo,
+        resident,
       }: {
+        residentId: string;
         userInfo: UpdateUserDTO;
-        residentId: number;
-        birthDate: string;
-        roomNumber: number;
+        resident: UpdateResidentDTO;
       },
     ): Promise<ResidentDTO> => {
       const newResident = await residentService.updateResident(
+        parseInt(residentId, 10),
         userInfo,
-        residentId,
-        birthDate,
-        roomNumber,
+        resident,
       );
       return newResident;
     },
