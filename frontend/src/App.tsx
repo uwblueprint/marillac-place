@@ -31,6 +31,7 @@ import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
+import SideBar from "./components/common/SideBar";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -125,7 +126,7 @@ const App = (): React.ReactElement => {
                     </PrivateRoute>
                   }
                 />
-                <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
+                <Route path={Routes.HOOKS_PAGE} element={<SideBar><HooksDemo /></SideBar>} />
                 <Route path="*" element={<NotFound />} />
               </Switch>
             </Router>
