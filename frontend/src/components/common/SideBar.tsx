@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from "react";
 import {
-  Tabs, 
-  TabList, 
+  Tabs,
+  TabList,
   Tab,
   Box,
   Avatar,
@@ -9,10 +9,9 @@ import {
   Flex,
   Heading,
   useBreakpointValue,
-  Spacer
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as Logo } from '../../assets/Marillac_Place_Logo.svg';
+import { ReactComponent as Logo } from "../../assets/Marillac_Place_Logo.svg";
 
 const SideBar: FC<{ children: ReactNode }> = () => {
   const navigate = useNavigate();
@@ -65,7 +64,7 @@ const SideBar: FC<{ children: ReactNode }> = () => {
                 </Flex>
               </Box>
             </Flex>
-            
+
             <Tabs orientation="vertical" variant="solid-rounded" size="lg">
               <TabList w="100%">
                 {pages.map((page) => (

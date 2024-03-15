@@ -126,7 +126,14 @@ const App = (): React.ReactElement => {
                     </PrivateRoute>
                   }
                 />
-                <Route path={Routes.HOOKS_PAGE} element={<SideBar><HooksDemo /></SideBar>} />
+                <Route
+                  path={Routes.HOOKS_PAGE}
+                  element={
+                    <SideBar>
+                      <HooksDemo />
+                    </SideBar>
+                  }
+                />
                 <Route path="*" element={<NotFound />} />
               </Switch>
             </Router>
