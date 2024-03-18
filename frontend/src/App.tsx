@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
   Route,
@@ -31,6 +31,7 @@ import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
+import SideBar from "./components/common/SideBar";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -48,8 +49,15 @@ const App = (): React.ReactElement => {
     DEFAULT_SAMPLE_CONTEXT,
   );
 
+  const theme = extendTheme({
+    colors: {
+      purple: "#57469D",
+      grey: "#C5C8D8",
+    },
+  });
+
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <SampleContext.Provider value={sampleContext}>
         <SampleContextDispatcherContext.Provider
           value={dispatchSampleContextUpdate}
@@ -118,7 +126,14 @@ const App = (): React.ReactElement => {
                     </PrivateRoute>
                   }
                 />
-                <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
+                <Route
+                  path={Routes.HOOKS_PAGE}
+                  element={
+                    <SideBar>
+                      <HooksDemo />
+                    </SideBar>
+                  }
+                />
                 <Route path="*" element={<NotFound />} />
               </Switch>
             </Router>
