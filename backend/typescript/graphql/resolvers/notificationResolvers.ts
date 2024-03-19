@@ -1,8 +1,8 @@
-import AdminService from "../../services/implementations/adminService";
+import AdminService from "../../services/implementations/notificationService";
 import {
   IAdminService,
   NotificationDTO,
-} from "../../services/interfaces/adminService";
+} from "../../services/interfaces/notificationService";
 
 const adminService: IAdminService = new AdminService();
 
@@ -44,6 +44,32 @@ const adminResolvers = {
         Number(staffId),
       );
       return newAnnouncement;
+    },
+    deleteNotificationForResident: async (
+      _parent: undefined,
+      {
+        notificationId,
+        residentId,
+      }: { notificationId: number; residentId: number },
+    ): Promise<NotificationDTO> => {
+      const updatedNotification = await adminService.deleteNotificationForResident(
+        Number(notificationId),
+        Number(residentId),
+      );
+      return updatedNotification;
+    },
+    updateSeenForResident: async (
+      _parent: undefined,
+      {
+        notificationId,
+        residentId,
+      }: { notificationId: number; residentId: number },
+    ): Promise<NotificationDTO> => {
+      const updatedNotification = await adminService.updateSeenForResident(
+        Number(notificationId),
+        Number(residentId),
+      );
+      return updatedNotification;
     },
   },
 };

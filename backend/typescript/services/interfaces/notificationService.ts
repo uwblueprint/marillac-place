@@ -10,6 +10,7 @@ export interface NotificationResidentDTO {
   notificationId: number;
   residentId: number;
   seen: boolean;
+  isDeleted: boolean;
 }
 
 export interface IAdminService {
@@ -23,8 +24,9 @@ export interface IAdminService {
 
   /**
    * Post a notification to the specified resident
-   * @param notif_obj notification id
-   * @param resident_id resident id
+   * @param notifMessage notification message that is to be sent
+   * @param residentId resident id
+   * @param staffId staff id
    * @returns a NotificationDTO associated with the posted notification
    * @throws Error if creation fails
    */
@@ -37,18 +39,43 @@ export interface IAdminService {
   /**
    * Post a notification to the specified resident
    * @returns a list of NotificationDTOs containing all notifications/ announcements
-   * @throws Error if creation fails
+   * @throws Error if retrieval fails
    */
   getAllNotifications(): Promise<NotificationDTO[]>;
 
   /**
-   * Post the announcement notif_obj to all active residents
-   * @param notif_obj notification
+   * Post the announcement notifMessage to all active residents
+   * @param notifMessage notification message that is to be sent
+   * @param staffId staff id
    * @returns the new updated NotificationDTO
    * @throws Error if creation fails
    */
   sendAnnouncement(
     notifMessage: string,
     staffId: number,
+  ): Promise<NotificationDTO>;
+
+  /**
+   * set a notification with notifId id to isDeleted for resident with id residentId
+   * @param notifId notification id
+   * @param residentId resident id
+   * @returns updated NotificationDTO with the isDeleted flag set to true for resident associated with residentId
+   * @throws Error if update fails
+   */
+  deleteNotificationForResident(
+    notificationId: number,
+    residentId: number,
+  ): Promise<NotificationDTO>;
+
+  /**
+   * update the seen flag of notification notifId for resident residentId
+   * @param notifId notification id
+   * @param residentId resident id
+   * @returns updated NotificationDTO with the seen flag set to true for resident associated with residentId
+   * @throws Error if update fails
+   */
+  updateSeenForResident(
+    notificationId: number,
+    residentId: number,
   ): Promise<NotificationDTO>;
 }
