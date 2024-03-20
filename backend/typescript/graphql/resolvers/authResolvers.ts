@@ -4,10 +4,9 @@ import nodemailerConfig from "../../nodemailer.config";
 import AuthService from "../../services/implementations/authService";
 import EmailService from "../../services/implementations/emailService";
 import UserService from "../../services/implementations/userService";
-import IAuthService from "../../services/interfaces/authService";
+import IAuthService, { AuthDTO } from "../../services/interfaces/authService";
 import IEmailService from "../../services/interfaces/emailService";
 import IUserService from "../../services/interfaces/userService";
-import { AuthDTO, RegisterUserDTO } from "../../types";
 
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
@@ -28,31 +27,6 @@ const authResolvers = {
     ): Promise<Omit<AuthDTO, "refreshToken">> => {
       const authDTO = await authService.generateToken(email, password);
       const { refreshToken, ...rest } = authDTO;
-      res.cookie("refreshToken", refreshToken, cookieOptions);
-      return rest;
-    },
-    loginWithGoogle: async (
-      _parent: undefined,
-      { idToken }: { idToken: string },
-      { res }: { res: Response },
-    ): Promise<Omit<AuthDTO, "refreshToken">> => {
-      const authDTO = await authService.generateTokenOAuth(idToken);
-      const { refreshToken, ...rest } = authDTO;
-      res.cookie("refreshToken", refreshToken, cookieOptions);
-      return rest;
-    },
-    register: async (
-      _parent: undefined,
-      { user }: { user: RegisterUserDTO },
-      { res }: { res: Response },
-    ): Promise<Omit<AuthDTO, "refreshToken">> => {
-      await userService.createUser({ ...user, role: "User" });
-      const authDTO = await authService.generateToken(
-        user.email,
-        user.password,
-      );
-      const { refreshToken, ...rest } = authDTO;
-      await authService.sendEmailVerificationLink(user.email);
       res.cookie("refreshToken", refreshToken, cookieOptions);
       return rest;
     },

@@ -1,9 +1,10 @@
 import * as firebaseAdmin from "firebase-admin";
+import { UserType } from "@prisma/client";
 
-import IAuthService from "../interfaces/authService";
+import { Token } from "../../types";
+import IAuthService, { AuthDTO } from "../interfaces/authService";
 import IEmailService from "../interfaces/emailService";
 import IUserService from "../interfaces/userService";
-import { AuthDTO, Role, Token } from "../../types";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import FirebaseRestClient from "../../utilities/firebaseRestClient";
 import logger from "../../utilities/logger";
@@ -34,41 +35,6 @@ class AuthService implements IAuthService {
       return { ...token, ...user };
     } catch (error) {
       Logger.error(`Failed to generate token for user with email ${email}`);
-      throw error;
-    }
-  }
-
-  /* eslint-disable class-methods-use-this */
-  async generateTokenOAuth(idToken: string): Promise<AuthDTO> {
-    try {
-      const googleUser = await FirebaseRestClient.signInWithGoogleOAuth(
-        idToken,
-      );
-      // googleUser.idToken refers to the Firebase Auth access token for the user
-      const token = {
-        accessToken: googleUser.idToken,
-        refreshToken: googleUser.refreshToken,
-      };
-      // If user already has a login with this email, just return the token
-      try {
-        // Note: an error message will be logged from UserService if this lookup fails.
-        // You may want to silence the logger for this special OAuth user lookup case
-        const user = await this.userService.getUserByEmail(googleUser.email);
-        return { ...token, ...user };
-        /* eslint-disable-next-line no-empty */
-      } catch (error) {}
-
-      const user = await this.userService.createUser({
-        firstName: googleUser.firstName,
-        lastName: googleUser.lastName,
-        email: googleUser.email,
-        role: "User",
-        password: "",
-      });
-
-      return { ...token, ...user };
-    } catch (error) {
-      Logger.error(`Failed to generate token for user with OAuth ID token`);
       throw error;
     }
   }
@@ -161,13 +127,13 @@ class AuthService implements IAuthService {
 
   async isAuthorizedByRole(
     accessToken: string,
-    roles: Set<Role>,
+    roles: Set<UserType>,
   ): Promise<boolean> {
     try {
       const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
         .auth()
         .verifyIdToken(accessToken, true);
-      const userRole = await this.userService.getUserRoleByAuthId(
+      const userRole = await this.userService.getUserTypeByAuthId(
         decodedIdToken.uid,
       );
 

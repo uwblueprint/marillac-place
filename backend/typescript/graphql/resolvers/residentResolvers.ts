@@ -1,31 +1,25 @@
 import ResidentService from "../../services/implementations/residentService";
-import type {
-  IResidentService,
+import IResidentService, {
   ResidentDTO,
-  RedeemCreditsResponse,
   CreateResidentDTO,
   UpdateResidentDTO,
+  RedeemCreditsResponse,
 } from "../../services/interfaces/residentService";
-import type {
-  UpdateUserDTO,
-  CreateUserDTO,
-} from "../../services/interfaces/userService";
 
 const residentService: IResidentService = new ResidentService();
-// const authService: IAuthService = new AuthService(userService, emailService);
 
 const residentResolvers = {
   Query: {
-    residentsById: async (
+    getResidentsByIds: async (
       _parent: undefined,
-      { id }: { id: string[] },
+      { userIds }: { userIds: string[] },
     ): Promise<Array<ResidentDTO>> => {
-      return residentService.getResidentsById(id.map(Number));
+      return residentService.getResidentsByIds(userIds.map(Number));
     },
-    allResidents: async (): Promise<Array<ResidentDTO>> => {
+    getAllResidents: async (): Promise<Array<ResidentDTO>> => {
       return residentService.getAllResidents();
     },
-    activeResidents: async (): Promise<ResidentDTO[]> => {
+    getActiveResidents: async (): Promise<ResidentDTO[]> => {
       const activeResidents = await residentService.getActiveResidents();
       return activeResidents;
     },
@@ -34,49 +28,44 @@ const residentResolvers = {
     addResident: async (
       _parent: undefined,
       {
-        userInfo,
         resident,
       }: {
-        userInfo: CreateUserDTO;
         resident: CreateResidentDTO;
       },
     ): Promise<ResidentDTO> => {
-      const newResident = await residentService.addResident(userInfo, resident);
+      const newResident = await residentService.addResident(resident);
       return newResident;
     },
     updateResident: async (
       _parent: undefined,
       {
-        residentId,
-        userInfo,
+        userId,
         resident,
       }: {
-        residentId: string;
-        userInfo: UpdateUserDTO;
+        userId: string;
         resident: UpdateResidentDTO;
       },
     ): Promise<ResidentDTO> => {
       const newResident = await residentService.updateResident(
-        parseInt(residentId, 10),
-        userInfo,
+        parseInt(userId, 10),
         resident,
       );
       return newResident;
     },
     deleteResident: async (
       _parent: undefined,
-      { id }: { id: string },
+      { userId }: { userId: string },
     ): Promise<ResidentDTO> => {
       const deletedResident = await residentService.deleteResident(
-        parseInt(id, 10),
+        parseInt(userId, 10),
       );
       return deletedResident;
     },
     redeemCredits: async (
       _parent: undefined,
-      { id, credits }: { id: string; credits: number },
+      { userId, credits }: { userId: string; credits: number },
     ): Promise<RedeemCreditsResponse> => {
-      return residentService.redeemCredits(parseInt(id, 10), credits);
+      return residentService.redeemCredits(parseInt(userId, 10), credits);
     },
   },
 };

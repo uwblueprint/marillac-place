@@ -1,42 +1,39 @@
-import { PrismaClient } from "@prisma/client";
 import * as firebaseAdmin from "firebase-admin";
-import type { IStaffService, StaffDTO } from "../interfaces/staffService";
-import {
-  // UserDTO,
-  CreateUserDTO,
-  UpdateUserDTO,
-} from "../interfaces/userService";
+import { UserType } from "@prisma/client";
+
+import prisma from "../../prisma";
+import IStaffService, {
+  StaffDTO,
+  CreateStaffDTO,
+  UpdateStaffDTO,
+} from "../interfaces/staffService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
-const Prisma = new PrismaClient();
 const Logger = logger(__filename);
 
 class StaffService implements IStaffService {
-  async addStaff(
-    userInfo: CreateUserDTO,
-    isAdmin: boolean = false,
-  ): Promise<StaffDTO> {
+  async addStaff(staff: CreateStaffDTO): Promise<StaffDTO> {
     try {
       const firebaseUser = await firebaseAdmin.auth().createUser({
-        email: userInfo.email,
-        password: userInfo.password,
+        email: staff.email,
+        password: staff.password,
       });
 
       try {
-        const newStaff = await Prisma.staff.create({
+        const newStaff = await prisma.staff.create({
           data: {
-            isAdmin,
+            isAdmin: staff.isAdmin,
             user: {
               create: {
                 authId: firebaseUser.uid,
-                type: "STAFF",
-                email: userInfo.email,
-                phoneNumber: userInfo.phoneNumber,
-                firstName: userInfo.firstName,
-                lastName: userInfo.lastName,
-                displayName: userInfo.displayName,
-                profilePictureURL: userInfo.profilePictureURL,
+                type: UserType.STAFF,
+                email: staff.email,
+                phoneNumber: staff.phoneNumber,
+                firstName: staff.firstName,
+                lastName: staff.lastName,
+                displayName: staff.displayName,
+                profilePictureURL: staff.profilePictureURL,
               },
             },
           },
@@ -46,7 +43,6 @@ class StaffService implements IStaffService {
         return {
           userId: newStaff.userId,
           isAdmin: newStaff.isAdmin,
-          type: newStaff.user.type,
           email: firebaseUser.email ?? "",
           phoneNumber: newStaff.user.phoneNumber,
           firstName: newStaff.user.firstName,
@@ -77,46 +73,46 @@ class StaffService implements IStaffService {
 
   async updateStaff(
     staffId: number,
-    userInfo: UpdateUserDTO,
+    staff: UpdateStaffDTO,
     isAdmin: boolean = false,
   ): Promise<StaffDTO> {
     try {
-      const originalUser = await Prisma.user.findUnique({
+      const originalUser = await prisma.user.findUnique({
         where: { id: staffId },
       });
 
       if (!originalUser) {
         throw new Error(`staff ${staffId} not found.`);
-      } else if (originalUser.type != "STAFF") {
+      } else if (originalUser.type !== UserType.STAFF) {
         throw new Error(`id ${staffId} is not a staff.`);
       }
 
       const { authId } = originalUser;
-      const email = "email" in userInfo ? userInfo.email : originalUser.email;
+      const email = "email" in staff ? staff.email : originalUser.email;
 
-      if ("password" in userInfo) {
+      if ("password" in staff) {
         await firebaseAdmin.auth().updateUser(authId, {
           email,
-          password: userInfo.password,
+          password: staff.password,
         });
       } else {
         await firebaseAdmin.auth().updateUser(authId, { email });
       }
 
-      const updatedStaff = await Prisma.staff.update({
+      const updatedStaff = await prisma.staff.update({
         where: { userId: staffId },
         data: {
           isAdmin,
           user: {
             update: {
               data: {
-                email: userInfo.email,
-                phoneNumber: userInfo.phoneNumber,
-                firstName: userInfo.firstName,
-                lastName: userInfo.lastName,
-                displayName: userInfo.displayName,
-                profilePictureURL: userInfo.profilePictureURL,
-                isActive: userInfo.isActive
+                email: staff.email,
+                phoneNumber: staff.phoneNumber,
+                firstName: staff.firstName,
+                lastName: staff.lastName,
+                displayName: staff.displayName,
+                profilePictureURL: staff.profilePictureURL,
+                isActive: staff.isActive,
               },
             },
           },
@@ -129,7 +125,6 @@ class StaffService implements IStaffService {
       return {
         userId: updatedStaff.userId,
         isAdmin: updatedStaff.isAdmin,
-        type: updatedStaff.user.type,
         email: updatedStaff.user.email,
         phoneNumber: updatedStaff.user.phoneNumber,
         firstName: updatedStaff.user.firstName,
@@ -148,31 +143,30 @@ class StaffService implements IStaffService {
 
   async deleteStaff(staffId: number): Promise<StaffDTO> {
     try {
-      const deletedUser = await Prisma.user.findUnique({
+      const deletedUser = await prisma.user.findUnique({
         where: { id: staffId },
       });
 
       if (!deletedUser) {
         throw new Error(`staff ${staffId} not found.`);
-      } else if (deletedUser.type != "STAFF") {
+      } else if (deletedUser.type !== UserType.STAFF) {
         throw new Error(`id ${staffId} is not a staff.`);
       }
 
       await firebaseAdmin.auth().deleteUser(deletedUser.authId);
 
-      const deletedStaff = await Prisma.staff.delete({
+      const deletedStaff = await prisma.staff.delete({
         where: { userId: staffId },
         include: { user: true },
       });
 
-      await Prisma.user.delete({
+      await prisma.user.delete({
         where: { id: staffId },
       });
 
       return {
         userId: deletedStaff.userId,
         isAdmin: deletedStaff.isAdmin,
-        type: deletedUser.type,
         email: deletedUser.email,
         phoneNumber: deletedUser.phoneNumber,
         firstName: deletedUser.firstName,
@@ -191,7 +185,7 @@ class StaffService implements IStaffService {
 
   async getAllStaff(): Promise<Array<StaffDTO>> {
     try {
-      const allStaff = await Prisma.staff.findMany({
+      const allStaff = await prisma.staff.findMany({
         include: {
           user: true,
           // user: {
@@ -209,7 +203,6 @@ class StaffService implements IStaffService {
         return {
           userId: staff.userId,
           isAdmin: staff.isAdmin,
-          type: staff.user.type,
           email: staff.user.email,
           phoneNumber: staff.user.phoneNumber,
           firstName: staff.user.firstName,
@@ -231,7 +224,7 @@ class StaffService implements IStaffService {
 
   async getStaffByIds(staffIds: number[]): Promise<Array<StaffDTO>> {
     try {
-      const getStaffById = await Prisma.staff.findMany({
+      const getStaffById = await prisma.staff.findMany({
         where: { userId: { in: staffIds } },
         include: {
           user: true,
@@ -250,7 +243,6 @@ class StaffService implements IStaffService {
         return {
           userId: staff.userId,
           isAdmin: staff.isAdmin,
-          type: staff.user.type,
           email: staff.user.email,
           phoneNumber: staff.user.phoneNumber,
           firstName: staff.user.firstName,

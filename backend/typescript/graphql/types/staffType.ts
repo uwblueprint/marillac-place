@@ -3,30 +3,48 @@ import { gql } from "apollo-server-express";
 const staffType = gql`
   type StaffDTO {
     userId: ID!
-    isAdmin: Boolean!
-    type: UserTypes!
     email: String!
+    phoneNumber: String
     firstName: String!
     lastName: String!
-    phoneNumber: String
     displayName: String
     profilePictureURL: String
     isActive: Boolean!
+    isAdmin: Boolean!
+  }
+
+  input CreateStaffDTO {
+    email: String!
+    password: String!
+    phoneNumber: String
+    firstName: String!
+    lastName: String!
+    displayName: String
+    profilePictureURL: String
+    isAdmin: Boolean!
+  }
+
+  input UpdateStaffDTO {
+    email: String
+    password: String
+    phoneNumber: String
+    firstName: String
+    lastName: String
+    displayName: String
+    profilePictureURL: String
+    isActive: Boolean
+    isAdmin: Boolean
   }
 
   extend type Query {
+    getStaffByIds(userIds: [ID!]): [StaffDTO!]
     getAllStaff: [StaffDTO!]
-    getStaffByIds(staffIds: [ID!]): [StaffDTO!]
   }
 
   extend type Mutation {
-    addStaff(userInfo: CreateUserDTO!, isAdmin: Boolean): StaffDTO!
-    updateStaff(
-      staffId: ID!
-      userInfo: UpdateUserDTO!
-      isAdmin: Boolean
-    ): StaffDTO!
-    deleteStaff(staffId: ID!): StaffDTO!
+    addStaff(staff: CreateStaffDTO!): StaffDTO!
+    updateStaff(userId: ID!, staff: UpdateStaffDTO!): StaffDTO!
+    deleteStaff(userId: ID!): StaffDTO!
   }
 `;
 

@@ -1,12 +1,9 @@
 import StaffService from "../../services/implementations/staffService";
-import type {
-  IStaffService,
+import IStaffService, {
   StaffDTO,
+  CreateStaffDTO,
+  UpdateStaffDTO,
 } from "../../services/interfaces/staffService";
-import type {
-  UpdateUserDTO,
-  CreateUserDTO,
-} from "../../services/interfaces/userService";
 
 const staffService: IStaffService = new StaffService();
 
@@ -14,9 +11,9 @@ const staffResolvers = {
   Query: {
     getStaffByIds: async (
       _parent: undefined,
-      { staffIds }: { staffIds: string[] },
+      { userIds }: { userIds: string[] },
     ): Promise<Array<StaffDTO>> => {
-      return staffService.getStaffByIds(staffIds.map(Number));
+      return staffService.getStaffByIds(userIds.map(Number));
     },
     getAllStaff: async (): Promise<Array<StaffDTO>> => {
       return staffService.getAllStaff();
@@ -25,40 +22,32 @@ const staffResolvers = {
   Mutation: {
     addStaff: async (
       _parent: undefined,
-      {
-        userInfo,
-        isAdmin,
-      }: { userInfo: CreateUserDTO; isAdmin: boolean | undefined },
+      { staff }: { staff: CreateStaffDTO },
     ): Promise<StaffDTO> => {
-      const newStaff = await staffService.addStaff(userInfo, isAdmin);
+      const newStaff = await staffService.addStaff(staff);
       return newStaff;
     },
     updateStaff: async (
       _parent: undefined,
       {
-        staffId,
-        userInfo,
-        isAdmin,
+        userId,
+        staff,
       }: {
-        staffId: string;
-        userInfo: UpdateUserDTO;
-        isAdmin: boolean | undefined;
+        userId: string;
+        staff: UpdateStaffDTO;
       },
     ): Promise<StaffDTO> => {
       const newStaff = await staffService.updateStaff(
-        parseInt(staffId, 10),
-        userInfo,
-        isAdmin,
+        parseInt(userId, 10),
+        staff,
       );
       return newStaff;
     },
     deleteStaff: async (
       _parent: undefined,
-      { staffId }: { staffId: string },
+      { userId }: { userId: string },
     ): Promise<StaffDTO> => {
-      const deletedStaff = await staffService.deleteStaff(
-        parseInt(staffId, 10),
-      );
+      const deletedStaff = await staffService.deleteStaff(parseInt(userId, 10));
       return deletedStaff;
     },
   },

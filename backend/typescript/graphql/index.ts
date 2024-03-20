@@ -5,6 +5,7 @@ import {
   typeDefs as scalarTypeDefs,
   resolvers as scalarResolvers,
 } from "graphql-scalars";
+import { UserType } from "@prisma/client";
 
 import {
   isAuthorizedByEmail,
@@ -13,16 +14,10 @@ import {
 } from "../middlewares/auth";
 import authResolvers from "./resolvers/authResolvers";
 import authType from "./types/authType";
-import entityResolvers from "./resolvers/entityResolvers";
-import entityType from "./types/entityType";
-import simpleEntityResolvers from "./resolvers/simpleEntityResolvers";
-import adminResolvers from "./resolvers/adminResolvers";
-import simpleEntityType from "./types/simpleEntityType";
-import userResolvers from "./resolvers/userResolvers";
-import userType from "./types/userType";
+import notificationResolvers from "./resolvers/notificationResolvers";
+import notificationType from "./types/notificationType";
+import staffResolvers from "./resolvers/staffResolver";
 import staffType from "./types/staffType";
-import staffResolver from "./resolvers/staffResolver";
-import adminType from "./types/adminType";
 import residentResolvers from "./resolvers/residentResolvers";
 import residentType from "./types/residentType";
 import taskResolvers from "./resolvers/taskResolvers";
@@ -46,54 +41,48 @@ const executableSchema = makeExecutableSchema({
     query,
     mutation,
     authType,
-    entityType,
-    residentType,
-    simpleEntityType,
-    userType,
-    taskType,
+    notificationType,
     staffType,
-    adminType,
+    residentType,
+    taskType,
   ],
   resolvers: merge(
     scalarResolvers,
     authResolvers,
-    entityResolvers,
+    notificationResolvers,
+    staffResolvers,
     residentResolvers,
-    simpleEntityResolvers,
-    userResolvers,
     taskResolvers,
-    staffResolver,
-    adminResolvers,
   ),
 });
 
-const authorizedByAllRoles = () =>
-  isAuthorizedByRole(new Set(["User", "Admin"]));
-const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
+// const authorizedByAllRoles = () =>
+//   isAuthorizedByRole(new Set([UserType.STAFF, UserType.RESIDENT]));
+// const authorizedByAdmin = () => isAuthorizedByRole(new Set([UserType.STAFF]));
 
 const graphQLMiddlewares = {
   Query: {
-    entity: authorizedByAllRoles(),
-    entities: authorizedByAllRoles(),
-    simpleEntity: authorizedByAllRoles(),
-    simpleEntities: authorizedByAllRoles(),
-    userById: authorizedByAdmin(),
-    userByEmail: authorizedByAdmin(),
-    users: authorizedByAdmin(),
+    // entity: authorizedByAllRoles(),
+    // entities: authorizedByAllRoles(),
+    // simpleEntity: authorizedByAllRoles(),
+    // simpleEntities: authorizedByAllRoles(),
+    // userById: authorizedByAdmin(),
+    // userByEmail: authorizedByAdmin(),
+    // users: authorizedByAdmin(),
   },
   Mutation: {
-    createEntity: authorizedByAllRoles(),
-    updateEntity: authorizedByAllRoles(),
-    deleteEntity: authorizedByAllRoles(),
-    createSimpleEntity: authorizedByAllRoles(),
-    updateSimpleEntity: authorizedByAllRoles(),
-    deleteSimpleEntity: authorizedByAllRoles(),
-    createUser: authorizedByAdmin(),
-    updateUser: authorizedByAdmin(),
-    deleteUserById: authorizedByAdmin(),
-    deleteUserByEmail: authorizedByAdmin(),
-    logout: isAuthorizedByUserId("userId"),
-    resetPassword: isAuthorizedByEmail("email"),
+    // createEntity: authorizedByAllRoles(),
+    // updateEntity: authorizedByAllRoles(),
+    // deleteEntity: authorizedByAllRoles(),
+    // createSimpleEntity: authorizedByAllRoles(),
+    // updateSimpleEntity: authorizedByAllRoles(),
+    // deleteSimpleEntity: authorizedByAllRoles(),
+    // createUser: authorizedByAdmin(),
+    // updateUser: authorizedByAdmin(),
+    // deleteUserById: authorizedByAdmin(),
+    // deleteUserByEmail: authorizedByAdmin(),
+    // logout: isAuthorizedByUserId("userId"),
+    // resetPassword: isAuthorizedByEmail("email"),
   },
 };
 

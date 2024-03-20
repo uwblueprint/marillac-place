@@ -1,11 +1,11 @@
 import { Request } from "express";
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import { GraphQLResolveInfo } from "graphql";
+import { UserType } from "@prisma/client";
 
 import AuthService from "../services/implementations/authService";
 import UserService from "../services/implementations/userService";
 import IAuthService from "../services/interfaces/authService";
-import { Role } from "../types";
 
 const authService: IAuthService = new AuthService(new UserService());
 
@@ -24,7 +24,7 @@ export const getAccessToken = (req: Request): string | null => {
 /* Determine if request is authorized based on accessToken validity and role of client */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export const isAuthorizedByRole = (roles: Set<Role>) => {
+export const isAuthorizedByRole = (roles: Set<UserType>) => {
   return async (
     resolve: (
       parent: any,

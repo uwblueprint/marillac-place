@@ -1,41 +1,52 @@
-export type Status = "PENDING_APPROVAL" | "INCOMPLETE" | "COMPLETE" | "EXCUSED";
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type Recurrence_Frequency = "DAILY" | "WEEKLY" | "BI_WEEKLY";
-
-export interface InputTaskDTO {
-  categoryId: number;
-  title: string;
-  status: Status;
-  description: string;
-  assigneeId: number;
-  assignerId: number;
-  creditValue: number;
-  startDate: Date;
-  endDate?: Date | null;
-  comments?: string | null;
-  recurrenceFrequency?: Recurrence_Frequency | null;
-}
+import { TaskType, Status, RecurrenceFrequency } from "@prisma/client";
 
 export interface TaskDTO {
   id: number;
-  categoryId: number;
-  categoryName: string;
+  type: TaskType;
   title: string;
-  status: Status;
   description: string;
-  assigneeId: number;
-  assigneeName: string;
-  assignerId: number;
-  assignerName: string;
   creditValue: number;
-  startDate: Date;
-  endDate?: Date | null;
-  comments?: string | null;
-  recurrenceFrequency?: Recurrence_Frequency | null;
+  location: TaskLocationDTO;
 }
 
-export interface ITaskService {
+export interface TaskLocationDTO {
+  id: number;
+  title: string;
+  description: string;
+}
+
+export interface InputTaskDTO {
+  type: TaskType;
+  title: string;
+  description: string;
+  creditValue: number;
+  locationId: number;
+}
+
+export interface InputTaskAssignedDTO {
+  taskId: number;
+  assigneeId: number;
+  assignerId?: number;
+  status: Status;
+  startDate: Date;
+  endDate?: Date;
+  recurrenceFrequency?: RecurrenceFrequency;
+  comments?: string;
+}
+
+export interface TaskAssignedDTO {
+  id: number;
+  taskId: number;
+  assignerId: number | null;
+  assigneeId: number;
+  status: Status;
+  startDate: Date;
+  endDate: Date | null;
+  recurrenceFrequency: RecurrenceFrequency | null;
+  comments: string | null;
+}
+
+interface ITaskService {
   /**
    * Get the task corresponding to the taskId
    * @param id task id
@@ -46,11 +57,11 @@ export interface ITaskService {
 
   /**
    * Get all tasks belonging to a category
-   * @param categoryId category's id
-   * @returns a list of TaskDTOs with a given category
+   * @param type task type
+   * @returns a list of TaskDTOs with a given type
    * @throws Error if task retrieval fails
    */
-  getTasksByCategoryId(categoryId: number): Promise<TaskDTO[]>;
+  getTasksByType(type: TaskType): Promise<TaskDTO[]>;
 
   /**
    * Get all tasks assigned to a resident
@@ -58,7 +69,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs with a given assignee
    * @throws Error if task retrieval fails
    */
-  getTasksByAssigneeId(assigneeId: number): Promise<TaskDTO[]>;
+  getTasksByAssigneeId(assigneeId: number): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks assigned by a staff member
@@ -66,7 +77,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs with a given assigner
    * @throws Error if task retrieval fails
    */
-  getTasksByAssignerId(assignerId: number): Promise<TaskDTO[]>;
+  getTasksByAssignerId(assignerId: number): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks by a start date
@@ -74,7 +85,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs starting on the provided date
    * @throws Error if task retrieval fails
    */
-  getTasksByStartDate(startDate: Date): Promise<TaskDTO[]>;
+  getTasksByStartDate(startDate: Date): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks by an end date
@@ -82,7 +93,7 @@ export interface ITaskService {
    * @returns a list of TaskDTOs ending on the provided date
    * @throws Error if task retrieval fails
    */
-  getTasksByEndDate(endDate: Date): Promise<TaskDTO[]>;
+  getTasksByEndDate(endDate: Date): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks by a status
@@ -90,7 +101,7 @@ export interface ITaskService {
    * @returns a list of TaskDTO with a given status
    * @throws Error if task retrieval fails
    */
-  getTasksByStatus(status: Status): Promise<TaskDTO[]>;
+  getTasksByStatus(status: Status): Promise<TaskAssignedDTO[]>;
 
   /**
    * Create a task
@@ -116,4 +127,25 @@ export interface ITaskService {
    * @throws Error if task deletion fails
    */
   deleteTaskById(taskId: number): Promise<TaskDTO>;
+
+  /**
+   * Assign a task to a resident
+   * @param taskAssigned the task to be assigned
+   * @returns a TaskAssignedDTO with the TaskAssigned's information
+   * @throws Error if task assignment fails
+   */
+  assignTask(taskAssigned: InputTaskAssignedDTO): Promise<TaskAssignedDTO>;
+
+  /**
+   * Changes the status of an assigned task
+   * @param taskAssigned the task to have its status changed
+   * @returns a TaskAssignedDTO with the TaskAssigned's information
+   * @throws Error if task status change fails
+   */
+  changeTaskStatus(
+    taskAssignedId: number,
+    status: Status,
+  ): Promise<TaskAssignedDTO>;
 }
+
+export default ITaskService;

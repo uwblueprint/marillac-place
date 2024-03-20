@@ -1,4 +1,9 @@
-import { AuthDTO, Role, Token } from "../../types";
+import { UserType } from "@prisma/client";
+
+import { Token } from "../../types";
+import { SimplifiedUserDTO } from "./userService";
+
+export type AuthDTO = Token & SimplifiedUserDTO;
 
 interface IAuthService {
   /**
@@ -18,7 +23,7 @@ interface IAuthService {
    * @returns AuthDTO object containing the access token, refresh token, and user info
    * @throws Error if token generation fails
    */
-  generateTokenOAuth(idToken: string): Promise<AuthDTO>;
+  // generateTokenOAuth(idToken: string): Promise<AuthDTO>;
 
   /**
    * Revoke all refresh tokens of a user
@@ -58,7 +63,10 @@ interface IAuthService {
    * @param roles roles to check for
    * @returns true if token valid and authorized, false otherwise
    */
-  isAuthorizedByRole(accessToken: string, roles: Set<Role>): Promise<boolean>;
+  isAuthorizedByRole(
+    accessToken: string,
+    roles: Set<UserType>,
+  ): Promise<boolean>;
 
   /**
    * Determine if the provided access token is valid and issued to the requested user

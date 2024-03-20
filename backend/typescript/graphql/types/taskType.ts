@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 const taskType = gql`
   enum Status {
     PENDING_APPROVAL
+    ASSIGNED
     INCOMPLETE
     COMPLETE
     EXCUSED
@@ -14,52 +15,76 @@ const taskType = gql`
     BI_WEEKLY
   }
 
-  input InputTaskDTO {
-    categoryId: Int!
-    title: String!
-    status: Status!
-    description: String!
-    assigneeId: Int!
-    assignerId: Int!
-    creditValue: Float!
-    startDate: Date!
-    endDate: Date
-    comments: String
-    recurrenceFrequency: Recurrence_Frequency
+  enum TaskType {
+    REQUIRED
+    OPTIONAL
+    CHORE
+    CUSTOM
   }
 
   type TaskDTO {
     id: Int!
-    categoryName: String!
-    categoryId: Int!
+    type: TaskType!
     title: String!
-    status: Status!
     description: String!
+    creditValue: Int!
+    location: TaskLocationDTO!
+    tasksAssigned: [TaskAssignedDTO!]
+  }
+
+  type TaskLocationDTO {
+    id: Int!
+    title: String!
+    description: String!
+  }
+
+  input InputTaskDTO {
+    type: TaskType!
+    title: String!
+    description: String!
+    creditValue: Int!
+    locationId: Int!
+  }
+
+  input InputTaskAssignedDTO {
+    taskId: Int
+    assigneeId: Int
+    assignerId: Int
+    status: Status
+    startDate: Date
+    endDate: Date
+    recurrenceFrequency: Recurrence_Frequency
+    comments: String
+  }
+
+  type TaskAssignedDTO {
+    id: Int!
+    taskId: Int!
     assigneeId: Int!
-    assigneeName: String!
     assignerId: Int!
-    assignerName: String!
-    creditValue: Float!
+    status: Status!
     startDate: Date!
     endDate: Date
-    comments: String
     recurrenceFrequency: Recurrence_Frequency
+    comments: String
   }
 
   extend type Query {
-    getTaskById(id: Int!): TaskDTO!
-    getTasksByCategoryId(categoryId: Int!): [TaskDTO!]
-    getTasksByAssigneeId(assigneeId: Int!): [TaskDTO!]
-    getTasksByAssignerId(assignerId: Int!): [TaskDTO!]
-    getTasksByStartDate(startDate: Date!): [TaskDTO!]
-    getTasksByEndDate(endDate: Date!): [TaskDTO!]
-    getTasksByStatus(status: Status!): [TaskDTO!]
+    getTaskById(taskId: Int!): TaskDTO!
+    getTasksByType(type: TaskType!): [TaskDTO!]
+    getTasksByAssigneeId(assigneeId: Int!): [TaskAssignedDTO]
+    getTasksByAssignerId(assignerId: Int!): [TaskAssignedDTO]
+    getTasksByStartDate(startDate: Date!): [TaskAssignedDTO]
+    getTasksByEndDate(endDate: Date!): [TaskAssignedDTO]
+    getTasksByStatus(status: Status!): [TaskAssignedDTO]
   }
 
   extend type Mutation {
     createTask(task: InputTaskDTO!): TaskDTO!
-    updateTask(id: Int!, task: InputTaskDTO!): TaskDTO!
-    deleteTask(id: Int!): TaskDTO!
+    updateTask(taskId: Int, task: InputTaskDTO!): TaskDTO!
+    deleteTask(taskId: Int): TaskDTO!
+    assignTask(taskAssigned: InputTaskAssignedDTO): TaskAssignedDTO
+    changeTaskStatus(taskAssignedId: Int!, status: Status!): TaskAssignedDTO
   }
 `;
 

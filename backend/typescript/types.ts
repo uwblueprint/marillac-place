@@ -1,27 +1,27 @@
-export type Role = "User" | "Admin";
+// export type UserType = "STAFF" | "RESIDENT";
 
 export type Token = {
   accessToken: string;
   refreshToken: string;
 };
 
-export type UserDTO = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: Role;
-};
+// export type UserDTO = {
+//   id: number;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   type: UserType;
+// };
 
-export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
+// export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 
-export type UpdateUserDTO = Omit<UserDTO, "id">;
+// export type UpdateUserDTO = Omit<UserDTO, "id">;
 
-export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
+// export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
-export type AuthDTO = Token & UserDTO;
+// export type AuthDTO = Token & UserDTO;
 
-export type Letters = "A" | "B" | "C" | "D";
+// export type Letters = "A" | "B" | "C" | "D";
 
 export type NodemailerConfig = {
   service: "gmail";

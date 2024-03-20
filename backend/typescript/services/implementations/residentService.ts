@@ -1,7 +1,8 @@
-import { PrismaClient } from "@prisma/client";
 import * as firebaseAdmin from "firebase-admin";
-import {
-  IResidentService,
+import { UserType } from "@prisma/client";
+
+import prisma from "../../prisma";
+import IResidentService, {
   ResidentDTO,
   CreateResidentDTO,
   UpdateResidentDTO,
@@ -9,28 +10,19 @@ import {
 } from "../interfaces/residentService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
-import {
-  // UserDTO,
-  CreateUserDTO,
-  UpdateUserDTO,
-} from "../interfaces/userService";
 
-const Prisma = new PrismaClient();
 const Logger = logger(__filename);
 
 class ResidentService implements IResidentService {
-  async addResident(
-    userInfo: CreateUserDTO,
-    resident: CreateResidentDTO,
-  ): Promise<ResidentDTO> {
+  async addResident(resident: CreateResidentDTO): Promise<ResidentDTO> {
     try {
       const firebaseUser = await firebaseAdmin.auth().createUser({
-        email: userInfo.email,
-        password: userInfo.password,
+        email: resident.email,
+        password: resident.password,
       });
 
       try {
-        const newResident = await Prisma.resident.create({
+        const newResident = await prisma.resident.create({
           data: {
             residentId: resident.residentId,
             birthDate: resident.birthDate,
@@ -42,13 +34,13 @@ class ResidentService implements IResidentService {
             user: {
               create: {
                 authId: firebaseUser.uid,
-                type: "RESIDENT",
-                email: userInfo.email,
-                phoneNumber: userInfo.phoneNumber,
-                firstName: userInfo.firstName,
-                lastName: userInfo.lastName,
-                displayName: userInfo.displayName,
-                profilePictureURL: userInfo.profilePictureURL,
+                type: UserType.RESIDENT,
+                email: resident.email,
+                phoneNumber: resident.phoneNumber,
+                firstName: resident.firstName,
+                lastName: resident.lastName,
+                displayName: resident.displayName,
+                profilePictureURL: resident.profilePictureURL,
                 isActive: true,
               },
             },
@@ -65,7 +57,6 @@ class ResidentService implements IResidentService {
           dateJoined: newResident.dateJoined,
           dateLeft: newResident.dateLeft,
           notes: newResident.notes,
-          type: newResident.user.type,
           email: newResident.user.email,
           phoneNumber: newResident.user.phoneNumber,
           firstName: newResident.user.firstName,
@@ -98,37 +89,36 @@ class ResidentService implements IResidentService {
   }
 
   async updateResident(
-    residentId: number,
-    userInfo: UpdateUserDTO,
+    userId: number,
     resident: UpdateResidentDTO,
   ): Promise<ResidentDTO> {
     try {
-      const oldUser = await Prisma.user.findUnique({
-        where: { id: residentId },
+      const oldUser = await prisma.user.findUnique({
+        where: { id: userId },
       });
 
       if (!oldUser) {
-        throw new Error(`resident ${residentId} not found.`);
+        throw new Error(`resident ${userId} not found.`);
       }
 
-      if (oldUser.type !== "RESIDENT") {
-        throw new Error(`${residentId} is not a resident.`);
+      if (oldUser.type !== UserType.RESIDENT) {
+        throw new Error(`${userId} is not a resident.`);
       }
 
       const { authId } = oldUser;
-      const email = "email" in userInfo ? userInfo.email : oldUser.email;
+      const email = "email" in resident ? resident.email : oldUser.email;
 
-      if ("password" in userInfo) {
+      if ("password" in resident) {
         await firebaseAdmin.auth().updateUser(authId, {
           email,
-          password: userInfo.password,
+          password: resident.password,
         });
       } else {
         await firebaseAdmin.auth().updateUser(authId, { email });
       }
 
-      const updatedResident = await Prisma.resident.update({
-        where: { userId: residentId },
+      const updatedResident = await prisma.resident.update({
+        where: { userId },
         data: {
           residentId: resident.residentId || undefined,
           birthDate: resident.birthDate || undefined,
@@ -140,13 +130,13 @@ class ResidentService implements IResidentService {
           user: {
             update: {
               data: {
-                email: userInfo.email || undefined,
-                phoneNumber: userInfo.phoneNumber || undefined,
-                firstName: userInfo.firstName || undefined,
-                lastName: userInfo.lastName || undefined,
-                displayName: userInfo.displayName || undefined,
-                profilePictureURL: userInfo.profilePictureURL || undefined,
-                isActive: userInfo.isActive || undefined,
+                email: resident.email || undefined,
+                phoneNumber: resident.phoneNumber || undefined,
+                firstName: resident.firstName || undefined,
+                lastName: resident.lastName || undefined,
+                displayName: resident.displayName || undefined,
+                profilePictureURL: resident.profilePictureURL || undefined,
+                isActive: resident.isActive || undefined,
               },
             },
           },
@@ -163,7 +153,6 @@ class ResidentService implements IResidentService {
         dateJoined: updatedResident.dateJoined,
         dateLeft: updatedResident.dateLeft,
         notes: updatedResident.notes,
-        type: updatedResident.user.type,
         email: updatedResident.user.email,
         phoneNumber: updatedResident.user.phoneNumber,
         firstName: updatedResident.user.firstName,
@@ -174,7 +163,7 @@ class ResidentService implements IResidentService {
       };
     } catch (error) {
       Logger.error(
-        `Failed to update resident #${residentId} because ${getErrorMessage(
+        `Failed to update resident #${userId} because ${getErrorMessage(
           error,
         )}`,
       );
@@ -182,29 +171,29 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async deleteResident(residentId: number): Promise<ResidentDTO> {
+  async deleteResident(userId: number): Promise<ResidentDTO> {
     try {
-      const deletedUser = await Prisma.user.findUnique({
-        where: { id: residentId },
+      const deletedUser = await prisma.user.findUnique({
+        where: { id: userId },
       });
 
       if (!deletedUser) {
-        throw new Error(`resident ${residentId} not found.`);
+        throw new Error(`resident ${userId} not found.`);
       }
 
-      if (deletedUser.type !== "RESIDENT") {
-        throw new Error(`${residentId} is not a resident.`);
+      if (deletedUser.type !== UserType.RESIDENT) {
+        throw new Error(`${userId} is not a resident.`);
       }
 
       await firebaseAdmin.auth().deleteUser(deletedUser.authId);
 
-      const deletedResident = await Prisma.resident.delete({
-        where: { userId: residentId },
+      const deletedResident = await prisma.resident.delete({
+        where: { userId },
         include: { user: true },
       });
 
-      await Prisma.user.delete({
-        where: { id: residentId },
+      await prisma.user.delete({
+        where: { id: userId },
       });
 
       return {
@@ -216,7 +205,6 @@ class ResidentService implements IResidentService {
         dateJoined: deletedResident.dateJoined,
         dateLeft: deletedResident.dateLeft,
         notes: deletedResident.notes,
-        type: deletedResident.user.type,
         email: deletedResident.user.email,
         phoneNumber: deletedResident.user.phoneNumber,
         firstName: deletedResident.user.firstName,
@@ -227,7 +215,7 @@ class ResidentService implements IResidentService {
       };
     } catch (error) {
       Logger.error(
-        `Failed to delete resident #${residentId} because ${getErrorMessage(
+        `Failed to delete resident #${userId} because ${getErrorMessage(
           error,
         )}`,
       );
@@ -237,7 +225,7 @@ class ResidentService implements IResidentService {
 
   async getAllResidents(): Promise<ResidentDTO[]> {
     try {
-      const allResidents = await Prisma.resident.findMany({
+      const allResidents = await prisma.resident.findMany({
         include: { user: true },
       });
       return allResidents.map((resident) => {
@@ -250,7 +238,6 @@ class ResidentService implements IResidentService {
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
           notes: resident.notes,
-          type: resident.user.type,
           email: resident.user.email,
           phoneNumber: resident.user.phoneNumber,
           firstName: resident.user.firstName,
@@ -268,10 +255,10 @@ class ResidentService implements IResidentService {
     }
   }
 
-  async getResidentsById(residentId: number[]): Promise<ResidentDTO[]> {
+  async getResidentsByIds(userId: number[]): Promise<ResidentDTO[]> {
     try {
-      const getResidentById = await Prisma.resident.findMany({
-        where: { residentId: { in: residentId } },
+      const getResidentById = await prisma.resident.findMany({
+        where: { userId: { in: userId } },
         include: { user: true },
       });
       return getResidentById.map((resident) => {
@@ -284,7 +271,6 @@ class ResidentService implements IResidentService {
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
           notes: resident.notes,
-          type: resident.user.type,
           email: resident.user.email,
           phoneNumber: resident.user.phoneNumber,
           firstName: resident.user.firstName,
@@ -296,7 +282,7 @@ class ResidentService implements IResidentService {
       });
     } catch (error: unknown) {
       Logger.error(
-        `Failed to get residents by IDs. IDs = ${residentId}. Reason = ${getErrorMessage(
+        `Failed to get residents by IDs. IDs = ${userId}. Reason = ${getErrorMessage(
           error,
         )}`,
       );
@@ -306,7 +292,7 @@ class ResidentService implements IResidentService {
 
   async getActiveResidents(): Promise<ResidentDTO[]> {
     try {
-      const residents = await Prisma.resident.findMany({
+      const residents = await prisma.resident.findMany({
         where: {
           dateLeft: null,
         },
@@ -325,7 +311,6 @@ class ResidentService implements IResidentService {
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
           notes: resident.notes,
-          type: resident.user.type,
           email: resident.user.email,
           phoneNumber: resident.user.phoneNumber,
           firstName: resident.user.firstName,
@@ -346,12 +331,12 @@ class ResidentService implements IResidentService {
   }
 
   async redeemCredits(
-    residentId: number,
+    userId: number,
     credits: number,
   ): Promise<RedeemCreditsResponse> {
     try {
-      const currentCredits = await Prisma.resident.findUnique({
-        where: { residentId },
+      const currentCredits = await prisma.resident.findUnique({
+        where: { userId },
         select: {
           credits: true,
         },
@@ -361,8 +346,8 @@ class ResidentService implements IResidentService {
         return RedeemCreditsResponse.INVALID_ID;
       }
       if (currentCredits.credits >= credits) {
-        await Prisma.resident.update({
-          where: { residentId },
+        await prisma.resident.update({
+          where: { userId },
           data: {
             credits: {
               decrement: credits,
@@ -374,7 +359,7 @@ class ResidentService implements IResidentService {
       return RedeemCreditsResponse.NOT_ENOUGH_CREDITS;
     } catch (error: unknown) {
       Logger.error(
-        `Failed to redeem resident's credits by IDs. IDs = ${residentId}. Reason = ${getErrorMessage(
+        `Failed to redeem resident's credits by IDs. IDs = ${userId}. Reason = ${getErrorMessage(
           error,
         )}`,
       );

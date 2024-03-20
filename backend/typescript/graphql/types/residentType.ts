@@ -6,12 +6,6 @@ const residentType = gql`
   type ResidentDTO {
     userId: Int!
     residentId: Int!
-    birthDate: Date!
-    roomNumber: Int!
-    credits: Float!
-    dateJoined: DateTime!
-    dateLeft: DateTime
-    notes: String
     email: String!
     phoneNumber: String
     firstName: String!
@@ -19,9 +13,22 @@ const residentType = gql`
     displayName: String
     profilePictureURL: String
     isActive: Boolean!
+    birthDate: Date!
+    roomNumber: Int!
+    credits: Float!
+    dateJoined: DateTime!
+    dateLeft: DateTime
+    notes: String
   }
 
   input CreateResidentDTO {
+    email: String!
+    password: String!
+    phoneNumber: String
+    firstName: String!
+    lastName: String!
+    displayName: String
+    profilePictureURL: String
     residentId: Int!
     birthDate: Date!
     roomNumber: Int!
@@ -32,6 +39,13 @@ const residentType = gql`
   }
 
   input UpdateResidentDTO {
+    email: String
+    password: String
+    phoneNumber: String
+    firstName: String
+    lastName: String
+    displayName: String
+    profilePictureURL: String
     residentId: Int
     birthDate: Date
     roomNumber: Int
@@ -48,23 +62,16 @@ const residentType = gql`
   }
 
   extend type Query {
-    residentsById(id: [ID!]): [ResidentDTO!]
-    allResidents: [ResidentDTO!]
-    activeResidents: [ResidentDTO!]
+    getResidentsByIds(id: [ID!]): [ResidentDTO!]
+    getAllResidents: [ResidentDTO!]
+    getActiveResidents: [ResidentDTO!]
   }
 
   extend type Mutation {
-    updateResident(
-      residentId: ID!
-      userInfo: UpdateUserDTO!
-      resident: UpdateResidentDTO!
-    ): ResidentDTO!
-    addResident(
-      userInfo: CreateUserDTO!
-      resident: CreateResidentDTO!
-    ): ResidentDTO!
-    deleteResident(id: ID!): ResidentDTO!
-    redeemCredits(id: ID!, credits: Float!): RedeemCreditResponse!
+    addResident(resident: CreateResidentDTO!): ResidentDTO!
+    updateResident(userId: ID!, resident: UpdateResidentDTO!): ResidentDTO!
+    deleteResident(userId: ID!): ResidentDTO!
+    redeemCredits(userId: ID!, credits: Float!): RedeemCreditResponse!
   }
 `;
 

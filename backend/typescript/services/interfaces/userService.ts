@@ -1,30 +1,51 @@
-import { UserDTO, Role } from "../../types";
-// import { NotificationResidentDTO, NotificationDTO } from "./adminService";
+import { UserType } from "@prisma/client";
 
-export type UserTypes = "STAFF" | "RESIDENT";
+// import {
+//   NotificationDTO,
+//   NotificationReceivedDTO,
+// } from "./notificationService";
 
-export interface CreateUserDTO {
+export type UserDTO = {
+  id: number;
+  type: UserType;
   email: string;
-  password: string;
-  phoneNumber: string | null;
-  firstName: string;
-  lastName: string;
-  displayName: string | null;
-  profilePictureURL: string | null;
-}
-
-export interface UpdateUserDTO {
-  email: string;
-  password: string;
   phoneNumber: string | null;
   firstName: string;
   lastName: string;
   displayName: string | null;
   profilePictureURL: string | null;
   isActive: boolean;
+  // notificationsSent: NotificationDTO[];
+  // notificationsReceived: NotificationReceivedDTO[];
+};
+
+export type SimplifiedUserDTO = Pick<
+  UserDTO,
+  "id" | "type" | "email" | "firstName" | "lastName"
+>;
+
+export interface CreateUserDTO {
+  email: string;
+  password: string;
+  phoneNumber?: string;
+  firstName: string;
+  lastName: string;
+  displayName?: string;
+  profilePictureURL?: string;
 }
 
-export interface IUserService {
+export interface UpdateUserDTO {
+  email?: string;
+  password?: string;
+  phoneNumber?: string;
+  firstName?: string;
+  lastName?: string;
+  displayName?: string;
+  profilePictureURL?: string;
+  isActive?: boolean;
+}
+
+interface IUserService {
   /**
    * Create a user, email verification configurable
    * @param user the user to be created
@@ -33,10 +54,10 @@ export interface IUserService {
    * @returns a UserDTO with the created user's information
    * @throws Error if user creation fails
    */
-  createUser(
-    user: any,
-    // authId?: string,
-  ): Promise<UserDTO>;
+  // createUser(
+  //   user: any,
+  //   // authId?: string,
+  // ): Promise<UserDTO>;
 
   /**
    * Get user associated with id
@@ -44,7 +65,7 @@ export interface IUserService {
    * @returns a UserDTO with user's information
    * @throws Error if user retrieval fails
    */
-  getUserById(userId: string): Promise<UserDTO>;
+  // getUserById(userId: string): Promise<UserDTO>;
 
   /**
    * Get user associated with email
@@ -52,7 +73,7 @@ export interface IUserService {
    * @returns a UserDTO with user's information
    * @throws Error if user retrieval fails
    */
-  getUserByEmail(email: string): Promise<UserDTO>;
+  getUserByEmail(email: string): Promise<SimplifiedUserDTO>;
 
   /**
    * Get id of user associated with authId
@@ -70,13 +91,13 @@ export interface IUserService {
    */
   getAuthIdById(userId: string): Promise<string>;
 
-  getUserRoleByAuthId(authId: string): Promise<Role>;
+  getUserTypeByAuthId(authId: string): Promise<UserType>;
   /**
    * Get all user information (possibly paginated in the future)
    * @returns array of UserDTOs
    * @throws Error if user retrieval fails
    */
-  getUsers(): Promise<Array<UserDTO>>;
+  // getUsers(): Promise<Array<UserDTO>>;
 
   /**
    * Update a user.
@@ -86,21 +107,21 @@ export interface IUserService {
    * @returns a UserDTO with the updated user's information
    * @throws Error if user update fails
    */
-  updateUserById(userId: string, user: any): Promise<UserDTO>;
+  // updateUserById(userId: string, user: any): Promise<UserDTO>;
 
   /**
    * Delete a user by id
    * @param userId user's userId
    * @throws Error if user deletion fails
    */
-  deleteUserById(userId: string): Promise<void>;
+  // deleteUserById(userId: string): Promise<void>;
 
   /**
    * Delete a user by email
    * @param email user's email
    * @throws Error if user deletion fails
    */
-  deleteUserByEmail(email: string): Promise<void>;
+  // deleteUserByEmail(email: string): Promise<void>;
 }
 
 export default IUserService;

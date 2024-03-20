@@ -1,48 +1,42 @@
-import { CreateUserDTO, UpdateUserDTO, UserTypes } from "./userService";
+import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
 // import { TaskDTO } from "./taskService";
 // import { WarningDTO } from "./warningService";
 // import { NotificationReceivedDTO, NotificationDTO } from "./adminService";
 
-export interface StaffDTO {
+export interface StaffDTO extends Omit<UserDTO, "id" | "type"> {
   userId: number;
   isAdmin: boolean;
-  type: UserTypes;
-  email: string;
-  phoneNumber: string | null;
-  firstName: string;
-  lastName: string;
-  displayName: string | null;
-  profilePictureURL: string | null;
-  isActive: boolean;
   // tasksAssigned: TaskDTO[];
   // warningsAssigned: WarningDTO[];
   // notificationsSent: NotificationDTO[];
   // notificationsReceived: NotificationReceivedDTO[];
 }
 
-export interface IStaffService {
+export interface CreateStaffDTO extends CreateUserDTO {
+  isAdmin: boolean;
+}
+
+export interface UpdateStaffDTO extends UpdateUserDTO {
+  isAdmin?: boolean;
+}
+
+interface IStaffService {
   /**
    * Create a staff
-   * @param userInfo the staff to be created
-   * @param isAdmin if the staff is an admin or not
+   * @param staff the staff to be created
    * @returns a StaffDTO with the created user's information
    * @throws Error if user creation fails
    */
-  addStaff(userInfo: CreateUserDTO, isAdmin?: boolean): Promise<StaffDTO>;
+  addStaff(staff: CreateStaffDTO): Promise<StaffDTO>;
 
   /**
    * Update a staff.
    * @param staffId staff id
-   * @param userInfo the staff to be updated
-   * @param isAdmin if the staff is an admin or not
+   * @param staff the staff to be updated
    * @returns a StaffDTO with the updated staff's information
    * @throws Error if staff update fails
    */
-  updateStaff(
-    staffId: number,
-    userInfo: UpdateUserDTO,
-    isAdmin?: boolean,
-  ): Promise<StaffDTO>;
+  updateStaff(staffId: number, staff: UpdateStaffDTO): Promise<StaffDTO>;
 
   /**
    * Delete a staff by id
@@ -66,3 +60,5 @@ export interface IStaffService {
    */
   getStaffByIds(staffIds: number[]): Promise<Array<StaffDTO>>;
 }
+
+export default IStaffService;

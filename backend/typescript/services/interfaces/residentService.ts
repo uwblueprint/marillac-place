@@ -1,43 +1,38 @@
-import { CreateUserDTO, UpdateUserDTO, UserTypes } from "./userService";
-// import { NotificationResidentDTO } from "./adminService";
+import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
+// import { TaskAssignedDTO } from "./taskService";
+// import { WarningDTO } from "./warningService";
 
-export interface ResidentDTO {
+export interface ResidentDTO extends Omit<UserDTO, "id" | "type"> {
   userId: number;
   residentId: number;
   birthDate: Date;
   roomNumber: number;
   credits: number;
   dateJoined: Date;
-  dateLeft?: Date | null;
-  notes?: string | null;
-  type: UserTypes;
-  email: string;
-  phoneNumber: string | null;
-  firstName: string;
-  lastName: string;
-  displayName: string | null;
-  profilePictureURL: string | null;
-  isActive: boolean;
+  dateLeft: Date | null;
+  notes: string | null;
+  // tasks: TaskAssignedDTO[];
+  // warnings: WarningDTO[];
 }
 
-export interface CreateResidentDTO {
+export interface CreateResidentDTO extends CreateUserDTO {
   residentId: number;
   birthDate: Date;
   roomNumber: number;
   credits: number;
   dateJoined: Date;
-  dateLeft?: Date | null;
-  notes?: string | null;
+  dateLeft?: Date;
+  notes?: string;
 }
 
-export interface UpdateResidentDTO {
-  residentId: number | null;
-  birthDate: Date | null;
-  roomNumber: number | null;
-  credits: number | null;
-  dateJoined: Date | null;
-  dateLeft?: Date | null;
-  notes?: string | null;
+export interface UpdateResidentDTO extends UpdateUserDTO {
+  residentId?: number;
+  birthDate?: Date;
+  roomNumber?: number;
+  credits?: number;
+  dateJoined?: Date;
+  dateLeft?: Date;
+  notes?: string;
 }
 
 // Have to manually map enums as ts treats enums as numbers
@@ -47,37 +42,33 @@ export enum RedeemCreditsResponse {
   INVALID_ID = "INVALID_ID",
 }
 
-export interface IResidentService {
+interface IResidentService {
   /**
    * Adds a resident
-   * @param userInfo: a CreateResidentDTO with the new resident's information
+   * @param resident: a CreateResidentDTO with the new resident's information
    * @returns a ResidentDTO with created resident info
    * @throws Error if resident reation fails
    */
-  addResident(
-    userInfo: CreateUserDTO,
-    resident: CreateResidentDTO,
-  ): Promise<ResidentDTO>;
+  addResident(resident: CreateResidentDTO): Promise<ResidentDTO>;
 
   /**
    * Update a resident's details
-   * @param residentId: The ID of the resident information that needs to be updated
-   * @param residentInfo: Update ResidentDTO of the resident with this information
+   * @param userId: The ID of the resident information that needs to be updated
+   * @param resident: Update ResidentDTO of the resident with this information
    * @returns: a ResidentDTO with resident's updated info
    */
   updateResident(
-    residentId: number,
-    userInfo: UpdateUserDTO,
+    userId: number,
     resident: UpdateResidentDTO,
   ): Promise<ResidentDTO>;
 
   /**
    * Deletes a resident by id
-   * @param id: resident id of resident to be deleted
+   * @param userId: resident id of resident to be deleted
    * @returns: a ResidentDTO with deleted resident's info
    * @throws Error if resident deletion fails
    */
-  deleteResident(residentId: number): Promise<ResidentDTO>;
+  deleteResident(userId: number): Promise<ResidentDTO>;
 
   /**
    * Gets all residents
@@ -88,11 +79,11 @@ export interface IResidentService {
 
   /**
    * Gets certain residents based on resident id
-   * @param residentId: array of resident id's to be retrieved
+   * @param userId: array of resident id's to be retrieved
    * @returns: array of ResidentDTO's with residents information
    * @throws Error if retrieval fails
    */
-  getResidentsById(residentId: number[]): Promise<Array<ResidentDTO>>;
+  getResidentsByIds(userId: number[]): Promise<Array<ResidentDTO>>;
 
   /**
    * Gets all residents that are currently active
@@ -103,10 +94,15 @@ export interface IResidentService {
 
   /**
    * Redeems certain resident's credits based on resident id
-   * @param residentId: resident id whose credits are to be redeemed
+   * @param userId: resident id whose credits are to be redeemed
    *                    and number of credits to be redeemed
    * @returns: Enum of success or not enough credits
    * @throws Error if retrieval fails
    */
-  redeemCredits(id: number, credits: number): Promise<RedeemCreditsResponse>;
+  redeemCredits(
+    userId: number,
+    credits: number,
+  ): Promise<RedeemCreditsResponse>;
 }
+
+export default IResidentService;
