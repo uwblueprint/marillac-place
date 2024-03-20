@@ -9,7 +9,7 @@ import { UserType } from "@prisma/client";
 
 import {
   isAuthorizedByEmail,
-  isAuthorizedByRole,
+  isAuthorizedByUserType,
   isAuthorizedByUserId,
 } from "../middlewares/auth";
 import authResolvers from "./resolvers/authResolvers";
@@ -56,34 +56,49 @@ const executableSchema = makeExecutableSchema({
   ),
 });
 
-// const authorizedByAllRoles = () =>
-//   isAuthorizedByRole(new Set([UserType.STAFF, UserType.RESIDENT]));
-// const authorizedByAdmin = () => isAuthorizedByRole(new Set([UserType.STAFF]));
+const authorizedByAllUserTypes = () =>
+  isAuthorizedByUserType(new Set([UserType.STAFF, UserType.RESIDENT]));
+const authorizedByStaff = () =>
+  isAuthorizedByUserType(new Set([UserType.STAFF]));
 
 const graphQLMiddlewares = {
   Query: {
-    entity: authorizedByAllRoles(),
-    entities: authorizedByAllRoles(),
-    simpleEntity: authorizedByAllRoles(),
-    simpleEntities: authorizedByAllRoles(),
-    allResidents: authorizedByAllRoles(),
-    userById: authorizedByAdmin(),
-    userByEmail: authorizedByAdmin(),
-    users: authorizedByAdmin(),
+    // getNotificationsByUserId: authorizedByAllUserTypes(),
+    // getNotificationById: authorizedByAllUserTypes(),
+    // getStaffByIds: authorizedByStaff(),
+    // getAllStaff: authorizedByStaff(),
+    // getResidentsByIds: authorizedByStaff(),
+    // getAllResidents: authorizedByStaff(),
+    // getActiveResidents: authorizedByStaff(),
+    // getTaskById: authorizedByAllUserTypes(),
+    // getTasksByType: authorizedByAllUserTypes(),
+    // getTasksByAssigneeId: authorizedByAllUserTypes(),
+    // getTasksByAssignerId: authorizedByStaff(),
+    // getTasksByStartDate: authorizedByAllUserTypes(),
+    // getTasksByEndDate: authorizedByAllUserTypes(),
+    // getTasksByStatus: authorizedByAllUserTypes(),
   },
   Mutation: {
-    // createEntity: authorizedByAllRoles(),
-    // updateEntity: authorizedByAllRoles(),
-    // deleteEntity: authorizedByAllRoles(),
-    // createSimpleEntity: authorizedByAllRoles(),
-    // updateSimpleEntity: authorizedByAllRoles(),
-    // deleteSimpleEntity: authorizedByAllRoles(),
-    // createUser: authorizedByAdmin(),
-    // updateUser: authorizedByAdmin(),
-    // deleteUserById: authorizedByAdmin(),
-    // deleteUserByEmail: authorizedByAdmin(),
+    // login: isAuthorizedByEmail("email"),
+    // refresh: isAuthorizedByEmail("email"),
     // logout: isAuthorizedByUserId("userId"),
     // resetPassword: isAuthorizedByEmail("email"),
+    // sendNotification: authorizedByAllUserTypes(),
+    // deleteUserNotification: authorizedByStaff(),
+    // updateSeenNotification: authorizedByAllUserTypes(),
+    // sendAnnouncement: authorizedByStaff(),
+    // addStaff: authorizedByStaff(),
+    // updateStaff: authorizedByStaff(),
+    // deleteStaff: authorizedByStaff(),
+    // addResident: authorizedByStaff(),
+    // updateResident: authorizedByStaff(),
+    // deleteResident: authorizedByStaff(),
+    // redeemCredits: authorizedByStaff(),
+    // createTask: authorizedByAllUserTypes(),
+    // updateTask: authorizedByAllUserTypes(),
+    // deleteTask: authorizedByAllUserTypes(),
+    // assignTask: authorizedByStaff(),
+    // changeTaskStatus: authorizedByStaff(),
   },
 };
 

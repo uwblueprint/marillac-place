@@ -13,7 +13,6 @@ const authType = gql`
     firstName: String!
     lastName: String!
     accessToken: String!
-    refreshToken: String!
   }
 
   extend type Mutation {

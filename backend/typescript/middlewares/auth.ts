@@ -24,7 +24,7 @@ export const getAccessToken = (req: Request): string | null => {
 /* Determine if request is authorized based on accessToken validity and role of client */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export const isAuthorizedByRole = (roles: Set<UserType>) => {
+export const isAuthorizedByUserType = (types: Set<UserType>) => {
   return async (
     resolve: (
       parent: any,
@@ -39,11 +39,12 @@ export const isAuthorizedByRole = (roles: Set<UserType>) => {
   ) => {
     const accessToken = getAccessToken(context.req);
     const authorized =
-      accessToken && (await authService.isAuthorizedByRole(accessToken, roles));
+      accessToken &&
+      (await authService.isAuthorizedByUserType(accessToken, types));
 
     if (!authorized) {
       throw new AuthenticationError(
-        "Failed authentication and/or authorization by role",
+        "Failed authentication and/or authorization by user type",
       );
     }
 

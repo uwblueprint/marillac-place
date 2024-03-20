@@ -63,9 +63,9 @@ interface IAuthService {
    * @param roles roles to check for
    * @returns true if token valid and authorized, false otherwise
    */
-  isAuthorizedByRole(
+  isAuthorizedByUserType(
     accessToken: string,
-    roles: Set<UserType>,
+    types: Set<UserType>,
   ): Promise<boolean>;
 
   /**
