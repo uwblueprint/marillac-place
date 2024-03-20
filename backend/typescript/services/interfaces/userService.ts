@@ -1,10 +1,5 @@
 import { UserType } from "@prisma/client";
 
-// import {
-//   NotificationDTO,
-//   NotificationReceivedDTO,
-// } from "./notificationService";
-
 export type UserDTO = {
   id: number;
   type: UserType;
@@ -15,8 +10,6 @@ export type UserDTO = {
   displayName: string | null;
   profilePictureURL: string | null;
   isActive: boolean;
-  // notificationsSent: NotificationDTO[];
-  // notificationsReceived: NotificationReceivedDTO[];
 };
 
 export type SimplifiedUserDTO = Pick<

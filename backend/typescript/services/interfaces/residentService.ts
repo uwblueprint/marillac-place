@@ -1,6 +1,4 @@
 import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
-// import { TaskAssignedDTO } from "./taskService";
-// import { WarningDTO } from "./warningService";
 
 export interface ResidentDTO extends Omit<UserDTO, "id" | "type"> {
   userId: number;
@@ -11,8 +9,6 @@ export interface ResidentDTO extends Omit<UserDTO, "id" | "type"> {
   dateJoined: Date;
   dateLeft: Date | null;
   notes: string | null;
-  // tasks: TaskAssignedDTO[];
-  // warnings: WarningDTO[];
 }
 
 export interface CreateResidentDTO extends CreateUserDTO {

@@ -1,15 +1,8 @@
 import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
-// import { TaskDTO } from "./taskService";
-// import { WarningDTO } from "./warningService";
-// import { NotificationReceivedDTO, NotificationDTO } from "./adminService";
 
 export interface StaffDTO extends Omit<UserDTO, "id" | "type"> {
   userId: number;
   isAdmin: boolean;
-  // tasksAssigned: TaskDTO[];
-  // warningsAssigned: WarningDTO[];
-  // notificationsSent: NotificationDTO[];
-  // notificationsReceived: NotificationReceivedDTO[];
 }
 
 export interface CreateStaffDTO extends CreateUserDTO {
