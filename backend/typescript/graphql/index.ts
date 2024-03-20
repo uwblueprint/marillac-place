@@ -62,13 +62,14 @@ const executableSchema = makeExecutableSchema({
 
 const graphQLMiddlewares = {
   Query: {
-    // entity: authorizedByAllRoles(),
-    // entities: authorizedByAllRoles(),
-    // simpleEntity: authorizedByAllRoles(),
-    // simpleEntities: authorizedByAllRoles(),
-    // userById: authorizedByAdmin(),
-    // userByEmail: authorizedByAdmin(),
-    // users: authorizedByAdmin(),
+    entity: authorizedByAllRoles(),
+    entities: authorizedByAllRoles(),
+    simpleEntity: authorizedByAllRoles(),
+    simpleEntities: authorizedByAllRoles(),
+    allResidents: authorizedByAllRoles(),
+    userById: authorizedByAdmin(),
+    userByEmail: authorizedByAdmin(),
+    users: authorizedByAdmin(),
   },
   Mutation: {
     // createEntity: authorizedByAllRoles(),
