@@ -14,7 +14,11 @@ interface IAuthService {
    * @returns AuthDTO object containing the access token, refresh token, and user info
    * @throws Error if token generation fails
    */
-  generateToken(email: string, password: string): Promise<AuthDTO>;
+  generateToken(
+    email: string,
+    password: string,
+    userType: UserType,
+  ): Promise<AuthDTO>;
 
   /**
    * Generate a short-lived JWT access token and a long-lived refresh token

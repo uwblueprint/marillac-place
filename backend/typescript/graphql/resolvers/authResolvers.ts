@@ -1,4 +1,5 @@
 import { CookieOptions, Request, Response } from "express";
+import { UserType } from "@prisma/client";
 
 import nodemailerConfig from "../../nodemailer.config";
 import AuthService from "../../services/implementations/authService";
@@ -22,13 +23,21 @@ const authResolvers = {
   Mutation: {
     login: async (
       _parent: undefined,
-      { email, password }: { email: string; password: string },
+      {
+        email,
+        password,
+        userType,
+      }: { email: string; password: string; userType: UserType },
       { res }: { res: Response },
     ): Promise<Omit<AuthDTO, "refreshToken">> => {
-      const authDTO = await authService.generateToken(email, password);
-      const { refreshToken, ...rest } = authDTO;
+      const authDTO = await authService.generateToken(
+        email,
+        password,
+        userType,
+      );
+      const { refreshToken, ...user } = authDTO;
       res.cookie("refreshToken", refreshToken, cookieOptions);
-      return rest;
+      return user;
     },
     refresh: async (
       _parent: undefined,

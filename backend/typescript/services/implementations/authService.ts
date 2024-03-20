@@ -25,13 +25,20 @@ class AuthService implements IAuthService {
   }
 
   /* eslint-disable class-methods-use-this */
-  async generateToken(email: string, password: string): Promise<AuthDTO> {
+  async generateToken(
+    email: string,
+    password: string,
+    userType: UserType,
+  ): Promise<AuthDTO> {
     try {
       const token = await FirebaseRestClient.signInWithPassword(
         email,
         password,
       );
       const user = await this.userService.getUserByEmail(email);
+      if (user.type !== userType) {
+        throw new Error("User type does not match");
+      }
       return { ...token, ...user };
     } catch (error) {
       Logger.error(`Failed to generate token for user with email ${email}`);
