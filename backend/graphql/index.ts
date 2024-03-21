@@ -6,12 +6,12 @@ import {
   resolvers as scalarResolvers,
 } from "graphql-scalars";
 
-import { UserType } from "../prisma";
-import {
-  isAuthorizedByEmail,
-  isAuthorizedByUserType,
-  isAuthorizedByUserId,
-} from "../middlewares/auth";
+// import { UserType } from "../prisma";
+// import {
+//   isAuthorizedByEmail,
+//   isAuthorizedByUserType,
+//   isAuthorizedByUserId,
+// } from "../middlewares/auth";
 import authResolvers from "./resolvers/authResolvers";
 import authType from "./types/authType";
 import notificationResolvers from "./resolvers/notificationResolvers";
@@ -60,10 +60,10 @@ const executableSchema = makeExecutableSchema({
   ),
 });
 
-const authorizedByAllUserTypes = () =>
-  isAuthorizedByUserType(new Set([UserType.STAFF, UserType.RESIDENT]));
-const authorizedByStaff = () =>
-  isAuthorizedByUserType(new Set([UserType.STAFF]));
+// const authorizedByAllUserTypes = () =>
+//   isAuthorizedByUserType(new Set([UserType.STAFF, UserType.RESIDENT]));
+// const authorizedByStaff = () =>
+//   isAuthorizedByUserType(new Set([UserType.STAFF]));
 
 const graphQLMiddlewares = {
   Query: {
