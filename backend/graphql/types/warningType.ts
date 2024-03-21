@@ -5,7 +5,7 @@ const warningType = gql`
     id: Int!
     title: String!
     description: String!
-    dateIssued: DateTime
+    dateIssued: Date
     assigneeId: Int!
     assignerId: Int
     relatedTaskId: Int
@@ -14,7 +14,7 @@ const warningType = gql`
   input CreateWarningDTO {
     title: String!
     description: String!
-    dateIssued: DateTime
+    dateIssued: Date
     assigneeId: Int!
     assignerId: Int
     relatedTaskId: Int

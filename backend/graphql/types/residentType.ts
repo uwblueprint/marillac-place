@@ -16,8 +16,8 @@ const residentType = gql`
     birthDate: Date!
     roomNumber: Int!
     credits: Float!
-    dateJoined: DateTime!
-    dateLeft: DateTime
+    dateJoined: Date!
+    dateLeft: Date
     notes: String
   }
 
@@ -33,8 +33,8 @@ const residentType = gql`
     birthDate: Date!
     roomNumber: Int!
     credits: Float!
-    dateJoined: DateTime!
-    dateLeft: DateTime
+    dateJoined: Date!
+    dateLeft: Date
     notes: String
   }
 
@@ -50,8 +50,8 @@ const residentType = gql`
     birthDate: Date
     roomNumber: Int
     credits: Float
-    dateJoined: DateTime
-    dateLeft: DateTime
+    dateJoined: Date
+    dateLeft: Date
     notes: String
   }
 

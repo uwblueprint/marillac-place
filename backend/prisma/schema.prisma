@@ -47,11 +47,11 @@ model Resident {
   user       User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId     Int            @id @map("user_id")
   residentId Int            @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
-  birthDate  DateTime       @map("birth_date")
+  birthDate  DateTime       @map("birth_date") @db.Date
   roomNumber Int            @map("room_number")
   credits    Float          @default(0)
-  dateJoined DateTime       @default(now()) @map("date_joined")
-  dateLeft   DateTime?      @map("date_left")
+  dateJoined DateTime       @default(now()) @map("date_joined") @db.Date
+  dateLeft   DateTime?      @map("date_left") @db.Date
   notes      String?
   tasks      TaskAssigned[]
   warnings   Warning[]
@@ -112,8 +112,8 @@ model TaskAssigned {
   assignee            Resident             @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   assigneeId          Int                  @map("assignee_id")
   status              Status
-  startDate           DateTime             @map("start_date")
-  endDate             DateTime?            @map("end_date")
+  startDate           DateTime             @map("start_date") @db.Date
+  endDate             DateTime?            @map("end_date") @db.Date
   recurrenceFrequency RecurrenceFrequency? @map("recurrence_frequency")
   comments            String?
 
@@ -130,7 +130,7 @@ model Warning {
   relatedTaskId Int?     @map("related_task_id")
   title         String
   description   String
-  dateIssued    DateTime @default(now()) @map("date_issued")
+  dateIssued    DateTime @default(now()) @map("date_issued") @db.Date
 
   @@map("warnings")
 }
@@ -141,7 +141,7 @@ model Notification {
   authorId   Int?                   @map("author_id")
   title      String
   message    String
-  createdAt  DateTime               @default(now()) @map("created_at")
+  createdAt  DateTime               @default(now()) @map("created_at") @db.Date
   recipients NotificationReceived[]
 
   @@map("notifications")
