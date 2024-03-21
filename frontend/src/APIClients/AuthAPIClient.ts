@@ -3,8 +3,10 @@ import {
   MutationFunctionOptions,
   OperationVariables,
 } from "@apollo/client";
+
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { AuthenticatedUser } from "../types/AuthTypes";
+import { UserType } from "../types/UserTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
 type LoginFunction = (
@@ -22,11 +24,14 @@ type LoginFunction = (
 const login = async (
   email: string,
   password: string,
+  userType: UserType,
   loginFunction: LoginFunction,
 ): Promise<AuthenticatedUser | null> => {
   let user: AuthenticatedUser = null;
   try {
-    const result = await loginFunction({ variables: { email, password } });
+    const result = await loginFunction({
+      variables: { email, password, userType },
+    });
     user = result.data?.login ?? null;
     if (user) {
       localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(user));
@@ -137,12 +142,11 @@ const logout = async (
   const result = await logoutFunction({
     variables: { userId: authenticatedUserId },
   });
-  let success = false;
   if (result.data?.logout === null) {
-    success = true;
     localStorage.removeItem(AUTHENTICATED_USER_KEY);
+    return true;
   }
-  return success;
+  return false;
 };
 
 type RefreshFunction = (
@@ -166,13 +170,12 @@ type RefreshFunction = (
 
 const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
   const result = await refreshFunction();
-  let success = false;
   const token = result.data?.refresh;
   if (token) {
-    success = true;
     setLocalStorageObjProperty(AUTHENTICATED_USER_KEY, "accessToken", token);
+    return true;
   }
-  return success;
+  return false;
 };
 
 export default { login, logout, loginWithGoogle, register, refresh };

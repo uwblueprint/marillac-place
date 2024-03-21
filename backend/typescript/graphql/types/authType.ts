@@ -16,7 +16,7 @@ const authType = gql`
   }
 
   extend type Mutation {
-    login(email: String!, password: String!): AuthDTO!
+    login(email: String!, password: String!, userType: UserType!): AuthDTO!
     refresh: String!
     logout(userId: ID!): ID
     resetPassword(email: String!): Boolean!
