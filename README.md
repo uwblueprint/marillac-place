@@ -33,7 +33,7 @@ git clone https://github.com/uwblueprint/marillac-place.git
 cd marillac-place
 ```
 
-2. Go into ./backend/typescript and create a .env file
+2. Go into ./backend and create a .env file
 3. In the .env file add the DATABASE_URL
 
    - If on (Only if running manual prisma setup) MacOS replace username with your user which can be found in Finder (Finder -> Go -> Home)
@@ -69,9 +69,9 @@ The backend runs at http://localhost:5000 and the frontend runs at http://localh
 
 ### Note: Manual Database Setup
 
-If for some reason docker container is not syncing with your prisma models in backend/typescript/prisma/schema
+If for some reason docker container is not syncing with your prisma models in backend/prisma/schema
 
-Update .env file in /backend/typescript to be
+Update .env file in /backend to be
 (Use different username for Mac)
 
 ```bash
@@ -94,7 +94,7 @@ nvm use 18.18.2
 
 ## Creating Prisma Migration
 
-Go to `backend/typescript` and run
+Go to `/backend` and run
 
 npx prisma migrate dev
 
@@ -126,12 +126,6 @@ SELECT * FROM <table-name>;
 
 ### Linting & Formatting
 
-Python backend:
-
-```bash
-docker exec -it scv2_py_backend /bin/bash -c "black ."
-```
-
 TypeScript backend and frontend:
 
 ```bash
@@ -143,12 +137,6 @@ docker exec -it scv2_ts_backend /bin/bash -c "yarn fix"
 ```
 
 ### Running Tests
-
-Python backend:
-
-```bash
-docker exec -it scv2_py_backend /bin/bash -c "pip install -e . && pytest"
-```
 
 TypeScript backend and frontend:
 
