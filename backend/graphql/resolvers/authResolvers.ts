@@ -44,7 +44,6 @@ const authResolvers = {
       _args: Record<string, undefined>,
       { req, res }: { req: Request; res: Response },
     ): Promise<string> => {
-      // req.cookies.refreshToken is undefined
       const token = await authService.renewToken(req.cookies.refreshToken);
       res.cookie("refreshToken", token.refreshToken, cookieOptions);
       return token.accessToken;
