@@ -40,17 +40,17 @@ cd marillac-place
    - If on Windows replace '<USERNAME>' with 'postgres'
 
 ```
-DATABASE_URL=postgresql://postgres:postgres@scv2_db:5432/scv2
+DATABASE_URL=postgresql://postgres:postgres@mp_db:5432/mp
 ```
 
 4. Create a .env file at the root with this information
 
 ```
- POSTGRES_DB_DEV=scv2
- POSTGRES_DB_TEST=scv2_test
+ POSTGRES_DB_DEV=mp
+ POSTGRES_DB_TEST=mp_test
  POSTGRES_USER=postgres
  POSTGRES_PASSWORD=postgres
- DB_HOST=scv2_db
+ DB_HOST=mp_db
 ```
 
 5. Create a .env file in ./frontend with
@@ -75,7 +75,7 @@ Update .env file in /backend to be
 (Use different username for Mac)
 
 ```bash
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/scv2
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mp
 ```
 
 Try running (when the docker container is up):
@@ -96,7 +96,9 @@ nvm use 18.18.2
 
 Go to `/backend` and run
 
+```bash
 npx prisma migrate dev
+```
 
 ## Useful Commands
 
@@ -110,10 +112,10 @@ docker ps
 
 ```bash
 # run a bash shell in the container
-docker exec -it scv2_db /bin/bash
+docker exec -it mp_db /bin/bash
 
 # in container now
-psql -U postgres -d scv2
+psql -U postgres -d mp
 
 # in postgres shell, some common commands:
 # display all table names
@@ -126,22 +128,38 @@ SELECT * FROM <table-name>;
 
 ### Linting & Formatting
 
-TypeScript backend and frontend:
+Backend:
 
 ```bash
 # linting & formatting warnings only
-docker exec -it scv2_ts_backend /bin/bash -c "yarn lint"
+docker exec -it mp_backend /bin/bash -c "yarn lint"
 
 # linting with fix & formatting
-docker exec -it scv2_ts_backend /bin/bash -c "yarn fix"
+docker exec -it mp_backend /bin/bash -c "yarn fix"
+```
+
+Frontend:
+
+```bash
+# linting & formatting warnings only
+docker exec -it mp_frontend /bin/bash -c "yarn lint"
+
+# linting with fix & formatting
+docker exec -it mp_frontend /bin/bash -c "yarn fix"
 ```
 
 ### Running Tests
 
-TypeScript backend and frontend:
+Backend:
 
 ```bash
-docker exec -it scv2_ts_backend /bin/bash -c "yarn test"
+docker exec -it mp_backend /bin/bash -c "yarn test"
+```
+
+Frontend:
+
+```bash
+docker exec -it mp_frontend /bin/bash -c "yarn test"
 ```
 
 ## Version Control Guide
@@ -182,7 +200,7 @@ git rebase -i HEAD~2
 git push -f
 ```
 
-- Use ([Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) naming scheme for commits and PRs
+- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) naming scheme for commits and PRs
 - Commit messages and PR names are descriptive and written in **imperative tense**<sup>1</sup>
 - E.g. "feat: create user REST endpoints" or "fix: set bgcolor to blue"
 - PRs can contain multiple commits, they do not need to be squashed together before merging as long as each commit is atomic. Our repo is configured to only allow squash commits to `main` so the entire PR will appear as 1 commit on `main`, but the individual commits are preserved when viewing the PR.
