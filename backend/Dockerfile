@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY package.json yarn.lock tsconfig.json ./
 
-COPY ./prisma/schema.prisma ./prisma/schema.prisma
+COPY ./prisma ./prisma
 
 # libcurl3 is required for mongodb-memory-server, which is used for testing
 # RUN apt-get update && apt-get install -y libcurl3
@@ -19,4 +19,3 @@ COPY . ./
 EXPOSE 5000
 
 ENTRYPOINT ["yarn", "prismaInitAndRun"]
-
