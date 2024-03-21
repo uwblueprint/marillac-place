@@ -1,7 +1,6 @@
 import * as firebaseAdmin from "firebase-admin";
-import { UserType } from "@prisma/client";
 
-import prisma from "../../prisma";
+import prisma, { UserType } from "../../prisma";
 import IStaffService, {
   StaffDTO,
   CreateStaffDTO,

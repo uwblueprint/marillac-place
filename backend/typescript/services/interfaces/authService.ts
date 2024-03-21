@@ -1,5 +1,4 @@
-import { UserType } from "@prisma/client";
-
+import { UserType } from "../../prisma";
 import { Token } from "../../types";
 import { SimplifiedUserDTO } from "./userService";
 

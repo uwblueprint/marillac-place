@@ -1,4 +1,4 @@
-import { TaskType, Status, RecurrenceFrequency } from "@prisma/client";
+import { TaskType, Status, RecurrenceFrequency } from "../../prisma";
 
 export interface TaskDTO {
   id: number;

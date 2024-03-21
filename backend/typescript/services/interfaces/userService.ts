@@ -1,4 +1,4 @@
-import { UserType } from "@prisma/client";
+import { UserType } from "../../prisma";
 
 export type UserDTO = {
   id: number;

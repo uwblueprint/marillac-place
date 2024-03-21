@@ -1,8 +1,8 @@
 import { Request } from "express";
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import { GraphQLResolveInfo } from "graphql";
-import { UserType } from "@prisma/client";
 
+import { UserType } from "../prisma";
 import AuthService from "../services/implementations/authService";
 import UserService from "../services/implementations/userService";
 import IAuthService from "../services/interfaces/authService";

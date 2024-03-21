@@ -1,6 +1,6 @@
 import * as firebaseAdmin from "firebase-admin";
-import { UserType } from "@prisma/client";
 
+import { UserType } from "../../prisma";
 import { Token } from "../../types";
 import IAuthService, { AuthDTO } from "../interfaces/authService";
 import IEmailService from "../interfaces/emailService";

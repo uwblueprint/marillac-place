@@ -1,6 +1,4 @@
-import { Status, TaskType } from "@prisma/client";
-
-import prisma from "../../prisma";
+import prisma, { TaskType, Status } from "../../prisma";
 import ITaskService, {
   InputTaskDTO,
   TaskDTO,

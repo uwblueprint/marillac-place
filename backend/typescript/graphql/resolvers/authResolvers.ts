@@ -1,6 +1,6 @@
 import { CookieOptions, Request, Response } from "express";
-import { UserType } from "@prisma/client";
 
+import { UserType } from "../../prisma";
 import nodemailerConfig from "../../nodemailer.config";
 import AuthService from "../../services/implementations/authService";
 import EmailService from "../../services/implementations/emailService";
@@ -44,6 +44,7 @@ const authResolvers = {
       _args: Record<string, undefined>,
       { req, res }: { req: Request; res: Response },
     ): Promise<string> => {
+      // req.cookies.refreshToken is undefined
       const token = await authService.renewToken(req.cookies.refreshToken);
       res.cookie("refreshToken", token.refreshToken, cookieOptions);
       return token.accessToken;

@@ -26,7 +26,6 @@ const notificationResolvers = {
       return notificationService.getNotificationById(Number(id));
     },
   },
-
   Mutation: {
     sendNotification: async (
       _parent: undefined,
