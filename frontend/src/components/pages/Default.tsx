@@ -6,6 +6,57 @@ import SampleContext from "../../contexts/SampleContext";
 import Logout from "../auth/Logout";
 import RefreshCredentials from "../auth/RefreshCredentials";
 import ResetPassword from "../auth/ResetPassword";
+import CommonTable, { columnInfoType, tableProps } from "../common/CommonTable";
+
+const mockData = [
+  {
+    "id": 1,
+    "title": "taxes",
+    "description": "do ur taxes",
+    "room": 1,
+    "credits": 3.0,
+    "due_date": "2022-12-12",
+  },
+  {
+    "id": 2,
+    "title": "taxes",
+    "description": "do ur taxes",
+    "room": 1,
+    "credits": 3.0,
+    "due_date": "2022-12-12",
+  },
+  {
+    "id": 3,
+    "title": "taxes",
+    "description": "do ur taxes",
+    "room": 1,
+    "credits": 4.0,
+    "due_date": "2022-12-12",
+  }
+]
+
+const mockColumns: columnInfoType[] = [
+  {
+    Header: "Task name",
+    Type: "string",
+    Key: "title"
+  },
+  {
+    Header: "Room Number",
+    Type: "number",
+    Key: "room"
+  },
+  {
+    Header: "Due Date",
+    Type: "date",
+    Key: "due_date"
+  },
+  {
+    Header: "Requested Marillac Bucks",
+    Type: "number",
+    Key: "credits"
+  }
+]
 
 type ButtonProps = { text: string; path: string };
 
@@ -37,6 +88,10 @@ const TeamInfoDisplay = () => {
   );
 };
 
+const testEdit = () => {
+  console.log("edit clicked")
+}
+
 const Default = (): React.ReactElement => {
   return (
     <div style={{ textAlign: "center", paddingTop: "20px" }}>
@@ -66,6 +121,7 @@ const Default = (): React.ReactElement => {
 
       <div style={{ height: "2rem" }} />
 
+      <CommonTable columnInfo={mockColumns} data={mockData} onEdit={() => testEdit()} maxResults={8} isSelectable={true}/>
       <TeamInfoDisplay />
     </div>
   );
