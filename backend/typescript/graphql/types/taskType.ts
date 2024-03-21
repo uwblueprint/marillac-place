@@ -19,7 +19,7 @@ const taskType = gql`
     REQUIRED
     OPTIONAL
     CHORE
-    CUSTOM
+    ACHIEVEMENT
   }
 
   type TaskDTO {
