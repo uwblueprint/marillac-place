@@ -183,14 +183,6 @@ class StaffService implements IStaffService {
       const allStaff = await prisma.staff.findMany({
         include: {
           user: true,
-          // user: {
-          //   include: {
-          //     tasksAssigned: true,
-          //     warningsAssigned: true
-          //   }
-          // }
-          // notificationsReceived: true,
-          // notificationsSent: true
         },
       });
 
@@ -205,10 +197,6 @@ class StaffService implements IStaffService {
           displayName: staff.user.displayName,
           profilePictureURL: staff.user.profilePictureURL,
           isActive: staff.user.isActive,
-          // notificationsReceived: staff.notificationsReceived,
-          // notificationsSent: staff.notificationsSent,
-          // warningsAssigned: staff.user.warningsAssigned,
-          // tasksAssigned: staff.user.tasksAssigned,
         };
       });
     } catch (error: unknown) {
@@ -221,17 +209,7 @@ class StaffService implements IStaffService {
     try {
       const getStaffById = await prisma.staff.findMany({
         where: { userId: { in: userIds } },
-        include: {
-          user: true,
-          // user: {
-          //   include: {
-          //     tasksAssigned: true,
-          //     warningsAssigned: true
-          //   }
-          // }
-          // notificationsReceived: true,
-          // notificationsSent: true
-        },
+        include: { user: true },
       });
 
       return getStaffById.map((staff) => {
@@ -245,10 +223,6 @@ class StaffService implements IStaffService {
           displayName: staff.user.displayName,
           profilePictureURL: staff.user.profilePictureURL,
           isActive: staff.user.isActive,
-          // notificationsReceived: staff.notificationsReceived,
-          // notificationsSent: staff.notificationsSent,
-          // warningsAssigned: staff.user.warningsAssigned,
-          // tasksAssigned: staff.user.tasksAssigned,
         };
       });
     } catch (error: unknown) {
