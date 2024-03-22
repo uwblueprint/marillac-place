@@ -70,20 +70,16 @@ class StaffService implements IStaffService {
     }
   }
 
-  async updateStaff(
-    staffId: number,
-    staff: UpdateStaffDTO,
-    isAdmin: boolean = false,
-  ): Promise<StaffDTO> {
+  async updateStaff(userId: number, staff: UpdateStaffDTO): Promise<StaffDTO> {
     try {
       const originalUser = await prisma.user.findUnique({
-        where: { id: staffId },
+        where: { id: userId },
       });
 
       if (!originalUser) {
-        throw new Error(`staff ${staffId} not found.`);
+        throw new Error(`staff ${userId} not found.`);
       } else if (originalUser.type !== UserType.STAFF) {
-        throw new Error(`id ${staffId} is not a staff.`);
+        throw new Error(`id ${userId} is not a staff.`);
       }
 
       const { authId } = originalUser;
@@ -99,9 +95,9 @@ class StaffService implements IStaffService {
       }
 
       const updatedStaff = await prisma.staff.update({
-        where: { userId: staffId },
+        where: { userId },
         data: {
-          isAdmin,
+          isAdmin: staff.isAdmin,
           user: {
             update: {
               data: {
@@ -134,33 +130,33 @@ class StaffService implements IStaffService {
       };
     } catch (error) {
       Logger.error(
-        `Failed to update staff #${staffId} because ${getErrorMessage(error)}`,
+        `Failed to update staff #${userId} because ${getErrorMessage(error)}`,
       );
       throw error;
     }
   }
 
-  async deleteStaff(staffId: number): Promise<StaffDTO> {
+  async deleteStaff(userId: number): Promise<StaffDTO> {
     try {
       const deletedUser = await prisma.user.findUnique({
-        where: { id: staffId },
+        where: { id: userId },
       });
 
       if (!deletedUser) {
-        throw new Error(`staff ${staffId} not found.`);
+        throw new Error(`staff ${userId} not found.`);
       } else if (deletedUser.type !== UserType.STAFF) {
-        throw new Error(`id ${staffId} is not a staff.`);
+        throw new Error(`id ${userId} is not a staff.`);
       }
 
       await firebaseAdmin.auth().deleteUser(deletedUser.authId);
 
       const deletedStaff = await prisma.staff.delete({
-        where: { userId: staffId },
+        where: { userId },
         include: { user: true },
       });
 
       await prisma.user.delete({
-        where: { id: staffId },
+        where: { id: userId },
       });
 
       return {
@@ -176,7 +172,7 @@ class StaffService implements IStaffService {
       };
     } catch (error) {
       Logger.error(
-        `Failed to delete staff #${staffId} because ${getErrorMessage(error)}`,
+        `Failed to delete staff #${userId} because ${getErrorMessage(error)}`,
       );
       throw error;
     }
@@ -221,10 +217,10 @@ class StaffService implements IStaffService {
     }
   }
 
-  async getStaffByIds(staffIds: number[]): Promise<Array<StaffDTO>> {
+  async getStaffByIds(userIds: number[]): Promise<Array<StaffDTO>> {
     try {
       const getStaffById = await prisma.staff.findMany({
-        where: { userId: { in: staffIds } },
+        where: { userId: { in: userIds } },
         include: {
           user: true,
           // user: {
@@ -257,7 +253,7 @@ class StaffService implements IStaffService {
       });
     } catch (error: unknown) {
       Logger.error(
-        `Failed to get staff by IDs. IDs = ${staffIds} because ${getErrorMessage(
+        `Failed to get staff by IDs. IDs = ${userIds} because ${getErrorMessage(
           error,
         )}`,
       );
