@@ -62,7 +62,7 @@ const residentType = gql`
   }
 
   extend type Query {
-    getResidentsByIds(id: [ID!]): [ResidentDTO!]
+    getResidentsByIds(userIds: [ID!]): [ResidentDTO!]
     getAllResidents: [ResidentDTO!]
     getActiveResidents: [ResidentDTO!]
   }
