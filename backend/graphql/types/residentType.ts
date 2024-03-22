@@ -32,8 +32,8 @@ const residentType = gql`
     residentId: Int!
     birthDate: Date!
     roomNumber: Int!
-    credits: Float!
-    dateJoined: Date!
+    credits: Float
+    dateJoined: Date
     dateLeft: Date
     notes: String
   }

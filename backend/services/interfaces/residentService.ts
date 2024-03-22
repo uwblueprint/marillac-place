@@ -15,8 +15,8 @@ export interface CreateResidentDTO extends CreateUserDTO {
   residentId: number;
   birthDate: Date;
   roomNumber: number;
-  credits: number;
-  dateJoined: Date;
+  credits?: number;
+  dateJoined?: Date;
   dateLeft?: Date;
   notes?: string;
 }
