@@ -2,8 +2,7 @@ version: "3.7"
 
 services:
   frontend:
-    # TODO: rename container for your project
-    container_name: scv2_frontend
+    container_name: mp_frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -16,14 +15,13 @@ services:
       - CHOKIDAR_USEPOLLING=true
     env_file:
       - ./frontend/.env
-  ts-backend:
-    # TODO: rename container for your project
-    container_name: scv2_ts_backend
+  backend:
+    container_name: mp_backend
     build:
-      context: ./backend/typescript
+      context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./backend/typescript:/app
+      - ./backend:/app
       - /app/node_modules
     ports:
       - 5000:5000
@@ -34,10 +32,9 @@ services:
         condition: service_healthy
     env_file:
       - ./.env
-      - ./backend/typescript/.env
+      - ./backend/.env
   db:
-    # TODO: rename container for your project
-    container_name: scv2_db
+    container_name: mp_db
     image: postgres:12-alpine
     ports:
       - 5432:5432
