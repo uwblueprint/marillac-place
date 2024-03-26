@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.7.1",
+    "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/styled-system": "^2.9.2",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@rjsf/bootstrap-4": "^2.5.1",

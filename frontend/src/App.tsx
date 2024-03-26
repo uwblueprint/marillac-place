@@ -1,6 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
-import { ChakraProvider } from "@chakra-ui/react";
+import {
+  ChakraProvider,
+  extendTheme,  
+} from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
   Route,
@@ -30,7 +33,11 @@ import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherCo
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
 
+import ModalContainer from "./components/common/ModalContainer";
+
 import { AuthenticatedUser } from "./types/AuthTypes";
+import modalTheme from "./themes/ModalTheme";
+
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -48,8 +55,15 @@ const App = (): React.ReactElement => {
     DEFAULT_SAMPLE_CONTEXT,
   );
 
+
+  const theme = extendTheme({
+    components: {
+        Modal: modalTheme,
+    }
+  })
+
   return (
-    <ChakraProvider>
+    <ChakraProvider theme = {theme}>
       <SampleContext.Provider value={sampleContext}>
         <SampleContextDispatcherContext.Provider
           value={dispatchSampleContextUpdate}
@@ -57,6 +71,7 @@ const App = (): React.ReactElement => {
           <AuthContext.Provider
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
+            <ModalContainer/>
             <Router>
               <Switch>
                 <Route path={Routes.LOGIN_PAGE} element={<Login />} />
@@ -121,6 +136,7 @@ const App = (): React.ReactElement => {
                 <Route path={Routes.HOOKS_PAGE} element={<HooksDemo />} />
                 <Route path="*" element={<NotFound />} />
               </Switch>
+              
             </Router>
           </AuthContext.Provider>
         </SampleContextDispatcherContext.Provider>

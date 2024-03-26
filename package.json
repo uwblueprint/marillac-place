@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@chakra-ui/anatomy": "^2.2.2",
+    "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/styled-system": "^2.9.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "framer-motion": "^11.0.13",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.22.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66"
+  }
+}
