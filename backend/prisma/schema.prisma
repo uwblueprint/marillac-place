@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // uncomment this for neon db
+  // directUrl = env("DIRECT_URL")
+}
+
+enum UserType {
+  STAFF
+  RESIDENT
+}
+
+model User {
+  id                    Int                    @id @default(autoincrement())
+  type                  UserType
+  staff                 Staff?
+  resident              Resident?
+  authId                String                 @unique @map("auth_id")
+  email                 String                 @unique
+  phoneNumber           String?                @unique @map("phone_number")
+  firstName             String                 @map("first_name")
+  lastName              String                 @map("last_name")
+  displayName           String?                @map("display_name")
+  profilePictureURL     String?                @map("profile_picture_url")
+  isActive              Boolean                @default(true) @map("is_active")
+  notificationsSent     Notification[]
+  notificationsReceived NotificationReceived[]
+
+  @@map("users")
+}
+
+model Staff {
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId           Int            @id @map("user_id")
+  isAdmin          Boolean        @default(false) @map("is_admin")
+  tasksAssigned    TaskAssigned[]
+  warningsAssigned Warning[]
+
+  @@map("staff")
+}
+
+model Resident {
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId     Int            @id @map("user_id")
+  residentId Int            @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
+  birthDate  DateTime       @map("birth_date") @db.Date
+  roomNumber Int            @map("room_number")
+  credits    Float          @default(0)
+  dateJoined DateTime       @default(now()) @map("date_joined") @db.Date
+  dateLeft   DateTime?      @map("date_left") @db.Date
+  notes      String?
+  tasks      TaskAssigned[]
+  warnings   Warning[]
+
+  @@map("residents")
+}
+
+enum TaskType {
+  REQUIRED
+  OPTIONAL
+  CHORE
+  ACHIEVEMENT
+}
+
+model Task {
+  id              Int            @id @default(autoincrement())
+  type            TaskType
+  title           String
+  description     String
+  creditValue     Float          @map("credit_value")
+  location        TaskLocation   @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  locationId      Int            @map("location_id")
+  tasksAssigned   TaskAssigned[]
+  relatedWarnings Warning[]
+
+  @@map("tasks")
+}
+
+model TaskLocation {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  tasks       Task[]
+
+  @@map("task_locations")
+}
+
+enum Status {
+  PENDING_APPROVAL
+  ASSIGNED
+  INCOMPLETE
+  COMPLETE
+  EXCUSED
+}
+
+enum RecurrenceFrequency {
+  DAILY
+  WEEKLY
+  BI_WEEKLY
+}
+
+model TaskAssigned {
+  id                  Int                  @id @default(autoincrement())
+  task                Task                 @relation(fields: [taskId], references: [id])
+  taskId              Int                  @map("task_id")
+  assigner            Staff?               @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  assignerId          Int?                 @map("assigner_id")
+  assignee            Resident             @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  assigneeId          Int                  @map("assignee_id")
+  status              Status
+  startDate           DateTime             @map("start_date") @db.Date
+  endDate             DateTime?            @map("end_date") @db.Date
+  recurrenceFrequency RecurrenceFrequency? @map("recurrence_frequency")
+  comments            String?
+
+  @@map("tasks_assigned")
+}
+
+model Warning {
+  id            Int      @id @default(autoincrement())
+  assigner      Staff?   @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  assignerId    Int?     @map("assigner_id")
+  assignee      Resident @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  assigneeId    Int      @map("resident_id")
+  relatedTask   Task?    @relation(fields: [relatedTaskId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  relatedTaskId Int?     @map("related_task_id")
+  title         String
+  description   String
+  dateIssued    DateTime @default(now()) @map("date_issued") @db.Date
+
+  @@map("warnings")
+}
+
+model Notification {
+  id         Int                    @id @default(autoincrement())
+  author     User?                  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  authorId   Int?                   @map("author_id")
+  title      String
+  message    String
+  createdAt  DateTime               @default(now()) @map("created_at") @db.Date
+  recipients NotificationReceived[]
+
+  @@map("notifications")
+}
+
+model NotificationReceived {
+  id             Int          @id @default(autoincrement())
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  notificationId Int          @map("notification_id")
+  recipient      User         @relation(fields: [recipientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  recipientId    Int          @map("recipient_id")
+  seen           Boolean      @default(false)
+
+  @@map("notifications_received")
+}

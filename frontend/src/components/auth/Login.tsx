@@ -11,6 +11,7 @@ import authAPIClient from "../../APIClients/AuthAPIClient";
 import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
+import { UserType } from "../../types/UserTypes";
 
 type GoogleResponse = GoogleLoginResponse | GoogleLoginResponseOffline;
 
@@ -20,8 +21,8 @@ type GoogleErrorResponse = {
 };
 
 const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation Login($email: String!, $password: String!, $userType: UserType!) {
+    login(email: $email, password: $password, userType: $userType) {
       id
       firstName
       lastName
@@ -60,6 +61,7 @@ const Login = (): React.ReactElement => {
     const user: AuthenticatedUser = await authAPIClient.login(
       email,
       password,
+      UserType.Staff,
       login,
     );
     setAuthenticatedUser(user);
