@@ -28,16 +28,13 @@ const login = async (
   loginFunction: LoginFunction,
 ): Promise<AuthenticatedUser | null> => {
   let user: AuthenticatedUser = null;
-  // try {
-  const result = await loginFunction({ variables: { email, password } });
+  const result = await loginFunction({
+    variables: { email, password, userType },
+  });
   user = result.data?.login ?? null;
   if (user) {
     localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(user));
   }
-  // } catch (e: unknown) {
-  //   // eslint-disable-next-line no-alert
-  //   window.alert("Failed to login");
-  // }
   return user;
 };
 

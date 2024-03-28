@@ -16,16 +16,15 @@ import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 import { ReactComponent as Logo } from "../../assets/Marillac_Place_Logo.svg";
-import { UserType } from "../../types/UserTypes";
 
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!, $userType: UserType!) {
     login(email: $email, password: $password, userType: $userType) {
       id
+      type
+      email
       firstName
       lastName
-      email
-      role
       accessToken
     }
   }
@@ -45,7 +44,7 @@ const Login = (): React.ReactElement => {
       const user: AuthenticatedUser = await authAPIClient.login(
         email,
         password,
-        UserType.Staff,
+        "STAFF",
         login,
       );
       setAuthenticatedUser(user);
