@@ -8,22 +8,19 @@ import {
   Text,
   Input,
   FormControl,
-  FormErrorMessage
+  FormErrorMessage,
 } from "@chakra-ui/react";
-
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
-import { ReactComponent as Logo } from '../../assets/Marillac_Place_Logo.svg';
-
-
-
+import { ReactComponent as Logo } from "../../assets/Marillac_Place_Logo.svg";
+import { UserType } from "../../types/UserTypes";
 
 const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation Login($email: String!, $password: String!, $userType: UserType!) {
+    login(email: $email, password: $password, userType: $userType) {
       id
       firstName
       lastName
@@ -48,12 +45,13 @@ const Login = (): React.ReactElement => {
       const user: AuthenticatedUser = await authAPIClient.login(
         email,
         password,
+        UserType.Staff,
         login,
       );
       setAuthenticatedUser(user);
-      setError('');
+      setError("");
     } catch (e: unknown) {
-      setError('Wrong email or password. Try again.');  
+      setError("Wrong email or password. Try again.");
     }
   };
 
@@ -61,31 +59,43 @@ const Login = (): React.ReactElement => {
     navigate(SIGNUP_PAGE);
   };
 
-// CHANGE TO RESET_PASSWORD_PAGE 
+  // CHANGE TO RESET_PASSWORD_PAGE
   const onForgotPasswordClick = () => {
-    navigate(SIGNUP_PAGE)
-  }
+    navigate(SIGNUP_PAGE);
+  };
 
   if (authenticatedUser) {
     return <Navigate to={HOME_PAGE} />;
-  } 
+  }
 
+  return (
+    <Box
+      width="100%"
+      display="flex"
+      flexDirection="column"
+      alignContent="center"
+      minH="100vh"
+    >
+      <Box paddingLeft="38px" paddingTop="34px">
+        <Logo />
+      </Box>
 
-return (
-  <Box width="100%" display="flex" flexDirection="column" alignContent="center" minH="100vh">
-    <Box paddingLeft="38px"
-    paddingTop="34px">
-      <Logo/>
-    </Box>
-    
-    <Box maxWidth="514px" height="480px" mt="8vh" mx="auto" padding="48px" borderRadius="8px" boxShadow="0 5px 15px 1px rgba(0, 0, 0, 0.09)">
-      <Text fontSize="38px" fontWeight="bold" mb="8px">
-        Sign In
-      </Text>
-      <Text fontSize="18px" mb="48px">
-        Please enter your login information
-      </Text>
-      <FormControl isInvalid={!!error} alignItems="center">
+      <Box
+        maxWidth="514px"
+        height="480px"
+        mt="8vh"
+        mx="auto"
+        padding="48px"
+        borderRadius="8px"
+        boxShadow="0 5px 15px 1px rgba(0, 0, 0, 0.09)"
+      >
+        <Text fontSize="38px" fontWeight="bold" mb="8px">
+          Sign In
+        </Text>
+        <Text fontSize="18px" mb="48px">
+          Please enter your login information
+        </Text>
+        <FormControl isInvalid={!!error} alignItems="center">
           <Input
             id="email"
             type="email"
@@ -97,76 +107,78 @@ return (
             borderWidth="2px"
             mb="32px"
             fontSize="18px"
-            paddingTop={email ? '14px' : '0'}
+            paddingTop={email ? "14px" : "0"}
           />
-       {email !== '' && (
-        <Box
-          position="absolute"
-          top="0"
-          left="0"
-          paddingLeft="17px"
-          paddingTop="2px"
-          fontSize="sm"
-          color="black"
-        >
-          Email
-        </Box>
-       )}
-        
-        <Input
-          id="password"
-          type="password"
-          value={password}
-          height="49px"
-          onChange={(event) => setPassword(event.target.value)}
-          borderColor="black"
-          borderWidth="2px"
-          fontSize="18px"
-          placeholder="Password"
-        />
-        
-        <FormErrorMessage
-        fontSize="18px"
-        >
-          {error}</FormErrorMessage>
-        <Text
-        onClick={onForgotPasswordClick}
-        cursor="pointer"
-        fontWeight="bold"
-        fontSize="18px"
-        textDecoration="underline"
-        float="right"
-        mt="8px"
-      >
-        Forgot Password?
-      </Text>
-        <Button onClick={onLogInClick} mt="10px" paddingTop="15px" width="418px" height="60px" backgroundColor="purple" color="white" borderRadius="48px">
+          {email !== "" && (
+            <Box
+              position="absolute"
+              top="0"
+              left="0"
+              paddingLeft="17px"
+              paddingTop="2px"
+              fontSize="sm"
+              color="black"
+            >
+              Email
+            </Box>
+          )}
+
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            height="49px"
+            onChange={(event) => setPassword(event.target.value)}
+            borderColor="black"
+            borderWidth="2px"
+            fontSize="18px"
+            placeholder="Password"
+          />
+
+          <FormErrorMessage fontSize="18px">{error}</FormErrorMessage>
           <Text
-          fontSize="24px"
+            onClick={onForgotPasswordClick}
+            cursor="pointer"
+            fontWeight="bold"
+            fontSize="18px"
+            textDecoration="underline"
+            float="right"
+            mt="8px"
           >
-            Sign In
+            Forgot Password?
           </Text>
-          
-        </Button>
-      </FormControl>
+          <Button
+            onClick={onLogInClick}
+            mt="10px"
+            paddingTop="15px"
+            width="418px"
+            height="60px"
+            backgroundColor="purple"
+            color="white"
+            borderRadius="48px"
+          >
+            <Text fontSize="24px">Sign In</Text>
+          </Button>
+        </FormControl>
+      </Box>
+      <Box mx="auto" mt="24px">
+        <Text as="span" fontSize="18px">
+          Don&apos;t have an account?&nbsp;
+        </Text>
+        <Text
+          as="span"
+          fontWeight="bold"
+          textDecoration="underline"
+          textColor="purple"
+          fontSize="18px"
+          onClick={onSignUpClick}
+          cursor="pointer"
+        >
+          Join Now
+        </Text>
+      </Box>
     </Box>
-    <Box mx="auto" mt="24px">
-      <Text as="span" fontSize="18px">
-        Don&apos;t have an account?&nbsp;
-      </Text>
-      <Text as="span"
-        fontWeight="bold"
-        textDecoration="underline"
-        textColor="purple"
-        fontSize="18px"
-        onClick={onSignUpClick}
-        cursor="pointer"
-      >
-         Join Now
-      </Text>
-    </Box>
-  </Box>
-);
+  );
 };
 
 export default Login;
