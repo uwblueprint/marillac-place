@@ -1,6 +1,3 @@
-export enum UserType {
-  Staff = "STAFF",
-  Resident = "RESIDENT",
-}
+export type UserType = "STAFF" | "RESIDENT";
 
 export default {};
