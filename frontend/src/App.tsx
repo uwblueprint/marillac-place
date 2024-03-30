@@ -33,11 +33,16 @@ import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherCo
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
 import ModalContainer from "./components/common/ModalContainer";
+import ModalContainerTest from "./components/common/ModalContainerTest";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
 import modalTheme from "./themes/ModalTheme";
+import buttonTheme from "./themes/ButtonTheme";
+import {inputTheme, textareaTheme} from "./themes/InputTheme";
 
 import SideBar from "./components/common/SideBar";
+import ParticipantsModal from "./components/pages/participants/ParticipantsModal";
+
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -59,9 +64,13 @@ const App = (): React.ReactElement => {
     colors: {
       purple: "#57469D",
       grey: "#C5C8D8",
+      red: "#fc0303"
     },
     components: {
       Modal: modalTheme,
+      Button: buttonTheme,
+      Input: inputTheme,
+      Textarea: textareaTheme,
     },
   });
 
@@ -74,7 +83,7 @@ const App = (): React.ReactElement => {
           <AuthContext.Provider
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
-            <ModalContainer/>
+            <ModalContainer title = "title" onSubmit={(content: any) => console.log(content)} submitName="Add Paricipant" ModalContainerContent={ParticipantsModal} onDelete={() => console.log("deleting")}/>
             <Router>
               <Switch>
                 <Route path={Routes.LOGIN_PAGE} element={<Login />} />

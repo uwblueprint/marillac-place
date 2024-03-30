@@ -8,11 +8,17 @@ const { definePartsStyle, defineMultiStyleConfig } =
     createMultiStyleConfigHelpers(parts.keys);
     
 const baseStyle = definePartsStyle({
+    header: {
+        padding: '0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        textAlign: 'center',
+    },
     overlay: {
         bg: '#00000040'
     },
     dialogContainer: {
-        // maxW: '668px',
+        alignItems: 'center',
     },
     dialog: {
         minW: '668px',
@@ -21,6 +27,12 @@ const baseStyle = definePartsStyle({
         boxShadow: '0px 4px 8px 0px #00000040',
         padding: '36px 40px'
     },
+    body: {
+        padding: '15px 0px 60px 0px',
+    },
+    footer: {
+        padding: '0',
+    }
 });
 
 const modalTheme = defineMultiStyleConfig({
