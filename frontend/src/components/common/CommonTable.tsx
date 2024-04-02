@@ -12,8 +12,9 @@ import {
   Center,
   Box,
   IconButton,
+  Flex,
 } from "@chakra-ui/react";
-import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+import { ChevronRightIcon, ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
 
 import pencil from "../../assets/pencil_edit.png";
 
@@ -174,11 +175,11 @@ const CommonTable = ({
     return Math.ceil(data.length / maxResults) >= 5
       ? setPageArray([1, 2, 3, 4, 5])
       : setPageArray(
-          Array.from(
-            { length: Math.ceil(data.length / maxResults) },
-            (_, i) => i,
-          ),
-        );
+        Array.from(
+          { length: Math.ceil(data.length / maxResults) },
+          (_, i) => i + 1,
+        ),
+      );
   }, [data, maxResults]);
 
   const checkedPage = checked.slice((page - 1) * maxResults, page * maxResults);
@@ -215,18 +216,19 @@ const CommonTable = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignContent="space-between">
+    <Flex flexBasis="100%" flexDirection="column" justifyContent="space-between" width="100%">
       <TableContainer
         margin="10px"
         paddingTop="0px"
         border="2px solid lightgray"
         borderRadius="6px"
+        maxWidth="100%"
       >
-        <Table>
+        <Table maxWidth="100%">
           <Thead>
             <Tr backgroundColor="rgba(245, 246, 248, 1)" width="100%">
               {isSelectable ? (
-                <Th padding="0px 0px 0px 20px" w="16px">
+                <Th padding="0px 0px 0px 10px" w="16px">
                   <Checkbox
                     verticalAlign="middle"
                     margin="0"
@@ -259,7 +261,7 @@ const CommonTable = ({
                 return (
                   <Tr key={index}>
                     {isSelectable ? (
-                      <Td padding="0px 0px 0px 20px" w="16px">
+                      <Td padding="0px 0px 0px 10px" w="16px">
                         <Checkbox
                           verticalAlign="middle"
                           margin="0"
@@ -275,17 +277,13 @@ const CommonTable = ({
                     ) : null}
                     {columnInfo.map((column, i) => {
                       return (
-                        <Td key={i}>{row[column.Key as keyof typeof row]}</Td>
+                        <Td key={i} fontSize='sm'>{row[column.Key as keyof typeof row]}</Td>
                       );
                     })}
-                    <Td onClick={() => onEdit(row)}>
-                      <Image
-                        boxSize="25px"
-                        objectFit="cover"
-                        _hover={{ cursor: "pointer" }}
-                        src={pencil}
-                        alt="edit"
-                      />
+                    <Td paddingRight="0px" onClick={() => onEdit(row)}>
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 16H3.425L13.2 6.225L11.775 4.8L2 14.575V16ZM1 18C0.716667 18 0.479167 17.9042 0.2875 17.7125C0.0958333 17.5208 0 17.2833 0 17V14.575C0 14.3083 0.05 14.0542 0.15 13.8125C0.25 13.5708 0.391667 13.3583 0.575 13.175L13.2 0.575C13.4 0.391667 13.6208 0.25 13.8625 0.15C14.1042 0.05 14.3583 0 14.625 0C14.8917 0 15.15 0.05 15.4 0.15C15.65 0.25 15.8667 0.4 16.05 0.6L17.425 2C17.625 2.18333 17.7708 2.4 17.8625 2.65C17.9542 2.9 18 3.15 18 3.4C18 3.66667 17.9542 3.92083 17.8625 4.1625C17.7708 4.40417 17.625 4.625 17.425 4.825L4.825 17.425C4.64167 17.6083 4.42917 17.75 4.1875 17.85C3.94583 17.95 3.69167 18 3.425 18H1ZM12.475 5.525L11.775 4.8L13.2 6.225L12.475 5.525Z" fill="black"/>
+                      </svg>
                     </Td>
                   </Tr>
                 );
@@ -294,11 +292,10 @@ const CommonTable = ({
         </Table>
       </TableContainer>
 
-      <Box height="50px" position="relative">
+      <Flex height="50px" position="relative">
         <Box position="absolute" width="250px" height="50px" marginLeft="10px">
-          {`Showing ${(page - 1) * maxResults + 1} to ${page * maxResults} of ${
-            data.length
-          } entries`}
+          {`Showing ${(page - 1) * maxResults + 1} to ${page * maxResults} of ${data.length
+            } entries`}
         </Box>
         <Box position="absolute" left="50%" transform="translateX(-50%)">
           <Box
@@ -310,6 +307,8 @@ const CommonTable = ({
             <IconButton
               role="group"
               boxSize="35px"
+              backgroundColor="white"
+              paddingRight="5px"
               _hover={{
                 cursor: "pointer",
                 backgroundColor: "rgba(87, 70, 157, 1)",
@@ -350,6 +349,8 @@ const CommonTable = ({
             <IconButton
               role="group"
               boxSize="35px"
+              backgroundColor="white"
+              paddingLeft="5px"
               _hover={{
                 cursor: "pointer",
                 backgroundColor: "rgba(87, 70, 157, 1)",
@@ -366,8 +367,8 @@ const CommonTable = ({
             />
           </Box>
         </Box>
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   );
 };
 

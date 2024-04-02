@@ -32,6 +32,7 @@ import HooksDemo from "./components/pages/HooksDemo";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
 import SideBar from "./components/common/SideBar";
+import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -133,6 +134,12 @@ const App = (): React.ReactElement => {
                       <HooksDemo />
                     </SideBar>
                   }
+                />
+                <Route 
+                  path={Routes.PARTICIPANT_PAGE} 
+                  element={
+                    <ParticipantsPage/>
+                  } 
                 />
                 <Route path="*" element={<NotFound />} />
               </Switch>
