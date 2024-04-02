@@ -25,7 +25,9 @@ const SideBar: FC<{ children: ReactNode }> = () => {
     { label: "Insights", route: "/insights" },
   ];
 
-  const currentPage = pages.findIndex((page) => page.route === window.location.pathname);
+  const currentPage = pages.findIndex(
+    (page) => page.route === window.location.pathname,
+  );
 
   const sidebarWidth = useBreakpointValue({
     base: "100%",
@@ -67,7 +69,12 @@ const SideBar: FC<{ children: ReactNode }> = () => {
               </Box>
             </Flex>
 
-            <Tabs defaultIndex={currentPage} orientation="vertical" variant="solid-rounded" size="lg">
+            <Tabs
+              defaultIndex={currentPage}
+              orientation="vertical"
+              variant="solid-rounded"
+              size="lg"
+            >
               <TabList w="100%">
                 {pages.map((page) => (
                   <Tab

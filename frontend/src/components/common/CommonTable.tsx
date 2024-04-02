@@ -8,15 +8,12 @@ import {
   Td,
   TableContainer,
   Checkbox,
-  Image,
   Center,
   Box,
   IconButton,
   Flex,
 } from "@chakra-ui/react";
-import { ChevronRightIcon, ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
-
-import pencil from "../../assets/pencil_edit.png";
+import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 
 export type TableTypes = "string" | "number" | "boolean" | "date";
 
@@ -175,11 +172,11 @@ const CommonTable = ({
     return Math.ceil(data.length / maxResults) >= 5
       ? setPageArray([1, 2, 3, 4, 5])
       : setPageArray(
-        Array.from(
-          { length: Math.ceil(data.length / maxResults) },
-          (_, i) => i + 1,
-        ),
-      );
+          Array.from(
+            { length: Math.ceil(data.length / maxResults) },
+            (_, i) => i + 1,
+          ),
+        );
   }, [data, maxResults]);
 
   const checkedPage = checked.slice((page - 1) * maxResults, page * maxResults);
@@ -216,7 +213,12 @@ const CommonTable = ({
   };
 
   return (
-    <Flex flexBasis="100%" flexDirection="column" justifyContent="space-between" width="100%">
+    <Flex
+      flexBasis="100%"
+      flexDirection="column"
+      justifyContent="space-between"
+      width="100%"
+    >
       <TableContainer
         margin="10px"
         paddingTop="0px"
@@ -277,12 +279,23 @@ const CommonTable = ({
                     ) : null}
                     {columnInfo.map((column, i) => {
                       return (
-                        <Td key={i} fontSize='sm'>{row[column.Key as keyof typeof row]}</Td>
+                        <Td key={i} fontSize="sm">
+                          {row[column.Key as keyof typeof row]}
+                        </Td>
                       );
                     })}
                     <Td paddingRight="0px" onClick={() => onEdit(row)}>
-                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 16H3.425L13.2 6.225L11.775 4.8L2 14.575V16ZM1 18C0.716667 18 0.479167 17.9042 0.2875 17.7125C0.0958333 17.5208 0 17.2833 0 17V14.575C0 14.3083 0.05 14.0542 0.15 13.8125C0.25 13.5708 0.391667 13.3583 0.575 13.175L13.2 0.575C13.4 0.391667 13.6208 0.25 13.8625 0.15C14.1042 0.05 14.3583 0 14.625 0C14.8917 0 15.15 0.05 15.4 0.15C15.65 0.25 15.8667 0.4 16.05 0.6L17.425 2C17.625 2.18333 17.7708 2.4 17.8625 2.65C17.9542 2.9 18 3.15 18 3.4C18 3.66667 17.9542 3.92083 17.8625 4.1625C17.7708 4.40417 17.625 4.625 17.425 4.825L4.825 17.425C4.64167 17.6083 4.42917 17.75 4.1875 17.85C3.94583 17.95 3.69167 18 3.425 18H1ZM12.475 5.525L11.775 4.8L13.2 6.225L12.475 5.525Z" fill="black"/>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M2 16H3.425L13.2 6.225L11.775 4.8L2 14.575V16ZM1 18C0.716667 18 0.479167 17.9042 0.2875 17.7125C0.0958333 17.5208 0 17.2833 0 17V14.575C0 14.3083 0.05 14.0542 0.15 13.8125C0.25 13.5708 0.391667 13.3583 0.575 13.175L13.2 0.575C13.4 0.391667 13.6208 0.25 13.8625 0.15C14.1042 0.05 14.3583 0 14.625 0C14.8917 0 15.15 0.05 15.4 0.15C15.65 0.25 15.8667 0.4 16.05 0.6L17.425 2C17.625 2.18333 17.7708 2.4 17.8625 2.65C17.9542 2.9 18 3.15 18 3.4C18 3.66667 17.9542 3.92083 17.8625 4.1625C17.7708 4.40417 17.625 4.625 17.425 4.825L4.825 17.425C4.64167 17.6083 4.42917 17.75 4.1875 17.85C3.94583 17.95 3.69167 18 3.425 18H1ZM12.475 5.525L11.775 4.8L13.2 6.225L12.475 5.525Z"
+                          fill="black"
+                        />
                       </svg>
                     </Td>
                   </Tr>
@@ -294,8 +307,9 @@ const CommonTable = ({
 
       <Flex height="50px" position="relative">
         <Box position="absolute" width="250px" height="50px" marginLeft="10px">
-          {`Showing ${(page - 1) * maxResults + 1} to ${page * maxResults} of ${data.length
-            } entries`}
+          {`Showing ${(page - 1) * maxResults + 1} to ${page * maxResults} of ${
+            data.length
+          } entries`}
         </Box>
         <Box position="absolute" left="50%" transform="translateX(-50%)">
           <Box

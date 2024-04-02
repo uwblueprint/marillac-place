@@ -135,11 +135,9 @@ const App = (): React.ReactElement => {
                     </SideBar>
                   }
                 />
-                <Route 
-                  path={Routes.PARTICIPANT_PAGE} 
-                  element={
-                    <ParticipantsPage/>
-                  } 
+                <Route
+                  path={Routes.PARTICIPANT_PAGE}
+                  element={<ParticipantsPage />}
                 />
                 <Route path="*" element={<NotFound />} />
               </Switch>
