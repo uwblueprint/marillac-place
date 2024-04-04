@@ -1,9 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
-import {
-  ChakraProvider,
-  extendTheme,  
-} from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
   Route,
@@ -33,16 +30,14 @@ import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherCo
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
 import ModalContainer from "./components/common/ModalContainer";
-import ModalContainerTest from "./components/common/ModalContainerTest";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
 import modalTheme from "./themes/ModalTheme";
 import buttonTheme from "./themes/ButtonTheme";
-import {inputTheme, textareaTheme} from "./themes/InputTheme";
+import { inputTheme, textareaTheme } from "./themes/InputTheme";
 
 import SideBar from "./components/common/SideBar";
 import ParticipantsModal from "./components/pages/participants/ParticipantsModal";
-
 
 const App = (): React.ReactElement => {
   const [isOpen, setOpen] = useState(true);
@@ -65,7 +60,7 @@ const App = (): React.ReactElement => {
     colors: {
       purple: "#57469D",
       grey: "#C5C8D8",
-      red: "#fc0303"
+      red: "#fc0303",
     },
     components: {
       Modal: modalTheme,
@@ -84,7 +79,13 @@ const App = (): React.ReactElement => {
           <AuthContext.Provider
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
-            <ModalContainer title = "title" ModalContainerContent={ParticipantsModal} onDelete={() => console.log("deleting")} isOpen={isOpen} setOpen={setOpen}/>
+            <ModalContainer
+              title="title"
+              ModalContainerContent={ParticipantsModal}
+              onDelete={() => console.log("deleting")}
+              isOpen={isOpen}
+              setOpen={setOpen}
+            />
             <Router>
               <Switch>
                 <Route path={Routes.LOGIN_PAGE} element={<Login />} />
@@ -156,7 +157,6 @@ const App = (): React.ReactElement => {
                 />
                 <Route path="*" element={<NotFound />} />
               </Switch>
-              
             </Router>
           </AuthContext.Provider>
         </SampleContextDispatcherContext.Provider>
