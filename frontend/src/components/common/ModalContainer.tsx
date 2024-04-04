@@ -1,42 +1,23 @@
-import React, {useState}  from "react";
+import React from "react";
 import {
     Modal,
     ModalOverlay,
     ModalContent,
     ModalHeader,
-    ModalFooter,
     ModalBody,
-    Button,
-    Text,
-    Input,
-    ChakraProvider,
+    Button
 } from '@chakra-ui/react';
-import { DeleteIcon } from '@chakra-ui/icons'
-import { useNavigate } from "react-router-dom";
-import { HOME_PAGE } from "../../constants/Routes";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 type Props = {
     title: string,
-    onSubmit: (content: any) => void,
     onDelete?: () => void,
-    submitName: string,
     ModalContainerContent: any,
+    isOpen: any,
+    setOpen: any,
 };
 
-const ModalContainer = ( {title, onSubmit, submitName, ModalContainerContent, onDelete}: Props ): React.ReactElement => {
-    const [content, setContent] = useState({});
-    const [submitPressed, setSubmitPressed] = useState(false);
-    const [isOpen, setOpen] = useState(true);
-
-    const handleSubmit = () => {
-        onSubmit(content);
-        // try {
-        //     setSubmitPressed(true);
-        //     onSubmit(content);
-        // } catch {
-        //     console.log("failed to submit");
-        // }
-    }
+const ModalContainer = ( {title, ModalContainerContent, onDelete, isOpen, setOpen}: Props ): React.ReactElement => {
     return (
         <>
             <Modal isOpen={isOpen} onClose = {() => null}>
@@ -45,24 +26,15 @@ const ModalContainer = ( {title, onSubmit, submitName, ModalContainerContent, on
                     <ModalHeader>
                         {title}
                         {onDelete ? (
-                            <Button variant="del" onClick={onDelete}>
-                                <DeleteIcon marginRight="6px"/>
+                            <Button variant="del" gap="2px" onClick={onDelete}>
+                                <DeleteOutlinedIcon />
                                 Delete
                             </Button>
                         ) : null}
                     </ModalHeader>
                     <ModalBody>
-                        <ModalContainerContent setContent={setContent} submitPressed={submitPressed}/>
+                        <ModalContainerContent setOpen={setOpen}/>
                     </ModalBody>
-
-                    <ModalFooter>
-                        <Button variant = "clear" marginRight="8px" onClick={() => setOpen(!isOpen)}>
-                            Cancel
-                        </Button>
-                        <Button variant = "primary" onClick={handleSubmit}>
-                            {submitName}
-                        </Button>
-                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>

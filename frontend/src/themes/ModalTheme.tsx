@@ -18,17 +18,16 @@ const baseStyle = definePartsStyle({
         bg: '#00000040'
     },
     dialogContainer: {
-        alignItems: 'center',
     },
     dialog: {
         minW: '668px',
         borderRadius: '16px',
         bg: `white`,
         boxShadow: '0px 4px 8px 0px #00000040',
-        padding: '36px 40px'
+        padding: '36px 40px',
     },
     body: {
-        padding: '15px 0px 60px 0px',
+        padding: '15px 0px 0px 0px',
     },
     footer: {
         padding: '0',

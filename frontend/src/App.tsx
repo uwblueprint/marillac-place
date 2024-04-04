@@ -45,6 +45,7 @@ import ParticipantsModal from "./components/pages/participants/ParticipantsModal
 
 
 const App = (): React.ReactElement => {
+  const [isOpen, setOpen] = useState(true);
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
     AUTHENTICATED_USER_KEY,
   );
@@ -83,7 +84,7 @@ const App = (): React.ReactElement => {
           <AuthContext.Provider
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
-            <ModalContainer title = "title" onSubmit={(content: any) => console.log(content)} submitName="Add Paricipant" ModalContainerContent={ParticipantsModal} onDelete={() => console.log("deleting")}/>
+            <ModalContainer title = "title" ModalContainerContent={ParticipantsModal} onDelete={() => console.log("deleting")} isOpen={isOpen} setOpen={setOpen}/>
             <Router>
               <Switch>
                 <Route path={Routes.LOGIN_PAGE} element={<Login />} />

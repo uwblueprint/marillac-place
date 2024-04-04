@@ -24,11 +24,16 @@ const del = defineStyle({
     bg: 'white',
     color: '#E30000',
     variant: 'outline',
-    border: '2px solid #C5C8D8',
+    border: '2px solid #C5C8D8'
+});
+
+const icon = defineStyle({
+    bg: 'transparent',
+    height: '34px'
 });
 
 const buttonTheme = defineStyleConfig({
-    variants: { primary, clear, del },
+    variants: { primary, clear, del, icon },
 });
 
 export default buttonTheme;
