@@ -71,7 +71,7 @@ const Default = (): React.ReactElement => {
         columnInfo={mockColumns}
         data={mockData}
         onEdit={() => {}}
-        maxResults={2}
+        maxResults={4}
         isSelectable
       />
       <TeamInfoDisplay />

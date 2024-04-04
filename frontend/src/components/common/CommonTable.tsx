@@ -13,19 +13,19 @@ import {
   Box,
   IconButton,
 } from "@chakra-ui/react";
-import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-
-import pencil from "../../assets/pencil_edit.png";
+// eslint-disable-line
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
+import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 
 export type TableTypes = "string" | "number" | "boolean" | "date";
 
-export type ColumnInfoTypes = { Header: string; Type: TableTypes; Key: string };
+export type ColumnInfoTypes = { header: string; type: TableTypes; key: string };
 
 export type TableProps = {
-  // eslint-disable-next-line
+  // eslint-disable-line
   data: any[];
   columnInfo: ColumnInfoTypes[];
-  // eslint-disable-next-line
   onEdit: (row: any) => any;
   maxResults: number;
   isSelectable: boolean;
@@ -38,7 +38,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 1,
     credits: "$4.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 2,
@@ -46,7 +46,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 1,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 3,
@@ -54,7 +54,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 2,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 4,
@@ -62,7 +62,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 2,
     credits: "$4.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 5,
@@ -70,7 +70,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 3,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 6,
@@ -78,7 +78,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 3,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 7,
@@ -86,7 +86,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 4,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 8,
@@ -94,7 +94,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 4,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 9,
@@ -102,7 +102,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 5,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 10,
@@ -110,7 +110,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 5,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 11,
@@ -118,7 +118,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 6,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 12,
@@ -126,30 +126,30 @@ export const mockData = [
     description: "do ur taxes",
     room: 6,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
 ];
 
 export const mockColumns: ColumnInfoTypes[] = [
   {
-    Header: "Task name",
-    Type: "string",
-    Key: "title",
+    header: "Task name",
+    type: "string",
+    key: "title",
   },
   {
-    Header: "Room Number",
-    Type: "number",
-    Key: "room",
+    header: "Room Number",
+    type: "number",
+    key: "room",
   },
   {
-    Header: "Due Date",
-    Type: "date",
-    Key: "due_date",
+    header: "Due Date",
+    type: "date",
+    key: "dueDate",
   },
   {
-    Header: "Requested Marillac Bucks",
-    Type: "number",
-    Key: "credits",
+    header: "Requested Marillac Bucks",
+    type: "number",
+    key: "credits",
   },
 ];
 
@@ -160,13 +160,7 @@ const CommonTable = ({
   maxResults,
   onEdit,
 }: TableProps): React.ReactElement => {
-  const checkRows: boolean[] = [];
-  Object.keys(data).forEach((item) => {
-    if (Object.prototype.hasOwnProperty.call(data, item)) {
-      checkRows.push(false);
-    }
-  });
-  const [checked, setChecked] = useState(checkRows);
+  const [checked, setChecked] = useState(data.map(() => false));
   const [page, setPage] = useState(1);
   const [pageArray, setPageArray] = useState<number[]>([]);
 
@@ -176,7 +170,7 @@ const CommonTable = ({
       : setPageArray(
           Array.from(
             { length: Math.ceil(data.length / maxResults) },
-            (_, i) => i,
+            (_, i) => i + 1,
           ),
         );
   }, [data, maxResults]);
@@ -224,7 +218,7 @@ const CommonTable = ({
       >
         <Table>
           <Thead>
-            <Tr backgroundColor="rgba(245, 246, 248, 1)" width="100%">
+            <Tr backgroundColor="lightgrey" width="100%">
               {isSelectable ? (
                 <Th padding="0px 0px 0px 20px" w="16px">
                   <Checkbox
@@ -247,7 +241,7 @@ const CommonTable = ({
                 </Th>
               ) : null}
               {columnInfo.map((header, index) => {
-                return <Th key={index}>{header.Header}</Th>;
+                return <Th key={index}>{header.header}</Th>;
               })}
               <Th />
             </Tr>
@@ -275,16 +269,12 @@ const CommonTable = ({
                     ) : null}
                     {columnInfo.map((column, i) => {
                       return (
-                        <Td key={i}>{row[column.Key as keyof typeof row]}</Td>
+                        <Td key={i}>{row[column.key as keyof typeof row]}</Td>
                       );
                     })}
                     <Td onClick={() => onEdit(row)}>
-                      <Image
-                        boxSize="25px"
-                        objectFit="cover"
-                        _hover={{ cursor: "pointer" }}
-                        src={pencil}
-                        alt="edit"
+                      <EditOutlinedIcon
+                        sx={{ ":hover": { cursor: "pointer" } }}
                       />
                     </Td>
                   </Tr>
@@ -312,24 +302,24 @@ const CommonTable = ({
               boxSize="35px"
               _hover={{
                 cursor: "pointer",
-                backgroundColor: "rgba(87, 70, 157, 1)",
+                backgroundColor: "purple",
               }}
+              sx={{ ":hover .chevron": { color: "white" } }}
               onClick={() => leftPaginate()}
               aria-label="Previous Page"
               icon={
-                <ChevronLeftIcon
-                  boxSize="25px"
-                  color="rgba(87, 70, 157, 1)"
-                  _groupHover={{ color: "white" }}
+                <ChevronLeftOutlinedIcon
+                  className="chevron"
+                  sx={{
+                    color: "purple",
+                  }}
                 />
               }
             />
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={
-                    item === page ? "rgba(87, 70, 157, 1)" : "white"
-                  }
+                  backgroundColor={item === page ? "purple" : "white"}
                   height="35px"
                   padding="10px"
                   flexBasis="35px"
@@ -337,7 +327,7 @@ const CommonTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "rgba(87, 70, 157, 1)",
+                    backgroundColor: "purple",
                   }}
                   textColor={item === page ? "white" : "rgba(128, 128, 128, 1)"}
                   onClick={() => numberPaginate(item)}
@@ -352,15 +342,17 @@ const CommonTable = ({
               boxSize="35px"
               _hover={{
                 cursor: "pointer",
-                backgroundColor: "rgba(87, 70, 157, 1)",
+                backgroundColor: "purple",
               }}
+              sx={{ ":hover .chevron": { color: "white" } }}
               onClick={() => rightPaginate()}
-              aria-label="Previous Page"
+              aria-label="Next Page"
               icon={
-                <ChevronRightIcon
-                  boxSize="25px"
-                  color="rgba(87, 70, 157, 1)"
-                  _groupHover={{ color: "white" }}
+                <ChevronRightOutlinedIcon
+                  className="chevron"
+                  sx={{
+                    color: "purple",
+                  }}
                 />
               }
             />
