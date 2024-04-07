@@ -29,8 +29,10 @@ import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
+import tabsTheme from "./themes/TabsTheme";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
+import TasksPage from "./components/pages/tasks/TasksPage";
 import SideBar from "./components/common/SideBar";
 
 const App = (): React.ReactElement => {
@@ -54,6 +56,9 @@ const App = (): React.ReactElement => {
       purple: "#57469D",
       grey: "#C5C8D8",
     },
+    components: {
+      Tabs: tabsTheme,
+    }
   });
 
   return (
@@ -132,6 +137,12 @@ const App = (): React.ReactElement => {
                     <SideBar>
                       <HooksDemo />
                     </SideBar>
+                  }
+                />
+                <Route
+                  path={Routes.TASKS_PAGE}
+                  element={
+                    <TasksPage />
                   }
                 />
                 <Route path="*" element={<NotFound />} />
