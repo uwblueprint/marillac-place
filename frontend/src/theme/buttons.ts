@@ -5,16 +5,28 @@ const primary = defineStyle({
   borderRadius: "8px",
   padding: "4px 16px",
   border: "0",
-  bg: "#57469D",
+  bg: "purple.main",
   color: "white",
+  _hover: { bg: "purple.200" },
 });
 
-const clear = defineStyle({
+const secondary = defineStyle({
+  height: "34px",
+  borderRadius: "8px",
+  padding: "4px 16px",
+  border: "0",
+  bg: "purple.100",
+  color: "purple.main",
+  _hover: { bg: "gray.100" },
+});
+
+const cancel = defineStyle({
   height: "34px",
   borderRadius: "8px",
   padding: "4px 16px",
   border: "2px solid #C5C8D8",
   bg: "white",
+  _hover: { bg: "gray.100" },
 });
 
 const del = defineStyle({
@@ -27,13 +39,8 @@ const del = defineStyle({
   border: "2px solid #C5C8D8",
 });
 
-const icon = defineStyle({
-  bg: "transparent",
-  height: "34px",
-});
-
 const buttonTheme = defineStyleConfig({
-  variants: { primary, clear, del, icon },
+  variants: { primary, secondary, cancel, del },
 });
 
 export default buttonTheme;
