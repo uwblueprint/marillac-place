@@ -27,7 +27,6 @@ module.exports = {
   ],
   rules: {
     "prettier/prettier": ["warn", { endOfLine: "auto" }],
-    "react/no-unused-prop-types": "warn",
     "react/require-default-props": "off",
     "react/no-array-index-key": "off",
     "jsx-a11y/click-events-have-key-events": "off",
