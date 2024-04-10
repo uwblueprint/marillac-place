@@ -46,7 +46,7 @@ const LOGIN_WITH_GOOGLE = gql`
   }
 `;
 
-const Login = (): React.ReactElement => {
+const LoginPage = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -142,4 +142,4 @@ const Login = (): React.ReactElement => {
   );
 };
 
-export default Login;
+export default LoginPage;

@@ -25,7 +25,7 @@ interface TableData {
   [key: string]: TableTypes;
 }
 
-export type TableProps = {
+type Props = {
   data: TableData[];
   columnInfo: ColumnInfoTypes[];
   onEdit: (row: unknown) => unknown;
@@ -37,9 +37,9 @@ const CommonTable = ({
   columnInfo,
   data,
   onEdit,
-  maxResults = 8,
+  maxResults = 10,
   isSelectable = false,
-}: TableProps): React.ReactElement => {
+}: Props): React.ReactElement => {
   const [checked, setChecked] = useState(data.map(() => false));
   const [page, setPage] = useState(1);
   const [pageArray, setPageArray] = useState<number[]>([]);
@@ -190,7 +190,7 @@ const CommonTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.300"
+              color="purple.main"
               backgroundColor="white"
               aria-label="Previous Page"
               icon={<ChevronLeftOutlinedIcon />}
@@ -199,7 +199,7 @@ const CommonTable = ({
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={item === page ? "purple.300" : "white"}
+                  backgroundColor={item === page ? "purple.main" : "white"}
                   height="35px"
                   padding="10px"
                   flexBasis="35px"
@@ -207,9 +207,9 @@ const CommonTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "purple.300",
+                    backgroundColor: "purple.main",
                   }}
-                  textColor={item === page ? "white" : "gray.500"}
+                  textColor={item === page ? "white" : "gray.main"}
                   onClick={() => numberPaginate(item)}
                   key={index}
                 >
@@ -223,7 +223,7 @@ const CommonTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.300"
+              color="purple.main"
               backgroundColor="white"
               aria-label="Next Page"
               icon={<ChevronRightOutlinedIcon />}
