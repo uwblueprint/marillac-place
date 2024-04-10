@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { Flex } from "@chakra-ui/react";
 
 import AuthContext from "../../contexts/AuthContext";
 import { LOGIN_PAGE } from "../../constants/Routes";
@@ -10,7 +11,10 @@ const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({
 }) => {
   const { authenticatedUser } = useContext(AuthContext);
   return authenticatedUser ? (
-    <SideBar>{children}</SideBar>
+    <Flex>
+      <SideBar />
+      {children}
+    </Flex>
   ) : (
     <Navigate to={LOGIN_PAGE} />
   );

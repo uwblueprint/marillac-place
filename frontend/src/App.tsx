@@ -18,6 +18,9 @@ import SimpleEntityDisplayPage from "./components/pages/SimpleEntityDisplayPage"
 import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
 import SimpleEntityUpdatePage from "./components/pages/SimpleEntityUpdatePage";
+import EditTeamInfoPage from "./components/pages/EditTeamPage";
+import HooksDemo from "./components/pages/HooksDemo";
+import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import AuthContext from "./contexts/AuthContext";
@@ -27,8 +30,6 @@ import SampleContext, {
 } from "./contexts/SampleContext";
 import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
-import EditTeamInfoPage from "./components/pages/EditTeamPage";
-import HooksDemo from "./components/pages/HooksDemo";
 import ModalContainer from "./components/common/ModalContainer";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
@@ -36,7 +37,6 @@ import modalTheme from "./themes/ModalTheme";
 import buttonTheme from "./themes/ButtonTheme";
 import { inputTheme, textareaTheme } from "./themes/InputTheme";
 
-import SideBar from "./components/common/SideBar";
 import ParticipantsModal from "./components/pages/participants/ParticipantsModal";
 
 const App = (): React.ReactElement => {
@@ -150,9 +150,17 @@ const App = (): React.ReactElement => {
                 <Route
                   path={Routes.HOOKS_PAGE}
                   element={
-                    <SideBar>
+                    <PrivateRoute>
                       <HooksDemo />
-                    </SideBar>
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path={Routes.PARTICIPANTS_PAGE}
+                  element={
+                    <PrivateRoute>
+                      <ParticipantsPage />
+                    </PrivateRoute>
                   }
                 />
                 <Route path="*" element={<NotFound />} />
