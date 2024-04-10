@@ -25,7 +25,7 @@ interface TableData {
   [key: string]: TableTypes;
 }
 
-export type TableProps = {
+type Props = {
   data: TableData[];
   columnInfo: ColumnInfoTypes[];
   onEdit: (row: unknown) => unknown;
@@ -39,7 +39,7 @@ const CommonTable = ({
   onEdit,
   maxResults = 10,
   isSelectable = false,
-}: TableProps): React.ReactElement => {
+}: Props): React.ReactElement => {
   const [checked, setChecked] = useState(data.map(() => false));
   const [page, setPage] = useState(1);
   const [pageArray, setPageArray] = useState<number[]>([]);

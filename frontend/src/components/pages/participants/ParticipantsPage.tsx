@@ -52,19 +52,15 @@ const ParticipantsPage = (): React.ReactElement => {
             leftIcon={
               <Icon as={FileDownloadOutlinedIcon} color="purple.main" />
             }
-            bg="purple.100"
-            _hover={{ bg: "gray.100" }}
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => {}}
           >
             Export
           </Button>
           <Button
+            variant="primary"
             leftIcon={<Icon as={Add} color="white" />}
-            bg="purple.main"
-            color="white"
-            _hover={{ bg: "purple.200" }}
             size="sm"
             onClick={() => setIsModalOpen(true)}
           >

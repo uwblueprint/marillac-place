@@ -13,7 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import * as Routes from "../../constants/Routes";
-import { ReactComponent as Logo } from "../../assets/Marillac_Place_Logo.svg";
+import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
 
 const SideBar: React.FC = () => {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const SideBar: React.FC = () => {
               variant="solid-rounded"
               size="lg"
             >
-              <TabList w="100%">
+              <TabList width="100%">
                 {pages.map((page) => (
                   <Tab
                     key={page.route}
@@ -86,6 +86,7 @@ const SideBar: React.FC = () => {
                     textAlign="left"
                     onClick={() => navigate(page.route)}
                     _selected={{ bg: "purple.main", color: "white" }}
+                    _hover={{ bg: "purple.100", color: "purple.main" }}
                   >
                     {page.label}
                   </Tab>

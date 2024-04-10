@@ -60,7 +60,8 @@ const FormField = ({
           <InputRightElement height="34px">
             <Button
               onClick={() => setShowPassword(!showPassword)}
-              variant="icon"
+              bg="transparent"
+              _hover={{ bg: "transparent" }}
             >
               {!showPassword ? (
                 <VisibilityIcon fontSize="small" />
@@ -215,7 +216,7 @@ const ParticipantsModal = ({
 
         <Flex justifyContent="flex-end">
           <Button
-            variant="clear"
+            variant="cancel"
             marginRight="8px"
             onClick={() => {
               resetFormState();

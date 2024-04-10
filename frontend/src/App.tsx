@@ -7,34 +7,32 @@ import {
   Routes as Switch,
 } from "react-router-dom";
 
-import Login from "./components/auth/Login";
-import Signup from "./components/auth/Signup";
-import PrivateRoute from "./components/auth/PrivateRoute";
-import CreatePage from "./components/pages/CreatePage";
-import Default from "./components/pages/Default";
-import DisplayPage from "./components/pages/DisplayPage";
-import SimpleEntityCreatePage from "./components/pages/SimpleEntityCreatePage";
-import SimpleEntityDisplayPage from "./components/pages/SimpleEntityDisplayPage";
-import NotFound from "./components/pages/NotFound";
-import UpdatePage from "./components/pages/UpdatePage";
-import SimpleEntityUpdatePage from "./components/pages/SimpleEntityUpdatePage";
-import EditTeamInfoPage from "./components/pages/EditTeamPage";
-import HooksDemo from "./components/pages/HooksDemo";
-import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
-import AuthContext from "./contexts/AuthContext";
+import { AuthenticatedUser } from "./types/AuthTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
+import AuthContext from "./contexts/AuthContext";
 import SampleContext, {
   DEFAULT_SAMPLE_CONTEXT,
 } from "./contexts/SampleContext";
-import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
+import sampleContextReducer from "./reducers/SampleContextReducer";
 
-import { AuthenticatedUser } from "./types/AuthTypes";
-import modalTheme from "./themes/ModalTheme";
-import buttonTheme from "./themes/ButtonTheme";
-import { inputTheme, textareaTheme } from "./themes/InputTheme";
+import colors from "./theme/colors";
+import modalTheme from "./theme/modals";
+import buttonTheme from "./theme/buttons";
+import { inputTheme, textareaTheme } from "./theme/inputs";
+
+import PrivateRoute from "./components/auth/PrivateRoute";
+import LoginPage from "./components/auth/LoginPage";
+import SignupPage from "./components/auth/SignupPage";
+import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
+import ApprovalsPage from "./components/pages/approvals/ApprovalsPage";
+import InsightsPage from "./components/pages/insights/InsightsPage";
+import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
+import SchedulePage from "./components/pages/schedule/SchedulePage";
+import TasksPage from "./components/pages/tasks/TasksPage";
+import NotFoundPage from "./components/pages/NotFoundPage";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -53,25 +51,7 @@ const App = (): React.ReactElement => {
   );
 
   const theme = extendTheme({
-    colors: {
-      black: "#000",
-      white: "#fff",
-      gray: {
-        main: "#808080",
-        100: "#E3E4EA",
-        300: "#C5C8D8",
-      },
-      purple: {
-        main: "#57469D",
-        100: "#F1ECFF",
-        300: "#B1A7D7",
-        500: "#382584",
-      },
-      red: {
-        main: "#D34C5C",
-        error: "#E30000",
-      },
-    },
+    colors,
     components: {
       Modal: modalTheme,
       Button: buttonTheme,
@@ -91,70 +71,37 @@ const App = (): React.ReactElement => {
           >
             <Router>
               <Switch>
-                <Route path={Routes.LOGIN_PAGE} element={<Login />} />
-                <Route path={Routes.SIGNUP_PAGE} element={<Signup />} />
-                <Route path={Routes.HOME_PAGE} element={<Default />} />
+                <Route path={Routes.LOGIN_PAGE} element={<LoginPage />} />
+                <Route path={Routes.SIGNUP_PAGE} element={<SignupPage />} />
                 <Route
-                  path={Routes.CREATE_ENTITY_PAGE}
+                  path={Routes.HOME_PAGE}
                   element={
                     <PrivateRoute>
-                      <CreatePage />
+                      <AnnouncementsPage />
                     </PrivateRoute>
                   }
                 />
                 <Route
-                  path={Routes.UPDATE_ENTITY_PAGE}
+                  path={Routes.TASKS_PAGE}
                   element={
                     <PrivateRoute>
-                      <UpdatePage />
+                      <TasksPage />
                     </PrivateRoute>
                   }
                 />
                 <Route
-                  path={Routes.DISPLAY_ENTITY_PAGE}
+                  path={Routes.APPROVALS_PAGE}
                   element={
                     <PrivateRoute>
-                      <DisplayPage />
+                      <ApprovalsPage />
                     </PrivateRoute>
                   }
                 />
                 <Route
-                  path={Routes.CREATE_SIMPLE_ENTITY_PAGE}
+                  path={Routes.SCHEDULE_PAGE}
                   element={
                     <PrivateRoute>
-                      <SimpleEntityCreatePage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path={Routes.UPDATE_SIMPLE_ENTITY_PAGE}
-                  element={
-                    <PrivateRoute>
-                      <SimpleEntityUpdatePage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path={Routes.DISPLAY_SIMPLE_ENTITY_PAGE}
-                  element={
-                    <PrivateRoute>
-                      <SimpleEntityDisplayPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path={Routes.EDIT_TEAM_PAGE}
-                  element={
-                    <PrivateRoute>
-                      <EditTeamInfoPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path={Routes.HOOKS_PAGE}
-                  element={
-                    <PrivateRoute>
-                      <HooksDemo />
+                      <SchedulePage />
                     </PrivateRoute>
                   }
                 />
@@ -166,7 +113,15 @@ const App = (): React.ReactElement => {
                     </PrivateRoute>
                   }
                 />
-                <Route path="*" element={<NotFound />} />
+                <Route
+                  path={Routes.INSIGHTS_PAGE}
+                  element={
+                    <PrivateRoute>
+                      <InsightsPage />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path="*" element={<NotFoundPage />} />
               </Switch>
             </Router>
           </AuthContext.Provider>
