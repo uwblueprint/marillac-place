@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Input,
@@ -12,7 +12,8 @@ import { Add, Search } from "@mui/icons-material";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 import CommonTable, { ColumnInfoTypes } from "../../common/CommonTable";
-import { participants } from "../../../mocks/participants"; // TODO: replace mock data
+import ParticipantsModal from "./ParticipantsModal";
+import { participants } from "../../../mocks/participants"; // TODO: Replace mock data
 
 const columnTypes: ColumnInfoTypes[] = [
   {
@@ -34,6 +35,8 @@ const columnTypes: ColumnInfoTypes[] = [
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <Flex flexDirection="column" flexGrow={1} padding="20px">
       <Flex justifyContent="space-between" padding="10px" paddingBottom="10px">
@@ -46,7 +49,9 @@ const ParticipantsPage = (): React.ReactElement => {
 
         <Stack direction="row" spacing={4}>
           <Button
-            leftIcon={<Icon as={FileDownloadOutlinedIcon} color="purple.300" />}
+            leftIcon={
+              <Icon as={FileDownloadOutlinedIcon} color="purple.main" />
+            }
             bg="purple.100"
             _hover={{ bg: "gray.100" }}
             variant="outline"
@@ -57,11 +62,11 @@ const ParticipantsPage = (): React.ReactElement => {
           </Button>
           <Button
             leftIcon={<Icon as={Add} color="white" />}
-            bg="purple.300"
+            bg="purple.main"
             color="white"
             _hover={{ bg: "purple.200" }}
             size="sm"
-            onClick={() => {}}
+            onClick={() => setIsModalOpen(true)}
           >
             Add Participant
           </Button>
@@ -72,6 +77,7 @@ const ParticipantsPage = (): React.ReactElement => {
         columnInfo={columnTypes}
         onEdit={() => {}}
       />
+      <ParticipantsModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </Flex>
   );
 };

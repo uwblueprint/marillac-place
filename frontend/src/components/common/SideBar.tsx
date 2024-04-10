@@ -85,7 +85,7 @@ const SideBar: React.FC = () => {
                     justifyContent="stretch"
                     textAlign="left"
                     onClick={() => navigate(page.route)}
-                    _selected={{ bg: "purple.300", color: "white" }}
+                    _selected={{ bg: "purple.main", color: "white" }}
                   >
                     {page.label}
                   </Tab>

@@ -12,118 +12,104 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
+import ModalContainer from "../../common/ModalContainer";
+
 type Props = {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ParticipantsModal = ({ setOpen }: Props): React.ReactElement => {
-  const [participant, setParticipant] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    ID: "",
-    password: "",
-    arrivalDate: "",
-    departureDate: "",
-    notes: "",
-  });
+const ParticipantsModal = ({
+  isOpen,
+  setIsOpen,
+}: Props): React.ReactElement => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [residentId, setResidentId] = useState("");
+  const [password, setPassword] = useState("");
+  const [arrivalDate, setArrivalDate] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [notes, setNotes] = useState("");
 
-  const [show, setShow] = React.useState(false);
-  const handleClick = () => setShow(!show);
-
-  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipant({ ...participant, firstName: e.target.value });
-  };
-  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipant({ ...participant, lastName: e.target.value });
-  };
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipant({ ...participant, email: e.target.value });
-  };
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipant({ ...participant, phoneNumber: e.target.value });
-  };
-  const handleIDChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipant({ ...participant, ID: e.target.value });
-  };
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipant({ ...participant, password: e.target.value });
-  };
-  const handleArrivalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipant({ ...participant, arrivalDate: e.target.value });
-  };
-  const handleDepartureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipant({ ...participant, departureDate: e.target.value });
-  };
-  const handleNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setParticipant({ ...participant, notes: e.target.value });
-  };
-
+  const [showPassword, setShowPassword] = useState(false);
   const [submitPressed, setSubmitPressed] = useState(false);
-  const onSubmit = () => {
+
+  const handleSubmit = () => {
     setSubmitPressed(true);
     if (
-      !participant.firstName ||
-      !participant.lastName ||
-      !participant.email ||
-      !participant.phoneNumber ||
-      !participant.ID ||
-      !participant.password ||
-      !participant.arrivalDate
+      !firstName ||
+      !lastName ||
+      !email ||
+      !phoneNumber ||
+      !residentId ||
+      !password ||
+      !arrivalDate
     ) {
-      console.log("some field is missing");
+      // TODO: Add error handling
     } else {
-      console.log(participant);
+      // TODO: Add API call
     }
   };
 
+  const resetFormState = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPhoneNumber("");
+    setResidentId("");
+    setPassword("");
+    setArrivalDate("");
+    setDepartureDate("");
+    setNotes("");
+
+    setShowPassword(false);
+    setSubmitPressed(false);
+  };
+
   return (
-    <>
+    <ModalContainer
+      title="New Participant"
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+    >
       <Flex flexDirection="column" gap="20px">
         <Flex gap="20px">
           <Flex flexDir="column" flex="1">
             <FormControl isRequired>
-              <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+              <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
                 First name
               </FormLabel>
               <Input
                 variant="primary"
                 borderColor={
-                  submitPressed && !participant.firstName
-                    ? "#E30000BB"
-                    : "#C5C8D8"
+                  submitPressed && !firstName ? "red.error" : "gray.300"
                 }
                 boxShadow={
-                  submitPressed && !participant.firstName
-                    ? "0 0 2px #E30000BB"
-                    : "none"
+                  submitPressed && !firstName ? "0 0 2px red.error" : "none"
                 }
-                value={participant.firstName}
-                onChange={handleFirstNameChange}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
               />
             </FormControl>
           </Flex>
 
           <Flex flexDir="column" flex="1">
             <FormControl isRequired>
-              <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+              <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
                 Last name
               </FormLabel>
               <Input
                 variant="primary"
                 borderColor={
-                  submitPressed && !participant.lastName
-                    ? "#E30000BB"
-                    : "#C5C8D8"
+                  submitPressed && !lastName ? "red.error" : "gray.300"
                 }
                 boxShadow={
-                  submitPressed && !participant.lastName
-                    ? "0 0 2px #E30000BB"
-                    : "none"
+                  submitPressed && !lastName ? "0 0 2px red.error" : "none"
                 }
-                value={participant.lastName}
-                onChange={handleLastNameChange}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </FormControl>
           </Flex>
@@ -132,46 +118,38 @@ const ParticipantsModal = ({ setOpen }: Props): React.ReactElement => {
         <Flex gap="20px">
           <Flex flexDir="column" flex="1">
             <FormControl isRequired>
-              <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+              <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
                 Email
               </FormLabel>
               <Input
                 variant="primary"
-                borderColor={
-                  submitPressed && !participant.email ? "#E30000BB" : "#C5C8D8"
-                }
+                borderColor={submitPressed && !email ? "red.error" : "gray.300"}
                 boxShadow={
-                  submitPressed && !participant.email
-                    ? "0 0 2px #E30000BB"
-                    : "none"
+                  submitPressed && !email ? "0 0 2px red.error" : "none"
                 }
                 type="email"
-                value={participant.email}
-                onChange={handleEmailChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </FormControl>
           </Flex>
 
           <Flex flexDir="column" flex="1">
             <FormControl isRequired>
-              <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+              <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
                 Phone Number
               </FormLabel>
               <Input
                 variant="primary"
                 borderColor={
-                  submitPressed && !participant.phoneNumber
-                    ? "#E30000BB"
-                    : "#C5C8D8"
+                  submitPressed && !phoneNumber ? "red.error" : "gray.300"
                 }
                 boxShadow={
-                  submitPressed && !participant.phoneNumber
-                    ? "0 0 2px #E30000BB"
-                    : "none"
+                  submitPressed && !phoneNumber ? "0 0 2px red.error" : "none"
                 }
                 type="tel"
-                value={participant.phoneNumber}
-                onChange={handlePhoneNumberChange}
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </FormControl>
           </Flex>
@@ -179,48 +157,47 @@ const ParticipantsModal = ({ setOpen }: Props): React.ReactElement => {
 
         <Flex>
           <FormControl isRequired>
-            <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+            <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
               ID
             </FormLabel>
             <Input
               variant="primary"
               borderColor={
-                submitPressed && !participant.ID ? "#E30000BB" : "#C5C8D8"
+                submitPressed && !residentId ? "red.error" : "gray.300"
               }
               boxShadow={
-                submitPressed && !participant.ID ? "0 0 2px #E30000BB" : "none"
+                submitPressed && !residentId ? "0 0 2px red.error" : "none"
               }
-              value={participant.ID}
-              onChange={handleIDChange}
+              value={residentId}
+              onChange={(e) => setResidentId(e.target.value)}
             />
           </FormControl>
         </Flex>
 
         <Flex>
           <FormControl isRequired>
-            <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+            <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
               Password
             </FormLabel>
             <InputGroup>
               <Input
                 variant="primary"
                 borderColor={
-                  submitPressed && !participant.password
-                    ? "#E30000BB"
-                    : "#C5C8D8"
+                  submitPressed && !password ? "red.error" : "gray.300"
                 }
                 boxShadow={
-                  submitPressed && !participant.password
-                    ? "0 0 2px #E30000BB"
-                    : "none"
+                  submitPressed && !password ? "0 0 2px red.error" : "none"
                 }
-                type={show ? "text" : "password"}
-                value={participant.password}
-                onChange={handlePasswordChange}
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <InputRightElement height="34px">
-                <Button onClick={handleClick} variant="icon">
-                  {show ? (
+                <Button
+                  onClick={() => setShowPassword(!showPassword)}
+                  variant="icon"
+                >
+                  {!showPassword ? (
                     <VisibilityIcon fontSize="small" />
                   ) : (
                     <VisibilityOffIcon fontSize="small" />
@@ -234,38 +211,34 @@ const ParticipantsModal = ({ setOpen }: Props): React.ReactElement => {
         <Flex gap="20px">
           <Flex flexDir="column" flex="1">
             <FormControl isRequired>
-              <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+              <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
                 Arrival Date
               </FormLabel>
               <Input
                 variant="primary"
                 borderColor={
-                  submitPressed && !participant.arrivalDate
-                    ? "#E30000BB"
-                    : "#C5C8D8"
+                  submitPressed && !arrivalDate ? "red.error" : "gray.300"
                 }
                 boxShadow={
-                  submitPressed && !participant.arrivalDate
-                    ? "0 0 2px #E30000BB"
-                    : "none"
+                  submitPressed && !arrivalDate ? "0 0 2px red.error" : "none"
                 }
-                value={participant.arrivalDate}
+                value={arrivalDate}
                 type="date"
-                onChange={handleArrivalChange}
+                onChange={(e) => setArrivalDate(e.target.value)}
               />
             </FormControl>
           </Flex>
 
           <Flex flexDir="column" flex="1">
             <FormControl>
-              <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+              <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
                 Departure Date
               </FormLabel>
               <Input
                 variant="primary"
-                value={participant.departureDate}
+                value={departureDate}
                 type="date"
-                onChange={handleDepartureChange}
+                onChange={(e) => setDepartureDate(e.target.value)}
               />
             </FormControl>
           </Flex>
@@ -273,13 +246,13 @@ const ParticipantsModal = ({ setOpen }: Props): React.ReactElement => {
 
         <Flex>
           <FormControl>
-            <FormLabel marginBottom="5px" color="#626262" fontWeight="700">
+            <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
               Notes
             </FormLabel>
             <Textarea
               variant="primary"
-              value={participant.notes}
-              onChange={handleNotesChange}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
             />
           </FormControl>
         </Flex>
@@ -288,16 +261,19 @@ const ParticipantsModal = ({ setOpen }: Props): React.ReactElement => {
           <Button
             variant="clear"
             marginRight="8px"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              resetFormState();
+              setIsOpen(false);
+            }}
           >
             Cancel
           </Button>
-          <Button variant="primary" onClick={onSubmit}>
+          <Button variant="primary" onClick={handleSubmit}>
             Add Participant
           </Button>
         </Flex>
       </Flex>
-    </>
+    </ModalContainer>
   );
 };
 

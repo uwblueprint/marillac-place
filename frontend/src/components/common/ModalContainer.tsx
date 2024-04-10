@@ -12,42 +12,34 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 type Props = {
   title: string;
   onDelete?: () => void;
-  ModalContainerContent: ({
-    setOpen,
-  }: {
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  }) => React.ReactElement;
   isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  children: React.ReactNode;
 };
 
 const ModalContainer = ({
   title,
-  ModalContainerContent,
   onDelete,
   isOpen,
-  setOpen,
+  setIsOpen,
+  children,
 }: Props): React.ReactElement => {
   return (
-    <>
-      <Modal isOpen={isOpen} onClose={() => null}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {title}
-            {onDelete ? (
-              <Button variant="del" gap="2px" onClick={onDelete}>
-                <DeleteOutlinedIcon />
-                Delete
-              </Button>
-            ) : null}
-          </ModalHeader>
-          <ModalBody>
-            <ModalContainerContent setOpen={setOpen} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          {title}
+          {onDelete ? (
+            <Button variant="del" gap="2px" onClick={onDelete}>
+              <DeleteOutlinedIcon />
+              Delete
+            </Button>
+          ) : null}
+        </ModalHeader>
+        <ModalBody>{children}</ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 

@@ -30,17 +30,13 @@ import SampleContext, {
 } from "./contexts/SampleContext";
 import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
-import ModalContainer from "./components/common/ModalContainer";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
 import modalTheme from "./themes/ModalTheme";
 import buttonTheme from "./themes/ButtonTheme";
 import { inputTheme, textareaTheme } from "./themes/InputTheme";
 
-import ParticipantsModal from "./components/pages/participants/ParticipantsModal";
-
 const App = (): React.ReactElement => {
-  const [isOpen, setOpen] = useState(true);
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
     AUTHENTICATED_USER_KEY,
   );
@@ -58,9 +54,23 @@ const App = (): React.ReactElement => {
 
   const theme = extendTheme({
     colors: {
-      purple: "#57469D",
-      grey: "#C5C8D8",
-      red: "#fc0303",
+      black: "#000",
+      white: "#fff",
+      gray: {
+        main: "#808080",
+        100: "#E3E4EA",
+        300: "#C5C8D8",
+      },
+      purple: {
+        main: "#57469D",
+        100: "#F1ECFF",
+        300: "#B1A7D7",
+        500: "#382584",
+      },
+      red: {
+        main: "#D34C5C",
+        error: "#E30000",
+      },
     },
     components: {
       Modal: modalTheme,
@@ -79,13 +89,6 @@ const App = (): React.ReactElement => {
           <AuthContext.Provider
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
-            <ModalContainer
-              title="title"
-              ModalContainerContent={ParticipantsModal}
-              onDelete={() => console.log("deleting")}
-              isOpen={isOpen}
-              setOpen={setOpen}
-            />
             <Router>
               <Switch>
                 <Route path={Routes.LOGIN_PAGE} element={<Login />} />
