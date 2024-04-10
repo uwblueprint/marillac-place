@@ -31,7 +31,6 @@ import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
-import SideBar from "./components/common/SideBar";
 import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
 
 const App = (): React.ReactElement => {
@@ -52,10 +51,19 @@ const App = (): React.ReactElement => {
 
   const theme = extendTheme({
     colors: {
-      purple: "#57469D",
-      grey: "#C5C8D8",
-      lightgrey: "#E3E4EA",
-      darkgrey: "#808080",
+      black: "#000",
+      white: "#fff",
+      gray: {
+        100: "#E3E4EA",
+        300: "#C5C8D8",
+        500: "#808080",
+      },
+      purple: {
+        100: "#F1ECFF",
+        200: "#B1A7D7",
+        300: "#57469D",
+        500: "#382584",
+      },
     },
   });
 
@@ -132,14 +140,18 @@ const App = (): React.ReactElement => {
                 <Route
                   path={Routes.HOOKS_PAGE}
                   element={
-                    <SideBar>
+                    <PrivateRoute>
                       <HooksDemo />
-                    </SideBar>
+                    </PrivateRoute>
                   }
                 />
                 <Route
-                  path={Routes.PARTICIPANT_PAGE}
-                  element={<ParticipantsPage />}
+                  path={Routes.PARTICIPANTS_PAGE}
+                  element={
+                    <PrivateRoute>
+                      <ParticipantsPage />
+                    </PrivateRoute>
+                  }
                 />
                 <Route path="*" element={<NotFound />} />
               </Switch>

@@ -1,11 +1,11 @@
-const data = [
+export const participants = [
   {
     id: 123456789,
     title: "taxes",
     description: "do ur taxes",
     room: 1,
     credits: "$4.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -14,7 +14,7 @@ const data = [
     description: "do ur taxes",
     room: 1,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -23,7 +23,7 @@ const data = [
     description: "do ur taxes",
     room: 2,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -32,7 +32,7 @@ const data = [
     description: "do ur taxes",
     room: 2,
     credits: "$4.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -41,7 +41,7 @@ const data = [
     description: "do ur taxes",
     room: 3,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -50,7 +50,7 @@ const data = [
     description: "do ur taxes",
     room: 3,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -59,7 +59,7 @@ const data = [
     description: "do ur taxes",
     room: 4,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -68,7 +68,7 @@ const data = [
     description: "do ur taxes",
     room: 4,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -77,7 +77,7 @@ const data = [
     description: "do ur taxes",
     room: 5,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -86,7 +86,7 @@ const data = [
     description: "do ur taxes",
     room: 5,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -95,7 +95,7 @@ const data = [
     description: "do ur taxes",
     room: 6,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
   {
@@ -104,9 +104,9 @@ const data = [
     description: "do ur taxes",
     room: 6,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
     email: "temp@gmail.com",
   },
 ];
 
-export default data;
+export default {};

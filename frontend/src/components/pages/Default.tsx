@@ -6,7 +6,6 @@ import SampleContext from "../../contexts/SampleContext";
 import Logout from "../auth/Logout";
 import RefreshCredentials from "../auth/RefreshCredentials";
 import ResetPassword from "../auth/ResetPassword";
-import CommonTable, { mockColumns, mockData } from "../common/CommonTable";
 
 type ButtonProps = { text: string; path: string };
 
@@ -63,18 +62,9 @@ const Default = (): React.ReactElement => {
         />
         <Button text="Edit Team" path={Routes.EDIT_TEAM_PAGE} />
         <Button text="Hooks Demo" path={Routes.HOOKS_PAGE} />
-        <Button text="Participants Page" path={Routes.PARTICIPANT_PAGE} />
+        <Button text="Participants Page" path={Routes.PARTICIPANTS_PAGE} />
       </div>
-
       <div style={{ height: "2rem" }} />
-
-      <CommonTable
-        columnInfo={mockColumns}
-        data={mockData}
-        onEdit={() => {}}
-        maxResults={2}
-        isSelectable
-      />
       <TeamInfoDisplay />
     </div>
   );

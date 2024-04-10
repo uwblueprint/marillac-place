@@ -4,93 +4,74 @@ import {
   Input,
   Stack,
   Button,
+  Icon,
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
-import { SearchIcon, AddIcon, DownloadIcon } from "@chakra-ui/icons";
+import { Add, Search } from "@mui/icons-material";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+
 import CommonTable, { ColumnInfoTypes } from "../../common/CommonTable";
-
-import SideBar from "../../common/SideBar";
-
-import { data } from "./temp";
+import { participants } from "../../../mock/participants"; // TODO: replace mock data
 
 const columnTypes: ColumnInfoTypes[] = [
   {
-    Header: "Room #",
-    Type: "number",
-    Key: "room",
+    header: "Room #",
+    key: "room",
   },
   {
-    Header: "Departure Date",
-    Type: "string",
-    Key: "due_date",
+    header: "Departure Date",
+    key: "dueDate",
   },
   {
-    Header: "ID Number",
-    Type: "number",
-    Key: "id",
+    header: "ID Number",
+    key: "id",
   },
   {
-    Header: "Email",
-    Type: "string",
-    Key: "email",
+    header: "Email",
+    key: "email",
   },
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
   return (
-    <Flex>
-      <SideBar>
-        <></>
-      </SideBar>
-      <Flex flexDirection="column" flexGrow={1} padding="20px">
-        <Flex
-          justifyContent="space-between"
-          padding="10px"
-          paddingBottom="10px"
-        >
-          <InputGroup width="30%">
-            <InputLeftElement pointerEvents="none">
-              <SearchIcon color="gray.300" />
-            </InputLeftElement>
-            <Input placeholder="Search" />
-          </InputGroup>
+    <Flex flexDirection="column" flexGrow={1} padding="20px">
+      <Flex justifyContent="space-between" padding="10px" paddingBottom="10px">
+        <InputGroup width="30%">
+          <InputLeftElement pointerEvents="none">
+            <Icon as={Search} color="gray.300" />
+          </InputLeftElement>
+          <Input placeholder="Search" />
+        </InputGroup>
 
-          <Stack direction="row" spacing={4}>
-            <Button
-              leftIcon={<DownloadIcon color="purple" />}
-              colorScheme="purple"
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                alert("DOWNLOAD CSV");
-              }}
-            >
-              Export
-            </Button>
-            <Button
-              leftIcon={<AddIcon color="white" />}
-              bg="purple"
-              color="white"
-              size="sm"
-              onClick={() => {
-                alert("ADD PARTICIPANT");
-              }}
-            >
-              Add Participant
-            </Button>
-          </Stack>
-        </Flex>
-        <CommonTable
-          data={data}
-          columnInfo={columnTypes}
-          maxResults={4}
-          onEdit={() => {
-            alert("EDITING");
-          }}
-          isSelectable={false}
-        />
+        <Stack direction="row" spacing={4}>
+          <Button
+            leftIcon={<Icon as={FileDownloadOutlinedIcon} color="purple.300" />}
+            bg="purple.100"
+            _hover={{ bg: "gray.100" }}
+            variant="outline"
+            size="sm"
+            onClick={() => {}}
+          >
+            Export
+          </Button>
+          <Button
+            leftIcon={<Icon as={Add} color="white" />}
+            bg="purple.300"
+            color="white"
+            _hover={{ bg: "purple.200" }}
+            size="sm"
+            onClick={() => {}}
+          >
+            Add Participant
+          </Button>
+        </Stack>
       </Flex>
+      <CommonTable
+        data={participants}
+        columnInfo={columnTypes}
+        onEdit={() => {}}
+      />
     </Flex>
   );
 };
