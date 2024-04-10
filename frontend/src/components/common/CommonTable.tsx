@@ -11,32 +11,35 @@ import {
   Center,
   Box,
   IconButton,
-  Flex,
 } from "@chakra-ui/react";
-import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
+import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 
-export type TableTypes = "string" | "number" | "boolean" | "date";
+type TableTypes = string | number | boolean | Date;
 
-export type ColumnInfoTypes = { Header: string; Type: TableTypes; Key: string };
+type ColumnInfoTypes = { header: string; type: TableTypes; key: string };
+
+interface TableData {
+  [key: string]: TableTypes;
+}
 
 export type TableProps = {
-  // eslint-disable-next-line
-  data: any[];
+  data: TableData[];
   columnInfo: ColumnInfoTypes[];
-  // eslint-disable-next-line
-  onEdit: (row: any) => any;
+  onEdit: (row: unknown) => unknown;
   maxResults: number;
   isSelectable: boolean;
 };
 
-export const mockData = [
+export const mockData: TableData[] = [
   {
     id: 1,
     title: "taxes",
     description: "do ur taxes",
     room: 1,
     credits: "$4.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 2,
@@ -44,7 +47,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 1,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 3,
@@ -52,7 +55,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 2,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 4,
@@ -60,7 +63,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 2,
     credits: "$4.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 5,
@@ -68,7 +71,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 3,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 6,
@@ -76,7 +79,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 3,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 7,
@@ -84,7 +87,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 4,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 8,
@@ -92,7 +95,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 4,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 9,
@@ -100,7 +103,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 5,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 10,
@@ -108,7 +111,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 5,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 11,
@@ -116,7 +119,7 @@ export const mockData = [
     description: "do ur taxes",
     room: 6,
     credits: "$3.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
   {
     id: 12,
@@ -124,30 +127,30 @@ export const mockData = [
     description: "do ur taxes",
     room: 6,
     credits: "$2.00",
-    due_date: "2022-12-12",
+    dueDate: "2022-12-12",
   },
 ];
 
 export const mockColumns: ColumnInfoTypes[] = [
   {
-    Header: "Task name",
-    Type: "string",
-    Key: "title",
+    header: "Task name",
+    type: "string",
+    key: "title",
   },
   {
-    Header: "Room Number",
-    Type: "number",
-    Key: "room",
+    header: "Room Number",
+    type: "number",
+    key: "room",
   },
   {
-    Header: "Due Date",
-    Type: "date",
-    Key: "due_date",
+    header: "Due Date",
+    type: "date",
+    key: "dueDate",
   },
   {
-    Header: "Requested Marillac Bucks",
-    Type: "number",
-    Key: "credits",
+    header: "Requested Marillac Bucks",
+    type: "number",
+    key: "credits",
   },
 ];
 
@@ -158,13 +161,7 @@ const CommonTable = ({
   maxResults,
   onEdit,
 }: TableProps): React.ReactElement => {
-  const checkRows: boolean[] = [];
-  Object.keys(data).forEach((item) => {
-    if (Object.prototype.hasOwnProperty.call(data, item)) {
-      checkRows.push(false);
-    }
-  });
-  const [checked, setChecked] = useState(checkRows);
+  const [checked, setChecked] = useState(data.map(() => false));
   const [page, setPage] = useState(1);
   const [pageArray, setPageArray] = useState<number[]>([]);
 
@@ -213,25 +210,20 @@ const CommonTable = ({
   };
 
   return (
-    <Flex
-      flexBasis="100%"
-      flexDirection="column"
-      justifyContent="space-between"
-      width="100%"
-    >
+    <Box display="flex" flexDirection="column" alignContent="space-between">
       <TableContainer
         margin="10px"
         paddingTop="0px"
-        border="2px solid lightgray"
+        border="2px solid lightgrey"
         borderRadius="6px"
-        maxWidth="100%"
       >
-        <Table maxWidth="100%">
+        <Table>
           <Thead>
-            <Tr backgroundColor="rgba(245, 246, 248, 1)" width="100%">
+            <Tr backgroundColor="lightgrey" width="100%">
               {isSelectable ? (
-                <Th padding="0px 0px 0px 10px" w="16px">
+                <Th padding="0px 0px 0px 20px" w="16px">
                   <Checkbox
+                    borderColor="grey"
                     verticalAlign="middle"
                     margin="0"
                     isChecked={allChecked}
@@ -251,7 +243,7 @@ const CommonTable = ({
                 </Th>
               ) : null}
               {columnInfo.map((header, index) => {
-                return <Th key={index}>{header.Header}</Th>;
+                return <Th key={index}>{header.header}</Th>;
               })}
               <Th />
             </Tr>
@@ -263,7 +255,7 @@ const CommonTable = ({
                 return (
                   <Tr key={index}>
                     {isSelectable ? (
-                      <Td padding="0px 0px 0px 10px" w="16px">
+                      <Td padding="0px 0px 0px 20px" w="16px">
                         <Checkbox
                           verticalAlign="middle"
                           margin="0"
@@ -277,26 +269,13 @@ const CommonTable = ({
                         />
                       </Td>
                     ) : null}
-                    {columnInfo.map((column, i) => {
-                      return (
-                        <Td key={i} fontSize="sm">
-                          {row[column.Key as keyof typeof row]}
-                        </Td>
-                      );
-                    })}
-                    <Td paddingRight="0px" onClick={() => onEdit(row)}>
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 18 18"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M2 16H3.425L13.2 6.225L11.775 4.8L2 14.575V16ZM1 18C0.716667 18 0.479167 17.9042 0.2875 17.7125C0.0958333 17.5208 0 17.2833 0 17V14.575C0 14.3083 0.05 14.0542 0.15 13.8125C0.25 13.5708 0.391667 13.3583 0.575 13.175L13.2 0.575C13.4 0.391667 13.6208 0.25 13.8625 0.15C14.1042 0.05 14.3583 0 14.625 0C14.8917 0 15.15 0.05 15.4 0.15C15.65 0.25 15.8667 0.4 16.05 0.6L17.425 2C17.625 2.18333 17.7708 2.4 17.8625 2.65C17.9542 2.9 18 3.15 18 3.4C18 3.66667 17.9542 3.92083 17.8625 4.1625C17.7708 4.40417 17.625 4.625 17.425 4.825L4.825 17.425C4.64167 17.6083 4.42917 17.75 4.1875 17.85C3.94583 17.95 3.69167 18 3.425 18H1ZM12.475 5.525L11.775 4.8L13.2 6.225L12.475 5.525Z"
-                          fill="black"
-                        />
-                      </svg>
+                    {columnInfo.map((column, i) => (
+                      <Td key={i}>{String(row[column.key])}</Td>
+                    ))}
+                    <Td onClick={() => onEdit(row)}>
+                      <EditOutlinedIcon
+                        sx={{ ":hover": { cursor: "pointer" } }}
+                      />
                     </Td>
                   </Tr>
                 );
@@ -305,7 +284,7 @@ const CommonTable = ({
         </Table>
       </TableContainer>
 
-      <Flex height="50px" position="relative">
+      <Box height="50px" position="relative">
         <Box position="absolute" width="250px" height="50px" marginLeft="10px">
           {`Showing ${(page - 1) * maxResults + 1} to ${page * maxResults} of ${
             data.length
@@ -321,28 +300,26 @@ const CommonTable = ({
             <IconButton
               role="group"
               boxSize="35px"
-              backgroundColor="white"
-              paddingRight="5px"
               _hover={{
                 cursor: "pointer",
-                backgroundColor: "rgba(87, 70, 157, 1)",
+                backgroundColor: "purple",
               }}
+              sx={{ ":hover .chevron": { color: "white" } }}
               onClick={() => leftPaginate()}
               aria-label="Previous Page"
               icon={
-                <ChevronLeftIcon
-                  boxSize="25px"
-                  color="rgba(87, 70, 157, 1)"
-                  _groupHover={{ color: "white" }}
+                <ChevronLeftOutlinedIcon
+                  className="chevron"
+                  sx={{
+                    color: "purple",
+                  }}
                 />
               }
             />
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={
-                    item === page ? "rgba(87, 70, 157, 1)" : "white"
-                  }
+                  backgroundColor={item === page ? "purple" : "white"}
                   height="35px"
                   padding="10px"
                   flexBasis="35px"
@@ -350,9 +327,9 @@ const CommonTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "rgba(87, 70, 157, 1)",
+                    backgroundColor: "purple",
                   }}
-                  textColor={item === page ? "white" : "rgba(128, 128, 128, 1)"}
+                  textColor={item === page ? "white" : "darkgrey"}
                   onClick={() => numberPaginate(item)}
                   key={index}
                 >
@@ -363,26 +340,26 @@ const CommonTable = ({
             <IconButton
               role="group"
               boxSize="35px"
-              backgroundColor="white"
-              paddingLeft="5px"
               _hover={{
                 cursor: "pointer",
-                backgroundColor: "rgba(87, 70, 157, 1)",
+                backgroundColor: "purple",
               }}
+              sx={{ ":hover .chevron": { color: "white" } }}
               onClick={() => rightPaginate()}
-              aria-label="Previous Page"
+              aria-label="Next Page"
               icon={
-                <ChevronRightIcon
-                  boxSize="25px"
-                  color="rgba(87, 70, 157, 1)"
-                  _groupHover={{ color: "white" }}
+                <ChevronRightOutlinedIcon
+                  className="chevron"
+                  sx={{
+                    color: "purple",
+                  }}
                 />
               }
             />
           </Box>
         </Box>
-      </Flex>
-    </Flex>
+      </Box>
+    </Box>
   );
 };
 
