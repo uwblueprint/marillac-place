@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import React from "react";
 import {
   Tabs,
   TabList,
@@ -11,19 +11,25 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as Logo } from "../../assets/Marillac_Place_Logo.svg";
 
-const SideBar: FC<{ children: ReactNode }> = () => {
+import * as Routes from "../../constants/Routes";
+import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
+
+const SideBar: React.FC = () => {
   const navigate = useNavigate();
 
   const pages = [
-    { label: "Home", route: "/" },
-    { label: "Tasks", route: "/tasks" },
-    { label: "Approvals", route: "/approvals" },
-    { label: "Schedule", route: "/schedule" },
-    { label: "Participants", route: "/participants" },
-    { label: "Insights", route: "/insights" },
+    { label: "Announcements", route: Routes.HOME_PAGE },
+    { label: "Tasks", route: Routes.TASKS_PAGE },
+    { label: "Approvals", route: Routes.APPROVALS_PAGE },
+    { label: "Schedule", route: Routes.SCHEDULE_PAGE },
+    { label: "Participants", route: Routes.PARTICIPANTS_PAGE },
+    { label: "Insights", route: Routes.INSIGHTS_PAGE },
   ];
+
+  const currentPage = pages.findIndex(
+    (page) => page.route === window.location.pathname,
+  );
 
   const sidebarWidth = useBreakpointValue({
     base: "100%",
@@ -37,7 +43,7 @@ const SideBar: FC<{ children: ReactNode }> = () => {
       <Box
         h="calc(100vh)"
         borderRight="solid"
-        borderRightColor="grey"
+        borderRightColor="gray.300"
         pt={10}
         pr={4}
         pl={4}
@@ -47,7 +53,7 @@ const SideBar: FC<{ children: ReactNode }> = () => {
             <Flex flexDir="column" alignItems="flex-start" w="100%" pb={20}>
               <Box
                 border="solid"
-                borderColor="grey"
+                borderColor="gray.300"
                 pl={2}
                 pr={2}
                 w="100%"
@@ -65,8 +71,13 @@ const SideBar: FC<{ children: ReactNode }> = () => {
               </Box>
             </Flex>
 
-            <Tabs orientation="vertical" variant="solid-rounded" size="lg">
-              <TabList w="100%">
+            <Tabs
+              defaultIndex={currentPage}
+              orientation="vertical"
+              variant="solid-rounded"
+              size="lg"
+            >
+              <TabList width="100%">
                 {pages.map((page) => (
                   <Tab
                     key={page.route}
@@ -74,7 +85,8 @@ const SideBar: FC<{ children: ReactNode }> = () => {
                     justifyContent="stretch"
                     textAlign="left"
                     onClick={() => navigate(page.route)}
-                    _selected={{ bg: "purple", color: "white" }}
+                    _selected={{ bg: "purple.main", color: "white" }}
+                    _hover={{ bg: "purple.100", color: "purple.main" }}
                   >
                     {page.label}
                   </Tab>

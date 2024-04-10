@@ -1,6 +1,6 @@
 import React from "react";
 
-const NotFound = (): React.ReactElement => {
+const NotFoundPage = (): React.ReactElement => {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>404 Not Found 🙁</h1>
@@ -8,4 +8,4 @@ const NotFound = (): React.ReactElement => {
   );
 };
 
-export default NotFound;
+export default NotFoundPage;
