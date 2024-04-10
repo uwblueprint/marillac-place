@@ -8,30 +8,31 @@ import {
   Td,
   TableContainer,
   Checkbox,
-  Image,
   Center,
   Box,
   IconButton,
 } from "@chakra-ui/react";
-// eslint-disable-line
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 
-export type TableTypes = "string" | "number" | "boolean" | "date";
+type TableTypes = string | number | boolean | Date;
 
-export type ColumnInfoTypes = { header: string; type: TableTypes; key: string };
+type ColumnInfoTypes = { header: string; type: TableTypes; key: string };
+
+interface TableData {
+  [key: string]: TableTypes;
+}
 
 export type TableProps = {
-  // eslint-disable-line
-  data: any[];
+  data: TableData[];
   columnInfo: ColumnInfoTypes[];
-  onEdit: (row: any) => any;
+  onEdit: (row: unknown) => unknown;
   maxResults: number;
   isSelectable: boolean;
 };
 
-export const mockData = [
+export const mockData: TableData[] = [
   {
     id: 1,
     title: "taxes",
@@ -213,7 +214,7 @@ const CommonTable = ({
       <TableContainer
         margin="10px"
         paddingTop="0px"
-        border="2px solid lightgray"
+        border="2px solid lightgrey"
         borderRadius="6px"
       >
         <Table>
@@ -222,6 +223,7 @@ const CommonTable = ({
               {isSelectable ? (
                 <Th padding="0px 0px 0px 20px" w="16px">
                   <Checkbox
+                    borderColor="grey"
                     verticalAlign="middle"
                     margin="0"
                     isChecked={allChecked}
@@ -267,11 +269,9 @@ const CommonTable = ({
                         />
                       </Td>
                     ) : null}
-                    {columnInfo.map((column, i) => {
-                      return (
-                        <Td key={i}>{row[column.key as keyof typeof row]}</Td>
-                      );
-                    })}
+                    {columnInfo.map((column, i) => (
+                      <Td key={i}>{String(row[column.key])}</Td>
+                    ))}
                     <Td onClick={() => onEdit(row)}>
                       <EditOutlinedIcon
                         sx={{ ":hover": { cursor: "pointer" } }}
@@ -329,7 +329,7 @@ const CommonTable = ({
                     color: "white",
                     backgroundColor: "purple",
                   }}
-                  textColor={item === page ? "white" : "rgba(128, 128, 128, 1)"}
+                  textColor={item === page ? "white" : "darkgrey"}
                   onClick={() => numberPaginate(item)}
                   key={index}
                 >

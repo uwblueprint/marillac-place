@@ -54,6 +54,7 @@ const App = (): React.ReactElement => {
       purple: "#57469D",
       grey: "#C5C8D8",
       lightgrey: "#E3E4EA",
+      darkgrey: "#808080",
     },
   });
 
