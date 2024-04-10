@@ -11,6 +11,7 @@ import {
   Center,
   Box,
   IconButton,
+  Icon,
 } from "@chakra-ui/react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
@@ -18,7 +19,7 @@ import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 
 type TableTypes = string | number | boolean | Date;
 
-type ColumnInfoTypes = { header: string; type: TableTypes; key: string };
+export type ColumnInfoTypes = { header: string; key: string };
 
 interface TableData {
   [key: string]: TableTypes;
@@ -28,138 +29,16 @@ export type TableProps = {
   data: TableData[];
   columnInfo: ColumnInfoTypes[];
   onEdit: (row: unknown) => unknown;
-  maxResults: number;
-  isSelectable: boolean;
+  maxResults?: number;
+  isSelectable?: boolean;
 };
-
-export const mockData: TableData[] = [
-  {
-    id: 1,
-    title: "taxes",
-    description: "do ur taxes",
-    room: 1,
-    credits: "$4.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 2,
-    title: "more taxes",
-    description: "do ur taxes",
-    room: 1,
-    credits: "$3.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 3,
-    title: "heap of taxes",
-    description: "do ur taxes",
-    room: 2,
-    credits: "$2.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 4,
-    title: "im too lazy",
-    description: "do ur taxes",
-    room: 2,
-    credits: "$4.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 5,
-    title: "t5",
-    description: "do ur taxes",
-    room: 3,
-    credits: "$3.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 6,
-    title: "t6",
-    description: "do ur taxes",
-    room: 3,
-    credits: "$2.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 7,
-    title: "t7",
-    description: "do ur taxes",
-    room: 4,
-    credits: "$3.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 8,
-    title: "t8",
-    description: "do ur taxes",
-    room: 4,
-    credits: "$2.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 9,
-    title: "t9",
-    description: "do ur taxes",
-    room: 5,
-    credits: "$3.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 10,
-    title: "t10",
-    description: "do ur taxes",
-    room: 5,
-    credits: "$2.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 11,
-    title: "t11",
-    description: "do ur taxes",
-    room: 6,
-    credits: "$3.00",
-    dueDate: "2022-12-12",
-  },
-  {
-    id: 12,
-    title: "t12",
-    description: "do ur taxes",
-    room: 6,
-    credits: "$2.00",
-    dueDate: "2022-12-12",
-  },
-];
-
-export const mockColumns: ColumnInfoTypes[] = [
-  {
-    header: "Task name",
-    type: "string",
-    key: "title",
-  },
-  {
-    header: "Room Number",
-    type: "number",
-    key: "room",
-  },
-  {
-    header: "Due Date",
-    type: "date",
-    key: "dueDate",
-  },
-  {
-    header: "Requested Marillac Bucks",
-    type: "number",
-    key: "credits",
-  },
-];
 
 const CommonTable = ({
   columnInfo,
   data,
-  isSelectable,
-  maxResults,
   onEdit,
+  maxResults = 8,
+  isSelectable = false,
 }: TableProps): React.ReactElement => {
   const [checked, setChecked] = useState(data.map(() => false));
   const [page, setPage] = useState(1);
@@ -210,20 +89,27 @@ const CommonTable = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignContent="space-between">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignContent="space-between"
+      justifyContent="space-between"
+      height="100%"
+    >
       <TableContainer
         margin="10px"
         paddingTop="0px"
-        border="2px solid lightgrey"
+        border="2px solid"
+        borderColor="gray.100"
         borderRadius="6px"
       >
         <Table>
           <Thead>
-            <Tr backgroundColor="lightgrey" width="100%">
+            <Tr backgroundColor="gray.100" width="100%">
               {isSelectable ? (
                 <Th padding="0px 0px 0px 20px" w="16px">
                   <Checkbox
-                    borderColor="grey"
+                    borderColor="gray.300"
                     verticalAlign="middle"
                     margin="0"
                     isChecked={allChecked}
@@ -273,8 +159,9 @@ const CommonTable = ({
                       <Td key={i}>{String(row[column.key])}</Td>
                     ))}
                     <Td onClick={() => onEdit(row)}>
-                      <EditOutlinedIcon
-                        sx={{ ":hover": { cursor: "pointer" } }}
+                      <Icon
+                        as={EditOutlinedIcon}
+                        _hover={{ cursor: "pointer" }}
                       />
                     </Td>
                   </Tr>
@@ -302,24 +189,17 @@ const CommonTable = ({
               boxSize="35px"
               _hover={{
                 cursor: "pointer",
-                backgroundColor: "purple",
               }}
-              sx={{ ":hover .chevron": { color: "white" } }}
-              onClick={() => leftPaginate()}
+              color="purple.300"
+              backgroundColor="white"
               aria-label="Previous Page"
-              icon={
-                <ChevronLeftOutlinedIcon
-                  className="chevron"
-                  sx={{
-                    color: "purple",
-                  }}
-                />
-              }
+              icon={<ChevronLeftOutlinedIcon />}
+              onClick={() => leftPaginate()}
             />
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={item === page ? "purple" : "white"}
+                  backgroundColor={item === page ? "purple.300" : "white"}
                   height="35px"
                   padding="10px"
                   flexBasis="35px"
@@ -327,9 +207,9 @@ const CommonTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "purple",
+                    backgroundColor: "purple.300",
                   }}
-                  textColor={item === page ? "white" : "darkgrey"}
+                  textColor={item === page ? "white" : "gray.500"}
                   onClick={() => numberPaginate(item)}
                   key={index}
                 >
@@ -342,19 +222,12 @@ const CommonTable = ({
               boxSize="35px"
               _hover={{
                 cursor: "pointer",
-                backgroundColor: "purple",
               }}
-              sx={{ ":hover .chevron": { color: "white" } }}
-              onClick={() => rightPaginate()}
+              color="purple.300"
+              backgroundColor="white"
               aria-label="Next Page"
-              icon={
-                <ChevronRightOutlinedIcon
-                  className="chevron"
-                  sx={{
-                    color: "purple",
-                  }}
-                />
-              }
+              icon={<ChevronRightOutlinedIcon />}
+              onClick={() => rightPaginate()}
             />
           </Box>
         </Box>
