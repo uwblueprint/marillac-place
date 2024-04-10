@@ -12,7 +12,7 @@ import { Add, Search } from "@mui/icons-material";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 import CommonTable, { ColumnInfoTypes } from "../../common/CommonTable";
-import { participants } from "../../../mock/participants"; // TODO: replace mock data
+import { participants } from "../../../mocks/participants"; // TODO: replace mock data
 
 const columnTypes: ColumnInfoTypes[] = [
   {
@@ -21,11 +21,11 @@ const columnTypes: ColumnInfoTypes[] = [
   },
   {
     header: "Departure Date",
-    key: "dueDate",
+    key: "departureDate",
   },
   {
     header: "ID Number",
-    key: "id",
+    key: "residentId",
   },
   {
     header: "Email",
