@@ -6,6 +6,7 @@ import SampleContext from "../../contexts/SampleContext";
 import Logout from "../auth/Logout";
 import RefreshCredentials from "../auth/RefreshCredentials";
 import ResetPassword from "../auth/ResetPassword";
+import CommonTable, { mockColumns, mockData } from "../common/CommonTable";
 
 type ButtonProps = { text: string; path: string };
 
@@ -66,6 +67,13 @@ const Default = (): React.ReactElement => {
 
       <div style={{ height: "2rem" }} />
 
+      <CommonTable
+        columnInfo={mockColumns}
+        data={mockData}
+        onEdit={() => {}}
+        maxResults={4}
+        isSelectable
+      />
       <TeamInfoDisplay />
     </div>
   );
