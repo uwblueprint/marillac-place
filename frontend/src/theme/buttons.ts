@@ -7,7 +7,7 @@ const primary = defineStyle({
   border: "0",
   bg: "purple.main",
   color: "white",
-  _hover: { bg: "purple.200" },
+  _hover: { bg: "purple.100", color: "purple.main" },
 });
 
 const secondary = defineStyle({
