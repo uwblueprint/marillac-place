@@ -12,11 +12,7 @@ import {
 } from "@chakra-ui/react";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import {
-  HOME_PAGE,
-  SIGNUP_PAGE,
-  RESET_PASSWORD_PAGE,
-} from "../../constants/Routes";
+import { HOME_PAGE, RESET_PASSWORD_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
@@ -138,22 +134,6 @@ const LoginPage = (): React.ReactElement => {
             <Text fontSize="24px">Sign In</Text>
           </Button>
         </FormControl>
-      </Flex>
-      <Flex mx="auto" mt="24px">
-        <Text as="span" fontSize="18px">
-          Don&apos;t have an account?&nbsp;
-        </Text>
-        <Text
-          as="span"
-          fontWeight="bold"
-          textDecoration="underline"
-          textColor="purple.main"
-          fontSize="18px"
-          onClick={() => navigate(SIGNUP_PAGE)}
-          cursor="pointer"
-        >
-          Join Now
-        </Text>
       </Flex>
     </Flex>
   );
