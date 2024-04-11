@@ -4,20 +4,14 @@ export const LOGIN_PAGE = "/login";
 
 export const SIGNUP_PAGE = "/signup";
 
-export const EDIT_TEAM_PAGE = "/edit-team";
+export const RESET_PASSWORD_PAGE = "/reset-password";
 
-export const DISPLAY_ENTITY_PAGE = "/entity";
+export const TASKS_PAGE = "/tasks";
 
-export const CREATE_ENTITY_PAGE = "/entity/create";
+export const APPROVALS_PAGE = "/approvals";
 
-export const UPDATE_ENTITY_PAGE = "/entity/update";
+export const SCHEDULE_PAGE = "/schedule";
 
-export const DISPLAY_SIMPLE_ENTITY_PAGE = "/simpleEntity";
+export const RESIDENTS_PAGE = "/residents";
 
-export const CREATE_SIMPLE_ENTITY_PAGE = "/simpleEntity/create";
-
-export const UPDATE_SIMPLE_ENTITY_PAGE = "/simpleEntity/update";
-
-export const HOOKS_PAGE = "/hooks";
-
-export const ANNOUNCEMENTS_PAGE = "/announcements";
+export const INSIGHTS_PAGE = "/insights";

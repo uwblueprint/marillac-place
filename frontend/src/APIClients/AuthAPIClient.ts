@@ -3,8 +3,10 @@ import {
   MutationFunctionOptions,
   OperationVariables,
 } from "@apollo/client";
+
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { AuthenticatedUser } from "../types/AuthTypes";
+import { UserType } from "../types/UserTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
 type LoginFunction = (
@@ -22,53 +24,16 @@ type LoginFunction = (
 const login = async (
   email: string,
   password: string,
+  userType: UserType,
   loginFunction: LoginFunction,
 ): Promise<AuthenticatedUser | null> => {
   let user: AuthenticatedUser = null;
-  try {
-    const result = await loginFunction({ variables: { email, password } });
-    user = result.data?.login ?? null;
-    if (user) {
-      localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(user));
-    }
-  } catch (e: unknown) {
-    // eslint-disable-next-line no-alert
-    window.alert("Failed to login");
-  }
-  return user;
-};
-
-type LoginWithGoogleFunction = (
-  options?:
-    | MutationFunctionOptions<
-        { loginWithGoogle: AuthenticatedUser },
-        OperationVariables
-      >
-    | undefined,
-) => Promise<
-  FetchResult<
-    { loginWithGoogle: AuthenticatedUser },
-    Record<string, unknown>,
-    Record<string, unknown>
-  >
->;
-
-const loginWithGoogle = async (
-  idToken: string,
-  loginFunction: LoginWithGoogleFunction,
-): Promise<AuthenticatedUser | null> => {
-  let user: AuthenticatedUser = null;
-  try {
-    const result = await loginFunction({
-      variables: { idToken },
-    });
-    user = result.data?.loginWithGoogle ?? null;
-    if (user) {
-      localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(user));
-    }
-  } catch (e: unknown) {
-    // eslint-disable-next-line no-alert
-    window.alert("Failed to login");
+  const result = await loginFunction({
+    variables: { email, password, userType },
+  });
+  user = result.data?.login ?? null;
+  if (user) {
+    localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(user));
   }
   return user;
 };
@@ -137,12 +102,11 @@ const logout = async (
   const result = await logoutFunction({
     variables: { userId: authenticatedUserId },
   });
-  let success = false;
   if (result.data?.logout === null) {
-    success = true;
     localStorage.removeItem(AUTHENTICATED_USER_KEY);
+    return true;
   }
-  return success;
+  return false;
 };
 
 type RefreshFunction = (
@@ -166,13 +130,12 @@ type RefreshFunction = (
 
 const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
   const result = await refreshFunction();
-  let success = false;
   const token = result.data?.refresh;
   if (token) {
-    success = true;
     setLocalStorageObjProperty(AUTHENTICATED_USER_KEY, "accessToken", token);
+    return true;
   }
-  return success;
+  return false;
 };
 
-export default { login, logout, loginWithGoogle, register, refresh };
+export default { login, logout, register, refresh };
