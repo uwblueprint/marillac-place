@@ -42,7 +42,7 @@ const FormField = ({
 }) => (
   <Flex flexDir="column" flex="1">
     <FormControl isRequired={required}>
-      <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
+      <FormLabel mb="5px" color="gray.main" fontWeight="700">
         {label}
       </FormLabel>
       <InputGroup>
@@ -57,7 +57,7 @@ const FormField = ({
           onChange={onChange}
         />
         {isPassword && setShowPassword && (
-          <InputRightElement height="34px">
+          <InputRightElement h="34px">
             <Button
               onClick={() => setShowPassword(!showPassword)}
               bg="transparent"
@@ -76,10 +76,7 @@ const FormField = ({
   </Flex>
 );
 
-const ParticipantsModal = ({
-  isOpen,
-  setIsOpen,
-}: Props): React.ReactElement => {
+const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -126,11 +123,7 @@ const ParticipantsModal = ({
   };
 
   return (
-    <ModalContainer
-      title="New Participant"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-    >
+    <ModalContainer title="New Resident" isOpen={isOpen} setIsOpen={setIsOpen}>
       <Flex flexDirection="column" gap="20px">
         <Flex gap="20px">
           <FormField
@@ -203,7 +196,7 @@ const ParticipantsModal = ({
         </Flex>
         <Flex>
           <FormControl>
-            <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
+            <FormLabel mb="5px" color="gray.main" fontWeight="700">
               Notes
             </FormLabel>
             <Textarea
@@ -217,7 +210,7 @@ const ParticipantsModal = ({
         <Flex justifyContent="flex-end">
           <Button
             variant="cancel"
-            marginRight="8px"
+            mr="8px"
             onClick={() => {
               resetFormState();
               setIsOpen(false);
@@ -226,7 +219,7 @@ const ParticipantsModal = ({
             Cancel
           </Button>
           <Button variant="primary" onClick={handleSubmit}>
-            Add Participant
+            Add Resident
           </Button>
         </Flex>
       </Flex>
@@ -234,4 +227,4 @@ const ParticipantsModal = ({
   );
 };
 
-export default ParticipantsModal;
+export default ResidentsModal;

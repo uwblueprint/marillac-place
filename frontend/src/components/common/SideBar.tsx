@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
+import { gql, useMutation } from "@apollo/client";
 import {
   Tabs,
   TabList,
   Tab,
   Box,
+  Button,
   Avatar,
   Text,
   Flex,
@@ -14,16 +16,54 @@ import { useNavigate } from "react-router-dom";
 
 import * as Routes from "../../constants/Routes";
 import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
+import authAPIClient from "../../APIClients/AuthAPIClient";
+import AuthContext from "../../contexts/AuthContext";
+
+const LOGOUT = gql`
+  mutation Logout($userId: ID!) {
+    logout(userId: $userId)
+  }
+`;
+
+const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
+  label,
+  handleClick,
+}) => {
+  return (
+    <Tab
+      borderRadius="8px"
+      justifyContent="stretch"
+      textAlign="left"
+      onClick={handleClick}
+      _selected={{ bg: "purple.main", color: "white" }}
+      _hover={{ bg: "purple.100", color: "purple.main" }}
+    >
+      {label}
+    </Tab>
+  );
+};
 
 const SideBar: React.FC = () => {
   const navigate = useNavigate();
+  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const [logout] = useMutation<{ logout: null }>(LOGOUT);
+
+  const onLogOutClick = async () => {
+    const success = await authAPIClient.logout(
+      String(authenticatedUser?.id),
+      logout,
+    );
+    if (success) {
+      setAuthenticatedUser(null);
+    }
+  };
 
   const pages = [
     { label: "Announcements", route: Routes.HOME_PAGE },
     { label: "Tasks", route: Routes.TASKS_PAGE },
     { label: "Approvals", route: Routes.APPROVALS_PAGE },
     { label: "Schedule", route: Routes.SCHEDULE_PAGE },
-    { label: "Participants", route: Routes.PARTICIPANTS_PAGE },
+    { label: "Residents", route: Routes.RESIDENTS_PAGE },
     { label: "Insights", route: Routes.INSIGHTS_PAGE },
   ];
 
@@ -41,7 +81,7 @@ const SideBar: React.FC = () => {
   return (
     <Flex flexDir="column" w={sidebarWidth}>
       <Box
-        h="calc(100vh)"
+        h="100vh"
         borderRight="solid"
         borderRightColor="gray.300"
         pt={10}
@@ -54,16 +94,17 @@ const SideBar: React.FC = () => {
               <Box
                 border="solid"
                 borderColor="gray.300"
+                borderRadius="8px"
                 pl={2}
                 pr={2}
                 w="100%"
-                borderRadius="8px"
               >
                 <Flex align="center">
                   <Avatar name="Jane Doe" src="https://bit.ly/2k1H1t6" />
                   <Flex flexDir="column" ml={4}>
                     <Heading size="sm" mt={4}>
-                      Jane Doe
+                      {authenticatedUser?.firstName}{" "}
+                      {authenticatedUser?.lastName}
                     </Heading>
                     <Text>Administrative Staff</Text>
                   </Flex>
@@ -77,24 +118,24 @@ const SideBar: React.FC = () => {
               variant="solid-rounded"
               size="lg"
             >
-              <TabList width="100%">
+              <TabList w="100%">
                 {pages.map((page) => (
-                  <Tab
-                    key={page.route}
-                    borderRadius="8px"
-                    justifyContent="stretch"
-                    textAlign="left"
-                    onClick={() => navigate(page.route)}
-                    _selected={{ bg: "purple.main", color: "white" }}
-                    _hover={{ bg: "purple.100", color: "purple.main" }}
-                  >
-                    {page.label}
-                  </Tab>
+                  <SideBarTab
+                    key={page.label}
+                    label={page.label}
+                    handleClick={() => navigate(page.route)}
+                  />
                 ))}
               </TabList>
             </Tabs>
           </Flex>
-          <Logo width="50%" />
+
+          <Flex alignItems="center" justifyContent="center">
+            <Logo width="50%" />
+            <Button variant="primary" ml={3} onClick={onLogOutClick}>
+              Logout
+            </Button>
+          </Flex>
         </Flex>
       </Box>
     </Flex>
