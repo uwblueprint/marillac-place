@@ -42,7 +42,7 @@ const FormField = ({
 }) => (
   <Flex flexDir="column" flex="1">
     <FormControl isRequired={required}>
-      <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
+      <FormLabel mb="5px" color="gray.main" fontWeight="700">
         {label}
       </FormLabel>
       <InputGroup>
@@ -57,7 +57,7 @@ const FormField = ({
           onChange={onChange}
         />
         {isPassword && setShowPassword && (
-          <InputRightElement height="34px">
+          <InputRightElement h="34px">
             <Button
               onClick={() => setShowPassword(!showPassword)}
               bg="transparent"
@@ -196,7 +196,7 @@ const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
         </Flex>
         <Flex>
           <FormControl>
-            <FormLabel marginBottom="5px" color="gray.main" fontWeight="700">
+            <FormLabel mb="5px" color="gray.main" fontWeight="700">
               Notes
             </FormLabel>
             <Textarea
@@ -210,7 +210,7 @@ const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
         <Flex justifyContent="flex-end">
           <Button
             variant="cancel"
-            marginRight="8px"
+            mr="8px"
             onClick={() => {
               resetFormState();
               setIsOpen(false);

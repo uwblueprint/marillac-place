@@ -70,8 +70,8 @@ const TasksPage = (): React.ReactElement => {
   }, [taskType]);
 
   return (
-    <Flex display="flex" flexDirection="column" width="100%">
-      <Tabs variant="horizontal" width="100%" height="20px" mb={6}>
+    <Flex flexDirection="column" w="100%">
+      <Tabs variant="horizontal" h="25px" mb={6}>
         <TabList>
           <Tab
             onClick={() => {
@@ -104,9 +104,9 @@ const TasksPage = (): React.ReactElement => {
         </TabList>
       </Tabs>
 
-      <Flex flexDirection="column" flexGrow={1} padding="20px">
-        <Flex justifyContent="space-between" padding="10px">
-          <InputGroup width="30%">
+      <Flex flexDirection="column" flexGrow={1} p="20px">
+        <Flex justifyContent="space-between" p="10px">
+          <InputGroup w="30%">
             <InputLeftElement pointerEvents="none">
               <Icon as={Search} color="gray.300" />
             </InputLeftElement>

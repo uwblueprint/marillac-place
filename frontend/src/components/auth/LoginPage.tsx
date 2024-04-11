@@ -61,8 +61,8 @@ const LoginPage = (): React.ReactElement => {
 
   return (
     <Flex
-      width="100vw"
-      height="100vh"
+      w="100vw"
+      h="100vh"
       flexDirection="column"
       alignContent="center"
       justifyContent="center"
@@ -72,10 +72,10 @@ const LoginPage = (): React.ReactElement => {
       </Flex>
 
       <Flex
-        maxWidth="514px"
-        maxHeight="480px"
+        maxW="514px"
+        maxH="480px"
         mx="auto"
-        padding="48px"
+        p="48px"
         borderRadius="8px"
         boxShadow="lg"
         flexDirection="column"
@@ -94,7 +94,7 @@ const LoginPage = (): React.ReactElement => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
-            height="49px"
+            h="49px"
             borderColor="black"
             mb="24px"
             fontSize="18px"
@@ -105,7 +105,7 @@ const LoginPage = (): React.ReactElement => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            height="49px"
+            h="49px"
             borderColor="black"
             fontSize="18px"
           />
@@ -125,9 +125,9 @@ const LoginPage = (): React.ReactElement => {
           <Button
             variant="primary"
             mt="10px"
-            paddingTop="15px"
-            width="100%"
-            height="60px"
+            pt="15px"
+            w="100%"
+            h="60px"
             borderRadius="48px"
             onClick={onLogInClick}
           >

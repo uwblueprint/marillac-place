@@ -45,9 +45,9 @@ const ResidentsPage = (): React.ReactElement => {
   }, []);
 
   return (
-    <Flex flexDirection="column" flexGrow={1} padding="20px">
-      <Flex justifyContent="space-between" padding="10px">
-        <InputGroup width="30%">
+    <Flex flexDirection="column" flexGrow={1} p="20px">
+      <Flex justifyContent="space-between" p="10px">
+        <InputGroup w="30%">
           <InputLeftElement pointerEvents="none">
             <Icon as={Search} color="gray.300" />
           </InputLeftElement>
