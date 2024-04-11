@@ -15,7 +15,7 @@ import authAPIClient from "../../APIClients/AuthAPIClient";
 import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
-import { ReactComponent as Logo } from "../../assets/Marillac_Place_Logo.svg";
+import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
 
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!, $userType: UserType!) {
