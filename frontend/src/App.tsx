@@ -7,18 +7,6 @@ import {
   Routes as Switch,
 } from "react-router-dom";
 
-import Login from "./components/auth/Login";
-import Signup from "./components/auth/Signup";
-import PrivateRoute from "./components/auth/PrivateRoute";
-import CreatePage from "./components/pages/CreatePage";
-import Default from "./components/pages/Default";
-import DisplayPage from "./components/pages/DisplayPage";
-import SimpleEntityCreatePage from "./components/pages/SimpleEntityCreatePage";
-import SimpleEntityDisplayPage from "./components/pages/SimpleEntityDisplayPage";
-import NotFound from "./components/pages/NotFound";
-import UpdatePage from "./components/pages/UpdatePage";
-import SimpleEntityUpdatePage from "./components/pages/SimpleEntityUpdatePage";
-import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage"
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import { AuthenticatedUser } from "./types/AuthTypes";
@@ -65,11 +53,7 @@ const App = (): React.ReactElement => {
   );
 
   const theme = extendTheme({
-    colors: {
-      purple: "#57469D",
-      grey: "#C5C8D8",
-      lightPurple: "#F9F7FF"
-    },
+    colors,
     components: {
       Modal: modalTheme,
       Button: buttonTheme,
@@ -144,32 +128,6 @@ const App = (): React.ReactElement => {
                     </PrivateRoute>
                   }
                 />
-                <Route
-                  path={Routes.EDIT_TEAM_PAGE}
-                  element={
-                    <PrivateRoute>
-                      <EditTeamInfoPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path={Routes.HOOKS_PAGE}
-                  element={
-                    <SideBar>
-                      <HooksDemo />
-                    </SideBar>
-                  }
-                />
-                <Route
-                  path={Routes.ANNOUNCEMENTS_PAGE}
-                  element={
-                    // <PrivateRoute>
-                      <AnnouncementsPage />
-                    // </PrivateRoute>
-                  }
-                />
-
-                <Route path="*" element={<NotFound />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Switch>
             </Router>
