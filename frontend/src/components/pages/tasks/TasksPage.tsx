@@ -1,123 +1,136 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Input,
-  Stack,
   Button,
   InputGroup,
   InputLeftElement,
   Tabs,
   TabList,
-  TabPanels,
   Tab,
-  TabPanel,
+  Icon,
 } from "@chakra-ui/react";
-import SearchIcon from "@mui/icons-material/Search";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import AddIcon from "@mui/icons-material/Add";
-// import { SearchIcon, AddIcon, DownloadIcon } from "@chakra-ui/icons";
-// import CommonTable, { ColumnInfoTypes } from "../../common/CommonTable";
+import { Add, Search } from "@mui/icons-material";
 
-// Module not found: Error: Can't resolve '@mui/material/utils' in '/Users/kathleenxiong/Documents/GitHub/marillac-place/frontend/node_modules/@mui/icons-material/utils'
-// ERROR in ./node_modules/@mui/icons-material/utils/createSvgIcon.js 13:13-43
-// Module not found: Error: Can't resolve '@mui/material/utils' in '/Users/kathleenxiong/Documents/GitHub/marillac-place/frontend/node_modules/@mui/icons-material/utils'
-
-import SideBar from "../../common/SideBar";
-
-// import { data } from "./temp";
-
-// const columnTypes: ColumnInfoTypes[] = [
-//   {
-//     Header: "Task Name",
-//     Type: "string",
-//     Key: "room",
-//   },
-//   {
-//     Header: "Due Date",
-//     Type: "string",
-//     Key: "due_date",
-//   },
-//   {
-//     Header: "Marillac Bucks",
-//     Type: "number",
-//     Key: "marillac_bucks",
-//   }
-// ];
-
-// type TaskTab = "Required" | "Optional" | "Custom" | "Chore";
+import {
+  TaskType,
+  Task,
+  CustomTask,
+  ChoreTask,
+} from "../../../types/TaskTypes";
+import CommonTable, {
+  ColumnInfoTypes,
+  TableData,
+} from "../../common/CommonTable";
+import {
+  tasksColumnTypes,
+  customTasksColumnTypes,
+  choreTasksColumnTypes,
+} from "./columnKeys";
+import {
+  requiredTasksMockData,
+  optionalTasksMockData,
+  customTasksMockData,
+  choreTasksMockData,
+} from "../../../mocks/tasks"; // TODO: Replace mock data
 
 const TasksPage = (): React.ReactElement => {
-  const [dataType, setDataType] = useState("Required");
+  const [requiredTasks, setRequiredTasks] = useState<Task[]>([]);
+  const [optionalTasks, setOptionalTasks] = useState<Task[]>([]);
+  const [customTasks, setCustomTasks] = useState<CustomTask[]>([]);
+  const [choreTasks, setChoreTasks] = useState<ChoreTask[]>([]);
+
+  const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
+  const [taskData, setTaskData] = useState<TableData[]>([]);
+  const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
+
+  useEffect(() => {
+    // TODO: Fetch the task data from the API instead of using mock data
+    setRequiredTasks(requiredTasks);
+    setOptionalTasks(optionalTasks);
+    setCustomTasks(customTasks);
+    setChoreTasks(choreTasks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (taskType === "REQUIRED") {
+      setTaskData(requiredTasksMockData);
+      setTaskDataColumns(tasksColumnTypes);
+    } else if (taskType === "OPTIONAL") {
+      setTaskData(optionalTasksMockData);
+      setTaskDataColumns(tasksColumnTypes);
+    } else if (taskType === "CUSTOM") {
+      setTaskData(customTasksMockData);
+      setTaskDataColumns(customTasksColumnTypes);
+    } else if (taskType === "CHORE") {
+      setTaskData(choreTasksMockData);
+      setTaskDataColumns(choreTasksColumnTypes);
+    }
+  }, [taskType]);
+
   return (
-    <Flex>
-      <SideBar>
-        <></>
-      </SideBar>
+    <Flex display="flex" flexDirection="column" width="100%">
+      <Flex>
+        <Tabs variant="horizontal" width="100%">
+          <TabList>
+            <Tab
+              onClick={() => {
+                setTaskType("REQUIRED");
+              }}
+            >
+              Required
+            </Tab>
+            <Tab
+              onClick={() => {
+                setTaskType("OPTIONAL");
+              }}
+            >
+              Optional
+            </Tab>
+            <Tab
+              onClick={() => {
+                setTaskType("CUSTOM");
+              }}
+            >
+              Custom
+            </Tab>
+            <Tab
+              onClick={() => {
+                setTaskType("CHORE");
+              }}
+            >
+              Chores
+            </Tab>
+          </TabList>
+        </Tabs>
+      </Flex>
 
-      <Flex display="flex" flexDirection="column" width="100%">
-        <Flex>
-          <Tabs variant="horizontal" width="100%">
-            <TabList>
-              <Tab onClick={() => setDataType("Required")}>Required</Tab>
-              <Tab onClick={() => setDataType("Optional")}>Optional</Tab>
-              <Tab onClick={() => setDataType("Custom")}>Custom</Tab>
-              <Tab onClick={() => setDataType("Chores")}>Chores</Tab>
-            </TabList>
-          </Tabs>
-        </Flex>
-
-        {/* Add theme values to these elements when merged in: */}
-        <Flex flexDirection="column" flexGrow={1} padding="20px">
-          <Flex
-            justifyContent="space-between"
-            padding="10px"
-            paddingBottom="10px"
+      <Flex flexDirection="column" flexGrow={1} padding="20px">
+        <Flex justifyContent="space-between" padding="10px">
+          <InputGroup width="30%">
+            <InputLeftElement pointerEvents="none">
+              <Icon as={Search} color="gray.300" />
+            </InputLeftElement>
+            <Input placeholder="Search" />
+          </InputGroup>
+          <Button
+            variant="primary"
+            leftIcon={<Icon as={Add} color="white" />}
+            size="sm"
+            onClick={() => {}}
           >
-            <InputGroup width="30%">
-              <InputLeftElement pointerEvents="none">
-                <SearchIcon style={{ color: "grey" }} />
-              </InputLeftElement>
-              <Input placeholder="Search" />
-            </InputGroup>
-
-            <Stack direction="row" spacing={4}>
-              <Button
-                leftIcon={<FileDownloadOutlinedIcon />}
-                colorScheme="purple"
-                bg="#F1ECFF"
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  alert("DOWNLOAD CSV");
-                }}
-              >
-                Export
-              </Button>
-              <Button
-                leftIcon={<AddIcon />}
-                bg="purple"
-                color="white"
-                size="sm"
-                onClick={() => {
-                  alert("ADD TASK");
-                }}
-              >
-                Add Task
-              </Button>
-            </Stack>
-          </Flex>
-
-          {dataType}
-          {/* <CommonTable
-                    data={data}
-                    columnInfo={columnTypes}
-                    maxResults={4}
-                    onEdit={() => {
-                        alert("EDITING");
-                    }}
-                    isSelectable={false}
-                    /> */}
+            {taskType === "CHORE" ? "Add Chore" : "Add Task"}
+          </Button>
         </Flex>
+
+        <CommonTable
+          data={taskData}
+          columnInfo={taskDataColumns}
+          maxResults={8}
+          onEdit={() => {}}
+          isSelectable={false}
+        />
       </Flex>
     </Flex>
   );

@@ -21,7 +21,7 @@ type TableTypes = string | number | boolean | Date;
 
 export type ColumnInfoTypes = { header: string; key: string };
 
-interface TableData {
+export interface TableData {
   [key: string]: TableTypes;
 }
 
