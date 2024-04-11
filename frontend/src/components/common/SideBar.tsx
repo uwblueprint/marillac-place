@@ -63,7 +63,7 @@ const SideBar: React.FC = () => {
     { label: "Tasks", route: Routes.TASKS_PAGE },
     { label: "Approvals", route: Routes.APPROVALS_PAGE },
     { label: "Schedule", route: Routes.SCHEDULE_PAGE },
-    { label: "Participants", route: Routes.PARTICIPANTS_PAGE },
+    { label: "Residents", route: Routes.RESIDENTS_PAGE },
     { label: "Insights", route: Routes.INSIGHTS_PAGE },
   ];
 
@@ -79,7 +79,7 @@ const SideBar: React.FC = () => {
   });
 
   return (
-    <Flex flexDir="column" width={sidebarWidth}>
+    <Flex flexDir="column" width={sidebarWidth} minWidth="300px">
       <Box
         h="calc(100vh)"
         borderRight="solid"

@@ -76,10 +76,7 @@ const FormField = ({
   </Flex>
 );
 
-const ParticipantsModal = ({
-  isOpen,
-  setIsOpen,
-}: Props): React.ReactElement => {
+const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -234,4 +231,4 @@ const ParticipantsModal = ({
   );
 };
 
-export default ParticipantsModal;
+export default ResidentsModal;
