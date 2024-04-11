@@ -123,11 +123,7 @@ const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   };
 
   return (
-    <ModalContainer
-      title="New Participant"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-    >
+    <ModalContainer title="New Resident" isOpen={isOpen} setIsOpen={setIsOpen}>
       <Flex flexDirection="column" gap="20px">
         <Flex gap="20px">
           <FormField
@@ -223,7 +219,7 @@ const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
             Cancel
           </Button>
           <Button variant="primary" onClick={handleSubmit}>
-            Add Participant
+            Add Resident
           </Button>
         </Flex>
       </Flex>

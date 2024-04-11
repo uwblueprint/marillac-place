@@ -114,37 +114,37 @@ export const customTasksMockData = [
 
 export const choreTasksMockData = [
   {
-    choreName: "Wash the dishes",
+    title: "Wash the dishes",
     location: "Kitchen",
     dueDate: "Everyday at 11:00am",
     creditValue: 5,
   },
   {
-    choreName: "Clean the bathroom",
+    title: "Clean the bathroom",
     location: "Bathroom",
     dueDate: "Everyday at 11:00am",
     creditValue: 5,
   },
   {
-    choreName: "Mop the floors",
+    title: "Mop the floors",
     location: "Living Room",
     dueDate: "Everyday at 11:00am",
     creditValue: 5,
   },
   {
-    choreName: "Take out the trash",
+    title: "Take out the trash",
     location: "Kitchen",
     dueDate: "Everyday at 11:00am",
     creditValue: 5,
   },
   {
-    choreName: "Vacuum the carpets",
+    title: "Vacuum the carpets",
     location: "Living Room",
     dueDate: "Everyday at 11:00am",
     creditValue: 5,
   },
   {
-    choreName: "Dust the furniture",
+    title: "Dust the furniture",
     location: "Living Room",
     dueDate: "Everyday at 11:00am",
     creditValue: 5,

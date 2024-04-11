@@ -24,9 +24,6 @@ const horizontalVariant = definePartsStyle({
     bg: "#F9F7FF",
     paddingLeft: "40px",
     gap: "40px",
-    // display: 'flex',
-    // alignItems: 'flex-end',
-    // justifyContent: 'space-between',
   },
 });
 

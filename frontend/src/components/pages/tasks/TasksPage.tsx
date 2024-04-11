@@ -71,40 +71,38 @@ const TasksPage = (): React.ReactElement => {
 
   return (
     <Flex display="flex" flexDirection="column" width="100%">
-      <Flex>
-        <Tabs variant="horizontal" width="100%">
-          <TabList>
-            <Tab
-              onClick={() => {
-                setTaskType("REQUIRED");
-              }}
-            >
-              Required
-            </Tab>
-            <Tab
-              onClick={() => {
-                setTaskType("OPTIONAL");
-              }}
-            >
-              Optional
-            </Tab>
-            <Tab
-              onClick={() => {
-                setTaskType("CUSTOM");
-              }}
-            >
-              Custom
-            </Tab>
-            <Tab
-              onClick={() => {
-                setTaskType("CHORE");
-              }}
-            >
-              Chores
-            </Tab>
-          </TabList>
-        </Tabs>
-      </Flex>
+      <Tabs variant="horizontal" width="100%">
+        <TabList>
+          <Tab
+            onClick={() => {
+              setTaskType("REQUIRED");
+            }}
+          >
+            Required
+          </Tab>
+          <Tab
+            onClick={() => {
+              setTaskType("OPTIONAL");
+            }}
+          >
+            Optional
+          </Tab>
+          <Tab
+            onClick={() => {
+              setTaskType("CUSTOM");
+            }}
+          >
+            Custom
+          </Tab>
+          <Tab
+            onClick={() => {
+              setTaskType("CHORE");
+            }}
+          >
+            Chores
+          </Tab>
+        </TabList>
+      </Tabs>
 
       <Flex flexDirection="column" flexGrow={1} padding="20px">
         <Flex justifyContent="space-between" padding="10px">
