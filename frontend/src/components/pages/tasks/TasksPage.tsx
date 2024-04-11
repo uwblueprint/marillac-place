@@ -71,7 +71,7 @@ const TasksPage = (): React.ReactElement => {
 
   return (
     <Flex display="flex" flexDirection="column" width="100%">
-      <Tabs variant="horizontal" width="100%">
+      <Tabs variant="horizontal" width="100%" height="20px" mb={6}>
         <TabList>
           <Tab
             onClick={() => {
@@ -127,7 +127,6 @@ const TasksPage = (): React.ReactElement => {
           columnInfo={taskDataColumns}
           maxResults={8}
           onEdit={() => {}}
-          isSelectable={false}
         />
       </Flex>
     </Flex>
