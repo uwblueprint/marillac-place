@@ -26,6 +26,7 @@ import { inputTheme, textareaTheme } from "./theme/inputs";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import LoginPage from "./components/auth/LoginPage";
 import SignupPage from "./components/auth/SignupPage";
+import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import ApprovalsPage from "./components/pages/approvals/ApprovalsPage";
 import InsightsPage from "./components/pages/insights/InsightsPage";
@@ -73,6 +74,10 @@ const App = (): React.ReactElement => {
               <Switch>
                 <Route path={Routes.LOGIN_PAGE} element={<LoginPage />} />
                 <Route path={Routes.SIGNUP_PAGE} element={<SignupPage />} />
+                <Route
+                  path={Routes.RESET_PASSWORD_PAGE}
+                  element={<ResetPasswordPage />}
+                />
                 <Route
                   path={Routes.HOME_PAGE}
                   element={

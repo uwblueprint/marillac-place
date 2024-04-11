@@ -4,7 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 
 import {
   Button,
-  Box,
+  Flex,
   Text,
   Input,
   FormControl,
@@ -12,7 +12,11 @@ import {
 } from "@chakra-ui/react";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
+import {
+  HOME_PAGE,
+  SIGNUP_PAGE,
+  RESET_PASSWORD_PAGE,
+} from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
@@ -31,10 +35,11 @@ const LOGIN = gql`
 `;
 
 const LoginPage = (): React.ReactElement => {
+  const navigate = useNavigate();
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
@@ -54,89 +59,64 @@ const LoginPage = (): React.ReactElement => {
     }
   };
 
-  const onSignUpClick = () => {
-    navigate(SIGNUP_PAGE);
-  };
-
-  // CHANGE TO RESET_PASSWORD_PAGE
-  const onForgotPasswordClick = () => {
-    navigate(SIGNUP_PAGE);
-  };
-
   if (authenticatedUser) {
     return <Navigate to={HOME_PAGE} />;
   }
 
   return (
-    <Box
-      width="100%"
-      display="flex"
+    <Flex
+      width="100vw"
+      height="100vh"
       flexDirection="column"
       alignContent="center"
-      minH="100vh"
+      justifyContent="center"
     >
-      <Box paddingLeft="38px" paddingTop="34px">
+      <Flex position="absolute" top="10px" left="10px">
         <Logo />
-      </Box>
+      </Flex>
 
-      <Box
+      <Flex
         maxWidth="514px"
-        height="480px"
-        mt="8vh"
+        maxHeight="480px"
         mx="auto"
         padding="48px"
         borderRadius="8px"
-        boxShadow="0 5px 15px 1px rgba(0, 0, 0, 0.09)"
+        boxShadow="lg"
+        flexDirection="column"
       >
         <Text fontSize="38px" fontWeight="bold" mb="8px">
           Sign In
         </Text>
-        <Text fontSize="18px" mb="48px">
+        <Text fontSize="18px" mb="30px">
           Please enter your login information
         </Text>
+
         <FormControl isInvalid={!!error} alignItems="center">
           <Input
             id="email"
             type="email"
             value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
             height="49px"
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="Email or Phone Number"
             borderColor="black"
-            borderWidth="2px"
-            mb="32px"
+            mb="24px"
             fontSize="18px"
-            paddingTop={email ? "14px" : "0"}
           />
-          {email !== "" && (
-            <Box
-              position="absolute"
-              top="0"
-              left="0"
-              paddingLeft="17px"
-              paddingTop="2px"
-              fontSize="sm"
-              color="black"
-            >
-              Email
-            </Box>
-          )}
-
           <Input
             id="password"
             type="password"
             value={password}
-            height="49px"
-            onChange={(event) => setPassword(event.target.value)}
-            borderColor="black"
-            borderWidth="2px"
-            fontSize="18px"
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
+            height="49px"
+            borderColor="black"
+            fontSize="18px"
           />
 
           <FormErrorMessage fontSize="18px">{error}</FormErrorMessage>
           <Text
-            onClick={onForgotPasswordClick}
+            onClick={() => navigate(RESET_PASSWORD_PAGE)}
             cursor="pointer"
             fontWeight="bold"
             fontSize="18px"
@@ -147,20 +127,19 @@ const LoginPage = (): React.ReactElement => {
             Forgot Password?
           </Text>
           <Button
-            onClick={onLogInClick}
+            variant="primary"
             mt="10px"
             paddingTop="15px"
-            width="418px"
+            width="100%"
             height="60px"
-            backgroundColor="purple"
-            color="white"
             borderRadius="48px"
+            onClick={onLogInClick}
           >
             <Text fontSize="24px">Sign In</Text>
           </Button>
         </FormControl>
-      </Box>
-      <Box mx="auto" mt="24px">
+      </Flex>
+      <Flex mx="auto" mt="24px">
         <Text as="span" fontSize="18px">
           Don&apos;t have an account?&nbsp;
         </Text>
@@ -168,15 +147,15 @@ const LoginPage = (): React.ReactElement => {
           as="span"
           fontWeight="bold"
           textDecoration="underline"
-          textColor="purple"
+          textColor="purple.main"
           fontSize="18px"
-          onClick={onSignUpClick}
+          onClick={() => navigate(SIGNUP_PAGE)}
           cursor="pointer"
         >
           Join Now
         </Text>
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   );
 };
 

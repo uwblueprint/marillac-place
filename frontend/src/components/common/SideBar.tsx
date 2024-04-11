@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
+import { gql, useMutation } from "@apollo/client";
 import {
   Tabs,
   TabList,
   Tab,
   Box,
+  Button,
   Avatar,
   Text,
   Flex,
@@ -14,9 +16,47 @@ import { useNavigate } from "react-router-dom";
 
 import * as Routes from "../../constants/Routes";
 import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
+import authAPIClient from "../../APIClients/AuthAPIClient";
+import AuthContext from "../../contexts/AuthContext";
+
+const LOGOUT = gql`
+  mutation Logout($userId: ID!) {
+    logout(userId: $userId)
+  }
+`;
+
+const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
+  label,
+  handleClick,
+}) => {
+  return (
+    <Tab
+      borderRadius="8px"
+      justifyContent="stretch"
+      textAlign="left"
+      onClick={handleClick}
+      _selected={{ bg: "purple.main", color: "white" }}
+      _hover={{ bg: "purple.100", color: "purple.main" }}
+    >
+      {label}
+    </Tab>
+  );
+};
 
 const SideBar: React.FC = () => {
   const navigate = useNavigate();
+  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const [logout] = useMutation<{ logout: null }>(LOGOUT);
+
+  const onLogOutClick = async () => {
+    const success = await authAPIClient.logout(
+      String(authenticatedUser?.id),
+      logout,
+    );
+    if (success) {
+      setAuthenticatedUser(null);
+    }
+  };
 
   const pages = [
     { label: "Announcements", route: Routes.HOME_PAGE },
@@ -39,14 +79,14 @@ const SideBar: React.FC = () => {
   });
 
   return (
-    <Flex flexDir="column" w={sidebarWidth}>
+    <Flex flexDir="column" width={sidebarWidth}>
       <Box
         h="calc(100vh)"
         borderRight="solid"
         borderRightColor="gray.300"
         pt={10}
-        pr={4}
-        pl={4}
+        pr={3}
+        pl={3}
       >
         <Flex flexDir="column" alignItems="space-between" h="100%">
           <Flex flexDir="column" h="100%">
@@ -79,22 +119,22 @@ const SideBar: React.FC = () => {
             >
               <TabList width="100%">
                 {pages.map((page) => (
-                  <Tab
-                    key={page.route}
-                    borderRadius="8px"
-                    justifyContent="stretch"
-                    textAlign="left"
-                    onClick={() => navigate(page.route)}
-                    _selected={{ bg: "purple.main", color: "white" }}
-                    _hover={{ bg: "purple.100", color: "purple.main" }}
-                  >
-                    {page.label}
-                  </Tab>
+                  <SideBarTab
+                    key={page.label}
+                    label={page.label}
+                    handleClick={() => navigate(page.route)}
+                  />
                 ))}
               </TabList>
             </Tabs>
           </Flex>
-          <Logo width="50%" />
+
+          <Flex alignItems="center" justifyContent="center">
+            <Logo width="50%" />
+            <Button variant="primary" ml={3} onClick={onLogOutClick}>
+              Logout
+            </Button>
+          </Flex>
         </Flex>
       </Box>
     </Flex>
