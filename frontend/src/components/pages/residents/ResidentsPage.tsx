@@ -45,7 +45,7 @@ const ResidentsPage = (): React.ReactElement => {
   }, []);
 
   return (
-    <Flex flexDirection="column" flexGrow={1} p="20px">
+    <Flex flexDir="column" flexGrow={1} p="20px">
       <Flex justifyContent="space-between" p="10px">
         <InputGroup w="30%">
           <InputLeftElement pointerEvents="none">

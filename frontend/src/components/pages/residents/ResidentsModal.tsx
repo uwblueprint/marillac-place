@@ -124,7 +124,7 @@ const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
   return (
     <ModalContainer title="New Resident" isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Flex flexDirection="column" gap="20px">
+      <Flex flexDir="column" gap="20px">
         <Flex gap="20px">
           <FormField
             label="First name"

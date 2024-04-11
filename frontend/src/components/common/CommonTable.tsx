@@ -91,7 +91,7 @@ const CommonTable = ({
 
   return (
     <Flex
-      flexDirection="column"
+      flexDir="column"
       alignContent="space-between"
       justifyContent="space-between"
       h="100%"
