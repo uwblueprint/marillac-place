@@ -6,7 +6,6 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const horizontalVariant = definePartsStyle({
   tab: {
-    height: "27px",
     fontSize: "18px",
     fontWeight: "600",
     marginBottom: "0",
@@ -22,7 +21,6 @@ const horizontalVariant = definePartsStyle({
     borderColor: "#C5C8D8",
     borderWidth: "0 0 3px 0",
     bg: "#F9F7FF",
-    paddingLeft: "40px",
     gap: "40px",
   },
 });

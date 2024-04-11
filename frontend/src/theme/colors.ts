@@ -8,6 +8,7 @@ const colors = {
   },
   purple: {
     main: "#57469D",
+    50: "#F9F7FF",
     100: "#F1ECFF",
     300: "#B1A7D7",
     500: "#382584",
