@@ -63,7 +63,7 @@ const SideBar: React.FC = () => {
     { label: "Tasks", route: Routes.TASKS_PAGE },
     { label: "Approvals", route: Routes.APPROVALS_PAGE },
     { label: "Schedule", route: Routes.SCHEDULE_PAGE },
-    { label: "Participants", route: Routes.PARTICIPANTS_PAGE },
+    { label: "Residents", route: Routes.RESIDENTS_PAGE },
     { label: "Insights", route: Routes.INSIGHTS_PAGE },
   ];
 
@@ -79,14 +79,14 @@ const SideBar: React.FC = () => {
   });
 
   return (
-    <Flex flexDir="column" width={sidebarWidth}>
+    <Flex flexDir="column" w={sidebarWidth}>
       <Box
-        h="calc(100vh)"
+        h="100vh"
         borderRight="solid"
         borderRightColor="gray.300"
         pt={10}
-        pr={3}
-        pl={3}
+        pr={4}
+        pl={4}
       >
         <Flex flexDir="column" alignItems="space-between" h="100%">
           <Flex flexDir="column" h="100%">
@@ -94,16 +94,17 @@ const SideBar: React.FC = () => {
               <Box
                 border="solid"
                 borderColor="gray.300"
+                borderRadius="8px"
                 pl={2}
                 pr={2}
                 w="100%"
-                borderRadius="8px"
               >
                 <Flex align="center">
                   <Avatar name="Jane Doe" src="https://bit.ly/2k1H1t6" />
                   <Flex flexDir="column" ml={4}>
                     <Heading size="sm" mt={4}>
-                      Jane Doe
+                      {authenticatedUser?.firstName}{" "}
+                      {authenticatedUser?.lastName}
                     </Heading>
                     <Text>Administrative Staff</Text>
                   </Flex>
@@ -117,7 +118,7 @@ const SideBar: React.FC = () => {
               variant="solid-rounded"
               size="lg"
             >
-              <TabList width="100%">
+              <TabList w="100%">
                 {pages.map((page) => (
                   <SideBarTab
                     key={page.label}

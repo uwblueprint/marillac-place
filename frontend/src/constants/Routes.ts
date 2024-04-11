@@ -12,6 +12,6 @@ export const APPROVALS_PAGE = "/approvals";
 
 export const SCHEDULE_PAGE = "/schedule";
 
-export const PARTICIPANTS_PAGE = "/participants";
+export const RESIDENTS_PAGE = "/residents";
 
 export const INSIGHTS_PAGE = "/insights";

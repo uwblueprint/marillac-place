@@ -10,6 +10,7 @@ import {
   Checkbox,
   Center,
   Box,
+  Flex,
   IconButton,
   Icon,
 } from "@chakra-ui/react";
@@ -21,7 +22,7 @@ type TableTypes = string | number | boolean | Date;
 
 export type ColumnInfoTypes = { header: string; key: string };
 
-interface TableData {
+export interface TableData {
   [key: string]: TableTypes;
 }
 
@@ -89,29 +90,27 @@ const CommonTable = ({
   };
 
   return (
-    <Box
-      display="flex"
+    <Flex
       flexDirection="column"
       alignContent="space-between"
       justifyContent="space-between"
-      height="100%"
+      h="100%"
     >
       <TableContainer
-        margin="10px"
-        paddingTop="0px"
+        m="10px"
         border="2px solid"
         borderColor="gray.100"
         borderRadius="6px"
       >
         <Table>
           <Thead>
-            <Tr backgroundColor="gray.100" width="100%">
+            <Tr backgroundColor="gray.100" w="100%">
               {isSelectable ? (
-                <Th padding="0px 0px 0px 20px" w="16px">
+                <Th p="0px 0px 0px 20px" w="16px">
                   <Checkbox
                     borderColor="gray.300"
                     verticalAlign="middle"
-                    margin="0"
+                    m="0"
                     isChecked={allChecked}
                     isIndeterminate={isIndeterminate}
                     onChange={(e) => {
@@ -141,10 +140,10 @@ const CommonTable = ({
                 return (
                   <Tr key={index}>
                     {isSelectable ? (
-                      <Td padding="0px 0px 0px 20px" w="16px">
+                      <Td p="0px 0px 0px 20px" w="16px">
                         <Checkbox
                           verticalAlign="middle"
-                          margin="0"
+                          m="0"
                           isChecked={checked[index + (page - 1) * maxResults]}
                           onChange={(e) => {
                             const newChecked = [...checked];
@@ -171,8 +170,8 @@ const CommonTable = ({
         </Table>
       </TableContainer>
 
-      <Box height="50px" position="relative">
-        <Box position="absolute" width="250px" height="50px" marginLeft="10px">
+      <Box h="50px" position="relative">
+        <Box position="absolute" w="250px" h="50px" ml="10px">
           {`Showing ${(page - 1) * maxResults + 1} to ${page * maxResults} of ${
             data.length
           } entries`}
@@ -200,8 +199,8 @@ const CommonTable = ({
               return (
                 <Center
                   backgroundColor={item === page ? "purple.main" : "white"}
-                  height="35px"
-                  padding="10px"
+                  h="35px"
+                  p="10px"
                   flexBasis="35px"
                   borderRadius="7px"
                   _hover={{
@@ -232,7 +231,7 @@ const CommonTable = ({
           </Box>
         </Box>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

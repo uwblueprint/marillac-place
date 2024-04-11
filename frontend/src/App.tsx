@@ -21,6 +21,7 @@ import sampleContextReducer from "./reducers/SampleContextReducer";
 import colors from "./theme/colors";
 import modalTheme from "./theme/modals";
 import buttonTheme from "./theme/buttons";
+import tabsTheme from "./theme/tabs";
 import { inputTheme, textareaTheme } from "./theme/inputs";
 
 import PrivateRoute from "./components/auth/PrivateRoute";
@@ -28,11 +29,11 @@ import LoginPage from "./components/auth/LoginPage";
 import SignupPage from "./components/auth/SignupPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
-import ApprovalsPage from "./components/pages/approvals/ApprovalsPage";
-import InsightsPage from "./components/pages/insights/InsightsPage";
-import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
-import SchedulePage from "./components/pages/schedule/SchedulePage";
 import TasksPage from "./components/pages/tasks/TasksPage";
+import ApprovalsPage from "./components/pages/approvals/ApprovalsPage";
+import SchedulePage from "./components/pages/schedule/SchedulePage";
+import ResidentsPage from "./components/pages/residents/ResidentsPage";
+import InsightsPage from "./components/pages/insights/InsightsPage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 
 const App = (): React.ReactElement => {
@@ -58,6 +59,7 @@ const App = (): React.ReactElement => {
       Button: buttonTheme,
       Input: inputTheme,
       Textarea: textareaTheme,
+      Tabs: tabsTheme,
     },
   });
 
@@ -111,10 +113,10 @@ const App = (): React.ReactElement => {
                   }
                 />
                 <Route
-                  path={Routes.PARTICIPANTS_PAGE}
+                  path={Routes.RESIDENTS_PAGE}
                   element={
                     <PrivateRoute>
-                      <ParticipantsPage />
+                      <ResidentsPage />
                     </PrivateRoute>
                   }
                 />
