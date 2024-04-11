@@ -29,6 +29,7 @@ import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
+import AnnouncementsPage from "./components/pages/AnnouncementsPage";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
 import SideBar from "./components/common/SideBar";
@@ -134,6 +135,16 @@ const App = (): React.ReactElement => {
                     </SideBar>
                   }
                 />
+                {/* <Route
+                  path={Routes.ANNOUNCEMENTS_PAGE}
+                  element={
+                    <SideBar>
+                      <AnnouncementsPage />
+                    </SideBar>
+                  }
+                /> */}
+                <Route path={Routes.ANNOUNCEMENTS_PAGE} element={<AnnouncementsPage />} />
+
                 <Route path="*" element={<NotFound />} />
               </Switch>
             </Router>
