@@ -76,7 +76,7 @@ const FormField = ({
   </Flex>
 );
 
-const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
+const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -102,9 +102,8 @@ const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       !arrivalDate
     ) {
       // TODO: Add error handling
-    } else {
-      // TODO: Add API call
     }
+    // TODO: API call to add resident
   };
 
   const resetFormState = () => {
@@ -227,4 +226,4 @@ const ResidentsModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   );
 };
 
-export default ResidentsModal;
+export default ResidentModal;

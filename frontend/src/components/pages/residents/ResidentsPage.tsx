@@ -13,7 +13,7 @@ import CommonTable, {
   ColumnInfoTypes,
   TableData,
 } from "../../common/CommonTable";
-import ResidentsModal from "./ResidentsModal";
+import ResidentModal from "./ResidentModal";
 import { residentsMockData } from "../../../mocks/residents";
 
 const columnTypes: ColumnInfoTypes[] = [
@@ -67,7 +67,7 @@ const ResidentsPage = (): React.ReactElement => {
         columnInfo={columnTypes}
         onEdit={() => {}}
       />
-      <ResidentsModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      <ResidentModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </Flex>
   );
 };
