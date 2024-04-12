@@ -3,11 +3,13 @@ const colors = {
   white: "#fff",
   gray: {
     main: "#808080",
-    100: "#E3E4EA",
+    100: "#F5F6F8",
+    200: "#E3E4EA",
     300: "#C5C8D8",
   },
   purple: {
     main: "#57469D",
+    50: "#F9F7FF",
     100: "#F1ECFF",
     300: "#B1A7D7",
     500: "#382584",

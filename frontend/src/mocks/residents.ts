@@ -1,7 +1,7 @@
 export const residentsMockData = [
   {
     roomNumber: 1,
-    departureDate: "2023-06-15", // should this be included?
+    departureDate: "2023-06-15",
     residentId: 12345,
     email: "john.doe@example.com",
   },

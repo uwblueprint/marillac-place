@@ -63,7 +63,7 @@ const LoginPage = (): React.ReactElement => {
     <Flex
       w="100vw"
       h="100vh"
-      flexDirection="column"
+      flexDir="column"
       alignContent="center"
       justifyContent="center"
     >
@@ -78,7 +78,7 @@ const LoginPage = (): React.ReactElement => {
         p="48px"
         borderRadius="8px"
         boxShadow="lg"
-        flexDirection="column"
+        flexDir="column"
       >
         <Text fontSize="38px" fontWeight="bold" mb="8px">
           Sign In

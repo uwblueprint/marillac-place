@@ -70,9 +70,9 @@ const TasksPage = (): React.ReactElement => {
   }, [taskType]);
 
   return (
-    <Flex flexDirection="column" w="100%">
-      <Tabs variant="horizontal" h="25px" mb={6}>
-        <TabList>
+    <Flex flexDir="column" w="100%">
+      <Tabs variant="horizontal" h="30px" mb={6}>
+        <TabList pl={6}>
           <Tab
             onClick={() => {
               setTaskType("REQUIRED");
@@ -104,7 +104,7 @@ const TasksPage = (): React.ReactElement => {
         </TabList>
       </Tabs>
 
-      <Flex flexDirection="column" flexGrow={1} p="20px">
+      <Flex flexDir="column" flexGrow={1} p="20px">
         <Flex justifyContent="space-between" p="10px">
           <InputGroup w="30%">
             <InputLeftElement pointerEvents="none">
