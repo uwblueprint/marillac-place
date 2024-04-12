@@ -67,7 +67,7 @@ const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
       {announcements[selectedGroup].map((announcement, index) => (
         <Box
           key={index}
-          backgroundColor="#F5F6F8"
+          backgroundColor="gray.100"
           p="10px"
           ml="38px"
           mr="38px"
@@ -80,7 +80,7 @@ const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
               <Heading size="sm" fontSize="16px" mt={4} mb={0}>
                 {announcement.author}
               </Heading>
-              <Text color="#808080" fontSize="12px">
+              <Text color="gray.main" fontSize="12px">
                 {moment(announcement.createdAt).fromNow()}
               </Text>
             </Flex>
@@ -112,7 +112,7 @@ const AnnouncementsView = ({
           <h1 style={{ fontSize: "24px" }}>All Rooms</h1>
           <IconButton
             aria-label="info"
-            color="purple"
+            color="purple.main"
             backgroundColor="white"
             borderRadius="50%"
             fontSize="30px"

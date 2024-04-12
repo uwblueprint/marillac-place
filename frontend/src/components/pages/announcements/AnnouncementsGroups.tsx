@@ -41,11 +41,11 @@ const formatRooms = (roomIDs: number[]) => {
 
 const GroupTab = ({
   roomKey,
-  announcements,
+  firstAnnouncement,
   setSelectedGroup,
 }: {
   roomKey: string;
-  announcements: Announcement[];
+  firstAnnouncement: Announcement;
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const rooms = roomKey.split(",").map(Number);
@@ -80,10 +80,10 @@ const GroupTab = ({
           <Flex justifyContent="space-between" alignItems="center" w="100%">
             <Text as="b">{formatRooms(rooms)}</Text>
             <Text color="gray.500">
-              {moment(announcements[0].createdAt).fromNow()}
+              {moment(firstAnnouncement.createdAt).fromNow()}
             </Text>
           </Flex>
-          <Text>{truncateMessage(announcements[0].message, 60)}</Text>
+          <Text>{truncateMessage(firstAnnouncement.message, 60)}</Text>
         </Flex>
       </Flex>
     </Box>
@@ -119,6 +119,20 @@ const GroupList: React.FC<{
     setProcessedAnnouncements(processedData);
   }, [announcements]);
 
+  const renderGroupTabs = (announcementsGroup: GroupAnnouncements) => {
+    return (
+      announcementsGroup &&
+      Object.keys(announcementsGroup).map((roomKey) => (
+        <GroupTab
+          key={roomKey}
+          roomKey={roomKey}
+          firstAnnouncement={announcementsGroup[roomKey][0]}
+          setSelectedGroup={setSelectedGroup}
+        />
+      ))
+    );
+  };
+
   return (
     <Box h="100vh" w="100%" borderRight="solid" borderRightColor="gray.300">
       <Flex flexDir="column" bg="purple.50" w="100%">
@@ -143,7 +157,7 @@ const GroupList: React.FC<{
             bg="white"
             _hover={{ bg: "white" }}
             border="solid"
-            borderColor="gray.100"
+            borderColor="gray.200"
             mr={5}
           />
         </Flex>
@@ -157,36 +171,15 @@ const GroupList: React.FC<{
           <TabPanels bg="white">
             <TabPanel>
               {processedAnnouncements?.all &&
-                Object.keys(processedAnnouncements.all).map((roomKey) => (
-                  <GroupTab
-                    key={roomKey}
-                    roomKey={roomKey}
-                    announcements={processedAnnouncements.all[roomKey]}
-                    setSelectedGroup={setSelectedGroup}
-                  />
-                ))}
+                renderGroupTabs(processedAnnouncements.all)}
             </TabPanel>
             <TabPanel>
               {processedAnnouncements?.private &&
-                Object.keys(processedAnnouncements.private).map((roomKey) => (
-                  <GroupTab
-                    key={roomKey}
-                    roomKey={roomKey}
-                    announcements={processedAnnouncements.private[roomKey]}
-                    setSelectedGroup={setSelectedGroup}
-                  />
-                ))}
+                renderGroupTabs(processedAnnouncements.private)}
             </TabPanel>
             <TabPanel>
               {processedAnnouncements?.groups &&
-                Object.keys(processedAnnouncements.groups).map((roomKey) => (
-                  <GroupTab
-                    key={roomKey}
-                    roomKey={roomKey}
-                    announcements={processedAnnouncements.groups[roomKey]}
-                    setSelectedGroup={setSelectedGroup}
-                  />
-                ))}
+                renderGroupTabs(processedAnnouncements.groups)}
             </TabPanel>
           </TabPanels>
         </Tabs>

@@ -99,12 +99,12 @@ const CommonTable = ({
       <TableContainer
         m="10px"
         border="2px solid"
-        borderColor="gray.100"
+        borderColor="gray.200"
         borderRadius="6px"
       >
         <Table>
           <Thead>
-            <Tr backgroundColor="gray.100" w="100%">
+            <Tr backgroundColor="gray.200" w="100%">
               {isSelectable ? (
                 <Th p="0px 0px 0px 20px" w="16px">
                   <Checkbox

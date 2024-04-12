@@ -17,7 +17,7 @@ const secondary = defineStyle({
   border: "0",
   bg: "purple.100",
   color: "purple.main",
-  _hover: { bg: "gray.100" },
+  _hover: { bg: "gray.200" },
 });
 
 const cancel = defineStyle({
@@ -26,7 +26,7 @@ const cancel = defineStyle({
   padding: "4px 16px",
   border: "2px solid #C5C8D8",
   bg: "white",
-  _hover: { bg: "gray.100" },
+  _hover: { bg: "gray.200" },
 });
 
 const del = defineStyle({

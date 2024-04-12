@@ -4,7 +4,6 @@ import { Flex } from "@chakra-ui/react";
 import { GroupAnnouncements } from "../../../types/NotificationTypes";
 import AnnouncementsGroups from "./AnnouncementsGroups";
 import AnnouncementsView from "./AnnouncementsView";
-
 import { announcementsMockData } from "../../../mocks/notifications";
 
 const AnnouncementsPage = (): React.ReactElement => {
