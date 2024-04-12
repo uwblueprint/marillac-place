@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import moment from "moment";
 import {
   Box,
   Flex,
@@ -7,134 +8,103 @@ import {
   IconButton,
   Avatar,
   Heading,
-  Textarea,
+  Input,
 } from "@chakra-ui/react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-function MessageInput({ onPost }: { onPost: (message: string) => void }) {
-  const [message, setMessage] = useState("");
+import { GroupAnnouncements } from "../../../types/NotificationTypes";
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(event.target.value);
-  };
+const MessageInput = ({
+  handlePost,
+}: {
+  handlePost: (message: string) => void;
+}) => {
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (message.trim() !== "") {
-      onPost(message);
+      handlePost(message);
       setMessage("");
-    }
-  };
-
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleTextareaResize = () => {
-    const textarea = textareaRef.current;
-
-    if (textarea) {
-      textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
-        <Textarea
-          ref={textareaRef}
-          value={message}
-          onChange={handleChange}
-          onInput={handleTextareaResize}
-          size="lg"
-          marginRight="20px"
+        <Input
           placeholder="Type an announcement..."
-          resize="none"
-          overflowY="hidden"
-          minHeight="38px"
-          rows={1}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          w="100%"
+          mr={4}
         />
-        <Button w="120px" color="white" backgroundColor="purple" type="submit">
+        <Button
+          w="120px"
+          color="white"
+          backgroundColor="purple.main"
+          type="submit"
+        >
           Post
         </Button>
       </Flex>
     </form>
   );
-}
-
-type MessageListProps = {
-  messages: any[];
 };
 
-function getDate() {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const today = new Date();
-  const month = monthNames[today.getMonth()];
-  const year = today.getFullYear();
-  const date = today.getDate();
-  return `${month} ${date}, ${year}`;
-}
+type Props = {
+  announcements: GroupAnnouncements;
+  selectedGroup: string;
+};
 
-function MessageList({ messages }: MessageListProps) {
+const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
+  if (selectedGroup.length === 0) {
+    return null;
+  }
+
   return (
-    <div>
-      {messages.map((message: any, index: number) => (
-        <div
+    <Box>
+      {announcements[selectedGroup].map((announcement, index) => (
+        <Box
           key={index}
-          style={{
-            backgroundColor: "#F5F6F8",
-            padding: "10px",
-            marginLeft: "38px",
-            marginRight: "38px",
-            marginTop: "20px",
-            borderRadius: "10px",
-          }}
+          backgroundColor="#F5F6F8"
+          p="10px"
+          ml="38px"
+          mr="38px"
+          mt="20px"
+          borderRadius="10px"
         >
           <Flex pl={2} align="center">
-            <Avatar name="Jane Doe" src="https://bit.ly/2k1H1t6" />
+            <Avatar name={announcement.author} src="https://bit.ly/2k1H1t6" />
             <Flex flexDir="column" ml={4}>
               <Heading size="sm" fontSize="16px" mt={4} mb={0}>
-                Jane Doe
+                {announcement.author}
               </Heading>
               <Text color="#808080" fontSize="12px">
-                {getDate()}
+                {moment(announcement.createdAt).fromNow()}
               </Text>
             </Flex>
           </Flex>
           <Text pl={2} fontSize="16px">
-            {message}
+            {announcement.message}
           </Text>
-        </div>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
-}
+};
 
-const AnnouncementsView = (): React.ReactElement => {
-  const [messages, setMessages] = useState<any[]>([]);
-  const handlePost = (newMessage: any) => {
-    setMessages([...messages, newMessage]);
-  };
-
+const AnnouncementsView = ({
+  announcements,
+  selectedGroup,
+}: Props): React.ReactElement => {
   return (
-    <Box h="calc(100vh)" w="100%">
+    <Box h="100vh" w="100%">
       <Flex align="left" flexDir="column" h="100%">
         <Box
-          padding="22px 47px"
-          borderBottomWidth="3px"
-          borderBottomColor="grey"
+          p="22px 47px"
+          borderBottom="solid"
+          borderBottomColor="gray.300"
           display="flex"
           alignItems="center"
           justifyContent="space-between"
@@ -150,11 +120,14 @@ const AnnouncementsView = (): React.ReactElement => {
             <InfoOutlinedIcon fontSize="inherit" />
           </IconButton>
         </Box>
-        <Box flex={1} height="calc(100vh)" overflowY="scroll">
-          <MessageList messages={messages} />
+        <Box flex={1} h="100vh" overflowY="scroll">
+          <AnnouncementsList
+            announcements={announcements}
+            selectedGroup={selectedGroup}
+          />
         </Box>
-        <Box padding="27px 39px">
-          <MessageInput onPost={handlePost} />
+        <Box p="27px 39px">
+          <MessageInput handlePost={() => {}} />
         </Box>
       </Flex>
     </Box>
