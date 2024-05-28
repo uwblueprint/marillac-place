@@ -111,7 +111,9 @@ const AnnouncementsView = ({
           alignItems="center"
           justifyContent="space-between"
         >
-          <h1 style={{ fontSize: "24px" }}>{selectedGroup === ""? "All Rooms": formatRooms(rooms)}</h1>
+          <h1 style={{ fontSize: "24px" }}>
+            {selectedGroup === "" ? "All Rooms" : formatRooms(rooms)}
+          </h1>
           <IconButton
             aria-label="info"
             color="purple.main"
