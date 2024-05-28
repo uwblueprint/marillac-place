@@ -13,6 +13,7 @@ import {
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 import { GroupAnnouncements } from "../../../types/NotificationTypes";
+import { formatRooms } from "./AnnouncementsGroups";
 
 const MessageInput = ({
   handlePost,
@@ -98,6 +99,7 @@ const AnnouncementsView = ({
   announcements,
   selectedGroup,
 }: Props): React.ReactElement => {
+  const rooms = selectedGroup.split(",").map(Number);
   return (
     <Box h="100vh" w="100%">
       <Flex align="left" flexDir="column" h="100%">
@@ -109,7 +111,9 @@ const AnnouncementsView = ({
           alignItems="center"
           justifyContent="space-between"
         >
-          <h1 style={{ fontSize: "24px" }}>All Rooms</h1>
+          <h1 style={{ fontSize: "24px" }}>
+            {selectedGroup === "" ? "All Rooms" : formatRooms(rooms)}
+          </h1>
           <IconButton
             aria-label="info"
             color="purple.main"
