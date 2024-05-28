@@ -91,9 +91,9 @@ const App = (): React.ReactElement => {
                 <Route
                   path={Routes.TASKS_PAGE}
                   element={
-                    <PrivateRoute>
+                    // <PrivateRoute>
                       <TasksPage />
-                    </PrivateRoute>
+                    // </PrivateRoute>
                   }
                 />
                 <Route

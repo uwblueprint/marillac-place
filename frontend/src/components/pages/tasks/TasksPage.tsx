@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
 
+import TaskModal from "./TaskModal";
 import {
   TaskType,
   Task,
@@ -39,6 +40,7 @@ const TasksPage = (): React.ReactElement => {
   const [optionalTasks, setOptionalTasks] = useState<Task[]>([]);
   const [customTasks, setCustomTasks] = useState<CustomTask[]>([]);
   const [choreTasks, setChoreTasks] = useState<ChoreTask[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
@@ -126,11 +128,12 @@ const TasksPage = (): React.ReactElement => {
           data={taskData}
           columnInfo={taskDataColumns}
           maxResults={8}
-          onEdit={() => {}}
+          onEdit={() => {setIsModalOpen(true);}}
         />
+        <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       </Flex>
     </Flex>
   );
 };
-
+ 
 export default TasksPage;
