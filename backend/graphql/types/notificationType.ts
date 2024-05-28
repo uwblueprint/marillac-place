@@ -38,7 +38,9 @@ const notificationType = gql`
     ): NotificationDTO!
     updateAnnouncement(
       announcementId: ID!
-      announcement: NotificationDTO!
+      title: String
+      message: String
+      createdAt: String
     ): NotificationDTO!
   }
 `;

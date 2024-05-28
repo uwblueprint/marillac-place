@@ -87,15 +87,24 @@ const notificationResolvers = {
       _parent: undefined,
       {
         announcementId,
-        announcement,
-      }: { announcementId: number, announcement: NotificationDTO},
+        title,
+        message,
+        createdAt,
+      }: {
+        announcementId: number;
+        title: string;
+        message: string;
+        createdAt: Date;
+      },
     ): Promise<NotificationDTO> => {
       const updatedAnnouncement = await notificationService.updateAnnouncement(
-        announcementId,
-        announcement
+        Number(announcementId),
+        title,
+        message,
+        createdAt,
       );
       return updatedAnnouncement;
-    }
+    },
   },
 };
 

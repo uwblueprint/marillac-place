@@ -83,7 +83,9 @@ interface INotificationService {
 
   updateAnnouncement(
     announcementId: number,
-    announcement: NotificationDTO,
+    title: string,
+    message: string,
+    createdAt: Date,
   ): Promise<NotificationDTO>;
 }
 
