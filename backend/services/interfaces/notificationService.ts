@@ -80,6 +80,11 @@ interface INotificationService {
     message: string,
     userId: number,
   ): Promise<NotificationDTO>;
+
+  updateAnnouncement(
+    announcementId: number,
+    announcement: NotificationDTO,
+  ): Promise<NotificationDTO>;
 }
 
 export default INotificationService;

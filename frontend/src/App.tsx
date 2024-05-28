@@ -83,9 +83,9 @@ const App = (): React.ReactElement => {
                 <Route
                   path={Routes.HOME_PAGE}
                   element={
-                    <PrivateRoute>
+                    // <PrivateRoute>
                       <AnnouncementsPage />
-                    </PrivateRoute>
+                    // </PrivateRoute>
                   }
                 />
                 <Route

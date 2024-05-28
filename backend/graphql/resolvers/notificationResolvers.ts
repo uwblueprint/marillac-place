@@ -83,6 +83,19 @@ const notificationResolvers = {
       );
       return newAnnouncement;
     },
+    updateAnnouncement: async (
+      _parent: undefined,
+      {
+        announcementId,
+        announcement,
+      }: { announcementId: number, announcement: NotificationDTO},
+    ): Promise<NotificationDTO> => {
+      const updatedAnnouncement = await notificationService.updateAnnouncement(
+        announcementId,
+        announcement
+      );
+      return updatedAnnouncement;
+    }
   },
 };
 

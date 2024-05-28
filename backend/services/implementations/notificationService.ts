@@ -186,6 +186,48 @@ class NotificationService implements INotificationService {
       throw error;
     }
   }
+  
+  async updateAnnouncement(
+    announcementId: number,
+    announcement: NotificationDTO,
+  ): Promise<NotificationDTO> {
+    try {
+      const oldAnnouncement = await prisma.notification.findUnique({
+        where: { id: announcementId },
+      });
+
+      if (!oldAnnouncement) {
+        throw new Error(`announcement ${announcementId} not found.`);
+      }
+
+      const updatedAnnouncement = await prisma.notification.update({
+        where: { announcementId },
+        data: {
+          authorId: announcement.authorId,
+          title: announcement.title,
+          message: announcement.message,
+          createdAt: announcement.createdAt
+        },
+        include: { recipients: true },
+      });
+
+      return {
+        id: updatedAnnouncement.id,
+        authorId: announcement.authorId,
+        title: announcement.title,
+        message: announcement.message,
+        createdAt: announcement.createdAt,
+        recipients: updatedAnnouncement.recipients
+      };
+    } catch (error) {
+      Logger.error(
+        `Failed to update announcement #${announcementId} because ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+  }
 }
 
 export default NotificationService;

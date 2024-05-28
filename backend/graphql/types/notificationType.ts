@@ -36,6 +36,10 @@ const notificationType = gql`
       message: String
       userId: ID
     ): NotificationDTO!
+    updateAnnouncement(
+      announcementId: ID!
+      announcement: NotificationDTO!
+    ): NotificationDTO!
   }
 `;
 
