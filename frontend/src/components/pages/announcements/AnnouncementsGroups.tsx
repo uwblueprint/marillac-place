@@ -32,7 +32,7 @@ interface ProcessedGroupAnnouncements {
   groups: GroupAnnouncements;
 }
 
-const formatRooms = (roomIDs: number[]) => {
+export const formatRooms = (roomIDs: number[]) => {
   // Map each room ID to its formatted string
   const formattedRooms = roomIDs.map((id) => `Room ${id}`);
   // Join the formatted room strings with commas
