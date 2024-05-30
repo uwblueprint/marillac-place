@@ -55,6 +55,7 @@ const MessageInput = ({
 type Props = {
   announcements: GroupAnnouncements;
   selectedGroup: string;
+  // deleteAnnouncement: (index: number) => void;
 };
 
 const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
@@ -62,6 +63,10 @@ const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
     return null;
   }
 
+  const handleButtonClick = () => {
+    console.log("Button clicked!");
+  };
+  
   return (
     <Box>
       {announcements[selectedGroup].map((announcement, index) => (
@@ -88,6 +93,9 @@ const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
           <Text pl={2} fontSize="16px">
             {announcement.message}
           </Text>
+          <Button onClick={handleButtonClick} mt={2} colorScheme="blue">
+            Simple Button
+          </Button>
         </Box>
       ))}
     </Box>
@@ -97,6 +105,7 @@ const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
 const AnnouncementsView = ({
   announcements,
   selectedGroup,
+  // deleteAnnouncement
 }: Props): React.ReactElement => {
   return (
     <Box h="100vh" w="100%">
@@ -129,6 +138,7 @@ const AnnouncementsView = ({
         <Box p="27px 39px">
           <MessageInput handlePost={() => {}} />
         </Box>
+      
       </Flex>
     </Box>
   );

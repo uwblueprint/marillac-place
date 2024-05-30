@@ -15,6 +15,13 @@ const AnnouncementsPage = (): React.ReactElement => {
     setAnnouncements(announcementsMockData);
   }, []);
 
+  // const deleteAnnouncement = (id: number): void => {
+  //   const newDict = announcements.filter((index:number) => {
+  //     id !== index
+  //   })
+  //   setAnnouncements(newDict)
+  // }
+
   return (
     <Flex flexDir="row" alignItems="flex-start" w="100%">
       <AnnouncementsGroups
@@ -24,6 +31,7 @@ const AnnouncementsPage = (): React.ReactElement => {
       <AnnouncementsView
         announcements={announcements}
         selectedGroup={selectedGroup}
+        // deleteAnnouncement={deleteAnnouncement}
       />
     </Flex>
   );
