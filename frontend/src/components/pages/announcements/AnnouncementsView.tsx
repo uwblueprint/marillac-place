@@ -69,10 +69,11 @@ const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
           key={index}
           backgroundColor="gray.100"
           p="10px"
-          ml="38px"
-          mr="38px"
+          ml="30px"
+          mr="20px"
           mt="20px"
           borderRadius="10px"
+          w="83vh"
         >
           <Flex pl={2} align="center">
             <Avatar name={announcement.author} src="https://bit.ly/2k1H1t6" />

@@ -70,7 +70,7 @@ const TasksPage = (): React.ReactElement => {
   }, [taskType]);
 
   return (
-    <Flex flexDir="column" w="100%">
+    <Flex flexDir="column" flexGrow={1}>
       <Tabs variant="horizontal" h="30px" mb={6}>
         <TabList pl={6}>
           <Tab
