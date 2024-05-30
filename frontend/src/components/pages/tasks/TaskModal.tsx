@@ -14,6 +14,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { TbTrash } from "react-icons/tb";
+import { format } from 'date-fns';
 
 import ModalContainer from "../../common/ModalContainer";
 
@@ -27,6 +28,7 @@ const FormField = ({
   value,
   type = "text",
   onChange,
+  onBlur,
   submitPressed,
   required = false,
   isPassword = false,
@@ -37,6 +39,7 @@ const FormField = ({
   value: string;
   type?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
   submitPressed: boolean;
   required?: boolean;
   isPassword?: boolean;
@@ -80,39 +83,64 @@ const FormField = ({
 );
 
 const DateInput = ({
-  dueDateTime,
-  setDueDateTime,
+  dueDate,
+  setDueDate,
+  dueTime,
+  setDueTime,
   isAllDay,
   setIsAllDay,
   recurrenceFrequency,
   setRecurrenceFrequency,
   submitPressed,
 }: {
-  dueDateTime: string;
-  setDueDateTime: React.Dispatch<React.SetStateAction<string>>;
+  dueDate: string;
+  setDueDate: React.Dispatch<React.SetStateAction<string>>;
+  dueTime: string;
+  setDueTime: React.Dispatch<React.SetStateAction<string>>;
   isAllDay: boolean;
   setIsAllDay: React.Dispatch<React.SetStateAction<boolean>>;
   recurrenceFrequency: string;
   setRecurrenceFrequency: React.Dispatch<React.SetStateAction<string>>;
   submitPressed: boolean;
-}) => (
+}) => {
+    const formatDate = (inputDate: Date) => {
+      return format(inputDate, 'yyyy-MM-dd');
+    };
+  
+    return (
   <Flex flexDir="column" flex="1">
     <FormControl isRequired>
       <FormLabel mb="5px" color="gray.main" fontWeight="700">
         Due Date
       </FormLabel>
       <Flex flexDir="column">
-        <Input
-          variant="primary"
-          mb={3}
-          borderColor={submitPressed && !dueDateTime ? "red.error" : "gray.300"}
-          boxShadow={
-            submitPressed && !dueDateTime ? "0 0 2px red.error" : "none"
-          }
-          type="datetime-local"
-          value={dueDateTime}
-          onChange={(e) => setDueDateTime(e.target.value)}
-        />
+        <Flex flexDir="row">
+          <Input
+            variant="primary"
+            mb={3}
+            borderColor={submitPressed && !dueDate ? "red.error" : "gray.300"}
+            boxShadow={
+              submitPressed && !dueDate ? "0 0 2px red.error" : "none"
+            }
+            type="date"
+            value={dueDate ? formatDate(new Date(dueDate)) : ''}
+            width="200px"
+            onChange={(e) => setDueDate(e.target.value)}
+          />
+          <Text paddingX="10px" paddingY="4px">at</Text>
+          <Input
+            variant="primary"
+            mb={3}
+            borderColor={submitPressed && !dueTime ? "red.error" : "gray.300"}
+            boxShadow={
+              submitPressed && !dueTime ? "0 0 2px red.error" : "none"
+            }
+            type="time"
+            value={dueTime}
+            width="200px"
+            onChange={(e) => setDueTime(e.target.value)}
+          />
+        </Flex>
         <Flex alignItems="center">
           <Checkbox
             w="200px"
@@ -137,20 +165,23 @@ const DateInput = ({
     </FormControl>
   </Flex>
 );
+};
 
 const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [dueDateTime, setDueDateTime] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [dueTime, setDueTime] = useState("");
   const [isAllDay, setIsAllDay] = useState(false);
   const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
-  const [marillacBucks, setMarillacBucks] = useState("");
+  const [unformattedMarillacBucks, setUnformattedMarillacBucks] = useState('');
+  const [formattedMarillacBucks, setFormattedMarillacBucks] = useState('$');
 
   const [submitPressed, setSubmitPressed] = useState(false);
 
   const handleSubmit = () => {
     setSubmitPressed(true);
-    if (!title || !location || !dueDateTime || !marillacBucks) {
+    if (!title || !location || !dueDate || !dueTime || !formattedMarillacBucks) {
       // TODO: Add error handling
     }
     // TODO: API call to add task
@@ -159,20 +190,26 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const resetFormState = () => {
     setTitle("");
     setLocation("");
-    setDueDateTime("");
+    setDueDate("");
+    setDueTime("");
     setIsAllDay(false);
     setRecurrenceFrequency("");
-    setMarillacBucks("");
+    setUnformattedMarillacBucks("");
+    setFormattedMarillacBucks("$");
 
     setSubmitPressed(false);
   };
 
   const handleMoneyInput = () => {
-    const moneyRegex = /^\d*(\.\d{0,2})?$/;
-
-    // if (value === '' || moneyRegex.test(value)) {
-    //   setValue(value);
-    // }
+    console.log("Marillac bucks field blurred. unformattedMarillacBucks: ", unformattedMarillacBucks);
+    let inputValue = unformattedMarillacBucks.replace(/[^0-9.]/g, ''); // Remove non-numeric and non-period characters
+    
+    if (inputValue) {
+      let numberValue = parseFloat(inputValue).toFixed(2);
+      console.log("rounded numberValue", numberValue);
+      setFormattedMarillacBucks(`$${numberValue}`);
+      console.log("formattedMarillacBucks:", formattedMarillacBucks);
+    }
   };
   
 
@@ -181,7 +218,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       <Flex justifyContent="space-between" paddingTop="0px">
         <Text fontWeight="500" fontSize="20">Edit Chore</Text>
         <Button variant="cancel" onClick={() => {}}>
-          <TbTrash/> Delete
+          <TbTrash style={{ color: "#E30000" }} /><span style={{ color: "#E30000" }}>&nbsp;Delete</span>
         </Button>
       </Flex>
       <Flex flexDir="column" gap="20px">
@@ -209,8 +246,10 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           </Select>
         </FormControl>
         <DateInput
-          dueDateTime={dueDateTime}
-          setDueDateTime={setDueDateTime}
+          dueDate={dueDate}
+          setDueDate={setDueDate}
+          dueTime={dueTime}
+          setDueTime={setDueTime}
           isAllDay={isAllDay}
           setIsAllDay={setIsAllDay}
           recurrenceFrequency={recurrenceFrequency}
@@ -219,13 +258,13 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
         />
         <FormField
           label="Marillac Bucks"
-          value={marillacBucks}
-          type="number"
-          onChange={(e) => setMarillacBucks(e.target.value)}
+          value={formattedMarillacBucks}
+          type="text"
+          onChange={(e) => setUnformattedMarillacBucks(e.target.value)}
+          onBlur={handleMoneyInput}
           submitPressed={submitPressed}
           required
         />
-
         <Flex justifyContent="flex-end">
           <Button
             variant="cancel"
