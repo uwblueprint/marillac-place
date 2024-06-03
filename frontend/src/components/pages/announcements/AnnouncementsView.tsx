@@ -55,49 +55,66 @@ const MessageInput = ({
 type Props = {
   announcements: GroupAnnouncements;
   selectedGroup: string;
-  // deleteAnnouncement: (index: number) => void;
+  deleteAnnouncement: (room: string, id: number) => void;
 };
 
-const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
+const AnnouncementsList = ({
+  announcements,
+  selectedGroup,
+  deleteAnnouncement,
+}: Props) => {
   if (selectedGroup.length === 0) {
     return null;
   }
 
-  const handleButtonClick = () => {
-    console.log("Button clicked!");
+  const updateAnnouncement = () => {
+    console.log("Implement update announcement");
   };
-  
+
   return (
     <Box>
-      {announcements[selectedGroup].map((announcement, index) => (
-        <Box
-          key={index}
-          backgroundColor="gray.100"
-          p="10px"
-          ml="38px"
-          mr="38px"
-          mt="20px"
-          borderRadius="10px"
-        >
-          <Flex pl={2} align="center">
-            <Avatar name={announcement.author} src="https://bit.ly/2k1H1t6" />
-            <Flex flexDir="column" ml={4}>
-              <Heading size="sm" fontSize="16px" mt={4} mb={0}>
-                {announcement.author}
-              </Heading>
-              <Text color="gray.main" fontSize="12px">
-                {moment(announcement.createdAt).fromNow()}
-              </Text>
+      {announcements[selectedGroup] ? (
+        announcements[selectedGroup].map((announcement, index) => (
+          <Box
+            key={index}
+            backgroundColor="gray.100"
+            p="10px"
+            ml="38px"
+            mr="38px"
+            mt="20px"
+            borderRadius="10px"
+          >
+            <Flex pl={2} align="center">
+              <Avatar name={announcement.author} src="https://bit.ly/2k1H1t6" />
+              <Flex flexDir="column" ml={4}>
+                <Heading size="sm" fontSize="16px" mt={4} mb={0}>
+                  {announcement.author}
+                </Heading>
+                <Text color="gray.main" fontSize="12px">
+                  {moment(announcement.createdAt).fromNow()}
+                </Text>
+              </Flex>
             </Flex>
-          </Flex>
-          <Text pl={2} fontSize="16px">
-            {announcement.message}
-          </Text>
-          <Button onClick={handleButtonClick} mt={2} colorScheme="blue">
-            Simple Button
-          </Button>
-        </Box>
-      ))}
+            <Text pl={2} fontSize="16px">
+              {announcement.message}
+            </Text>
+            <Button onClick={updateAnnouncement} mt={2} colorScheme="blue">
+              Update Announcement
+            </Button>
+            <Button
+              onClick={() => {
+                deleteAnnouncement(selectedGroup, announcement.id);
+              }}
+              mt={2}
+              colorScheme="red"
+            >
+              Delete Announcement
+            </Button>
+          </Box>
+        ))
+      ) : (
+        <Text>No announcements found</Text>
+      )}
     </Box>
   );
 };
@@ -105,7 +122,7 @@ const AnnouncementsList = ({ announcements, selectedGroup }: Props) => {
 const AnnouncementsView = ({
   announcements,
   selectedGroup,
-  // deleteAnnouncement
+  deleteAnnouncement,
 }: Props): React.ReactElement => {
   return (
     <Box h="100vh" w="100%">
@@ -133,12 +150,12 @@ const AnnouncementsView = ({
           <AnnouncementsList
             announcements={announcements}
             selectedGroup={selectedGroup}
+            deleteAnnouncement={deleteAnnouncement}
           />
         </Box>
         <Box p="27px 39px">
           <MessageInput handlePost={() => {}} />
         </Box>
-      
       </Flex>
     </Box>
   );

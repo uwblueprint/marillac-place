@@ -50,43 +50,45 @@ const GroupTab = ({
 }) => {
   const rooms = roomKey.split(",").map(Number);
   return (
-    <Box
-      onClick={() => setSelectedGroup(roomKey)}
-      w="100%"
-      p={3}
-      borderBottom="solid"
-      borderBottomColor="gray.300"
-      _hover={{ bg: "purple.100", cursor: "pointer" }}
-    >
-      <Flex alignItems="center">
-        <Box
-          borderRadius="full"
-          border="1px solid"
-          borderColor="purple.300"
-          p={1}
-          mr={3}
-        >
-          <Icon
-            as={
-              rooms.length === 1
-                ? PersonOutlineOutlinedIcon
-                : PeopleAltOutlinedIcon
-            }
-            boxSize={10}
-            color="purple.main"
-          />
-        </Box>
-        <Flex flexDir="column">
-          <Flex justifyContent="space-between" alignItems="center" w="100%">
-            <Text as="b">{formatRooms(rooms)}</Text>
-            <Text color="gray.500">
-              {moment(firstAnnouncement.createdAt).fromNow()}
-            </Text>
+    firstAnnouncement && (
+      <Box
+        onClick={() => setSelectedGroup(roomKey)}
+        w="100%"
+        p={3}
+        borderBottom="solid"
+        borderBottomColor="gray.300"
+        _hover={{ bg: "purple.100", cursor: "pointer" }}
+      >
+        <Flex alignItems="center">
+          <Box
+            borderRadius="full"
+            border="1px solid"
+            borderColor="purple.300"
+            p={1}
+            mr={3}
+          >
+            <Icon
+              as={
+                rooms.length === 1
+                  ? PersonOutlineOutlinedIcon
+                  : PeopleAltOutlinedIcon
+              }
+              boxSize={10}
+              color="purple.main"
+            />
+          </Box>
+          <Flex flexDir="column">
+            <Flex justifyContent="space-between" alignItems="center" w="100%">
+              <Text as="b">{formatRooms(rooms)}</Text>
+              <Text color="gray.500">
+                {moment(firstAnnouncement.createdAt).fromNow()}
+              </Text>
+            </Flex>
+            <Text>{truncateMessage(firstAnnouncement.message, 60)}</Text>
           </Flex>
-          <Text>{truncateMessage(firstAnnouncement.message, 60)}</Text>
         </Flex>
-      </Flex>
-    </Box>
+      </Box>
+    )
   );
 };
 

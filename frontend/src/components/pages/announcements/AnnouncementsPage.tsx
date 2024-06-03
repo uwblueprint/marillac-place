@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 
-import { GroupAnnouncements } from "../../../types/NotificationTypes";
+import {
+  GroupAnnouncements,
+  Announcement,
+} from "../../../types/NotificationTypes";
 import AnnouncementsGroups from "./AnnouncementsGroups";
 import AnnouncementsView from "./AnnouncementsView";
 import { announcementsMockData } from "../../../mocks/notifications";
@@ -11,16 +14,17 @@ const AnnouncementsPage = (): React.ReactElement => {
   const [selectedGroup, setSelectedGroup] = useState<string>("");
 
   useEffect(() => {
-    // TODO: Fetch announcements from API
+    // TODO: Fetch announcements from API 
     setAnnouncements(announcementsMockData);
   }, []);
 
-  // const deleteAnnouncement = (id: number): void => {
-  //   const newDict = announcements.filter((index:number) => {
-  //     id !== index
-  //   })
-  //   setAnnouncements(newDict)
-  // }
+  const deleteAnnouncement = (room: string, id: number): void => {
+    const newAnnouncements = { ...announcements };
+    newAnnouncements[room] = newAnnouncements[room].filter(
+      (announcement: Announcement) => announcement.id !== id,
+    );
+    setAnnouncements(newAnnouncements);
+  };
 
   return (
     <Flex flexDir="row" alignItems="flex-start" w="100%">
@@ -31,7 +35,7 @@ const AnnouncementsPage = (): React.ReactElement => {
       <AnnouncementsView
         announcements={announcements}
         selectedGroup={selectedGroup}
-        // deleteAnnouncement={deleteAnnouncement}
+        deleteAnnouncement={deleteAnnouncement}
       />
     </Flex>
   );
