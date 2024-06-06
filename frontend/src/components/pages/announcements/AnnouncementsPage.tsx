@@ -9,6 +9,8 @@ import { announcementsMockData } from "../../../mocks/notifications";
 const AnnouncementsPage = (): React.ReactElement => {
   const [announcements, setAnnouncements] = useState<GroupAnnouncements>({});
   const [selectedGroup, setSelectedGroup] = useState<string>("");
+  const [addingNewRoom, setAddingNewRoom] = useState<boolean>(false);
+  const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
 
   useEffect(() => {
     // TODO: Fetch announcements from API
@@ -20,10 +22,17 @@ const AnnouncementsPage = (): React.ReactElement => {
       <AnnouncementsGroups
         announcements={announcements}
         setSelectedGroup={setSelectedGroup}
+        addingNewRoom={addingNewRoom}
+        setAddingNewRoom={setAddingNewRoom}
+        selectedRooms={selectedRooms}
       />
       <AnnouncementsView
         announcements={announcements}
         selectedGroup={selectedGroup}
+        addingNewRoom={addingNewRoom}
+        setAddingNewRoom={setAddingNewRoom}
+        selectedRooms={selectedRooms}
+        setSelectedRooms={setSelectedRooms}
       />
     </Flex>
   );
