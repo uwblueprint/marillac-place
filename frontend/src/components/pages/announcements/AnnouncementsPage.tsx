@@ -14,7 +14,7 @@ const AnnouncementsPage = (): React.ReactElement => {
   const [selectedGroup, setSelectedGroup] = useState<string>("");
 
   useEffect(() => {
-    // TODO: Fetch announcements from API 
+    // TODO: Fetch announcements from API
     setAnnouncements(announcementsMockData);
   }, []);
 
@@ -22,6 +22,18 @@ const AnnouncementsPage = (): React.ReactElement => {
     const newAnnouncements = { ...announcements };
     newAnnouncements[room] = newAnnouncements[room].filter(
       (announcement: Announcement) => announcement.id !== id,
+    );
+    setAnnouncements(newAnnouncements);
+  };
+
+  const updateAnnouncement = (
+    room: string,
+    id: number,
+    message: string,
+  ): void => {
+    const newAnnouncements = { ...announcements };
+    newAnnouncements[room] = newAnnouncements[room].map((announcement) =>
+      announcement.id === id ? { ...announcement, message } : announcement,
     );
     setAnnouncements(newAnnouncements);
   };
@@ -36,6 +48,7 @@ const AnnouncementsPage = (): React.ReactElement => {
         announcements={announcements}
         selectedGroup={selectedGroup}
         deleteAnnouncement={deleteAnnouncement}
+        updateAnnouncement={updateAnnouncement}
       />
     </Flex>
   );

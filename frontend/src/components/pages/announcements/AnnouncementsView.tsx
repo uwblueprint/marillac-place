@@ -9,6 +9,7 @@ import {
   Avatar,
   Heading,
   Input,
+  Textarea,
 } from "@chakra-ui/react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
@@ -56,20 +57,23 @@ type Props = {
   announcements: GroupAnnouncements;
   selectedGroup: string;
   deleteAnnouncement: (room: string, id: number) => void;
+  updateAnnouncement: (room: string, id: number, message: string) => void;
 };
 
 const AnnouncementsList = ({
   announcements,
   selectedGroup,
   deleteAnnouncement,
+  updateAnnouncement,
 }: Props) => {
+  const [editingAnnouncement, setEditingAnnouncement] = useState<number | null>(
+    null,
+  );
+  const [editMessage, setEditMessage] = useState("");
+
   if (selectedGroup.length === 0) {
     return null;
   }
-
-  const updateAnnouncement = () => {
-    console.log("Implement update announcement");
-  };
 
   return (
     <Box>
@@ -95,10 +99,49 @@ const AnnouncementsList = ({
                 </Text>
               </Flex>
             </Flex>
-            <Text pl={2} fontSize="16px">
-              {announcement.message}
-            </Text>
-            <Button onClick={updateAnnouncement} mt={2} colorScheme="blue">
+            {editingAnnouncement === announcement.id ? (
+              <Flex pl={2} flexDir="column">
+                <Textarea
+                  value={editMessage}
+                  onChange={(e) => setEditMessage(e.target.value)}
+                  placeholder="Update your announcement..."
+                />
+                <Button
+                  onClick={() => {
+                    // Here you will handle the save action later
+                    setEditingAnnouncement(null);
+                    updateAnnouncement(
+                      selectedGroup,
+                      announcement.id,
+                      editMessage,
+                    );
+                  }}
+                  mt={2}
+                  colorScheme="blue"
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={() => setEditingAnnouncement(null)}
+                  mt={2}
+                  colorScheme="gray"
+                >
+                  Cancel
+                </Button>
+              </Flex>
+            ) : (
+              <Text pl={2} fontSize="16px">
+                {announcement.message}
+              </Text>
+            )}
+            <Button
+              onClick={() => {
+                setEditingAnnouncement(announcement.id);
+                setEditMessage(announcement.message);
+              }}
+              mt={2}
+              colorScheme="blue"
+            >
               Update Announcement
             </Button>
             <Button
@@ -123,6 +166,7 @@ const AnnouncementsView = ({
   announcements,
   selectedGroup,
   deleteAnnouncement,
+  updateAnnouncement,
 }: Props): React.ReactElement => {
   return (
     <Box h="100vh" w="100%">
@@ -151,6 +195,7 @@ const AnnouncementsView = ({
             announcements={announcements}
             selectedGroup={selectedGroup}
             deleteAnnouncement={deleteAnnouncement}
+            updateAnnouncement={updateAnnouncement}
           />
         </Box>
         <Box p="27px 39px">
