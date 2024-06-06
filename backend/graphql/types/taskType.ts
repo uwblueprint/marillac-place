@@ -51,8 +51,8 @@ const taskType = gql`
     assigneeId: Int
     assignerId: Int
     status: Status
-    startDate: Date
-    endDate: Date
+    startDate: DateTime
+    endDate: DateTime
     recurrenceFrequency: Recurrence_Frequency
     comments: String
   }
@@ -63,8 +63,8 @@ const taskType = gql`
     assigneeId: Int!
     assignerId: Int!
     status: Status!
-    startDate: Date!
-    endDate: Date
+    startDate: DateTime!
+    endDate: DateTime!
     recurrenceFrequency: Recurrence_Frequency
     comments: String
   }
@@ -74,8 +74,8 @@ const taskType = gql`
     getTasksByType(type: TaskType!): [TaskDTO!]
     getTasksByAssigneeId(assigneeId: Int!): [TaskAssignedDTO]
     getTasksByAssignerId(assignerId: Int!): [TaskAssignedDTO]
-    getTasksByStartDate(startDate: Date!): [TaskAssignedDTO]
-    getTasksByEndDate(endDate: Date!): [TaskAssignedDTO]
+    getTasksByStartDate(startDate: DateTime!): [TaskAssignedDTO]
+    getTasksByEndDate(endDate: DateTime!): [TaskAssignedDTO]
     getTasksByStatus(status: Status!): [TaskAssignedDTO]
   }
 
