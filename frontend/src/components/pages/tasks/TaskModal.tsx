@@ -10,15 +10,16 @@ import {
   InputRightElement,
   InputGroup,
   Checkbox,
+  Container,
 } from "@chakra-ui/react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { TbTrash } from "react-icons/tb";
-import { format } from 'date-fns';
 import dayjs, { Dayjs } from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import 'dayjs/locale/de';
 
 import ModalContainer from "../../common/ModalContainer";
 
@@ -120,8 +121,10 @@ const DateInput = ({
   setRecurrenceFrequency,
   submitPressed,
 }: {
-  dueDate: Dayjs | null;
-  setDueDate: React.Dispatch<React.SetStateAction<Dayjs | null>>;
+  // dueDate: Dayjs | null;
+  dueDate: string;
+  // setDueDate: React.Dispatch<React.SetStateAction<Dayjs | null>>;
+  setDueDate: React.Dispatch<React.SetStateAction<string>>;
   dueTime: string;
   setDueTime: React.Dispatch<React.SetStateAction<string>>;
   isAllDay: boolean;
@@ -174,27 +177,33 @@ const DateInput = ({
               // shouldOpenCalendar={() => false}
             />
           </div> */}
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              // label="Date Picker"
-              // // format="LL"
-              // value={dueDate}
-              // defaultValue={dayjs('2022-04-17')}
-              // onChange={
-              //   (date) => {
-              //     setDueDate(date as Dayjs | null);
-              //   }
-              // }
-              label="Controlled picker"
-              value={dueDate}
-              onChange={(newValue) => setDueDate(newValue)}
-            />
-          </LocalizationProvider>
-
-
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
             <DatePicker />
-          </LocalizationProvider>
+            <DatePicker
+              label="Date Picker"
+              format="LL"
+              value={dueDate}
+              defaultValue={dayjs('2022-04-17')}
+              onChange={
+                (date) => {
+                  setDueDate(date);
+                }
+              }
+            />          
+          </LocalizationProvider> */}
+
+          <Input
+            variant="primary"
+            mb={3}
+            borderColor={submitPressed && !dueTime ? "red.error" : "gray.300"}
+            boxShadow={
+              submitPressed && !dueTime ? "0 0 2px red.error" : "none"
+            }
+            type="date"
+            value={dueDate}
+            width="200px"
+            onChange={(e) => setDueDate(e.target.value)}
+          />
           
           <Text paddingX="10px" paddingY="4px">at</Text>
           <Select
@@ -261,7 +270,8 @@ const DateInput = ({
 const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [dueDate, setDueDate] = useState<Dayjs | null>(dayjs().startOf('day'));
+  // const [dueDate, setDueDate] = useState<Dayjs | null>(dayjs().startOf('day'));
+  const [dueDate, setDueDate] = useState("");
   const [dueTime, setDueTime] = useState("");
   const [isAllDay, setIsAllDay] = useState(false);
   const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
@@ -280,7 +290,8 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const resetFormState = () => {
     setTitle("");
     setLocation("");
-    setDueDate(dayjs().startOf('day'));
+    // setDueDate(dayjs().startOf('day'));
+    setDueDate("");
     setDueTime("");
     setIsAllDay(false);
     setRecurrenceFrequency("");
