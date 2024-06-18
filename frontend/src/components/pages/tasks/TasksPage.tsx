@@ -47,10 +47,6 @@ const TasksPage = (): React.ReactElement => {
 
   const [taskFilter, setTaskFilter] = useState<string>("");
 
-  interface Task {
-    title: string;
-  }
-
   useEffect(() => {
     // TODO: Fetch the task data from the API instead of using mock data
     setRequiredTasks(requiredTasks);
@@ -64,9 +60,13 @@ const TasksPage = (): React.ReactElement => {
     if (taskFilter === "") {
       setTaskData(storedTaskData);
     } else {
-      setTaskData(storedTaskData.filter((task) => 
-        typeof task.title === 'string' && task.title.toLowerCase().includes(taskFilter.toLowerCase())
-      ));
+      setTaskData(
+        storedTaskData.filter(
+          (task) =>
+            typeof task.title === "string" &&
+            task.title.toLowerCase().includes(taskFilter.toLowerCase()),
+        ),
+      );
     }
   }, [taskFilter, storedTaskData, taskData]);
 
@@ -126,8 +126,12 @@ const TasksPage = (): React.ReactElement => {
           <InputGroup w="30%">
             <InputLeftElement pointerEvents="none">
               <Icon as={Search} color="gray.300" />
-            </InputLeftElement>.
-            <Input placeholder="Search" onChange={(e) => setTaskFilter(e.target.value)}/>
+            </InputLeftElement>
+            .
+            <Input
+              placeholder="Search"
+              onChange={(e) => setTaskFilter(e.target.value)}
+            />
           </InputGroup>
           <Button
             variant="primary"
