@@ -18,16 +18,20 @@ import { residentsMockData } from "../../../mocks/residents";
 
 const columnTypes: ColumnInfoTypes[] = [
   {
+    header: "ID Number",
+    key: "residentId",
+  },
+  {
     header: "Room #",
     key: "roomNumber",
   },
   {
-    header: "Departure Date",
-    key: "departureDate",
+    header: "Arrival Date",
+    key: "arrivalDate",
   },
   {
-    header: "ID Number",
-    key: "residentId",
+    header: "Departure Date",
+    key: "departureDate",
   },
   {
     header: "Email",
