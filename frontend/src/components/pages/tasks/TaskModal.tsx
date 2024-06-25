@@ -15,10 +15,6 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { TbTrash } from "react-icons/tb";
-import dayjs, { Dayjs } from 'dayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/de';
 
 import ModalContainer from "../../common/ModalContainer";
@@ -121,9 +117,7 @@ const DateInput = ({
   setRecurrenceFrequency,
   submitPressed,
 }: {
-  // dueDate: Dayjs | null;
   dueDate: string;
-  // setDueDate: React.Dispatch<React.SetStateAction<Dayjs | null>>;
   setDueDate: React.Dispatch<React.SetStateAction<string>>;
   dueTime: string;
   setDueTime: React.Dispatch<React.SetStateAction<string>>;
@@ -133,11 +127,6 @@ const DateInput = ({
   setRecurrenceFrequency: React.Dispatch<React.SetStateAction<string>>;
   submitPressed: boolean;
 }) => {
-  // const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  // const [selectedDate, setSelectedDate] = React.useState<Dayjs | null>(dayjs().startOf('day'));
-
-  const [calendarIsOpen, setCalendarIsOpen] = useState(false);
-
   return(
   <Flex flexDir="column" flex="1">
     <FormControl isRequired>
@@ -145,52 +134,7 @@ const DateInput = ({
         Due Date
       </FormLabel>
       <Flex flexDir="column">
-        <Flex flexDir="row">
-            {/* date starts */}
-          {/* <Input
-            variant="primary"
-            mb={3}
-            borderColor={submitPressed && !dueDate ? "red.error" : "gray.300"}
-            boxShadow={
-              submitPressed && !dueDate ? "0 0 2px red.error" : "none"
-            }
-            type="date"
-            value={dueDate}
-            width="200px"
-            onChange={(e) => setDueDate(e.target.value)}
-          /> */}
-          {/* <div>
-            <DatePicker 
-              onChange={(date) => {
-                setSelectedDate(date as Date | null);
-                setCalendarIsOpen(false);
-              }}
-              isOpen={calendarIsOpen}
-              value={selectedDate}
-              format="MMM dd, y" 
-              // shouldOpenCalendar={({ reason }) => reason !== 'focus'}
-              // format="yyyy-MM-dd" 
-              // calendarIcon={null}
-              // clearIcon={null}
-              required
-              closeCalendar
-              // shouldOpenCalendar={() => false}
-            />
-          </div> */}
-          {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-            <DatePicker />
-            <DatePicker
-              label="Date Picker"
-              format="LL"
-              value={dueDate}
-              defaultValue={dayjs('2022-04-17')}
-              onChange={
-                (date) => {
-                  setDueDate(date);
-                }
-              }
-            />          
-          </LocalizationProvider> */}
+        <Flex flexDir="row">  
 
           <Input
             variant="primary"
@@ -226,18 +170,7 @@ const DateInput = ({
               </option>
             ))}
           </Select>
-          {/* <Input
-            variant="primary"
-            mb={3}
-            borderColor={submitPressed && !dueTime ? "red.error" : "gray.300"}
-            boxShadow={
-              submitPressed && !dueTime ? "0 0 2px red.error" : "none"
-            }
-            type="time"
-            value={dueTime}
-            width="200px"
-            onChange={(e) => setDueTime(e.target.value)}
-          /> */}
+          
         </Flex>
         <Flex alignItems="center">
           <Checkbox
@@ -270,7 +203,6 @@ const DateInput = ({
 const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  // const [dueDate, setDueDate] = useState<Dayjs | null>(dayjs().startOf('day'));
   const [dueDate, setDueDate] = useState("");
   const [dueTime, setDueTime] = useState("");
   const [isAllDay, setIsAllDay] = useState(false);
@@ -290,7 +222,6 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const resetFormState = () => {
     setTitle("");
     setLocation("");
-    // setDueDate(dayjs().startOf('day'));
     setDueDate("");
     setDueTime("");
     setIsAllDay(false);
@@ -308,16 +239,14 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       setMarillacBucks(`$${numberValue}`);
     }
   };
-  
+
+  // delete task api stuff
+  const handleDelete = () => { 
+    
+  }
 
   return (
-    <ModalContainer title="" isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Flex justifyContent="space-between" paddingTop="0px">
-        <Text fontWeight="500" fontSize="20">Edit Chore</Text>
-        <Button variant="cancel" onClick={() => {}}>
-          <TbTrash style={{ color: "#E30000" }} /><span style={{ color: "#E30000" }}>&nbsp;Delete</span>
-        </Button>
-      </Flex>
+    <ModalContainer title="Edit Chore" isOpen={isOpen} setIsOpen={setIsOpen} onDelete={handleDelete}>
       <Flex flexDir="column" gap="20px">
         <FormField
           label="Task Name"
