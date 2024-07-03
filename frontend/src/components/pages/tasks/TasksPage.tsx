@@ -42,7 +42,10 @@ const TasksPage = (): React.ReactElement => {
 
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
+  const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
   const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
+
+  const [taskFilter, setTaskFilter] = useState<string>("");
 
   useEffect(() => {
     // TODO: Fetch the task data from the API instead of using mock data
@@ -54,17 +57,31 @@ const TasksPage = (): React.ReactElement => {
   }, []);
 
   useEffect(() => {
+    if (taskFilter === "") {
+      setTaskData(storedTaskData);
+    } else {
+      setTaskData(
+        storedTaskData.filter(
+          (task) =>
+            typeof task.title === "string" &&
+            task.title.toLowerCase().includes(taskFilter.toLowerCase()),
+        ),
+      );
+    }
+  }, [taskFilter, storedTaskData, taskData]);
+
+  useEffect(() => {
     if (taskType === "REQUIRED") {
-      setTaskData(requiredTasksMockData);
+      setStoredTaskData(requiredTasksMockData);
       setTaskDataColumns(tasksColumnTypes);
     } else if (taskType === "OPTIONAL") {
-      setTaskData(optionalTasksMockData);
+      setStoredTaskData(optionalTasksMockData);
       setTaskDataColumns(tasksColumnTypes);
     } else if (taskType === "CUSTOM") {
-      setTaskData(customTasksMockData);
+      setStoredTaskData(customTasksMockData);
       setTaskDataColumns(customTasksColumnTypes);
     } else if (taskType === "CHORE") {
-      setTaskData(choreTasksMockData);
+      setStoredTaskData(choreTasksMockData);
       setTaskDataColumns(choreTasksColumnTypes);
     }
   }, [taskType]);
@@ -110,7 +127,11 @@ const TasksPage = (): React.ReactElement => {
             <InputLeftElement pointerEvents="none">
               <Icon as={Search} color="gray.300" />
             </InputLeftElement>
-            <Input placeholder="Search" />
+            .
+            <Input
+              placeholder="Search"
+              onChange={(e) => setTaskFilter(e.target.value)}
+            />
           </InputGroup>
           <Button
             variant="primary"
