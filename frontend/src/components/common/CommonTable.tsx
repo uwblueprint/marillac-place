@@ -17,6 +17,8 @@ import {
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
+import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 
 type TableTypes = string | number | boolean | Date;
 
@@ -34,6 +36,10 @@ type Props = {
   isSelectable?: boolean;
 };
 
+type SortState = {
+  [key: string]: boolean;
+};
+
 const CommonTable = ({
   columnInfo,
   data,
@@ -44,6 +50,7 @@ const CommonTable = ({
   const [checked, setChecked] = useState(data.map(() => false));
   const [page, setPage] = useState(1);
   const [pageArray, setPageArray] = useState<number[]>([]);
+  const [sortingColumn, setSortingColumn] = useState<SortState>({});
 
   useEffect(() => {
     return Math.ceil(data.length / maxResults) >= 5
@@ -55,6 +62,22 @@ const CommonTable = ({
           ),
         );
   }, [data, maxResults]);
+
+  // sorting the columns by ascending and descending order based on column indicated
+  const sortColumn = (column: string) => {
+    const newSortingColumn = { ...sortingColumn };
+    newSortingColumn[column] =
+      newSortingColumn[column] === undefined ? true : !newSortingColumn[column];
+    setSortingColumn(newSortingColumn);
+
+    const sortedData = data.sort((a, b) => {
+      if (newSortingColumn[column]) {
+        return a[column] > b[column] ? 1 : -1;
+      }
+      return a[column] < b[column] ? 1 : -1;
+    });
+    return sortedData;
+  };
 
   const checkedPage = checked.slice((page - 1) * maxResults, page * maxResults);
   const allChecked = checkedPage.every(Boolean);
@@ -127,9 +150,40 @@ const CommonTable = ({
                   />
                 </Th>
               ) : null}
-              {columnInfo.map((header, index) => {
-                return <Th key={index}>{header.header}</Th>;
-              })}
+              {columnInfo.map((header, index) => (
+                <Th key={index}>
+                  <Flex alignItems="center">
+                    {header.header}
+                    <Flex
+                      alignItems="center"
+                      flexDirection="column"
+                      paddingLeft="2.5px"
+                      onClick={() => {
+                        sortColumn(header.key);
+                      }}
+                    >
+                      <KeyboardArrowUpOutlinedIcon
+                        style={{
+                          height: "0.5em",
+                          cursor: "pointer",
+                          color:
+                            sortingColumn[header.key] === false
+                              ? "#c4c8d8"
+                              : "",
+                        }}
+                      />
+                      <KeyboardArrowDownOutlinedIcon
+                        style={{
+                          height: "0.5em",
+                          cursor: "pointer",
+                          color:
+                            sortingColumn[header.key] === true ? "#c4c8d8" : "",
+                        }}
+                      />
+                    </Flex>
+                  </Flex>
+                </Th>
+              ))}
               <Th />
             </Tr>
           </Thead>
