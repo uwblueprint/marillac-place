@@ -15,74 +15,14 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { TbTrash } from "react-icons/tb";
-import 'dayjs/locale/de';
 
 import ModalContainer from "../../common/ModalContainer";
+import FormField from "../../common/FormField";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
-const FormField = ({
-  label,
-  value,
-  type = "text",
-  onChange,
-  onBlur,
-  submitPressed,
-  required = false,
-  isPassword = false,
-  showPassword,
-  setShowPassword,
-}: {
-  label: string;
-  value: string;
-  type?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: () => void;
-  submitPressed: boolean;
-  required?: boolean;
-  isPassword?: boolean;
-  showPassword?: boolean;
-  setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
-}) => (
-  <Flex flexDir="column" flex="1">
-    <FormControl isRequired={required}>
-      <FormLabel mb="5px" color="gray.main" fontWeight="700">
-        {label}
-      </FormLabel>
-      <InputGroup>
-        <Input
-          variant="primary"
-          borderColor={submitPressed && !value ? "red.error" : "gray.300"}
-          boxShadow={submitPressed && !value ? "0 0 2px red.error" : "none"}
-          type={
-            isPassword && setShowPassword && !showPassword ? "password" : type
-          }
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-        />
-        {isPassword && setShowPassword && (
-          <InputRightElement h="34px">
-            <Button
-              onClick={() => setShowPassword(!showPassword)}
-              bg="transparent"
-              _hover={{ bg: "transparent" }}
-            >
-              {!showPassword ? (
-                <VisibilityIcon fontSize="small" />
-              ) : (
-                <VisibilityOffIcon fontSize="small" />
-              )}
-            </Button>
-          </InputRightElement>
-        )}
-      </InputGroup>
-    </FormControl>
-  </Flex>
-);
 
 const generateOptions = () => {
   const options = [];
@@ -177,6 +117,7 @@ const DateInput = ({
             w="200px"
             isChecked={isAllDay}
             onChange={(e) => setIsAllDay(e.target.checked)}
+            m={0}
           >
             All Day
           </Checkbox>
@@ -207,7 +148,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [dueTime, setDueTime] = useState("");
   const [isAllDay, setIsAllDay] = useState(false);
   const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
-  const [marillacBucks, setMarillacBucks] = useState('$ ');
+  const [marillacBucks, setMarillacBucks] = useState('');
 
   const [submitPressed, setSubmitPressed] = useState(false);
 
@@ -226,7 +167,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
     setDueTime("");
     setIsAllDay(false);
     setRecurrenceFrequency("");
-    setMarillacBucks("$");
+    setMarillacBucks("");
 
     setSubmitPressed(false);
   };
@@ -236,7 +177,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
     
     if (inputValue) {
       const numberValue = parseFloat(inputValue).toFixed(2);
-      setMarillacBucks(`$${numberValue}`);
+      setMarillacBucks(numberValue);
     }
   };
 
@@ -255,10 +196,12 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           submitPressed={submitPressed}
           required
         />
-        <FormLabel color="gray.main" fontWeight="700" mb={0} pb={0}>
-          Location
-        </FormLabel>
+
         <FormControl isRequired mt={0} pt={0}>
+          <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            Location
+          </FormLabel>
+        
           <Select
             variant="primary"
             value={location}
@@ -291,6 +234,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           onChange={(e) => setMarillacBucks(e.target.value)}
           onBlur={handleMoneyInput}
           submitPressed={submitPressed}
+          leftElement="$"
           required
         />
         <Flex justifyContent="flex-end">
