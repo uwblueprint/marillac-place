@@ -91,9 +91,9 @@ const App = (): React.ReactElement => {
                 <Route
                   path={Routes.TASKS_PAGE}
                   element={
-                    <PrivateRoute>
+                    // <PrivateRoute>
                       <TasksPage />
-                    </PrivateRoute>
+                    // </PrivateRoute>
                   }
                 />
                 <Route
@@ -107,17 +107,17 @@ const App = (): React.ReactElement => {
                 <Route
                   path={Routes.SCHEDULE_PAGE}
                   element={
-                    <PrivateRoute>
+                    // <PrivateRoute>
                       <SchedulePage />
-                    </PrivateRoute>
+                    // </PrivateRoute>
                   }
                 />
                 <Route
                   path={Routes.RESIDENTS_PAGE}
                   element={
-                    <PrivateRoute>
+                    // <PrivateRoute>
                       <ResidentsPage />
-                    </PrivateRoute>
+                    // </PrivateRoute>
                   }
                 />
                 <Route

@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
 
+import SideBar from "../../common/SideBar";
+
 import {
   TaskType,
   Task,
@@ -70,64 +72,67 @@ const TasksPage = (): React.ReactElement => {
   }, [taskType]);
 
   return (
-    <Flex flexDir="column" flexGrow={1}>
-      <Tabs variant="horizontal" h="30px" mb={6}>
-        <TabList pl={6}>
-          <Tab
-            onClick={() => {
-              setTaskType("REQUIRED");
-            }}
-          >
-            Required
-          </Tab>
-          <Tab
-            onClick={() => {
-              setTaskType("OPTIONAL");
-            }}
-          >
-            Optional
-          </Tab>
-          <Tab
-            onClick={() => {
-              setTaskType("CUSTOM");
-            }}
-          >
-            Custom
-          </Tab>
-          <Tab
-            onClick={() => {
-              setTaskType("CHORE");
-            }}
-          >
-            Chores
-          </Tab>
-        </TabList>
-      </Tabs>
+    <Flex>
+      <SideBar />
+      <Flex flexDir="column" flexGrow={1}>
+        <Tabs variant="horizontal" h="30px" mb={6}>
+          <TabList pl={6}>
+            <Tab
+              onClick={() => {
+                setTaskType("REQUIRED");
+              }}
+            >
+              Required
+            </Tab>
+            <Tab
+              onClick={() => {
+                setTaskType("OPTIONAL");
+              }}
+            >
+              Optional
+            </Tab>
+            <Tab
+              onClick={() => {
+                setTaskType("CUSTOM");
+              }}
+            >
+              Custom
+            </Tab>
+            <Tab
+              onClick={() => {
+                setTaskType("CHORE");
+              }}
+            >
+              Chores
+            </Tab>
+          </TabList>
+        </Tabs>
 
-      <Flex flexDir="column" flexGrow={1} p="20px">
-        <Flex justifyContent="space-between" p="10px">
-          <InputGroup w="30%">
-            <InputLeftElement pointerEvents="none">
-              <Icon as={Search} color="gray.300" />
-            </InputLeftElement>
-            <Input placeholder="Search" />
-          </InputGroup>
-          <Button
-            variant="primary"
-            leftIcon={<Icon as={Add} color="white" />}
-            size="sm"
-            onClick={() => {}}
-          >
-            {taskType === "CHORE" ? "Add Chore" : "Add Task"}
-          </Button>
+        <Flex flexDir="column" flexGrow={1} p="20px">
+          <Flex justifyContent="space-between" p="10px">
+            <InputGroup w="30%">
+              <InputLeftElement pointerEvents="none">
+                <Icon as={Search} color="gray.300" />
+              </InputLeftElement>
+              <Input placeholder="Search" />
+            </InputGroup>
+            <Button
+              variant="primary"
+              leftIcon={<Icon as={Add} color="white" />}
+              size="sm"
+              onClick={() => {}}
+            >
+              {taskType === "CHORE" ? "Add Chore" : "Add Task"}
+            </Button>
+          </Flex>
+
+          <CommonTable
+            data={taskData}
+            columnInfo={taskDataColumns}
+            maxResults={8}
+            onEdit={() => {}}
+          />
         </Flex>
-
-        <CommonTable
-          data={taskData}
-          columnInfo={taskDataColumns}
-          maxResults={8}
-          onEdit={() => {}}
-        />
       </Flex>
     </Flex>
   );
