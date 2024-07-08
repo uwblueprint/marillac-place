@@ -13,68 +13,12 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import ModalContainer from "../../common/ModalContainer";
+import FormField from "../../common/FormField";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
-const FormField = ({
-  label,
-  value,
-  type = "text",
-  onChange,
-  submitPressed,
-  required = false,
-  isPassword = false,
-  showPassword,
-  setShowPassword,
-}: {
-  label: string;
-  value: string;
-  type?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  submitPressed: boolean;
-  required?: boolean;
-  isPassword?: boolean;
-  showPassword?: boolean;
-  setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
-}) => (
-  <Flex flexDir="column" flex="1">
-    <FormControl isRequired={required}>
-      <FormLabel mb="5px" color="gray.main" fontWeight="700">
-        {label}
-      </FormLabel>
-      <InputGroup>
-        <Input
-          variant="primary"
-          borderColor={submitPressed && !value ? "red.error" : "gray.300"}
-          boxShadow={submitPressed && !value ? "0 0 2px red.error" : "none"}
-          type={
-            isPassword && setShowPassword && !showPassword ? "password" : type
-          }
-          value={value}
-          onChange={onChange}
-        />
-        {isPassword && setShowPassword && (
-          <InputRightElement h="34px">
-            <Button
-              onClick={() => setShowPassword(!showPassword)}
-              bg="transparent"
-              _hover={{ bg: "transparent" }}
-            >
-              {!showPassword ? (
-                <VisibilityIcon fontSize="small" />
-              ) : (
-                <VisibilityOffIcon fontSize="small" />
-              )}
-            </Button>
-          </InputRightElement>
-        )}
-      </InputGroup>
-    </FormControl>
-  </Flex>
-);
 
 const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [firstName, setFirstName] = useState("");
