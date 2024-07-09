@@ -37,7 +37,7 @@ type Props = {
 };
 
 type SortState = {
-  [key: string]: boolean;
+  [key: string]: "asc" | "desc" | null;
 };
 
 const CommonTable = ({
@@ -51,6 +51,8 @@ const CommonTable = ({
   const [page, setPage] = useState(1);
   const [pageArray, setPageArray] = useState<number[]>([]);
   const [sortingColumn, setSortingColumn] = useState<SortState>({});
+  const [originalData, setOriginalData] = useState(data);
+  const [sortedData, setSortedData] = useState(data);
 
   useEffect(() => {
     return Math.ceil(data.length / maxResults) >= 5
@@ -63,20 +65,40 @@ const CommonTable = ({
         );
   }, [data, maxResults]);
 
-  // sorting the columns by ascending and descending order based on column indicated
-  const sortColumn = (column: string) => {
-    const newSortingColumn = { ...sortingColumn };
-    newSortingColumn[column] =
-      newSortingColumn[column] === undefined ? true : !newSortingColumn[column];
-    setSortingColumn(newSortingColumn);
+  useEffect(() => {
+    setOriginalData(data);
+    setSortedData(data);
+  }, [data]);
 
-    const sortedData = data.sort((a, b) => {
-      if (newSortingColumn[column]) {
+  // sorting the columns by ascending and descending order based on column indicated
+  const sortColumn = (column: string, direction: "asc" | "desc" | null) => {
+    let newDirection = direction;
+  
+    // Check if the current sorting state is already set to the direction being clicked
+    if (sortingColumn[column] === direction) {
+      newDirection = null;
+    }
+  
+    // Reset the sorting direction of all other columns
+    const newSortingColumn: SortState = {};
+    columnInfo.forEach(col => {
+      newSortingColumn[col.key] = col.key === column ? newDirection : null;
+    });
+
+    setSortingColumn(newSortingColumn);
+  
+    if (newDirection === null) {
+      setSortedData(originalData);
+      return;
+    }
+  
+    const sorted = [...originalData].sort((a, b) => {
+      if (newDirection === "asc") {
         return a[column] > b[column] ? 1 : -1;
       }
       return a[column] < b[column] ? 1 : -1;
     });
-    return sortedData;
+    setSortedData(sorted);
   };
 
   const checkedPage = checked.slice((page - 1) * maxResults, page * maxResults);
@@ -158,26 +180,25 @@ const CommonTable = ({
                       alignItems="center"
                       flexDirection="column"
                       paddingLeft="2.5px"
-                      onClick={() => {
-                        sortColumn(header.key);
-                      }}
                     >
                       <KeyboardArrowUpOutlinedIcon
                         style={{
                           height: "0.5em",
                           cursor: "pointer",
-                          color:
-                            sortingColumn[header.key] === false
-                              ? "#c4c8d8"
-                              : "",
+                          color: sortingColumn[header.key] === "asc" ? "" : "#c4c8d8",
+                        }}
+                        onClick={() => {
+                          sortColumn(header.key, "asc");
                         }}
                       />
                       <KeyboardArrowDownOutlinedIcon
                         style={{
                           height: "0.5em",
                           cursor: "pointer",
-                          color:
-                            sortingColumn[header.key] === true ? "#c4c8d8" : "",
+                          color: sortingColumn[header.key] === "desc" ? "" : "#c4c8d8",
+                        }}
+                        onClick={() => {
+                          sortColumn(header.key, "desc");
                         }}
                       />
                     </Flex>
@@ -188,7 +209,7 @@ const CommonTable = ({
             </Tr>
           </Thead>
           <Tbody>
-            {data
+            {sortedData
               .slice((page - 1) * maxResults, page * maxResults)
               .map((row, index) => {
                 return (
