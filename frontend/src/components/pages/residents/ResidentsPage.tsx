@@ -49,8 +49,6 @@ const ResidentsPage = (): React.ReactElement => {
   }, []);
 
   return (
-    <Flex>
-      <SideBar />
     <Flex flexDir="column" flexGrow={1} p="20px">
       <Flex justifyContent="space-between" p="10px">
         <InputGroup w="30%">
@@ -74,7 +72,6 @@ const ResidentsPage = (): React.ReactElement => {
         onEdit={() => {}}
       />
       <ResidentModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
-    </Flex>
     </Flex>
   );
 };
