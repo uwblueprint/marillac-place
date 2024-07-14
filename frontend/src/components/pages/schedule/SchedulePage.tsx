@@ -21,8 +21,6 @@ import {
   CalendarMonth
 } from '@mui/icons-material';
 
-import SideBar from "../../common/SideBar";
-
 import {
   ScheduleType,
 } from "../../../types/ScheduleTypes";

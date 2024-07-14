@@ -12,8 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
 
-import SideBar from "../../common/SideBar";
-
+import TaskModal from "./TaskModal";
 import {
   TaskType,
   Task,
@@ -41,10 +40,14 @@ const TasksPage = (): React.ReactElement => {
   const [optionalTasks, setOptionalTasks] = useState<Task[]>([]);
   const [customTasks, setCustomTasks] = useState<CustomTask[]>([]);
   const [choreTasks, setChoreTasks] = useState<ChoreTask[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
+  const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
   const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
+
+  const [taskFilter, setTaskFilter] = useState<string>("");
 
   useEffect(() => {
     // TODO: Fetch the task data from the API instead of using mock data
@@ -56,17 +59,31 @@ const TasksPage = (): React.ReactElement => {
   }, []);
 
   useEffect(() => {
+    if (taskFilter === "") {
+      setTaskData(storedTaskData);
+    } else {
+      setTaskData(
+        storedTaskData.filter(
+          (task) =>
+            typeof task.title === "string" &&
+            task.title.toLowerCase().includes(taskFilter.toLowerCase()),
+        ),
+      );
+    }
+  }, [taskFilter, storedTaskData, taskData]);
+
+  useEffect(() => {
     if (taskType === "REQUIRED") {
-      setTaskData(requiredTasksMockData);
+      setStoredTaskData(requiredTasksMockData);
       setTaskDataColumns(tasksColumnTypes);
     } else if (taskType === "OPTIONAL") {
-      setTaskData(optionalTasksMockData);
+      setStoredTaskData(optionalTasksMockData);
       setTaskDataColumns(tasksColumnTypes);
     } else if (taskType === "CUSTOM") {
-      setTaskData(customTasksMockData);
+      setStoredTaskData(customTasksMockData);
       setTaskDataColumns(customTasksColumnTypes);
     } else if (taskType === "CHORE") {
-      setTaskData(choreTasksMockData);
+      setStoredTaskData(choreTasksMockData);
       setTaskDataColumns(choreTasksColumnTypes);
     }
   }, [taskType]);
@@ -108,34 +125,38 @@ const TasksPage = (): React.ReactElement => {
           </TabList>
         </Tabs>
 
-        <Flex flexDir="column" flexGrow={1} p="20px">
-          <Flex justifyContent="space-between" p="10px">
-            <InputGroup w="30%">
-              <InputLeftElement pointerEvents="none">
-                <Icon as={Search} color="gray.300" />
-              </InputLeftElement>
-              <Input placeholder="Search" />
-            </InputGroup>
-            <Button
-              variant="primary"
-              leftIcon={<Icon as={Add} color="white" />}
-              size="sm"
-              onClick={() => {}}
-            >
-              {taskType === "CHORE" ? "Add Chore" : "Add Task"}
-            </Button>
-          </Flex>
-
-          <CommonTable
-            data={taskData}
-            columnInfo={taskDataColumns}
-            maxResults={8}
-            onEdit={() => {}}
-          />
+      <Flex flexDir="column" flexGrow={1} p="20px">
+        <Flex justifyContent="space-between" p="10px">
+          <InputGroup w="30%">
+            <InputLeftElement pointerEvents="none">
+              <Icon as={Search} color="gray.300" />
+            </InputLeftElement>
+            .
+            <Input
+              placeholder="Search"
+              onChange={(e) => setTaskFilter(e.target.value)}
+            />
+          </InputGroup>
+          <Button
+            variant="primary"
+            leftIcon={<Icon as={Add} color="white" />}
+            size="sm"
+            onClick={() => {}}
+          >
+            {taskType === "CHORE" ? "Add Chore" : "Add Task"}
+          </Button>
         </Flex>
+
+        <CommonTable
+          data={taskData}
+          columnInfo={taskDataColumns}
+          maxResults={8}
+          onEdit={() => {setIsModalOpen(true);}}
+        />
+        <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       </Flex>
     </Flex>
   );
 };
-
+ 
 export default TasksPage;
