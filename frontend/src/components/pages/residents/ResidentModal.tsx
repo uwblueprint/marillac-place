@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import {
   Button,
-  Input,
   Textarea,
   Flex,
   FormControl,
   FormLabel,
-  InputRightElement,
-  InputGroup,
 } from "@chakra-ui/react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";

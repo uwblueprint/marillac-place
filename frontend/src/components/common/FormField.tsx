@@ -2,15 +2,12 @@ import React from "react";
 import {
   Button,
   Input,
-  Select,
   Flex,
   FormControl,
   FormLabel,
   InputRightElement,
   InputGroup,
   InputLeftElement,
-  Checkbox,
-  Container,
 } from "@chakra-ui/react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -28,7 +25,7 @@ const FormField = ({
   isPassword = false,
   showPassword,
   setShowPassword,
-  leftElement
+  leftElement,
 }: {
   label: string;
   value: string;
@@ -49,15 +46,25 @@ const FormField = ({
         {label}
       </FormLabel>
       <InputGroup>
-        {leftElement && <InputLeftElement height='34px' pointerEvents='none' color='black'>
-          <Flex>{leftElement}</Flex>
-        </InputLeftElement>}
+        {leftElement && (
+          <InputLeftElement height="34px" pointerEvents="none" color="black">
+            <Flex>{leftElement}</Flex>
+          </InputLeftElement>
+        )}
 
         <Input
           variant="primary"
           placeholder=""
-          borderColor={error || (submitPressed && !value && required)? "red.error" : "gray.300"}
-          boxShadow={error || (submitPressed && !value && required)? "0 0 2px red.error" : "none"}
+          borderColor={
+            error || (submitPressed && !value && required)
+              ? "red.error"
+              : "gray.300"
+          }
+          boxShadow={
+            error || (submitPressed && !value && required)
+              ? "0 0 2px red.error"
+              : "none"
+          }
           type={
             isPassword && setShowPassword && !showPassword ? "password" : type
           }

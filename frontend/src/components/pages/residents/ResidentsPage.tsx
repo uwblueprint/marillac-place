@@ -33,7 +33,7 @@ const columnTypes: ColumnInfoTypes[] = [
   {
     header: "Departure Date",
     key: "departureDate",
-  }
+  },
 ];
 
 const ResidentsPage = (): React.ReactElement => {
@@ -82,18 +82,18 @@ const ResidentsPage = (): React.ReactElement => {
         onEdit={handleResidentEdit}
       />
 
-      <ResidentModal 
-        isOpen={isModalOpen === "add"} 
-        setIsOpen={() => setIsModalOpen("none")} 
-        />
+      <ResidentModal
+        isOpen={isModalOpen === "add"}
+        setIsOpen={() => setIsModalOpen("none")}
+      />
 
       {residentEditInfo && (
-        <ResidentEditModal 
-          residentInfo={residentEditInfo} 
-          isOpen={isModalOpen === "edit"} 
+        <ResidentEditModal
+          residentInfo={residentEditInfo}
+          isOpen={isModalOpen === "edit"}
           setIsOpen={() => setIsModalOpen("none")}
           onCloseEditModal={handleResidentSubmitEdit}
-          />
+        />
       )}
     </Flex>
   );

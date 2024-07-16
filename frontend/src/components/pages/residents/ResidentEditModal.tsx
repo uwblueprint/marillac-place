@@ -1,29 +1,15 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Text,
-  Input,
-  Textarea,
-  Flex,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  InputRightElement,
-  InputGroup,
-} from "@chakra-ui/react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-
+import React, { useState } from "react";
+import { Button, Text, Flex } from "@chakra-ui/react";
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
 
 export type ResidentEditInfo = {
-    residentId: number;
-    roomNumber: number;
-    arrivalDate: string;
-    departureDate: string;
-    password: string;
-}
+  residentId: number;
+  roomNumber: number;
+  arrivalDate: string;
+  departureDate: string;
+  password: string;
+};
 
 type Props = {
   isOpen: boolean;
@@ -32,19 +18,29 @@ type Props = {
   onCloseEditModal: any;
 };
 
-const ResidentEditModal = ({ isOpen, setIsOpen, residentInfo, onCloseEditModal}: Props): React.ReactElement => {
+const ResidentEditModal = ({
+  isOpen,
+  setIsOpen,
+  residentInfo,
+  onCloseEditModal,
+}: Props): React.ReactElement => {
   const [residentId, setResidentId] = useState(residentInfo.residentId);
   const [password, setPassword] = useState(residentInfo.password);
   const [arrivalDate, setArrivalDate] = useState(residentInfo.arrivalDate);
-  const [departureDate, setDepartureDate] = useState(residentInfo.departureDate);
+  const [departureDate, setDepartureDate] = useState(
+    residentInfo.departureDate,
+  );
 
   const [roomNumber, setRoomNumber] = useState(residentInfo.roomNumber);
 
   const [showPassword, setShowPassword] = useState(false);
   const [submitPressed, setSubmitPressed] = useState(false);
 
-  const [roomList, setRoomList] = useState([1,2,3,4,5,6,7,8]);
-  const [residentIdList, setresidentIdList] = useState<Array<number>>([12345,67890,23456,78901,34567,89012,45678,56789,12346,67891,23457,78902,34568,89013,45679,90124,56790,12347,67892]);
+  const [roomList, setRoomList] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+  const [residentIdList, setresidentIdList] = useState<Array<number>>([
+    12345, 67890, 23456, 78901, 34567, 89012, 45678, 56789, 12346, 67891, 23457,
+    78902, 34568, 89013, 45679, 90124, 56790, 12347, 67892,
+  ]);
 
   const [invalidRoomNumber, setInvalidRoomNumber] = useState("");
   const [invalidResidentId, setInvalidResidentId] = useState("");
@@ -54,29 +50,30 @@ const ResidentEditModal = ({ isOpen, setIsOpen, residentInfo, onCloseEditModal}:
 
   const handleSubmit = () => {
     setSubmitPressed(true);
-    if(roomNumber !== residentInfo.roomNumber && roomNumber in roomList) {
-      setInvalidRoomNumber("This room number is already taken. Note: To set this field, please remove the room number from the Resident who occupies the room.") 
+    if (roomNumber !== residentInfo.roomNumber && roomNumber in roomList) {
+      setInvalidRoomNumber(
+        "This room number is already taken. Note: To set this field, please remove the room number from the Resident who occupies the room.",
+      );
     } else {
       setInvalidRoomNumber("");
     }
-    
-    if(residentId !== residentInfo.residentId && residentIdList.includes(residentId)) {
+
+    if (
+      residentId !== residentInfo.residentId &&
+      residentIdList.includes(residentId)
+    ) {
       setInvalidResidentId("This ID number is already taken.");
     } else {
       setInvalidResidentId("");
     }
-    
-    if(invalidRoomNumber || invalidResidentId) {
+
+    if (invalidRoomNumber || invalidResidentId) {
       return;
     }
 
     // TODO: API POST to Residents/Participants
 
-    if (
-      !residentId ||
-      !password ||
-      !arrivalDate
-    ) {
+    if (!residentId || !password || !arrivalDate) {
       // TODO: Add error handling
     }
     // TODO: API call to add resident
@@ -100,35 +97,28 @@ const ResidentEditModal = ({ isOpen, setIsOpen, residentInfo, onCloseEditModal}:
             error={invalidResidentId !== ""}
           />
           {invalidResidentId && (
-            <Text 
-              mb="5px" 
-              mt="1px" 
-              color="red.error" 
-              fontWeight="700"> 
-                {invalidResidentId} 
+            <Text mb="5px" mt="1px" color="red.error" fontWeight="700">
+              {invalidResidentId}
             </Text>
-            )}
+          )}
         </Flex>
-        
+
         <Flex flexDir="column">
-          <FormField 
-              label="Room Number (Optional)"
-              value={roomNumber.toString()}
-              type="number"
-              onChange={(e) => setRoomNumber(parseInt(e.target.value, 10))}
-              submitPressed={submitPressed}
-              error={invalidRoomNumber !== ""}
-            />
-            {invalidRoomNumber && (
-              <Text 
-                mb="5px" 
-                color="red.error" 
-                fontWeight="700">
-                  {invalidRoomNumber}
-              </Text>
-            )}
+          <FormField
+            label="Room Number (Optional)"
+            value={roomNumber.toString()}
+            type="number"
+            onChange={(e) => setRoomNumber(parseInt(e.target.value, 10))}
+            submitPressed={submitPressed}
+            error={invalidRoomNumber !== ""}
+          />
+          {invalidRoomNumber && (
+            <Text mb="5px" color="red.error" fontWeight="700">
+              {invalidRoomNumber}
+            </Text>
+          )}
         </Flex>
-        
+
         <Flex gap="20px">
           <FormField
             label="Arrival Date"
@@ -147,16 +137,16 @@ const ResidentEditModal = ({ isOpen, setIsOpen, residentInfo, onCloseEditModal}:
           />
         </Flex>
         <Flex>
-        <FormField
-          label="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          submitPressed={submitPressed}
-          required
-          isPassword
-          showPassword={showPassword}
-          setShowPassword={setShowPassword}
-        />
+          <FormField
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            submitPressed={submitPressed}
+            required
+            isPassword
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+          />
         </Flex>
 
         <Flex justifyContent="flex-end">
