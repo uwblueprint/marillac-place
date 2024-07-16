@@ -40,9 +40,12 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
   return (
     <Tab
       borderRadius="8px"
-      justifyContent="stretch"
       textAlign="left"
+      justifyContent="stretch"
       onClick={handleClick}
+      pt={1}
+      pb={1}
+      mt={5}
       _selected={{ bg: "purple.main", color: "white" }}
       _hover={{ bg: "purple.100", color: "purple.main" }}
     >
@@ -54,8 +57,8 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
 const SideBar: React.FC = () => {
   const navigate = useNavigate();
   // const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
-  const { setAuthenticatedUser } = useContext(AuthContext); // Temp 
-  const authenticatedUser = mockAuthenticatedUser; // Temp 
+  const { setAuthenticatedUser } = useContext(AuthContext); // Temp
+  const authenticatedUser = mockAuthenticatedUser; // Temp
   const [logout] = useMutation<{ logout: null }>(LOGOUT);
 
   const onLogOutClick = async () => {
@@ -64,17 +67,18 @@ const SideBar: React.FC = () => {
       logout,
     );
     if (success) {
-      setAuthenticatedUser(null); 
+      setAuthenticatedUser(null);
     }
   };
 
   const pages = [
-    { label: "Announcements", route: Routes.HOME_PAGE },
-    { label: "Tasks", route: Routes.TASKS_PAGE },
-    { label: "Approvals", route: Routes.APPROVALS_PAGE },
+    { label: "Home", route: Routes.HOME_PAGE }, // NEED NEW HOME PAGE
     { label: "Schedule", route: Routes.SCHEDULE_PAGE },
-    { label: "Residents", route: Routes.RESIDENTS_PAGE },
-    { label: "Insights", route: Routes.INSIGHTS_PAGE },
+    { label: "Announcements", route: Routes.HOME_PAGE }, // NEED NEW NAME
+    { label: "Approvals", route: Routes.APPROVALS_PAGE },
+    { label: "Participants", route: Routes.RESIDENTS_PAGE }, // RESIDENTS/PARTICIPANTS
+    { label: "Task List", route: Routes.TASKS_PAGE },
+    // { label: "Insights", route: Routes.INSIGHTS_PAGE },
   ];
 
   const currentPage = pages.findIndex(
@@ -85,7 +89,7 @@ const SideBar: React.FC = () => {
     base: "100%",
     md: "50%",
     lg: "30%",
-    xl: "20%",
+    xl: "18.5%",
   });
 
   return (
@@ -100,7 +104,7 @@ const SideBar: React.FC = () => {
       >
         <Flex flexDir="column" alignItems="space-between" h="100%">
           <Flex flexDir="column" h="100%">
-            <Flex flexDir="column" alignItems="flex-start" w="100%" pb={20}>
+            <Flex flexDir="column" alignItems="flex-start" w="100%">
               <Box
                 border="solid"
                 borderColor="gray.300"
@@ -110,7 +114,7 @@ const SideBar: React.FC = () => {
                 w="100%"
               >
                 <Flex align="center">
-                  <Avatar name="Jane Doe" src="https://bit.ly/2k1H1t6" />
+                  {/* <Avatar name="Jane Doe" src="https://bit.ly/2k1H1t6" /> */}
                   <Flex flexDir="column" ml={4}>
                     <Heading size="sm" mt={4}>
                       {authenticatedUser?.firstName}{" "}
@@ -126,7 +130,7 @@ const SideBar: React.FC = () => {
               defaultIndex={currentPage}
               orientation="vertical"
               variant="solid-rounded"
-              size="lg"
+              size="md"
             >
               <TabList w="100%">
                 {pages.map((page) => (
@@ -140,8 +144,8 @@ const SideBar: React.FC = () => {
             </Tabs>
           </Flex>
 
-          <Flex alignItems="center" justifyContent="center">
-            <Logo width="50%" />
+          <Flex alignItems="center">
+            <Logo width="75%" />
             <Button variant="primary" ml={3} onClick={onLogOutClick}>
               Logout
             </Button>
