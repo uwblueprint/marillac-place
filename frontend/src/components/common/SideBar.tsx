@@ -19,6 +19,14 @@ import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import AuthContext from "../../contexts/AuthContext";
 
+const mockAuthenticatedUser = {
+  id: "1",
+  type: "STAFF",
+  email: "janedoe@gmail.com",
+  firstName: "Jane",
+  lastName: "Doe",
+};
+
 const LOGOUT = gql`
   mutation Logout($userId: ID!) {
     logout(userId: $userId)
@@ -45,7 +53,9 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
 
 const SideBar: React.FC = () => {
   const navigate = useNavigate();
-  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  // const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const { setAuthenticatedUser } = useContext(AuthContext); // Temp 
+  const authenticatedUser = mockAuthenticatedUser; // Temp 
   const [logout] = useMutation<{ logout: null }>(LOGOUT);
 
   const onLogOutClick = async () => {
@@ -54,7 +64,7 @@ const SideBar: React.FC = () => {
       logout,
     );
     if (success) {
-      setAuthenticatedUser(null);
+      setAuthenticatedUser(null); 
     }
   };
 
