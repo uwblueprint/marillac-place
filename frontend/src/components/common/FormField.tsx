@@ -24,6 +24,7 @@ const FormField = ({
   onBlur,
   submitPressed,
   required = false,
+  error = false,
   isPassword = false,
   showPassword,
   setShowPassword,
@@ -36,6 +37,7 @@ const FormField = ({
   onBlur?: () => void;
   submitPressed: boolean;
   required?: boolean;
+  error?: boolean;
   isPassword?: boolean;
   showPassword?: boolean;
   setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -53,9 +55,9 @@ const FormField = ({
 
         <Input
           variant="primary"
-          placeholder='Enter amount'
-          borderColor={submitPressed && !value ? "red.error" : "gray.300"}
-          boxShadow={submitPressed && !value ? "0 0 2px red.error" : "none"}
+          placeholder=""
+          borderColor={error || (submitPressed && !value && required)? "red.error" : "gray.300"}
+          boxShadow={error || (submitPressed && !value && required)? "0 0 2px red.error" : "none"}
           type={
             isPassword && setShowPassword && !showPassword ? "password" : type
           }
