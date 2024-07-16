@@ -37,7 +37,7 @@ type Props = {
 };
 
 type SortState = {
-  [key: string]: "asc" | "desc" | null;
+  [key: string]: number;
 };
 
 const CommonTable = ({
@@ -71,40 +71,48 @@ const CommonTable = ({
   }, [data]);
 
   // sorting the columns by ascending and descending order based on column indicated
-  const sortColumn = (column: string, direction: "asc" | "desc" | null) => {
-    let newDirection = direction;
-  
-    // Check if the current sorting state is already set to the direction being clicked
-    if (sortingColumn[column] === direction) {
-      newDirection = null;
-    }
-  
-    // Reset the sorting direction of all other columns
+  const sortColumn = (column: string) => {
     const newSortingColumn: SortState = {};
-    columnInfo.forEach(col => {
-      newSortingColumn[col.key] = col.key === column ? newDirection : null;
+    columnInfo.forEach((col) => {
+      newSortingColumn[col.key] =
+        col.key === column ? sortingColumn[column] : 0;
     });
 
-    setSortingColumn(newSortingColumn);
-  
-    if (newDirection === null) {
+    // increment column sorting state
+    sortingColumn[column] = sortingColumn[column]
+      ? sortingColumn[column] + 1
+      : 1;
+
+    // if at the end, go back to 0
+    if (sortingColumn[column] === 3) {
+      setSortingColumn({ ...sortingColumn, [column]: 0 });
       setSortedData(originalData);
       return;
     }
-  
+    setSortingColumn({
+      ...newSortingColumn,
+      [column]: sortingColumn[column],
+    });
+
+    // apply sorting based on which sorting state the column's in
     const sorted = [...originalData].sort((a, b) => {
-      if (newDirection === "asc") {
+      if (sortingColumn[column] === 1) {
         return a[column] > b[column] ? 1 : -1;
       }
-      return a[column] < b[column] ? 1 : -1;
+      if (sortingColumn[column] === 2) {
+        return a[column] < b[column] ? 1 : -1;
+      }
+      return 0;
     });
     setSortedData(sorted);
   };
 
+  // constants for pagination UI
   const checkedPage = checked.slice((page - 1) * maxResults, page * maxResults);
   const allChecked = checkedPage.every(Boolean);
   const isIndeterminate = checkedPage.some(Boolean) && !allChecked;
 
+  // pagination functions
   const leftPaginate = () => {
     if (page > 1) setPage(page - 1);
     if (pageArray[0] > 1 && pageArray.length === 5) {
@@ -185,20 +193,22 @@ const CommonTable = ({
                         style={{
                           height: "0.5em",
                           cursor: "pointer",
-                          color: sortingColumn[header.key] === "asc" ? "" : "#c4c8d8",
+                          color:
+                            sortingColumn[header.key] === 1 ? "" : "#c4c8d8",
                         }}
                         onClick={() => {
-                          sortColumn(header.key, "asc");
+                          sortColumn(header.key);
                         }}
                       />
                       <KeyboardArrowDownOutlinedIcon
                         style={{
                           height: "0.5em",
                           cursor: "pointer",
-                          color: sortingColumn[header.key] === "desc" ? "" : "#c4c8d8",
+                          color:
+                            sortingColumn[header.key] === 2 ? "" : "#c4c8d8",
                         }}
                         onClick={() => {
-                          sortColumn(header.key, "desc");
+                          sortColumn(header.key);
                         }}
                       />
                     </Flex>
