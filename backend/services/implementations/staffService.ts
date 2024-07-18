@@ -6,12 +6,21 @@ import IStaffService, {
   CreateStaffDTO,
   UpdateStaffDTO,
 } from "../interfaces/staffService";
+import IUserService from "../interfaces/userService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
 const Logger = logger(__filename);
 
 class StaffService implements IStaffService {
+  userService: IUserService;
+
+  constructor(
+    userService: IUserService,
+  ) {
+    this.userService = userService;
+  }
+
   async addStaff(staff: CreateStaffDTO): Promise<StaffDTO> {
     try {
       const firebaseUser = await firebaseAdmin.auth().createUser({
@@ -228,6 +237,40 @@ class StaffService implements IStaffService {
     } catch (error: unknown) {
       Logger.error(
         `Failed to get staff by IDs. IDs = ${userIds} because ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+  }
+
+  async setStaffInactive(userId: number): Promise<StaffDTO>{
+    try {
+      const staff = await prisma.staff.findUnique({
+        where: { userId: userId },
+        include: { user: true },
+      });
+
+      if(!staff) {
+        throw new Error(`Staff with userId ${userId} not found.`);
+      }
+
+      this.userService.setUserInactive(userId);
+
+      return {
+        userId: staff.userId,
+        isAdmin: staff.isAdmin,
+        email: staff.user.email,
+        phoneNumber: staff.user.phoneNumber,
+        firstName: staff.user.firstName,
+        lastName: staff.user.lastName,
+        displayName: staff.user.displayName,
+        profilePictureURL: staff.user.profilePictureURL,
+        isActive: false,
+      };
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to set staff inactive. IDs = ${userId} because ${getErrorMessage(
           error,
         )}`,
       );

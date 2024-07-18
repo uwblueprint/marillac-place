@@ -76,6 +76,28 @@ class UserService implements IUserService {
       throw error;
     }
   }
+
+  async setUserInactive(userId: number): Promise<void> {
+    try {
+      const user = await prisma.user.update({
+        where: { 
+          id: userId,
+        },
+        data: {
+          isActive: false
+        }
+      });
+
+      if (!user) {
+        throw new Error(`User with userId ${userId} not found.`);
+      }
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to set user inactive. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
 }
 
 export default UserService;
