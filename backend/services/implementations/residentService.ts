@@ -16,9 +16,7 @@ const Logger = logger(__filename);
 class ResidentService implements IResidentService {
   userService: IUserService;
 
-  constructor(
-    userService: IUserService,
-  ) {
+  constructor(userService: IUserService) {
     this.userService = userService;
   }
 
@@ -378,11 +376,11 @@ class ResidentService implements IResidentService {
   async setResidentInactive(userId: number): Promise<ResidentDTO> {
     try {
       const resident = await prisma.resident.findUnique({
-        where: {userId: userId,},
+        where: { userId },
         include: { user: true },
       });
 
-      if(!resident) {
+      if (!resident) {
         throw new Error(`Resident with ${userId} not found.`);
       }
 
@@ -406,7 +404,9 @@ class ResidentService implements IResidentService {
         isActive: false,
       };
     } catch (error: unknown) {
-      Logger.error(`Failed to set resident inactive. Reason = ${getErrorMessage(error)}`);
+      Logger.error(
+        `Failed to set resident inactive. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }

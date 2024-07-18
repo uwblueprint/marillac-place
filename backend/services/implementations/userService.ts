@@ -80,12 +80,12 @@ class UserService implements IUserService {
   async setUserInactive(userId: number): Promise<void> {
     try {
       const user = await prisma.user.update({
-        where: { 
+        where: {
           id: userId,
         },
         data: {
-          isActive: false
-        }
+          isActive: false,
+        },
       });
 
       if (!user) {

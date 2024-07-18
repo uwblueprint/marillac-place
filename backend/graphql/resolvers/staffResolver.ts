@@ -57,9 +57,11 @@ const staffResolvers = {
       _parent: undefined,
       { userId }: { userId: string },
     ): Promise<StaffDTO> => {
-      const updatedStaff = await staffService.setStaffInactive(parseInt(userId, 10));
+      const updatedStaff = await staffService.setStaffInactive(
+        parseInt(userId, 10),
+      );
       return updatedStaff;
-    }
+    },
   },
 };
 

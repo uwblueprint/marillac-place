@@ -15,9 +15,7 @@ const Logger = logger(__filename);
 class StaffService implements IStaffService {
   userService: IUserService;
 
-  constructor(
-    userService: IUserService,
-  ) {
+  constructor(userService: IUserService) {
     this.userService = userService;
   }
 
@@ -244,14 +242,14 @@ class StaffService implements IStaffService {
     }
   }
 
-  async setStaffInactive(userId: number): Promise<StaffDTO>{
+  async setStaffInactive(userId: number): Promise<StaffDTO> {
     try {
       const staff = await prisma.staff.findUnique({
-        where: { userId: userId },
+        where: { userId },
         include: { user: true },
       });
 
-      if(!staff) {
+      if (!staff) {
         throw new Error(`Staff with userId ${userId} not found.`);
       }
 

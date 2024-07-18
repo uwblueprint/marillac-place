@@ -72,11 +72,13 @@ const residentResolvers = {
     },
     setResidentInactive: async (
       _parent: undefined,
-      {userId}:{userId: string},
-    ) : Promise<ResidentDTO> => {
-      const updatedResident = await residentService.setResidentInactive(parseInt(userId,10));
+      { userId }: { userId: string },
+    ): Promise<ResidentDTO> => {
+      const updatedResident = await residentService.setResidentInactive(
+        parseInt(userId, 10),
+      );
       return updatedResident;
-    }
+    },
   },
 };
 
