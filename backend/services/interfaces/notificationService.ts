@@ -31,7 +31,7 @@ interface INotificationService {
    */
   getNotificationById(id: number): Promise<NotificationReceivedDTO>;
 
-    /**
+  /**
    * Get all notifications
    * @returns a NotificationDTO[] with all notifications
    * @throws Error if retrieval fails

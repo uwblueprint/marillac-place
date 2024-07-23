@@ -58,7 +58,7 @@ class NotificationService implements INotificationService {
 
   async getAllNotifications(): Promise<NotificationReceivedDTO[]> {
     try {
-      const allNotifications = await prisma.notificationReceived.findMany()
+      const allNotifications = await prisma.notificationReceived.findMany();
 
       return allNotifications.map((notificationReceived) => {
         return {
@@ -67,7 +67,7 @@ class NotificationService implements INotificationService {
           recipientId: notificationReceived.recipientId,
           seen: notificationReceived.seen,
         };
-      }); 
+      });
     } catch (error: unknown) {
       Logger.error(
         `Failed to get all notifications. Reason = ${getErrorMessage(error)}`,
