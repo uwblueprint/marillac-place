@@ -101,29 +101,14 @@ const SideBar: React.FC = () => {
         pt={10}
         pr={4}
         pl={4}
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
       >
         <Flex flexDir="column" alignItems="space-between" h="100%">
           <Flex flexDir="column" h="100%">
-            <Flex flexDir="column" alignItems="flex-start" w="100%">
-              <Box
-                border="solid"
-                borderColor="gray.300"
-                borderRadius="8px"
-                pl={2}
-                pr={2}
-                w="100%"
-              >
-                <Flex align="center">
-                  {/* <Avatar name="Jane Doe" src="https://bit.ly/2k1H1t6" /> */}
-                  <Flex flexDir="column" ml={4}>
-                    <Heading size="sm" mt={4}>
-                      {authenticatedUser?.firstName}{" "}
-                      {authenticatedUser?.lastName}
-                    </Heading>
-                    <Text>Administrative Staff</Text>
-                  </Flex>
-                </Flex>
-              </Box>
+            <Flex flexDir="column" alignItems="column" maxW="250px" ml={4}>
+              <Logo width="75%" />
             </Flex>
 
             <Tabs
@@ -144,10 +129,17 @@ const SideBar: React.FC = () => {
             </Tabs>
           </Flex>
 
-          <Flex alignItems="center">
-            <Logo width="75%" />
-            <Button variant="primary" ml={3} onClick={onLogOutClick}>
-              Logout
+          <Flex flexDirection="column" alignItems="left" mb={10}>
+          <Text fontWeight="bold" mb="3">Administrative Staff</Text>
+            
+            <Button 
+              variant="outline"
+              borderColor="gray.400"
+              color="red.500"
+              onClick={onLogOutClick}
+              width="fit-content"
+            >
+              Sign out
             </Button>
           </Flex>
         </Flex>
