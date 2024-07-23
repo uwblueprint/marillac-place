@@ -6,7 +6,7 @@ import {
   Text,
   Input,
   Button,
-  Icon,
+  Icon, 
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
@@ -18,6 +18,7 @@ const HomePage = (): React.ReactElement => {
   const [numberPosts, setNumberPosts] = useState(0);
   const [viewAll, setViewAll] = useState(false);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [recentAnnouncements, setRecentAnnouncements] = useState<Announcement[]>([]);
 
   useEffect(() => {
     // Combine all announcements into a single array
@@ -32,8 +33,17 @@ const HomePage = (): React.ReactElement => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
-    setAnnouncements(sortedAnnouncements);
-    setNumberPosts(sortedAnnouncements.length);
+    // // Filter announcements from the current week
+    // const oneWeekAgo = new Date();
+    // oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    // const thisWeeksAnnouncements = sortedAnnouncements.filter(
+    //   (announcement) => new Date(announcement.createdAt) >= oneWeekAgo
+    // );
+    const thisWeeksAnnouncements = sortedAnnouncements
+
+    setAnnouncements(thisWeeksAnnouncements);
+    setRecentAnnouncements(thisWeeksAnnouncements.slice(0, 3));
+    setNumberPosts(thisWeeksAnnouncements.length);
   }, []);
 
 
@@ -49,18 +59,27 @@ const HomePage = (): React.ReactElement => {
         justifyContent="space-between"
         borderRadius="8px"
       >
-        <Box>
-          <Text fontSize="md" as="b">
-            Announcements
+        <Flex justifyContent="space-between" alignItems="center" mb={2}>
+        <Flex alignItems="center">
+            <Text fontSize="md" as="b">
+              Announcements
+            </Text>
+            <Text ml={4}>
+              {numberPosts === 0
+                ? "You're all caught up!"
+                : `${numberPosts} new posts today`}
+            </Text>
+          </Flex>
+        
+        <Text
+          onClick={() => setViewAll(!viewAll)}
+          color="blue.500"
+          cursor="pointer"
+        >
+          {viewAll ? "View less" : "View all"}
           </Text>
-          <Text>
-            {numberPosts === 0
-              ? "You're all caught up!"
-              : `${numberPosts} new posts today`}
-          </Text>
-        </Box>
-        <Text onClick={() => setViewAll(!viewAll)}>View all</Text>
-        {announcements.map((announcement, index) => (
+        </Flex>
+          {(viewAll ? announcements : recentAnnouncements).map((announcement, index) => (
           <AnnouncementNotification
             author={announcement.author}
             message={announcement.message}
