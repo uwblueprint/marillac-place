@@ -56,6 +56,26 @@ class NotificationService implements INotificationService {
     }
   }
 
+  async getAllNotifications(): Promise<NotificationReceivedDTO[]> {
+    try {
+      const allNotifications = await prisma.notificationReceived.findMany()
+
+      return allNotifications.map((notificationReceived) => {
+        return {
+          id: notificationReceived.id,
+          notificationId: notificationReceived.notificationId,
+          recipientId: notificationReceived.recipientId,
+          seen: notificationReceived.seen,
+        };
+      }); 
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get all notifications. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
   async sendNotification(
     authorId: number,
     title: string,

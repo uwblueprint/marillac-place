@@ -31,6 +31,13 @@ interface INotificationService {
    */
   getNotificationById(id: number): Promise<NotificationReceivedDTO>;
 
+    /**
+   * Get all notifications
+   * @returns a NotificationDTO[] with all notifications
+   * @throws Error if retrieval fails
+   */
+  getAllNotifications(): Promise<NotificationReceivedDTO[]>;
+
   /**
    * Post a notification to a specified resident or residents
    * @param authorId user id of author of notification

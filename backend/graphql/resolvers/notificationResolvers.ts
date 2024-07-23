@@ -25,6 +25,11 @@ const notificationResolvers = {
     ): Promise<NotificationReceivedDTO> => {
       return notificationService.getNotificationById(Number(id));
     },
+    getAllNotifications: async (
+      _parent: undefined,
+    ): Promise<NotificationReceivedDTO[]> => {
+      return notificationService.getAllNotifications();
+    },
   },
   Mutation: {
     sendNotification: async (
