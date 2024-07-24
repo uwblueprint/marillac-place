@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   Button,
@@ -16,6 +16,14 @@ import FormField from "../../common/FormField";
 type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  taskType: string;
+  rowData: RowData;
+};
+
+type RowData = {
+  title: string;
+  dueDate: string;
+  creditValue: string;
 };
 
 const generateOptions = () => {
@@ -134,7 +142,7 @@ const DateInput = ({
   );
 };
 
-const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
+const TaskModal = ({ isOpen, setIsOpen, taskType, rowData}: Props): React.ReactElement => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -142,8 +150,20 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [isAllDay, setIsAllDay] = useState(false);
   const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
   const [marillacBucks, setMarillacBucks] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
 
   const [submitPressed, setSubmitPressed] = useState(false);
+
+  
+  useEffect(() => {
+    if (rowData) {
+      setTitle(rowData.title);
+      setDueDate(rowData.dueDate);
+      const { creditValue, ...rest } = rowData;
+      const modifiedCreditValue = creditValue.length > 1 ? creditValue.slice(1) : '';
+      setMarillacBucks(modifiedCreditValue);
+    }
+  }, [rowData]);
 
   const handleSubmit = () => {
     setSubmitPressed(true);
@@ -151,18 +171,31 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       // TODO: Add error handling
     }
     // TODO: API call to add task
+    const newTask = { ...rowData };
+    newTask.title = title;
+    newTask.dueDate = dueDate;
+    newTask.creditValue = `$${marillacBucks}`;
   };
 
-  const resetFormState = () => {
-    setTitle("");
-    setLocation("");
-    setDueDate("");
-    setDueTime("");
-    setIsAllDay(false);
-    setRecurrenceFrequency("");
-    setMarillacBucks("");
+  // const resetFormState = () => {
+  //   setTitle("");
+  //   setLocation("");
+  //   setDueDate("");
+  //   setDueTime("");
+  //   setIsAllDay(false);
+  //   setRecurrenceFrequency("");
+  //   setMarillacBucks("");
+  //   setSubmitPressed(false);
+  // };
 
-    setSubmitPressed(false);
+  const resetFormState = () => {
+    if (rowData) {
+      setTitle(rowData.title);
+      setDueDate(rowData.dueDate);
+      const { creditValue, ...rest } = rowData;
+      const modifiedCreditValue = creditValue.length > 1 ? creditValue.slice(1) : '';
+      setMarillacBucks(modifiedCreditValue);
+    }
   };
 
   const handleMoneyInput = () => {
@@ -177,16 +210,28 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   // delete task api stuff
   const handleDelete = () => {};
 
+  useEffect(() => {
+    if (taskType === "REQUIRED") {
+      setModalTitle("Edit Required Task");
+    } else if (taskType === "OPTIONAL") {
+      setModalTitle("Edit Optional Task");
+    } else if (taskType === "CUSTOM") {
+      setModalTitle("Edit Custom Task");
+    } else if (taskType === "CHORE") {
+      setModalTitle("Edit Chore");
+    }
+  }, [taskType]);
+
   return (
     <ModalContainer 
-      title="Edit Chore"
+      title={modalTitle}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       onDelete={handleDelete}
     >
       <Flex flexDir="column" gap="20px">
         <FormField
-          label="Task Name"
+          label="Name"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           submitPressed={submitPressed}

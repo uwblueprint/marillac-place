@@ -45,6 +45,7 @@ const TasksPage = (): React.ReactElement => {
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
   const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
+  const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
   useEffect(() => {
     // TODO: Fetch the task data from the API instead of using mock data
@@ -128,9 +129,12 @@ const TasksPage = (): React.ReactElement => {
           data={taskData}
           columnInfo={taskDataColumns}
           maxResults={8}
-          onEdit={() => {setIsModalOpen(true);}}
+          onEdit={(row: any) => {
+            setIsModalOpen(true);
+            setSelectedRowData(row);
+          }}
         />
-        <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+        <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} taskType={taskType} rowData={selectedRowData} />
       </Flex>
     </Flex>
   );
