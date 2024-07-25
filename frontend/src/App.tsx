@@ -28,6 +28,7 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import LoginPage from "./components/auth/LoginPage";
 import SignupPage from "./components/auth/SignupPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
+import HomePage from "./components/pages/home/HomePage";
 import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import TasksPage from "./components/pages/tasks/TasksPage";
 import ApprovalsPage from "./components/pages/approvals/ApprovalsPage";
@@ -82,6 +83,14 @@ const App = (): React.ReactElement => {
                 />
                 <Route
                   path={Routes.HOME_PAGE}
+                  element={
+                    <PrivateRoute>
+                      <HomePage />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path={Routes.ANNOUNCEMENTS_PAGE}
                   element={
                     <PrivateRoute>
                       <AnnouncementsPage />
