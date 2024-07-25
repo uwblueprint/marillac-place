@@ -22,6 +22,7 @@ type Props = {
 
 type RowData = {
   title: string;
+  location: string;
   dueDate: string;
   creditValue: string;
 };
@@ -159,6 +160,7 @@ const TaskModal = ({ isOpen, setIsOpen, taskType, rowData}: Props): React.ReactE
     if (rowData) {
       setTitle(rowData.title);
       setDueDate(rowData.dueDate);
+      setLocation(rowData.location);
       const { creditValue, ...rest } = rowData;
       const modifiedCreditValue = creditValue.length > 1 ? creditValue.slice(1) : '';
       setMarillacBucks(modifiedCreditValue);
@@ -173,6 +175,7 @@ const TaskModal = ({ isOpen, setIsOpen, taskType, rowData}: Props): React.ReactE
     // TODO: API call to add task
     const newTask = { ...rowData };
     newTask.title = title;
+    newTask.location = location;
     newTask.dueDate = dueDate;
     newTask.creditValue = `$${marillacBucks}`;
   };
@@ -192,6 +195,7 @@ const TaskModal = ({ isOpen, setIsOpen, taskType, rowData}: Props): React.ReactE
     if (rowData) {
       setTitle(rowData.title);
       setDueDate(rowData.dueDate);
+      setLocation(rowData.location);
       const { creditValue, ...rest } = rowData;
       const modifiedCreditValue = creditValue.length > 1 ? creditValue.slice(1) : '';
       setMarillacBucks(modifiedCreditValue);
@@ -249,12 +253,11 @@ const TaskModal = ({ isOpen, setIsOpen, taskType, rowData}: Props): React.ReactE
             onChange={(e) => setLocation(e.target.value)}
             border="solid"
             borderWidth="2px"
-            borderColor="gray.300"
             height="34px"
           >
-            <option value="kitchen">Kitchen</option>
-            <option value="livingRoom">Living Room</option>
-            <option value="washroom">Washroom</option>
+            <option value="Kitchen">Kitchen</option>
+            <option value="Living Room">Living Room</option>
+            <option value="Bathroom">Bathroom</option>
           </Select>
         </FormControl>
         <DateInput
@@ -291,7 +294,9 @@ const TaskModal = ({ isOpen, setIsOpen, taskType, rowData}: Props): React.ReactE
           </Button>
           <Button variant="primary" onClick={ () => {
               handleSubmit();
-              setIsOpen(false);
+              if (title && dueDate && dueTime && marillacBucks) {
+                setIsOpen(false);
+              } 
             }}
             >
             Save
