@@ -41,6 +41,8 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
     <Tab
       borderRadius="8px"
       textAlign="left"
+      fontWeight={500}
+      color="black"
       justifyContent="stretch"
       onClick={handleClick}
       pt={1}
@@ -85,20 +87,21 @@ const SideBar: React.FC = () => {
     (page) => page.route === window.location.pathname,
   );
 
-  const sidebarWidth = useBreakpointValue({
-    base: "100%",
-    md: "50%",
-    lg: "30%",
-    xl: "18.5%",
-  });
+  // const sidebarWidth = useBreakpointValue({
+  //   base: "100%",
+  //   md: "100%",
+  //   lg: "10%",
+  //   xl: "10%",
+  // });
 
   return (
-    <Flex flexDir="column" w={sidebarWidth}>
+    <Flex flexDir="column" w="100%" maxW="240px">
       <Box
         h="100vh"
         borderRight="solid"
         borderRightColor="gray.300"
-        pt={10}
+        pt={6}
+        pb={6}
         pr={4}
         pl={4}
         display="flex"
@@ -107,8 +110,8 @@ const SideBar: React.FC = () => {
       >
         <Flex flexDir="column" alignItems="space-between" h="100%">
           <Flex flexDir="column" h="100%">
-            <Flex flexDir="column" alignItems="column" maxW="250px" ml={4}>
-              <Logo width="75%" />
+            <Flex flexDir="column" alignItems="column" maxW="250px">
+              <Logo width="85%" />
             </Flex>
 
             <Tabs
@@ -129,14 +132,16 @@ const SideBar: React.FC = () => {
             </Tabs>
           </Flex>
 
-          <Flex flexDirection="column" alignItems="left" mb={10}>
-          <Text fontWeight="bold" mb="3">Administrative Staff</Text>
+          <Flex flexDirection="column" alignItems="left">
+            <Text whiteSpace="nowrap" fontWeight="bold" mb="3">Administrative Staff</Text>
             
             <Button 
-              variant="outline"
-              borderColor="gray.400"
-              color="red.500"
+              variant="del"
               onClick={onLogOutClick}
+              border="1px solid #C5C8D8"
+              color="#B21D2F"
+              fontWeight={400}
+              fontSize="14px"
               width="fit-content"
             >
               Sign out
