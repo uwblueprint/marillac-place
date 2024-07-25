@@ -25,7 +25,19 @@ const HomePage = (): React.ReactElement => {
     // let combinedAnnouncements: Announcement[] = [];
     // const announcementKeys: Array<keyof typeof announcementsMockData> =
     //   Object.keys(announcementsMockData);
-    const combinedAnnouncements = Object.values(announcementsMockData).flat();
+    const combinedAnnouncements: Announcement[] = [];
+    for (const room in announcementsMockData) {
+      const roomKey = room as keyof typeof announcementsMockData;
+      for (const announcement of announcementsMockData[roomKey]) {
+        const newAnnouncement: Announcement = {
+          room: room,
+          author: announcement.author,
+          message: announcement.message,
+          createdAt: announcement.createdAt
+        };
+        combinedAnnouncements.push(newAnnouncement);
+      }
+    }
 
     // Sort the announcements by createdAt in descending order
     const sortedAnnouncements = combinedAnnouncements.sort(
@@ -60,11 +72,11 @@ const HomePage = (): React.ReactElement => {
         borderRadius="8px"
       >
         <Flex justifyContent="space-between" alignItems="center" mb={2}>
-        <Flex alignItems="center">
+        <Flex alignItems="baseline">
             <Text fontSize="md" as="b">
               Announcements
             </Text>
-            <Text ml={4}>
+            <Text ml={6} fontSize="smaller">
               {numberPosts === 0
                 ? "You're all caught up!"
                 : `${numberPosts} new posts today`}
@@ -73,7 +85,6 @@ const HomePage = (): React.ReactElement => {
         
         <Text
           onClick={() => setViewAll(!viewAll)}
-          color="blue.500"
           cursor="pointer"
         >
           {viewAll ? "View less" : "View all"}
@@ -81,6 +92,7 @@ const HomePage = (): React.ReactElement => {
         </Flex>
           {(viewAll ? announcements : recentAnnouncements).map((announcement, index) => (
           <AnnouncementNotification
+            room={announcement.room}
             author={announcement.author}
             message={announcement.message}
             createdAt={announcement.createdAt}

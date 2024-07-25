@@ -1,13 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import moment from "moment";
-import { Box, Text, Flex, Icon } from "@chakra-ui/react";
+import { Box, Text, Flex, Icon, IconButton } from "@chakra-ui/react";
+import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 import {Announcement} from '../../../types/NotificationTypes';
 import { truncateMessage } from "../../../utils/StringUtils";
 
-const AnnouncementNotification = ({ author, message, createdAt }: Announcement): React.ReactElement => {
-    return (
+const AnnouncementNotification = ({ room, author, message, createdAt }: Announcement): React.ReactElement => {
+  const [showFullMessage, setShowFullMessage] = useState(false);
+  
+  return (
       <Box
       w="100%"
       p={3}
@@ -27,13 +30,22 @@ const AnnouncementNotification = ({ author, message, createdAt }: Announcement):
           <Flex flexDir="column" w="100%">
           <Flex alignItems="baseline" w="100%">
             <Text as="b" mr={4}>
-              {author}
+              {"Admin to Room ".concat(room)}
             </Text>
             <Text color="gray.500" fontSize="sm">
               posted at {moment(createdAt).format("h:mm a")}
             </Text>
           </Flex>
-          <Text mt={1}>{truncateMessage(message, 120)}</Text>
+          <Text
+            mt={1}>
+          {showFullMessage ? message : truncateMessage(message, 60)}
+          </Text>
+          <IconButton
+            aria-label="expand"
+            colorScheme="black"
+            onClick={() => setShowFullMessage(!showFullMessage)}
+            icon={showFullMessage ? <MdExpandLess /> : <MdExpandMore />}
+          />
         </Flex>
       </Flex>
     </Box>
