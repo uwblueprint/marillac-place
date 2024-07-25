@@ -18,7 +18,7 @@ function RoomGrid() {
   return (
     <Grid templateColumns="repeat(4, 1fr)" gap={2}>
       {rooms.map((room) => (
-        <Box key={room.id} p={4} borderWidth="2px" borderColor="grey.300" borderRadius="5px" w="238px" h="170px" bg="white">
+        <Box key={room.id} p={4} borderWidth="2px" borderColor="grey.300" borderRadius="5px" w="100%" h="100%" bg="white">
           <Text fontWeight="bold">{room.name}</Text>
           <Text>{room.info}</Text>
         </Box>
