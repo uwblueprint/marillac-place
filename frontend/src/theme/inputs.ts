@@ -13,7 +13,6 @@ const primaryInput = definePartsStyle({
     height: "34px",
     borderRadius: "8px",
     border: "2px solid #C5C8D8",
-    padding: "8px",
   },
 });
 

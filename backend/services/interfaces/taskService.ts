@@ -29,7 +29,7 @@ export interface InputTaskAssignedDTO {
   assignerId?: number;
   status: Status;
   startDate: Date;
-  endDate?: Date;
+  endDate: Date;
   recurrenceFrequency?: RecurrenceFrequency;
   comments?: string;
 }
@@ -41,7 +41,7 @@ export interface TaskAssignedDTO {
   assigneeId: number;
   status: Status;
   startDate: Date;
-  endDate: Date | null;
+  endDate: Date;
   recurrenceFrequency: RecurrenceFrequency | null;
   comments: string | null;
 }

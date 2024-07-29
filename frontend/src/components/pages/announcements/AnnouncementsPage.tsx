@@ -18,22 +18,24 @@ const AnnouncementsPage = (): React.ReactElement => {
   }, []);
 
   return (
-    <Flex flexDir="row" alignItems="flex-start" w="100%">
-      <AnnouncementsGroups
-        announcements={announcements}
-        setSelectedGroup={setSelectedGroup}
-        addingNewRoom={addingNewRoom}
-        setAddingNewRoom={setAddingNewRoom}
-        selectedRooms={selectedRooms}
-      />
-      <AnnouncementsView
-        announcements={announcements}
-        selectedGroup={selectedGroup}
-        addingNewRoom={addingNewRoom}
-        setAddingNewRoom={setAddingNewRoom}
-        selectedRooms={selectedRooms}
-        setSelectedRooms={setSelectedRooms}
-      />
+    <Flex flexDir="column" flexGrow={1}>
+      <Flex flexDir="row" alignItems="flex-start" w="100%">
+        <AnnouncementsGroups
+          announcements={announcements}
+          setSelectedGroup={setSelectedGroup}
+          addingNewRoom={addingNewRoom}
+          setAddingNewRoom={setAddingNewRoom}
+          selectedRooms={selectedRooms}
+        />
+        <AnnouncementsView
+          announcements={announcements}
+          selectedGroup={selectedGroup}
+          addingNewRoom={addingNewRoom}
+          setAddingNewRoom={setAddingNewRoom}
+          selectedRooms={selectedRooms}
+          setSelectedRooms={setSelectedRooms}
+        />
+      </Flex>
     </Flex>
   );
 };
