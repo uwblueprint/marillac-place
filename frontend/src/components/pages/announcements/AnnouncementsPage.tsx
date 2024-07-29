@@ -19,7 +19,7 @@ const AnnouncementsPage = (): React.ReactElement => {
 
   return (
     <Flex flexDir="column" flexGrow={1}>
-      <Flex flexDir="row" alignItems="flex-start" w="100%">
+      <Flex flexDir="row" alignItems="flex-start" w="100%" flexGrow={1}>
         <AnnouncementsGroups
           announcements={announcements}
           setSelectedGroup={setSelectedGroup}
