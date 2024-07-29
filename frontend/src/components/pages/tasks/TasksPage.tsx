@@ -46,6 +46,7 @@ const TasksPage = (): React.ReactElement => {
   const [taskData, setTaskData] = useState<TableData[]>([]);
   const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
   const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
+  const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
   const [taskFilter, setTaskFilter] = useState<string>("");
 
@@ -149,9 +150,12 @@ const TasksPage = (): React.ReactElement => {
           data={taskData}
           columnInfo={taskDataColumns}
           maxResults={8}
-          onEdit={() => {setIsModalOpen(true);}}
+          onEdit={(row: any) => {
+            setIsModalOpen(true);
+            setSelectedRowData(row);
+          }}
         />
-        <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+        <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} taskType={taskType} rowData={selectedRowData} />
       </Flex>
     </Flex>
   );
