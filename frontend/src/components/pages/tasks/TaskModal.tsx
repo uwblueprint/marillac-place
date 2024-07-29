@@ -178,7 +178,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const handleDelete = () => {};
 
   return (
-    <ModalContainer 
+    <ModalContainer
       title="Edit Chore"
       isOpen={isOpen}
       setIsOpen={setIsOpen}
@@ -197,7 +197,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
             Location
           </FormLabel>
-        
+
           <Select
             variant="primary"
             value={location}
@@ -244,11 +244,13 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           >
             Cancel
           </Button>
-          <Button variant="primary" onClick={ () => {
+          <Button
+            variant="primary"
+            onClick={() => {
               handleSubmit();
               setIsOpen(false);
             }}
-            >
+          >
             Save
           </Button>
         </Flex>

@@ -25,7 +25,11 @@ const ModalContainer = ({
   children,
 }: Props): React.ReactElement => {
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal
+      closeOnOverlayClick={false}
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
