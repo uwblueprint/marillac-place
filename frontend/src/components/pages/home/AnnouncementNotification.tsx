@@ -6,11 +6,9 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 import { Announcement } from "../../../types/NotificationTypes";
-import { truncateMessage } from "../../../utils/StringUtils";
 
 const AnnouncementNotification = ({
   room,
-  author,
   message,
   createdAt,
 }: Announcement): React.ReactElement => {

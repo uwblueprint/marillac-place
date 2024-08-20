@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Flex,
-  Box,
-  Heading,
-  Text,
-  Input,
-  Button,
-  Icon,
-  InputGroup,
-  InputLeftElement,
-} from "@chakra-ui/react";
+import { Flex, Box, Heading, Text } from "@chakra-ui/react";
 import { announcementsMockData } from "../../../mocks/notifications";
 import AnnouncementNotification from "./AnnouncementNotification";
 import { Announcement } from "../../../types/NotificationTypes";
@@ -36,7 +26,6 @@ const HomePage = (): React.ReactElement => {
         combinedAnnouncements.push(newAnnouncement);
       }
     });
-    console.log(combinedAnnouncements);
 
     const sortedAnnouncements = combinedAnnouncements.sort(
       (a, b) =>
