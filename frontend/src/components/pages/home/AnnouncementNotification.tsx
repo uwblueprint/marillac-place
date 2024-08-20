@@ -1,20 +1,23 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { Box, Text, Flex, Icon, IconButton } from "@chakra-ui/react";
-import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
-import {Announcement} from '../../../types/NotificationTypes';
+import { Announcement } from "../../../types/NotificationTypes";
 import { truncateMessage } from "../../../utils/StringUtils";
 
-const AnnouncementNotification = ({ room, author, message, createdAt }: Announcement): React.ReactElement => {
+const AnnouncementNotification = ({
+  room,
+  author,
+  message,
+  createdAt,
+}: Announcement): React.ReactElement => {
   const [showFullMessage, setShowFullMessage] = useState(false);
-  
+
   return (
-      <Box
-      w="100%"
-      p={3}
-    >
+    <Box w="100%" p={3}>
       <Flex alignItems="center">
         <Box
           borderRadius="full"
@@ -24,10 +27,12 @@ const AnnouncementNotification = ({ room, author, message, createdAt }: Announce
           mr={3}
         >
           <Icon
-            as={PersonOutlineOutlinedIcon} boxSize={10}
-            color="purple.main" />
-          </Box>
-          <Flex flexDir="column" w="100%">
+            as={PersonOutlineOutlinedIcon}
+            boxSize={10}
+            color="purple.main"
+          />
+        </Box>
+        <Flex flexDir="column" w="80%">
           <Flex alignItems="baseline" w="100%">
             <Text as="b" mr={4}>
               {"Admin to Room ".concat(room)}
@@ -36,20 +41,32 @@ const AnnouncementNotification = ({ room, author, message, createdAt }: Announce
               posted at {moment(createdAt).format("h:mm a")}
             </Text>
           </Flex>
-          <Text
-            mt={1}>
-          {showFullMessage ? message : truncateMessage(message, 60)}
-          </Text>
-          <IconButton
-            aria-label="expand"
-            colorScheme="black"
-            onClick={() => setShowFullMessage(!showFullMessage)}
-            icon={showFullMessage ? <MdExpandLess /> : <MdExpandMore />}
-          />
+          <Box w="80%">
+            {showFullMessage ? (
+              <Text mt={1}>{message}</Text>
+            ) : (
+              <Text
+                mt={1}
+                overflow="hidden"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+              >
+                {message}
+              </Text>
+            )}
+          </Box>
         </Flex>
+        <IconButton
+          aria-label="expand"
+          bg="white"
+          _hover={{ bg: "white" }}
+          onClick={() => setShowFullMessage(!showFullMessage)}
+          icon={showFullMessage ? <ChevronRightIcon /> : <ExpandLessIcon />}
+          size="md"
+        />
       </Flex>
     </Box>
-    );
-  };
-  
+  );
+};
+
 export default AnnouncementNotification;

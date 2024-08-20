@@ -6,7 +6,7 @@ import {
   Text,
   Input,
   Button,
-  Icon, 
+  Icon,
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
@@ -18,61 +18,55 @@ const HomePage = (): React.ReactElement => {
   const [numberPosts, setNumberPosts] = useState(0);
   const [viewAll, setViewAll] = useState(false);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [recentAnnouncements, setRecentAnnouncements] = useState<Announcement[]>([]);
+  const [recentAnnouncements, setRecentAnnouncements] = useState<
+    Announcement[]
+  >([]);
 
   useEffect(() => {
     // Combine all announcements into a single array
-    // let combinedAnnouncements: Announcement[] = [];
-    // const announcementKeys: Array<keyof typeof announcementsMockData> =
-    //   Object.keys(announcementsMockData);
     const combinedAnnouncements: Announcement[] = [];
-    for (const room in announcementsMockData) {
-      const roomKey = room as keyof typeof announcementsMockData;
-      for (const announcement of announcementsMockData[roomKey]) {
+    Object.entries(announcementsMockData).forEach(([key, value]) => {
+      for (let i = 0; i < value.length; i += 1) {
         const newAnnouncement: Announcement = {
-          room: room,
-          author: announcement.author,
-          message: announcement.message,
-          createdAt: announcement.createdAt
+          room: key,
+          author: value[i].author,
+          message: value[i].message,
+          createdAt: value[i].createdAt,
         };
         combinedAnnouncements.push(newAnnouncement);
       }
-    }
+    });
+    console.log(combinedAnnouncements);
 
-    // Sort the announcements by createdAt in descending order
     const sortedAnnouncements = combinedAnnouncements.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
-
-    // // Filter announcements from the current week
-    // const oneWeekAgo = new Date();
-    // oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    // const thisWeeksAnnouncements = sortedAnnouncements.filter(
-    //   (announcement) => new Date(announcement.createdAt) >= oneWeekAgo
-    // );
-    const thisWeeksAnnouncements = sortedAnnouncements
-
-    setAnnouncements(thisWeeksAnnouncements);
+    // Filter announcements from the current week
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    const thisWeeksAnnouncements = sortedAnnouncements.filter(
+      (announcement) => new Date(announcement.createdAt) >= oneWeekAgo,
+    );
+    setAnnouncements(combinedAnnouncements);
     setRecentAnnouncements(thisWeeksAnnouncements.slice(0, 3));
     setNumberPosts(thisWeeksAnnouncements.length);
   }, []);
 
-
-
   return (
-    <Flex flexDirection="column" alignItems="center" w="100%">
+    <Flex flexDirection="column" alignItems="center" w="80vw">
       <Box>
         <Heading>Home Page</Heading>
       </Box>
       <Box
         border="2px solid grey"
-        p="4"
+        p={6}
         justifyContent="space-between"
         borderRadius="8px"
+        w="75%"
       >
         <Flex justifyContent="space-between" alignItems="center" mb={2}>
-        <Flex alignItems="baseline">
+          <Flex alignItems="baseline">
             <Text fontSize="md" as="b">
               Announcements
             </Text>
@@ -82,23 +76,22 @@ const HomePage = (): React.ReactElement => {
                 : `${numberPosts} new posts today`}
             </Text>
           </Flex>
-        
-        <Text
-          onClick={() => setViewAll(!viewAll)}
-          cursor="pointer"
-        >
-          {viewAll ? "View less" : "View all"}
+
+          <Text onClick={() => setViewAll(!viewAll)} cursor="pointer">
+            {viewAll ? "View less" : "View all"}
           </Text>
         </Flex>
-          {(viewAll ? announcements : recentAnnouncements).map((announcement, index) => (
-          <AnnouncementNotification
-            room={announcement.room}
-            author={announcement.author}
-            message={announcement.message}
-            createdAt={announcement.createdAt}
-            key={index}
-          />
-        ))}
+        {(viewAll ? announcements : recentAnnouncements).map(
+          (announcement, index) => (
+            <AnnouncementNotification
+              room={announcement.room}
+              author={announcement.author}
+              message={announcement.message}
+              createdAt={announcement.createdAt}
+              key={index}
+            />
+          ),
+        )}
       </Box>
     </Flex>
   );

@@ -12,22 +12,19 @@ const AnnouncementsPage = (): React.ReactElement => {
 
   useEffect(() => {
     // TODO: Fetch announcements from API
-    const combinedGroupAnnouncements: GroupAnnouncements{key: string, value: Announcement[]} = {};
-    for (const room in announcementsMockData) {
-      const roomKey = room as keyof typeof announcementsMockData;
-      const tempGroupAnnouncements: Announcement[] = [];
-      for (const announcement of announcementsMockData[roomKey]) {
+    const combinedAnnouncements: Announcement[] = [];
+    Object.entries(announcementsMockData).forEach(([key, value]) => {
+      for (let i = 0; i < value.length; i += 1) {
         const newAnnouncement: Announcement = {
-          room: room,
-          author: announcement.author,
-          message: announcement.message,
-          createdAt: announcement.createdAt
+          room: key,
+          author: value[i].author,
+          message: value[i].message,
+          createdAt: value[i].createdAt,
         };
-        tempGroupAnnouncements.push(newAnnouncement);
+        combinedAnnouncements.push(newAnnouncement);
       }
-      combinedGroupAnnouncement[room] = tempGroupAnnouncements;
-    }
-    setAnnouncements(combinedGroupAnnouncements);
+    });
+
   }, []);
 
   return (
