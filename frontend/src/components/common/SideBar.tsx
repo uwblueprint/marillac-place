@@ -41,6 +41,8 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
     <Tab
       borderRadius="8px"
       textAlign="left"
+      fontWeight={500}
+      color="black"
       justifyContent="stretch"
       onClick={handleClick}
       pt={1}
@@ -75,7 +77,6 @@ const SideBar: React.FC = () => {
     { label: "Home", route: Routes.HOME_PAGE }, // NEED NEW HOME PAGE
     { label: "Schedule", route: Routes.SCHEDULE_PAGE },
     { label: "Announcements", route: Routes.HOME_PAGE }, // NEED NEW NAME
-    { label: "Approvals", route: Routes.APPROVALS_PAGE },
     { label: "Participants", route: Routes.RESIDENTS_PAGE }, // RESIDENTS/PARTICIPANTS
     { label: "Task List", route: Routes.TASKS_PAGE },
     // { label: "Insights", route: Routes.INSIGHTS_PAGE },
@@ -85,45 +86,31 @@ const SideBar: React.FC = () => {
     (page) => page.route === window.location.pathname,
   );
 
-  const sidebarWidth = useBreakpointValue({
-    base: "100%",
-    md: "50%",
-    lg: "30%",
-    xl: "18.5%",
-  });
+  // const sidebarWidth = useBreakpointValue({
+  //   base: "100%",
+  //   md: "100%",
+  //   lg: "10%",
+  //   xl: "10%",
+  // });
 
   return (
-    <Flex flexDir="column" w={sidebarWidth}>
+    <Flex flexDir="column" w="100%" maxW="240px">
       <Box
         h="100vh"
         borderRight="solid"
         borderRightColor="gray.300"
-        pt={10}
+        pt={6}
+        pb={6}
         pr={4}
         pl={4}
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
       >
         <Flex flexDir="column" alignItems="space-between" h="100%">
           <Flex flexDir="column" h="100%">
-            <Flex flexDir="column" alignItems="flex-start" w="100%">
-              <Box
-                border="solid"
-                borderColor="gray.300"
-                borderRadius="8px"
-                pl={2}
-                pr={2}
-                w="100%"
-              >
-                <Flex align="center">
-                  {/* <Avatar name="Jane Doe" src="https://bit.ly/2k1H1t6" /> */}
-                  <Flex flexDir="column" ml={4}>
-                    <Heading size="sm" mt={4}>
-                      {authenticatedUser?.firstName}{" "}
-                      {authenticatedUser?.lastName}
-                    </Heading>
-                    <Text>Administrative Staff</Text>
-                  </Flex>
-                </Flex>
-              </Box>
+            <Flex flexDir="column" alignItems="column" maxW="250px">
+              <Logo width="85%" />
             </Flex>
 
             <Tabs
@@ -144,10 +131,21 @@ const SideBar: React.FC = () => {
             </Tabs>
           </Flex>
 
-          <Flex alignItems="center">
-            <Logo width="75%" />
-            <Button variant="primary" ml={3} onClick={onLogOutClick}>
-              Logout
+          <Flex flexDirection="column" alignItems="left">
+            <Text whiteSpace="nowrap" fontWeight="bold" mb="3">
+              Administrative Staff
+            </Text>
+
+            <Button
+              variant="del"
+              onClick={onLogOutClick}
+              border="1px solid #C5C8D8"
+              color="#B21D2F"
+              fontWeight={400}
+              fontSize="14px"
+              width="fit-content"
+            >
+              Sign out
             </Button>
           </Flex>
         </Flex>
