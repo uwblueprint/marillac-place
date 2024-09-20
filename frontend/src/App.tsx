@@ -30,7 +30,6 @@ import SignupPage from "./components/auth/SignupPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import TasksPage from "./components/pages/tasks/TasksPage";
-import ApprovalsPage from "./components/pages/approvals/ApprovalsPage";
 import SchedulePage from "./components/pages/schedule/SchedulePage";
 import ResidentsPage from "./components/pages/residents/ResidentsPage";
 import InsightsPage from "./components/pages/insights/InsightsPage";
@@ -93,14 +92,6 @@ const App = (): React.ReactElement => {
                   element={
                     <PrivateRoute>
                       <TasksPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path={Routes.APPROVALS_PAGE}
-                  element={
-                    <PrivateRoute>
-                      <ApprovalsPage />
                     </PrivateRoute>
                   }
                 />

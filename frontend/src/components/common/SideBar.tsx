@@ -77,7 +77,6 @@ const SideBar: React.FC = () => {
     { label: "Home", route: Routes.HOME_PAGE }, // NEED NEW HOME PAGE
     { label: "Schedule", route: Routes.SCHEDULE_PAGE },
     { label: "Announcements", route: Routes.HOME_PAGE }, // NEED NEW NAME
-    { label: "Approvals", route: Routes.APPROVALS_PAGE },
     { label: "Participants", route: Routes.RESIDENTS_PAGE }, // RESIDENTS/PARTICIPANTS
     { label: "Task List", route: Routes.TASKS_PAGE },
     // { label: "Insights", route: Routes.INSIGHTS_PAGE },
@@ -133,9 +132,11 @@ const SideBar: React.FC = () => {
           </Flex>
 
           <Flex flexDirection="column" alignItems="left">
-            <Text whiteSpace="nowrap" fontWeight="bold" mb="3">Administrative Staff</Text>
-            
-            <Button 
+            <Text whiteSpace="nowrap" fontWeight="bold" mb="3">
+              Administrative Staff
+            </Text>
+
+            <Button
               variant="del"
               onClick={onLogOutClick}
               border="1px solid #C5C8D8"
