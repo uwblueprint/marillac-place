@@ -92,7 +92,7 @@ const App = (): React.ReactElement => {
                   path={Routes.ANNOUNCEMENTS_PAGE}
                   element={
                     <PrivateRoute>
-                      <HomePage />
+                      <AnnouncementsPage />
                     </PrivateRoute>
                   }
                 />
@@ -113,7 +113,7 @@ const App = (): React.ReactElement => {
                   }
                 />
                 <Route
-                  path={Routes.RESIDENTS_PAGE}
+                  path={Routes.PARTICIPANTS_PAGE}
                   element={
                     <PrivateRoute>
                       <ResidentsPage />

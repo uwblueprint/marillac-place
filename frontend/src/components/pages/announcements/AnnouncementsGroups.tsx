@@ -62,7 +62,10 @@ const GroupTab = ({
   isDraft: boolean;
   selectedRooms?: number[] | null;
 }) => {
-  const rooms = (selectedRooms && selectedRooms.length > 0)? selectedRooms: roomKey.split(",").map(Number);
+  const rooms =
+    selectedRooms && selectedRooms.length > 0
+      ? selectedRooms
+      : roomKey.split(",").map(Number);
 
   return (
     <Box
@@ -93,14 +96,22 @@ const GroupTab = ({
         </Box>
         <Flex flexDir="column" w="100%">
           <Flex justifyContent="space-between">
-            <Text as="b" color={isDraft ? 'gray.500' : 'black'}>{formatRooms(rooms)}</Text>
+            <Text as="b" color={isDraft ? "gray.500" : "black"}>
+              {formatRooms(rooms)}
+            </Text>
             <Text margin="0" color="gray.500">
-              {firstAnnouncement? moment(firstAnnouncement.createdAt).fromNow(): moment(Date.now()).fromNow()}
+              {firstAnnouncement
+                ? moment(firstAnnouncement.createdAt).fromNow()
+                : moment(Date.now()).fromNow()}
             </Text>
           </Flex>
-          
-          <Text marginBottom="0" marginTop="4px">{truncateMessage(firstAnnouncement? firstAnnouncement.message: "", 60)}</Text>
-          
+
+          <Text marginBottom="0" marginTop="4px">
+            {truncateMessage(
+              firstAnnouncement ? firstAnnouncement.message : "",
+              60,
+            )}
+          </Text>
         </Flex>
       </Flex>
     </Box>
@@ -113,7 +124,15 @@ const GroupList: React.FC<{
   addingNewRoom: boolean;
   setAddingNewRoom: React.Dispatch<React.SetStateAction<boolean>>;
   selectedRooms: number[];
-}> = ({ announcements, setSelectedGroup, addingNewRoom, setAddingNewRoom, selectedRooms}) => {
+}> = ({
+  announcements,
+  setSelectedGroup,
+  addingNewRoom,
+  setAddingNewRoom,
+  selectedRooms,
+}) => {
+  const [searchRooms, setSearchRooms] = useState<number[]>([]);
+  const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
   const [processedAnnouncements, setProcessedAnnouncements] =
     useState<ProcessedGroupAnnouncements>();
 
@@ -140,27 +159,46 @@ const GroupList: React.FC<{
         processedData.groups[key] = announcementData;
       }
     });
-    
+
     setProcessedAnnouncements(processedData);
   }, [announcements]);
 
   const renderGroupTabs = (announcementsGroup: GroupAnnouncements) => {
     return (
       announcementsGroup &&
-      Object.keys(announcementsGroup).filter((roomKey) =>
-            !searchRooms ||
-            searchRooms.length === 0 ||
-            searchRooms.some((room) =>
-              roomKey.split(",").map(Number).includes(room),
-            ),
-        ).map((roomKey) => (
+      [
+        addingNewRoom ? (
           <GroupTab
-            key={roomKey}
-            roomKey={roomKey}
-            firstAnnouncement={announcementsGroup[roomKey][0]}
+            key={null}
+            roomKey="0"
+            firstAnnouncement={null}
             setSelectedGroup={setSelectedGroup}
+            selectedRooms={selectedRooms}
+            isDraft
           />
-        ))
+        ) : (
+          <></>
+        ),
+      ].concat(
+        Object.keys(announcementsGroup)
+          .filter(
+            (roomKey) =>
+              !searchRooms ||
+              searchRooms.length === 0 ||
+              searchRooms.some((room) =>
+                roomKey.split(",").map(Number).includes(room),
+              ),
+          )
+          .map((roomKey) => (
+            <GroupTab
+              key={roomKey}
+              roomKey={roomKey}
+              isDraft={false}
+              firstAnnouncement={announcementsGroup[roomKey][0]}
+              setSelectedGroup={setSelectedGroup}
+            />
+          )),
+      )
     );
   };
 
@@ -177,6 +215,10 @@ const GroupList: React.FC<{
     if (!searchRooms.includes(roomId)) {
       setSearchRooms([...searchRooms, roomId]);
     }
+  };
+  
+  const addRoom = () => {
+    setAddingNewRoom(true);
   };
 
   return (

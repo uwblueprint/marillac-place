@@ -76,10 +76,10 @@ const SideBar: React.FC = () => {
   const pages = [
     { label: "Home", route: Routes.HOME_PAGE },
     { label: "Tasks", route: Routes.TASKS_PAGE },
-    { label: "Approvals", route: Routes.APPROVALS_PAGE },
+    // { label: "Approvals", route: Routes.APPROVALS_PAGE },
     { label: "Schedule", route: Routes.SCHEDULE_PAGE },
-    { label: "Announcements", route: Routes.HOME_PAGE }, // NEED NEW NAME
-    { label: "Participants", route: Routes.RESIDENTS_PAGE }, // RESIDENTS/PARTICIPANTS
+    { label: "Announcements", route: Routes.ANNOUNCEMENTS_PAGE },
+    { label: "Participants", route: Routes.PARTICIPANTS_PAGE }, // RESIDENTS/PARTICIPANTS
     { label: "Task List", route: Routes.TASKS_PAGE },
     // { label: "Insights", route: Routes.INSIGHTS_PAGE },
   ];

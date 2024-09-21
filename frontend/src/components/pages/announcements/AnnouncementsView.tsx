@@ -18,7 +18,7 @@ import {
   TagLabel,
   TagCloseButton,
 } from "@chakra-ui/react";
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 import { GroupAnnouncements } from "../../../types/NotificationTypes";
@@ -80,7 +80,7 @@ const AnnouncementsList = ({ announcements, selectedGroup }: PropsList) => {
   if (selectedGroup.length === 0) {
     return null;
   }
-  
+
   return (
     <Box>
       {announcements[selectedGroup].map((announcement, index) => (
@@ -120,52 +120,68 @@ const AnnouncementsView = ({
   addingNewRoom,
   setAddingNewRoom,
   selectedRooms,
-  setSelectedRooms
+  setSelectedRooms,
 }: Props): React.ReactElement => {
   const rooms = selectedGroup.split(",").map(Number);
-  const [allRooms, setAllRooms] = useState([1,2,3,4,5,6]);
+  const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
 
   const addRoomToNewRoom = (roomId: number) => {
-    if(!selectedRooms.includes(roomId)) {
+    if (!selectedRooms.includes(roomId)) {
       setSelectedRooms([...selectedRooms, roomId]);
     }
-  }
+  };
 
   const deleteRoomSelected = (roomId: number) => {
-    if(selectedRooms.includes(roomId)) {
-      setSelectedRooms(selectedRooms.filter(room => room !== roomId));
+    if (selectedRooms.includes(roomId)) {
+      setSelectedRooms(selectedRooms.filter((room) => room !== roomId));
     }
-  }
+  };
 
   const handlePost = (message: string) => {
-    if(addingNewRoom && selectedRooms.length > 0) {
+    if (addingNewRoom && selectedRooms.length > 0) {
       setSelectedRooms([]);
       setAddingNewRoom(false);
     }
-  }
+  };
 
   const formatHeader = (roomIDs: number[]) => {
-    if(addingNewRoom && selectedGroup === "0"){
-      return <Flex fontSize="16px">
-        <HStack spacing={4}>
-          {selectedRooms.map((room) => (
-            <Tag key={room} variant='solid' height="30px" color='#57469D' border='1px solid #57469D' backgroundColor='#F9F7FF'>
-              <TagLabel textAlign="center"> Room {room}</TagLabel>
-              <TagCloseButton onClick = {() => deleteRoomSelected(room)} color='#57469D'/>
-            </Tag>
-          ))}
-          <Menu>
-            <MenuButton>
-              <AddCircleOutlineOutlinedIcon sx={{color: "#57469D"}}/>
-            </MenuButton>
-            <MenuList maxH="40vh" overflow="auto">
-              {allRooms.filter(room => !selectedRooms.includes(room)).map((room) => (
-                <MenuItem onClick={()=>addRoomToNewRoom(room)} key={room}>Room {room}</MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
-        </HStack>
-      </Flex>
+    if (addingNewRoom && selectedGroup === "0") {
+      return (
+        <Flex fontSize="16px">
+          <HStack spacing={4}>
+            {selectedRooms.map((room) => (
+              <Tag
+                key={room}
+                variant="solid"
+                height="30px"
+                color="#57469D"
+                border="1px solid #57469D"
+                backgroundColor="#F9F7FF"
+              >
+                <TagLabel textAlign="center"> Room {room}</TagLabel>
+                <TagCloseButton
+                  onClick={() => deleteRoomSelected(room)}
+                  color="#57469D"
+                />
+              </Tag>
+            ))}
+            <Menu>
+              <MenuButton>
+                <AddCircleOutlineOutlinedIcon sx={{ color: "#57469D" }} />
+              </MenuButton>
+              <MenuList maxH="40vh" overflow="auto">
+                {allRooms
+                  .filter((room) => !selectedRooms.includes(room))
+                  .map((room) => (
+                    <MenuItem onClick={() => addRoomToNewRoom(room)} key={room}>
+                      Room {room}
+                    </MenuItem>
+                  ))}
+              </MenuList>
+            </Menu>
+          </HStack>
+        </Flex>
+      );
     }
     return "All Rooms";
   };
@@ -183,7 +199,9 @@ const AnnouncementsView = ({
           h="10vh"
         >
           <h1 style={{ fontSize: "24px", margin: "0" }}>
-            {selectedGroup === "" || selectedGroup === "0" ? formatHeader(rooms) : formatRooms(rooms)}
+            {selectedGroup === "" || selectedGroup === "0"
+              ? formatHeader(rooms)
+              : formatRooms(rooms)}
           </h1>
           <IconButton
             aria-label="info"
@@ -196,10 +214,12 @@ const AnnouncementsView = ({
           </IconButton>
         </Box>
         <Box flex={1} h="100vh" overflowY="scroll">
-          {selectedGroup !== "0" && <AnnouncementsList
-            announcements={announcements}
-            selectedGroup={selectedGroup}
-          />}
+          {selectedGroup !== "0" && (
+            <AnnouncementsList
+              announcements={announcements}
+              selectedGroup={selectedGroup}
+            />
+          )}
         </Box>
         <Box p="27px 39px">
           <MessageInput handlePost={handlePost} />
