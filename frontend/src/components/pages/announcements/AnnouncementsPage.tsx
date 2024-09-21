@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 
-import { GroupAnnouncements } from "../../../types/NotificationTypes";
+import {
+  GroupAnnouncements,
+  Announcement,
+} from "../../../types/NotificationTypes";
 import AnnouncementsGroups from "./AnnouncementsGroups";
 import AnnouncementsView from "./AnnouncementsView";
 import { announcementsMockData } from "../../../mocks/notifications";
@@ -9,12 +12,27 @@ import { announcementsMockData } from "../../../mocks/notifications";
 const AnnouncementsPage = (): React.ReactElement => {
   const [announcements, setAnnouncements] = useState<GroupAnnouncements>({});
   const [selectedGroup, setSelectedGroup] = useState<string>("");
-  const [addingNewRoom, setAddingNewRoom] = useState<boolean>(false);
-  const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
 
   useEffect(() => {
     // TODO: Fetch announcements from API
-    setAnnouncements(announcementsMockData);
+    const combinedAnnouncements: GroupAnnouncements = {};
+    Object.entries(announcementsMockData).forEach(([key, value]) => {
+      for (let i = 0; i < value.length; i += 1) {
+        const newAnnouncement: Announcement = {
+          room: key,
+          author: value[i].author,
+          message: value[i].message,
+          createdAt: value[i].createdAt,
+        };
+        // check if alr exists, if not create new
+        if (!combinedAnnouncements[key]) {
+          combinedAnnouncements[key] = [];
+        }
+        combinedAnnouncements[key].push(newAnnouncement);
+      }
+    });
+
+    setAnnouncements(combinedAnnouncements);
   }, []);
 
   return (
@@ -23,17 +41,10 @@ const AnnouncementsPage = (): React.ReactElement => {
         <AnnouncementsGroups
           announcements={announcements}
           setSelectedGroup={setSelectedGroup}
-          addingNewRoom={addingNewRoom}
-          setAddingNewRoom={setAddingNewRoom}
-          selectedRooms={selectedRooms}
         />
         <AnnouncementsView
           announcements={announcements}
           selectedGroup={selectedGroup}
-          addingNewRoom={addingNewRoom}
-          setAddingNewRoom={setAddingNewRoom}
-          selectedRooms={selectedRooms}
-          setSelectedRooms={setSelectedRooms}
         />
       </Flex>
     </Flex>
