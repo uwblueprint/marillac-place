@@ -28,9 +28,9 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import LoginPage from "./components/auth/LoginPage";
 import SignupPage from "./components/auth/SignupPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
+import HomePage from "./components/pages/home/HomePage";
 import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import TasksPage from "./components/pages/tasks/TasksPage";
-import ApprovalsPage from "./components/pages/approvals/ApprovalsPage";
 import SchedulePage from "./components/pages/schedule/SchedulePage";
 import ResidentsPage from "./components/pages/residents/ResidentsPage";
 import InsightsPage from "./components/pages/insights/InsightsPage";
@@ -84,7 +84,15 @@ const App = (): React.ReactElement => {
                   path={Routes.HOME_PAGE}
                   element={
                     <PrivateRoute>
-                      <AnnouncementsPage />
+                      <HomePage />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path={Routes.ANNOUNCEMENTS_PAGE}
+                  element={
+                    <PrivateRoute>
+                      <HomePage />
                     </PrivateRoute>
                   }
                 />
@@ -93,14 +101,6 @@ const App = (): React.ReactElement => {
                   element={
                     <PrivateRoute>
                       <TasksPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path={Routes.APPROVALS_PAGE}
-                  element={
-                    <PrivateRoute>
-                      <ApprovalsPage />
                     </PrivateRoute>
                   }
                 />

@@ -112,8 +112,8 @@ model TaskAssigned {
   assignee            Resident             @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   assigneeId          Int                  @map("assignee_id")
   status              Status
-  startDate           DateTime             @map("start_date") @db.Date
-  endDate             DateTime?            @map("end_date") @db.Date
+  startDate           DateTime             @map("start_date")
+  endDate             DateTime            @map("end_date")
   recurrenceFrequency RecurrenceFrequency? @map("recurrence_frequency")
   comments            String?
 

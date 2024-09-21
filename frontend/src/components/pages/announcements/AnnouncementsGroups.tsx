@@ -39,7 +39,12 @@ interface ProcessedGroupAnnouncements {
 
 export const formatRooms = (roomIDs: number[]) => {
   // Map each room ID to its formatted string
-  const formattedRooms = roomIDs.map((id) => `Room ${id}`);
+  const formattedRooms = roomIDs.map((id) => {
+    if (id === 0) {
+      return "New Announcement";
+    }
+    return `Room ${id}`;
+  });
   // Join the formatted room strings with commas
   return formattedRooms.join(", ");
 };
@@ -48,12 +53,17 @@ const GroupTab = ({
   roomKey,
   firstAnnouncement,
   setSelectedGroup,
+  isDraft,
+  selectedRooms,
 }: {
   roomKey: string;
-  firstAnnouncement: Announcement;
+  firstAnnouncement: Announcement | null;
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
+  isDraft: boolean;
+  selectedRooms?: number[] | null;
 }) => {
-  const rooms = roomKey.split(",").map(Number);
+  const rooms = (selectedRooms && selectedRooms.length > 0)? selectedRooms: roomKey.split(",").map(Number);
+
   return (
     <Box
       onClick={() => setSelectedGroup(roomKey)}
@@ -63,7 +73,7 @@ const GroupTab = ({
       borderBottomColor="gray.300"
       _hover={{ bg: "purple.100", cursor: "pointer" }}
     >
-      <Flex alignItems="center">
+      <Flex alignItems="center" minH="93px">
         <Box
           borderRadius="full"
           border="1px solid"
@@ -81,14 +91,16 @@ const GroupTab = ({
             color="purple.main"
           />
         </Box>
-        <Flex flexDir="column">
-          <Flex justifyContent="space-between" alignItems="center" w="100%">
-            <Text as="b">{formatRooms(rooms)}</Text>
-            <Text color="gray.500">
-              {moment(firstAnnouncement.createdAt).fromNow()}
+        <Flex flexDir="column" w="100%">
+          <Flex justifyContent="space-between">
+            <Text as="b" color={isDraft ? 'gray.500' : 'black'}>{formatRooms(rooms)}</Text>
+            <Text margin="0" color="gray.500">
+              {firstAnnouncement? moment(firstAnnouncement.createdAt).fromNow(): moment(Date.now()).fromNow()}
             </Text>
           </Flex>
-          <Text>{truncateMessage(firstAnnouncement.message, 60)}</Text>
+          
+          <Text marginBottom="0" marginTop="4px">{truncateMessage(firstAnnouncement? firstAnnouncement.message: "", 60)}</Text>
+          
         </Flex>
       </Flex>
     </Box>
@@ -98,12 +110,16 @@ const GroupTab = ({
 const GroupList: React.FC<{
   announcements: GroupAnnouncements;
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ announcements, setSelectedGroup }) => {
+  addingNewRoom: boolean;
+  setAddingNewRoom: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedRooms: number[];
+}> = ({ announcements, setSelectedGroup, addingNewRoom, setAddingNewRoom, selectedRooms}) => {
   const [processedAnnouncements, setProcessedAnnouncements] =
     useState<ProcessedGroupAnnouncements>();
 
   const [searchRooms, setSearchRooms] = useState<number[]>([]);
   const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
+
   useEffect(() => {
     const processedData: ProcessedGroupAnnouncements = {
       all: {},
@@ -113,6 +129,7 @@ const GroupList: React.FC<{
     Object.keys(announcements).forEach((key) => {
       const rooms = key.split(",").map((room) => parseInt(room.trim(), 10));
       const announcementData = announcements[key];
+
       if (rooms.length === 1) {
         // Add announcement to 'all' and 'private' if there is only 1 room
         processedData.all[key] = announcementData;
@@ -123,22 +140,20 @@ const GroupList: React.FC<{
         processedData.groups[key] = announcementData;
       }
     });
+    
     setProcessedAnnouncements(processedData);
   }, [announcements]);
 
   const renderGroupTabs = (announcementsGroup: GroupAnnouncements) => {
     return (
       announcementsGroup &&
-      Object.keys(announcementsGroup)
-        .filter(
-          (roomKey) =>
+      Object.keys(announcementsGroup).filter((roomKey) =>
             !searchRooms ||
             searchRooms.length === 0 ||
             searchRooms.some((room) =>
               roomKey.split(",").map(Number).includes(room),
             ),
-        )
-        .map((roomKey) => (
+        ).map((roomKey) => (
           <GroupTab
             key={roomKey}
             roomKey={roomKey}
@@ -235,6 +250,7 @@ const GroupList: React.FC<{
             border="solid"
             borderColor="gray.200"
             mr={5}
+            onClick={addRoom}
           />
         </Flex>
 
