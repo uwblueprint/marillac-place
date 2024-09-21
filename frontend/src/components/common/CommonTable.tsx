@@ -17,6 +17,8 @@ import {
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
+import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 
 type TableTypes = string | number | boolean | Date;
 
@@ -34,6 +36,10 @@ type Props = {
   isSelectable?: boolean;
 };
 
+type SortState = {
+  [key: string]: number;
+};
+
 const CommonTable = ({
   columnInfo,
   data,
@@ -44,6 +50,9 @@ const CommonTable = ({
   const [checked, setChecked] = useState(data.map(() => false));
   const [page, setPage] = useState(1);
   const [pageArray, setPageArray] = useState<number[]>([]);
+  const [sortingColumn, setSortingColumn] = useState<SortState>({});
+  const [originalData, setOriginalData] = useState(data);
+  const [sortedData, setSortedData] = useState(data);
 
   useEffect(() => {
     return Math.ceil(data.length / maxResults) >= 5
@@ -56,10 +65,54 @@ const CommonTable = ({
         );
   }, [data, maxResults]);
 
+  useEffect(() => {
+    setOriginalData(data);
+    setSortedData(data);
+  }, [data]);
+
+  // sorting the columns by ascending and descending order based on column indicated
+  const sortColumn = (column: string) => {
+    const newSortingColumn: SortState = {};
+    columnInfo.forEach((col) => {
+      newSortingColumn[col.key] =
+        col.key === column ? sortingColumn[column] : 0;
+    });
+
+    // increment column sorting state
+    sortingColumn[column] = sortingColumn[column]
+      ? sortingColumn[column] + 1
+      : 1;
+
+    // if at the end, go back to 0
+    if (sortingColumn[column] === 3) {
+      setSortingColumn({ ...sortingColumn, [column]: 0 });
+      setSortedData(originalData);
+      return;
+    }
+    setSortingColumn({
+      ...newSortingColumn,
+      [column]: sortingColumn[column],
+    });
+
+    // apply sorting based on which sorting state the column's in
+    const sorted = [...originalData].sort((a, b) => {
+      if (sortingColumn[column] === 1) {
+        return a[column] > b[column] ? 1 : -1;
+      }
+      if (sortingColumn[column] === 2) {
+        return a[column] < b[column] ? 1 : -1;
+      }
+      return 0;
+    });
+    setSortedData(sorted);
+  };
+
+  // constants for pagination UI
   const checkedPage = checked.slice((page - 1) * maxResults, page * maxResults);
   const allChecked = checkedPage.every(Boolean);
   const isIndeterminate = checkedPage.some(Boolean) && !allChecked;
 
+  // pagination functions
   const leftPaginate = () => {
     if (page > 1) setPage(page - 1);
     if (pageArray[0] > 1 && pageArray.length === 5) {
@@ -127,14 +180,46 @@ const CommonTable = ({
                   />
                 </Th>
               ) : null}
-              {columnInfo.map((header, index) => {
-                return <Th key={index}>{header.header}</Th>;
-              })}
+              {columnInfo.map((header, index) => (
+                <Th key={index}>
+                  <Flex alignItems="center">
+                    {header.header}
+                    <Flex
+                      alignItems="center"
+                      flexDirection="column"
+                      paddingLeft="2.5px"
+                    >
+                      <KeyboardArrowUpOutlinedIcon
+                        style={{
+                          height: "0.5em",
+                          cursor: "pointer",
+                          color:
+                            sortingColumn[header.key] === 1 ? "" : "#c4c8d8",
+                        }}
+                        onClick={() => {
+                          sortColumn(header.key);
+                        }}
+                      />
+                      <KeyboardArrowDownOutlinedIcon
+                        style={{
+                          height: "0.5em",
+                          cursor: "pointer",
+                          color:
+                            sortingColumn[header.key] === 2 ? "" : "#c4c8d8",
+                        }}
+                        onClick={() => {
+                          sortColumn(header.key);
+                        }}
+                      />
+                    </Flex>
+                  </Flex>
+                </Th>
+              ))}
               <Th />
             </Tr>
           </Thead>
           <Tbody>
-            {data
+            {sortedData
               .slice((page - 1) * maxResults, page * maxResults)
               .map((row, index) => {
                 return (
