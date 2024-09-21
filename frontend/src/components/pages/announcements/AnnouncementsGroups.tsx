@@ -136,9 +136,6 @@ const GroupList: React.FC<{
   const [processedAnnouncements, setProcessedAnnouncements] =
     useState<ProcessedGroupAnnouncements>();
 
-  const [searchRooms, setSearchRooms] = useState<number[]>([]);
-  const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
-
   useEffect(() => {
     const processedData: ProcessedGroupAnnouncements = {
       all: {},
