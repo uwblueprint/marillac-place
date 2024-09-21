@@ -3,9 +3,6 @@ import moment from "moment";
 import {
   Box,
   Flex,
-  InputGroup,
-  InputLeftElement,
-  Input,
   Icon,
   Tabs,
   TabList,
@@ -14,6 +11,14 @@ import {
   TabPanel,
   IconButton,
   Text,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  HStack,
 } from "@chakra-ui/react";
 import { Search } from "@mui/icons-material";
 import EditNoteIcon from "@mui/icons-material/EditNote";
@@ -111,6 +116,10 @@ const GroupList: React.FC<{
 }> = ({ announcements, setSelectedGroup, addingNewRoom, setAddingNewRoom, selectedRooms}) => {
   const [processedAnnouncements, setProcessedAnnouncements] =
     useState<ProcessedGroupAnnouncements>();
+
+  const [searchRooms, setSearchRooms] = useState<number[]>([]);
+  const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
+
   useEffect(() => {
     const processedData: ProcessedGroupAnnouncements = {
       all: {},
@@ -138,30 +147,37 @@ const GroupList: React.FC<{
   const renderGroupTabs = (announcementsGroup: GroupAnnouncements) => {
     return (
       announcementsGroup &&
-      [addingNewRoom? 
-        <GroupTab 
-          key={null}
-          roomKey="0"
-          firstAnnouncement={null}
-          setSelectedGroup={setSelectedGroup}
-          selectedRooms={selectedRooms}
-          isDraft
-        />: <></>].concat(
-      Object.keys(announcementsGroup).map((roomKey) => (
-        <GroupTab
-          key={roomKey}
-          roomKey={roomKey}
-          firstAnnouncement={roomKey===""? null: announcementsGroup[roomKey][0]}
-          setSelectedGroup={setSelectedGroup}
-          isDraft={false}
-        />
-      )))
+      Object.keys(announcementsGroup).filter((roomKey) =>
+            !searchRooms ||
+            searchRooms.length === 0 ||
+            searchRooms.some((room) =>
+              roomKey.split(",").map(Number).includes(room),
+            ),
+        ).map((roomKey) => (
+          <GroupTab
+            key={roomKey}
+            roomKey={roomKey}
+            firstAnnouncement={announcementsGroup[roomKey][0]}
+            setSelectedGroup={setSelectedGroup}
+          />
+        ))
     );
   };
 
-  const addRoom = () => {
-    setAddingNewRoom(true);
-  }
+  const deleteSearchRoom = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    roomId: number,
+  ) => {
+    if (searchRooms.includes(roomId)) {
+      setSearchRooms(searchRooms.filter((room) => room !== roomId));
+    }
+  };
+
+  const addRoomToSearch = (roomId: number) => {
+    if (!searchRooms.includes(roomId)) {
+      setSearchRooms([...searchRooms, roomId]);
+    }
+  };
 
   return (
     <Box h="100vh" w="100%" borderRight="solid" borderRightColor="gray.300">
@@ -174,12 +190,57 @@ const GroupList: React.FC<{
           mb={4}
           bg="purple.50"
         >
-          <InputGroup w="80%" bg="white" ml={5}>
-            <InputLeftElement pointerEvents="none">
+          <Box
+            width="100%"
+            marginRight="1.25rem"
+            marginLeft="1.25rem"
+            position="relative"
+            w="100%"
+            bg="white"
+            h="2.5rem"
+            borderRadius="0.375rem"
+            border="1px solid"
+            borderColor="inherit"
+            _hover={{ borderColor: "#C5C8D8" }}
+            _focusVisible={{
+              borderColor: "477FC8",
+              boxShadow: "0 0 0 1px #3182ce",
+            }}
+          >
+            <Menu>
+              <MenuButton width="100%" position="absolute" height="100%" />
+              <MenuList maxH="40vh" overflow="auto" position="absolute">
+                {allRooms
+                  .filter((room) => !searchRooms.includes(room))
+                  .map((room) => (
+                    <MenuItem onClick={() => addRoomToSearch(room)} key={room}>
+                      Room {room}
+                    </MenuItem>
+                  ))}
+              </MenuList>
+            </Menu>
+
+            <HStack spacing={2} height="100%" paddingLeft="8px">
               <Icon as={Search} color="gray.300" />
-            </InputLeftElement>
-            <Input placeholder="Search" />
-          </InputGroup>
+              {searchRooms.map((room) => (
+                <Tag
+                  key={room}
+                  variant="solid"
+                  height="30px"
+                  color="#57469D"
+                  border="1px solid #57469D"
+                  backgroundColor="#F9F7FF"
+                >
+                  <TagLabel textAlign="center"> Room {room} </TagLabel>
+                  <TagCloseButton
+                    onClick={(e) => deleteSearchRoom(e, room)}
+                    color="#57469D"
+                  />
+                </Tag>
+              ))}
+            </HStack>
+          </Box>
+
           <IconButton
             icon={<EditNoteIcon />}
             aria-label="Edit"
