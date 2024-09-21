@@ -3,9 +3,6 @@ import moment from "moment";
 import {
   Box,
   Flex,
-  InputGroup,
-  InputLeftElement,
-  Input,
   Icon,
   Tabs,
   TabList,
@@ -138,6 +135,10 @@ const GroupList: React.FC<{
   const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
   const [processedAnnouncements, setProcessedAnnouncements] =
     useState<ProcessedGroupAnnouncements>();
+
+  const [searchRooms, setSearchRooms] = useState<number[]>([]);
+  const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
+
   useEffect(() => {
     const processedData: ProcessedGroupAnnouncements = {
       all: {},
@@ -215,6 +216,7 @@ const GroupList: React.FC<{
       setSearchRooms([...searchRooms, roomId]);
     }
   };
+  
   const addRoom = () => {
     setAddingNewRoom(true);
   };
@@ -280,6 +282,7 @@ const GroupList: React.FC<{
               ))}
             </HStack>
           </Box>
+
           <IconButton
             icon={<EditNoteIcon />}
             aria-label="Edit"
