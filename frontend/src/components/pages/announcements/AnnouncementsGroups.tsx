@@ -57,7 +57,10 @@ const GroupTab = ({
   isDraft: boolean;
   selectedRooms?: number[] | null;
 }) => {
-  const rooms = (selectedRooms && selectedRooms.length > 0)? selectedRooms: roomKey.split(",").map(Number);
+  const rooms =
+    selectedRooms && selectedRooms.length > 0
+      ? selectedRooms
+      : roomKey.split(",").map(Number);
 
   return (
     <Box
@@ -88,14 +91,22 @@ const GroupTab = ({
         </Box>
         <Flex flexDir="column" w="100%">
           <Flex justifyContent="space-between">
-            <Text as="b" color={isDraft ? 'gray.500' : 'black'}>{formatRooms(rooms)}</Text>
+            <Text as="b" color={isDraft ? "gray.500" : "black"}>
+              {formatRooms(rooms)}
+            </Text>
             <Text margin="0" color="gray.500">
-              {firstAnnouncement? moment(firstAnnouncement.createdAt).fromNow(): moment(Date.now()).fromNow()}
+              {firstAnnouncement
+                ? moment(firstAnnouncement.createdAt).fromNow()
+                : moment(Date.now()).fromNow()}
             </Text>
           </Flex>
-          
-          <Text marginBottom="0" marginTop="4px">{truncateMessage(firstAnnouncement? firstAnnouncement.message: "", 60)}</Text>
-          
+
+          <Text marginBottom="0" marginTop="4px">
+            {truncateMessage(
+              firstAnnouncement ? firstAnnouncement.message : "",
+              60,
+            )}
+          </Text>
         </Flex>
       </Flex>
     </Box>
@@ -108,7 +119,13 @@ const GroupList: React.FC<{
   addingNewRoom: boolean;
   setAddingNewRoom: React.Dispatch<React.SetStateAction<boolean>>;
   selectedRooms: number[];
-}> = ({ announcements, setSelectedGroup, addingNewRoom, setAddingNewRoom, selectedRooms}) => {
+}> = ({
+  announcements,
+  setSelectedGroup,
+  addingNewRoom,
+  setAddingNewRoom,
+  selectedRooms,
+}) => {
   const [processedAnnouncements, setProcessedAnnouncements] =
     useState<ProcessedGroupAnnouncements>();
   useEffect(() => {
@@ -131,37 +148,45 @@ const GroupList: React.FC<{
         processedData.groups[key] = announcementData;
       }
     });
-    
+
     setProcessedAnnouncements(processedData);
   }, [announcements]);
 
   const renderGroupTabs = (announcementsGroup: GroupAnnouncements) => {
     return (
       announcementsGroup &&
-      [addingNewRoom? 
-        <GroupTab 
-          key={null}
-          roomKey="0"
-          firstAnnouncement={null}
-          setSelectedGroup={setSelectedGroup}
-          selectedRooms={selectedRooms}
-          isDraft
-        />: <></>].concat(
-      Object.keys(announcementsGroup).map((roomKey) => (
-        <GroupTab
-          key={roomKey}
-          roomKey={roomKey}
-          firstAnnouncement={roomKey===""? null: announcementsGroup[roomKey][0]}
-          setSelectedGroup={setSelectedGroup}
-          isDraft={false}
-        />
-      )))
+      [
+        addingNewRoom ? (
+          <GroupTab
+            key={null}
+            roomKey="0"
+            firstAnnouncement={null}
+            setSelectedGroup={setSelectedGroup}
+            selectedRooms={selectedRooms}
+            isDraft
+          />
+        ) : (
+          <></>
+        ),
+      ].concat(
+        Object.keys(announcementsGroup).map((roomKey) => (
+          <GroupTab
+            key={roomKey}
+            roomKey={roomKey}
+            firstAnnouncement={
+              roomKey === "" ? null : announcementsGroup[roomKey][0]
+            }
+            setSelectedGroup={setSelectedGroup}
+            isDraft={false}
+          />
+        )),
+      )
     );
   };
 
   const addRoom = () => {
     setAddingNewRoom(true);
-  }
+  };
 
   return (
     <Box h="100vh" w="100%" borderRight="solid" borderRightColor="gray.300">

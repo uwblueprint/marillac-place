@@ -12,6 +12,6 @@ export const TASKS_PAGE = "/tasks";
 
 export const SCHEDULE_PAGE = "/schedule";
 
-export const RESIDENTS_PAGE = "/residents";
+export const PARTICIPANTS_PAGE = "/participants";
 
 export const INSIGHTS_PAGE = "/insights";
