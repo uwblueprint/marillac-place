@@ -1,5 +1,6 @@
 export interface Announcement {
   author: string;
+  room: string;
   message: string;
   createdAt: string;
 }

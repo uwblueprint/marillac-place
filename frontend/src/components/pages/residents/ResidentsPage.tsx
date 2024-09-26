@@ -14,6 +14,7 @@ import CommonTable, {
   TableData,
 } from "../../common/CommonTable";
 import ResidentModal from "./ResidentModal";
+import ResidentEditModal, { ResidentEditInfo } from "./ResidentEditModal";
 import { residentsMockData } from "../../../mocks/residents";
 
 const columnTypes: ColumnInfoTypes[] = [
@@ -33,20 +34,29 @@ const columnTypes: ColumnInfoTypes[] = [
     header: "Departure Date",
     key: "departureDate",
   },
-  {
-    header: "Email",
-    key: "email",
-  },
 ];
 
 const ResidentsPage = (): React.ReactElement => {
   const [residents, setResidents] = useState<TableData[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState("none");
+  const [residentEditInfo, setEditInfo] = useState<ResidentEditInfo>();
 
   useEffect(() => {
     // TODO: Fetch residents from API
     setResidents(residentsMockData);
   }, []);
+
+  const handleResidentEdit = (row: any) => {
+    setIsModalOpen("edit");
+    // console.log(row);
+    setEditInfo(row);
+  };
+
+  const handleResidentSubmitEdit = () => {
+    setEditInfo(undefined);
+
+    // TODO: modify data
+  };
 
   return (
     <Flex flexDir="column" flexGrow={1} p="20px">
@@ -61,7 +71,7 @@ const ResidentsPage = (): React.ReactElement => {
           variant="primary"
           leftIcon={<Icon as={Add} color="white" />}
           size="sm"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setIsModalOpen("add")}
         >
           Add Resident
         </Button>
@@ -69,9 +79,22 @@ const ResidentsPage = (): React.ReactElement => {
       <CommonTable
         data={residents}
         columnInfo={columnTypes}
-        onEdit={() => {}}
+        onEdit={handleResidentEdit}
       />
-      <ResidentModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+
+      <ResidentModal
+        isOpen={isModalOpen === "add"}
+        setIsOpen={() => setIsModalOpen("none")}
+      />
+
+      {residentEditInfo && (
+        <ResidentEditModal
+          residentInfo={residentEditInfo}
+          isOpen={isModalOpen === "edit"}
+          setIsOpen={() => setIsModalOpen("none")}
+          onCloseEditModal={handleResidentSubmitEdit}
+        />
+      )}
     </Flex>
   );
 };

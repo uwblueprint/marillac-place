@@ -10,13 +10,15 @@ const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({
   children,
 }) => {
   const { authenticatedUser } = useContext(AuthContext);
-  return authenticatedUser ? (
+  return (
+    // after return, add "authenticatedUser ?""
     <Flex>
       <SideBar />
       {children}
     </Flex>
-  ) : (
-    <Navigate to={LOGIN_PAGE} />
+    // ) : (
+    //   <Navigate to={LOGIN_PAGE} />
+    // );
   );
 };
 
