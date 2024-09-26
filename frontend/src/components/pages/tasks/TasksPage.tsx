@@ -149,12 +149,14 @@ const TasksPage = (): React.ReactElement => {
           data={taskData}
           columnInfo={taskDataColumns}
           maxResults={8}
-          onEdit={() => {setIsModalOpen(true);}}
+          onEdit={() => {
+            setIsModalOpen(true);
+          }}
         />
         <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       </Flex>
     </Flex>
   );
 };
- 
+
 export default TasksPage;

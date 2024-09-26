@@ -2,15 +2,12 @@ import React from "react";
 import {
   Button,
   Input,
-  Select,
   Flex,
   FormControl,
   FormLabel,
   InputRightElement,
   InputGroup,
   InputLeftElement,
-  Checkbox,
-  Container,
 } from "@chakra-ui/react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -24,10 +21,11 @@ const FormField = ({
   onBlur,
   submitPressed,
   required = false,
+  error = false,
   isPassword = false,
   showPassword,
   setShowPassword,
-  leftElement
+  leftElement,
 }: {
   label: string;
   value: string;
@@ -36,6 +34,7 @@ const FormField = ({
   onBlur?: () => void;
   submitPressed: boolean;
   required?: boolean;
+  error?: boolean;
   isPassword?: boolean;
   showPassword?: boolean;
   setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,15 +46,25 @@ const FormField = ({
         {label}
       </FormLabel>
       <InputGroup>
-        {leftElement && <InputLeftElement height='34px' pointerEvents='none' color='black'>
-          <Flex>{leftElement}</Flex>
-        </InputLeftElement>}
+        {leftElement && (
+          <InputLeftElement height="34px" pointerEvents="none" color="black">
+            <Flex>{leftElement}</Flex>
+          </InputLeftElement>
+        )}
 
         <Input
           variant="primary"
-          placeholder='Enter amount'
-          borderColor={submitPressed && !value ? "red.error" : "gray.300"}
-          boxShadow={submitPressed && !value ? "0 0 2px red.error" : "none"}
+          placeholder=""
+          borderColor={
+            error || (submitPressed && !value && required)
+              ? "red.error"
+              : "gray.300"
+          }
+          boxShadow={
+            error || (submitPressed && !value && required)
+              ? "0 0 2px red.error"
+              : "none"
+          }
           type={
             isPassword && setShowPassword && !showPassword ? "password" : type
           }
