@@ -3,6 +3,7 @@ import { Flex, Box, Heading, Text } from "@chakra-ui/react";
 import { announcementsMockData } from "../../../mocks/notifications";
 import AnnouncementNotification from "./AnnouncementNotification";
 import { Announcement } from "../../../types/NotificationTypes";
+import RoomGrid from "./RoomGrid";
 
 const HomePage = (): React.ReactElement => {
   const [numberPosts, setNumberPosts] = useState(0);
@@ -43,45 +44,56 @@ const HomePage = (): React.ReactElement => {
   }, []);
 
   return (
-    <Flex flexDirection="column" alignItems="center" w="80vw">
-      <Box>
-        <Heading>Home Page</Heading>
-      </Box>
-      <Box
-        border="2px solid grey"
-        p={6}
-        justifyContent="space-between"
-        borderRadius="8px"
-        w="75%"
-      >
-        <Flex justifyContent="space-between" alignItems="center" mb={2}>
-          <Flex alignItems="baseline">
-            <Text fontSize="md" as="b">
-              Announcements
-            </Text>
-            <Text ml={6} fontSize="smaller">
-              {numberPosts === 0
-                ? "You're all caught up!"
-                : `${numberPosts} new posts today`}
+    <Flex flexDir="column" alignItems="center" flexGrow={1}>
+      <Box w="100%" h="13%" borderWidth={2} bg="purple.50" />
+      <Flex flexDir="column" w="65%" flexGrow={1} position="absolute" top="2%">
+        <Text
+          fontSize="2xl"
+          fontWeight="bold"
+          textAlign="left"
+          alignItems="center"
+          paddingY="12px"
+        >
+          Marillac Place Overview
+        </Text>
+        <RoomGrid />
+        <Box
+          border="2px solid grey"
+          p={6}
+          justifyContent="space-between"
+          borderRadius="8px"
+          marginTop="36px"
+          w="100%"
+        >
+          <Flex justifyContent="space-between" alignItems="center" mb={2}>
+            <Flex alignItems="baseline">
+              <Text fontSize="md" as="b">
+                Announcements
+              </Text>
+              <Text ml={6} fontSize="smaller">
+                {numberPosts === 0
+                  ? "You're all caught up!"
+                  : `${numberPosts} new posts today`}
+              </Text>
+            </Flex>
+
+            <Text onClick={() => setViewAll(!viewAll)} cursor="pointer">
+              {viewAll ? "View less" : "View all"}
             </Text>
           </Flex>
-
-          <Text onClick={() => setViewAll(!viewAll)} cursor="pointer">
-            {viewAll ? "View less" : "View all"}
-          </Text>
-        </Flex>
-        {(viewAll ? announcements : recentAnnouncements).map(
-          (announcement, index) => (
-            <AnnouncementNotification
-              room={announcement.room}
-              author={announcement.author}
-              message={announcement.message}
-              createdAt={announcement.createdAt}
-              key={index}
-            />
-          ),
-        )}
-      </Box>
+          {(viewAll ? announcements : recentAnnouncements).map(
+            (announcement, index) => (
+              <AnnouncementNotification
+                room={announcement.room}
+                author={announcement.author}
+                message={announcement.message}
+                createdAt={announcement.createdAt}
+                key={index}
+              />
+            ),
+          )}
+        </Box>
+      </Flex>
     </Flex>
   );
 };
