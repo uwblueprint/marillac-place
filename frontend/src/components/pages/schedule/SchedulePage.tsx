@@ -1,10 +1,31 @@
 import React from "react";
+import {
+  Flex,
+} from "@chakra-ui/react";
+
+import RoomCard from "../home/HomeRoomCard"
+import { residentsMockData } from "../../../mocks/residents";
+
+const renderRoomCards = residentsMockData.map(resident => 
+  <RoomCard
+    key={resident.residentId}
+    room={resident.roomNumber}
+    residentId={resident.residentId}
+  />
+)
+
 
 const SchedulePage = (): React.ReactElement => {
   return (
-    <div>
+    <Flex flexDir="column" flexGrow={1} p="20px">
       <h1>Schedule Page</h1>
-    </div>
+      <Flex
+        flexWrap="wrap" 
+        justifyContent="flex-start" 
+      >
+        {renderRoomCards}
+      </Flex>
+    </Flex>
   );
 };
 
