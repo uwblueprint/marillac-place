@@ -2,8 +2,6 @@ export const HOME_PAGE = "/home";
 
 export const ANNOUNCEMENTS_PAGE = "/announcements";
 
-export const ANNOUNCEMENTS_PAGE = "/announcements";
-
 export const LOGIN_PAGE = "/login";
 
 export const SIGNUP_PAGE = "/signup";
