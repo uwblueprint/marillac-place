@@ -20,7 +20,7 @@ const AnnouncementNotification = ({
         <Box
           borderRadius="full"
           border="2px solid"
-          borderColor="gray.300"
+          borderColor="#C5C8D8"
           p={1}
           mr={3}
         >

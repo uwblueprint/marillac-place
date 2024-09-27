@@ -1,6 +1,8 @@
 import React from "react";
 import { Flex, Heading, Text, Box, Circle } from "@chakra-ui/react";
 
+// TODO: Change name to id when schedule is done
+
 type Props = {
   room: string | number;
   residentId: number;
@@ -10,13 +12,12 @@ const RoomCard = ({ room, residentId }: Props): React.ReactElement => {
   return (
     <Box
       p="10px"
-      ml="30px"
-      mr="20px"
-      mt="20px"
       border="solid"
       borderRadius="10px"
       borderColor="gray.300"
-      w="17vw"
+      background="white"
+      minW="260px"
+      w="20vw"
     >
       <Flex flexDir="column" ml={4} my={4}>
         <Heading size="sm" color="purple.500">

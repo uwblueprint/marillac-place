@@ -43,26 +43,74 @@ const HomePage = (): React.ReactElement => {
     setNumberPosts(thisWeeksAnnouncements.length);
   }, []);
 
+  const getDate = () => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date().toLocaleDateString("en-US", options);
+  };
+
   return (
-    <Flex flexDir="column" alignItems="center" flexGrow={1}>
-      <Box w="100%" h="13%" borderWidth={2} bg="purple.50" />
-      <Flex flexDir="column" w="65%" flexGrow={1} position="absolute" top="2%">
-        <Text
-          fontSize="2xl"
-          fontWeight="bold"
-          textAlign="left"
+    <Flex
+      flexDir="column"
+      alignItems="center"
+      overflow="scroll"
+      position="relative"
+      // height="100%"
+    >
+      <Box
+        w="100%"
+        h="150px"
+        borderWidth={0}
+        bg="purple.50"
+        position="absolute"
+        zIndex="-1"
+        top="0"
+      />
+      <Flex
+        flexDir="column"
+        w="75%"
+        flexGrow={1}
+        top="2%"
+        justifyContent="center"
+      >
+        <Flex
+          flexDir="row"
+          justifyContent="space-between"
           alignItems="center"
-          paddingY="12px"
+          marginTop="24px"
         >
-          Marillac Place Overview
-        </Text>
+          <Text
+            fontSize="2xl"
+            fontWeight="bold"
+            textAlign="left"
+            alignItems="center"
+            paddingY="8px"
+          >
+            Marillac Place Overview
+          </Text>
+
+          <Text
+            fontSize="xl"
+            fontWeight="bold"
+            textAlign="left"
+            alignItems="center"
+            paddingY="8px"
+            color="#382584"
+          >
+            {getDate()}
+          </Text>
+        </Flex>
         <RoomGrid />
         <Box
-          border="2px solid grey"
+          border="2px solid #E3E4EA"
           p={6}
           justifyContent="space-between"
           borderRadius="8px"
           marginTop="36px"
+          marginBottom="36px"
           w="100%"
         >
           <Flex justifyContent="space-between" alignItems="center" mb={2}>

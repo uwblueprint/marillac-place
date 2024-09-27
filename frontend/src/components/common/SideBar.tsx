@@ -96,11 +96,20 @@ const SideBar: React.FC = () => {
   // });
 
   return (
-    <Flex flexDir="column" w="100%" maxW="240px">
+    <Flex
+      flexDir="column"
+      w="100%"
+      minW="240px"
+      maxW="240px"
+      position="relative"
+    >
       <Box
-        h="100vh"
+        h="100%"
+        w="240px"
         borderRight="solid"
         borderRightColor="gray.300"
+        background="white"
+        position="fixed"
         pt={6}
         pb={6}
         pr={4}
