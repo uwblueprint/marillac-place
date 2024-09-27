@@ -171,6 +171,11 @@ const SchedulePage = (): React.ReactElement => {
         </Heading>
       </Flex>
 
+      {scheduleType === "CALENDAR" && (
+        <Box mt={2} ml={10} mr={10} padding={40} borderWidth="1px">
+          <Heading size="md">box</Heading>
+        </Box>
+      )}
     </Flex>
   );
 };
