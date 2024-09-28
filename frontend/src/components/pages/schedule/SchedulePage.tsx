@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
   Flex,
-  Input,
-  Button,
-  InputGroup,
-  InputLeftElement,
   Tabs,
   TabList,
   Tab,
-  Icon,
-  Checkbox,
+  Text,
 } from "@chakra-ui/react";
 
 import {
@@ -125,8 +120,10 @@ const SchedulePage = (): React.ReactElement => {
       >
         {renderRoomCards}
       </Flex>
-      <b style={{ display: 'block', margin: '10px 0' }}>Weekly Tasks</b>
       <Flex flexDir="column" flexGrow={1} p="20px">
+        <Text as="b" display="block" margin="10px" textAlign="left">
+          Weekly Tasks
+        </Text>
         <ScheduleTable
           data={taskData}
           columnInfo={taskDataColumns}
@@ -135,19 +132,24 @@ const SchedulePage = (): React.ReactElement => {
           isSelectable
         />
       </Flex>
-
-      <Tabs variant="enclosed" h="30px" mb={6} isFitted>
-        <TabList pl={6}>
-          <Tab
-          _selected={{ color: "white", bg: "purple.main" }}
+      <Flex flexDir="column" flexGrow={1} p="20px">
+        <Text as="b" display="block" margin="10px" textAlign="left">
+          Daily Tasks
+        </Text>
+      <Tabs variant="enclosed-colored" h="30px" mb="10px" isFitted>
+        <TabList margin="10px">
+            <Tab
+            _selected={{ color: "white", bg: "purple.main" }}
+            borderRadius="8px 8px 0 0"
             onClick={() => {
               setTaskDate(Dates.SUNDAY);
             }}
-          >
+            >
             Sunday
-          </Tab>
+            </Tab>
           <Tab
           _selected={{ color: "white", bg: "purple.main" }}
+          borderRadius="8px 8px 0 0"
             onClick={() => {
               setTaskDate(Dates.MONDAY);
             }}
@@ -156,6 +158,7 @@ const SchedulePage = (): React.ReactElement => {
           </Tab>
           <Tab
           _selected={{ color: "white", bg: "purple.main" }}
+          borderRadius="8px 8px 0 0"
             onClick={() => {
               setTaskDate(Dates.TUESDAY);
             }}
@@ -164,6 +167,7 @@ const SchedulePage = (): React.ReactElement => {
           </Tab>
           <Tab
           _selected={{ color: "white", bg: "purple.main" }}
+          borderRadius="8px 8px 0 0"
             onClick={() => {
               setTaskDate(Dates.WEDNESDAY);
             }}
@@ -172,6 +176,7 @@ const SchedulePage = (): React.ReactElement => {
           </Tab>
           <Tab
           _selected={{ color: "white", bg: "purple.main" }}
+          borderRadius="8px 8px 0 0"
             onClick={() => {
               setTaskDate(Dates.THURSDAY);
             }}
@@ -180,6 +185,7 @@ const SchedulePage = (): React.ReactElement => {
           </Tab>
           <Tab
           _selected={{ color: "white", bg: "purple.main" }}
+          borderRadius="8px 8px 0 0"
             onClick={() => {
               setTaskDate(Dates.FRIDAY);
             }}
@@ -188,6 +194,7 @@ const SchedulePage = (): React.ReactElement => {
           </Tab>
           <Tab
           _selected={{ color: "white", bg: "purple.main" }}
+          borderRadius="8px 8px 0 0"
             onClick={() => {
               setTaskDate(Dates.SATURDAY);
             }}
@@ -196,8 +203,6 @@ const SchedulePage = (): React.ReactElement => {
           </Tab>
         </TabList>
       </Tabs>
-      <b style={{ display: 'block', margin: '10px 0' }}>Daily Tasks</b>
-      <Flex flexDir="column" flexGrow={1} p="20px">
         <ScheduleTable
           data={dailyTaskData}
           columnInfo={taskDataColumns}
