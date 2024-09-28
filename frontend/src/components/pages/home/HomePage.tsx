@@ -58,7 +58,7 @@ const HomePage = (): React.ReactElement => {
       alignItems="center"
       overflow="scroll"
       position="relative"
-      // height="100%"
+      width="100%"
     >
       <Box
         w="100%"
@@ -83,7 +83,7 @@ const HomePage = (): React.ReactElement => {
           marginTop="24px"
         >
           <Text
-            fontSize="2xl"
+            fontSize="3xl"
             fontWeight="bold"
             textAlign="left"
             alignItems="center"

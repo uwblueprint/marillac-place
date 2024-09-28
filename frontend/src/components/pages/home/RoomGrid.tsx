@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Grid } from "@chakra-ui/react";
 import RoomCard from "./HomeRoomCard";
 
 const rooms = [
@@ -12,18 +12,26 @@ const rooms = [
   { id: 7, name: "7", info: "Info about Room 7" },
   { id: 8, name: "8", info: "Info about Room 8" },
   { id: 9, name: "9", info: "Info about Room 9" },
-{ id: 10, name: "10", info: "Info about Room 10" },
-{ id: 11, name: "11", info: "Info about Room 11" },
+  { id: 10, name: "10", info: "Info about Room 10" },
+  { id: 11, name: "11", info: "Info about Room 11" },
 ];
 
 function RoomGrid() {
   return (
-    <Flex justifyContent="center" alignItems="center">
-      <Flex flexWrap="wrap" justifyContent="center" gap="20px" width="auto">
+    <Flex justifyContent="center" alignItems="center" width="100%">
+      <Grid
+        templateColumns={{
+          md: "repeat(2, 1fr)",
+          lg: "repeat(3, 1fr)",
+          xl: "repeat(4, 1fr)",
+        }}
+        gap="20px"
+        width="100%"
+      >
         {rooms.map((room) => (
           <RoomCard room={room.name} residentId={room.id} key={room.id} />
         ))}
-      </Flex>
+      </Grid>
     </Flex>
   );
 }
