@@ -125,8 +125,8 @@ const HomePage = (): React.ReactElement => {
               </Text>
             </Flex>
 
-            <Text onClick={() => setViewAll(!viewAll)} cursor="pointer">
-              {viewAll ? "View less" : "View all"}
+            <Text onClick={() => setViewAll(!viewAll)} cursor="pointer" textDecoration="underline">
+              {viewAll ? "Collapse All" : "View all"}
             </Text>
           </Flex>
           {(viewAll ? announcements : recentAnnouncements).map(
