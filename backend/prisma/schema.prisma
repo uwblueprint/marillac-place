@@ -66,12 +66,6 @@ enum TaskType {
   ACHIEVEMENT
 }
 
-enum TaskFrequency {
-  WEEKLY
-  BIWEEKLY
-  MONTHLY
-}
-
 model Task {
   id              Int            @id @default(autoincrement())
   type            TaskType
@@ -82,10 +76,6 @@ model Task {
   locationId      Int            @map("location_id")
   tasksAssigned   TaskAssigned[]
   relatedWarnings Warning[]
-  frequency       TaskFrequency? @map("frequency")
-  startDate       DateTime?      @map("start_date")
-  endDate         DateTime?      @map("end_date")
-  allDay          Boolean        @default(false) @map("all_day")
 
   @@map("tasks")
 }
