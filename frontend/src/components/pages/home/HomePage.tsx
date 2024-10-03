@@ -15,6 +15,23 @@ const HomePage = (): React.ReactElement => {
 
   useEffect(() => {
     // Combine all announcements into a single array
+    fetch("http://localhost:5000/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+        query {
+          getAllStaff {
+            userId
+            email
+          }
+        }`,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
     const combinedAnnouncements: Announcement[] = [];
     Object.entries(announcementsMockData).forEach(([key, value]) => {
       for (let i = 0; i < value.length; i += 1) {
