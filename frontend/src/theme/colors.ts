@@ -3,6 +3,7 @@ const colors = {
   white: "#fff",
   gray: {
     main: "#808080",
+    50: "FBFBFB",
     100: "#F5F6F8",
     200: "#E3E4EA",
     300: "#C5C8D8",
@@ -16,8 +17,12 @@ const colors = {
   },
   red: {
     main: "#D34C5C",
-    error: "#E30000",
+    100: "#FFE6E6",
   },
+  green: {
+    main: "#0D8312",
+    100: "#ECFFED",
+  }
 };
 
 export default colors;
