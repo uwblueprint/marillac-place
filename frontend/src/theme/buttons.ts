@@ -14,10 +14,11 @@ const secondary = defineStyle({
   height: "34px",
   borderRadius: "8px",
   padding: "4px 16px",
-  border: "0",
+  border: "2px solid",
+  borderColor: "purple.main",
   bg: "purple.100",
   color: "purple.main",
-  _hover: { bg: "gray.200" },
+  _hover: { bg: "purple.main", color: "white" },
 });
 
 const cancel = defineStyle({
