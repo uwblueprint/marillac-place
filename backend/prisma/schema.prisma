@@ -95,7 +95,7 @@ model Task {
   endDate             DateTime?             @map("end_date")
   recurrenceFrequency RecurrenceFrequency   @map("recurrence_frequency")
   specificDay         DaysOfWeek?           @map("specific_day") // used for one time tasks
-  repeatDays          DaysOfWeek[]          @map("repeat_day") // used for repeating tasks
+  repeatDays          DaysOfWeek[]          @map("repeat_days") // used for repeating tasks
 
   @@map("tasks")
 }

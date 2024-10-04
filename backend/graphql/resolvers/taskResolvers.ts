@@ -46,13 +46,13 @@ const taskResolvers = {
       const tasks = await taskService.getTasksByStartDate(startDate);
       return tasks;
     },
-    getTasksByEndDate: async (
-      _parent: undefined,
-      { endDate }: { endDate: Date },
-    ): Promise<TaskAssignedDTO[]> => {
-      const tasks = await taskService.getTasksByEndDate(endDate);
-      return tasks;
-    },
+    // getTasksByEndDate: async (
+    //   _parent: undefined,
+    //   { endDate }: { endDate: Date },
+    // ): Promise<TaskAssignedDTO[]> => {
+    //   const tasks = await taskService.getTasksByEndDate(endDate);
+    //   return tasks;
+    // },
     getTasksByStatus: async (
       _parent: undefined,
       { status }: { status: Status },
