@@ -282,9 +282,10 @@ const ScheduleTable = ({
 
       <Box h="50px" position="relative">
         <Box position="absolute" w="250px" h="50px" ml="10px">
-          {`Showing ${(page - 1) * maxResults + 1} to ${page * maxResults} of ${
-            data.length
-          } entries`}
+          {`Showing ${(page - 1) * maxResults + 1} to ${Math.min(
+            page * maxResults,
+            data.length,
+          )} of ${data.length} entries`}
         </Box>
         <Box position="absolute" left="50%" transform="translateX(-50%)">
           <Box
