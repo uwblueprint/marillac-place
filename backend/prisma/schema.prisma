@@ -66,16 +66,36 @@ enum TaskType {
   ACHIEVEMENT
 }
 
+enum DaysOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDA
+  SATURDAY
+  SUNDAY
+}
+
+enum RecurrenceFrequency {
+  ONE_TIME
+  REPEATS_PER_WEEK_SELECTED
+  REPEATS_PER_WEEK_ONCE
+}
+
 model Task {
-  id              Int            @id @default(autoincrement())
-  type            TaskType
-  title           String
-  description     String
-  creditValue     Float          @map("credit_value")
-  location        TaskLocation   @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  locationId      Int            @map("location_id")
-  tasksAssigned   TaskAssigned[]
-  relatedWarnings Warning[]
+  id                  Int                   @id @default(autoincrement())
+  type                TaskType
+  title               String
+  description         String
+  creditValue         Float                 @map("credit_value")
+  location            TaskLocation          @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  locationId          Int                   @map("location_id")
+  tasksAssigned       TaskAssigned[]
+  relatedWarnings     Warning[]
+  endDate             DateTime?             @map("end_date")
+  recurrenceFrequency RecurrenceFrequency   @map("recurrence_frequency")
+  specificDay         DaysOfWeek?           @map("specific_day") // used for one time tasks
+  repeatDays          DaysOfWeek[]          @map("repeat_day") // used for repeating tasks
 
   @@map("tasks")
 }
@@ -89,20 +109,6 @@ model TaskLocation {
   @@map("task_locations")
 }
 
-enum Status {
-  PENDING_APPROVAL
-  ASSIGNED
-  INCOMPLETE
-  COMPLETE
-  EXCUSED
-}
-
-enum RecurrenceFrequency {
-  DAILY
-  WEEKLY
-  BI_WEEKLY
-}
-
 model TaskAssigned {
   id                  Int                  @id @default(autoincrement())
   task                Task                 @relation(fields: [taskId], references: [id])
@@ -113,11 +119,17 @@ model TaskAssigned {
   assigneeId          Int                  @map("assignee_id")
   status              Status
   startDate           DateTime             @map("start_date")
-  endDate             DateTime            @map("end_date")
-  recurrenceFrequency RecurrenceFrequency? @map("recurrence_frequency")
   comments            String?
 
   @@map("tasks_assigned")
+}
+
+enum Status {
+  PENDING_APPROVAL
+  ASSIGNED
+  INCOMPLETE
+  COMPLETE
+  EXCUSED
 }
 
 model Warning {
