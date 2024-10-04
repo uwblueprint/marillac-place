@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  Flex,
-  Tabs,
-  TabList,
-  Tab,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, Tabs, TabList, Tab, Text } from "@chakra-ui/react";
 
-import {
-  tasksColumnTypes
-} from "./columnKeys";
+import { tasksColumnTypes } from "./columnKeys";
 
 import {
   scheduleTasksMockData,
@@ -22,21 +14,18 @@ import {
   saturdayScheduleTasksMockData,
 } from "../../../mocks/scheduletasks";
 
-import ScheduleTable, {
-  ColumnInfoTypes,
-  TableData,
-} from "./ScheduleTable";
+import ScheduleTable, { ColumnInfoTypes, TableData } from "./ScheduleTable";
 
-import RoomCard from "../home/HomeRoomCard"
+import RoomCard from "../home/HomeRoomCard";
 import { residentsMockData } from "../../../mocks/residents";
 
-const renderRoomCards = residentsMockData.map(resident => 
+const renderRoomCards = residentsMockData.map((resident) => (
   <RoomCard
     key={resident.residentId}
     room={resident.roomNumber}
     residentId={resident.residentId}
   />
-)
+));
 
 const SchedulePage = (): React.ReactElement => {
   const enum Dates {
@@ -60,64 +49,27 @@ const SchedulePage = (): React.ReactElement => {
     setTaskData(scheduleTasksMockData);
     if (taskDate === Dates.SUNDAY) {
       setDailyTaskData(sundayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.MONDAY) {
+    } else if (taskDate === Dates.MONDAY) {
       setDailyTaskData(mondayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.TUESDAY) {
+    } else if (taskDate === Dates.TUESDAY) {
       setDailyTaskData(tuesdayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.WEDNESDAY) {
+    } else if (taskDate === Dates.WEDNESDAY) {
       setDailyTaskData(wednesdayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.THURSDAY) {
+    } else if (taskDate === Dates.THURSDAY) {
       setDailyTaskData(thursdayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.FRIDAY) {
+    } else if (taskDate === Dates.FRIDAY) {
       setDailyTaskData(fridayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.SATURDAY) {
+    } else if (taskDate === Dates.SATURDAY) {
       setDailyTaskData(saturdayScheduleTasksMockData);
-    }
-    else {
+    } else {
       setDailyTaskData(sundayScheduleTasksMockData);
     }
-  }, []);
-
-  useEffect(() => {
-    if (taskDate === Dates.SUNDAY) {
-      setDailyTaskData(sundayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.MONDAY) {
-      setDailyTaskData(mondayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.TUESDAY) {
-      setDailyTaskData(tuesdayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.WEDNESDAY) {
-      setDailyTaskData(wednesdayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.THURSDAY) {
-      setDailyTaskData(thursdayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.FRIDAY) {
-      setDailyTaskData(fridayScheduleTasksMockData);
-    }
-    else if (taskDate === Dates.SATURDAY) {
-      setDailyTaskData(saturdayScheduleTasksMockData);
-    }
-    else {
-      setDailyTaskData(sundayScheduleTasksMockData);
-    }
-  }, [taskDate])
+  }, [taskDate]);
 
   return (
     <Flex flexDir="column" flexGrow={1} p="20px">
       <h1>Schedule Page</h1>
-      <Flex
-        flexWrap="wrap" 
-        justifyContent="flex-start" 
-      >
+      <Flex flexWrap="wrap" justifyContent="flex-start">
         {renderRoomCards}
       </Flex>
       <Flex flexDir="column" flexGrow={1} p="20px">
@@ -136,73 +88,73 @@ const SchedulePage = (): React.ReactElement => {
         <Text as="b" display="block" margin="10px" textAlign="left">
           Daily Tasks
         </Text>
-      <Tabs variant="enclosed-colored" h="30px" mb="10px" isFitted>
-        <TabList margin="10px">
+        <Tabs variant="enclosed-colored" h="30px" mb="10px" isFitted>
+          <TabList margin="10px">
             <Tab
-            _selected={{ color: "white", bg: "purple.main" }}
-            borderRadius="8px 8px 0 0"
-            onClick={() => {
-              setTaskDate(Dates.SUNDAY);
-            }}
+              _selected={{ color: "white", bg: "purple.main" }}
+              borderRadius="8px 8px 0 0"
+              onClick={() => {
+                setTaskDate(Dates.SUNDAY);
+              }}
             >
-            Sunday
+              Sunday
             </Tab>
-          <Tab
-          _selected={{ color: "white", bg: "purple.main" }}
-          borderRadius="8px 8px 0 0"
-            onClick={() => {
-              setTaskDate(Dates.MONDAY);
-            }}
-          >
-            Monday
-          </Tab>
-          <Tab
-          _selected={{ color: "white", bg: "purple.main" }}
-          borderRadius="8px 8px 0 0"
-            onClick={() => {
-              setTaskDate(Dates.TUESDAY);
-            }}
-          >
-            Tuesday
-          </Tab>
-          <Tab
-          _selected={{ color: "white", bg: "purple.main" }}
-          borderRadius="8px 8px 0 0"
-            onClick={() => {
-              setTaskDate(Dates.WEDNESDAY);
-            }}
-          >
-            Wednesday
-          </Tab>
-          <Tab
-          _selected={{ color: "white", bg: "purple.main" }}
-          borderRadius="8px 8px 0 0"
-            onClick={() => {
-              setTaskDate(Dates.THURSDAY);
-            }}
-          >
-            Thursday
-          </Tab>
-          <Tab
-          _selected={{ color: "white", bg: "purple.main" }}
-          borderRadius="8px 8px 0 0"
-            onClick={() => {
-              setTaskDate(Dates.FRIDAY);
-            }}
-          >
-            Friday
-          </Tab>
-          <Tab
-          _selected={{ color: "white", bg: "purple.main" }}
-          borderRadius="8px 8px 0 0"
-            onClick={() => {
-              setTaskDate(Dates.SATURDAY);
-            }}
-          >
-            Saturday
-          </Tab>
-        </TabList>
-      </Tabs>
+            <Tab
+              _selected={{ color: "white", bg: "purple.main" }}
+              borderRadius="8px 8px 0 0"
+              onClick={() => {
+                setTaskDate(Dates.MONDAY);
+              }}
+            >
+              Monday
+            </Tab>
+            <Tab
+              _selected={{ color: "white", bg: "purple.main" }}
+              borderRadius="8px 8px 0 0"
+              onClick={() => {
+                setTaskDate(Dates.TUESDAY);
+              }}
+            >
+              Tuesday
+            </Tab>
+            <Tab
+              _selected={{ color: "white", bg: "purple.main" }}
+              borderRadius="8px 8px 0 0"
+              onClick={() => {
+                setTaskDate(Dates.WEDNESDAY);
+              }}
+            >
+              Wednesday
+            </Tab>
+            <Tab
+              _selected={{ color: "white", bg: "purple.main" }}
+              borderRadius="8px 8px 0 0"
+              onClick={() => {
+                setTaskDate(Dates.THURSDAY);
+              }}
+            >
+              Thursday
+            </Tab>
+            <Tab
+              _selected={{ color: "white", bg: "purple.main" }}
+              borderRadius="8px 8px 0 0"
+              onClick={() => {
+                setTaskDate(Dates.FRIDAY);
+              }}
+            >
+              Friday
+            </Tab>
+            <Tab
+              _selected={{ color: "white", bg: "purple.main" }}
+              borderRadius="8px 8px 0 0"
+              onClick={() => {
+                setTaskDate(Dates.SATURDAY);
+              }}
+            >
+              Saturday
+            </Tab>
+          </TabList>
+        </Tabs>
         <ScheduleTable
           data={dailyTaskData}
           columnInfo={taskDataColumns}
@@ -211,7 +163,6 @@ const SchedulePage = (): React.ReactElement => {
           isSelectable
         />
       </Flex>
-
     </Flex>
   );
 };

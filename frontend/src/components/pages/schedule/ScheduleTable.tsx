@@ -14,7 +14,7 @@ import {
   IconButton,
   Icon,
 } from "@chakra-ui/react";
-import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
@@ -208,20 +208,20 @@ const ScheduleTable = ({
                 return (
                   <Tr key={index}>
                     {isSelectable ? (
-                        <Td p="0px 0px 0px 20px" w="16px">
+                      <Td p="0px 0px 0px 20px" w="16px">
                         <Checkbox
                           verticalAlign="middle"
                           m="0"
                           isChecked={checked[index + (page - 1) * maxResults]}
                           borderColor="black"
                           onChange={(e) => {
-                          const newChecked = [...checked];
-                          newChecked[index + (page - 1) * maxResults] =
-                            e.target.checked;
-                          setChecked(newChecked);
+                            const newChecked = [...checked];
+                            newChecked[index + (page - 1) * maxResults] =
+                              e.target.checked;
+                            setChecked(newChecked);
                           }}
                         />
-                        </Td>
+                      </Td>
                     ) : null}
                     {columnInfo.map((column, i) => {
                       const getColor = (status: string) => {
@@ -248,20 +248,31 @@ const ScheduleTable = ({
                             justifyContent="space-evenly"
                             alignItems="center"
                             borderRadius="8px"
-                            backgroundColor={getBoxColor(String(row[column.key]))}
-                          >{row[column.key] ? <b>{String(row[column.key])}</b> : ''}
-                          </Box>     
+                            backgroundColor={getBoxColor(
+                              String(row[column.key]),
+                            )}
+                          >
+                            {row[column.key] ? (
+                              <b>{String(row[column.key])}</b>
+                            ) : (
+                              ""
+                            )}
+                          </Box>
                         </Td>
                       ) : (
-                        <Td key={i}>{row[column.key] ? String(row[column.key]) : ''}</Td>
+                        <Td key={i}>
+                          {row[column.key] ? String(row[column.key]) : ""}
+                        </Td>
                       );
                     })}
-                    <Td onClick={() => onEdit(row)}>
-                      <Icon
-                        as={ModeCommentOutlinedIcon}
-                        _hover={{ cursor: "pointer" }}
-                      />
-                    </Td>
+                    {row.status !== "Incomplete" && (
+                      <Td onClick={() => onEdit(row)}>
+                        <Icon
+                          as={ModeCommentOutlinedIcon}
+                          _hover={{ cursor: "pointer" }}
+                        />
+                      </Td>
+                    )}
                   </Tr>
                 );
               })}
