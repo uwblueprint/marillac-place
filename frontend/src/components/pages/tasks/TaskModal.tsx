@@ -109,7 +109,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       onDelete={handleDelete}
     >
       <Flex flexDir="column" gap="20px">
-      <FormControl isRequired mt={0} pt={0}>
+      <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
             Task Type
           </FormLabel>
@@ -117,7 +117,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           <Select
             variant="primary"
             value={taskType}
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e) => setTaskType(e.target.value)}
             border="solid"
             borderWidth="2px"
             borderColor="gray.300"
@@ -133,9 +133,8 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           submitPressed={submitPressed}
-          required
         />
-       <FormControl isRequired mt={0} pt={0}>
+       <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
             Recurrence
           </FormLabel>
@@ -143,7 +142,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           <Select
             variant="primary"
             value={recurrence}
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e) => setRecurrence(e.target.value)}
             border="solid"
             borderWidth="2px"
             borderColor="gray.300"
@@ -293,10 +292,10 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
             </label>
               <input 
                style={{
-                width: "70px", 
+                width: "90px", 
                 height: "30px",
                 marginLeft: "10px",
-                border: "1px solid black",
+                border: "1px solid gray",
                 borderRadius: "10px"
               }}
               />
@@ -311,7 +310,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           onBlur={handleMoneyInput}
           submitPressed={submitPressed}
           leftElement="$"
-          required
+        
         />
         <Flex justifyContent="flex-end">
           <Button
