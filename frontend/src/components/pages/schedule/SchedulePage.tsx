@@ -5,6 +5,7 @@ import {
 
 import RoomCard from "../home/HomeRoomCard"
 import { residentsMockData } from "../../../mocks/residents";
+import { ScheduleCalendar } from "./ScheduleCalendar";
 
 const renderRoomCards = residentsMockData.map(resident => 
   <RoomCard
@@ -25,6 +26,7 @@ const SchedulePage = (): React.ReactElement => {
       >
         {renderRoomCards}
       </Flex>
+      <ScheduleCalendar/>
     </Flex>
   );
 };
