@@ -47,6 +47,9 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [taskType, setTaskType] = useState("");
   const [recurrence, setRecurrence] = useState("");
   const [marillacBucks, setMarillacBucks] = useState("");
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+
+  const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
 
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -77,6 +80,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
     setSubmitPressed(false);
   };
+  
 
   const handleMoneyInput = () => {
     const inputValue = marillacBucks.replace(/[^0-9.]/g, ""); // Remove non-numeric and non-period characters
@@ -89,6 +93,14 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
   // delete task api stuff
   const handleDelete = () => {};
+
+  const selectDay = (day: string) => {
+    if ((selectedDays).includes(day)) {
+      setSelectedDays(selectedDays.filter((d) => d !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  }
 
   return (
     <ModalContainer
@@ -145,9 +157,34 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
        
        
        <Flex flexDir="row">
-          <h6>Select Days:</h6>
+          <h6 style={{ marginTop: '15x' }}>Select Days:</h6>
+
+          {days.map((day, index) => (
+            <Button
+              key={day}
+              // text colour (based on if day is selected)
+              color={selectedDays.includes(day) ? "white" : "gray"}
+              backgroundColor={selectedDays.includes(day) ? "#56469c" : "transparent"}
+              // if button is clicked, calls selectDay on day
+              onClick={() => selectDay(day)}
+              // hover style based on if day is selected
+              _hover={{ bg: selectedDays.includes(day) ? "#56469c" : "#e2e2e2", color: selectedDays.includes(day) ? "white" : "gray" }}
+              // same styling as before
+              style={{
+                padding: "4px",
+                width: "30px",
+                borderRadius: "50%",
+                // top: "-10px",
+                // left: `${(index + 1) * 10}px`
+                margin: "0 5px"
+              }}
+            >
+              {day}
+            </Button>
+          ))}
           
-          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
+          
+          {/* <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
           style={{
             padding: "4px",
             width: "20px",               
@@ -209,7 +246,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
             top: "-10px",
             left: "70px"
           }}
-          >S</Button>
+          >S</Button> */}
         </Flex>
 
         <Flex flexDir='column'>
