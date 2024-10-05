@@ -8,12 +8,19 @@ import {
   InputLeftElement,
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   ADD_RESIDENT,
   UPDATE_RESIDENT,
   DELETE_RESIDENT,
 } from "../../../APIClients/Mutations/ResidentsMutations";
+
+import {
+  GET_RESIDENTS_BY_ID,
+  GET_ALL_RESIDENTS,
+  GET_ACTIVE_RESIDENTS,
+} from "../../../APIClients/Queries/ResidentsQueries";
+
 import {
   UserResponse,
   UserRequest,
@@ -52,16 +59,16 @@ const ResidentsPage = (): React.ReactElement => {
   const [isModalOpen, setIsModalOpen] = useState("none");
   const [residentEditInfo, setEditInfo] = useState<ResidentEditInfo>();
 
-  const [addResident] = useMutation<{ addResident: UserResponse }>(
-    ADD_RESIDENT,
-  );
+  // const [addResident] = useMutation<{ addResident: UserResponse }>(
+  //   ADD_RESIDENT,
+  // );
 
-  const [updateResident] = useMutation<{
-    userId: number;
-    resident: UserResponse;
-  }>(UPDATE_RESIDENT);
+  // const [updateResident] = useMutation<{
+  //   userId: number;
+  //   resident: UserResponse;
+  // }>(UPDATE_RESIDENT);
 
-  const [deleteResident] = useMutation<{ userId: number }>(DELETE_RESIDENT);
+  // const [deleteResident] = useMutation<{ userId: number }>(DELETE_RESIDENT);
 
   // const handleAddResident = async () => {
   //   try {
@@ -108,6 +115,35 @@ const ResidentsPage = (): React.ReactElement => {
   //   }
   // };
 
+  // const ids = [4];
+  // const {
+  //   loading: residentIdLoading,
+  //   error: residentIdError,
+  //   data: residentIdData,
+  // } = useQuery<{ userIds: [number] }>(GET_RESIDENTS_BY_ID, {
+  //   variables: { userIds: ids },
+  // });
+
+  // const {
+  //   loading: residentActiveLoading,
+  //   error: residentActiveError,
+  //   data: residentActiveData,
+  // } = useQuery(GET_ACTIVE_RESIDENTS);
+
+  const {
+    loading: residentAllLoading,
+    error: residentAllError,
+    data: residentAllData,
+  } = useQuery(GET_ALL_RESIDENTS);
+
+  const allResidents = React.useMemo(() => {
+    return residentAllData;
+  }, [residentAllData]);
+
+  const printAllResidents = () => {
+    console.log(allResidents);
+  };
+
   useEffect(() => {
     // TODO: Fetch residents from API
     setResidents(residentsMockData);
@@ -144,11 +180,22 @@ const ResidentsPage = (): React.ReactElement => {
         </Button>
       </Flex>
       <CommonTable
-        data={residents}
+        data={
+          !residentAllLoading && !residentAllError
+            ? allResidents.getAllResidents.map((item: UserResponse) => {
+                return {
+                  roomNumber: item.roomNumber,
+                  arrivalDate: item.dateJoined,
+                  departureDate: item.dateLeft ? item.dateLeft : "",
+                  residentId: item.residentId,
+                  password: "1231874",
+                };
+              })
+            : residents
+        }
         columnInfo={columnTypes}
         onEdit={handleResidentEdit}
       />
-
       <ResidentModal
         isOpen={isModalOpen === "add"}
         setIsOpen={() => setIsModalOpen("none")}
