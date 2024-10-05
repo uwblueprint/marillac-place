@@ -147,53 +147,67 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
        <Flex flexDir="row">
           <h6>Select Days:</h6>
           
-          <Button
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
           style={{
             padding: "4px",
             width: "20px",               
             borderRadius: "50%",
+            top: "-10px",
+            left: "10px"
           }}
           >S</Button>
-          <Button
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
           style={{
             padding: "4px",
             width: "20px",               
             borderRadius: "50%",
+            top: "-10px",
+            left: "20px"
           }}
           >M</Button>
-          <Button
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
           style={{
             padding: "4px",
             width: "20px",               
             borderRadius: "50%",
+            top: "-10px",
+            left: "30px"
           }}
           >T</Button>
-          <Button
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
           style={{
             padding: "4px",
             width: "20px",               
             borderRadius: "50%",
+            top: "-10px",
+            left: "40px"
           }}
           >W</Button>
-          <Button
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
           style={{
             padding: "4px",
             width: "20px",               
             borderRadius: "50%",
+            top: "-10px",
+            left: "50px"
           }}
           >T</Button>
-          <Button
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
           style={{
             padding: "4px",
             width: "20px",               
             borderRadius: "50%",
+            top: "-10px",
+            left: "60px"
           }}
           >F</Button>
-          <Button
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
           style={{
             padding: "4px",
             width: "20px",               
             borderRadius: "50%",
+            top: "-10px",
+            left: "70px"
           }}
           >S</Button>
         </Flex>
@@ -204,6 +218,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
               <input
                 type="radio"
                 id="freqDays"
+                name="option"
                 style={{ marginRight: '8px' }}
               />
               Every Selected Day
@@ -212,6 +227,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
               <input
                 type="radio"
                 id="freqDays"
+                name="option"
                 style={{ marginRight: '8px' }}
               />
               One of the selected days
@@ -224,6 +240,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
               <input
                 type="radio"
                 id="freqDays"
+                name="option"
                 style={{ marginRight: '8px' }}
               />
               Never
@@ -233,6 +250,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
               <input
                 type="radio"
                 id="freqDays"
+                name="option"
                 style={{ marginRight: '8px' }}
               />
               On
