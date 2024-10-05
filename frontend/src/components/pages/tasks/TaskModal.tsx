@@ -48,7 +48,6 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [recurrence, setRecurrence] = useState("");
   const [marillacBucks, setMarillacBucks] = useState("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
-
   const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
 
   const [title, setTitle] = useState("");
@@ -157,7 +156,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
        
        
        <Flex flexDir="row">
-          <h6 style={{ marginTop: '15x' }}>Select Days:</h6>
+          <h6 style={{ marginTop: '10px' }}>Select Days:</h6>
 
           {days.map((day, index) => (
             <Button
