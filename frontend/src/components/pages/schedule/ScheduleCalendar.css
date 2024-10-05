@@ -1,0 +1,8 @@
+.fc-timegrid-slot
+
+.fc-timegrid-slot-lane 
+
+.fc-timegrid-slot-minor {
+    display: none;
+    color: transparent;
+}
