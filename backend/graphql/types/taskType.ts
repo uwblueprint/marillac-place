@@ -20,7 +20,7 @@ const taskType = gql`
     TUESDAY
     WEDNESDAY
     THURSDAY
-    FRIDA
+    FRIDAY
     SATURDAY
     SUNDAY
   }

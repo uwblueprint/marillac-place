@@ -5,10 +5,13 @@ CREATE TYPE "UserType" AS ENUM ('STAFF', 'RESIDENT');
 CREATE TYPE "TaskType" AS ENUM ('REQUIRED', 'OPTIONAL', 'CHORE', 'ACHIEVEMENT');
 
 -- CreateEnum
-CREATE TYPE "Status" AS ENUM ('PENDING_APPROVAL', 'ASSIGNED', 'INCOMPLETE', 'COMPLETE', 'EXCUSED');
+CREATE TYPE "DaysOfWeek" AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY');
 
 -- CreateEnum
-CREATE TYPE "RecurrenceFrequency" AS ENUM ('DAILY', 'WEEKLY', 'BI_WEEKLY');
+CREATE TYPE "RecurrenceFrequency" AS ENUM ('ONE_TIME', 'REPEATS_PER_WEEK_SELECTED', 'REPEATS_PER_WEEK_ONCE');
+
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('PENDING_APPROVAL', 'ASSIGNED', 'INCOMPLETE', 'COMPLETE', 'EXCUSED');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -56,6 +59,10 @@ CREATE TABLE "tasks" (
     "description" TEXT NOT NULL,
     "credit_value" DOUBLE PRECISION NOT NULL,
     "location_id" INTEGER NOT NULL,
+    "end_date" TIMESTAMP(3),
+    "recurrence_frequency" "RecurrenceFrequency" NOT NULL,
+    "specific_day" "DaysOfWeek",
+    "repeat_days" "DaysOfWeek"[],
 
     CONSTRAINT "tasks_pkey" PRIMARY KEY ("id")
 );
@@ -76,9 +83,7 @@ CREATE TABLE "tasks_assigned" (
     "assigner_id" INTEGER,
     "assignee_id" INTEGER NOT NULL,
     "status" "Status" NOT NULL,
-    "start_date" DATE NOT NULL,
-    "end_date" DATE,
-    "recurrence_frequency" "RecurrenceFrequency",
+    "start_date" TIMESTAMP(3) NOT NULL,
     "comments" TEXT,
 
     CONSTRAINT "tasks_assigned_pkey" PRIMARY KEY ("id")
