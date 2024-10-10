@@ -71,7 +71,7 @@ enum DaysOfWeek {
   TUESDAY
   WEDNESDAY
   THURSDAY
-  FRIDA
+  FRIDAY
   SATURDAY
   SUNDAY
 }
