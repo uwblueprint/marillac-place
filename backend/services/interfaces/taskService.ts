@@ -1,4 +1,9 @@
-import { TaskType, Status, RecurrenceFrequency } from "../../prisma";
+import {
+  TaskType,
+  Status,
+  RecurrenceFrequency,
+  DaysOfWeek,
+} from "../../prisma";
 
 export interface TaskDTO {
   id: number;
@@ -7,6 +12,10 @@ export interface TaskDTO {
   description: string;
   creditValue: number;
   location: TaskLocationDTO;
+  endDate: Date | null;
+  recurrenceFrequency: RecurrenceFrequency;
+  specificDay: DaysOfWeek | null;
+  repeatDays: DaysOfWeek[];
 }
 
 export interface TaskLocationDTO {
@@ -21,6 +30,10 @@ export interface InputTaskDTO {
   description: string;
   creditValue: number;
   locationId: number;
+  endDate: Date | null;
+  recurrenceFrequency: RecurrenceFrequency;
+  specificDay: DaysOfWeek | null;
+  repeatDays: DaysOfWeek[];
 }
 
 export interface InputTaskAssignedDTO {
@@ -29,8 +42,6 @@ export interface InputTaskAssignedDTO {
   assignerId?: number;
   status: Status;
   startDate: Date;
-  endDate: Date;
-  recurrenceFrequency?: RecurrenceFrequency;
   comments?: string;
 }
 
@@ -41,8 +52,6 @@ export interface TaskAssignedDTO {
   assigneeId: number;
   status: Status;
   startDate: Date;
-  endDate: Date;
-  recurrenceFrequency: RecurrenceFrequency | null;
   comments: string | null;
 }
 
@@ -93,7 +102,7 @@ interface ITaskService {
    * @returns a list of TaskDTOs ending on the provided date
    * @throws Error if task retrieval fails
    */
-  getTasksByEndDate(endDate: Date): Promise<TaskAssignedDTO[]>;
+  // getTasksByEndDate(endDate: Date): Promise<TaskAssignedDTO[]>;
 
   /**
    * Get all tasks by a status
