@@ -20,6 +20,7 @@ const notificationType = gql`
   extend type Query {
     getNotificationsByUserId(userId: ID!): [NotificationReceivedDTO!]
     getNotificationById(id: ID!): NotificationReceivedDTO!
+    getAllNotifications: [NotificationReceivedDTO!]
   }
 
   extend type Mutation {
