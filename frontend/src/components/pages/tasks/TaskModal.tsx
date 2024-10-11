@@ -8,6 +8,7 @@ import {
   FormControl,
   FormLabel,
   Checkbox,
+  IconButton,
 } from "@chakra-ui/react";
 
 import ModalContainer from "../../common/ModalContainer";
@@ -40,108 +41,22 @@ const generateOptions = () => {
 
 const options = generateOptions();
 
-const DateInput = ({
-  dueDate,
-  setDueDate,
-  dueTime,
-  setDueTime,
-  isAllDay,
-  setIsAllDay,
-  recurrenceFrequency,
-  setRecurrenceFrequency,
-  submitPressed,
-}: {
-  dueDate: string;
-  setDueDate: React.Dispatch<React.SetStateAction<string>>;
-  dueTime: string;
-  setDueTime: React.Dispatch<React.SetStateAction<string>>;
-  isAllDay: boolean;
-  setIsAllDay: React.Dispatch<React.SetStateAction<boolean>>;
-  recurrenceFrequency: string;
-  setRecurrenceFrequency: React.Dispatch<React.SetStateAction<string>>;
-  submitPressed: boolean;
-}) => {
-  return (
-    <Flex flexDir="column" flex="1">
-      <FormControl isRequired>
-        <FormLabel mb="5px" color="gray.main" fontWeight="700">
-          Due Date
-        </FormLabel>
-        <Flex flexDir="column">
-          <Flex flexDir="row">
-            <Input
-              variant="primary"
-              mb={3}
-              borderColor={submitPressed && !dueTime ? "red.error" : "gray.300"}
-              boxShadow={
-                submitPressed && !dueTime ? "0 0 2px red.error" : "none"
-              }
-              type="date"
-              value={dueDate}
-              width="200px"
-              onChange={(e) => setDueDate(e.target.value)}
-            />
-            <Text paddingX="10px" paddingY="4px">
-              at
-            </Text>
-            <Select
-              variant="primary"
-              value={dueTime}
-              onChange={(e) => setDueTime(e.target.value)}
-              border="solid"
-              borderColor={submitPressed && !dueTime ? "red.error" : "gray.300"}
-              boxShadow={
-                submitPressed && !dueTime ? "0 0 2px red.error" : "none"
-              }
-              borderWidth="2px"
-              height="34px"
-              width="200px"
-            >
-              <option value="">Select...</option>
-              {options.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-            </Select>
-          </Flex>
-          <Flex alignItems="center">
-            <Checkbox
-              w="200px"
-              isChecked={isAllDay}
-              onChange={(e) => setIsAllDay(e.target.checked)}
-              m={0}
-            >
-              All Day
-            </Checkbox>
-            <Select
-              variant="primary"
-              value={recurrenceFrequency}
-              onChange={(e) => setRecurrenceFrequency(e.target.value)}
-              border="solid"
-              borderColor="gray.300"
-              borderWidth="2px"
-              height="34px"
-            >
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="biWeekly">Bi-Weekly</option>
-            </Select>
-          </Flex>
-        </Flex>
-      </FormControl>
-    </Flex>
-  );
-};
+
 
 const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
+  const [taskType, setTaskType] = useState("");
+  const [recurrence, setRecurrence] = useState("");
+  const [marillacBucks, setMarillacBucks] = useState("");
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
+
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [dueTime, setDueTime] = useState("");
   const [isAllDay, setIsAllDay] = useState(false);
   const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
-  const [marillacBucks, setMarillacBucks] = useState("");
+  
 
   const [submitPressed, setSubmitPressed] = useState(false);
 
@@ -164,6 +79,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
     setSubmitPressed(false);
   };
+  
 
   const handleMoneyInput = () => {
     const inputValue = marillacBucks.replace(/[^0-9.]/g, ""); // Remove non-numeric and non-period characters
@@ -177,6 +93,14 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   // delete task api stuff
   const handleDelete = () => {};
 
+  const selectDay = (day: string) => {
+    if ((selectedDays).includes(day)) {
+      setSelectedDays(selectedDays.filter((d) => d !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  }
+
   return (
     <ModalContainer
       title="Edit Chore"
@@ -185,44 +109,199 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       onDelete={handleDelete}
     >
       <Flex flexDir="column" gap="20px">
-        <FormField
-          label="Task Name"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          submitPressed={submitPressed}
-          required
-        />
-
-        <FormControl isRequired mt={0} pt={0}>
+      <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
-            Location
+            Task Type
           </FormLabel>
 
           <Select
             variant="primary"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            value={taskType}
+            onChange={(e) => setTaskType(e.target.value)}
             border="solid"
             borderWidth="2px"
             borderColor="gray.300"
             height="34px"
           >
-            <option value="kitchen">Kitchen</option>
-            <option value="livingRoom">Living Room</option>
-            <option value="washroom">Washroom</option>
+            <option value="optional">Optional</option>
+            <option value="required">Required</option>
           </Select>
         </FormControl>
-        <DateInput
-          dueDate={dueDate}
-          setDueDate={setDueDate}
-          dueTime={dueTime}
-          setDueTime={setDueTime}
-          isAllDay={isAllDay}
-          setIsAllDay={setIsAllDay}
-          recurrenceFrequency={recurrenceFrequency}
-          setRecurrenceFrequency={setRecurrenceFrequency}
+
+        <FormField
+          label="Task Name"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           submitPressed={submitPressed}
         />
+       <FormControl>
+          <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            Recurrence
+          </FormLabel>
+
+          <Select
+            variant="primary"
+            value={recurrence}
+            onChange={(e) => setRecurrence(e.target.value)}
+            border="solid"
+            borderWidth="2px"
+            borderColor="gray.300"
+            height="34px"
+          >
+            <option value="Repeats">Repeats</option>
+            <option value="Single">Single</option>
+          </Select>
+        </FormControl>
+       
+       
+       <Flex flexDir="row">
+          <h6 style={{ marginTop: '10px' }}>Select Days:</h6>
+
+          {days.map((day, index) => (
+            <Button
+              key={day}
+              // text colour (based on if day is selected)
+              color={selectedDays.includes(day) ? "white" : "gray"}
+              backgroundColor={selectedDays.includes(day) ? "#56469c" : "transparent"}
+              // if button is clicked, calls selectDay on day
+              onClick={() => selectDay(day)}
+              // hover style based on if day is selected
+              _hover={{ bg: selectedDays.includes(day) ? "#56469c" : "#e2e2e2", color: selectedDays.includes(day) ? "white" : "gray" }}
+              // same styling as before
+              style={{
+                padding: "4px",
+                width: "30px",
+                borderRadius: "50%",
+                // top: "-10px",
+                // left: `${(index + 1) * 10}px`
+                margin: "0 5px"
+              }}
+            >
+              {day}
+            </Button>
+          ))}
+          
+          
+          {/* <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
+          style={{
+            padding: "4px",
+            width: "20px",               
+            borderRadius: "50%",
+            top: "-10px",
+            left: "10px"
+          }}
+          >S</Button>
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
+          style={{
+            padding: "4px",
+            width: "20px",               
+            borderRadius: "50%",
+            top: "-10px",
+            left: "20px"
+          }}
+          >M</Button>
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
+          style={{
+            padding: "4px",
+            width: "20px",               
+            borderRadius: "50%",
+            top: "-10px",
+            left: "30px"
+          }}
+          >T</Button>
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
+          style={{
+            padding: "4px",
+            width: "20px",               
+            borderRadius: "50%",
+            top: "-10px",
+            left: "40px"
+          }}
+          >W</Button>
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
+          style={{
+            padding: "4px",
+            width: "20px",               
+            borderRadius: "50%",
+            top: "-10px",
+            left: "50px"
+          }}
+          >T</Button>
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
+          style={{
+            padding: "4px",
+            width: "20px",               
+            borderRadius: "50%",
+            top: "-10px",
+            left: "60px"
+          }}
+          >F</Button>
+          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
+          style={{
+            padding: "4px",
+            width: "20px",               
+            borderRadius: "50%",
+            top: "-10px",
+            left: "70px"
+          }}
+          >S</Button> */}
+        </Flex>
+
+        <Flex flexDir='column'>
+            <h6 style={{ marginBottom: '8px' }}>Completed On</h6>
+            <label htmlFor="freqDays">
+              <input
+                type="radio"
+                id="freqDays"
+                name="option"
+                style={{ marginRight: '8px' }}
+              />
+              Every Selected Day
+            </label>
+            <label htmlFor="freqDays">
+              <input
+                type="radio"
+                id="freqDays"
+                name="option"
+                style={{ marginRight: '8px' }}
+              />
+              One of the selected days
+            </label>
+        </Flex>
+
+        <Flex flexDir='column'>
+            <h6 style={{ marginBottom: '8px' }}>Ends On</h6>
+            <label htmlFor="freqDays">
+              <input
+                type="radio"
+                id="freqDays"
+                name="option"
+                style={{ marginRight: '8px' }}
+              />
+              Never
+            </label>
+        <Flex flexDir='row'>
+            <label htmlFor="freqDays">
+              <input
+                type="radio"
+                id="freqDays"
+                name="option"
+                style={{ marginRight: '8px' }}
+              />
+              On
+            </label>
+              <input 
+               style={{
+                width: "90px", 
+                height: "30px",
+                marginLeft: "10px",
+                border: "1px solid gray",
+                borderRadius: "10px"
+              }}
+              />
+            </Flex>
+        </Flex>
+
         <FormField
           label="Marillac Bucks"
           value={marillacBucks}
@@ -231,7 +310,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           onBlur={handleMoneyInput}
           submitPressed={submitPressed}
           leftElement="$"
-          required
+        
         />
         <Flex justifyContent="flex-end">
           <Button
