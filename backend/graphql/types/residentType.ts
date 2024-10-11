@@ -72,6 +72,7 @@ const residentType = gql`
     updateResident(userId: ID!, resident: UpdateResidentDTO!): ResidentDTO!
     deleteResident(userId: ID!): ResidentDTO!
     redeemCredits(userId: ID!, credits: Float!): RedeemCreditResponse!
+    setResidentInactive(userId: ID!): ResidentDTO!
   }
 `;
 

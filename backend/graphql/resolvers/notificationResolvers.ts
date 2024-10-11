@@ -5,8 +5,11 @@ import INotificationService, {
 } from "../../services/interfaces/notificationService";
 import IResidentService from "../../services/interfaces/residentService";
 import ResidentService from "../../services/implementations/residentService";
+import IUserService from "../../services/interfaces/userService";
+import UserService from "../../services/implementations/userService";
 
-const residentService: IResidentService = new ResidentService();
+const userService: IUserService = new UserService();
+const residentService: IResidentService = new ResidentService(userService);
 const notificationService: INotificationService = new NotificationService(
   residentService,
 );

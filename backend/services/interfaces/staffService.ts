@@ -52,6 +52,14 @@ interface IStaffService {
    * @throws Error if staff retrieval fails
    */
   getStaffByIds(staffIds: number[]): Promise<Array<StaffDTO>>;
+
+  /**
+   * Update staff with staffId to inactive
+   * @param staffId  staff ids
+   * @returns a StaffDTO with staff's information
+   * @throws Error if staff retrieval fails
+   */
+  setStaffInactive(userId: number): Promise<StaffDTO>;
 }
 
 export default IStaffService;

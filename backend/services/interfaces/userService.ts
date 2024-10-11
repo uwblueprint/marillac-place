@@ -70,6 +70,14 @@ interface IUserService {
    * @throws Error if user type retrieval fails
    */
   getUserTypeByAuthId(authId: string): Promise<UserType>;
+
+  /**
+   * Update user with userId to inactive
+   * @param userId user's id
+   * @returns user's type
+   * @throws Error if user type retrieval fails
+   */
+  setUserInactive(userId: number): Promise<void>;
 }
 
 export default IUserService;

@@ -45,6 +45,7 @@ const staffType = gql`
     addStaff(staff: CreateStaffDTO!): StaffDTO!
     updateStaff(userId: ID!, staff: UpdateStaffDTO!): StaffDTO!
     deleteStaff(userId: ID!): StaffDTO!
+    setStaffInactive(userId: ID!): StaffDTO!
   }
 `;
 

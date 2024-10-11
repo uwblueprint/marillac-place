@@ -7,12 +7,19 @@ import IResidentService, {
   UpdateResidentDTO,
   RedeemCreditsResponse,
 } from "../interfaces/residentService";
+import IUserService from "../interfaces/userService";
 import logger from "../../utilities/logger";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
 const Logger = logger(__filename);
 
 class ResidentService implements IResidentService {
+  userService: IUserService;
+
+  constructor(userService: IUserService) {
+    this.userService = userService;
+  }
+
   async addResident(resident: CreateResidentDTO): Promise<ResidentDTO> {
     try {
       const firebaseUser = await firebaseAdmin.auth().createUser({
@@ -361,6 +368,44 @@ class ResidentService implements IResidentService {
         `Failed to redeem resident's credits by IDs. IDs = ${userId}. Reason = ${getErrorMessage(
           error,
         )}`,
+      );
+      throw error;
+    }
+  }
+
+  async setResidentInactive(userId: number): Promise<ResidentDTO> {
+    try {
+      const resident = await prisma.resident.findUnique({
+        where: { userId },
+        include: { user: true },
+      });
+
+      if (!resident) {
+        throw new Error(`Resident with ${userId} not found.`);
+      }
+
+      this.userService.setUserInactive(userId);
+
+      return {
+        userId: resident.userId,
+        residentId: resident.residentId,
+        birthDate: resident.birthDate,
+        roomNumber: resident.roomNumber,
+        credits: resident.credits,
+        dateJoined: resident.dateJoined,
+        dateLeft: resident.dateLeft,
+        notes: resident.notes,
+        email: resident.user.email,
+        phoneNumber: resident.user.phoneNumber,
+        firstName: resident.user.firstName,
+        lastName: resident.user.lastName,
+        displayName: resident.user.displayName,
+        profilePictureURL: resident.user.profilePictureURL,
+        isActive: false,
+      };
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to set resident inactive. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }

@@ -5,8 +5,11 @@ import IResidentService, {
   UpdateResidentDTO,
   RedeemCreditsResponse,
 } from "../../services/interfaces/residentService";
+import UserService from "../../services/implementations/userService";
+import IUserService from "../../services/interfaces/userService";
 
-const residentService: IResidentService = new ResidentService();
+const userService: IUserService = new UserService();
+const residentService: IResidentService = new ResidentService(userService);
 
 const residentResolvers = {
   Query: {
@@ -66,6 +69,15 @@ const residentResolvers = {
       { userId, credits }: { userId: string; credits: number },
     ): Promise<RedeemCreditsResponse> => {
       return residentService.redeemCredits(parseInt(userId, 10), credits);
+    },
+    setResidentInactive: async (
+      _parent: undefined,
+      { userId }: { userId: string },
+    ): Promise<ResidentDTO> => {
+      const updatedResident = await residentService.setResidentInactive(
+        parseInt(userId, 10),
+      );
+      return updatedResident;
     },
   },
 };

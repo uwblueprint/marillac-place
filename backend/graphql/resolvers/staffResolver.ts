@@ -4,8 +4,11 @@ import IStaffService, {
   CreateStaffDTO,
   UpdateStaffDTO,
 } from "../../services/interfaces/staffService";
+import UserService from "../../services/implementations/userService";
+import IUserService from "../../services/interfaces/userService";
 
-const staffService: IStaffService = new StaffService();
+const userService: IUserService = new UserService();
+const staffService: IStaffService = new StaffService(userService);
 
 const staffResolvers = {
   Query: {
@@ -49,6 +52,15 @@ const staffResolvers = {
     ): Promise<StaffDTO> => {
       const deletedStaff = await staffService.deleteStaff(parseInt(userId, 10));
       return deletedStaff;
+    },
+    setStaffInactive: async (
+      _parent: undefined,
+      { userId }: { userId: string },
+    ): Promise<StaffDTO> => {
+      const updatedStaff = await staffService.setStaffInactive(
+        parseInt(userId, 10),
+      );
+      return updatedStaff;
     },
   },
 };
