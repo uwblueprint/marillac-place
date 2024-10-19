@@ -10,4 +10,17 @@ export type UserRequest = {
     profilePictureURL?: string;
     isActive: boolean;
   };
+
+export type UserRequestID = {
+    userId: string;
+    email: string;
+    password: string;
+    phoneNumber?: string;
+    firstName: string;
+    lastName: string;
+    isAdmin: boolean;
+    displayName?: string;
+    profilePictureURL?: string;
+    isActive: boolean;
+  };
   

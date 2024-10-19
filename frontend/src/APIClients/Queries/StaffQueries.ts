@@ -15,3 +15,19 @@ export const GET_ALL_STAFF = gql`
     }
   }
 `;
+
+export const GET_STAFF_BY_IDS = gql`
+  query GetStaffByIds {
+    getStaffByIds {
+      userId
+      email
+      phoneNumber
+      firstName
+      lastName
+      displayName
+      profilePictureURL
+      isActive
+      isAdmin
+    }
+  }
+`;
