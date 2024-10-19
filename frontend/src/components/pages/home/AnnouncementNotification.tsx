@@ -3,7 +3,7 @@ import moment from "moment";
 import { Box, Text, Flex, Icon, IconButton } from "@chakra-ui/react";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 import { Announcement } from "../../../types/NotificationTypes";
@@ -17,7 +17,7 @@ const AnnouncementNotification = ({
 
   return (
     <Box w="100%" p={3}>
-      <Flex justifyContent="space-betwee" maxW="100%" position="relative">
+      <Flex justifyContent="space-between" maxW="100%" position="relative">
         <Flex alignItems="flex-start" w="100%" overflow="hidden">
           <Box
             borderRadius="full"

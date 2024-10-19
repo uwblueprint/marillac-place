@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flex, Box, Heading, Text } from "@chakra-ui/react";
+import { Flex, Box, Text } from "@chakra-ui/react";
 import { announcementsMockData } from "../../../mocks/notifications";
 import AnnouncementNotification from "./AnnouncementNotification";
 import { Announcement } from "../../../types/NotificationTypes";
@@ -125,7 +125,11 @@ const HomePage = (): React.ReactElement => {
               </Text>
             </Flex>
 
-            <Text onClick={() => setViewAll(!viewAll)} cursor="pointer" textDecoration="underline">
+            <Text
+              onClick={() => setViewAll(!viewAll)}
+              cursor="pointer"
+              textDecoration="underline"
+            >
               {viewAll ? "Collapse All" : "View all"}
             </Text>
           </Flex>
