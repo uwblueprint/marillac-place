@@ -8,24 +8,24 @@ import {
   InputLeftElement,
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  ADD_RESIDENT,
-  UPDATE_RESIDENT,
-  DELETE_RESIDENT,
-} from "../../../APIClients/Mutations/ResidentsMutations";
+import { useQuery } from "@apollo/client";
+// import {
+//   ADD_RESIDENT,
+//   UPDATE_RESIDENT,
+//   DELETE_RESIDENT,
+// } from "../../../APIClients/Mutations/ResidentsMutations";
 
 import {
-  GET_RESIDENTS_BY_ID,
+  // GET_RESIDENTS_BY_ID,
   GET_ALL_RESIDENTS,
-  GET_ACTIVE_RESIDENTS,
+  // GET_ACTIVE_RESIDENTS,
 } from "../../../APIClients/Queries/ResidentsQueries";
 
-import {
-  UserResponse,
-  UserRequest,
-  UserRequestUpdate,
-} from "../../../APIClients/Types/ResidentsType";
+// import {
+//   UserResponse,
+//   UserRequest,
+//   UserRequestUpdate,
+// } from "../../../APIClients/Types/ResidentsType";
 
 import CommonTable, {
   ColumnInfoTypes,
@@ -33,7 +33,7 @@ import CommonTable, {
 } from "../../common/CommonTable";
 import ResidentModal from "./ResidentModal";
 import ResidentEditModal, { ResidentEditInfo } from "./ResidentEditModal";
-import { residentsMockData } from "../../../mocks/residents";
+// import { residentsMockData } from "../../../mocks/residents";
 
 const columnTypes: ColumnInfoTypes[] = [
   {
@@ -131,23 +131,16 @@ const ResidentsPage = (): React.ReactElement => {
   // } = useQuery(GET_ACTIVE_RESIDENTS);
 
   const {
-    loading: residentAllLoading,
-    error: residentAllError,
+    // loading: residentAllLoading, MAY NEED TO ADD LOADING ICON/STATE
+    // error: residentAllError,
     data: residentAllData,
   } = useQuery(GET_ALL_RESIDENTS);
 
-  const allResidents = React.useMemo(() => {
-    return residentAllData;
-  }, [residentAllData]);
-
-  const printAllResidents = () => {
-    console.log(allResidents);
-  };
-
   useEffect(() => {
-    // TODO: Fetch residents from API
-    setResidents(residentsMockData);
-  }, []);
+    if (residentAllData?.getAllResidents) {
+      setResidents(residentAllData.getAllResidents);
+    }
+  }, [residentAllData]);
 
   const handleResidentEdit = (row: any) => {
     setIsModalOpen("edit");
@@ -180,19 +173,15 @@ const ResidentsPage = (): React.ReactElement => {
         </Button>
       </Flex>
       <CommonTable
-        data={
-          !residentAllLoading && !residentAllError
-            ? allResidents.getAllResidents.map((item: UserResponse) => {
-                return {
-                  roomNumber: item.roomNumber,
-                  arrivalDate: item.dateJoined,
-                  departureDate: item.dateLeft ? item.dateLeft : "",
-                  residentId: item.residentId,
-                  password: "1231874",
-                };
-              })
-            : residents
-        }
+        data={residents.map((item: TableData) => {
+          return {
+            roomNumber: item.roomNumber,
+            arrivalDate: item.dateJoined,
+            departureDate: item.dateLeft ? item.dateLeft : "",
+            residentId: item.residentId,
+            password: "1231874",
+          };
+        })}
         columnInfo={columnTypes}
         onEdit={handleResidentEdit}
       />
