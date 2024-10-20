@@ -24,3 +24,38 @@ export type UserRequestID = {
     isActive: boolean;
   };
   
+  export type UserRequestAdd = {
+    userId?: number;
+    email: string;
+    phoneNumber: string;
+    firstName: string;
+    lastName: string;
+    displayName: string;
+    profilePictureURL?: string;
+    isActive: boolean;
+    isAdmin: boolean;
+};
+
+export type UserRequestUpdate = {
+      userId: number;
+      email?: string;
+      phoneNumber?: string;
+      firstName?: string;
+      lastName?: string;
+      displayName?: string;
+      profilePictureURL?: string;
+      isActive?: boolean;
+      isAdmin?: boolean;
+  };
+
+  export type UserRequestDelete = {
+    userId: number;
+    email?: string;
+    phoneNumber?: string;
+    firstName?: string;
+    lastName?: string;
+    displayName?: string;
+    profilePictureURL?: string;
+    isActive?: boolean;
+    isAdmin?: boolean;
+};
