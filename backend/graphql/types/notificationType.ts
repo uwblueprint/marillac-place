@@ -6,7 +6,7 @@ const notificationType = gql`
     authorId: ID
     title: String!
     message: String!
-    createdAt: String!
+    createdAt: DateTime!
     recipients: [NotificationReceivedDTO!]
   }
 
