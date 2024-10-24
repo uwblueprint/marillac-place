@@ -89,6 +89,14 @@ interface IResidentService {
   getActiveResidents(): Promise<Array<ResidentDTO>>;
 
   /**
+   * Update resident with userId to inactive
+   * @param userId resident's id
+   * @returns resident's type
+   * @throws Error if user type retrieval fails
+   */
+  setResidentInactive(userId: number): Promise<ResidentDTO>;
+
+  /**
    * Redeems certain resident's credits based on resident id
    * @param userId: resident id whose credits are to be redeemed
    *                    and number of credits to be redeemed
