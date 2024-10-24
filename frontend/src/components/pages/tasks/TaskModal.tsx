@@ -172,7 +172,6 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
                 padding: "4px",
                 width: "30px",
                 borderRadius: "50%",
-                // top: "-10px",
                 // left: `${(index + 1) * 10}px`
                 margin: "0 5px"
               }}
@@ -180,71 +179,6 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
               {day}
             </Button>
           ))}
-          
-          
-          {/* <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
-          style={{
-            padding: "4px",
-            width: "20px",               
-            borderRadius: "50%",
-            top: "-10px",
-            left: "10px"
-          }}
-          >S</Button>
-          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
-          style={{
-            padding: "4px",
-            width: "20px",               
-            borderRadius: "50%",
-            top: "-10px",
-            left: "20px"
-          }}
-          >M</Button>
-          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
-          style={{
-            padding: "4px",
-            width: "20px",               
-            borderRadius: "50%",
-            top: "-10px",
-            left: "30px"
-          }}
-          >T</Button>
-          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
-          style={{
-            padding: "4px",
-            width: "20px",               
-            borderRadius: "50%",
-            top: "-10px",
-            left: "40px"
-          }}
-          >W</Button>
-          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
-          style={{
-            padding: "4px",
-            width: "20px",               
-            borderRadius: "50%",
-            top: "-10px",
-            left: "50px"
-          }}
-          >T</Button>
-          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
-          style={{
-            padding: "4px",
-            width: "20px",               
-            borderRadius: "50%",
-            top: "-10px",
-            left: "60px"
-          }}
-          >F</Button>
-          <Button color="gray"_hover={{bg: "#56469c", color: "white"}}
-          style={{
-            padding: "4px",
-            width: "20px",               
-            borderRadius: "50%",
-            top: "-10px",
-            left: "70px"
-          }}
-          >S</Button> */}
         </Flex>
 
         <Flex flexDir='column'>
