@@ -47,6 +47,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [taskType, setTaskType] = useState("");
   const [recurrence, setRecurrence] = useState("");
   const [marillacBucks, setMarillacBucks] = useState("");
+  const [comments, setComments] = useState("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
 
@@ -149,7 +150,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
             height="34px"
           >
             <option value="Repeats">Repeats</option>
-            <option value="Single">Single</option>
+            <option value="Does Not Repeat">Does Not Repeat</option>
           </Select>
         </FormControl>
        
@@ -192,10 +193,10 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
               />
               Every Selected Day
             </label>
-            <label htmlFor="freqDays">
+            <label htmlFor="oneSelectedDay">
               <input
                 type="radio"
-                id="freqDays"
+                id="oneSelectedDay"
                 name="option"
                 style={{ marginRight: '8px' }}
               />
@@ -244,8 +245,20 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           onBlur={handleMoneyInput}
           submitPressed={submitPressed}
           leftElement="$"
-        
         />
+        <Flex flexDir="column" alignItems='start'>
+              <h6>Comments</h6>
+              <Button
+              
+              style={{ 
+                backgroundColor: 'transparent',
+                width: 'fit-content', 
+                color: 'blue',
+                padding: '0'
+              }}
+
+              >+ Create Comment</Button>
+        </Flex>
         <Flex justifyContent="flex-end">
           <Button
             variant="cancel"
