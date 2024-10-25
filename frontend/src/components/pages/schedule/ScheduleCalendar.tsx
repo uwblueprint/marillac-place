@@ -42,7 +42,7 @@ function renderHeaderContent(date: DayHeaderContentArg) {
   )
 }
 
-export function ScheduleCalendar() {
+export function ScheduleCalendar() {  
   const calendarRef = useRef<any>(null);
   const handleAllDayContent = (arg: any) => {
     return <span>{arg.text ? '' : ''}</span>;
