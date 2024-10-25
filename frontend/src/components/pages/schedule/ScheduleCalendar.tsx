@@ -6,6 +6,7 @@ import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 
 const events = [
   { title: 'Meeting', start: new Date('2024-09-29T09:00:00'), end: new Date('2024-09-29T10:00:00' ) },
+  { title: 'AllDay', start: '2024-10-30T00:00:00', end: '2024-11-02T00:00:00', allDay: true },
   { title: 'AllDay', start: '2024-10-30T00:00:00', end: '2024-11-02T00:00:00', allDay: true }
 ]
 
@@ -34,7 +35,7 @@ function renderHeaderContent(date: DayHeaderContentArg) {
   )
 }
 
-export function ScheduleCalendar() {
+export function ScheduleCalendar() {  
   const calendarRef = useRef<any>(null);
   const handleAllDayContent = (arg: any) => {
     return <span>{arg.text ? '' : ''}</span>;
