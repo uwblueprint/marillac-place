@@ -206,21 +206,21 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
         <Flex flexDir='column'>
             <h6 style={{ marginBottom: '8px' }}>Ends On</h6>
-            <label htmlFor="freqDays">
+            <label htmlFor="endsOn">
               <input
                 type="radio"
-                id="freqDays"
-                name="option"
+                id="endsOn"
+                name="option2"
                 style={{ marginRight: '8px' }}
               />
               Never
             </label>
         <Flex flexDir='row'>
-            <label htmlFor="freqDays">
+            <label htmlFor="endsOn2">
               <input
                 type="radio"
-                id="freqDays"
-                name="option"
+                id="endsOn2"
+                name="option2"
                 style={{ marginRight: '8px' }}
               />
               On
