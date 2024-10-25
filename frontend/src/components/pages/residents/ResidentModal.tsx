@@ -11,10 +11,6 @@ import { gql, useMutation } from '@apollo/client';
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
 
-// import ResidentService from "../../../../../backend/services/implementations/residentService";
-// eslint-disable-next-line import/no-named-as-default
-// import CreateResidentDTO from "../../../../../backend/services/interfaces/residentService";
-
 type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,13 +19,13 @@ type Props = {
 const ADD_RESIDENT = gql`
   mutation AddResident($resident: CreateResidentDTO!) {
     addResident(resident: $resident) {
+      email
+      firstName
+      lastName
       residentId
       birthDate
-      roomNumber
-      credits
       dateJoined
-      dateLeft
-      notes
+      roomNumber
     }
   }
 `;
@@ -54,16 +50,14 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
   const handleAddResident = async () => {
     const newResident = {
+      email: "john.doe@example.com",
+      password: "assdasd123sadoiauod!d",
+      firstName: "John",
+      lastName: "Doe",
       residentId: 1,
-      birthDate: new Date('1990-01-01'),
-      roomNumber: 12,
-      credits: 23,
-      dateJoined: new Date(),
-      dateLeft: null,
-      notes: "Notes about the resident",
-      username: "john_doe",
-      password: "securepassword",
-      email: "john.doe@example.com"
+      birthDate: "1990-01-01",
+      dateJoined: "2023-01-01",
+      roomNumber: 12
     };
 
     try {
@@ -73,7 +67,7 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       console.error('Error adding resident:', error);
     }
   };
-  
+
   const handleSubmit = () => {
     setSubmitPressed(true);
     if (
@@ -85,7 +79,7 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       !password ||
       !arrivalDate
     ) {
-      // TODO: Add error handling
+      console.error("Missing field"); // TODO: Add error handling
     }
 
     handleAddResident();
