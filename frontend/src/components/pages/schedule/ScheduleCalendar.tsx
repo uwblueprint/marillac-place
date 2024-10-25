@@ -5,18 +5,26 @@ import React, { useEffect, useRef } from "react";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 
 const events = [
-  { title: 'Meeting', start: new Date('2024-09-29T09:00:00'), end: new Date('2024-09-29T10:00:00' ) },
-  { title: 'AllDay', start: '2024-10-30T00:00:00', end: '2024-11-02T00:00:00', allDay: true }
+  { title: 'test', start: new Date('2024-09-29T09:00:00'), end: new Date('2024-09-29T10:00:00' ), allDay: true },
 ]
 
 function renderEventContent(eventInfo: EventContentArg) {
+  const isAllDay = eventInfo.event.allDay;
   return (
-    <div style={{ padding: '5px', borderRadius: '5px', border: '0px', borderLeft: '5px solid #255B9A', backgroundColor: '#C5DCF8', color: '#255B9A' }}>
-      <b>{eventInfo.event.title}</b>
-      <br />
-      {new Date(eventInfo.event.start!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(eventInfo.event.end!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-      <br />
-      <ModeCommentOutlinedIcon fontSize="inherit" />
+    <div style={{ 
+      display: 'flex',
+      flexDirection: isAllDay ? 'row' : 'column',
+      padding: '5px', 
+      borderRadius: '5px', 
+      border: '0px', 
+      borderLeft: '5px solid #255B9A', 
+      backgroundColor: '#C5DCF8', 
+      color: '#255B9A', 
+      justifyContent: isAllDay ? 'space-between' : 'flex-start',
+    }}>
+      <div><b>{eventInfo.event.title}</b></div>
+      {isAllDay ? '' : `${new Date(eventInfo.event.start!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${new Date(eventInfo.event.end!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
+      <ModeCommentOutlinedIcon fontSize="inherit" style={{marginTop: '3px'}} />
     </div>
   )
 }
@@ -41,7 +49,6 @@ export function ScheduleCalendar() {
   };
   return (
     <div>
-      <h1>Demo App</h1>
       <FullCalendar
       plugins={[timeGridPlugin]}
       initialView='timeGridWeek'
@@ -59,6 +66,7 @@ export function ScheduleCalendar() {
       allDayContent={handleAllDayContent}
       eventBackgroundColor='transparent'
       eventBorderColor='transparent'
+      slotEventOverlap={false}
       />
     </div>
   )
