@@ -22,7 +22,7 @@ const colors = {
   green: {
     main: "#0D8312",
     100: "#ECFFED",
-  }
+  },
 };
 
 export default colors;

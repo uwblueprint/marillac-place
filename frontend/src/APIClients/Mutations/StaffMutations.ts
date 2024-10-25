@@ -1,21 +1,20 @@
-import {gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const ADD_STAFF = gql`
-mutation AddStaff($staff: CreateStaffDTO!) {
+  mutation AddStaff($staff: CreateStaffDTO!) {
     addStaff(staff: $staff) {
-        userId
-        email
-        phoneNumber
-        firstName
-        lastName
-        displayName
-        profilePictureURL
-        isActive
-        isAdmin
+      userId
+      email
+      phoneNumber
+      firstName
+      lastName
+      displayName
+      profilePictureURL
+      isActive
+      isAdmin
     }
-}
-`
-;
+  }
+`;
 
 export const UPDATE_STAFF = gql`
   mutation UpdateStaff($userId: userID!, $staff: UpdateStaffDTO!) {
@@ -48,4 +47,3 @@ export const DELETE_STAFF = gql`
     }
   }
 `;
-

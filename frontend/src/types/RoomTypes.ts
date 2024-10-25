@@ -1,5 +1,5 @@
 export interface Room {
-    author: string;
-    message: string;
-    createdAt: string;
-  }
+  author: string;
+  message: string;
+  createdAt: string;
+}

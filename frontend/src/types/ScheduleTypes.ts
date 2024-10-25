@@ -1,4 +1,4 @@
-export type ScheduleType = "LIST" | "CALENDAR"
+export type ScheduleType = "LIST" | "CALENDAR";
 
 export interface Task {
   title: string;
