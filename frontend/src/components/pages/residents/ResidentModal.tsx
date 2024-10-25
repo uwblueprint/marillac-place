@@ -7,15 +7,35 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 
+import { gql, useMutation } from '@apollo/client';
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
+
+// import ResidentService from "../../../../../backend/services/implementations/residentService";
+// eslint-disable-next-line import/no-named-as-default
+// import CreateResidentDTO from "../../../../../backend/services/interfaces/residentService";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const ADD_RESIDENT = gql`
+  mutation AddResident($resident: CreateResidentDTO!) {
+    addResident(resident: $resident) {
+      residentId
+      birthDate
+      roomNumber
+      credits
+      dateJoined
+      dateLeft
+      notes
+    }
+  }
+`;
+
 const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
+  
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,6 +49,31 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitPressed, setSubmitPressed] = useState(false);
 
+
+  const [addResident] = useMutation(ADD_RESIDENT);
+
+  const handleAddResident = async () => {
+    const newResident = {
+      residentId: 1,
+      birthDate: new Date('1990-01-01'),
+      roomNumber: 12,
+      credits: 23,
+      dateJoined: new Date(),
+      dateLeft: null,
+      notes: "Notes about the resident",
+      username: "john_doe",
+      password: "securepassword",
+      email: "john.doe@example.com"
+    };
+
+    try {
+      const response = await addResident({ variables: { resident: newResident } });
+      console.log('Resident added:', response.data.addResident);
+    } catch (error) {
+      console.error('Error adding resident:', error);
+    }
+  };
+  
   const handleSubmit = () => {
     setSubmitPressed(true);
     if (
@@ -42,7 +87,21 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
     ) {
       // TODO: Add error handling
     }
+
+    handleAddResident();
+    // const residentService = new ResidentService;
+    // const newResident: CreateResidentDTO = {
+    //   email: "123",
+    //   password: "123",
+    //   firstName: "First",
+    //   lastName: "Last",
+    //   residentId: 1,
+    //   birthDate: new Date('1990-01-01'),
+    //   roomNumber: 12
+    // };
+    // residentService.addResident(newResident);
     // TODO: API call to add resident
+    
   };
 
   const resetFormState = () => {
