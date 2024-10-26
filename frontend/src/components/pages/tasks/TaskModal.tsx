@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Select, Flex, FormControl, FormLabel } from "@chakra-ui/react";
 import colors from "../../../theme/colors";
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
+import {
+  TaskType,
+  Task,
+  CustomTask,
+  ChoreTask,
+} from "../../../types/TaskTypes";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  task: Task | null;
 };
 
 // returns an array of times in 30 minute increments
@@ -32,7 +39,7 @@ const generateOptions = () => {
 
 const options = generateOptions();
 
-const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
+const TaskModal = ({ isOpen, setIsOpen, task }: Props): React.ReactElement => {
   const [taskType, setTaskType] = useState("");
   const [recurrence, setRecurrence] = useState("Does Not Repeat");
   const [marillacBucks, setMarillacBucks] = useState("");
@@ -48,6 +55,45 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   // const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
 
   const [submitPressed, setSubmitPressed] = useState(false);
+
+  const dayIdMap = new Map<string, string>([
+    ["MONDAY", "M"],
+    ["TUESDAY", "Tu"],
+    ["WEDNESDAY", "W"],
+    ["THURSDAY", "Th"],
+    ["FRIDAY", "F"],
+    ["SATURDAY", "Sa"],
+    ["SUNDAY", "Su"],
+  ])
+
+  useEffect(() => {
+    if(task) {
+      setTaskType(task.type);
+      setRecurrence(task.recurrenceFrequency==="ONE_TIME"? "Does Not Repeat": "Repeats");
+      setMarillacBucks(task.creditValue.toString());
+
+      if(task.specificDay) {
+        const day = dayIdMap.get(task.specificDay);
+        if(day) {
+          setSelectedDays([day]);
+        }
+      } else {
+        setSelectedDays(task.repeatDays.map(day => dayIdMap.get(task.specificDay || "")).filter(day => day !== undefined));
+      }
+
+      setTitle(task.title);
+      setDueDate(task.endDate? task.endDate.toString(): "");
+      setDueTime("");
+    } else {
+      setTaskType("");
+      setRecurrence("Does Not Repeat");
+      setMarillacBucks("");
+      setSelectedDays([]);
+      setTitle("");
+      setDueDate("");
+      setDueTime("");
+    }
+  }, [task]);
 
   const handleSubmit = () => {
     setSubmitPressed(true);
