@@ -17,7 +17,7 @@ export const GET_TASK_BY_ID = gql`
 `;
 
 export const GET_TASKS_BY_TYPE = gql`
-  query getTaskById($type: TaskType!) {
+  query getTaskByType($type: TaskType!) {
     getTasksByType(type: $type) {
       id
       type

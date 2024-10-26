@@ -71,12 +71,21 @@ const TasksPage = (): React.ReactElement => {
   const [choreTasks, setChoreTasks] = useState<ChoreTask[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [requiredTasksData, setRequiredTasksData] = useState<TableData[]>([]);
+  const [optionalTasksData, setOptionalTasksData] = useState<TableData[]>([]);
+  const [customTasksData, setCustomTasksData] = useState<TableData[]>([]);
+  const [choreTasksData, setChoreTasksData] = useState<TableData[]>([]);
+
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
   const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
   const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
 
   const [taskFilter, setTaskFilter] = useState<string>("");
+
+  const { loading, error, data } = useQuery(GET_TASKS_BY_TYPE, {
+    variables: { type: taskType },
+  });
 
   // const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
 
@@ -270,20 +279,29 @@ const TasksPage = (): React.ReactElement => {
   }, [taskFilter, storedTaskData, taskData]);
 
   useEffect(() => {
-    if (taskType === "REQUIRED") {
-      setStoredTaskData(requiredTasksMockData);
-      setTaskDataColumns(tasksColumnTypes);
-    } else if (taskType === "OPTIONAL") {
-      setStoredTaskData(optionalTasksMockData);
-      setTaskDataColumns(tasksColumnTypes);
-    } else if (taskType === "CUSTOM") {
-      setStoredTaskData(customTasksMockData);
-      setTaskDataColumns(customTasksColumnTypes);
-    } else if (taskType === "CHORE") {
-      setStoredTaskData(choreTasksMockData);
-      setTaskDataColumns(choreTasksColumnTypes);
+    if (data) {
+      if (taskType === "REQUIRED") {
+        setRequiredTasks(data.getTasksByType);
+        setStoredTaskData(data.getTasksByType);
+        setTaskDataColumns(tasksColumnTypes);
+      } else if (taskType === "OPTIONAL") {
+        setOptionalTasks(data.getTasksByType);
+        setStoredTaskData(data.getTasksByType);
+        setTaskDataColumns(tasksColumnTypes);
+      } else if (taskType === "CUSTOM") {
+        setCustomTasks(data.getTasksByType);
+        setStoredTaskData(data.getTasksByType);
+        setTaskDataColumns(customTasksColumnTypes);
+      } else if (taskType === "CHORE") {
+        setChoreTasks(data.getTasksByType);
+        setStoredTaskData(data.getTasksByType);
+        setTaskDataColumns(choreTasksColumnTypes);
+      }
     }
-  }, [taskType]);
+  }, [data, taskType]);
+  
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <Flex flexDir="column" flexGrow={1}>
