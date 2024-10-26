@@ -79,23 +79,10 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       !password ||
       !arrivalDate
     ) {
-      console.error("Missing field"); // TODO: Add error handling
+      console.error("Missing field");
     }
 
     handleAddResident();
-    // const residentService = new ResidentService;
-    // const newResident: CreateResidentDTO = {
-    //   email: "123",
-    //   password: "123",
-    //   firstName: "First",
-    //   lastName: "Last",
-    //   residentId: 1,
-    //   birthDate: new Date('1990-01-01'),
-    //   roomNumber: 12
-    // };
-    // residentService.addResident(newResident);
-    // TODO: API call to add resident
-    
   };
 
   const resetFormState = () => {
