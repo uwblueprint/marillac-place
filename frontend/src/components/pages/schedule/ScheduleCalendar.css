@@ -1,3 +1,8 @@
+.fc .fc-toolbar-title {
+    font-size: 2em;
+    font-weight: 700;
+}
+
 .fc-timegrid-slot
 
 .fc-timegrid-slot-lane 
@@ -5,4 +10,27 @@
 .fc-timegrid-slot-minor {
     display: none;
     color: transparent;
+}
+
+.fc-scrollgrid-liquid {
+    border-left: none!important;
+}
+
+.fc-timegrid-slot-label {
+    border: none!important;
+    padding-right: 5px!important;
+}
+
+col {
+    width: 100px!important;
+}
+
+:root {
+    --fc-today-bg-color: rgba(87,70,157,0.10);
+    --fc-button-bg-color: rgb(87, 70, 157);
+    --fc-button-border-color: rgb(87, 70, 157);
+    --fc-button-hover-bg-color: rgb(71, 53, 147);
+    --fc-button-hover-border-color: rgb(71, 53, 147);
+    --fc-button-active-bg-color: rgb(62, 42, 153);
+    --fc-button-active-border-color: rgb(62, 42, 153);
 }
