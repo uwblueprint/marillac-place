@@ -35,21 +35,40 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
   const [addResident] = useMutation(ADD_RESIDENT);
 
+  const resetFormState = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPhoneNumber("");
+    setResidentId("");
+    setPassword("");
+    setArrivalDate("");
+    setDepartureDate("");
+    setNotes("");
+
+    setShowPassword(false);
+    setSubmitPressed(false);
+  };
+
   const handleAddResident = async () => {
     const newResident = {
-      email: "john.doe@example.com",
-      password: "assdasd123sadoiauod!d",
-      firstName: "John",
-      lastName: "Doe",
-      residentId: 1,
-      birthDate: "1990-01-01",
-      dateJoined: "2023-01-01",
+      email,
+      password,
+      firstName,
+      lastName,
+      residentId,
+      birthDate: "1990-01-01", // TODO: Update fields to what they should be
+      dateJoined: arrivalDate,
       roomNumber: 12
     };
 
     try {
       const response = await addResident({ variables: { resident: newResident } });
       console.log('Resident added:', response.data.addResident);
+
+      setIsOpen(false);
+      resetFormState();
+      window.location.reload();
     } catch (error) {
       console.error('Error adding resident:', error);
     }
@@ -70,21 +89,6 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
     }
 
     handleAddResident();
-  };
-
-  const resetFormState = () => {
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPhoneNumber("");
-    setResidentId("");
-    setPassword("");
-    setArrivalDate("");
-    setDepartureDate("");
-    setNotes("");
-
-    setShowPassword(false);
-    setSubmitPressed(false);
   };
 
   return (
