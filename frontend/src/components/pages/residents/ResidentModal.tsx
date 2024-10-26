@@ -7,28 +7,15 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
+import { ADD_RESIDENT, UPDATE_RESIDENT } from "../../../APIClients/Mutations/ResidentsMutations";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
-const ADD_RESIDENT = gql`
-  mutation AddResident($resident: CreateResidentDTO!) {
-    addResident(resident: $resident) {
-      email
-      firstName
-      lastName
-      residentId
-      birthDate
-      dateJoined
-      roomNumber
-    }
-  }
-`;
 
 const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   
