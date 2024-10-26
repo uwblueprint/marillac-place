@@ -336,7 +336,9 @@ const TasksPage = (): React.ReactElement => {
             variant="primary"
             leftIcon={<Icon as={Add} color="white" />}
             size="sm"
-            onClick={() => {}}
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
           >
             {taskType === "CHORE" ? "Add Chore" : "Add Task"}
           </Button>
