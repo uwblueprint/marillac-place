@@ -1,16 +1,6 @@
 import React, { useState } from "react";
-import {
-  Text,
-  Button,
-  Input,
-  Select,
-  Flex,
-  FormControl,
-  FormLabel,
-  Checkbox,
-  IconButton,
-} from "@chakra-ui/react";
-
+import { Button, Select, Flex, FormControl, FormLabel } from "@chakra-ui/react";
+import colors from "../../../theme/colors";
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
 
@@ -19,6 +9,7 @@ type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// returns an array of times in 30 minute increments
 const generateOptions = () => {
   const options = [];
   for (let hour = 0; hour < 24; hour += 1) {
@@ -41,13 +32,11 @@ const generateOptions = () => {
 
 const options = generateOptions();
 
-
-
 const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [taskType, setTaskType] = useState("");
-  const [recurrence, setRecurrence] = useState("");
+  const [recurrence, setRecurrence] = useState("Does Not Repeat");
   const [marillacBucks, setMarillacBucks] = useState("");
-  const [comments, setComments] = useState("");
+  // const [comments, setComments] = useState("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
 
@@ -55,9 +44,8 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [location, setLocation] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [dueTime, setDueTime] = useState("");
-  const [isAllDay, setIsAllDay] = useState(false);
-  const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
-  
+  // const [isAllDay, setIsAllDay] = useState(false);
+  // const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
 
   const [submitPressed, setSubmitPressed] = useState(false);
 
@@ -74,13 +62,12 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
     setLocation("");
     setDueDate("");
     setDueTime("");
-    setIsAllDay(false);
-    setRecurrenceFrequency("");
+    // setIsAllDay(false);
+    // setRecurrenceFrequency("");
     setMarillacBucks("");
 
     setSubmitPressed(false);
   };
-  
 
   const handleMoneyInput = () => {
     const inputValue = marillacBucks.replace(/[^0-9.]/g, ""); // Remove non-numeric and non-period characters
@@ -95,12 +82,12 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const handleDelete = () => {};
 
   const selectDay = (day: string) => {
-    if ((selectedDays).includes(day)) {
+    if (selectedDays.includes(day)) {
       setSelectedDays(selectedDays.filter((d) => d !== day));
     } else {
       setSelectedDays([...selectedDays, day]);
     }
-  }
+  };
 
   return (
     <ModalContainer
@@ -110,7 +97,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       onDelete={handleDelete}
     >
       <Flex flexDir="column" gap="20px">
-      <FormControl>
+        <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
             Task Type
           </FormLabel>
@@ -135,7 +122,7 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           onChange={(e) => setTitle(e.target.value)}
           submitPressed={submitPressed}
         />
-       <FormControl>
+        <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
             Recurrence
           </FormLabel>
@@ -153,90 +140,112 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
             <option value="Does Not Repeat">Does Not Repeat</option>
           </Select>
         </FormControl>
-       
-       
-       <Flex flexDir="row">
-          <h6 style={{ marginTop: '10px' }}>Select Days:</h6>
+        {recurrence === "Repeats" && (
+          <>
+            <Flex flexDir="row">
+              <h6 style={{ marginTop: "10px" }}>Select Days:</h6>
 
-          {days.map((day, index) => (
-            <Button
-              key={day}
-              // text colour (based on if day is selected)
-              color={selectedDays.includes(day) ? "white" : "gray"}
-              backgroundColor={selectedDays.includes(day) ? "#56469c" : "transparent"}
-              // if button is clicked, calls selectDay on day
-              onClick={() => selectDay(day)}
-              // hover style based on if day is selected
-              _hover={{ bg: selectedDays.includes(day) ? "#56469c" : "#e2e2e2", color: selectedDays.includes(day) ? "white" : "gray" }}
-              // same styling as before
-              style={{
-                padding: "4px",
-                width: "30px",
-                borderRadius: "50%",
-                // left: `${(index + 1) * 10}px`
-                margin: "0 5px"
-              }}
-            >
-              {day}
-            </Button>
-          ))}
-        </Flex>
-
-        <Flex flexDir='column'>
-            <h6 style={{ marginBottom: '8px' }}>Completed On</h6>
-            <label htmlFor="freqDays">
-              <input
-                type="radio"
-                id="freqDays"
-                name="option"
-                style={{ marginRight: '8px' }}
-              />
-              Every Selected Day
-            </label>
-            <label htmlFor="oneSelectedDay">
-              <input
-                type="radio"
-                id="oneSelectedDay"
-                name="option"
-                style={{ marginRight: '8px' }}
-              />
-              One of the selected days
-            </label>
-        </Flex>
-
-        <Flex flexDir='column'>
-            <h6 style={{ marginBottom: '8px' }}>Ends On</h6>
-            <label htmlFor="endsOn">
-              <input
-                type="radio"
-                id="endsOn"
-                name="option2"
-                style={{ marginRight: '8px' }}
-              />
-              Never
-            </label>
-        <Flex flexDir='row'>
-            <label htmlFor="endsOn2">
-              <input
-                type="radio"
-                id="endsOn2"
-                name="option2"
-                style={{ marginRight: '8px' }}
-              />
-              On
-            </label>
-              <input 
-               style={{
-                width: "90px", 
-                height: "30px",
-                marginLeft: "10px",
-                border: "1px solid gray",
-                borderRadius: "10px"
-              }}
-              />
+              {days.map((day, i) => (
+                <Button
+                  key={i}
+                  // text colour (based on if day is selected)
+                  color={selectedDays.includes(day) ? "white" : "gray"}
+                  backgroundColor={
+                    selectedDays.includes(day)
+                      ? colors.purple.main
+                      : "transparent"
+                  }
+                  // if button is clicked, calls selectDay on day
+                  onClick={() => selectDay(day)}
+                  // hover style based on if day is selected
+                  _hover={{
+                    bg: selectedDays.includes(day)
+                      ? colors.purple.main
+                      : "#e2e2e2",
+                    color: selectedDays.includes(day) ? "white" : "gray",
+                  }}
+                  // same styling as before
+                  style={{
+                    padding: "4px",
+                    width: "30px",
+                    borderRadius: "50%",
+                    // left: `${(index + 1) * 10}px`
+                    margin: "0 5px",
+                  }}
+                >
+                  {day}
+                </Button>
+              ))}
             </Flex>
-        </Flex>
 
+            <Flex flexDir="column">
+              <h6 style={{ marginBottom: "8px" }}>Completed On</h6>
+              <label htmlFor="freqDays">
+                <input
+                  type="radio"
+                  id="freqDays"
+                  name="option"
+                  style={{
+                    marginRight: "8px",
+                    accentColor: colors.purple.main,
+                  }}
+                />
+                Every Selected Day
+              </label>
+              <label htmlFor="oneSelectedDay">
+                <input
+                  type="radio"
+                  id="oneSelectedDay"
+                  name="option"
+                  style={{
+                    marginRight: "8px",
+                    accentColor: colors.purple.main,
+                  }}
+                />
+                One of the selected days
+              </label>
+            </Flex>
+
+            <Flex flexDir="column">
+              <h6 style={{ marginBottom: "8px" }}>Ends On</h6>
+              <label htmlFor="endsOn">
+                <input
+                  type="radio"
+                  id="endsOn"
+                  name="option2"
+                  style={{
+                    marginRight: "8px",
+                    accentColor: colors.purple.main,
+                  }}
+                />
+                Never
+              </label>
+              <Flex flexDir="row">
+                <label htmlFor="endsOn2">
+                  <input
+                    type="radio"
+                    id="endsOn2"
+                    name="option2"
+                    style={{
+                      marginRight: "8px",
+                      accentColor: colors.purple.main,
+                    }}
+                  />
+                  On
+                </label>
+                <input
+                  style={{
+                    width: "90px",
+                    height: "30px",
+                    marginLeft: "10px",
+                    border: "1px solid gray",
+                    borderRadius: "10px",
+                  }}
+                />
+              </Flex>
+            </Flex>
+          </>
+        )}
         <FormField
           label="Marillac Bucks"
           value={marillacBucks}
@@ -246,19 +255,6 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           submitPressed={submitPressed}
           leftElement="$"
         />
-        <Flex flexDir="column" alignItems='start'>
-              <h6>Comments</h6>
-              <Button
-              
-              style={{ 
-                backgroundColor: 'transparent',
-                width: 'fit-content', 
-                color: 'blue',
-                padding: '0'
-              }}
-
-              >+ Create Comment</Button>
-        </Flex>
         <Flex justifyContent="flex-end">
           <Button
             variant="cancel"
