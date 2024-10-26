@@ -1,168 +1,173 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Tabs, TabList, Tab, Text } from "@chakra-ui/react";
-
-import { tasksColumnTypes } from "./columnKeys";
+import {
+  Flex,
+  Tabs,
+  TabList,
+  Tab,
+  Heading,
+  Box,
+  Button,
+  IconButton,
+  Icon,
+} from "@chakra-ui/react";
 
 import {
-  scheduleTasksMockData,
-  sundayScheduleTasksMockData,
-  mondayScheduleTasksMockData,
-  tuesdayScheduleTasksMockData,
-  wednesdayScheduleTasksMockData,
-  thursdayScheduleTasksMockData,
-  fridayScheduleTasksMockData,
-  saturdayScheduleTasksMockData,
-} from "../../../mocks/scheduletasks";
+  ArrowBackIosNew,
+  ArrowForwardIos,
+  Edit,
+  FormatListBulleted,
+  CalendarMonth,
+} from "@mui/icons-material";
 
-import ScheduleTable, { ColumnInfoTypes, TableData } from "./ScheduleTable";
-
-import RoomCard from "../home/HomeRoomCard";
-import { residentsMockData } from "../../../mocks/residents";
-
-const renderRoomCards = residentsMockData.map((resident) => (
-  <RoomCard
-    key={resident.residentId}
-    room={resident.roomNumber}
-    residentId={resident.residentId}
-  />
-));
+import { ScheduleType } from "../../../types/ScheduleTypes";
 
 const SchedulePage = (): React.ReactElement => {
-  const enum Dates {
-    SUNDAY = "SUNDAY",
-    MONDAY = "MONDAY",
-    TUESDAY = "TUESDAY",
-    WEDNESDAY = "WEDNESDAY",
-    THURSDAY = "THURSDAY",
-    FRIDAY = "FRIDAY",
-    SATURDAY = "SATURDAY",
-  }
-
-  const [taskData, setTaskData] = useState<TableData[]>([]);
-  const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
-  const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
-  const [taskDate, setTaskDate] = useState(Dates.SUNDAY);
-  const [dailyTaskData, setDailyTaskData] = useState<TableData[]>([]);
+  const [rooms, setRooms] = useState<number[]>([]);
+  const [scheduleType, setScheduleType] = useState<ScheduleType>("LIST");
+  const [scheduleData, setScheduleData] = useState<string>("");
+  const [active, setActive] = useState<string>("List");
 
   useEffect(() => {
-    setTaskDataColumns(tasksColumnTypes);
-    setTaskData(scheduleTasksMockData);
-    if (taskDate === Dates.SUNDAY) {
-      setDailyTaskData(sundayScheduleTasksMockData);
-    } else if (taskDate === Dates.MONDAY) {
-      setDailyTaskData(mondayScheduleTasksMockData);
-    } else if (taskDate === Dates.TUESDAY) {
-      setDailyTaskData(tuesdayScheduleTasksMockData);
-    } else if (taskDate === Dates.WEDNESDAY) {
-      setDailyTaskData(wednesdayScheduleTasksMockData);
-    } else if (taskDate === Dates.THURSDAY) {
-      setDailyTaskData(thursdayScheduleTasksMockData);
-    } else if (taskDate === Dates.FRIDAY) {
-      setDailyTaskData(fridayScheduleTasksMockData);
-    } else if (taskDate === Dates.SATURDAY) {
-      setDailyTaskData(saturdayScheduleTasksMockData);
-    } else {
-      setDailyTaskData(sundayScheduleTasksMockData);
+    // TODO: Fetch occupied rooms from API?
+    setRooms([1, 2, 3, 4, 5, 6]);
+  }, []);
+
+  useEffect(() => {
+    if (scheduleType === "LIST") {
+      setScheduleData("List");
+    } else if (scheduleType === "CALENDAR") {
+      setScheduleData("Calendar");
     }
-  }, [taskDate]);
+  }, [scheduleType]);
+
+  const selectOption = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setActive(e.currentTarget.innerText);
+  };
+
+  const formatTabs = (roomNums: number[]) => {
+    return (
+      <Tabs variant="horizontal" h="30px" mb={6}>
+        <TabList pl={6}>
+          {roomNums.map((room) => (
+            <Tab key={room} width="10%">
+              Room {room}
+            </Tab>
+          ))}
+        </TabList>
+      </Tabs>
+    );
+  };
 
   return (
-    <Flex flexDir="column" flexGrow={1} p="20px">
-      <h1>Schedule Page</h1>
-      <Flex flexWrap="wrap" justifyContent="flex-start">
-        {renderRoomCards}
+    <Flex flexDir="column" flexGrow={1}>
+      <Tabs variant="horizontal" h="30px" mb={6}>
+        {formatTabs(rooms)}
+      </Tabs>
+
+      <Flex justifyContent="space-between" mt={10} ml={8} mr={10}>
+        <Flex>
+          <Heading size="lg" fontSize="36px" w="14vw" color="purple.main">
+            January 2025
+            {/* see announcements page for how to determine what text shows */}
+          </Heading>
+
+          <Flex w="200px" flexDir="row" height="100px" ml={5}>
+            <IconButton
+              _hover={{
+                cursor: "pointer",
+              }}
+              color="purple.main"
+              backgroundColor="grey.50"
+              borderRightRadius="0"
+              aria-label="Previous Week"
+              icon={<ArrowBackIosNew fontSize="small" />}
+            />
+            <Button
+              alignContent="center"
+              borderRadius="0"
+              color="purple.main"
+              size="md"
+              fontSize="lg"
+            >
+              Jan 1 - 7
+            </Button>
+            <IconButton
+              _hover={{
+                cursor: "pointer",
+              }}
+              color="purple.main"
+              backgroundColor="grey.50"
+              borderLeftRadius="0"
+              aria-label="Previous Week"
+              icon={<ArrowForwardIos fontSize="small" />}
+            />
+          </Flex>
+        </Flex>
+
+        <Flex flexDir="row" height="100px" justifyContent="space-between">
+          <Button
+            variant="success"
+            rightIcon={<Icon as={Edit} color="green.main" />}
+            size="sm"
+            onClick={() => {}}
+            mr={5}
+          >
+            200 M-Bucks
+          </Button>
+
+          <Button
+            variant="error"
+            rightIcon={<Icon as={Edit} color="red.main" />}
+            size="sm"
+            onClick={() => {}}
+          >
+            0 Warnings
+          </Button>
+        </Flex>
       </Flex>
-      <Flex flexDir="column" flexGrow={1} p="20px">
-        <Text as="b" display="block" margin="10px" textAlign="left">
-          Weekly Tasks
-        </Text>
-        <ScheduleTable
-          data={taskData}
-          columnInfo={taskDataColumns}
-          maxResults={8}
-          onEdit={() => {}}
-          isSelectable
-        />
+
+      <Flex justifyContent="space-between" mt={-5} ml={8} mr={10}>
+        <Flex>
+          <Button
+            variant={active === "List" ? "primary" : "secondary"}
+            w="7vw"
+            borderRightRadius="0"
+            leftIcon={<Icon as={FormatListBulleted} color="white" />}
+            size="sm"
+            onClick={(event) => {
+              selectOption(event);
+              setScheduleType("LIST");
+            }}
+          >
+            List
+          </Button>
+
+          <Button
+            variant={active === "Calendar" ? "primary" : "secondary"}
+            w="7vw"
+            borderLeftRadius="0"
+            leftIcon={<Icon as={CalendarMonth} color="white" />}
+            size="sm"
+            onClick={(event) => {
+              selectOption(event);
+              setScheduleType("CALENDAR");
+            }}
+          >
+            Calendar
+          </Button>
+        </Flex>
+
+        <Button variant="primary" size="sm" onClick={() => {}}>
+          Update Selected
+        </Button>
       </Flex>
-      <Flex flexDir="column" flexGrow={1} p="20px">
-        <Text as="b" display="block" margin="10px" textAlign="left">
-          Daily Tasks
-        </Text>
-        <Tabs variant="enclosed-colored" h="30px" mb="10px" isFitted>
-          <TabList margin="10px">
-            <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
-              borderRadius="8px 8px 0 0"
-              onClick={() => {
-                setTaskDate(Dates.SUNDAY);
-              }}
-            >
-              Sunday
-            </Tab>
-            <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
-              borderRadius="8px 8px 0 0"
-              onClick={() => {
-                setTaskDate(Dates.MONDAY);
-              }}
-            >
-              Monday
-            </Tab>
-            <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
-              borderRadius="8px 8px 0 0"
-              onClick={() => {
-                setTaskDate(Dates.TUESDAY);
-              }}
-            >
-              Tuesday
-            </Tab>
-            <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
-              borderRadius="8px 8px 0 0"
-              onClick={() => {
-                setTaskDate(Dates.WEDNESDAY);
-              }}
-            >
-              Wednesday
-            </Tab>
-            <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
-              borderRadius="8px 8px 0 0"
-              onClick={() => {
-                setTaskDate(Dates.THURSDAY);
-              }}
-            >
-              Thursday
-            </Tab>
-            <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
-              borderRadius="8px 8px 0 0"
-              onClick={() => {
-                setTaskDate(Dates.FRIDAY);
-              }}
-            >
-              Friday
-            </Tab>
-            <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
-              borderRadius="8px 8px 0 0"
-              onClick={() => {
-                setTaskDate(Dates.SATURDAY);
-              }}
-            >
-              Saturday
-            </Tab>
-          </TabList>
-        </Tabs>
-        <ScheduleTable
-          data={dailyTaskData}
-          columnInfo={taskDataColumns}
-          maxResults={8}
-          onEdit={() => {}}
-          isSelectable
-        />
-      </Flex>
+      <Box mt={8} ml={10} mr={10} padding={40} borderWidth="1px">
+        {scheduleType === "CALENDAR" ? (
+          <Heading size="md">TEMP CALENDAR</Heading>
+        ) : (
+          <Heading size="md">{scheduleData}</Heading>
+        )}
+      </Box>
     </Flex>
   );
 };

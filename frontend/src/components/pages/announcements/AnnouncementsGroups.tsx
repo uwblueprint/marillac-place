@@ -213,7 +213,7 @@ const GroupList: React.FC<{
       setSearchRooms([...searchRooms, roomId]);
     }
   };
-  
+
   const addRoom = () => {
     setAddingNewRoom(true);
   };

@@ -75,7 +75,6 @@ const SideBar: React.FC = () => {
 
   const pages = [
     { label: "Home", route: Routes.HOME_PAGE },
-    { label: "Tasks", route: Routes.TASKS_PAGE },
     // { label: "Approvals", route: Routes.APPROVALS_PAGE },
     { label: "Schedule", route: Routes.SCHEDULE_PAGE },
     { label: "Announcements", route: Routes.ANNOUNCEMENTS_PAGE },
@@ -96,11 +95,20 @@ const SideBar: React.FC = () => {
   // });
 
   return (
-    <Flex flexDir="column" w="100%" maxW="240px">
+    <Flex
+      flexDir="column"
+      w="100%"
+      minW="240px"
+      maxW="240px"
+      position="relative"
+    >
       <Box
-        h="100vh"
+        h="100%"
+        w="240px"
         borderRight="solid"
         borderRightColor="gray.300"
+        background="white"
+        position="fixed"
         pt={6}
         pb={6}
         pr={4}
