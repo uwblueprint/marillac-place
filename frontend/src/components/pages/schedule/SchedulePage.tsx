@@ -20,6 +20,7 @@ import {
 } from "@mui/icons-material";
 
 import { ScheduleType } from "../../../types/ScheduleTypes";
+import ScheduleListView from "./ScheduleListView";
 
 const SchedulePage = (): React.ReactElement => {
   const [rooms, setRooms] = useState<number[]>([]);
@@ -66,7 +67,7 @@ const SchedulePage = (): React.ReactElement => {
 
       <Flex justifyContent="space-between" mt={10} ml={8} mr={10}>
         <Flex>
-          <Heading size="lg" fontSize="36px" w="14vw" color="purple.main">
+          <Heading size="lg" fontSize="36px" color="purple.main" whiteSpace="nowrap">
             January 2025
             {/* see announcements page for how to determine what text shows */}
           </Heading>
@@ -161,13 +162,14 @@ const SchedulePage = (): React.ReactElement => {
           Update Selected
         </Button>
       </Flex>
-      <Box mt={8} ml={10} mr={10} padding={40} borderWidth="1px">
-        {scheduleType === "CALENDAR" ? (
-          <Heading size="md">TEMP CALENDAR</Heading>
-        ) : (
-          <Heading size="md">{scheduleData}</Heading>
-        )}
-      </Box>
+      {/* <Box mt={8} ml={10} mr={10} padding={40} borderWidth="1px"> */}
+      {scheduleType === "CALENDAR" ? (
+        <Heading size="md">TEMP CALENDAR</Heading>
+      ) : (
+        // <Heading size="md">{scheduleData}</Heading>
+        <ScheduleListView />
+      )}
+      {/* </Box> */}
     </Flex>
   );
 };
