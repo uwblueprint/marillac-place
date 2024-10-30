@@ -55,6 +55,7 @@ const TaskModal = ({ isOpen, setIsOpen, task }: Props): React.ReactElement => {
   // const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
 
   const [submitPressed, setSubmitPressed] = useState(false);
+  const isEditMode = !!task;
 
   const dayIdMap = new Map<string, string>([
     ["MONDAY", "M"],
@@ -78,7 +79,7 @@ const TaskModal = ({ isOpen, setIsOpen, task }: Props): React.ReactElement => {
           setSelectedDays([day]);
         }
       } else {
-        setSelectedDays(task.repeatDays.map(day => dayIdMap.get(task.specificDay || "")).filter(day => day !== undefined));
+        setSelectedDays(task.repeatDays.map(day => dayIdMap.get(day || "")).filter((day): day is string => day !== undefined));
       }
 
       setTitle(task.title);
@@ -137,10 +138,10 @@ const TaskModal = ({ isOpen, setIsOpen, task }: Props): React.ReactElement => {
 
   return (
     <ModalContainer
-      title="Edit Chore"
+      title={title}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      onDelete={handleDelete}
+      onDelete={isEditMode ? handleDelete : undefined}
     >
       <Flex flexDir="column" gap="20px">
         <FormControl>
