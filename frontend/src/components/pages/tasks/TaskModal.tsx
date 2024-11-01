@@ -65,25 +65,34 @@ const TaskModal = ({ isOpen, setIsOpen, task }: Props): React.ReactElement => {
     ["FRIDAY", "F"],
     ["SATURDAY", "Sa"],
     ["SUNDAY", "Su"],
-  ])
+  ]);
 
   useEffect(() => {
-    if(task) {
+    if (!isOpen) {
+      return;
+    }
+    if (task) {
       setTaskType(task.type);
-      setRecurrence(task.recurrenceFrequency==="ONE_TIME"? "Does Not Repeat": "Repeats");
+      setRecurrence(
+        task.recurrenceFrequency === "ONE_TIME" ? "Does Not Repeat" : "Repeats",
+      );
       setMarillacBucks(task.creditValue.toString());
 
-      if(task.specificDay) {
+      if (task.specificDay) {
         const day = dayIdMap.get(task.specificDay);
-        if(day) {
+        if (day) {
           setSelectedDays([day]);
         }
       } else {
-        setSelectedDays(task.repeatDays.map(day => dayIdMap.get(day || "")).filter((day): day is string => day !== undefined));
+        setSelectedDays(
+          task.repeatDays
+            .map((day) => dayIdMap.get(day || ""))
+            .filter((day): day is string => day !== undefined),
+        );
       }
 
       setTitle(task.title);
-      setDueDate(task.endDate? task.endDate.toString(): "");
+      setDueDate(task.endDate ? task.endDate.toString() : "");
       setDueTime("");
     } else {
       setTaskType("");
@@ -94,7 +103,7 @@ const TaskModal = ({ isOpen, setIsOpen, task }: Props): React.ReactElement => {
       setDueDate("");
       setDueTime("");
     }
-  }, [task]);
+  }, [task, isOpen]);
 
   const handleSubmit = () => {
     setSubmitPressed(true);

@@ -338,6 +338,7 @@ const TasksPage = (): React.ReactElement => {
             leftIcon={<Icon as={Add} color="white" />}
             size="sm"
             onClick={() => {
+              setModalTask(null);
               setIsModalOpen(true);
             }}
           >
@@ -350,8 +351,7 @@ const TasksPage = (): React.ReactElement => {
           columnInfo={taskDataColumns}
           maxResults={8}
           onEdit={(row: any) => {
-            setModalTask(row);  
-            console.log(row);
+            setModalTask(row);
             setIsModalOpen(true);
           }}
         />
