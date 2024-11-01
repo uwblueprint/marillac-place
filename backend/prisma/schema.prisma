@@ -15,15 +15,11 @@ enum UserType {
 }
 
 model User {
-  id                    Int                    @id @default(autoincrement())
-  type                  UserType
-  staff                 Staff?
-  resident              Resident?
-  authId                String                 @unique @map("auth_id")
-  email                 String                 @unique
-  phoneNumber           String?                @unique @map("phone_number")
-  firstName             String                 @map("first_name")
-  lastName              String                 @map("last_name")
+  id       Int       @id @default(autoincrement())
+  type     UserType
+  staff    Staff?
+  resident Resident?
+  authId   String    @unique @map("auth_id")
   displayName           String?                @map("display_name")
   profilePictureURL     String?                @map("profile_picture_url")
   isActive              Boolean                @default(true) @map("is_active")
@@ -36,6 +32,10 @@ model User {
 model Staff {
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId           Int            @id @map("user_id")
+  email            String         @unique
+  phoneNumber      String?        @unique @map("phone_number")
+  firstName        String         @map("first_name")
+  lastName         String         @map("last_name")
   isAdmin          Boolean        @default(false) @map("is_admin")
   tasksAssigned    TaskAssigned[]
   warningsAssigned Warning[]
@@ -47,12 +47,12 @@ model Resident {
   user       User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId     Int            @id @map("user_id")
   residentId Int            @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
-  birthDate  DateTime       @map("birth_date") @db.Date
+  // birthDate  DateTime       @map("birth_date") @db.Date
   roomNumber Int            @map("room_number")
   credits    Float          @default(0)
   dateJoined DateTime       @default(now()) @map("date_joined") @db.Date
   dateLeft   DateTime?      @map("date_left") @db.Date
-  notes      String?
+  // notes      String?
   tasks      TaskAssigned[]
   warnings   Warning[]
 
@@ -83,19 +83,19 @@ enum RecurrenceFrequency {
 }
 
 model Task {
-  id                  Int                   @id @default(autoincrement())
+  id                  Int                 @id @default(autoincrement())
   type                TaskType
   title               String
   description         String
-  creditValue         Float                 @map("credit_value")
-  location            TaskLocation          @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  locationId          Int                   @map("location_id")
+  creditValue         Float               @map("credit_value")
+  location            TaskLocation        @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  locationId          Int                 @map("location_id")
   tasksAssigned       TaskAssigned[]
   relatedWarnings     Warning[]
-  endDate             DateTime?             @map("end_date")
-  recurrenceFrequency RecurrenceFrequency   @map("recurrence_frequency")
-  specificDay         DaysOfWeek?           @map("specific_day") // used for one time tasks
-  repeatDays          DaysOfWeek[]          @map("repeat_days") // used for repeating tasks
+  endDate             DateTime?           @map("end_date")
+  recurrenceFrequency RecurrenceFrequency @map("recurrence_frequency")
+  specificDay         DaysOfWeek?         @map("specific_day") // used for one time tasks
+  repeatDays          DaysOfWeek[]        @map("repeat_days") // used for repeating tasks
 
   @@map("tasks")
 }
@@ -110,16 +110,16 @@ model TaskLocation {
 }
 
 model TaskAssigned {
-  id                  Int                  @id @default(autoincrement())
-  task                Task                 @relation(fields: [taskId], references: [id])
-  taskId              Int                  @map("task_id")
-  assigner            Staff?               @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
-  assignerId          Int?                 @map("assigner_id")
-  assignee            Resident             @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  assigneeId          Int                  @map("assignee_id")
-  status              Status
-  startDate           DateTime             @map("start_date")
-  comments            String?
+  id         Int      @id @default(autoincrement())
+  task       Task     @relation(fields: [taskId], references: [id])
+  taskId     Int      @map("task_id")
+  assigner   Staff?   @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  assignerId Int?     @map("assigner_id")
+  assignee   Resident @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  assigneeId Int      @map("assignee_id")
+  status     Status
+  startDate  DateTime @map("start_date")
+  comments   String?
 
   @@map("tasks_assigned")
 }
