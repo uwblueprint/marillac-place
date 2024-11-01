@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Textarea,
-  Flex,
-  FormControl,
-  FormLabel,
-  Select,
-} from "@chakra-ui/react";
+import { Button, Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 
 import { useMutation } from "@apollo/client";
 import ModalContainer from "../../common/ModalContainer";
@@ -22,15 +15,9 @@ type Props = {
 };
 
 const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [phoneNumber, setPhoneNumber] = useState("");
   const [residentId, setResidentId] = useState<number | null>(null);
   const [password, setPassword] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
-  // const [departureDate, setDepartureDate] = useState("");
-  // const [notes, setNotes] = useState("");
   const [rooms, setRooms] = useState([1, 2, 3]);
   const [roomNumber, setRoomNumber] = useState(Number);
 
@@ -40,61 +27,39 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [addResident] = useMutation(ADD_RESIDENT);
 
   const resetFormState = () => {
-    // setFirstName("");
-    // setLastName("");
-    // setEmail("");
-    // setPhoneNumber("");
     setResidentId(null);
     setPassword("");
     setArrivalDate("");
-    // setDepartureDate("");
-    // setNotes("");
-
     setShowPassword(false);
     setSubmitPressed(false);
   };
 
   const handleAddResident = async () => {
     const newResident = {
-      // email,
-      password,
-      // firstName,
-      // lastName,
       residentId,
-      // birthDate: "1990-01-01", // TODO: Update fields to what they should be
-      dateJoined: arrivalDate,
       roomNumber,
+      password,
+      dateJoined: arrivalDate,
     };
 
     try {
       const response = await addResident({
         variables: { resident: newResident },
       });
-      console.log("Resident added:", response.data.addResident);
-
+      console.log("Added resident:", response);
       setIsOpen(false);
       resetFormState();
       window.location.reload();
     } catch (error) {
-      console.log(newResident);
       console.error("Error adding resident:", error);
     }
   };
 
   const handleSubmit = () => {
     setSubmitPressed(true);
-    if (
-      // !firstName ||
-      // !lastName ||
-      // !email ||
-      // !phoneNumber ||
-      !residentId ||
-      !password ||
-      !arrivalDate
-    ) {
+    if (!residentId || !password || !arrivalDate || !roomNumber) {
       console.error("Missing field");
     }
-
     handleAddResident();
   };
 
