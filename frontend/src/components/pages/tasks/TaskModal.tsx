@@ -247,7 +247,6 @@ const TaskModal = ({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           submitPressed={submitPressed}
-          required
         />
         <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
