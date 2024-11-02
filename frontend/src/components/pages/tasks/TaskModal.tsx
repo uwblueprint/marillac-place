@@ -1,15 +1,6 @@
 import React, { useState } from "react";
-import {
-  Text,
-  Button,
-  Input,
-  Select,
-  Flex,
-  FormControl,
-  FormLabel,
-  Checkbox,
-} from "@chakra-ui/react";
-
+import { Button, Select, Flex, FormControl, FormLabel } from "@chakra-ui/react";
+import colors from "../../../theme/colors";
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
 
@@ -18,6 +9,7 @@ type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// returns an array of times in 30 minute increments
 const generateOptions = () => {
   const options = [];
   for (let hour = 0; hour < 24; hour += 1) {
@@ -40,108 +32,20 @@ const generateOptions = () => {
 
 const options = generateOptions();
 
-const DateInput = ({
-  dueDate,
-  setDueDate,
-  dueTime,
-  setDueTime,
-  isAllDay,
-  setIsAllDay,
-  recurrenceFrequency,
-  setRecurrenceFrequency,
-  submitPressed,
-}: {
-  dueDate: string;
-  setDueDate: React.Dispatch<React.SetStateAction<string>>;
-  dueTime: string;
-  setDueTime: React.Dispatch<React.SetStateAction<string>>;
-  isAllDay: boolean;
-  setIsAllDay: React.Dispatch<React.SetStateAction<boolean>>;
-  recurrenceFrequency: string;
-  setRecurrenceFrequency: React.Dispatch<React.SetStateAction<string>>;
-  submitPressed: boolean;
-}) => {
-  return (
-    <Flex flexDir="column" flex="1">
-      <FormControl isRequired>
-        <FormLabel mb="5px" color="gray.main" fontWeight="700">
-          Due Date
-        </FormLabel>
-        <Flex flexDir="column">
-          <Flex flexDir="row">
-            <Input
-              variant="primary"
-              mb={3}
-              borderColor={submitPressed && !dueTime ? "red.error" : "gray.300"}
-              boxShadow={
-                submitPressed && !dueTime ? "0 0 2px red.error" : "none"
-              }
-              type="date"
-              value={dueDate}
-              width="200px"
-              onChange={(e) => setDueDate(e.target.value)}
-            />
-            <Text paddingX="10px" paddingY="4px">
-              at
-            </Text>
-            <Select
-              variant="primary"
-              value={dueTime}
-              onChange={(e) => setDueTime(e.target.value)}
-              border="solid"
-              borderColor={submitPressed && !dueTime ? "red.error" : "gray.300"}
-              boxShadow={
-                submitPressed && !dueTime ? "0 0 2px red.error" : "none"
-              }
-              borderWidth="2px"
-              height="34px"
-              width="200px"
-            >
-              <option value="">Select...</option>
-              {options.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-            </Select>
-          </Flex>
-          <Flex alignItems="center">
-            <Checkbox
-              w="200px"
-              isChecked={isAllDay}
-              onChange={(e) => setIsAllDay(e.target.checked)}
-              m={0}
-            >
-              All Day
-            </Checkbox>
-            <Select
-              variant="primary"
-              value={recurrenceFrequency}
-              onChange={(e) => setRecurrenceFrequency(e.target.value)}
-              border="solid"
-              borderColor="gray.300"
-              borderWidth="2px"
-              height="34px"
-            >
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="biWeekly">Bi-Weekly</option>
-            </Select>
-          </Flex>
-        </Flex>
-      </FormControl>
-    </Flex>
-  );
-};
-
 const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
+  const [taskType, setTaskType] = useState("");
+  const [recurrence, setRecurrence] = useState("Does Not Repeat");
+  const [marillacBucks, setMarillacBucks] = useState("");
+  // const [comments, setComments] = useState("");
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
+
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [dueTime, setDueTime] = useState("");
-  const [isAllDay, setIsAllDay] = useState(false);
-  const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
-  const [marillacBucks, setMarillacBucks] = useState("");
+  // const [isAllDay, setIsAllDay] = useState(false);
+  // const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
 
   const [submitPressed, setSubmitPressed] = useState(false);
 
@@ -158,8 +62,8 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
     setLocation("");
     setDueDate("");
     setDueTime("");
-    setIsAllDay(false);
-    setRecurrenceFrequency("");
+    // setIsAllDay(false);
+    // setRecurrenceFrequency("");
     setMarillacBucks("");
 
     setSubmitPressed(false);
@@ -177,6 +81,14 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   // delete task api stuff
   const handleDelete = () => {};
 
+  const selectDay = (day: string) => {
+    if (selectedDays.includes(day)) {
+      setSelectedDays(selectedDays.filter((d) => d !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  };
+
   return (
     <ModalContainer
       title="Edit Chore"
@@ -185,44 +97,155 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
       onDelete={handleDelete}
     >
       <Flex flexDir="column" gap="20px">
-        <FormField
-          label="Task Name"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          submitPressed={submitPressed}
-          required
-        />
-
-        <FormControl isRequired mt={0} pt={0}>
+        <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
-            Location
+            Task Type
           </FormLabel>
 
           <Select
             variant="primary"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            value={taskType}
+            onChange={(e) => setTaskType(e.target.value)}
             border="solid"
             borderWidth="2px"
             borderColor="gray.300"
             height="34px"
           >
-            <option value="kitchen">Kitchen</option>
-            <option value="livingRoom">Living Room</option>
-            <option value="washroom">Washroom</option>
+            <option value="optional">Optional</option>
+            <option value="required">Required</option>
           </Select>
         </FormControl>
-        <DateInput
-          dueDate={dueDate}
-          setDueDate={setDueDate}
-          dueTime={dueTime}
-          setDueTime={setDueTime}
-          isAllDay={isAllDay}
-          setIsAllDay={setIsAllDay}
-          recurrenceFrequency={recurrenceFrequency}
-          setRecurrenceFrequency={setRecurrenceFrequency}
+
+        <FormField
+          label="Task Name"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           submitPressed={submitPressed}
         />
+        <FormControl>
+          <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            Recurrence
+          </FormLabel>
+
+          <Select
+            variant="primary"
+            value={recurrence}
+            onChange={(e) => setRecurrence(e.target.value)}
+            border="solid"
+            borderWidth="2px"
+            borderColor="gray.300"
+            height="34px"
+          >
+            <option value="Repeats">Repeats</option>
+            <option value="Does Not Repeat">Does Not Repeat</option>
+          </Select>
+        </FormControl>
+        {recurrence === "Repeats" && (
+          <>
+            <Flex flexDir="row">
+              <h6 style={{ marginTop: "10px" }}>Select Days:</h6>
+
+              {days.map((day, i) => (
+                <Button
+                  key={i}
+                  // text colour (based on if day is selected)
+                  color={selectedDays.includes(day) ? "white" : "gray"}
+                  backgroundColor={
+                    selectedDays.includes(day)
+                      ? colors.purple.main
+                      : "transparent"
+                  }
+                  // if button is clicked, calls selectDay on day
+                  onClick={() => selectDay(day)}
+                  // hover style based on if day is selected
+                  _hover={{
+                    bg: selectedDays.includes(day)
+                      ? colors.purple.main
+                      : "#e2e2e2",
+                    color: selectedDays.includes(day) ? "white" : "gray",
+                  }}
+                  // same styling as before
+                  style={{
+                    padding: "4px",
+                    width: "30px",
+                    borderRadius: "50%",
+                    // left: `${(index + 1) * 10}px`
+                    margin: "0 5px",
+                  }}
+                >
+                  {day}
+                </Button>
+              ))}
+            </Flex>
+
+            <Flex flexDir="column">
+              <h6 style={{ marginBottom: "8px" }}>Completed On</h6>
+              <label htmlFor="freqDays">
+                <input
+                  type="radio"
+                  id="freqDays"
+                  name="option"
+                  style={{
+                    marginRight: "8px",
+                    accentColor: colors.purple.main,
+                  }}
+                />
+                Every Selected Day
+              </label>
+              <label htmlFor="oneSelectedDay">
+                <input
+                  type="radio"
+                  id="oneSelectedDay"
+                  name="option"
+                  style={{
+                    marginRight: "8px",
+                    accentColor: colors.purple.main,
+                  }}
+                />
+                One of the selected days
+              </label>
+            </Flex>
+
+            <Flex flexDir="column">
+              <h6 style={{ marginBottom: "8px" }}>Ends On</h6>
+              <label htmlFor="endsOn">
+                <input
+                  type="radio"
+                  id="endsOn"
+                  name="option2"
+                  style={{
+                    marginRight: "8px",
+                    accentColor: colors.purple.main,
+                  }}
+                />
+                Never
+              </label>
+              <Flex flexDir="row">
+                <label htmlFor="endsOn2">
+                  <input
+                    type="radio"
+                    id="endsOn2"
+                    name="option2"
+                    style={{
+                      marginRight: "8px",
+                      accentColor: colors.purple.main,
+                    }}
+                  />
+                  On
+                </label>
+                <input
+                  style={{
+                    width: "90px",
+                    height: "30px",
+                    marginLeft: "10px",
+                    border: "1px solid gray",
+                    borderRadius: "10px",
+                  }}
+                />
+              </Flex>
+            </Flex>
+          </>
+        )}
         <FormField
           label="Marillac Bucks"
           value={marillacBucks}
@@ -231,7 +254,6 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           onBlur={handleMoneyInput}
           submitPressed={submitPressed}
           leftElement="$"
-          required
         />
         <Flex justifyContent="flex-end">
           <Button

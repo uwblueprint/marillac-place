@@ -91,20 +91,20 @@ class TaskService implements ITaskService {
     }
   }
 
-  async getTasksByEndDate(endDate: Date): Promise<TaskAssignedDTO[]> {
-    try {
-      const tasks = await prisma.taskAssigned.findMany({
-        where: {
-          endDate,
-        },
-      });
+  // async getTasksByEndDate(endDate: Date): Promise<TaskAssignedDTO[]> {
+  //   try {
+  //     const tasks = await prisma.taskAssigned.findMany({
+  //       where: {
+  //         endDate,
+  //       },
+  //     });
 
-      return tasks;
-    } catch (error: unknown) {
-      Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
-      throw error;
-    }
-  }
+  //     return tasks;
+  //   } catch (error: unknown) {
+  //     Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
+  //     throw error;
+  //   }
+  // }
 
   async getTasksByStatus(status: Status): Promise<TaskAssignedDTO[]> {
     try {
@@ -132,6 +132,10 @@ class TaskService implements ITaskService {
           location: {
             connect: { id: task.locationId },
           },
+          endDate: task.endDate,
+          recurrenceFrequency: task.recurrenceFrequency,
+          specificDay: task.specificDay,
+          repeatDays: task.repeatDays,
         },
         include: {
           location: true,
@@ -201,8 +205,6 @@ class TaskService implements ITaskService {
           },
           status: taskAssigned.status,
           startDate: taskAssigned.startDate,
-          endDate: taskAssigned.endDate,
-          recurrenceFrequency: taskAssigned.recurrenceFrequency,
           comments: taskAssigned.comments,
         },
       });

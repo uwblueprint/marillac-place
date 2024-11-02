@@ -10,9 +10,19 @@ const taskType = gql`
   }
 
   enum Recurrence_Frequency {
-    DAILY
-    WEEKLY
-    BI_WEEKLY
+    ONE_TIME
+    REPEATS_PER_WEEK_SELECTED
+    REPEATS_PER_WEEK_ONCE
+  }
+
+  enum DaysOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
   }
 
   enum TaskType {
@@ -30,6 +40,10 @@ const taskType = gql`
     creditValue: Int!
     location: TaskLocationDTO!
     tasksAssigned: [TaskAssignedDTO!]
+    endDate: DateTime
+    recurrenceFrequency: Recurrence_Frequency!
+    specificDay: DaysOfWeek
+    repeatDays: [DaysOfWeek!]
   }
 
   type TaskLocationDTO {
@@ -44,6 +58,10 @@ const taskType = gql`
     description: String!
     creditValue: Int!
     locationId: Int!
+    endDate: DateTime
+    recurrenceFrequency: Recurrence_Frequency!
+    specificDay: DaysOfWeek
+    repeatDays: [DaysOfWeek!]
   }
 
   input InputTaskAssignedDTO {
@@ -52,8 +70,6 @@ const taskType = gql`
     assignerId: Int
     status: Status
     startDate: DateTime
-    endDate: DateTime
-    recurrenceFrequency: Recurrence_Frequency
     comments: String
   }
 
@@ -64,8 +80,6 @@ const taskType = gql`
     assignerId: Int!
     status: Status!
     startDate: DateTime!
-    endDate: DateTime!
-    recurrenceFrequency: Recurrence_Frequency
     comments: String
   }
 
@@ -75,7 +89,7 @@ const taskType = gql`
     getTasksByAssigneeId(assigneeId: Int!): [TaskAssignedDTO]
     getTasksByAssignerId(assignerId: Int!): [TaskAssignedDTO]
     getTasksByStartDate(startDate: DateTime!): [TaskAssignedDTO]
-    getTasksByEndDate(endDate: DateTime!): [TaskAssignedDTO]
+    # getTasksByEndDate(endDate: DateTime!): [TaskAssignedDTO]
     getTasksByStatus(status: Status!): [TaskAssignedDTO]
   }
 
