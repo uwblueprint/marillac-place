@@ -6,9 +6,11 @@ import { Flex, Heading, Text, Box, Circle } from "@chakra-ui/react";
 type Props = {
   room: string | number;
   residentId: number;
+  pendingTasks: number;
+  assignedTasks: number;
 };
 
-const RoomCard = ({ room, residentId }: Props): React.ReactElement => {
+const RoomCard = ({ room, residentId, pendingTasks, assignedTasks }: Props): React.ReactElement => {
   return (
     <Box
       p="10px"
@@ -32,7 +34,7 @@ const RoomCard = ({ room, residentId }: Props): React.ReactElement => {
               padding={2.5}
             >
               <Flex alignItems="center" justifyContent="center" fontSize="sm">
-                1
+                {pendingTasks}
               </Flex>
             </Circle>
             <Flex
@@ -53,7 +55,7 @@ const RoomCard = ({ room, residentId }: Props): React.ReactElement => {
               padding={2.5}
             >
               <Flex alignItems="center" justifyContent="center" fontSize="sm">
-                2
+                {assignedTasks}
               </Flex>
             </Circle>
             <Flex
