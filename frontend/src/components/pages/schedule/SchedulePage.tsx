@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Flex,
@@ -20,6 +21,7 @@ import {
 } from "@mui/icons-material";
 
 import { ScheduleType } from "../../../types/ScheduleTypes";
+import { ScheduleCalendar } from "./ScheduleCalendar";
 
 const SchedulePage = (): React.ReactElement => {
   const [rooms, setRooms] = useState<number[]>([]);
