@@ -13,12 +13,15 @@ import {
   Flex,
   IconButton,
   Icon,
+  Text,
 } from "@chakra-ui/react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
+import ModalContainer from "./ModalContainer";
+
 
 type TableTypes = string | number | boolean | Date;
 
@@ -27,7 +30,7 @@ export type ColumnInfoTypes = { header: string; key: string };
 export interface TableData {
   [key: string]: TableTypes;
 }
-
+  
 type Props = {
   data: TableData[];
   columnInfo: ColumnInfoTypes[];
@@ -39,6 +42,8 @@ type Props = {
 type SortState = {
   [key: string]: number;
 };
+
+
 
 const CommonTable = ({
   columnInfo,
@@ -53,6 +58,8 @@ const CommonTable = ({
   const [sortingColumn, setSortingColumn] = useState<SortState>({});
   const [originalData, setOriginalData] = useState(data);
   const [sortedData, setSortedData] = useState(data);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<TableData>({});
 
   useEffect(() => {
     return Math.ceil(data.length / maxResults) >= 5
@@ -69,6 +76,24 @@ const CommonTable = ({
     setOriginalData(data);
     setSortedData(data);
   }, [data]);
+
+  const handleRowClick = (row: TableData) => {
+    setSelectedRow(row);
+    setIsPreviewModalOpen(true);
+  }
+
+  interface ColumnInfo {
+    header: string;
+    value: string;
+  }
+
+  const colData: ColumnInfo[] = columnInfo.map((col, index) => {
+  const value = Object.entries(selectedRow)[index]?.[1] || " ";
+    return {
+      header: String(col.header),
+      value: String(value),
+    };
+  });
 
   // sorting the columns by ascending and descending order based on column indicated
   const sortColumn = (column: string) => {
@@ -223,7 +248,7 @@ const CommonTable = ({
               .slice((page - 1) * maxResults, page * maxResults)
               .map((row, index) => {
                 return (
-                  <Tr key={index}>
+                  <Tr key={index} >
                     {isSelectable ? (
                       <Td p="0px 0px 0px 20px" w="16px">
                         <Checkbox
@@ -240,12 +265,21 @@ const CommonTable = ({
                       </Td>
                     ) : null}
                     {columnInfo.map((column, i) => (
-                      <Td key={i}>{String(row[column.key])}</Td>
+                      <Td 
+                          onClick={() => {
+                            handleRowClick(row);
+                          }}
+                          key={i}
+                       >{String(row[column.key])}</Td>
                     ))}
-                    <Td onClick={() => onEdit(row)}>
+                    <Td onClick={(e) => {
+                          e.stopPropagation(); 
+                          onEdit(row); 
+                        }}>
                       <Icon
                         as={EditOutlinedIcon}
                         _hover={{ cursor: "pointer" }}
+                       
                       />
                     </Td>
                   </Tr>
@@ -254,6 +288,24 @@ const CommonTable = ({
           </Tbody>
         </Table>
       </TableContainer>
+
+      {isPreviewModalOpen && selectedRow && (
+        <ModalContainer
+          title={colData[0].value}
+          isOpen={isPreviewModalOpen}
+          setIsOpen={setIsPreviewModalOpen}
+        >
+          <Flex flexDir="column" gap="5px" mt="10px">
+              {colData.slice(1).map((column, index) => (
+              <Text key={index}>
+                <Text as="span" fontWeight="700">
+                  {column.header}: {' '}
+                </Text> {column.value}
+              </Text>
+            ))}      
+          </Flex>
+        </ModalContainer>
+      )}
 
       <Box h="50px" position="relative">
         <Box position="absolute" w="250px" h="50px" ml="10px">

@@ -8,6 +8,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import CloseIcon from '@mui/icons-material/Close';
 
 type Props = {
   title: string;
@@ -39,7 +40,11 @@ const ModalContainer = ({
               <DeleteOutlinedIcon />
               Delete
             </Button>
-          ) : null}
+          ) : (
+            <Button bg="transparent" h="auto" _hover={{ bg: "transparent" }} onClick={() => setIsOpen(false)}>
+              <CloseIcon/>
+            </Button>
+          )}
         </ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>
