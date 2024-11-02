@@ -257,12 +257,10 @@ const TasksPage = (): React.ReactElement => {
   // };
 
   useEffect(() => {
-    // TODO: Fetch the task data from the API instead of using mock data
     setRequiredTasks(requiredTasks);
     setOptionalTasks(optionalTasks);
     setCustomTasks(customTasks);
     setChoreTasks(choreTasks);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -320,32 +318,16 @@ const TasksPage = (): React.ReactElement => {
     <Flex flexDir="column" flexGrow={1}>
       <Tabs variant="horizontal" h="30px" mb={6} onChange={(value) => setTabIndex(value)}>
         <TabList pl={6}>
-          <Tab
-            // onClick={() => {
-            //   setTaskType("REQUIRED");
-            // }}
-          >
+          <Tab>
             Required
           </Tab>
-          <Tab
-            // onClick={() => {
-            //   setTaskType("OPTIONAL");
-            // }}
-          >
+          <Tab>
             Optional
           </Tab>
-          <Tab
-            // onClick={() => {
-            //   setTaskType("CUSTOM");
-            // }}
-          >
+          <Tab>
             Custom
           </Tab>
-          <Tab
-            // onClick={() => {
-            //   setTaskType("CHORE");
-            // }}
-          >
+          <Tab>
             Chores
           </Tab>
         </TabList>
