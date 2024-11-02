@@ -70,6 +70,7 @@ const TasksPage = (): React.ReactElement => {
   const [customTasks, setCustomTasks] = useState<CustomTask[]>([]);
   const [choreTasks, setChoreTasks] = useState<ChoreTask[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const [requiredTasksData, setRequiredTasksData] = useState<TableData[]>([]);
   const [optionalTasksData, setOptionalTasksData] = useState<TableData[]>([]);
@@ -84,7 +85,7 @@ const TasksPage = (): React.ReactElement => {
   const [taskFilter, setTaskFilter] = useState<string>("");
 
   const { loading, error, data } = useQuery(GET_TASKS_BY_TYPE, {
-    variables: { type: taskType },
+    variables: { type: taskType === "CUSTOM" ? "OPTIONAL" : taskType },
   });
 
   // const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
@@ -265,6 +266,21 @@ const TasksPage = (): React.ReactElement => {
   }, []);
 
   useEffect(() => {
+    if (tabIndex === 0) {
+      setTaskType("REQUIRED");
+    }
+    else if (tabIndex === 1) {
+      setTaskType("OPTIONAL");
+    }
+    else if (tabIndex === 2) {
+      setTaskType("CUSTOM");
+    }
+    else {
+      setTaskType("CHORE");
+    }
+  }, [tabIndex])
+
+  useEffect(() => {
     if (taskFilter === "") {
       setTaskData(storedTaskData);
     } else {
@@ -305,33 +321,33 @@ const TasksPage = (): React.ReactElement => {
 
   return (
     <Flex flexDir="column" flexGrow={1}>
-      <Tabs variant="horizontal" h="30px" mb={6}>
+      <Tabs variant="horizontal" h="30px" mb={6} onChange={(value) => setTabIndex(value)}>
         <TabList pl={6}>
           <Tab
-            onClick={() => {
-              setTaskType("REQUIRED");
-            }}
+            // onClick={() => {
+            //   setTaskType("REQUIRED");
+            // }}
           >
             Required
           </Tab>
           <Tab
-            onClick={() => {
-              setTaskType("OPTIONAL");
-            }}
+            // onClick={() => {
+            //   setTaskType("OPTIONAL");
+            // }}
           >
             Optional
           </Tab>
           <Tab
-            onClick={() => {
-              setTaskType("CUSTOM");
-            }}
+            // onClick={() => {
+            //   setTaskType("CUSTOM");
+            // }}
           >
             Custom
           </Tab>
           <Tab
-            onClick={() => {
-              setTaskType("CHORE");
-            }}
+            // onClick={() => {
+            //   setTaskType("CHORE");
+            // }}
           >
             Chores
           </Tab>
