@@ -316,9 +316,6 @@ const TasksPage = (): React.ReactElement => {
     }
   }, [data, taskType]);
   
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
   return (
     <Flex flexDir="column" flexGrow={1}>
       <Tabs variant="horizontal" h="30px" mb={6} onChange={(value) => setTabIndex(value)}>
@@ -378,14 +375,18 @@ const TasksPage = (): React.ReactElement => {
           </Button>
         </Flex>
 
-        <CommonTable
-          data={taskData}
-          columnInfo={taskDataColumns}
-          maxResults={8}
-          onEdit={() => {
-            setIsModalOpen(true);
-          }}
-        />
+        {loading || error ? (
+          <p>Loading...</p>
+        ) : (
+          <CommonTable
+            data={taskData}
+            columnInfo={taskDataColumns}
+            maxResults={8}
+            onEdit={() => {
+              setIsModalOpen(true);
+            }}
+          />)
+        }
         <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       </Flex>
     </Flex>
