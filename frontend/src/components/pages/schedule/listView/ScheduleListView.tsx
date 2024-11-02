@@ -12,7 +12,7 @@ import {
   thursdayScheduleTasksMockData,
   fridayScheduleTasksMockData,
   saturdayScheduleTasksMockData,
-} from "../../../mocks/scheduletasks";
+} from "../../../../mocks/scheduletasks";
 
 import ScheduleTable, { ColumnInfoTypes, TableData } from "./ScheduleTable";
 
@@ -56,8 +56,8 @@ const ScheduleListView = (): React.ReactElement => {
 
   return (
     <>
-      <Flex flexDir="column" flexGrow={1} p="20px">
-        <Text as="b" display="block" margin="10px" textAlign="left">
+      <Flex flexDir="column" flexGrow={1}>
+        <Text as="b" display="block" textAlign="left" mb="10px">
           Weekly Tasks
         </Text>
         <ScheduleTable
@@ -68,12 +68,12 @@ const ScheduleListView = (): React.ReactElement => {
           isSelectable
         />
       </Flex>
-      <Flex flexDir="column" flexGrow={1} p="20px">
-        <Text as="b" display="block" margin="10px" textAlign="left">
+      <Flex flexDir="column" flexGrow={1}>
+        <Text as="b" display="block" textAlign="left" mb="10px">
           Daily Tasks
         </Text>
         <Tabs variant="enclosed-colored" h="30px" mb="10px" isFitted>
-          <TabList margin="10px">
+          <TabList>
             <Tab
               _selected={{ color: "white", bg: "purple.main" }}
               borderRadius="8px 8px 0 0"

@@ -150,7 +150,7 @@ const ScheduleTable = ({
       h="100%"
     >
       <TableContainer
-        m="10px"
+        mb="10px"
         border="2px solid"
         borderColor="gray.200"
         borderRadius="6px"

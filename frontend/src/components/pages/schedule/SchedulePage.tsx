@@ -4,6 +4,7 @@ import {
   Tabs,
   TabList,
   Tab,
+  Box,
   Heading,
   Button,
   IconButton,
@@ -65,11 +66,69 @@ const SchedulePage = (): React.ReactElement => {
         {formatTabs(rooms)}
       </Tabs>
 
-      <Flex justifyContent="space-between" mt={10} ml={8} mr={10}>
+      <Flex justifyContent="space-between" mt={10} ml={8} mr={5}>
+        <Flex>
+          <Heading
+            size="lg"
+            fontSize="36px"
+            color="purple.main"
+            whiteSpace="nowrap"
+          >
+            January 2025
+            {/* see announcements page for how to determine what text shows */}
+          </Heading>
+
+          <Flex w="200px" flexDir="row" height="100px" ml={5}>
+            <IconButton
+              _hover={{
+                cursor: "pointer",
+              }}
+              color="purple.main"
+              backgroundColor="grey.50"
+              borderRightRadius="0"
+              aria-label="Previous Week"
+              icon={<ArrowBackIosNew fontSize="small" />}
+            />
+            <Button
+              alignContent="center"
+              borderRadius="0"
+              color="purple.main"
+              size="md"
+              fontSize="lg"
+            >
+              Jan 1 - 7
+            </Button>
+            <IconButton
+              _hover={{
+                cursor: "pointer",
+              }}
+              color="purple.main"
+              backgroundColor="grey.50"
+              borderLeftRadius="0"
+              aria-label="Previous Week"
+              icon={<ArrowForwardIos fontSize="small" />}
+            />
+          </Flex>
+        </Flex>
+
+        <Flex flexDir="row" height="100px" justifyContent="space-between">
+          <Button
+            variant="success"
+            rightIcon={<Icon as={Edit} color="green.main" />}
+            size="sm"
+            onClick={() => {}}
+            mr={5}
+          >
+            200 M-Bucks
+          </Button>
+        </Flex>
+      </Flex>
+
+      <Flex justifyContent="space-between" mt={-5} ml={8} mr={10}>
         <Flex>
           <Button
             variant={active === "List" ? "primary" : "secondary"}
-            w="7vw"
+            w="8em"
             borderRightRadius="0"
             leftIcon={<Icon as={FormatListBulleted} color="white" />}
             size="sm"
@@ -83,7 +142,7 @@ const SchedulePage = (): React.ReactElement => {
 
           <Button
             variant={active === "Calendar" ? "primary" : "secondary"}
-            w="7vw"
+            w="8em"
             borderLeftRadius="0"
             leftIcon={<Icon as={CalendarMonth} color="white" />}
             size="sm"
@@ -95,27 +154,18 @@ const SchedulePage = (): React.ReactElement => {
             Calendar
           </Button>
         </Flex>
-        <Flex flexDir="row" height="100px" justifyContent="space-between">
-          <Button
-            variant="success"
-            rightIcon={<Icon as={Edit} color="green.main" />}
-            size="sm"
-            onClick={() => {}}
-            mr={5}
-          >
-            200 M-Bucks
-          </Button>
-          <Button variant="primary" size="sm" onClick={() => {}}>
-            Update Selected
-          </Button>
-        </Flex>
-      </Flex>
 
-      {scheduleType === "CALENDAR" ? (
-        <ScheduleCalendar />
-      ) : (
-        <ScheduleListView />
-      )}
+        <Button variant="primary" size="sm" onClick={() => {}}>
+          Update Selected
+        </Button>
+      </Flex>
+      <Box padding="40px">
+        {scheduleType === "CALENDAR" ? (
+          <ScheduleCalendar />
+        ) : (
+          <ScheduleListView />
+        )}
+      </Box>
     </Flex>
   );
 };

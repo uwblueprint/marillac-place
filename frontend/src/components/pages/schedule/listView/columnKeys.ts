@@ -1,4 +1,4 @@
-import { ColumnInfoTypes } from "../../common/CommonTable";
+import { ColumnInfoTypes } from "../../../common/CommonTable";
 
 export const tasksColumnTypes: ColumnInfoTypes[] = [
   {
