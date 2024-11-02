@@ -133,7 +133,7 @@ const TasksPage = (): React.ReactElement => {
   // const tasksByAssigneeId = React.useMemo(() => {
   //   return tasksByAssigneeIdData;
   // }, [tasksByAssigneeIdData]);
-  
+
   // const {
   //   loading: tasksByAssignerIdLoading,
   //   error: tasksByAssignerIdError,
@@ -156,7 +156,7 @@ const TasksPage = (): React.ReactElement => {
   // const tasksByStartDate = React.useMemo(() => {
   //   return taskByStartDateData;
   // }, [taskByStartDateData]);
-  
+
   // const {
   //   loading: tasksByStatusLoading,
   //   error: tasksByStatusError,
@@ -261,17 +261,14 @@ const TasksPage = (): React.ReactElement => {
   useEffect(() => {
     if (tabIndex === 0) {
       setTaskType("REQUIRED");
-    }
-    else if (tabIndex === 1) {
+    } else if (tabIndex === 1) {
       setTaskType("OPTIONAL");
-    }
-    else if (tabIndex === 2) {
+    } else if (tabIndex === 2) {
       setTaskType("CUSTOM");
-    }
-    else {
+    } else {
       setTaskType("CHORE");
     }
-  }, [tabIndex])
+  }, [tabIndex]);
 
   useEffect(() => {
     if (taskFilter === "") {
@@ -291,40 +288,42 @@ const TasksPage = (): React.ReactElement => {
     if (data) {
       if (taskType === "REQUIRED") {
         setRequiredTasks(data.getTasksByType);
-        setStoredTaskData(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
       } else if (taskType === "OPTIONAL") {
         setOptionalTasks(data.getTasksByType);
-        setStoredTaskData(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
       } else if (taskType === "CUSTOM") {
         setCustomTasks(data.getTasksByType);
-        setStoredTaskData(data.getTasksByType);
         setTaskDataColumns(customTasksColumnTypes);
       } else if (taskType === "CHORE") {
         setChoreTasks(data.getTasksByType);
-        setStoredTaskData(data.getTasksByType);
         setTaskDataColumns(choreTasksColumnTypes);
       }
+
+      setStoredTaskData(
+        data.getTasksByType.map((task: any) => {
+          return {
+            ...task,
+            endDate: new Date(task.endDate).toDateString(),
+          };
+        }),
+      );
     }
   }, [data, taskType]);
-  
+
   return (
     <Flex flexDir="column" flexGrow={1}>
-      <Tabs variant="horizontal" h="30px" mb={6} onChange={(value) => setTabIndex(value)}>
+      <Tabs
+        variant="horizontal"
+        h="30px"
+        mb={6}
+        onChange={(value) => setTabIndex(value)}
+      >
         <TabList pl={6}>
-          <Tab>
-            Required
-          </Tab>
-          <Tab>
-            Optional
-          </Tab>
-          <Tab>
-            Custom
-          </Tab>
-          <Tab>
-            Chores
-          </Tab>
+          <Tab>Required</Tab>
+          <Tab>Optional</Tab>
+          <Tab>Custom</Tab>
+          <Tab>Chores</Tab>
         </TabList>
       </Tabs>
 
@@ -362,8 +361,8 @@ const TasksPage = (): React.ReactElement => {
             onEdit={() => {
               setIsModalOpen(true);
             }}
-          />)
-        }
+          />
+        )}
         <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       </Flex>
     </Flex>
