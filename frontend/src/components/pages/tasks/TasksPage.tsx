@@ -72,11 +72,6 @@ const TasksPage = (): React.ReactElement => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
-  const [requiredTasksData, setRequiredTasksData] = useState<TableData[]>([]);
-  const [optionalTasksData, setOptionalTasksData] = useState<TableData[]>([]);
-  const [customTasksData, setCustomTasksData] = useState<TableData[]>([]);
-  const [choreTasksData, setChoreTasksData] = useState<TableData[]>([]);
-
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
   const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
