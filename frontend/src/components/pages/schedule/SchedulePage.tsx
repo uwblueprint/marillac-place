@@ -1,12 +1,11 @@
-
 import React, { useEffect, useState } from "react";
 import {
   Flex,
   Tabs,
   TabList,
   Tab,
-  Heading,
   Box,
+  Heading,
   Button,
   IconButton,
   Icon,
@@ -21,7 +20,8 @@ import {
 } from "@mui/icons-material";
 
 import { ScheduleType } from "../../../types/ScheduleTypes";
-import { ScheduleCalendar } from "./ScheduleCalendar";
+import ScheduleListView from "./listView/ScheduleListView";
+import { ScheduleCalendar } from "./calendarView/ScheduleCalendar";
 
 const SchedulePage = (): React.ReactElement => {
   const [rooms, setRooms] = useState<number[]>([]);
@@ -66,9 +66,14 @@ const SchedulePage = (): React.ReactElement => {
         {formatTabs(rooms)}
       </Tabs>
 
-      <Flex justifyContent="space-between" mt={10} ml={8} mr={10}>
+      <Flex justifyContent="space-between" mt={10} ml={8} mr={5}>
         <Flex>
-          <Heading size="lg" fontSize="36px" w="14vw" color="purple.main">
+          <Heading
+            size="lg"
+            fontSize="36px"
+            color="purple.main"
+            whiteSpace="nowrap"
+          >
             January 2025
             {/* see announcements page for how to determine what text shows */}
           </Heading>
@@ -116,15 +121,6 @@ const SchedulePage = (): React.ReactElement => {
           >
             200 M-Bucks
           </Button>
-
-          <Button
-            variant="error"
-            rightIcon={<Icon as={Edit} color="red.main" />}
-            size="sm"
-            onClick={() => {}}
-          >
-            0 Warnings
-          </Button>
         </Flex>
       </Flex>
 
@@ -132,7 +128,7 @@ const SchedulePage = (): React.ReactElement => {
         <Flex>
           <Button
             variant={active === "List" ? "primary" : "secondary"}
-            w="7vw"
+            w="8em"
             borderRightRadius="0"
             leftIcon={<Icon as={FormatListBulleted} color="white" />}
             size="sm"
@@ -146,7 +142,7 @@ const SchedulePage = (): React.ReactElement => {
 
           <Button
             variant={active === "Calendar" ? "primary" : "secondary"}
-            w="7vw"
+            w="8em"
             borderLeftRadius="0"
             leftIcon={<Icon as={CalendarMonth} color="white" />}
             size="sm"
@@ -163,11 +159,11 @@ const SchedulePage = (): React.ReactElement => {
           Update Selected
         </Button>
       </Flex>
-      <Box mt={8} ml={10} mr={10} padding={40} borderWidth="1px">
+      <Box padding="40px">
         {scheduleType === "CALENDAR" ? (
-          <Heading size="md">TEMP CALENDAR</Heading>
+          <ScheduleCalendar />
         ) : (
-          <Heading size="md">{scheduleData}</Heading>
+          <ScheduleListView />
         )}
       </Box>
     </Flex>
