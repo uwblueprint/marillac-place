@@ -19,7 +19,8 @@ import {
 } from "@mui/icons-material";
 
 import { ScheduleType } from "../../../types/ScheduleTypes";
-import ScheduleListView from "./ScheduleListView";
+import ScheduleListView from "./listView/ScheduleListView";
+import { ScheduleCalendar } from "./calendarView/ScheduleCalendar";
 
 const SchedulePage = (): React.ReactElement => {
   const [rooms, setRooms] = useState<number[]>([]);
@@ -111,7 +112,7 @@ const SchedulePage = (): React.ReactElement => {
       </Flex>
 
       {scheduleType === "CALENDAR" ? (
-        <Heading size="md">TEMP CALENDAR</Heading>
+        <ScheduleCalendar />
       ) : (
         <ScheduleListView />
       )}
