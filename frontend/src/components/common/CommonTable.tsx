@@ -20,7 +20,7 @@ import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 
-type TableTypes = string | number | boolean | Date;
+type TableTypes = string | number | boolean | Date | string[];
 
 export type ColumnInfoTypes = { header: string; key: string };
 

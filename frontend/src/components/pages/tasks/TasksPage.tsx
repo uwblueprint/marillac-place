@@ -78,19 +78,20 @@ const TasksPage = (): React.ReactElement => {
   const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
 
   const [taskFilter, setTaskFilter] = useState<string>("");
+  const [modalTask, setModalTask] = useState<Task | null>(null);
 
   const { loading, error, data } = useQuery(GET_TASKS_BY_TYPE, {
     variables: { type: taskType === "CUSTOM" ? "OPTIONAL" : taskType },
   });
 
-  // const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
+  const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
 
-  // const [updateTask] = useMutation<{
-  //   taskID: number;
-  //   taskId: TaskResponse;
-  // }>(UPDATE_TASK);
+  const [updateTask] = useMutation<{
+    taskID: number;
+    taskId: TaskResponse;
+  }>(UPDATE_TASK);
 
-  // const [deleteTask] = useMutation<{ taskID: number }>(DELETE_TASK);
+  const [deleteTask] = useMutation<{ taskID: number }>(DELETE_TASK);
 
   // const [assignTask] = useMutation<{ assignTask: TaskAssignedResponse }>(
   //   ASSIGN_TASK,
@@ -177,52 +178,60 @@ const TasksPage = (): React.ReactElement => {
   //   console.log(tasksByStatus);
   // };
 
-  // const handleAddTask = async () => {
-  //   try {
-  //     const date = new Date();
-  //     // const formattedDate = date.toISOString().split("T")[0];
+  const handleAddTask = async (task: TaskRequest) => {
+    try {
+      const date = new Date();
+      // const formattedDate = date.toISOString().split("T")[0];
 
-  //     const task: TaskRequest = {
-  //       type: TaskTypeEnum.REQUIRED,
-  //       title: "test task",
-  //       description: "blah blah",
-  //       creditValue: 5,
-  //       locationId: 1234,
-  //       endDate: date,
-  //       recurrenceFrequency: RecurrenceFrequency.ONE_TIME,
-  //       specificDay: DaysOfWeek.MONDAY,
-  //     };
-  //     await createTask({ variables: { task } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+      // const task: TaskRequest = {
+      //   type: TaskTypeEnum.REQUIRED,
+      //   title: "test task",
+      //   description: "blah blah",
+      //   creditValue: 5,
+      //   locationId: 1234,
+      //   endDate: date,
+      //   recurrenceFrequency: RecurrenceFrequency.ONE_TIME,
+      //   specificDay: DaysOfWeek.MONDAY,
+      // };
+      await createTask({ variables: { task } });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  // const handleUpdateTask = async () => {
-  //   try {
-  //     const taskId = 1;
-  //     const task: TaskRequest = {
-  //       type: TaskTypeEnum.REQUIRED,
-  //       title: "update name",
-  //       description: "blah blah",
-  //       creditValue: 7,
-  //       locationId: 1234,
-  //       recurrenceFrequency: RecurrenceFrequency.ONE_TIME,
-  //     };
-  //     await updateTask({ variables: { taskId, task } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const handleUpdateTask = async (taskId: string, task: TaskRequest) => {
+    try {
+      // const taskId = 1;
+      // const task: TaskRequest = {
+      //   type: TaskTypeEnum.REQUIRED,
+      //   title: "update name",
+      //   description: "blah blah",
+      //   creditValue: 7,
+      //   locationId: 1234,
+      //   recurrenceFrequency: RecurrenceFrequency.ONE_TIME,
+      // };
+      await updateTask({ variables: { taskId: parseInt(taskId, 10), task } });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  // const handleDeleteTask = async () => {
-  //   try {
-  //     const taskId = 2;
-  //     await deleteTask({ variables: { taskId } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const handleSaveClick = async (taskId: string, task: TaskRequest) => {
+    if (taskId === "") {
+      await handleAddTask(task);
+    } else {
+      await handleUpdateTask(taskId, task);
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      // console.log("DELETE", taskId);
+      await deleteTask({ variables: { taskId } });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   // const handleAssignTask = async () => {
   //   try {
@@ -344,6 +353,7 @@ const TasksPage = (): React.ReactElement => {
             leftIcon={<Icon as={Add} color="white" />}
             size="sm"
             onClick={() => {
+              setModalTask(null);
               setIsModalOpen(true);
             }}
           >
@@ -358,12 +368,19 @@ const TasksPage = (): React.ReactElement => {
             data={taskData}
             columnInfo={taskDataColumns}
             maxResults={8}
-            onEdit={() => {
+            onEdit={(row: any) => {
+              setModalTask(row);
               setIsModalOpen(true);
             }}
           />
         )}
-        <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+        <TaskModal
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          task={modalTask}
+          handleSaveClick={handleSaveClick}
+          handleDeleteTask={modalTask ? handleDeleteTask : undefined}
+        />
       </Flex>
     </Flex>
   );

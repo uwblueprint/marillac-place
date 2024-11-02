@@ -1,12 +1,35 @@
-import React, { useState } from "react";
-import { Button, Select, Flex, FormControl, FormLabel } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Select,
+  Flex,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+} from "@chakra-ui/react";
 import colors from "../../../theme/colors";
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
+import {
+  TaskType,
+  Task,
+  CustomTask,
+  ChoreTask,
+} from "../../../types/TaskTypes";
+import {
+  TaskRequest,
+  TaskTypeEnum,
+  RecurrenceFrequency,
+  DaysOfWeek,
+} from "../../../APIClients/Types/TaskType";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  task: Task | null;
+  handleDeleteTask?: (taskId: string) => Promise<void>;
+  handleSaveClick: (taskId: string, task: TaskRequest) => Promise<void>;
 };
 
 // returns an array of times in 30 minute increments
@@ -32,10 +55,18 @@ const generateOptions = () => {
 
 const options = generateOptions();
 
-const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
-  const [taskType, setTaskType] = useState("");
+const TaskModal = ({
+  isOpen,
+  setIsOpen,
+  task,
+  handleDeleteTask,
+  handleSaveClick,
+}: Props): React.ReactElement => {
+  const [taskType, setTaskType] = useState("OPTIONAL");
   const [recurrence, setRecurrence] = useState("Does Not Repeat");
-  const [marillacBucks, setMarillacBucks] = useState("");
+  const [marillacBucks, setMarillacBucks] = useState<number | undefined>(
+    undefined,
+  );
   // const [comments, setComments] = useState("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
@@ -44,17 +75,107 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [location, setLocation] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [dueTime, setDueTime] = useState("");
+  const [completedOn, setCompletedOn] = useState("every");
+  const [endsOn, setEndsOn] = useState("never");
+  const [endsOnDate, setEndsOnDate] = useState("");
   // const [isAllDay, setIsAllDay] = useState(false);
   // const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
 
   const [submitPressed, setSubmitPressed] = useState(false);
+  const [errorSubmitting, setError] = useState("");
+  const isEditMode = !!task;
+
+  const dayIdMap = [
+    { key: "MONDAY", short: "M" },
+    { key: "TUESDAY", short: "Tu" },
+    { key: "WEDNESDAY", short: "W" },
+    { key: "THURSDAY", short: "Th" },
+    { key: "FRIDAY", short: "F" },
+    { key: "SATURDAY", short: "Sa" },
+    { key: "SUNDAY", short: "Su" },
+  ];
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    if (task) {
+      setTaskType(task.type);
+      setRecurrence(
+        task.recurrenceFrequency === "ONE_TIME" ? "Does Not Repeat" : "Repeats",
+      );
+      setMarillacBucks(task.creditValue);
+
+      if (task.specificDay) {
+        const day = dayIdMap.find(
+          (dayMp) => dayMp.key === task.specificDay,
+        )?.short;
+        if (day) {
+          setSelectedDays([day]);
+        }
+      } else {
+        setSelectedDays(
+          task.repeatDays
+            .map((day) => dayIdMap.find((dayMp) => dayMp.key === day)?.short)
+            .filter((day): day is string => day !== undefined),
+        );
+      }
+
+      setTitle(task.title);
+      setDueDate(task.endDate ? task.endDate.toString() : "");
+      setDueTime("");
+    } else {
+      setTaskType("OPTIONAL");
+      setRecurrence("Does Not Repeat");
+      setMarillacBucks(undefined);
+      setSelectedDays([]);
+      setTitle("");
+      setDueDate("");
+      setDueTime("");
+    }
+  }, [task, isOpen]);
 
   const handleSubmit = () => {
     setSubmitPressed(true);
-    if (!title || !location || !dueDate || !dueTime || !marillacBucks) {
-      // TODO: Add error handling
+    if (title === "") {
+      console.log("Title is required");
+      return;
     }
+
     // TODO: API call to add task
+    let recurrenceFrequency = "ONE_TIME";
+    if (recurrence === "Repeats") {
+      if (completedOn === "every") {
+        recurrenceFrequency = "REPEATS_PER_WEEK_SELECTED";
+      } else {
+        recurrenceFrequency = "REPEATS_PER_WEEK_ONCE";
+      }
+
+      if (selectedDays.length === 0) {
+        console.log("Days are required");
+        return;
+      }
+    }
+
+    const taskRequest: TaskRequest = {
+      type: taskType as TaskTypeEnum,
+      title,
+      description: task?.description || "No field in modal",
+      creditValue: marillacBucks || 0,
+      locationId: task?.locationId || 1234, // no field in modal
+      endDate: endsOn === "never" ? undefined : new Date(endsOnDate),
+      recurrenceFrequency: recurrenceFrequency as RecurrenceFrequency,
+      repeatDays:
+        recurrenceFrequency === "ONE_TIME"
+          ? []
+          : selectedDays.map(
+              (day) =>
+                dayIdMap.find((dayMp) => dayMp.short === day)
+                  ?.key as DaysOfWeek,
+            ),
+    };
+    handleSaveClick(task?.id || "", taskRequest);
+    setIsOpen(false);
   };
 
   const resetFormState = () => {
@@ -64,22 +185,25 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
     setDueTime("");
     // setIsAllDay(false);
     // setRecurrenceFrequency("");
-    setMarillacBucks("");
+    setMarillacBucks(undefined);
 
     setSubmitPressed(false);
   };
 
   const handleMoneyInput = () => {
-    const inputValue = marillacBucks.replace(/[^0-9.]/g, ""); // Remove non-numeric and non-period characters
-
-    if (inputValue) {
-      const numberValue = parseFloat(inputValue).toFixed(2);
-      setMarillacBucks(numberValue);
-    }
+    // const inputValue = marillacBucks.replace(/[^0-9.]/g, ""); // Remove non-numeric and non-period characters
+    // if (inputValue) {
+    //   const numberValue = parseFloat(inputValue).toFixed(2);
+    //   setMarillacBucks(numberValue);
+    // }
   };
 
   // delete task api stuff
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    if (handleDeleteTask && task) {
+      handleDeleteTask(task.id);
+    }
+  };
 
   const selectDay = (day: string) => {
     if (selectedDays.includes(day)) {
@@ -91,10 +215,10 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
   return (
     <ModalContainer
-      title="Edit Chore"
+      title={title}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      onDelete={handleDelete}
+      onDelete={isEditMode ? handleDelete : undefined}
     >
       <Flex flexDir="column" gap="20px">
         <FormControl>
@@ -111,8 +235,10 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
             borderColor="gray.300"
             height="34px"
           >
-            <option value="optional">Optional</option>
-            <option value="required">Required</option>
+            <option value="OPTIONAL">Optional</option>
+            <option value="REQUIRED">Required</option>
+            {/* <option value="CUSTOM">Custom</option> */}
+            <option value="CHORE">Chores</option>
           </Select>
         </FormControl>
 
@@ -180,77 +306,60 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
 
             <Flex flexDir="column">
               <h6 style={{ marginBottom: "8px" }}>Completed On</h6>
-              <label htmlFor="freqDays">
-                <input
-                  type="radio"
-                  id="freqDays"
-                  name="option"
-                  style={{
-                    marginRight: "8px",
-                    accentColor: colors.purple.main,
-                  }}
-                />
-                Every Selected Day
-              </label>
-              <label htmlFor="oneSelectedDay">
-                <input
-                  type="radio"
-                  id="oneSelectedDay"
-                  name="option"
-                  style={{
-                    marginRight: "8px",
-                    accentColor: colors.purple.main,
-                  }}
-                />
-                One of the selected days
-              </label>
+
+              <RadioGroup
+                variant="outline"
+                value={completedOn}
+                onChange={(value) => setCompletedOn(value)}
+                colorScheme="purple"
+                style={{ flexDirection: "column", display: "flex" }}
+              >
+                <Radio value="every"> Every Selected Day </Radio>
+                <Radio value="once">One of the selected days</Radio>
+              </RadioGroup>
             </Flex>
 
             <Flex flexDir="column">
               <h6 style={{ marginBottom: "8px" }}>Ends On</h6>
-              <label htmlFor="endsOn">
-                <input
-                  type="radio"
-                  id="endsOn"
-                  name="option2"
-                  style={{
-                    marginRight: "8px",
-                    accentColor: colors.purple.main,
-                  }}
-                />
-                Never
-              </label>
-              <Flex flexDir="row">
-                <label htmlFor="endsOn2">
-                  <input
-                    type="radio"
-                    id="endsOn2"
-                    name="option2"
-                    style={{
-                      marginRight: "8px",
-                      accentColor: colors.purple.main,
-                    }}
-                  />
-                  On
-                </label>
-                <input
-                  style={{
-                    width: "90px",
-                    height: "30px",
-                    marginLeft: "10px",
-                    border: "1px solid gray",
-                    borderRadius: "10px",
-                  }}
-                />
-              </Flex>
+              <RadioGroup
+                variant="outline"
+                value={endsOn}
+                onChange={(value) => setEndsOn(value)}
+                colorScheme="purple"
+                style={{ flexDirection: "column", display: "flex" }}
+              >
+                <Radio value="never" margin="0">
+                  Never
+                </Radio>
+                <Radio value="endsOn">
+                  <Flex alignItems="center" gap="12px">
+                    On
+                    <FormField
+                      label=""
+                      value={endsOnDate}
+                      type="date"
+                      onChange={(e) => {
+                        setEndsOnDate(e.target.value);
+                      }}
+                      submitPressed={submitPressed}
+                    />
+                  </Flex>
+                </Radio>
+              </RadioGroup>
             </Flex>
           </>
         )}
         <FormField
           label="Marillac Bucks"
-          value={marillacBucks}
-          type="text"
-          onChange={(e) => setMarillacBucks(e.target.value)}
+          value={marillacBucks || ""}
+          type="number"
+          onChange={(e) => {
+            if (e.target.value) {
+              setMarillacBucks(parseInt(e.target.value, 10));
+            } else if (e.target.value === "") {
+              setMarillacBucks(undefined);
+            }
+          }}
           onBlur={handleMoneyInput}
           submitPressed={submitPressed}
           leftElement="$"
@@ -270,7 +379,6 @@ const TaskModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
             variant="primary"
             onClick={() => {
               handleSubmit();
-              setIsOpen(false);
             }}
           >
             Save
