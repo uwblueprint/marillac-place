@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 import {
   Flex,
   Tabs,
@@ -19,15 +19,27 @@ import {
   CalendarMonth,
 } from "@mui/icons-material";
 
+import FullCalendar from "@fullcalendar/react";
+import { CalendarApi } from "@fullcalendar/core";
 import { ScheduleType } from "../../../types/ScheduleTypes";
 import ScheduleListView from "./listView/ScheduleListView";
-import { ScheduleCalendar } from "./calendarView/ScheduleCalendar";
+import ScheduleCalendar from "./calendarView/ScheduleCalendar";
 
 const SchedulePage = (): React.ReactElement => {
   const [rooms, setRooms] = useState<number[]>([]);
   const [scheduleType, setScheduleType] = useState<ScheduleType>("LIST");
   const [scheduleData, setScheduleData] = useState<string>("");
   const [active, setActive] = useState<string>("List");
+
+  const calendarRef = useRef<CalendarApi | null>(null);
+
+  const handleNext = () => {
+    calendarRef.current?.next();
+  };
+  
+  const handlePrev = () => {
+    calendarRef.current?.prev();
+  };
 
   useEffect(() => {
     // TODO: Fetch occupied rooms from API?
@@ -80,6 +92,7 @@ const SchedulePage = (): React.ReactElement => {
 
           <Flex w="200px" flexDir="row" height="100px" ml={5}>
             <IconButton
+              onClick={handlePrev}
               _hover={{
                 cursor: "pointer",
               }}
@@ -99,6 +112,7 @@ const SchedulePage = (): React.ReactElement => {
               Jan 1 - 7
             </Button>
             <IconButton
+              onClick={handleNext}
               _hover={{
                 cursor: "pointer",
               }}
@@ -161,7 +175,7 @@ const SchedulePage = (): React.ReactElement => {
       </Flex>
       <Box padding="40px">
         {scheduleType === "CALENDAR" ? (
-          <ScheduleCalendar />
+          <ScheduleCalendar ref={calendarRef} />
         ) : (
           <ScheduleListView />
         )}

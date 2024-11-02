@@ -1,7 +1,7 @@
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { DayHeaderContentArg, EventContentArg } from "@fullcalendar/core";
-import React, { useEffect, useRef } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import "./ScheduleCalendar.css";
 
@@ -63,14 +63,25 @@ function renderHeaderContent(date: DayHeaderContentArg) {
   );
 }
 
-export function ScheduleCalendar() {
-  const calendarRef = useRef<any>(null);
+const ScheduleCalendar = forwardRef((_, ref) => {
+  const calendarRef = useRef<FullCalendar | null>(null);
+
   const handleAllDayContent = (arg: any) => {
     return <span>{arg.text ? "" : ""}</span>;
   };
+
+  useImperativeHandle(ref, () => ({
+    next: () => {
+      if (calendarRef.current) calendarRef.current.getApi().next();
+    },
+    prev: () => {
+      if (calendarRef.current) calendarRef.current.getApi().prev();
+    },
+  }));
   return (
     <div>
       <FullCalendar
+        ref = {calendarRef}
         plugins={[timeGridPlugin]}
         initialView="timeGridWeek"
         weekends
@@ -91,6 +102,8 @@ export function ScheduleCalendar() {
       />
     </div>
   );
-}
+})
+
+ScheduleCalendar.displayName = "ScheduleCalendar";
 
 export default ScheduleCalendar;
