@@ -3,32 +3,26 @@ import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
 export interface ResidentDTO extends Omit<UserDTO, "id" | "type"> {
   userId: number;
   residentId: number;
-  birthDate: Date;
   roomNumber: number;
   credits: number;
   dateJoined: Date;
   dateLeft: Date | null;
-  notes: string | null;
 }
 
 export interface CreateResidentDTO extends CreateUserDTO {
   residentId: number;
-  birthDate: Date;
   roomNumber: number;
   credits?: number;
   dateJoined?: Date;
   dateLeft?: Date;
-  notes?: string;
 }
 
 export interface UpdateResidentDTO extends UpdateUserDTO {
   residentId?: number;
-  birthDate?: Date;
   roomNumber?: number;
   credits?: number;
   dateJoined?: Date;
   dateLeft?: Date;
-  notes?: string;
 }
 
 // Have to manually map enums as ts treats enums as numbers

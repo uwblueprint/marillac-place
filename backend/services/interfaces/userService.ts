@@ -3,36 +3,21 @@ import { UserType } from "../../prisma";
 export type UserDTO = {
   id: number;
   type: UserType;
-  email: string;
-  phoneNumber: string | null;
-  firstName: string;
-  lastName: string;
   displayName: string | null;
   profilePictureURL: string | null;
   isActive: boolean;
 };
 
-export type SimplifiedUserDTO = Pick<
-  UserDTO,
-  "id" | "type" | "email" | "firstName" | "lastName"
->;
+export type SimplifiedUserDTO = Pick<UserDTO, "id" | "type">;
 
 export interface CreateUserDTO {
-  email: string;
   password: string;
-  phoneNumber?: string;
-  firstName: string;
-  lastName: string;
   displayName?: string;
   profilePictureURL?: string;
 }
 
 export interface UpdateUserDTO {
-  email?: string;
   password?: string;
-  phoneNumber?: string;
-  firstName?: string;
-  lastName?: string;
   displayName?: string;
   profilePictureURL?: string;
   isActive?: boolean;
