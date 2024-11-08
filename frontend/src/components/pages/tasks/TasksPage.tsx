@@ -80,7 +80,7 @@ const TasksPage = (): React.ReactElement => {
   const [taskFilter, setTaskFilter] = useState<string>("");
   const [modalTask, setModalTask] = useState<Task | null>(null);
 
-  const { loading, error, data } = useQuery(GET_TASKS_BY_TYPE, {
+  const { loading, error, data, refetch } = useQuery(GET_TASKS_BY_TYPE, {
     variables: { type: taskType === "CUSTOM" ? "OPTIONAL" : taskType },
   });
 
@@ -180,20 +180,8 @@ const TasksPage = (): React.ReactElement => {
 
   const handleAddTask = async (task: TaskRequest) => {
     try {
-      const date = new Date();
-      // const formattedDate = date.toISOString().split("T")[0];
-
-      // const task: TaskRequest = {
-      //   type: TaskTypeEnum.REQUIRED,
-      //   title: "test task",
-      //   description: "blah blah",
-      //   creditValue: 5,
-      //   locationId: 1234,
-      //   endDate: date,
-      //   recurrenceFrequency: RecurrenceFrequency.ONE_TIME,
-      //   specificDay: DaysOfWeek.MONDAY,
-      // };
       await createTask({ variables: { task } });
+      await refetch();
     } catch (e) {
       console.log(e);
     }
@@ -201,15 +189,6 @@ const TasksPage = (): React.ReactElement => {
 
   const handleUpdateTask = async (taskId: string, task: TaskRequest) => {
     try {
-      // const taskId = 1;
-      // const task: TaskRequest = {
-      //   type: TaskTypeEnum.REQUIRED,
-      //   title: "update name",
-      //   description: "blah blah",
-      //   creditValue: 7,
-      //   locationId: 1234,
-      //   recurrenceFrequency: RecurrenceFrequency.ONE_TIME,
-      // };
       await updateTask({ variables: { taskId: parseInt(taskId, 10), task } });
     } catch (e) {
       console.log(e);
@@ -226,8 +205,8 @@ const TasksPage = (): React.ReactElement => {
 
   const handleDeleteTask = async (taskId: string) => {
     try {
-      // console.log("DELETE", taskId);
       await deleteTask({ variables: { taskId } });
+      await refetch();
     } catch (e) {
       console.log(e);
     }

@@ -106,7 +106,7 @@ const TaskModal = ({
       );
       setMarillacBucks(task.creditValue);
 
-      if (task.specificDay) {
+      if (task.recurrenceFrequency === "ONE_TIME") {
         const day = dayIdMap.find(
           (dayMp) => dayMp.key === task.specificDay,
         )?.short;
@@ -202,6 +202,8 @@ const TaskModal = ({
   const handleDelete = () => {
     if (handleDeleteTask && task) {
       handleDeleteTask(task.id);
+      setIsOpen(false);
+      resetFormState();
     }
   };
 
