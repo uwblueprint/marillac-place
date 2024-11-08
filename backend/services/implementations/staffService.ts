@@ -23,14 +23,14 @@ class StaffService implements IStaffService {
         const newStaff = await prisma.staff.create({
           data: {
             isAdmin: staff.isAdmin,
+            email: staff.email,
+            firstName: staff.firstName,
+            lastName: staff.lastName,
+            phoneNumber: staff.phoneNumber,
             user: {
               create: {
                 authId: firebaseUser.uid,
                 type: UserType.STAFF,
-                email: staff.email,
-                phoneNumber: staff.phoneNumber,
-                firstName: staff.firstName,
-                lastName: staff.lastName,
                 displayName: staff.displayName,
                 profilePictureURL: staff.profilePictureURL,
               },
@@ -43,9 +43,9 @@ class StaffService implements IStaffService {
           userId: newStaff.userId,
           isAdmin: newStaff.isAdmin,
           email: firebaseUser.email ?? "",
-          phoneNumber: newStaff.user.phoneNumber,
-          firstName: newStaff.user.firstName,
-          lastName: newStaff.user.lastName,
+          phoneNumber: newStaff.phoneNumber,
+          firstName: newStaff.firstName,
+          lastName: newStaff.lastName,
           displayName: newStaff.user.displayName,
           profilePictureURL: newStaff.user.profilePictureURL,
           isActive: newStaff.user.isActive,
@@ -83,8 +83,8 @@ class StaffService implements IStaffService {
       }
 
       const { authId } = originalUser;
-      const email = "email" in staff ? staff.email : originalUser.email;
-
+      // const email = "email" in staff ? staff.email : originalUser.email;
+      const { email } = staff;
       if ("password" in staff) {
         await firebaseAdmin.auth().updateUser(authId, {
           email,
@@ -98,13 +98,13 @@ class StaffService implements IStaffService {
         where: { userId },
         data: {
           isAdmin: staff.isAdmin,
+          email: staff.email,
+          phoneNumber: staff.phoneNumber,
+          firstName: staff.firstName,
+          lastName: staff.lastName,
           user: {
             update: {
               data: {
-                email: staff.email,
-                phoneNumber: staff.phoneNumber,
-                firstName: staff.firstName,
-                lastName: staff.lastName,
                 displayName: staff.displayName,
                 profilePictureURL: staff.profilePictureURL,
                 isActive: staff.isActive,
@@ -120,10 +120,10 @@ class StaffService implements IStaffService {
       return {
         userId: updatedStaff.userId,
         isAdmin: updatedStaff.isAdmin,
-        email: updatedStaff.user.email,
-        phoneNumber: updatedStaff.user.phoneNumber,
-        firstName: updatedStaff.user.firstName,
-        lastName: updatedStaff.user.lastName,
+        email: updatedStaff.email,
+        phoneNumber: updatedStaff.phoneNumber,
+        firstName: updatedStaff.firstName,
+        lastName: updatedStaff.lastName,
         displayName: updatedStaff.user.displayName,
         profilePictureURL: updatedStaff.user.profilePictureURL,
         isActive: updatedStaff.user.isActive,
@@ -162,10 +162,10 @@ class StaffService implements IStaffService {
       return {
         userId: deletedStaff.userId,
         isAdmin: deletedStaff.isAdmin,
-        email: deletedUser.email,
-        phoneNumber: deletedUser.phoneNumber,
-        firstName: deletedUser.firstName,
-        lastName: deletedUser.lastName,
+        email: deletedStaff.email,
+        phoneNumber: deletedStaff.phoneNumber,
+        firstName: deletedStaff.firstName,
+        lastName: deletedStaff.lastName,
         displayName: deletedUser.displayName,
         profilePictureURL: deletedUser.profilePictureURL,
         isActive: deletedUser.isActive,
@@ -190,10 +190,10 @@ class StaffService implements IStaffService {
         return {
           userId: staff.userId,
           isAdmin: staff.isAdmin,
-          email: staff.user.email,
-          phoneNumber: staff.user.phoneNumber,
-          firstName: staff.user.firstName,
-          lastName: staff.user.lastName,
+          email: staff.email,
+          phoneNumber: staff.phoneNumber,
+          firstName: staff.firstName,
+          lastName: staff.lastName,
           displayName: staff.user.displayName,
           profilePictureURL: staff.user.profilePictureURL,
           isActive: staff.user.isActive,
@@ -216,10 +216,10 @@ class StaffService implements IStaffService {
         return {
           userId: staff.userId,
           isAdmin: staff.isAdmin,
-          email: staff.user.email,
-          phoneNumber: staff.user.phoneNumber,
-          firstName: staff.user.firstName,
-          lastName: staff.user.lastName,
+          email: staff.email,
+          phoneNumber: staff.phoneNumber,
+          firstName: staff.firstName,
+          lastName: staff.lastName,
           displayName: staff.user.displayName,
           profilePictureURL: staff.user.profilePictureURL,
           isActive: staff.user.isActive,

@@ -5,19 +5,13 @@ export const ADD_RESIDENT = gql`
     addResident(resident: $resident) {
       userId
       residentId
-      email
-      phoneNumber
-      firstName
-      lastName
       displayName
       profilePictureURL
       isActive
-      birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;
@@ -27,19 +21,13 @@ export const UPDATE_RESIDENT = gql`
     updateResident(userId: $userId, resident: $resident) {
       userId
       residentId
-      email
-      phoneNumber
-      firstName
-      lastName
       displayName
       profilePictureURL
       isActive
-      birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;
@@ -49,19 +37,13 @@ export const DELETE_RESIDENT = gql`
     deleteResident(userId: $userId) {
       userId
       residentId
-      email
-      phoneNumber
-      firstName
-      lastName
       displayName
       profilePictureURL
       isActive
-      birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;
