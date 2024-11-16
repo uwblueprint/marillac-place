@@ -28,7 +28,7 @@ const FormField = ({
   leftElement,
 }: {
   label: string;
-  value: string;
+  value: string | number | undefined;
   type?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
@@ -42,9 +42,11 @@ const FormField = ({
 }) => (
   <Flex flexDir="column" flex="1">
     <FormControl isRequired={required}>
-      <FormLabel mb="5px" color="gray.main" fontWeight="700">
-        {label}
-      </FormLabel>
+      {label && (
+        <FormLabel mb="5px" color="gray.main" fontWeight="700">
+          {label}
+        </FormLabel>
+      )}
       <InputGroup>
         {leftElement && (
           <InputLeftElement height="34px" pointerEvents="none" color="black">

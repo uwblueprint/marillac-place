@@ -70,6 +70,7 @@ const TasksPage = (): React.ReactElement => {
   const [customTasks, setCustomTasks] = useState<CustomTask[]>([]);
   const [choreTasks, setChoreTasks] = useState<ChoreTask[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
@@ -77,15 +78,20 @@ const TasksPage = (): React.ReactElement => {
   const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
 
   const [taskFilter, setTaskFilter] = useState<string>("");
+  const [modalTask, setModalTask] = useState<Task | null>(null);
 
-  // const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
+  const { loading, error, data, refetch } = useQuery(GET_TASKS_BY_TYPE, {
+    variables: { type: taskType === "CUSTOM" ? "OPTIONAL" : taskType },
+  });
 
-  // const [updateTask] = useMutation<{
-  //   taskID: number;
-  //   taskId: TaskResponse;
-  // }>(UPDATE_TASK);
+  const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
 
-  // const [deleteTask] = useMutation<{ taskID: number }>(DELETE_TASK);
+  const [updateTask] = useMutation<{
+    taskID: number;
+    taskId: TaskResponse;
+  }>(UPDATE_TASK);
+
+  const [deleteTask] = useMutation<{ taskID: number }>(DELETE_TASK);
 
   // const [assignTask] = useMutation<{ assignTask: TaskAssignedResponse }>(
   //   ASSIGN_TASK,
@@ -172,52 +178,39 @@ const TasksPage = (): React.ReactElement => {
   //   console.log(tasksByStatus);
   // };
 
-  // const handleAddTask = async () => {
-  //   try {
-  //     const date = new Date();
-  //     // const formattedDate = date.toISOString().split("T")[0];
+  const handleAddTask = async (task: TaskRequest) => {
+    try {
+      await createTask({ variables: { task } });
+      await refetch();
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  //     const task: TaskRequest = {
-  //       type: TaskTypeEnum.REQUIRED,
-  //       title: "test task",
-  //       description: "blah blah",
-  //       creditValue: 5,
-  //       locationId: 1234,
-  //       endDate: date,
-  //       recurrenceFrequency: RecurrenceFrequency.ONE_TIME,
-  //       specificDay: DaysOfWeek.MONDAY,
-  //     };
-  //     await createTask({ variables: { task } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const handleUpdateTask = async (taskId: string, task: TaskRequest) => {
+    try {
+      await updateTask({ variables: { taskId: parseInt(taskId, 10), task } });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  // const handleUpdateTask = async () => {
-  //   try {
-  //     const taskId = 1;
-  //     const task: TaskRequest = {
-  //       type: TaskTypeEnum.REQUIRED,
-  //       title: "update name",
-  //       description: "blah blah",
-  //       creditValue: 7,
-  //       locationId: 1234,
-  //       recurrenceFrequency: RecurrenceFrequency.ONE_TIME,
-  //     };
-  //     await updateTask({ variables: { taskId, task } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const handleSaveClick = async (taskId: string, task: TaskRequest) => {
+    if (taskId === "") {
+      await handleAddTask(task);
+    } else {
+      await handleUpdateTask(taskId, task);
+    }
+  };
 
-  // const handleDeleteTask = async () => {
-  //   try {
-  //     const taskId = 2;
-  //     await deleteTask({ variables: { taskId } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      await deleteTask({ variables: { taskId } });
+      await refetch();
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   // const handleAssignTask = async () => {
   //   try {
@@ -247,13 +240,23 @@ const TasksPage = (): React.ReactElement => {
   // };
 
   useEffect(() => {
-    // TODO: Fetch the task data from the API instead of using mock data
     setRequiredTasks(requiredTasks);
     setOptionalTasks(optionalTasks);
     setCustomTasks(customTasks);
     setChoreTasks(choreTasks);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (tabIndex === 0) {
+      setTaskType("REQUIRED");
+    } else if (tabIndex === 1) {
+      setTaskType("OPTIONAL");
+    } else if (tabIndex === 2) {
+      setTaskType("CUSTOM");
+    } else {
+      setTaskType("CHORE");
+    }
+  }, [tabIndex]);
 
   useEffect(() => {
     if (taskFilter === "") {
@@ -270,53 +273,45 @@ const TasksPage = (): React.ReactElement => {
   }, [taskFilter, storedTaskData, taskData]);
 
   useEffect(() => {
-    if (taskType === "REQUIRED") {
-      setStoredTaskData(requiredTasksMockData);
-      setTaskDataColumns(tasksColumnTypes);
-    } else if (taskType === "OPTIONAL") {
-      setStoredTaskData(optionalTasksMockData);
-      setTaskDataColumns(tasksColumnTypes);
-    } else if (taskType === "CUSTOM") {
-      setStoredTaskData(customTasksMockData);
-      setTaskDataColumns(customTasksColumnTypes);
-    } else if (taskType === "CHORE") {
-      setStoredTaskData(choreTasksMockData);
-      setTaskDataColumns(choreTasksColumnTypes);
+    if (data) {
+      if (taskType === "REQUIRED") {
+        setRequiredTasks(data.getTasksByType);
+        setTaskDataColumns(tasksColumnTypes);
+      } else if (taskType === "OPTIONAL") {
+        setOptionalTasks(data.getTasksByType);
+        setTaskDataColumns(tasksColumnTypes);
+      } else if (taskType === "CUSTOM") {
+        setCustomTasks(data.getTasksByType);
+        setTaskDataColumns(customTasksColumnTypes);
+      } else if (taskType === "CHORE") {
+        setChoreTasks(data.getTasksByType);
+        setTaskDataColumns(choreTasksColumnTypes);
+      }
+
+      setStoredTaskData(
+        data.getTasksByType.map((task: any) => {
+          return {
+            ...task,
+            endDate: new Date(task.endDate).toDateString(),
+          };
+        }),
+      );
     }
-  }, [taskType]);
+  }, [data, taskType]);
 
   return (
     <Flex flexDir="column" flexGrow={1}>
-      <Tabs variant="horizontal" h="30px" mb={6}>
+      <Tabs
+        variant="horizontal"
+        h="30px"
+        mb={6}
+        onChange={(value) => setTabIndex(value)}
+      >
         <TabList pl={6}>
-          <Tab
-            onClick={() => {
-              setTaskType("REQUIRED");
-            }}
-          >
-            Required
-          </Tab>
-          <Tab
-            onClick={() => {
-              setTaskType("OPTIONAL");
-            }}
-          >
-            Optional
-          </Tab>
-          <Tab
-            onClick={() => {
-              setTaskType("CUSTOM");
-            }}
-          >
-            Custom
-          </Tab>
-          <Tab
-            onClick={() => {
-              setTaskType("CHORE");
-            }}
-          >
-            Chores
-          </Tab>
+          <Tab>Required</Tab>
+          <Tab>Optional</Tab>
+          <Tab>Custom</Tab>
+          <Tab>Chores</Tab>
         </TabList>
       </Tabs>
 
@@ -337,6 +332,7 @@ const TasksPage = (): React.ReactElement => {
             leftIcon={<Icon as={Add} color="white" />}
             size="sm"
             onClick={() => {
+              setModalTask(null);
               setIsModalOpen(true);
             }}
           >
@@ -344,15 +340,26 @@ const TasksPage = (): React.ReactElement => {
           </Button>
         </Flex>
 
-        <CommonTable
-          data={taskData}
-          columnInfo={taskDataColumns}
-          maxResults={8}
-          onEdit={() => {
-            setIsModalOpen(true);
-          }}
+        {loading || error ? (
+          <p>Loading...</p>
+        ) : (
+          <CommonTable
+            data={taskData}
+            columnInfo={taskDataColumns}
+            maxResults={8}
+            onEdit={(row: any) => {
+              setModalTask(row);
+              setIsModalOpen(true);
+            }}
+          />
+        )}
+        <TaskModal
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          task={modalTask}
+          handleSaveClick={handleSaveClick}
+          handleDeleteTask={modalTask ? handleDeleteTask : undefined}
         />
-        <TaskModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       </Flex>
     </Flex>
   );

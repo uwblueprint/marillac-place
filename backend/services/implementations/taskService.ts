@@ -172,6 +172,12 @@ class TaskService implements ITaskService {
 
   async deleteTaskById(taskId: number): Promise<TaskDTO> {
     try {
+      await prisma.taskAssigned.deleteMany({
+        where: {
+          taskId,
+        },
+      });
+
       const deletedTask = await prisma.task.delete({
         where: {
           id: taskId,
