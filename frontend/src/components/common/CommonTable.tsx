@@ -22,7 +22,6 @@ import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutl
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import ModalContainer from "./ModalContainer";
 
-
 type TableTypes = string | number | boolean | Date;
 
 export type ColumnInfoTypes = { header: string; key: string };
@@ -30,7 +29,7 @@ export type ColumnInfoTypes = { header: string; key: string };
 export interface TableData {
   [key: string]: TableTypes;
 }
-  
+
 type Props = {
   data: TableData[];
   columnInfo: ColumnInfoTypes[];
@@ -42,8 +41,6 @@ type Props = {
 type SortState = {
   [key: string]: number;
 };
-
-
 
 const CommonTable = ({
   columnInfo,
@@ -80,7 +77,7 @@ const CommonTable = ({
   const handleRowClick = (row: TableData) => {
     setSelectedRow(row);
     setIsPreviewModalOpen(true);
-  }
+  };
 
   interface ColumnInfo {
     header: string;
@@ -88,7 +85,7 @@ const CommonTable = ({
   }
 
   const colData: ColumnInfo[] = columnInfo.map((col, index) => {
-  const value = Object.entries(selectedRow)[index]?.[1] || " ";
+    const value = Object.entries(selectedRow)[index]?.[1] || " ";
     return {
       header: String(col.header),
       value: String(value),
@@ -248,7 +245,7 @@ const CommonTable = ({
               .slice((page - 1) * maxResults, page * maxResults)
               .map((row, index) => {
                 return (
-                  <Tr key={index} >
+                  <Tr key={index}>
                     {isSelectable ? (
                       <Td p="0px 0px 0px 20px" w="16px">
                         <Checkbox
@@ -265,21 +262,24 @@ const CommonTable = ({
                       </Td>
                     ) : null}
                     {columnInfo.map((column, i) => (
-                      <Td 
-                          onClick={() => {
-                            handleRowClick(row);
-                          }}
-                          key={i}
-                       >{String(row[column.key])}</Td>
+                      <Td
+                        onClick={() => {
+                          handleRowClick(row);
+                        }}
+                        key={i}
+                      >
+                        {String(row[column.key])}
+                      </Td>
                     ))}
-                    <Td onClick={(e) => {
-                          e.stopPropagation(); 
-                          onEdit(row); 
-                        }}>
+                    <Td
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(row);
+                      }}
+                    >
                       <Icon
                         as={EditOutlinedIcon}
                         _hover={{ cursor: "pointer" }}
-                       
                       />
                     </Td>
                   </Tr>
@@ -296,13 +296,14 @@ const CommonTable = ({
           setIsOpen={setIsPreviewModalOpen}
         >
           <Flex flexDir="column" gap="5px" mt="10px">
-              {colData.slice(1).map((column, index) => (
+            {colData.slice(1).map((column, index) => (
               <Text key={index}>
                 <Text as="span" fontWeight="700">
-                  {column.header}: {' '}
-                </Text> {column.value}
+                  {column.header}:{" "}
+                </Text>{" "}
+                {column.value}
               </Text>
-            ))}      
+            ))}
           </Flex>
         </ModalContainer>
       )}

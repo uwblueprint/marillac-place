@@ -128,7 +128,7 @@ const TasksPage = (): React.ReactElement => {
   // const tasksByAssigneeId = React.useMemo(() => {
   //   return tasksByAssigneeIdData;
   // }, [tasksByAssigneeIdData]);
-  
+
   // const {
   //   loading: tasksByAssignerIdLoading,
   //   error: tasksByAssignerIdError,
@@ -151,7 +151,7 @@ const TasksPage = (): React.ReactElement => {
   // const tasksByStartDate = React.useMemo(() => {
   //   return taskByStartDateData;
   // }, [taskByStartDateData]);
-  
+
   // const {
   //   loading: tasksByStatusLoading,
   //   error: tasksByStatusError,
