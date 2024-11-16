@@ -30,15 +30,21 @@ const SchedulePage = (): React.ReactElement => {
   const [scheduleType, setScheduleType] = useState<ScheduleType>("LIST");
   const [scheduleData, setScheduleData] = useState<string>("");
   const [active, setActive] = useState<string>("List");
+  const [dateRange, setDateRange] = useState("Jan 1 - 7");
 
   const calendarRef = useRef<CalendarApi | null>(null);
 
   const handleNext = () => {
-    calendarRef.current?.next();
+    console.log(scheduleType);
+    if (scheduleType === "CALENDAR") {
+      calendarRef.current?.next();
+    }
   };
-  
+
   const handlePrev = () => {
-    calendarRef.current?.prev();
+    if (scheduleType === "CALENDAR") {
+      calendarRef.current?.prev();
+    }
   };
 
   useEffect(() => {
@@ -109,7 +115,7 @@ const SchedulePage = (): React.ReactElement => {
               size="md"
               fontSize="lg"
             >
-              Jan 1 - 7
+              {dateRange}
             </Button>
             <IconButton
               onClick={handleNext}
@@ -175,7 +181,10 @@ const SchedulePage = (): React.ReactElement => {
       </Flex>
       <Box padding="40px">
         {scheduleType === "CALENDAR" ? (
-          <ScheduleCalendar ref={calendarRef} />
+          <ScheduleCalendar
+            ref={calendarRef}
+            setDateRange={(range: string) => setDateRange(range)}
+          />
         ) : (
           <ScheduleListView />
         )}
