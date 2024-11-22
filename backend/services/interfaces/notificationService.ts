@@ -7,6 +7,13 @@ export interface NotificationDTO {
   recipients: NotificationReceivedDTO[];
 }
 
+export interface UpdateNotificationDTO {
+  authorId?: number;
+  title?: string;
+  message?: string;
+  createdAt?: Date;
+}
+
 export interface NotificationReceivedDTO {
   id: number;
   notificationId: number;
@@ -21,7 +28,9 @@ interface INotificationService {
    * @returns a NotificationDTO[] associated with that users notifications
    * @throws Error if retrieval fails
    */
-  getNotificationsByUserId(id: number): Promise<NotificationReceivedDTO[]>;
+  getNotificationsByRoomIds(
+    roomIds: number[],
+  ): Promise<NotificationReceivedDTO[]>;
 
   /**
    * Get a notification by a defined id
@@ -36,7 +45,7 @@ interface INotificationService {
    * @param authorId user id of author of notification
    * @param title title of notification
    * @param message message of notification
-   * @param recipientIds user ids of recipients of notification
+   * @param roomIds room ids of recipients of notification
    * @returns a NotificationDTO associated with the posted notifications
    * @throws Error if creation fails
    */
@@ -44,7 +53,7 @@ interface INotificationService {
     authorId: number,
     title: string,
     message: string,
-    recipientIds: number[],
+    roomIds: number[],
   ): Promise<NotificationDTO>;
 
   /**
@@ -58,7 +67,6 @@ interface INotificationService {
 
   /**
    * Update a user notification to be seen
-   * @param userId user id
    * @param notificationId notification id
    * @returns a NotificationDTO associated with the now seen Notification
    * @throws Error if retrieval fails
@@ -66,6 +74,17 @@ interface INotificationService {
   updateSeenNotification(
     notificationId: number,
   ): Promise<NotificationReceivedDTO>;
+
+  /**
+   * Update a user notification to be seen
+   * @param notificationId notification id
+   * @returns a NotificationDTO associated with the updated Notification
+   * @throws Error if retrieval fails
+   */
+  updateNotificationById(
+    notificationId: number,
+    notification: UpdateNotificationDTO,
+  ): Promise<NotificationDTO>;
 
   /**
    * Post an announcement notification to all active residents

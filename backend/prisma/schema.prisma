@@ -15,46 +15,45 @@ enum UserType {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  type     UserType
-  staff    Staff?
-  resident Resident?
-  authId   String    @unique @map("auth_id")
-  displayName           String?                @map("display_name")
-  profilePictureURL     String?                @map("profile_picture_url")
-  isActive              Boolean                @default(true) @map("is_active")
-  notificationsSent     Notification[]
-  notificationsReceived NotificationReceived[]
+  id                Int       @id @default(autoincrement())
+  type              UserType
+  staff             Staff?
+  resident          Resident?
+  authId            String    @unique @map("auth_id")
+  displayName       String?   @map("display_name")
+  profilePictureURL String?   @map("profile_picture_url")
+  isActive          Boolean   @default(true) @map("is_active")
 
   @@map("users")
 }
 
 model Staff {
-  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId           Int            @id @map("user_id")
-  email            String         @unique @map("email")
-  phoneNumber      String?        @unique @map("phone_number")
-  firstName        String         @map("first_name")
-  lastName         String         @map("last_name")
-  isAdmin          Boolean        @default(false) @map("is_admin")
-  tasksAssigned    TaskAssigned[]
-  warningsAssigned Warning[]
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId            Int            @id @map("user_id")
+  email             String         @unique @map("email")
+  phoneNumber       String?        @unique @map("phone_number")
+  firstName         String         @map("first_name")
+  lastName          String         @map("last_name")
+  isAdmin           Boolean        @default(false) @map("is_admin")
+  tasksAssigned     TaskAssigned[]
+  warningsAssigned  Warning[]
+  NotificationsSent Notification[]
 
   @@map("staff")
 }
 
 model Resident {
-  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId     Int            @id @map("user_id")
-  residentId Int            @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
-  // birthDate  DateTime       @map("birth_date") @db.Date
-  roomNumber Int            @map("room_number")
-  credits    Float          @default(0)
-  dateJoined DateTime       @default(now()) @map("date_joined") @db.Date
-  dateLeft   DateTime?      @map("date_left") @db.Date
-  // notes      String?
-  tasks      TaskAssigned[]
-  warnings   Warning[]
+  user                 User                   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId               Int                    @id @map("user_id")
+  residentId           Int                    @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
+  roomNumber           Int                    @map("room_number")
+  credits              Float                  @default(0)
+  dateJoined           DateTime               @default(now()) @map("date_joined") @db.Date
+  dateLeft             DateTime?              @map("date_left") @db.Date
+  tasks                TaskAssigned[]
+  warnings             Warning[]
+  notificationGroup    NotificationGroup[]
+  notificationRecieved NotificationReceived[]
 
   @@map("residents")
 }
@@ -147,14 +146,21 @@ model Warning {
   @@map("warnings")
 }
 
+model NotificationGroup {
+  id            Int            @id @default(autoincrement())
+  recipients    Resident[]
+  notifications Notification[]
+}
+
 model Notification {
-  id         Int                    @id @default(autoincrement())
-  author     User?                  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  authorId   Int?                   @map("author_id")
-  title      String
-  message    String
-  createdAt  DateTime               @default(now()) @map("created_at") @db.Date
-  recipients NotificationReceived[]
+  id                   Int                    @id @default(autoincrement())
+  message              String
+  createdAt            DateTime               @default(now()) @map("created_at") @db.Date
+  author               Staff?                 @relation(fields: [authorId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  authorId             Int?                   @map("author_id")
+  group                NotificationGroup      @relation(fields: [groupId], references: [id])
+  groupId              Int                    @map("group_id")
+  notificationReceived NotificationReceived[]
 
   @@map("notifications")
 }
@@ -163,7 +169,7 @@ model NotificationReceived {
   id             Int          @id @default(autoincrement())
   notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   notificationId Int          @map("notification_id")
-  recipient      User         @relation(fields: [recipientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  recipient      Resident     @relation(fields: [recipientId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   recipientId    Int          @map("recipient_id")
   seen           Boolean      @default(false)
 
