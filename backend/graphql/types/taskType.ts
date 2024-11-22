@@ -65,11 +65,11 @@ const taskType = gql`
   }
 
   input InputTaskAssignedDTO {
-    taskId: Int
-    assigneeId: Int
-    assignerId: Int
-    status: Status
-    startDate: DateTime
+    taskId: Int!
+    assigneeId: Int!
+    assignerId: Int!
+    status: Status!
+    startDate: DateTime!
     comments: String
   }
 
