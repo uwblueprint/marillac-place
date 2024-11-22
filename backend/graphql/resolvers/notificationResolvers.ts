@@ -2,6 +2,7 @@ import NotificationService from "../../services/implementations/notificationServ
 import INotificationService, {
   NotificationDTO,
   NotificationReceivedDTO,
+  UpdateNotificationDTO,
 } from "../../services/interfaces/notificationService";
 import IResidentService from "../../services/interfaces/residentService";
 import ResidentService from "../../services/implementations/residentService";
@@ -13,11 +14,11 @@ const notificationService: INotificationService = new NotificationService(
 
 const notificationResolvers = {
   Query: {
-    getNotificationsByUserId: async (
+    getNotificationsByRoomIds: async (
       _parent: undefined,
-      { userId }: { userId: string },
+      { roomIds }: { roomIds: string[] },
     ): Promise<NotificationReceivedDTO[]> => {
-      return notificationService.getNotificationsByUserId(Number(userId));
+      return notificationService.getNotificationsByRoomIds(roomIds.map(Number));
     },
     getNotificationById: async (
       _parent: undefined,
@@ -33,15 +34,15 @@ const notificationResolvers = {
         authorId,
         title,
         message,
-        recipientIds,
+        roomIds,
       }: {
         authorId: number;
         title: string;
         message: string;
-        recipientIds: number[];
+        roomIds: number[];
       },
     ): Promise<NotificationDTO> => {
-      const ids = recipientIds.map((id) => Number(id));
+      const ids = roomIds.map((id) => Number(id));
       const newNotification = await notificationService.sendNotification(
         Number(authorId),
         title,
@@ -65,6 +66,19 @@ const notificationResolvers = {
     ): Promise<NotificationReceivedDTO> => {
       const updatedNotification = await notificationService.updateSeenNotification(
         Number(notificationId),
+      );
+      return updatedNotification;
+    },
+    updateNotification: async (
+      _parent: undefined,
+      {
+        notificationId,
+        notification,
+      }: { notificationId: number; notification: UpdateNotificationDTO },
+    ): Promise<NotificationDTO> => {
+      const updatedNotification = await notificationService.updateNotificationById(
+        Number(notificationId),
+        notification,
       );
       return updatedNotification;
     },

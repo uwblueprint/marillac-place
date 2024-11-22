@@ -17,8 +17,15 @@ const notificationType = gql`
     seen: Boolean!
   }
 
+  input UpdateNotificationDTO {
+    authorId: ID
+    title: String
+    message: String
+    createdAt: DateTime
+  }
+
   extend type Query {
-    getNotificationsByUserId(userId: ID!): [NotificationReceivedDTO!]
+    getNotificationsByRoomIds(roomIds: [Int!]): [NotificationReceivedDTO!]
     getNotificationById(id: ID!): NotificationReceivedDTO!
   }
 
@@ -27,10 +34,14 @@ const notificationType = gql`
       authorId: ID!
       title: String!
       message: String!
-      recipientIds: [ID!]
+      roomIds: [Int!]
     ): NotificationDTO!
     deleteUserNotification(notificationId: ID!): NotificationDTO!
     updateSeenNotification(notificationId: ID!): NotificationReceivedDTO!
+    updateNotification(
+      notificationId: ID!
+      notification: UpdateNotificationDTO!
+    ): NotificationDTO!
     sendAnnouncement(
       title: String
       message: String
