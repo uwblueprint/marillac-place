@@ -1,9 +1,15 @@
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { DayHeaderContentArg, EventContentArg } from "@fullcalendar/core";
-import React, { useEffect, useRef } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import "./ScheduleCalendar.css";
+import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 const events = [
   {
@@ -63,14 +69,54 @@ function renderHeaderContent(date: DayHeaderContentArg) {
   );
 }
 
-export function ScheduleCalendar() {
-  const calendarRef = useRef<any>(null);
+interface ScheduleCalendarProps {
+  setDateRange: (range: string) => void;
+}
+
+interface ScheduleCalendarHandle {
+  next: () => void;
+  prev: () => void;
+}
+
+const ScheduleCalendar = forwardRef<
+  ScheduleCalendarHandle,
+  ScheduleCalendarProps
+>((props, ref) => {
+  const calendarRef = useRef<FullCalendar | null>(null);
+
   const handleAllDayContent = (arg: any) => {
     return <span>{arg.text ? "" : ""}</span>;
   };
+
+  const formatDateRange = (startDate: Date, endDate: Date) => {
+    const startFormat = startDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+    const endFormat = endDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+
+    if (startDate.getMonth() === endDate.getMonth()) {
+      return `${startFormat} - ${endFormat.split(" ")[1]}`;
+    }
+    return `${startFormat} - ${endFormat}`;
+  };
+
+  useImperativeHandle(ref, () => ({
+    next: () => {
+      if (calendarRef.current) calendarRef.current.getApi().next();
+    },
+    prev: () => {
+      if (calendarRef.current) calendarRef.current.getApi().prev();
+    },
+  }));
+
   return (
     <div>
       <FullCalendar
+        ref={calendarRef}
         plugins={[timeGridPlugin]}
         initialView="timeGridWeek"
         weekends
@@ -88,9 +134,15 @@ export function ScheduleCalendar() {
         eventBackgroundColor="transparent"
         eventBorderColor="transparent"
         slotEventOverlap={false}
+        datesSet={(dateInfo) => {
+          props.setDateRange(formatDateRange(dateInfo.start, dateInfo.end));
+        }}
+        headerToolbar={false}
       />
     </div>
   );
-}
+});
+
+ScheduleCalendar.displayName = "ScheduleCalendar";
 
 export default ScheduleCalendar;
