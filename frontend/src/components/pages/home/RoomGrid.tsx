@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Flex, Grid } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import RoomCard from "./HomeRoomCard";
-import { GET_ALL_RESIDENTS } from "../../../APIClients/Queries/ResidentsQueries";
+import { GET_ACTIVE_RESIDENTS } from "../../../APIClients/Queries/ResidentsQueries";
 import { GET_TASKS_BY_STATUS } from "../../../APIClients/Queries/TaskQueries";
 
 const RoomGrid = () => {
-  const { data: residentData } = useQuery(GET_ALL_RESIDENTS);
+  const { data: residentData } = useQuery(GET_ACTIVE_RESIDENTS);
 
   const { data: pending } = useQuery(GET_TASKS_BY_STATUS, {
     variables: { status: "PENDING_APPROVAL" },
