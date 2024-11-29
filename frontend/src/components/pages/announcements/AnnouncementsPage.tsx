@@ -17,7 +17,7 @@ import {
 } from "../../../APIClients/Mutations/NotificationMutations";
 
 import {
-  GET_NOTIFCATION_BY_ID, 
+  GET_NOTIFCATION_BY_ID,
   GET_NOTIFICATIONS_BY_USER_ID,
 } from "../../../APIClients/Queries/NotificationQueries";
 

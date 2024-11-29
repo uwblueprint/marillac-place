@@ -1,7 +1,10 @@
 import NotificationService from "../../services/implementations/notificationService";
 import INotificationService, {
   NotificationDTO,
+  NotificationGroupDTO,
   NotificationReceivedDTO,
+  UpdateNotificationDTO,
+  CreateNotificationDTO,
 } from "../../services/interfaces/notificationService";
 import IResidentService from "../../services/interfaces/residentService";
 import ResidentService from "../../services/implementations/residentService";
@@ -13,75 +16,117 @@ const notificationService: INotificationService = new NotificationService(
 
 const notificationResolvers = {
   Query: {
-    getNotificationsByUserId: async (
+    getNotificationsByIds: async (
       _parent: undefined,
-      { userId }: { userId: string },
+      { notificationIds }: { notificationIds: string[] },
     ): Promise<NotificationReceivedDTO[]> => {
-      return notificationService.getNotificationsByUserId(Number(userId));
+      const notificationReceived = await notificationService.getNotificationsByIds(
+        notificationIds.map(Number),
+      );
+      return notificationReceived;
     },
-    getNotificationById: async (
+    getNotificationByResident: async (
       _parent: undefined,
-      { id }: { id: string },
-    ): Promise<NotificationReceivedDTO> => {
-      return notificationService.getNotificationById(Number(id));
+      { residentId }: { residentId: string },
+    ): Promise<NotificationReceivedDTO[]> => {
+      const notificationReceived = await notificationService.getNotificationByResident(
+        Number(residentId),
+      );
+      return notificationReceived;
+    },
+    getAllGroupsAndNotifications: async (): Promise<NotificationGroupDTO[]> => {
+      const notificationGroups = await notificationService.getAllGroupsAndNotifications();
+      return notificationGroups;
     },
   },
   Mutation: {
-    sendNotification: async (
+    createNotificationGroup: async (
       _parent: undefined,
       {
-        authorId,
-        title,
-        message,
-        recipientIds,
+        roomIds,
       }: {
-        authorId: number;
-        title: string;
-        message: string;
-        recipientIds: number[];
+        roomIds: number[];
+      },
+    ): Promise<NotificationGroupDTO> => {
+      const ids = roomIds.map((id) => Number(id));
+      const newNotificationGroup = await notificationService.createNotificationGroup(
+        ids,
+      );
+      return newNotificationGroup;
+    },
+    createAnnouncementGroup: async (): Promise<NotificationGroupDTO> => {
+      const newNotificationGroup = await notificationService.createAnnouncementGroup();
+      return newNotificationGroup;
+    },
+    sendNotificationToGroup: async (
+      _parent: undefined,
+      {
+        groupId,
+        notification,
+      }: {
+        groupId: number;
+        notification: CreateNotificationDTO;
       },
     ): Promise<NotificationDTO> => {
-      const ids = recipientIds.map((id) => Number(id));
-      const newNotification = await notificationService.sendNotification(
-        Number(authorId),
-        title,
-        message,
-        ids,
+      const newNotification = await notificationService.sendNotificationToGroup(
+        Number(groupId),
+        notification,
       );
       return newNotification;
     },
-    deleteUserNotification: async (
+    deleteNotificationGroup: async (
       _parent: undefined,
-      { notificationId }: { notificationId: number },
-    ): Promise<NotificationDTO> => {
-      const deletedNotification = await notificationService.deleteUserNotification(
-        Number(notificationId),
+      {
+        groupId,
+      }: {
+        groupId: number;
+      },
+    ): Promise<NotificationGroupDTO> => {
+      const deletedGroup = await notificationService.deleteNotificationGroup(
+        Number(groupId),
       );
-      return deletedNotification;
+      return deletedGroup;
     },
-    updateSeenNotification: async (
+    updateNotificationById: async (
       _parent: undefined,
-      { notificationId }: { notificationId: number },
-    ): Promise<NotificationReceivedDTO> => {
-      const updatedNotification = await notificationService.updateSeenNotification(
+      {
+        notificationId,
+        notification,
+      }: {
+        notificationId: number;
+        notification: UpdateNotificationDTO;
+      },
+    ): Promise<NotificationDTO> => {
+      const updatedNotification = await notificationService.updateNotificationById(
         Number(notificationId),
+        notification,
       );
       return updatedNotification;
     },
-    sendAnnouncement: async (
+    deleteNotificationByIds: async (
       _parent: undefined,
       {
-        title,
-        message,
-        userId,
-      }: { title: string; message: string; userId: number },
-    ): Promise<NotificationDTO> => {
-      const newAnnouncement = await notificationService.sendAnnouncement(
-        title,
-        message,
-        Number(userId),
+        notificationIds,
+      }: {
+        notificationIds: number[];
+      },
+    ): Promise<boolean> => {
+      const ids = notificationIds.map((id) => Number(id));
+      await notificationService.deleteNotificationByIds(ids);
+      return true;
+    },
+    updateSeenNotification: async (
+      _parent: undefined,
+      {
+        notificationSeenId,
+      }: {
+        notificationSeenId: number;
+      },
+    ): Promise<NotificationReceivedDTO> => {
+      const updatedNotificationReceived = await notificationService.updateSeenNotification(
+        Number(notificationSeenId),
       );
-      return newAnnouncement;
+      return updatedNotificationReceived;
     },
   },
 };
