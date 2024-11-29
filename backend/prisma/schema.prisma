@@ -147,9 +147,10 @@ model Warning {
 }
 
 model NotificationGroup {
-  id            Int            @id @default(autoincrement())
-  recipients    Resident[]
-  notifications Notification[]
+  id                Int            @id @default(autoincrement())
+  recipients        Resident[] 
+  notifications     Notification[]
+  announcementGroup Boolean 
 }
 
 model Notification {
@@ -158,7 +159,7 @@ model Notification {
   createdAt            DateTime               @default(now()) @map("created_at") @db.Date
   author               Staff?                 @relation(fields: [authorId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   authorId             Int?                   @map("author_id")
-  group                NotificationGroup      @relation(fields: [groupId], references: [id])
+  group                NotificationGroup      @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId              Int                    @map("group_id")
   notificationReceived NotificationReceived[]
 

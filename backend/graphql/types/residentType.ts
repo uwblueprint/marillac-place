@@ -13,6 +13,8 @@ const residentType = gql`
     credits: Float!
     dateJoined: Date!
     dateLeft: Date
+    notificationGroup: [NotificationGroupDTO!]!
+    notificationRecieved: [NotificationReceivedDTO]!
   }
 
   input CreateResidentDTO {

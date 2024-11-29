@@ -1,3 +1,8 @@
+// eslint-disable-next-line import/no-cycle
+import {
+  NotificationGroupDTO,
+  NotificationReceivedDTO,
+} from "./notificationService";
 import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
 
 export interface ResidentDTO extends Omit<UserDTO, "id" | "type"> {
@@ -7,6 +12,8 @@ export interface ResidentDTO extends Omit<UserDTO, "id" | "type"> {
   credits: number;
   dateJoined: Date;
   dateLeft: Date | null;
+  notificationGroup?: NotificationGroupDTO[];
+  notificationRecieved?: NotificationReceivedDTO[];
 }
 
 export interface CreateResidentDTO extends CreateUserDTO {

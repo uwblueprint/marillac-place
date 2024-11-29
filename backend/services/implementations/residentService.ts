@@ -20,6 +20,13 @@ class ResidentService implements IResidentService {
       });
 
       try {
+        const announcementGroups = await prisma.notificationGroup.findMany({
+          where: {
+            announcementGroup: true,
+          },
+          include: { notifications: true },
+        });
+
         const newResident = await prisma.resident.create({
           data: {
             residentId: resident.residentId,
@@ -35,6 +42,18 @@ class ResidentService implements IResidentService {
                 profilePictureURL: resident.profilePictureURL,
                 isActive: true,
               },
+            },
+            notificationGroup: {
+              connect: announcementGroups.map((group) => ({ id: group.id })),
+            },
+            notificationRecieved: {
+              create: announcementGroups.flatMap((group) =>
+                group.notifications.map((notif) => ({
+                  notification: {
+                    connect: { id: notif.id },
+                  },
+                })),
+              ),
             },
           },
           include: { user: true },
