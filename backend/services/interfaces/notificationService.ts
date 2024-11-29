@@ -1,4 +1,4 @@
-import { ResidentDTO } from "./residentService";
+import type { ResidentDTO } from "./residentService";
 
 export interface NotificationDTO {
   id: number;
