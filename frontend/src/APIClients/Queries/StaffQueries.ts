@@ -8,8 +8,6 @@ export const GET_ALL_STAFF = gql`
       phoneNumber
       firstName
       lastName
-      displayName
-      profilePictureURL
       isAdmin
     }
   }
@@ -23,8 +21,6 @@ export const GET_STAFF_BY_IDS = gql`
       phoneNumber
       firstName
       lastName
-      displayName
-      profilePictureURL
       isAdmin
     }
   }

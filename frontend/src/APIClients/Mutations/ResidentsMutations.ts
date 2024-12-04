@@ -5,8 +5,6 @@ export const ADD_RESIDENT = gql`
     addResident(resident: $resident) {
       userId
       residentId
-      displayName
-      profilePictureURL
       roomNumber
       credits
       dateJoined
@@ -20,8 +18,6 @@ export const UPDATE_RESIDENT = gql`
     updateResident(userId: $userId, resident: $resident) {
       userId
       residentId
-      displayName
-      profilePictureURL
       roomNumber
       credits
       dateJoined
@@ -35,8 +31,6 @@ export const DELETE_RESIDENT = gql`
     deleteResident(userId: $userId) {
       userId
       residentId
-      displayName
-      profilePictureURL
       roomNumber
       credits
       dateJoined

@@ -8,8 +8,6 @@ export const ADD_STAFF = gql`
       phoneNumber
       firstName
       lastName
-      displayName
-      profilePictureURL
       isAdmin
     }
   }
@@ -23,8 +21,6 @@ export const UPDATE_STAFF = gql`
       phoneNumber
       firstName
       lastName
-      displayName
-      profilePictureURL
       isAdmin
     }
   }
@@ -38,8 +34,6 @@ export const DELETE_STAFF = gql`
       phoneNumber
       firstName
       lastName
-      displayName
-      profilePictureURL
       isAdmin
     }
   }
