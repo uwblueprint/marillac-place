@@ -8,7 +8,6 @@ export type UserRequest = {
   isAdmin: boolean;
   displayName?: string;
   profilePictureURL?: string;
-  isActive: boolean;
 };
 
 export type UserRequestID = {
@@ -21,7 +20,6 @@ export type UserRequestID = {
   isAdmin: boolean;
   displayName?: string;
   profilePictureURL?: string;
-  isActive: boolean;
 };
 
 export type UserRequestAdd = {
@@ -32,7 +30,6 @@ export type UserRequestAdd = {
   lastName: string;
   displayName: string;
   profilePictureURL?: string;
-  isActive: boolean;
   isAdmin: boolean;
 };
 
@@ -44,7 +41,6 @@ export type UserRequestUpdate = {
   lastName?: string;
   displayName?: string;
   profilePictureURL?: string;
-  isActive?: boolean;
   isAdmin?: boolean;
 };
 
@@ -56,6 +52,5 @@ export type UserRequestDelete = {
   lastName?: string;
   displayName?: string;
   profilePictureURL?: string;
-  isActive?: boolean;
   isAdmin?: boolean;
 };

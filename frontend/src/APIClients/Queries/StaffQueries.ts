@@ -10,7 +10,6 @@ export const GET_ALL_STAFF = gql`
       lastName
       displayName
       profilePictureURL
-      isActive
       isAdmin
     }
   }
@@ -26,7 +25,6 @@ export const GET_STAFF_BY_IDS = gql`
       lastName
       displayName
       profilePictureURL
-      isActive
       isAdmin
     }
   }

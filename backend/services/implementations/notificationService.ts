@@ -50,7 +50,9 @@ class NotificationService implements INotificationService {
 
   async createAnnouncementGroup(): Promise<NotificationGroupDTO> {
     try {
-      const residents = await prisma.resident.findMany();
+      const residents = await prisma.resident.findMany({
+        where: { dateLeft: null },
+      });
       const residentIds = residents.map((resident) => resident.userId);
 
       const newNotificationGroup = await prisma.notificationGroup.create({

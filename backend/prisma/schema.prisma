@@ -22,7 +22,6 @@ model User {
   authId            String    @unique @map("auth_id")
   displayName       String?   @map("display_name")
   profilePictureURL String?   @map("profile_picture_url")
-  isActive          Boolean   @default(true) @map("is_active")
 
   @@map("users")
 }
@@ -87,8 +86,8 @@ model Task {
   title               String
   description         String
   creditValue         Float               @map("credit_value")
-  location            TaskLocation        @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  locationId          Int                 @map("location_id")
+  // location            TaskLocation        @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // locationId          Int                 @map("location_id")
   tasksAssigned       TaskAssigned[]
   relatedWarnings     Warning[]
   endDate             DateTime?           @map("end_date")
@@ -99,14 +98,14 @@ model Task {
   @@map("tasks")
 }
 
-model TaskLocation {
-  id          Int    @id @default(autoincrement())
-  title       String
-  description String
-  tasks       Task[]
+// model TaskLocation {
+//   id          Int    @id @default(autoincrement())
+//   title       String
+//   description String
+//   tasks       Task[]
 
-  @@map("task_locations")
-}
+//   @@map("task_locations")
+// }
 
 model TaskAssigned {
   id         Int      @id @default(autoincrement())
@@ -148,9 +147,9 @@ model Warning {
 
 model NotificationGroup {
   id                Int            @id @default(autoincrement())
-  recipients        Resident[] 
+  recipients        Resident[]
   notifications     Notification[]
-  announcementGroup Boolean 
+  announcementGroup Boolean
 }
 
 model Notification {

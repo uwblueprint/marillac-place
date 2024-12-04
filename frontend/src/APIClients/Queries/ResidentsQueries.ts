@@ -5,7 +5,11 @@ export const GET_RESIDENTS_BY_ID = gql`
     getResidentsByIds(userIds: $userIds) {
       userId
       residentId
-      isActive
+      email
+      phoneNumber
+      firstName
+      lastName
+      birthDate
       roomNumber
       credits
       dateJoined
@@ -19,7 +23,11 @@ export const GET_ALL_RESIDENTS = gql`
     getAllResidents {
       userId
       residentId
-      isActive
+      email
+      phoneNumber
+      firstName
+      lastName
+      birthDate
       roomNumber
       credits
       dateJoined
@@ -33,7 +41,11 @@ export const GET_ACTIVE_RESIDENTS = gql`
     getActiveResidents {
       userId
       residentId
-      isActive
+      email
+      phoneNumber
+      firstName
+      lastName
+      birthDate
       roomNumber
       credits
       dateJoined

@@ -11,25 +11,25 @@ export interface TaskDTO {
   title: string;
   description: string;
   creditValue: number;
-  location: TaskLocationDTO;
+  // location: TaskLocationDTO;
   endDate: Date | null;
   recurrenceFrequency: RecurrenceFrequency;
   specificDay: DaysOfWeek | null;
   repeatDays: DaysOfWeek[];
 }
 
-export interface TaskLocationDTO {
-  id: number;
-  title: string;
-  description: string;
-}
+// export interface TaskLocationDTO {
+//   id: number;
+//   title: string;
+//   description: string;
+// }
 
 export interface InputTaskDTO {
   type: TaskType;
   title: string;
   description: string;
   creditValue: number;
-  locationId: number;
+  // locationId: number;
   endDate: Date | null;
   recurrenceFrequency: RecurrenceFrequency;
   specificDay: DaysOfWeek | null;

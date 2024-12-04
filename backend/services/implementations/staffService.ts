@@ -31,8 +31,6 @@ class StaffService implements IStaffService {
               create: {
                 authId: firebaseUser.uid,
                 type: UserType.STAFF,
-                displayName: staff.displayName,
-                profilePictureURL: staff.profilePictureURL,
               },
             },
           },
@@ -46,9 +44,6 @@ class StaffService implements IStaffService {
           phoneNumber: newStaff.phoneNumber,
           firstName: newStaff.firstName,
           lastName: newStaff.lastName,
-          displayName: newStaff.user.displayName,
-          profilePictureURL: newStaff.user.profilePictureURL,
-          isActive: newStaff.user.isActive,
         };
       } catch (postgresError) {
         try {
@@ -102,15 +97,6 @@ class StaffService implements IStaffService {
           phoneNumber: staff.phoneNumber,
           firstName: staff.firstName,
           lastName: staff.lastName,
-          user: {
-            update: {
-              data: {
-                displayName: staff.displayName,
-                profilePictureURL: staff.profilePictureURL,
-                isActive: staff.isActive,
-              },
-            },
-          },
         },
         include: {
           user: true,
@@ -124,9 +110,6 @@ class StaffService implements IStaffService {
         phoneNumber: updatedStaff.phoneNumber,
         firstName: updatedStaff.firstName,
         lastName: updatedStaff.lastName,
-        displayName: updatedStaff.user.displayName,
-        profilePictureURL: updatedStaff.user.profilePictureURL,
-        isActive: updatedStaff.user.isActive,
       };
     } catch (error) {
       Logger.error(
@@ -166,9 +149,6 @@ class StaffService implements IStaffService {
         phoneNumber: deletedStaff.phoneNumber,
         firstName: deletedStaff.firstName,
         lastName: deletedStaff.lastName,
-        displayName: deletedUser.displayName,
-        profilePictureURL: deletedUser.profilePictureURL,
-        isActive: deletedUser.isActive,
       };
     } catch (error) {
       Logger.error(
@@ -194,9 +174,6 @@ class StaffService implements IStaffService {
           phoneNumber: staff.phoneNumber,
           firstName: staff.firstName,
           lastName: staff.lastName,
-          displayName: staff.user.displayName,
-          profilePictureURL: staff.user.profilePictureURL,
-          isActive: staff.user.isActive,
         };
       });
     } catch (error: unknown) {
@@ -220,9 +197,6 @@ class StaffService implements IStaffService {
           phoneNumber: staff.phoneNumber,
           firstName: staff.firstName,
           lastName: staff.lastName,
-          displayName: staff.user.displayName,
-          profilePictureURL: staff.user.profilePictureURL,
-          isActive: staff.user.isActive,
         };
       });
     } catch (error: unknown) {

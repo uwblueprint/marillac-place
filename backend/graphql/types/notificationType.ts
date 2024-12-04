@@ -5,7 +5,7 @@ const notificationType = gql`
     id: ID!
     message: String!
     createdAt: DateTime
-    authorId: ID
+    authorId: Int
     recipients: [NotificationReceivedDTO]
   }
 
@@ -18,27 +18,27 @@ const notificationType = gql`
 
   type NotificationReceivedDTO {
     id: ID!
-    notificationId: ID!
+    notificationId: Int!
     notification: NotificationDTO
-    recipientId: ID!
+    recipientId: Int!
     seen: Boolean!
   }
 
   input UpdateNotificationDTO {
-    authorId: ID
+    authorId: Int
     message: String
     createdAt: DateTime
   }
 
   input CreateNotificationDTO {
-    authorId: ID
+    authorId: Int
     message: String!
     createdAt: DateTime
   }
 
   extend type Query {
     getNotificationsByIds(notificationIds: [ID!]): [NotificationReceivedDTO!]
-    getNotificationByResident(residentId: ID!): [NotificationReceivedDTO!]
+    getNotificationByResident(residentId: Int!): [NotificationReceivedDTO!]
     getAllGroupsAndNotifications: [NotificationGroupDTO!]
   }
 

@@ -3,9 +3,8 @@ import { UserType } from "../../prisma";
 export type UserDTO = {
   id: number;
   type: UserType;
-  displayName: string | null;
-  profilePictureURL: string | null;
-  isActive: boolean;
+  displayName?: string | null;
+  profilePictureURL?: string | null;
 };
 
 export type SimplifiedUserDTO = Pick<UserDTO, "id" | "type">;
@@ -20,7 +19,6 @@ export interface UpdateUserDTO {
   password?: string;
   displayName?: string;
   profilePictureURL?: string;
-  isActive?: boolean;
 }
 
 interface IUserService {
