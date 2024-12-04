@@ -44,7 +44,6 @@ class StaffService implements IStaffService {
           phoneNumber: newStaff.phoneNumber,
           firstName: newStaff.firstName,
           lastName: newStaff.lastName,
-          isActive: newStaff.user.isActive,
         };
       } catch (postgresError) {
         try {
@@ -98,13 +97,6 @@ class StaffService implements IStaffService {
           phoneNumber: staff.phoneNumber,
           firstName: staff.firstName,
           lastName: staff.lastName,
-          user: {
-            update: {
-              data: {
-                isActive: staff.isActive,
-              },
-            },
-          },
         },
         include: {
           user: true,
@@ -118,7 +110,6 @@ class StaffService implements IStaffService {
         phoneNumber: updatedStaff.phoneNumber,
         firstName: updatedStaff.firstName,
         lastName: updatedStaff.lastName,
-        isActive: updatedStaff.user.isActive,
       };
     } catch (error) {
       Logger.error(
@@ -158,7 +149,6 @@ class StaffService implements IStaffService {
         phoneNumber: deletedStaff.phoneNumber,
         firstName: deletedStaff.firstName,
         lastName: deletedStaff.lastName,
-        isActive: deletedUser.isActive,
       };
     } catch (error) {
       Logger.error(
@@ -184,7 +174,6 @@ class StaffService implements IStaffService {
           phoneNumber: staff.phoneNumber,
           firstName: staff.firstName,
           lastName: staff.lastName,
-          isActive: staff.user.isActive,
         };
       });
     } catch (error: unknown) {
@@ -208,7 +197,6 @@ class StaffService implements IStaffService {
           phoneNumber: staff.phoneNumber,
           firstName: staff.firstName,
           lastName: staff.lastName,
-          isActive: staff.user.isActive,
         };
       });
     } catch (error: unknown) {

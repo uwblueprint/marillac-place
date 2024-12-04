@@ -6,7 +6,6 @@ const residentType = gql`
   type ResidentDTO {
     userId: Int!
     residentId: Int!
-    isActive: Boolean!
     roomNumber: Int!
     credits: Float!
     dateJoined: Date!

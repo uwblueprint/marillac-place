@@ -11,7 +11,6 @@ export const GET_RESIDENTS_BY_ID = gql`
       lastName
       displayName
       profilePictureURL
-      isActive
       birthDate
       roomNumber
       credits
@@ -33,7 +32,6 @@ export const GET_ALL_RESIDENTS = gql`
       lastName
       displayName
       profilePictureURL
-      isActive
       birthDate
       roomNumber
       credits
@@ -55,7 +53,6 @@ export const GET_ACTIVE_RESIDENTS = gql`
       lastName
       displayName
       profilePictureURL
-      isActive
       birthDate
       roomNumber
       credits

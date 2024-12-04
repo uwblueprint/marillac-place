@@ -38,7 +38,6 @@ class ResidentService implements IResidentService {
               create: {
                 authId: firebaseUser.uid,
                 type: UserType.RESIDENT,
-                isActive: true,
               },
             },
             notificationGroup: {
@@ -64,7 +63,6 @@ class ResidentService implements IResidentService {
           credits: newResident.credits,
           dateJoined: newResident.dateJoined,
           dateLeft: newResident.dateLeft,
-          isActive: newResident.user.isActive,
         };
       } catch (postgresError) {
         try {
@@ -126,13 +124,6 @@ class ResidentService implements IResidentService {
           credits: resident.credits || undefined,
           dateJoined: resident.dateJoined || undefined,
           dateLeft: resident.dateLeft || undefined,
-          user: {
-            update: {
-              data: {
-                isActive: resident.isActive || undefined,
-              },
-            },
-          },
         },
         include: { user: true },
       });
@@ -144,7 +135,6 @@ class ResidentService implements IResidentService {
         credits: updatedResident.credits,
         dateJoined: updatedResident.dateJoined,
         dateLeft: updatedResident.dateLeft,
-        isActive: updatedResident.user.isActive,
       };
     } catch (error) {
       Logger.error(
@@ -188,7 +178,6 @@ class ResidentService implements IResidentService {
         credits: deletedResident.credits,
         dateJoined: deletedResident.dateJoined,
         dateLeft: deletedResident.dateLeft,
-        isActive: deletedResident.user.isActive,
       };
     } catch (error) {
       Logger.error(
@@ -213,7 +202,6 @@ class ResidentService implements IResidentService {
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          isActive: resident.user.isActive,
         };
       });
     } catch (error: unknown) {
@@ -238,7 +226,6 @@ class ResidentService implements IResidentService {
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          isActive: resident.user.isActive,
         };
       });
     } catch (error: unknown) {
@@ -270,7 +257,6 @@ class ResidentService implements IResidentService {
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          isActive: resident.user.isActive,
         };
       });
     } catch (error: unknown) {

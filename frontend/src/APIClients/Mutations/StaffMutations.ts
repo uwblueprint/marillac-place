@@ -10,7 +10,6 @@ export const ADD_STAFF = gql`
       lastName
       displayName
       profilePictureURL
-      isActive
       isAdmin
     }
   }
@@ -26,7 +25,6 @@ export const UPDATE_STAFF = gql`
       lastName
       displayName
       profilePictureURL
-      isActive
       isAdmin
     }
   }
@@ -42,7 +40,6 @@ export const DELETE_STAFF = gql`
       lastName
       displayName
       profilePictureURL
-      isActive
       isAdmin
     }
   }

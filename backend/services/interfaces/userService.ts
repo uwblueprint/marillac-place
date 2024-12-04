@@ -5,7 +5,6 @@ export type UserDTO = {
   type: UserType;
   displayName?: string | null;
   profilePictureURL?: string | null;
-  isActive: boolean;
 };
 
 export type SimplifiedUserDTO = Pick<UserDTO, "id" | "type">;
@@ -20,7 +19,6 @@ export interface UpdateUserDTO {
   password?: string;
   displayName?: string;
   profilePictureURL?: string;
-  isActive?: boolean;
 }
 
 interface IUserService {

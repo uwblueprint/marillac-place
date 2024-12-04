@@ -22,7 +22,6 @@ model User {
   authId            String    @unique @map("auth_id")
   displayName       String?   @map("display_name")
   profilePictureURL String?   @map("profile_picture_url")
-  isActive          Boolean   @default(true) @map("is_active")
 
   @@map("users")
 }
@@ -148,9 +147,9 @@ model Warning {
 
 model NotificationGroup {
   id                Int            @id @default(autoincrement())
-  recipients        Resident[] 
+  recipients        Resident[]
   notifications     Notification[]
-  announcementGroup Boolean 
+  announcementGroup Boolean
 }
 
 model Notification {

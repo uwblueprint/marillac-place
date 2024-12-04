@@ -7,7 +7,6 @@ export type UserResponse = {
   lastName: string;
   displayName?: string;
   profilePictureURL?: string;
-  isActive: boolean;
   birthDate: string;
   roomNumber: number;
   credits: number;

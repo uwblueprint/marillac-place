@@ -7,7 +7,6 @@ export const ADD_RESIDENT = gql`
       residentId
       displayName
       profilePictureURL
-      isActive
       roomNumber
       credits
       dateJoined
@@ -23,7 +22,6 @@ export const UPDATE_RESIDENT = gql`
       residentId
       displayName
       profilePictureURL
-      isActive
       roomNumber
       credits
       dateJoined
@@ -39,7 +37,6 @@ export const DELETE_RESIDENT = gql`
       residentId
       displayName
       profilePictureURL
-      isActive
       roomNumber
       credits
       dateJoined

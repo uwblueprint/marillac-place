@@ -7,7 +7,6 @@ export interface User {
   lastName: string;
   displayName: string | null;
   profilePictureURL: string | null;
-  isActive: boolean;
 }
 
 export interface Resident extends User {
