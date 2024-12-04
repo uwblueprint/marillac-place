@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Textarea,
-  Flex,
-  FormControl,
-  FormLabel,
-} from "@chakra-ui/react";
+import { Button, Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 
+import { useMutation } from "@apollo/client";
 import ModalContainer from "../../common/ModalContainer";
 import FormField from "../../common/FormField";
+import {
+  ADD_RESIDENT,
+  UPDATE_RESIDENT,
+} from "../../../APIClients/Mutations/ResidentsMutations";
 
 type Props = {
   isOpen: boolean;
@@ -16,92 +15,92 @@ type Props = {
 };
 
 const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [residentId, setResidentId] = useState("");
+  const [residentId, setResidentId] = useState<number | null>(null);
   const [password, setPassword] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
-  const [departureDate, setDepartureDate] = useState("");
-  const [notes, setNotes] = useState("");
+  const [rooms, setRooms] = useState([1, 2, 3]);
+  const [roomNumber, setRoomNumber] = useState<number | null>(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const [submitPressed, setSubmitPressed] = useState(false);
 
-  const handleSubmit = () => {
-    setSubmitPressed(true);
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !phoneNumber ||
-      !residentId ||
-      !password ||
-      !arrivalDate
-    ) {
-      // TODO: Add error handling
-    }
-    // TODO: API call to add resident
-  };
+  const [addResident] = useMutation(ADD_RESIDENT);
 
   const resetFormState = () => {
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPhoneNumber("");
-    setResidentId("");
+    setResidentId(null);
     setPassword("");
     setArrivalDate("");
-    setDepartureDate("");
-    setNotes("");
-
+    setRoomNumber(null);
     setShowPassword(false);
     setSubmitPressed(false);
+  };
+
+  const handleAddResident = async () => {
+    const newResident = {
+      residentId,
+      roomNumber,
+      password,
+      dateJoined: arrivalDate,
+    };
+
+    try {
+      const response = await addResident({
+        variables: { resident: newResident },
+      });
+      console.log("Added resident:", response);
+      setIsOpen(false);
+      resetFormState();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error adding resident:", error);
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log(roomNumber);
+    setSubmitPressed(true);
+    if (!residentId || !password || !arrivalDate || !roomNumber) {
+      console.error("Missing field");
+    }
+    handleAddResident();
   };
 
   return (
     <ModalContainer title="New Resident" isOpen={isOpen} setIsOpen={setIsOpen}>
       <Flex flexDir="column" gap="20px">
-        <Flex gap="20px">
-          <FormField
-            label="First name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            submitPressed={submitPressed}
-            required
-          />
-          <FormField
-            label="Last name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            submitPressed={submitPressed}
-            required
-          />
-        </Flex>
-        <Flex gap="20px">
-          <FormField
-            label="Email"
-            value={email}
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            submitPressed={submitPressed}
-            required
-          />
-          <FormField
-            label="Phone Number"
-            value={phoneNumber}
-            type="tel"
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            submitPressed={submitPressed}
-            required
-          />
-        </Flex>
         <FormField
-          label="ID"
-          value={residentId}
+          label="ID Number"
+          value={residentId !== null ? residentId.toString() : ""}
           type="number"
-          onChange={(e) => setResidentId(e.target.value)}
+          onChange={(e) =>
+            setResidentId(e.target.value ? Number(e.target.value) : null)
+          }
+          submitPressed={submitPressed}
+          required
+        />
+        <FormControl isRequired>
+          <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            Room Number
+          </FormLabel>
+          <Select
+            placeholder="Please select a room"
+            borderWidth="2px"
+            borderRadius="8px"
+            borderColor="gray.300"
+            onChange={(e) => setRoomNumber(Number(e.target.value))}
+          >
+            {rooms.map((room) => (
+              <option key={room} value={room}>
+                Room {room}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        <FormField
+          label="Arrival Date"
+          value={arrivalDate}
+          type="date"
+          onChange={(e) => setArrivalDate(e.target.value)}
           submitPressed={submitPressed}
           required
         />
@@ -115,36 +114,6 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
           showPassword={showPassword}
           setShowPassword={setShowPassword}
         />
-        <Flex gap="20px">
-          <FormField
-            label="Arrival Date"
-            value={arrivalDate}
-            type="date"
-            onChange={(e) => setArrivalDate(e.target.value)}
-            submitPressed={submitPressed}
-            required
-          />
-          <FormField
-            label="Departure Date"
-            value={departureDate}
-            type="date"
-            onChange={(e) => setDepartureDate(e.target.value)}
-            submitPressed={submitPressed}
-          />
-        </Flex>
-        <Flex>
-          <FormControl>
-            <FormLabel mb="5px" color="gray.main" fontWeight="700">
-              Notes
-            </FormLabel>
-            <Textarea
-              variant="primary"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-          </FormControl>
-        </Flex>
-
         <Flex justifyContent="flex-end">
           <Button
             variant="cancel"

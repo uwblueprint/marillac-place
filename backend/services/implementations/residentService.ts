@@ -16,32 +16,44 @@ class ResidentService implements IResidentService {
   async addResident(resident: CreateResidentDTO): Promise<ResidentDTO> {
     try {
       const firebaseUser = await firebaseAdmin.auth().createUser({
-        email: resident.email,
         password: resident.password,
       });
 
       try {
+        const announcementGroups = await prisma.notificationGroup.findMany({
+          where: {
+            announcementGroup: true,
+          },
+          include: { notifications: true },
+        });
+
         const newResident = await prisma.resident.create({
           data: {
             residentId: resident.residentId,
-            birthDate: resident.birthDate,
             roomNumber: resident.roomNumber,
             credits: resident.credits,
             dateJoined: resident.dateJoined,
             dateLeft: resident.dateLeft,
-            notes: resident.notes,
             user: {
               create: {
                 authId: firebaseUser.uid,
                 type: UserType.RESIDENT,
-                email: resident.email,
-                phoneNumber: resident.phoneNumber,
-                firstName: resident.firstName,
-                lastName: resident.lastName,
                 displayName: resident.displayName,
                 profilePictureURL: resident.profilePictureURL,
                 isActive: true,
               },
+            },
+            notificationGroup: {
+              connect: announcementGroups.map((group) => ({ id: group.id })),
+            },
+            notificationRecieved: {
+              create: announcementGroups.flatMap((group) =>
+                group.notifications.map((notif) => ({
+                  notification: {
+                    connect: { id: notif.id },
+                  },
+                })),
+              ),
             },
           },
           include: { user: true },
@@ -50,16 +62,10 @@ class ResidentService implements IResidentService {
         return {
           userId: newResident.userId,
           residentId: newResident.residentId,
-          birthDate: newResident.birthDate,
           roomNumber: newResident.roomNumber,
           credits: newResident.credits,
           dateJoined: newResident.dateJoined,
           dateLeft: newResident.dateLeft,
-          notes: newResident.notes,
-          email: newResident.user.email,
-          phoneNumber: newResident.user.phoneNumber,
-          firstName: newResident.user.firstName,
-          lastName: newResident.user.lastName,
           displayName: newResident.user.displayName,
           profilePictureURL: newResident.user.profilePictureURL,
           isActive: newResident.user.isActive,
@@ -105,34 +111,28 @@ class ResidentService implements IResidentService {
       }
 
       const { authId } = oldUser;
-      const email = "email" in resident ? resident.email : oldUser.email;
+      // const email = "email" in resident ? resident.email : oldUser.email;
 
       if ("password" in resident) {
         await firebaseAdmin.auth().updateUser(authId, {
-          email,
+          // email,
           password: resident.password,
         });
       } else {
-        await firebaseAdmin.auth().updateUser(authId, { email });
+        await firebaseAdmin.auth().updateUser(authId, {});
       }
 
       const updatedResident = await prisma.resident.update({
         where: { userId },
         data: {
           residentId: resident.residentId || undefined,
-          birthDate: resident.birthDate || undefined,
           roomNumber: resident.roomNumber || undefined,
           credits: resident.credits || undefined,
           dateJoined: resident.dateJoined || undefined,
           dateLeft: resident.dateLeft || undefined,
-          notes: resident.notes || undefined,
           user: {
             update: {
               data: {
-                email: resident.email || undefined,
-                phoneNumber: resident.phoneNumber || undefined,
-                firstName: resident.firstName || undefined,
-                lastName: resident.lastName || undefined,
                 displayName: resident.displayName || undefined,
                 profilePictureURL: resident.profilePictureURL || undefined,
                 isActive: resident.isActive || undefined,
@@ -146,16 +146,10 @@ class ResidentService implements IResidentService {
       return {
         userId: updatedResident.userId,
         residentId: updatedResident.residentId,
-        birthDate: updatedResident.birthDate,
         roomNumber: updatedResident.roomNumber,
         credits: updatedResident.credits,
         dateJoined: updatedResident.dateJoined,
         dateLeft: updatedResident.dateLeft,
-        notes: updatedResident.notes,
-        email: updatedResident.user.email,
-        phoneNumber: updatedResident.user.phoneNumber,
-        firstName: updatedResident.user.firstName,
-        lastName: updatedResident.user.lastName,
         displayName: updatedResident.user.displayName,
         profilePictureURL: updatedResident.user.profilePictureURL,
         isActive: updatedResident.user.isActive,
@@ -198,16 +192,10 @@ class ResidentService implements IResidentService {
       return {
         userId: deletedResident.userId,
         residentId: deletedResident.residentId,
-        birthDate: deletedResident.birthDate,
         roomNumber: deletedResident.roomNumber,
         credits: deletedResident.credits,
         dateJoined: deletedResident.dateJoined,
         dateLeft: deletedResident.dateLeft,
-        notes: deletedResident.notes,
-        email: deletedResident.user.email,
-        phoneNumber: deletedResident.user.phoneNumber,
-        firstName: deletedResident.user.firstName,
-        lastName: deletedResident.user.lastName,
         displayName: deletedResident.user.displayName,
         profilePictureURL: deletedResident.user.profilePictureURL,
         isActive: deletedResident.user.isActive,
@@ -231,16 +219,10 @@ class ResidentService implements IResidentService {
         return {
           userId: resident.userId,
           residentId: resident.residentId,
-          birthDate: resident.birthDate,
           roomNumber: resident.roomNumber,
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          notes: resident.notes,
-          email: resident.user.email,
-          phoneNumber: resident.user.phoneNumber,
-          firstName: resident.user.firstName,
-          lastName: resident.user.lastName,
           displayName: resident.user.displayName,
           profilePictureURL: resident.user.profilePictureURL,
           isActive: resident.user.isActive,
@@ -264,16 +246,10 @@ class ResidentService implements IResidentService {
         return {
           userId: resident.userId,
           residentId: resident.residentId,
-          birthDate: resident.birthDate,
           roomNumber: resident.roomNumber,
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          notes: resident.notes,
-          email: resident.user.email,
-          phoneNumber: resident.user.phoneNumber,
-          firstName: resident.user.firstName,
-          lastName: resident.user.lastName,
           displayName: resident.user.displayName,
           profilePictureURL: resident.user.profilePictureURL,
           isActive: resident.user.isActive,
@@ -304,16 +280,10 @@ class ResidentService implements IResidentService {
         return {
           userId: resident.userId,
           residentId: resident.residentId,
-          birthDate: resident.birthDate,
           roomNumber: resident.roomNumber,
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          notes: resident.notes,
-          email: resident.user.email,
-          phoneNumber: resident.user.phoneNumber,
-          firstName: resident.user.firstName,
-          lastName: resident.user.lastName,
           displayName: resident.user.displayName,
           profilePictureURL: resident.user.profilePictureURL,
           isActive: resident.user.isActive,

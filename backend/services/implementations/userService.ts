@@ -20,9 +20,6 @@ class UserService implements IUserService {
       return {
         id: user.id,
         type: user.type,
-        email: firebaseUser.email ?? "",
-        firstName: user.firstName,
-        lastName: user.lastName,
       };
     } catch (error: unknown) {
       Logger.error(`Failed to get user. Reason = ${getErrorMessage(error)}`);

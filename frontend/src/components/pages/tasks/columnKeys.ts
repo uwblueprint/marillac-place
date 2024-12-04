@@ -7,7 +7,7 @@ export const tasksColumnTypes: ColumnInfoTypes[] = [
   },
   {
     header: "Due Date",
-    key: "dueDate",
+    key: "endDate",
   },
   {
     header: "Marillac Bucks",
@@ -26,7 +26,7 @@ export const customTasksColumnTypes: ColumnInfoTypes[] = [
   },
   {
     header: "Due Date",
-    key: "dueDate",
+    key: "endDate",
   },
   {
     header: "Marillac Bucks",
@@ -45,7 +45,7 @@ export const choreTasksColumnTypes: ColumnInfoTypes[] = [
   },
   {
     header: "Due Date",
-    key: "dueDate",
+    key: "endDate",
   },
   {
     header: "Marillac Bucks",

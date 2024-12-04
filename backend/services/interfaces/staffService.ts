@@ -2,15 +2,27 @@ import { UserDTO, CreateUserDTO, UpdateUserDTO } from "./userService";
 
 export interface StaffDTO extends Omit<UserDTO, "id" | "type"> {
   userId: number;
+  email: string;
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
   isAdmin: boolean;
 }
 
 export interface CreateStaffDTO extends CreateUserDTO {
   isAdmin: boolean;
+  email: string;
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
 }
 
 export interface UpdateStaffDTO extends UpdateUserDTO {
   isAdmin?: boolean;
+  email: string;
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
 }
 
 interface IStaffService {
