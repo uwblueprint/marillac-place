@@ -19,7 +19,7 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   const [password, setPassword] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
   const [rooms, setRooms] = useState([1, 2, 3]);
-  const [roomNumber, setRoomNumber] = useState(Number);
+  const [roomNumber, setRoomNumber] = useState<number | null>(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const [submitPressed, setSubmitPressed] = useState(false);
@@ -30,6 +30,7 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
     setResidentId(null);
     setPassword("");
     setArrivalDate("");
+    setRoomNumber(null);
     setShowPassword(false);
     setSubmitPressed(false);
   };
@@ -56,6 +57,7 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
   };
 
   const handleSubmit = () => {
+    console.log(roomNumber);
     setSubmitPressed(true);
     if (!residentId || !password || !arrivalDate || !roomNumber) {
       console.error("Missing field");
@@ -85,6 +87,7 @@ const ResidentModal = ({ isOpen, setIsOpen }: Props): React.ReactElement => {
             borderWidth="2px"
             borderRadius="8px"
             borderColor="gray.300"
+            onChange={(e) => setRoomNumber(Number(e.target.value))}
           >
             {rooms.map((room) => (
               <option key={room} value={room}>
