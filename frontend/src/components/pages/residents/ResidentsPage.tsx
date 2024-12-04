@@ -186,7 +186,6 @@ const ResidentsPage = (): React.ReactElement => {
             arrivalDate: item.dateJoined,
             departureDate: item.dateLeft ? item.dateLeft : "",
             residentId: item.residentId,
-            password: "1231874",
           };
         })}
         columnInfo={columnTypes}

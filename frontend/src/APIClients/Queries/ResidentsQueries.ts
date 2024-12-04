@@ -5,19 +5,11 @@ export const GET_RESIDENTS_BY_ID = gql`
     getResidentsByIds(userIds: $userIds) {
       userId
       residentId
-      email
-      phoneNumber
-      firstName
-      lastName
-      displayName
-      profilePictureURL
       isActive
-      birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;
@@ -27,19 +19,11 @@ export const GET_ALL_RESIDENTS = gql`
     getAllResidents {
       userId
       residentId
-      email
-      phoneNumber
-      firstName
-      lastName
-      displayName
-      profilePictureURL
       isActive
-      birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;
@@ -49,19 +33,11 @@ export const GET_ACTIVE_RESIDENTS = gql`
     getActiveResidents {
       userId
       residentId
-      email
-      phoneNumber
-      firstName
-      lastName
-      displayName
-      profilePictureURL
       isActive
-      birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;
