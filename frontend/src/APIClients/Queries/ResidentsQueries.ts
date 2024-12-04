@@ -9,14 +9,11 @@ export const GET_RESIDENTS_BY_ID = gql`
       phoneNumber
       firstName
       lastName
-      displayName
-      profilePictureURL
       birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;
@@ -30,14 +27,11 @@ export const GET_ALL_RESIDENTS = gql`
       phoneNumber
       firstName
       lastName
-      displayName
-      profilePictureURL
       birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;
@@ -51,14 +45,11 @@ export const GET_ACTIVE_RESIDENTS = gql`
       phoneNumber
       firstName
       lastName
-      displayName
-      profilePictureURL
       birthDate
       roomNumber
       credits
       dateJoined
       dateLeft
-      notes
     }
   }
 `;

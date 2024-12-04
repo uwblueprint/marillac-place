@@ -30,6 +30,7 @@ const ModalContainer = ({
       closeOnOverlayClick={false}
       isOpen={isOpen}
       onClose={() => setIsOpen(false)}
+      isCentered
     >
       <ModalOverlay />
       <ModalContent>
