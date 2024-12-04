@@ -2,6 +2,9 @@ import prisma from "../../prisma";
 import INotificationService, {
   NotificationDTO,
   NotificationReceivedDTO,
+  NotificationGroupDTO,
+  CreateNotificationDTO,
+  UpdateNotificationDTO,
 } from "../interfaces/notificationService";
 import IResidentService from "../interfaces/residentService";
 import logger from "../../utilities/logger";
@@ -16,72 +19,90 @@ class NotificationService implements INotificationService {
     this.residentService = residentService;
   }
 
-  async getNotificationsByUserId(
-    id: number,
-  ): Promise<NotificationReceivedDTO[]> {
+  async createNotificationGroup(
+    roomIds: number[],
+  ): Promise<NotificationGroupDTO> {
     try {
-      const user = await prisma.user.findUnique({
-        where: {
-          id,
-        },
-        include: {
-          notificationsReceived: true,
+      const residents = await prisma.resident.findMany({
+        where: { roomNumber: { in: roomIds } },
+      });
+      const residentIds = residents.map((resident) => resident.userId);
+
+      const newNotificationGroup = await prisma.notificationGroup.create({
+        data: {
+          recipients: {
+            connect: residentIds.map((id) => ({ userId: id })),
+          },
+          announcementGroup: false,
         },
       });
-      if (!user) throw new Error(`No User found.`);
-      return user.notificationsReceived;
+
+      return newNotificationGroup;
     } catch (error) {
       Logger.error(
-        `Failed to get Notification. Reason = ${getErrorMessage(error)}`,
+        `Failed to create Notification Group. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
   }
 
-  async getNotificationById(id: number): Promise<NotificationReceivedDTO> {
+  async createAnnouncementGroup(): Promise<NotificationGroupDTO> {
     try {
-      const notification = await prisma.notificationReceived.findUnique({
-        where: {
-          id,
+      const residents = await prisma.resident.findMany();
+      const residentIds = residents.map((resident) => resident.userId);
+
+      const newNotificationGroup = await prisma.notificationGroup.create({
+        data: {
+          recipients: {
+            connect: residentIds.map((id) => ({ userId: id })),
+          },
+          announcementGroup: true,
         },
       });
-      if (!notification) throw new Error(`notification id ${id} not found`);
 
-      return notification;
-    } catch (error: unknown) {
+      return newNotificationGroup;
+    } catch (error) {
       Logger.error(
-        `Failed to get Notification. Reason = ${getErrorMessage(error)}`,
+        `Failed to create Notification Group. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
   }
 
-  async sendNotification(
-    authorId: number,
-    title: string,
-    message: string,
-    recipientIds: number[],
+  async sendNotificationToGroup(
+    groupId: number,
+    notification: CreateNotificationDTO,
   ): Promise<NotificationDTO> {
     try {
+      const notificationGroup = await prisma.notificationGroup.findUnique({
+        where: { id: groupId },
+        include: { recipients: true },
+      });
       const newNotification = await prisma.notification.create({
         data: {
-          title,
-          message,
+          message: notification.message,
+          createdAt: notification.createdAt,
           author: {
-            connect: { id: authorId },
+            connect: notification.authorId
+              ? { userId: notification.authorId }
+              : undefined,
           },
-          recipients: {
-            create: recipientIds.map((recipient) => ({
-              recipient: {
-                connect: {
-                  id: recipient,
-                },
-              },
-            })),
+          group: {
+            connect: { id: groupId },
           },
-        },
-        include: {
-          recipients: true,
+          notificationReceived: {
+            create: notificationGroup
+              ? notificationGroup.recipients.map((resident) => ({
+                  recipient: {
+                    connect: { userId: resident.userId },
+                  },
+                }))
+              : undefined,
+          },
         },
       });
 
@@ -94,21 +115,20 @@ class NotificationService implements INotificationService {
     }
   }
 
-  async deleteUserNotification(
-    notificationId: number,
-  ): Promise<NotificationDTO> {
+  async deleteNotificationGroup(
+    groupId: number,
+  ): Promise<NotificationGroupDTO> {
     try {
-      const deletedNotification = await prisma.notification.delete({
+      const deletedNotificationGroup = await prisma.notificationGroup.delete({
         where: {
-          id: notificationId,
+          id: groupId,
         },
-        include: { recipients: true },
       });
 
-      if (!deletedNotification)
-        throw new Error(`notification id ${notificationId} not found`);
+      if (!deletedNotificationGroup)
+        throw new Error(`notification id ${groupId} not found`);
 
-      return deletedNotification;
+      return deletedNotificationGroup;
     } catch (error) {
       Logger.error(
         `Failed to set isDelete flag. Reason = ${getErrorMessage(error)}`,
@@ -117,27 +137,58 @@ class NotificationService implements INotificationService {
     }
   }
 
-  async updateSeenNotification(
-    notificationRecievedId: number,
-  ): Promise<NotificationReceivedDTO> {
+  async getAllGroupsAndNotifications(): Promise<NotificationGroupDTO[]> {
     try {
-      await prisma.notificationReceived.update({
-        where: {
-          id: notificationRecievedId,
-        },
-        data: {
-          seen: true,
+      const notificationGroups = await prisma.notificationGroup.findMany({
+        include: {
+          // recipients: true, // TODO: resident type is incompatiable at time of writing
+          notifications: true,
         },
       });
+      return notificationGroups;
+    } catch (error) {
+      Logger.error(
+        `Failed to create Notification. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
 
-      const updatedNotification = await prisma.notificationReceived.findUnique({
+  async getNotificationsByIds(
+    notificationIds: number[],
+  ): Promise<NotificationReceivedDTO[]> {
+    try {
+      const notificationReceived = await prisma.notificationReceived.findMany({
+        where: { notificationId: { in: notificationIds } },
+        include: { notification: true },
+      });
+
+      if (!notificationReceived) throw new Error(`No User found.`);
+      return notificationReceived;
+    } catch (error) {
+      Logger.error(
+        `Failed to get Notification. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateNotificationById(
+    notificationId: number,
+    notification: UpdateNotificationDTO,
+  ): Promise<NotificationDTO> {
+    try {
+      const updatedNotification = await prisma.notification.update({
         where: {
-          id: notificationRecievedId,
+          id: notificationId,
+        },
+        data: {
+          ...notification,
         },
       });
 
       if (!updatedNotification)
-        throw new Error(`notification id ${notificationRecievedId} not found`);
+        throw new Error(`notification id ${notificationId} not found`);
 
       return updatedNotification;
     } catch (error) {
@@ -148,44 +199,280 @@ class NotificationService implements INotificationService {
     }
   }
 
-  async sendAnnouncement(
-    title: string,
-    message: string,
-    userId: number,
-  ): Promise<NotificationDTO> {
+  async deleteNotificationByIds(notficationId: number[]): Promise<boolean> {
     try {
-      const activeResidents = await this.residentService.getActiveResidents();
-      const newNotification = await prisma.notification.create({
-        data: {
-          title,
-          message,
-          author: {
-            connect: { id: userId },
-          },
-          recipients: {
-            create: activeResidents.map((recipient) => ({
-              recipient: {
-                connect: {
-                  id: recipient.userId,
-                },
-              },
-            })),
-          },
-        },
-        include: {
-          recipients: true,
-        },
+      const deletedNotification = await prisma.notification.deleteMany({
+        where: { id: { in: notficationId } },
       });
-      return newNotification;
+
+      if (!deletedNotification)
+        throw new Error(`notification id ${notficationId} not found`);
+      return true;
     } catch (error) {
       Logger.error(
-        `Failed to create Notification for Announcement. Reason = ${getErrorMessage(
-          error,
-        )}`,
+        `Failed to set isDelete flag. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
   }
+
+  async updateSeenNotification(
+    notificationSeenId: number,
+  ): Promise<NotificationReceivedDTO> {
+    try {
+      await prisma.notificationReceived.update({
+        where: {
+          id: notificationSeenId,
+        },
+        data: {
+          seen: true,
+        },
+      });
+
+      const updatedNotification = await prisma.notificationReceived.findUnique({
+        where: {
+          id: notificationSeenId,
+        },
+      });
+
+      if (!updatedNotification)
+        throw new Error(`notification id ${notificationSeenId} not found`);
+
+      return updatedNotification;
+    } catch (error) {
+      Logger.error(
+        `Failed to set seen flag. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async getNotificationByResident(
+    residentId: number,
+  ): Promise<NotificationReceivedDTO[]> {
+    try {
+      const notification = await prisma.notificationReceived.findMany({
+        where: {
+          recipientId: residentId,
+        },
+        include: { notification: true },
+      });
+      if (!notification)
+        throw new Error(`notification id ${residentId} not found`);
+
+      return notification;
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get Notification. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  // async getNotificationsByRoomIds(
+  //   roomIds: number[],
+  // ): Promise<NotificationReceivedDTO[]> {
+  //   try {
+  //     const residents = await prisma.resident.findMany({
+  //       where: { roomNumber: { in: roomIds } },
+  //     });
+  //     const residentIds = residents.map((resident) => resident.userId);
+
+  //     const notificationReceived = await prisma.notificationReceived.findMany({
+  //       where: { recipientId: { in: residentIds } },
+  //     });
+  //     if (!notificationReceived) throw new Error(`No User found.`);
+  //     return notificationReceived;
+  //   } catch (error) {
+  //     Logger.error(
+  //       `Failed to get Notification. Reason = ${getErrorMessage(error)}`,
+  //     );
+  //     throw error;
+  //   }
+  // }
+
+  // async getNotificationById(id: number): Promise<NotificationReceivedDTO> {
+  //   try {
+  //     const notification = await prisma.notificationReceived.findUnique({
+  //       where: {
+  //         id,
+  //       },
+  //     });
+  //     if (!notification) throw new Error(`notification id ${id} not found`);
+
+  //     return notification;
+  //   } catch (error: unknown) {
+  //     Logger.error(
+  //       `Failed to get Notification. Reason = ${getErrorMessage(error)}`,
+  //     );
+  //     throw error;
+  //   }
+  // }
+
+  // async sendNotification(
+  //   authorId: number,
+  //   title: string,
+  //   message: string,
+  //   roomIds: number[],
+  // ): Promise<NotificationDTO> {
+  //   try {
+  //     const residents = await prisma.resident.findMany({
+  //       where: { roomNumber: { in: roomIds } },
+  //     });
+  //     const residentIds = residents.map((resident) => resident.userId);
+
+  //     const newNotification = await prisma.notification.create({
+  //       data: {
+  //         title,
+  //         message,
+  //         author: {
+  //           connect: { id: authorId },
+  //         },
+  //         recipients: {
+  //           create: residentIds.map((resident) => ({
+  //             recipient: {
+  //               connect: {
+  //                 id: resident,
+  //               },
+  //             },
+  //           })),
+  //         },
+  //       },
+  //       include: {
+  //         recipients: true,
+  //       },
+  //     });
+
+  //     return newNotification;
+  //   } catch (error) {
+  //     Logger.error(
+  //       `Failed to create Notification. Reason = ${getErrorMessage(error)}`,
+  //     );
+  //     throw error;
+  //   }
+  // }
+
+  // async deleteUserNotification(
+  //   notificationId: number,
+  // ): Promise<NotificationDTO> {
+  //   try {
+  //     const deletedNotification = await prisma.notification.delete({
+  //       where: {
+  //         id: notificationId,
+  //       },
+  //       include: { recipients: true },
+  //     });
+
+  //     if (!deletedNotification)
+  //       throw new Error(`notification id ${notificationId} not found`);
+
+  //     return deletedNotification;
+  //   } catch (error) {
+  //     Logger.error(
+  //       `Failed to set isDelete flag. Reason = ${getErrorMessage(error)}`,
+  //     );
+  //     throw error;
+  //   }
+  // }
+
+  // async updateSeenNotification(
+  //   notificationRecievedId: number,
+  // ): Promise<NotificationReceivedDTO> {
+  //   try {
+  //     await prisma.notificationReceived.update({
+  //       where: {
+  //         id: notificationRecievedId,
+  //       },
+  //       data: {
+  //         seen: true,
+  //       },
+  //     });
+
+  //     const updatedNotification = await prisma.notificationReceived.findUnique({
+  //       where: {
+  //         id: notificationRecievedId,
+  //       },
+  //     });
+
+  //     if (!updatedNotification)
+  //       throw new Error(`notification id ${notificationRecievedId} not found`);
+
+  //     return updatedNotification;
+  //   } catch (error) {
+  //     Logger.error(
+  //       `Failed to set seen flag. Reason = ${getErrorMessage(error)}`,
+  //     );
+  //     throw error;
+  //   }
+  // }
+
+  // async updateNotificationById(
+  //   notificationId: number,
+  //   notification: UpdateNotificationDTO,
+  // ): Promise<NotificationDTO> {
+  //   try {
+  //     const updatedNotification = await prisma.notification.update({
+  //       where: {
+  //         id: notificationId,
+  //       },
+  //       data: {
+  //         ...notification,
+  //       },
+  //       include: {
+  //         recipients: true,
+  //       },
+  //     });
+
+  //     if (!updatedNotification)
+  //       throw new Error(`notification id ${notificationId} not found`);
+
+  //     return updatedNotification;
+  //   } catch (error) {
+  //     Logger.error(
+  //       `Failed to set seen flag. Reason = ${getErrorMessage(error)}`,
+  //     );
+  //     throw error;
+  //   }
+  // }
+
+  // async sendAnnouncement(
+  //   title: string,
+  //   message: string,
+  //   userId: number,
+  // ): Promise<NotificationDTO> {
+  //   try {
+  //     const activeResidents = await this.residentService.getActiveResidents();
+  //     const newNotification = await prisma.notification.create({
+  //       data: {
+  //         title,
+  //         message,
+  //         author: {
+  //           connect: { id: userId },
+  //         },
+  //         recipients: {
+  //           create: activeResidents.map((recipient) => ({
+  //             recipient: {
+  //               connect: {
+  //                 id: recipient.userId,
+  //               },
+  //             },
+  //           })),
+  //         },
+  //       },
+  //       include: {
+  //         recipients: true,
+  //       },
+  //     });
+  //     return newNotification;
+  //   } catch (error) {
+  //     Logger.error(
+  //       `Failed to create Notification for Announcement. Reason = ${getErrorMessage(
+  //         error,
+  //       )}`,
+  //     );
+  //     throw error;
+  //   }
+  // }
 }
 
 export default NotificationService;

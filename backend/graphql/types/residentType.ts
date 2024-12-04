@@ -6,53 +6,37 @@ const residentType = gql`
   type ResidentDTO {
     userId: Int!
     residentId: Int!
-    email: String!
-    phoneNumber: String
-    firstName: String!
-    lastName: String!
     displayName: String
     profilePictureURL: String
     isActive: Boolean!
-    birthDate: Date!
     roomNumber: Int!
     credits: Float!
     dateJoined: Date!
     dateLeft: Date
-    notes: String
+    notificationGroup: [NotificationGroupDTO!]!
+    notificationRecieved: [NotificationReceivedDTO]!
   }
 
   input CreateResidentDTO {
-    email: String!
     password: String!
-    phoneNumber: String
-    firstName: String!
-    lastName: String!
     displayName: String
     profilePictureURL: String
     residentId: Int!
-    birthDate: Date!
     roomNumber: Int!
     credits: Float
     dateJoined: Date
     dateLeft: Date
-    notes: String
   }
 
   input UpdateResidentDTO {
-    email: String
     password: String
-    phoneNumber: String
-    firstName: String
-    lastName: String
     displayName: String
     profilePictureURL: String
     residentId: Int
-    birthDate: Date
     roomNumber: Int
     credits: Float
     dateJoined: Date
     dateLeft: Date
-    notes: String
   }
 
   enum RedeemCreditResponse {

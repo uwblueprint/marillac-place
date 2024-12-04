@@ -3,39 +3,59 @@ import { gql } from "apollo-server-express";
 const notificationType = gql`
   type NotificationDTO {
     id: ID!
-    authorId: ID
-    title: String!
     message: String!
-    createdAt: String!
-    recipients: [NotificationReceivedDTO!]
+    createdAt: DateTime
+    authorId: ID
+    recipients: [NotificationReceivedDTO]
+  }
+
+  type NotificationGroupDTO {
+    id: ID!
+    recipients: [ResidentDTO!]
+    notifications: [NotificationDTO!]
+    announcementGroup: Boolean!
   }
 
   type NotificationReceivedDTO {
     id: ID!
     notificationId: ID!
+    notification: NotificationDTO
     recipientId: ID!
     seen: Boolean!
   }
 
+  input UpdateNotificationDTO {
+    authorId: ID
+    message: String
+    createdAt: DateTime
+  }
+
+  input CreateNotificationDTO {
+    authorId: ID
+    message: String!
+    createdAt: DateTime
+  }
+
   extend type Query {
-    getNotificationsByUserId(userId: ID!): [NotificationReceivedDTO!]
-    getNotificationById(id: ID!): NotificationReceivedDTO!
+    getNotificationsByIds(notificationIds: [ID!]): [NotificationReceivedDTO!]
+    getNotificationByResident(residentId: ID!): [NotificationReceivedDTO!]
+    getAllGroupsAndNotifications: [NotificationGroupDTO!]
   }
 
   extend type Mutation {
-    sendNotification(
-      authorId: ID!
-      title: String!
-      message: String!
-      recipientIds: [ID!]
+    createNotificationGroup(roomIds: [Int!]): NotificationGroupDTO!
+    createAnnouncementGroup: NotificationGroupDTO!
+    sendNotificationToGroup(
+      groupId: ID!
+      notification: CreateNotificationDTO!
     ): NotificationDTO!
-    deleteUserNotification(notificationId: ID!): NotificationDTO!
-    updateSeenNotification(notificationId: ID!): NotificationReceivedDTO!
-    sendAnnouncement(
-      title: String
-      message: String
-      userId: ID
+    deleteNotificationGroup(groupId: ID!): NotificationGroupDTO!
+    updateNotificationById(
+      notificationId: ID!
+      notification: UpdateNotificationDTO!
     ): NotificationDTO!
+    deleteNotificationByIds(notificationIds: [ID!]): Boolean!
+    updateSeenNotification(notificationSeenId: ID!): NotificationReceivedDTO!
   }
 `;
 
