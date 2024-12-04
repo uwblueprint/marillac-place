@@ -17,8 +17,14 @@ const RoomGrid = () => {
   });
 
   const fetchTasksForResident = (assigneeId: number) => {
-    const assignedTasks = assigned?.getTasksByStatus?.filter((task: { assigneeId: number }) => task.assigneeId === assigneeId).length || 0;
-    const pendingTasks = pending?.getTasksByStatus?.filter((task: { assigneeId: number }) => task.assigneeId === assigneeId).length || 0;
+    const assignedTasks =
+      assigned?.getTasksByStatus?.filter(
+        (task: { assigneeId: number }) => task.assigneeId === assigneeId,
+      ).length || 0;
+    const pendingTasks =
+      pending?.getTasksByStatus?.filter(
+        (task: { assigneeId: number }) => task.assigneeId === assigneeId,
+      ).length || 0;
     return { assignedTasks, pendingTasks, loading: false, error: null };
   };
 
@@ -33,19 +39,27 @@ const RoomGrid = () => {
         gap="20px"
         width="100%"
       >
-        {residentData?.getAllResidents?.map((room: { roomNumber: string; residentId: number; userId: number }) => {
-          const { assignedTasks, pendingTasks } = fetchTasksForResident(room.userId);
+        {residentData?.getAllResidents?.map(
+          (room: {
+            roomNumber: string;
+            residentId: number;
+            userId: number;
+          }) => {
+            const { assignedTasks, pendingTasks } = fetchTasksForResident(
+              room.userId,
+            );
 
-          return (
-            <RoomCard
-              key={room.userId}
-              room={room.roomNumber}
-              residentId={room.residentId}
-              assignedTasks={assignedTasks}
-              pendingTasks={pendingTasks}
-            />
-          );
-        })}
+            return (
+              <RoomCard
+                key={room.userId}
+                room={room.roomNumber}
+                residentId={room.residentId}
+                assignedTasks={assignedTasks}
+                pendingTasks={pendingTasks}
+              />
+            );
+          },
+        )}
       </Grid>
     </Flex>
   );

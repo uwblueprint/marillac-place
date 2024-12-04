@@ -10,7 +10,12 @@ type Props = {
   assignedTasks: number;
 };
 
-const RoomCard = ({ room, residentId, pendingTasks, assignedTasks }: Props): React.ReactElement => {
+const RoomCard = ({
+  room,
+  residentId,
+  pendingTasks,
+  assignedTasks,
+}: Props): React.ReactElement => {
   return (
     <Box
       p="10px"
