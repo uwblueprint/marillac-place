@@ -38,6 +38,7 @@ const taskType = gql`
     title: String!
     description: String!
     creditValue: Int!
+    location: TaskLocationDTO!
     tasksAssigned: [TaskAssignedDTO!]
     endDate: DateTime
     recurrenceFrequency: Recurrence_Frequency!
@@ -45,11 +46,18 @@ const taskType = gql`
     repeatDays: [DaysOfWeek!]
   }
 
+  type TaskLocationDTO {
+    id: Int!
+    title: String!
+    description: String!
+  }
+
   input InputTaskDTO {
     type: TaskType!
     title: String!
     description: String!
     creditValue: Int!
+    locationId: Int!
     endDate: DateTime
     recurrenceFrequency: Recurrence_Frequency!
     specificDay: DaysOfWeek

@@ -17,9 +17,9 @@ class TaskService implements ITaskService {
         where: {
           id: taskId,
         },
-        include: {
-          location: true,
-        },
+        // include: {
+        //   location: true,
+        // },
       });
       if (!task) throw new Error(`task id ${taskId} not found`);
       return task;
@@ -33,9 +33,9 @@ class TaskService implements ITaskService {
     try {
       const tasks = await prisma.task.findMany({
         where: { type },
-        include: {
-          location: true,
-        },
+        // include: {
+        //   location: true,
+        // },
       });
       if (!tasks) throw new Error(`task type ${type} not found`);
 
@@ -129,17 +129,17 @@ class TaskService implements ITaskService {
           type: task.type,
           description: task.description,
           creditValue: task.creditValue,
-          location: {
-            connect: { id: task.locationId },
-          },
+          // location: {
+          //   connect: { id: task.locationId },
+          // },
           endDate: task.endDate,
           recurrenceFrequency: task.recurrenceFrequency,
           specificDay: task.specificDay,
           repeatDays: task.repeatDays,
         },
-        include: {
-          location: true,
-        },
+        // include: {
+        //   location: true,
+        // },
       });
 
       return newTask;
@@ -159,9 +159,9 @@ class TaskService implements ITaskService {
           id: taskId,
         },
         data: updateTask,
-        include: {
-          location: true,
-        },
+        // include: {
+        //   location: true,
+        // },
       });
       return updatedTask;
     } catch (error: unknown) {
@@ -182,9 +182,9 @@ class TaskService implements ITaskService {
         where: {
           id: taskId,
         },
-        include: {
-          location: true,
-        },
+        // include: {
+        //   location: true,
+        // },
       });
 
       return deletedTask;
