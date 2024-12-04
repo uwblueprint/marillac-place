@@ -84,7 +84,7 @@ model Task {
   id                  Int                 @id @default(autoincrement())
   type                TaskType
   title               String
-  description         String
+  description         String?
   creditValue         Float               @map("credit_value")
   // location            TaskLocation        @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // locationId          Int                 @map("location_id")

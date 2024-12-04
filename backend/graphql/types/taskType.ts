@@ -36,7 +36,7 @@ const taskType = gql`
     id: Int!
     type: TaskType!
     title: String!
-    description: String!
+    description: String
     creditValue: Int!
     tasksAssigned: [TaskAssignedDTO!]
     endDate: DateTime
@@ -48,7 +48,7 @@ const taskType = gql`
   input InputTaskDTO {
     type: TaskType!
     title: String!
-    description: String!
+    description: String
     creditValue: Int!
     endDate: DateTime
     recurrenceFrequency: Recurrence_Frequency!

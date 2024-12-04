@@ -127,7 +127,7 @@ class TaskService implements ITaskService {
         data: {
           title: task.title,
           type: task.type,
-          description: task.description,
+          description: task.description ?? "",
           creditValue: task.creditValue,
           // location: {
           //   connect: { id: task.locationId },
