@@ -7,9 +7,6 @@ const staffType = gql`
     phoneNumber: String
     firstName: String!
     lastName: String!
-    displayName: String
-    profilePictureURL: String
-    isActive: Boolean!
     isAdmin: Boolean!
   }
 
@@ -19,8 +16,6 @@ const staffType = gql`
     phoneNumber: String
     firstName: String!
     lastName: String!
-    displayName: String
-    profilePictureURL: String
     isAdmin: Boolean!
   }
 
@@ -30,9 +25,6 @@ const staffType = gql`
     phoneNumber: String
     firstName: String
     lastName: String
-    displayName: String
-    profilePictureURL: String
-    isActive: Boolean
     isAdmin: Boolean
   }
 

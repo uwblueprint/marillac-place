@@ -38,8 +38,6 @@ class ResidentService implements IResidentService {
               create: {
                 authId: firebaseUser.uid,
                 type: UserType.RESIDENT,
-                displayName: resident.displayName,
-                profilePictureURL: resident.profilePictureURL,
                 isActive: true,
               },
             },
@@ -66,8 +64,6 @@ class ResidentService implements IResidentService {
           credits: newResident.credits,
           dateJoined: newResident.dateJoined,
           dateLeft: newResident.dateLeft,
-          displayName: newResident.user.displayName,
-          profilePictureURL: newResident.user.profilePictureURL,
           isActive: newResident.user.isActive,
         };
       } catch (postgresError) {
@@ -133,8 +129,6 @@ class ResidentService implements IResidentService {
           user: {
             update: {
               data: {
-                displayName: resident.displayName || undefined,
-                profilePictureURL: resident.profilePictureURL || undefined,
                 isActive: resident.isActive || undefined,
               },
             },
@@ -150,8 +144,6 @@ class ResidentService implements IResidentService {
         credits: updatedResident.credits,
         dateJoined: updatedResident.dateJoined,
         dateLeft: updatedResident.dateLeft,
-        displayName: updatedResident.user.displayName,
-        profilePictureURL: updatedResident.user.profilePictureURL,
         isActive: updatedResident.user.isActive,
       };
     } catch (error) {
@@ -196,8 +188,6 @@ class ResidentService implements IResidentService {
         credits: deletedResident.credits,
         dateJoined: deletedResident.dateJoined,
         dateLeft: deletedResident.dateLeft,
-        displayName: deletedResident.user.displayName,
-        profilePictureURL: deletedResident.user.profilePictureURL,
         isActive: deletedResident.user.isActive,
       };
     } catch (error) {
@@ -223,8 +213,6 @@ class ResidentService implements IResidentService {
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          displayName: resident.user.displayName,
-          profilePictureURL: resident.user.profilePictureURL,
           isActive: resident.user.isActive,
         };
       });
@@ -250,8 +238,6 @@ class ResidentService implements IResidentService {
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          displayName: resident.user.displayName,
-          profilePictureURL: resident.user.profilePictureURL,
           isActive: resident.user.isActive,
         };
       });
@@ -284,8 +270,6 @@ class ResidentService implements IResidentService {
           credits: resident.credits,
           dateJoined: resident.dateJoined,
           dateLeft: resident.dateLeft,
-          displayName: resident.user.displayName,
-          profilePictureURL: resident.user.profilePictureURL,
           isActive: resident.user.isActive,
         };
       });

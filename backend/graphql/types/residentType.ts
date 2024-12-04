@@ -6,8 +6,6 @@ const residentType = gql`
   type ResidentDTO {
     userId: Int!
     residentId: Int!
-    displayName: String
-    profilePictureURL: String
     isActive: Boolean!
     roomNumber: Int!
     credits: Float!
@@ -19,8 +17,6 @@ const residentType = gql`
 
   input CreateResidentDTO {
     password: String!
-    displayName: String
-    profilePictureURL: String
     residentId: Int!
     roomNumber: Int!
     credits: Float
@@ -29,9 +25,6 @@ const residentType = gql`
   }
 
   input UpdateResidentDTO {
-    password: String
-    displayName: String
-    profilePictureURL: String
     residentId: Int
     roomNumber: Int
     credits: Float

@@ -3,8 +3,8 @@ import { UserType } from "../../prisma";
 export type UserDTO = {
   id: number;
   type: UserType;
-  displayName: string | null;
-  profilePictureURL: string | null;
+  displayName?: string | null;
+  profilePictureURL?: string | null;
   isActive: boolean;
 };
 
