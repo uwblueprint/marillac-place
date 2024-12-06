@@ -88,8 +88,9 @@ type PropsList = {
 };
 
 const AnnouncementsList = ({ announcements, selectedGroup }: PropsList) => {
+  console.log(announcements, selectedGroup);
   if (selectedGroup.length === 0) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -237,7 +238,7 @@ const AnnouncementsView = ({
         <Box flex={1} h="100vh" overflowY="scroll">
           {selectedGroup !== "0" && (
             <AnnouncementsList
-              announcements={announcements}
+              announcements={announcements || []}
               selectedGroup={selectedGroup}
             />
           )}

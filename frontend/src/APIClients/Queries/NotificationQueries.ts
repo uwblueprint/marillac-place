@@ -48,9 +48,6 @@ export const GET_ALL_GROUPS_AND_NOTIFICATIONS = gql`
       recipients {
         userId
         residentId
-        displayName
-        profilePictureURL
-        isActive
         roomNumber
         credits
         dateJoined

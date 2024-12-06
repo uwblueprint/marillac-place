@@ -1,3 +1,5 @@
+import { ResidentResponse } from "./ResidentsType";
+
 export type NotificationResponse = {
   id: string;
   message: string;
@@ -20,7 +22,7 @@ export type NotificationUpdateRequest = {
 
 export type NotificationGroupResponse = {
   id: string;
-  // recipients?: Residentesponse[]; TODO: add when resident response exists
+  recipients?: ResidentResponse[];
   notifications?: NotificationResponse[];
   announcementGroup: boolean;
 };

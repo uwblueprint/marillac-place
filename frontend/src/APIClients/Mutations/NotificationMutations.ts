@@ -5,6 +5,14 @@ export const CREATE_NOTIFICATION_GROUP = gql`
     createNotificationGroup(roomIds: $roomIds) {
       id
       announcementGroup
+      recipients {
+        userId
+        residentId
+        roomNumber
+        credits
+        dateJoined
+        dateLeft
+      }
     }
   }
 `;
@@ -14,6 +22,14 @@ export const CREATE_ANNOUNCEMENT_GROUP = gql`
     createAnnouncementGroup {
       id
       announcementGroup
+      recipients {
+        userId
+        residentId
+        roomNumber
+        credits
+        dateJoined
+        dateLeft
+      }
     }
   }
 `;

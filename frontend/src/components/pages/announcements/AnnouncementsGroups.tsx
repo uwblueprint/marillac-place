@@ -54,12 +54,14 @@ export const formatRooms = (roomIDs: number[]) => {
 };
 
 const GroupTab = ({
+  roomId,
   roomKey,
   firstAnnouncement,
   setSelectedGroup,
   isDraft,
   selectedRooms,
 }: {
+  roomId: string;
   roomKey: string;
   firstAnnouncement: NotificationResponse | null;
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
@@ -73,7 +75,7 @@ const GroupTab = ({
 
   return (
     <Box
-      onClick={() => setSelectedGroup(roomKey)}
+      onClick={() => setSelectedGroup(roomId)}
       w="100%"
       p={3}
       borderBottom="solid"
@@ -148,10 +150,12 @@ const GroupList: React.FC<{
     };
     announcements?.forEach((group) => {
       processedData.all.push(group);
-      // if (group.recipients && group.recipients.length > 1) { TODO: whenn recipients are added, include this
-      //   processedData.private.push(group);
-      // }
-      processedData.groups.push(group);
+      console.log(group);
+      if (group.recipients && group.recipients.length <= 1 && !group.announcementGroup) {
+        processedData.private.push(group);
+      } else {
+        processedData.groups.push(group);
+      }
     });
 
     // Object.keys(announcements).forEach((key) => {
@@ -179,6 +183,7 @@ const GroupList: React.FC<{
         addingNewRoom ? (
           <GroupTab
             key={null}
+            roomId="0"
             roomKey="0"
             firstAnnouncement={null}
             setSelectedGroup={setSelectedGroup}
@@ -199,7 +204,8 @@ const GroupList: React.FC<{
           .map((group) => (
             <GroupTab
               key={group.id}
-              roomKey={group.id}
+              roomId={group.id}
+              roomKey={group.recipients?.map((resident) => resident.roomNumber).join(',') || ''}
               isDraft={false}
               firstAnnouncement={
                 group.notifications && group.notifications.length > 0

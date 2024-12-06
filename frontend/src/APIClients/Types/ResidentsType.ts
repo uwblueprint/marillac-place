@@ -5,7 +5,6 @@ export type UserResponse = {
   phoneNumber?: string;
   firstName: string;
   lastName: string;
-  displayName?: string;
   profilePictureURL?: string;
   birthDate: string;
   roomNumber: number;
@@ -21,7 +20,6 @@ export type UserRequest = {
   phoneNumber?: string;
   firstName: string;
   lastName: string;
-  displayName?: string;
   profilePictureURL?: string;
   residentId: number;
   birthDate: string;
@@ -38,7 +36,6 @@ export type UserRequestUpdate = {
   phoneNumber?: string;
   firstName?: string;
   lastName?: string;
-  displayName?: string;
   profilePictureURL?: string;
   residentId?: number;
   birthDate?: string;
@@ -48,3 +45,12 @@ export type UserRequestUpdate = {
   dateLeft?: Date;
   notes?: string;
 };
+
+export type ResidentResponse = {
+  userId: string;
+  residentId: string;
+  roomNumber: number;
+  credits: number;
+  dateJoined: Date;
+  dateLeft: Date;
+}
