@@ -30,11 +30,15 @@ import {
   GroupAnnouncements,
 } from "../../../types/NotificationTypes";
 import { truncateMessage } from "../../../utils/StringUtils";
+import {
+  NotificationGroupResponse,
+  NotificationResponse,
+} from "../../../APIClients/Types/NotificationType";
 
 interface ProcessedGroupAnnouncements {
-  all: GroupAnnouncements;
-  private: GroupAnnouncements;
-  groups: GroupAnnouncements;
+  all: NotificationGroupResponse[];
+  private: NotificationGroupResponse[];
+  groups: NotificationGroupResponse[];
 }
 
 export const formatRooms = (roomIDs: number[]) => {
@@ -57,7 +61,7 @@ const GroupTab = ({
   selectedRooms,
 }: {
   roomKey: string;
-  firstAnnouncement: Announcement | null;
+  firstAnnouncement: NotificationResponse | null;
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
   isDraft: boolean;
   selectedRooms?: number[] | null;
@@ -119,7 +123,7 @@ const GroupTab = ({
 };
 
 const GroupList: React.FC<{
-  announcements: GroupAnnouncements;
+  announcements: NotificationGroupResponse[];
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
   addingNewRoom: boolean;
   setAddingNewRoom: React.Dispatch<React.SetStateAction<boolean>>;
@@ -138,29 +142,37 @@ const GroupList: React.FC<{
 
   useEffect(() => {
     const processedData: ProcessedGroupAnnouncements = {
-      all: {},
-      private: {},
-      groups: {},
+      all: [],
+      private: [],
+      groups: [],
     };
-    Object.keys(announcements).forEach((key) => {
-      const rooms = key.split(",").map((room) => parseInt(room.trim(), 10));
-      const announcementData = announcements[key];
-
-      if (rooms.length === 1) {
-        // Add announcement to 'all' and 'private' if there is only 1 room
-        processedData.all[key] = announcementData;
-        processedData.private[key] = announcementData;
-      } else {
-        // Add announcement to 'all' and 'groups' if there are more than 1 room
-        processedData.all[key] = announcementData;
-        processedData.groups[key] = announcementData;
-      }
+    announcements?.forEach((group) => {
+      processedData.all.push(group);
+      // if (group.recipients && group.recipients.length > 1) { TODO: whenn recipients are added, include this
+      //   processedData.private.push(group);
+      // }
+      processedData.groups.push(group);
     });
+
+    // Object.keys(announcements).forEach((key) => {
+    //   const rooms = key.split(",").map((room) => parseInt(room.trim(), 10));
+    //   const announcementData = announcements[key];
+
+    //   if (rooms.length === 1) {
+    //     // Add announcement to 'all' and 'private' if there is only 1 room
+    //     processedData.all[key] = announcementData;
+    //     processedData.private[key] = announcementData;
+    //   } else {
+    //     // Add announcement to 'all' and 'groups' if there are more than 1 room
+    //     processedData.all[key] = announcementData;
+    //     processedData.groups[key] = announcementData;
+    //   }
+    // });
 
     setProcessedAnnouncements(processedData);
   }, [announcements]);
 
-  const renderGroupTabs = (announcementsGroup: GroupAnnouncements) => {
+  const renderGroupTabs = (announcementsGroup: NotificationGroupResponse[]) => {
     return (
       announcementsGroup &&
       [
@@ -177,21 +189,23 @@ const GroupList: React.FC<{
           <></>
         ),
       ].concat(
-        Object.keys(announcementsGroup)
+        announcementsGroup
           .filter(
-            (roomKey) =>
-              !searchRooms ||
-              searchRooms.length === 0 ||
-              searchRooms.some((room) =>
-                roomKey.split(",").map(Number).includes(room),
-              ),
+            (group) => !searchRooms || searchRooms.length === 0,
+            // || searchRooms.some((room) =>
+            //   roomKey.split(",").map(Number).includes(room),
+            // ),
           )
-          .map((roomKey) => (
+          .map((group) => (
             <GroupTab
-              key={roomKey}
-              roomKey={roomKey}
+              key={group.id}
+              roomKey={group.id}
               isDraft={false}
-              firstAnnouncement={announcementsGroup[roomKey][0]}
+              firstAnnouncement={
+                group.notifications && group.notifications.length > 0
+                  ? group.notifications[0]
+                  : null
+              }
               setSelectedGroup={setSelectedGroup}
             />
           )),

@@ -35,6 +35,9 @@ class NotificationService implements INotificationService {
           },
           announcementGroup: false,
         },
+        include: {
+          recipients: true,
+        },
       });
 
       return newNotificationGroup;
@@ -61,6 +64,9 @@ class NotificationService implements INotificationService {
             connect: residentIds.map((id) => ({ userId: id })),
           },
           announcementGroup: true,
+        },
+        include: {
+          recipients: true,
         },
       });
 
@@ -143,7 +149,7 @@ class NotificationService implements INotificationService {
     try {
       const notificationGroups = await prisma.notificationGroup.findMany({
         include: {
-          // recipients: true, // TODO: resident type is incompatiable at time of writing
+          recipients: true,
           notifications: true,
         },
       });

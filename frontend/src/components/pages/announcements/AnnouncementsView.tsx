@@ -21,8 +21,14 @@ import {
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
+import { useMutation } from "@apollo/client";
 import { GroupAnnouncements } from "../../../types/NotificationTypes";
 import { formatRooms } from "./AnnouncementsGroups";
+import {
+  NotificationCreateRequest,
+  NotificationGroupResponse,
+} from "../../../APIClients/Types/NotificationType";
+import { SEND_NOTIFICATION_TO_GROUP } from "../../../APIClients/Mutations/NotificationMutations";
 
 const MessageInput = ({
   handlePost,
@@ -63,16 +69,21 @@ const MessageInput = ({
 };
 
 type Props = {
-  announcements: GroupAnnouncements;
+  announcements: NotificationGroupResponse[];
   selectedGroup: string;
   addingNewRoom: boolean;
   setAddingNewRoom: React.Dispatch<React.SetStateAction<boolean>>;
   selectedRooms: number[];
   setSelectedRooms: React.Dispatch<React.SetStateAction<number[]>>;
+  sendNotification: (message: string, groupId: string) => Promise<void>;
+  createNotificationGroupAndSendNotification: (
+    selectedRooms: number[],
+    message: string,
+  ) => Promise<void>;
 };
 
 type PropsList = {
-  announcements: GroupAnnouncements;
+  announcements: NotificationGroupResponse[];
   selectedGroup: string;
 };
 
@@ -83,33 +94,38 @@ const AnnouncementsList = ({ announcements, selectedGroup }: PropsList) => {
 
   return (
     <Box>
-      {announcements[selectedGroup].map((announcement, index) => (
-        <Box
-          key={index}
-          backgroundColor="gray.100"
-          p="10px"
-          ml="30px"
-          mr="20px"
-          mt="20px"
-          borderRadius="10px"
-          w="83vh"
-        >
-          <Flex pl={2} align="center">
-            <Avatar name={announcement.author} src="https://bit.ly/2k1H1t6" />
-            <Flex flexDir="column" ml={4}>
-              <Heading size="sm" fontSize="16px" mt={4} mb={0}>
-                {announcement.author}
-              </Heading>
-              <Text color="gray.main" fontSize="12px">
-                {moment(announcement.createdAt).fromNow()}
-              </Text>
+      {announcements
+        .filter((group) => group.id === selectedGroup)[0]
+        .notifications?.map((notification, index) => (
+          <Box
+            key={index}
+            backgroundColor="gray.100"
+            p="10px"
+            ml="30px"
+            mr="20px"
+            mt="20px"
+            borderRadius="10px"
+            w="83vh"
+          >
+            <Flex pl={2} align="center">
+              <Avatar
+                name={notification.authorId || ""}
+                src="https://bit.ly/2k1H1t6"
+              />
+              <Flex flexDir="column" ml={4}>
+                <Heading size="sm" fontSize="16px" mt={4} mb={0}>
+                  {notification.authorId || ""}
+                </Heading>
+                <Text color="gray.main" fontSize="12px">
+                  {moment(notification.createdAt).fromNow()}
+                </Text>
+              </Flex>
             </Flex>
-          </Flex>
-          <Text pl={2} fontSize="16px">
-            {announcement.message}
-          </Text>
-        </Box>
-      ))}
+            <Text pl={2} fontSize="16px">
+              {notification.message}
+            </Text>
+          </Box>
+        ))}
     </Box>
   );
 };
@@ -121,6 +137,8 @@ const AnnouncementsView = ({
   setAddingNewRoom,
   selectedRooms,
   setSelectedRooms,
+  sendNotification,
+  createNotificationGroupAndSendNotification,
 }: Props): React.ReactElement => {
   const rooms = selectedGroup.split(",").map(Number);
   const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
@@ -137,11 +155,14 @@ const AnnouncementsView = ({
     }
   };
 
-  const handlePost = (message: string) => {
+  const handlePost = async (message: string) => {
     if (addingNewRoom && selectedRooms.length > 0) {
+      await createNotificationGroupAndSendNotification(selectedRooms, message);
       setSelectedRooms([]);
       setAddingNewRoom(false);
+      return;
     }
+    await sendNotification(message, selectedGroup);
   };
 
   const formatHeader = (roomIDs: number[]) => {
