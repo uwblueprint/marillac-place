@@ -9,7 +9,7 @@ export interface TaskDTO {
   id: number;
   type: TaskType;
   title: string;
-  description?: string;
+  description: string | null;
   creditValue: number;
   // location: TaskLocationDTO;
   endDate: Date | null;
@@ -27,7 +27,7 @@ export interface TaskDTO {
 export interface InputTaskDTO {
   type: TaskType;
   title: string;
-  description?: string;
+  description: string | null;
   creditValue: number;
   // locationId: number;
   endDate: Date | null;

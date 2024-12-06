@@ -6,6 +6,7 @@ import { GET_ACTIVE_RESIDENTS } from "../../../APIClients/Queries/ResidentsQueri
 import { GET_TASKS_BY_STATUS } from "../../../APIClients/Queries/TaskQueries";
 
 const RoomGrid = () => {
+  const [residents, setResidents] = useState<any[]>([]);
   const { data: residentData } = useQuery(GET_ACTIVE_RESIDENTS);
 
   const { data: pending } = useQuery(GET_TASKS_BY_STATUS, {
@@ -28,6 +29,10 @@ const RoomGrid = () => {
     return { assignedTasks, pendingTasks, loading: false, error: null };
   };
 
+  useEffect(() => {
+    setResidents(residentData?.getActiveResidents || []);
+  }, [pending, assigned, residentData]);
+
   return (
     <Flex justifyContent="center" alignItems="center" width="100%">
       <Grid
@@ -39,7 +44,7 @@ const RoomGrid = () => {
         gap="20px"
         width="100%"
       >
-        {residentData?.getAllResidents?.map(
+        {residents.map(
           (room: {
             roomNumber: string;
             residentId: number;

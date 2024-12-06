@@ -162,7 +162,6 @@ const TaskModal = ({
       title,
       description: task?.description || "No field in modal",
       creditValue: marillacBucks || 0,
-      locationId: task?.locationId || 1234, // no field in modal
       endDate: endsOn === "never" ? undefined : new Date(endsOnDate),
       recurrenceFrequency: recurrenceFrequency as RecurrenceFrequency,
       repeatDays:

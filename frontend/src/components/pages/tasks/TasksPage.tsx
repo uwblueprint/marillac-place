@@ -35,7 +35,6 @@ import {
   RecurrenceFrequency,
   DaysOfWeek,
   TaskTypeEnum,
-  TaskLocation,
   TaskResponse,
   TaskRequest,
   TaskAssignedRequest,
