@@ -46,6 +46,8 @@ export const formatRooms = (roomIDs: number[]) => {
   const formattedRooms = roomIDs.map((id) => {
     if (id === 0) {
       return "New Announcement";
+    } if (id === -1) {
+      return "All Rooms";
     }
     return `Room ${id}`;
   });

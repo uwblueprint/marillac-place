@@ -23,18 +23,15 @@ class NotificationService implements INotificationService {
     roomIds: number[],
   ): Promise<NotificationGroupDTO> {
     try {
-      if (roomIds.length == 0) {
-        throw Object.assign(
-          new Error('No rooms specified.'),
-          { code: 400 }
-        );
+      if (roomIds.length === 0) {
+        throw Object.assign(new Error("No rooms specified."), { code: 400 });
       }
-      if (roomIds.length > 1) { 
+      if (roomIds.length > 1) {
         // enforces that a group can only have one member
         // remove in the future if the requirements change
         throw Object.assign(
-          new Error('Notification Group can only have one room.'),
-          { code: 400 }
+          new Error("Notification Group can only have one room."),
+          { code: 400 },
         );
       }
       const residents = await prisma.resident.findMany({
@@ -53,7 +50,7 @@ class NotificationService implements INotificationService {
         },
         include: {
           recipients: true,
-        }
+        },
       });
 
       if (existingGroup && existingGroup.length > 0) {
@@ -61,8 +58,10 @@ class NotificationService implements INotificationService {
         existingGroup.forEach((group) => {
           if (group.recipients.length === residentIds.length) {
             throw Object.assign(
-              new Error('Notification Group already exists with specified roomIds.'),
-              { code: 400 }
+              new Error(
+                "Notification Group already exists with specified roomIds.",
+              ),
+              { code: 400 },
             );
           }
         });
@@ -99,7 +98,9 @@ class NotificationService implements INotificationService {
         },
       });
       if (existingGroup && existingGroup.length > 0) {
-        throw 'Announcement Group already exists.';
+        throw Object.assign(new Error("Announcement Group already exists."), {
+          code: 400,
+        });
       }
 
       const residents = await prisma.resident.findMany({
