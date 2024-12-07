@@ -148,6 +148,7 @@ const AnnouncementsPage = (): React.ReactElement => {
 
   const [sendNotificationToGroup] = useMutation(SEND_NOTIFICATION_TO_GROUP);
   const [createNotificationGroup] = useMutation(CREATE_NOTIFICATION_GROUP);
+  const [createAnnouncementGroup] = useMutation(CREATE_ANNOUNCEMENT_GROUP);
 
   const sendNotification = async (
     message: string,
@@ -202,13 +203,32 @@ const AnnouncementsPage = (): React.ReactElement => {
     message: string,
   ) => {
     try {
-      const newGroup = (
-        await createNotificationGroup({
-          variables: {
-            roomIds: selectedIds,
-          },
-        })
-      ).data.createNotificationGroup;
+      if (selectedIds.length > 1) {
+        throw Object.assign(
+          new Error('Only include one room id.'),
+          { code: 400 }
+        );
+      } else if (selectedIds.length === 0) {
+        throw Object.assign(
+          new Error('No rooms selected.'),
+          { code: 400 }
+        );
+      }
+
+      let newGroup;
+      if (selectedIds[0] === -1) {
+        newGroup = (
+          await createAnnouncementGroup({})
+        ).data.createNotificationGroup;
+      } else {
+        newGroup = (
+          await createNotificationGroup({
+            variables: {
+              roomIds: selectedIds,
+            },
+          })
+        ).data.createNotificationGroup;
+      }
 
       await sendNotification(message, newGroup.id, newGroup);
     } catch (e) {
