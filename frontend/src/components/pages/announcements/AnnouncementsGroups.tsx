@@ -56,6 +56,7 @@ export const formatRooms = (roomIDs: number[]) => {
 const GroupTab = ({
   roomId,
   roomKey,
+  announcementGroup,
   firstAnnouncement,
   setSelectedGroup,
   isDraft,
@@ -63,6 +64,7 @@ const GroupTab = ({
 }: {
   roomId: string;
   roomKey: string;
+  announcementGroup: boolean;
   firstAnnouncement: NotificationResponse | null;
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
   isDraft: boolean;
@@ -103,7 +105,7 @@ const GroupTab = ({
         <Flex flexDir="column" w="100%">
           <Flex justifyContent="space-between">
             <Text as="b" color={isDraft ? "gray.500" : "black"}>
-              {formatRooms(rooms)}
+              {announcementGroup? 'All Rooms': formatRooms(rooms)}
             </Text>
             <Text margin="0" color="gray.500">
               {firstAnnouncement
@@ -187,6 +189,7 @@ const GroupList: React.FC<{
         addingNewRoom ? (
           <GroupTab
             key={null}
+            announcementGroup={false}
             roomId="0"
             roomKey="0"
             firstAnnouncement={null}
@@ -208,6 +211,7 @@ const GroupList: React.FC<{
           .map((group) => (
             <GroupTab
               key={group.id}
+              announcementGroup={group.announcementGroup}
               roomId={group.id}
               roomKey={
                 group.recipients

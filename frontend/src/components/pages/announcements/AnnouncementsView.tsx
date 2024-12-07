@@ -141,7 +141,8 @@ const AnnouncementsView = ({
   sendNotification,
   createNotificationGroupAndSendNotification,
 }: Props): React.ReactElement => {
-  const rooms = selectedGroup.split(",").map(Number);
+  const groupInfo = announcements.find((group) => group.id === selectedGroup);
+  const rooms = groupInfo && groupInfo.recipients? groupInfo.recipients.map((recipient) => recipient.roomNumber): [];
   const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
 
   const addRoomToNewRoom = (roomId: number) => {
@@ -208,6 +209,16 @@ const AnnouncementsView = ({
     return "All Rooms";
   };
 
+  const getHeader = () => {
+    if (selectedGroup === "" || selectedGroup === "0") {
+      return formatHeader(rooms);
+    } 
+    if (groupInfo?.announcementGroup) {
+      return 'All Rooms';
+    } 
+    return formatRooms(rooms);
+  }
+
   return (
     <Box h="100vh" w="100%">
       <Flex align="left" flexDir="column" h="100%">
@@ -221,9 +232,7 @@ const AnnouncementsView = ({
           h="10vh"
         >
           <h1 style={{ fontSize: "24px", margin: "0" }}>
-            {selectedGroup === "" || selectedGroup === "0"
-              ? formatHeader(rooms)
-              : formatRooms(rooms)}
+            {getHeader()}
           </h1>
           <IconButton
             aria-label="info"
