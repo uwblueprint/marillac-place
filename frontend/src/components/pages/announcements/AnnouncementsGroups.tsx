@@ -151,7 +151,11 @@ const GroupList: React.FC<{
     announcements?.forEach((group) => {
       processedData.all.push(group);
       console.log(group);
-      if (group.recipients && group.recipients.length <= 1 && !group.announcementGroup) {
+      if (
+        group.recipients &&
+        group.recipients.length <= 1 &&
+        !group.announcementGroup
+      ) {
         processedData.private.push(group);
       } else {
         processedData.groups.push(group);
@@ -205,7 +209,11 @@ const GroupList: React.FC<{
             <GroupTab
               key={group.id}
               roomId={group.id}
-              roomKey={group.recipients?.map((resident) => resident.roomNumber).join(',') || ''}
+              roomKey={
+                group.recipients
+                  ?.map((resident) => resident.roomNumber)
+                  .join(",") || ""
+              }
               isDraft={false}
               firstAnnouncement={
                 group.notifications && group.notifications.length > 0
