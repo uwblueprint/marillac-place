@@ -181,27 +181,34 @@ const AnnouncementsView = ({
                 border="1px solid #57469D"
                 backgroundColor="#F9F7FF"
               >
-                <TagLabel textAlign="center"> Room {room}</TagLabel>
+                <TagLabel textAlign="center"> {room === -1? 'All Rooms': `Room ${room}`}</TagLabel>
                 <TagCloseButton
                   onClick={() => deleteRoomSelected(room)}
                   color="#57469D"
                 />
               </Tag>
             ))}
-            <Menu>
-              <MenuButton>
-                <AddCircleOutlineOutlinedIcon sx={{ color: "#57469D" }} />
-              </MenuButton>
-              <MenuList maxH="40vh" overflow="auto">
-                {allRooms
-                  .filter((room) => !selectedRooms.includes(room))
-                  .map((room) => (
-                    <MenuItem onClick={() => addRoomToNewRoom(room)} key={room}>
-                      Room {room}
-                    </MenuItem>
-                  ))}
-              </MenuList>
-            </Menu>
+            {selectedRooms.length === 0 && 
+              <Menu>
+                <MenuButton>
+                  <AddCircleOutlineOutlinedIcon sx={{ color: "#57469D" }} />
+                </MenuButton>
+                <MenuList maxH="40vh" overflow="auto">
+                  {[
+                    <MenuItem onClick={() => addRoomToNewRoom(-1)} key='all-rooms'>
+                        All Rooms
+                    </MenuItem>, 
+                    ...allRooms
+                      .filter((room) => !selectedRooms.includes(room))
+                      .map((room) => (
+                        <MenuItem onClick={() => addRoomToNewRoom(room)} key={room}>
+                          Room {room}
+                        </MenuItem>
+                      ))
+                  ]}
+                </MenuList>
+              </Menu>
+            }
           </HStack>
         </Flex>
       );
