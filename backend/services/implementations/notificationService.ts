@@ -23,10 +23,41 @@ class NotificationService implements INotificationService {
     roomIds: number[],
   ): Promise<NotificationGroupDTO> {
     try {
+      if (roomIds.length == 0) {
+        throw 'No rooms specified.';
+      }
+      if (roomIds.length > 1) { 
+        // enforces that a group can only have one member
+        // remove in the future if the requirements change
+        throw 'Notification Group can only have one room.';
+      }
       const residents = await prisma.resident.findMany({
         where: { roomNumber: { in: roomIds } },
       });
       const residentIds = residents.map((resident) => resident.userId);
+
+      const existingGroup = await prisma.notificationGroup.findMany({
+        where: {
+          announcementGroup: false,
+          recipients: {
+            every: {
+              userId: { in: residentIds },
+            },
+          },
+        },
+        include: {
+          recipients: true,
+        }
+      });
+
+      if (existingGroup && existingGroup.length > 0) {
+        // throw error if residents match
+        existingGroup.forEach((group) => {
+          if (group.recipients.length === residentIds.length) {
+            throw 'Notification Group already exists with specified roomIds.';
+          }
+        });
+      }
 
       const newNotificationGroup = await prisma.notificationGroup.create({
         data: {
@@ -53,6 +84,15 @@ class NotificationService implements INotificationService {
 
   async createAnnouncementGroup(): Promise<NotificationGroupDTO> {
     try {
+      const existingGroup = await prisma.notificationGroup.findMany({
+        where: {
+          announcementGroup: true,
+        },
+      });
+      if (existingGroup && existingGroup.length > 0) {
+        throw 'Announcement Group already exists.';
+      }
+
       const residents = await prisma.resident.findMany({
         where: { dateLeft: null },
       });
