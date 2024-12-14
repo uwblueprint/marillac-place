@@ -37,6 +37,11 @@ class NotificationService implements INotificationService {
       const residents = await prisma.resident.findMany({
         where: { roomNumber: { in: roomIds } },
       });
+      if (residents.length !== roomIds.length) {
+        throw Object.assign(new Error("Room id does not exist."), {
+          code: 400,
+        });
+      }
       const residentIds = residents.map((resident) => resident.userId);
 
       const existingGroup = await prisma.notificationGroup.findMany({

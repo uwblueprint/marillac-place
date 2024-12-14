@@ -204,22 +204,17 @@ const AnnouncementsPage = (): React.ReactElement => {
   ) => {
     try {
       if (selectedIds.length > 1) {
-        throw Object.assign(
-          new Error('Only include one room id.'),
-          { code: 400 }
-        );
+        throw Object.assign(new Error("Only include one room id."), {
+          code: 400,
+        });
       } else if (selectedIds.length === 0) {
-        throw Object.assign(
-          new Error('No rooms selected.'),
-          { code: 400 }
-        );
+        throw Object.assign(new Error("No rooms selected."), { code: 400 });
       }
 
       let newGroup;
       if (selectedIds[0] === -1) {
-        newGroup = (
-          await createAnnouncementGroup({})
-        ).data.createNotificationGroup;
+        newGroup = (await createAnnouncementGroup({})).data
+          .createNotificationGroup;
       } else {
         newGroup = (
           await createNotificationGroup({
@@ -231,8 +226,42 @@ const AnnouncementsPage = (): React.ReactElement => {
       }
 
       await sendNotification(message, newGroup.id, newGroup);
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      if (e.message === "Announcement Group already exists.") {
+        const announcementId = announcements.find(
+          (group) => group.announcementGroup === true,
+        )?.id;
+
+        if (announcementId) {
+          await sendNotification(message, announcementId);
+          setSelectedGroup(announcementId);
+        }
+      } else if (
+        e.message ===
+        "Notification Group already exists with specified roomIds."
+      ) {
+        const groupId = announcements.find((group) => {
+          if (
+            group.recipients &&
+            group.recipients.length === selectedIds.length
+          ) {
+            for (let i = 0; i < group.recipients.length; i += 1) {
+              if (!selectedIds.includes(group.recipients[i].roomNumber)) {
+                return false;
+              }
+            }
+            return true;
+          }
+          return false;
+        })?.id;
+
+        if (groupId) {
+          await sendNotification(message, groupId);
+          setSelectedGroup(groupId);
+        }
+      } else {
+        console.log(e);
+      }
     }
   };
 
