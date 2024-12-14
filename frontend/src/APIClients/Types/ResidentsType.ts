@@ -53,4 +53,4 @@ export type ResidentResponse = {
   credits: number;
   dateJoined: Date;
   dateLeft: Date;
-}
+};

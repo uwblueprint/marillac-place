@@ -142,7 +142,10 @@ const AnnouncementsView = ({
   createNotificationGroupAndSendNotification,
 }: Props): React.ReactElement => {
   const groupInfo = announcements.find((group) => group.id === selectedGroup);
-  const rooms = groupInfo && groupInfo.recipients? groupInfo.recipients.map((recipient) => recipient.roomNumber): [];
+  const rooms =
+    groupInfo && groupInfo.recipients
+      ? groupInfo.recipients.map((recipient) => recipient.roomNumber)
+      : [];
   const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
 
   const addRoomToNewRoom = (roomId: number) => {
@@ -181,34 +184,43 @@ const AnnouncementsView = ({
                 border="1px solid #57469D"
                 backgroundColor="#F9F7FF"
               >
-                <TagLabel textAlign="center"> {room === -1? 'All Rooms': `Room ${room}`}</TagLabel>
+                <TagLabel textAlign="center">
+                  {" "}
+                  {room === -1 ? "All Rooms" : `Room ${room}`}
+                </TagLabel>
                 <TagCloseButton
                   onClick={() => deleteRoomSelected(room)}
                   color="#57469D"
                 />
               </Tag>
             ))}
-            {selectedRooms.length === 0 && 
+            {selectedRooms.length === 0 && (
               <Menu>
                 <MenuButton>
                   <AddCircleOutlineOutlinedIcon sx={{ color: "#57469D" }} />
                 </MenuButton>
                 <MenuList maxH="40vh" overflow="auto">
                   {[
-                    <MenuItem onClick={() => addRoomToNewRoom(-1)} key='all-rooms'>
-                        All Rooms
-                    </MenuItem>, 
+                    <MenuItem
+                      onClick={() => addRoomToNewRoom(-1)}
+                      key="all-rooms"
+                    >
+                      All Rooms
+                    </MenuItem>,
                     ...allRooms
                       .filter((room) => !selectedRooms.includes(room))
                       .map((room) => (
-                        <MenuItem onClick={() => addRoomToNewRoom(room)} key={room}>
+                        <MenuItem
+                          onClick={() => addRoomToNewRoom(room)}
+                          key={room}
+                        >
                           Room {room}
                         </MenuItem>
-                      ))
+                      )),
                   ]}
                 </MenuList>
               </Menu>
-            }
+            )}
           </HStack>
         </Flex>
       );
@@ -219,12 +231,12 @@ const AnnouncementsView = ({
   const getHeader = () => {
     if (selectedGroup === "" || selectedGroup === "0") {
       return formatHeader(rooms);
-    } 
+    }
     if (groupInfo?.announcementGroup) {
-      return 'All Rooms';
-    } 
+      return "All Rooms";
+    }
     return formatRooms(rooms);
-  }
+  };
 
   return (
     <Box h="100vh" w="100%">
@@ -238,9 +250,7 @@ const AnnouncementsView = ({
           justifyContent="space-between"
           h="10vh"
         >
-          <h1 style={{ fontSize: "24px", margin: "0" }}>
-            {getHeader()}
-          </h1>
+          <h1 style={{ fontSize: "24px", margin: "0" }}>{getHeader()}</h1>
           <IconButton
             aria-label="info"
             color="purple.main"

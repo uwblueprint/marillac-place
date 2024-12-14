@@ -46,7 +46,8 @@ export const formatRooms = (roomIDs: number[]) => {
   const formattedRooms = roomIDs.map((id) => {
     if (id === 0) {
       return "New Announcement";
-    } if (id === -1) {
+    }
+    if (id === -1) {
       return "All Rooms";
     }
     return `Room ${id}`;
@@ -107,7 +108,7 @@ const GroupTab = ({
         <Flex flexDir="column" w="100%">
           <Flex justifyContent="space-between">
             <Text as="b" color={isDraft ? "gray.500" : "black"}>
-              {announcementGroup? 'All Rooms': formatRooms(rooms)}
+              {announcementGroup ? "All Rooms" : formatRooms(rooms)}
             </Text>
             <Text margin="0" color="gray.500">
               {firstAnnouncement

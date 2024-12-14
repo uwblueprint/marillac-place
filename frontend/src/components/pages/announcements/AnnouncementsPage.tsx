@@ -62,12 +62,6 @@ const AnnouncementsPage = (): React.ReactElement => {
   //   userId: number;
   // }>(SEND_ANNOUNCEMENT);
 
-  const {
-    loading: allNotificationsLoading,
-    error: allNotificationsError,
-    data: allNotificationsData,
-  } = useQuery(GET_ALL_GROUPS_AND_NOTIFICATIONS);
-
   // const {
   //   loading: notificationByIdLoading,
   //   error: notificationByIdError,
@@ -145,6 +139,12 @@ const AnnouncementsPage = (): React.ReactElement => {
     }
 ]
   */
+
+  const {
+    loading: allNotificationsLoading,
+    error: allNotificationsError,
+    data: allNotificationsData,
+  } = useQuery(GET_ALL_GROUPS_AND_NOTIFICATIONS);
 
   const [sendNotificationToGroup] = useMutation(SEND_NOTIFICATION_TO_GROUP);
   const [createNotificationGroup] = useMutation(CREATE_NOTIFICATION_GROUP);
