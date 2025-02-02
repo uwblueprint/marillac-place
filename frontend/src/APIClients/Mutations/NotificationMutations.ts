@@ -1,58 +1,92 @@
 import { gql } from "@apollo/client";
 
-export const SEND_NOTIFICATION = gql`
-  mutation SendNotification(
-    $authorId: ID!
-    $title: String!
-    $message: String!
-    $recipientIds: [ID!]
-  ) {
-    sendNotification(
-      authorId: $authorId
-      title: $title
-      message: $message
-      recipientIds: $recipientIds
-    ) {
+export const CREATE_NOTIFICATION_GROUP = gql`
+  mutation CreateNotificationGroup($roomIds: [Int!]) {
+    createNotificationGroup(roomIds: $roomIds) {
       id
-      authorId
-      title
-      message
-      createdAt
+      announcementGroup
+      recipients {
+        userId
+        residentId
+        roomNumber
+        credits
+        dateJoined
+        dateLeft
+      }
     }
   }
 `;
 
-export const DELETE_USER_NOTIFICATION = gql`
-  mutation DeleteUserNotification($notificationId: ID!) {
-    deleteUserNotification(notificationId: $notificationId) {
+export const CREATE_ANNOUNCEMENT_GROUP = gql`
+  mutation CreateAnnouncementGroup {
+    createAnnouncementGroup {
       id
-      authorId
-      title
+      announcementGroup
+      recipients {
+        userId
+        residentId
+        roomNumber
+        credits
+        dateJoined
+        dateLeft
+      }
+    }
+  }
+`;
+
+export const SEND_NOTIFICATION_TO_GROUP = gql`
+  mutation SendNotificationToGroup(
+    $groupId: ID!
+    $notification: CreateNotificationDTO!
+  ) {
+    sendNotificationToGroup(groupId: $groupId, notification: $notification) {
+      id
       message
       createdAt
+      authorId
     }
+  }
+`;
+
+export const DELETE_NOTIFICATION_GROUP = gql`
+  mutation DeleteNotificationGroup($groupId: ID!) {
+    deleteNotificationGroup(groupId: $groupId) {
+      id
+      announcementGroup
+    }
+  }
+`;
+
+export const UPDATE_NOTIFICATION_BY_ID = gql`
+  mutation UpdateNotificationById(
+    $notificationId: ID!
+    $notification: UpdateNotificationDTO!
+  ) {
+    updateNotificationById(
+      notificationId: $notificationId
+      notification: $notification
+    ) {
+      id
+      message
+      createdAt
+      authorId
+    }
+  }
+`;
+
+export const DELETE_NOTIFICATION_BY_IDS = gql`
+  mutation DeleteNotificationByIds($notificationIds: [ID!]) {
+    deleteNotificationByIds(notificationIds: $notificationIds)
   }
 `;
 
 export const UPDATE_SEEN_NOTIFICATION = gql`
-  mutation UpdateSeenNotification($notificationId: ID!) {
-    updateSeenNotification(notificationId: $notificationId) {
+  mutation UpdateSeenNotification($notificationSeenId: ID!) {
+    updateSeenNotification(notificationSeenId: $notificationSeenId) {
       id
       notificationId
       recipientId
       seen
-    }
-  }
-`;
-
-export const SEND_ANNOUNCEMENT = gql`
-  mutation SendAnnouncement($title: String, $message: String, $userId: ID) {
-    sendAnnouncement(title: $title, message: $message, userId: $userId) {
-      id
-      authorId
-      title
-      message
-      createdAt
     }
   }
 `;

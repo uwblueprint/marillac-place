@@ -23,10 +23,54 @@ class NotificationService implements INotificationService {
     roomIds: number[],
   ): Promise<NotificationGroupDTO> {
     try {
+      if (roomIds.length === 0) {
+        throw Object.assign(new Error("No rooms specified."), { code: 400 });
+      }
+      if (roomIds.length > 1) {
+        // enforces that a group can only have one member
+        // remove in the future if the requirements change
+        throw Object.assign(
+          new Error("Notification Group can only have one room."),
+          { code: 400 },
+        );
+      }
       const residents = await prisma.resident.findMany({
         where: { roomNumber: { in: roomIds } },
       });
+      if (residents.length !== roomIds.length) {
+        throw Object.assign(new Error("Room id does not exist."), {
+          code: 400,
+        });
+      }
       const residentIds = residents.map((resident) => resident.userId);
+
+      const existingGroup = await prisma.notificationGroup.findMany({
+        where: {
+          announcementGroup: false,
+          recipients: {
+            every: {
+              userId: { in: residentIds },
+            },
+          },
+        },
+        include: {
+          recipients: true,
+        },
+      });
+
+      if (existingGroup && existingGroup.length > 0) {
+        // throw error if residents match
+        existingGroup.forEach((group) => {
+          if (group.recipients.length === residentIds.length) {
+            throw Object.assign(
+              new Error(
+                "Notification Group already exists with specified roomIds.",
+              ),
+              { code: 400 },
+            );
+          }
+        });
+      }
 
       const newNotificationGroup = await prisma.notificationGroup.create({
         data: {
@@ -34,6 +78,9 @@ class NotificationService implements INotificationService {
             connect: residentIds.map((id) => ({ userId: id })),
           },
           announcementGroup: false,
+        },
+        include: {
+          recipients: true,
         },
       });
 
@@ -50,6 +97,17 @@ class NotificationService implements INotificationService {
 
   async createAnnouncementGroup(): Promise<NotificationGroupDTO> {
     try {
+      const existingGroup = await prisma.notificationGroup.findMany({
+        where: {
+          announcementGroup: true,
+        },
+      });
+      if (existingGroup && existingGroup.length > 0) {
+        throw Object.assign(new Error("Announcement Group already exists."), {
+          code: 400,
+        });
+      }
+
       const residents = await prisma.resident.findMany({
         where: { dateLeft: null },
       });
@@ -61,6 +119,9 @@ class NotificationService implements INotificationService {
             connect: residentIds.map((id) => ({ userId: id })),
           },
           announcementGroup: true,
+        },
+        include: {
+          recipients: true,
         },
       });
 
@@ -143,7 +204,7 @@ class NotificationService implements INotificationService {
     try {
       const notificationGroups = await prisma.notificationGroup.findMany({
         include: {
-          // recipients: true, // TODO: resident type is incompatiable at time of writing
+          recipients: true,
           notifications: true,
         },
       });

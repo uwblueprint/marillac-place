@@ -30,11 +30,15 @@ import {
   GroupAnnouncements,
 } from "../../../types/NotificationTypes";
 import { truncateMessage } from "../../../utils/StringUtils";
+import {
+  NotificationGroupResponse,
+  NotificationResponse,
+} from "../../../APIClients/Types/NotificationType";
 
 interface ProcessedGroupAnnouncements {
-  all: GroupAnnouncements;
-  private: GroupAnnouncements;
-  groups: GroupAnnouncements;
+  all: NotificationGroupResponse[];
+  private: NotificationGroupResponse[];
+  groups: NotificationGroupResponse[];
 }
 
 export const formatRooms = (roomIDs: number[]) => {
@@ -43,6 +47,9 @@ export const formatRooms = (roomIDs: number[]) => {
     if (id === 0) {
       return "New Announcement";
     }
+    if (id === -1) {
+      return "All Rooms";
+    }
     return `Room ${id}`;
   });
   // Join the formatted room strings with commas
@@ -50,14 +57,18 @@ export const formatRooms = (roomIDs: number[]) => {
 };
 
 const GroupTab = ({
+  roomId,
   roomKey,
+  announcementGroup,
   firstAnnouncement,
   setSelectedGroup,
   isDraft,
   selectedRooms,
 }: {
+  roomId: string;
   roomKey: string;
-  firstAnnouncement: Announcement | null;
+  announcementGroup: boolean;
+  firstAnnouncement: NotificationResponse | null;
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
   isDraft: boolean;
   selectedRooms?: number[] | null;
@@ -69,7 +80,7 @@ const GroupTab = ({
 
   return (
     <Box
-      onClick={() => setSelectedGroup(roomKey)}
+      onClick={() => setSelectedGroup(roomId)}
       w="100%"
       p={3}
       borderBottom="solid"
@@ -97,7 +108,7 @@ const GroupTab = ({
         <Flex flexDir="column" w="100%">
           <Flex justifyContent="space-between">
             <Text as="b" color={isDraft ? "gray.500" : "black"}>
-              {formatRooms(rooms)}
+              {announcementGroup ? "All Rooms" : formatRooms(rooms)}
             </Text>
             <Text margin="0" color="gray.500">
               {firstAnnouncement
@@ -119,7 +130,7 @@ const GroupTab = ({
 };
 
 const GroupList: React.FC<{
-  announcements: GroupAnnouncements;
+  announcements: NotificationGroupResponse[];
   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
   addingNewRoom: boolean;
   setAddingNewRoom: React.Dispatch<React.SetStateAction<boolean>>;
@@ -138,35 +149,51 @@ const GroupList: React.FC<{
 
   useEffect(() => {
     const processedData: ProcessedGroupAnnouncements = {
-      all: {},
-      private: {},
-      groups: {},
+      all: [],
+      private: [],
+      groups: [],
     };
-    Object.keys(announcements).forEach((key) => {
-      const rooms = key.split(",").map((room) => parseInt(room.trim(), 10));
-      const announcementData = announcements[key];
-
-      if (rooms.length === 1) {
-        // Add announcement to 'all' and 'private' if there is only 1 room
-        processedData.all[key] = announcementData;
-        processedData.private[key] = announcementData;
+    announcements?.forEach((group) => {
+      processedData.all.push(group);
+      console.log(group);
+      if (
+        group.recipients &&
+        group.recipients.length <= 1 &&
+        !group.announcementGroup
+      ) {
+        processedData.private.push(group);
       } else {
-        // Add announcement to 'all' and 'groups' if there are more than 1 room
-        processedData.all[key] = announcementData;
-        processedData.groups[key] = announcementData;
+        processedData.groups.push(group);
       }
     });
+
+    // Object.keys(announcements).forEach((key) => {
+    //   const rooms = key.split(",").map((room) => parseInt(room.trim(), 10));
+    //   const announcementData = announcements[key];
+
+    //   if (rooms.length === 1) {
+    //     // Add announcement to 'all' and 'private' if there is only 1 room
+    //     processedData.all[key] = announcementData;
+    //     processedData.private[key] = announcementData;
+    //   } else {
+    //     // Add announcement to 'all' and 'groups' if there are more than 1 room
+    //     processedData.all[key] = announcementData;
+    //     processedData.groups[key] = announcementData;
+    //   }
+    // });
 
     setProcessedAnnouncements(processedData);
   }, [announcements]);
 
-  const renderGroupTabs = (announcementsGroup: GroupAnnouncements) => {
+  const renderGroupTabs = (announcementsGroup: NotificationGroupResponse[]) => {
     return (
       announcementsGroup &&
       [
         addingNewRoom ? (
           <GroupTab
             key={null}
+            announcementGroup={false}
+            roomId="0"
             roomKey="0"
             firstAnnouncement={null}
             setSelectedGroup={setSelectedGroup}
@@ -177,21 +204,29 @@ const GroupList: React.FC<{
           <></>
         ),
       ].concat(
-        Object.keys(announcementsGroup)
+        announcementsGroup
           .filter(
-            (roomKey) =>
-              !searchRooms ||
-              searchRooms.length === 0 ||
-              searchRooms.some((room) =>
-                roomKey.split(",").map(Number).includes(room),
-              ),
+            (group) => !searchRooms || searchRooms.length === 0,
+            // || searchRooms.some((room) =>
+            //   roomKey.split(",").map(Number).includes(room),
+            // ),
           )
-          .map((roomKey) => (
+          .map((group) => (
             <GroupTab
-              key={roomKey}
-              roomKey={roomKey}
+              key={group.id}
+              announcementGroup={group.announcementGroup}
+              roomId={group.id}
+              roomKey={
+                group.recipients
+                  ?.map((resident) => resident.roomNumber)
+                  .join(",") || ""
+              }
               isDraft={false}
-              firstAnnouncement={announcementsGroup[roomKey][0]}
+              firstAnnouncement={
+                group.notifications && group.notifications.length > 0
+                  ? group.notifications[0]
+                  : null
+              }
               setSelectedGroup={setSelectedGroup}
             />
           )),

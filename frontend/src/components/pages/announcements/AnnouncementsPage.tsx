@@ -10,24 +10,33 @@ import AnnouncementsView from "./AnnouncementsView";
 import { announcementsMockData } from "../../../mocks/notifications";
 
 import {
-  SEND_NOTIFICATION,
-  DELETE_USER_NOTIFICATION,
+  CREATE_NOTIFICATION_GROUP,
+  CREATE_ANNOUNCEMENT_GROUP,
+  SEND_NOTIFICATION_TO_GROUP,
+  DELETE_NOTIFICATION_GROUP,
+  UPDATE_NOTIFICATION_BY_ID,
+  DELETE_NOTIFICATION_BY_IDS,
   UPDATE_SEEN_NOTIFICATION,
-  SEND_ANNOUNCEMENT,
 } from "../../../APIClients/Mutations/NotificationMutations";
 
 import {
-  GET_NOTIFCATION_BY_ID,
-  GET_NOTIFICATIONS_BY_USER_ID,
+  GET_NOTIFICATIONS_BY_IDS,
+  GET_NOTIFCATION_BY_RESIDENT,
+  GET_ALL_GROUPS_AND_NOTIFICATIONS,
 } from "../../../APIClients/Queries/NotificationQueries";
 
 import {
   NotificationResponse,
-  NotificationReceived,
+  NotificationUpdateRequest,
+  NotificationCreateRequest,
+  NotificationGroupResponse,
+  NotificationReceivedResponse,
 } from "../../../APIClients/Types/NotificationType";
 
 const AnnouncementsPage = (): React.ReactElement => {
-  const [announcements, setAnnouncements] = useState<GroupAnnouncements>({});
+  const [announcements, setAnnouncements] = useState<
+    NotificationGroupResponse[]
+  >([]);
   const [selectedGroup, setSelectedGroup] = useState<string>("");
   const [addingNewRoom, setAddingNewRoom] = useState<boolean>(false);
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
@@ -52,14 +61,6 @@ const AnnouncementsPage = (): React.ReactElement => {
   //   message: string;
   //   userId: number;
   // }>(SEND_ANNOUNCEMENT);
-
-  // const {
-  //   loading: notificationsByUserIdLoading,
-  //   error: notificationsByUserIdError,
-  //   data: notificationsByUserIdData,
-  // } = useQuery<{ userId: string }>(GET_NOTIFICATIONS_BY_USER_ID, {
-  //   variables: { userId: "4" },
-  // });
 
   // const {
   //   loading: notificationByIdLoading,
@@ -120,27 +121,175 @@ const AnnouncementsPage = (): React.ReactElement => {
   //   }
   // };
 
+  /*
+[
+    {
+        "__typename": "NotificationGroupDTO",
+        "id": "1",
+        "announcementGroup": true,
+        "notifications": [],
+        "recipients": null
+    },
+    {
+        "__typename": "NotificationGroupDTO",
+        "id": "34",
+        "announcementGroup": false,
+        "notifications": [],
+        "recipients": null
+    }
+]
+  */
+
+  const {
+    loading: allNotificationsLoading,
+    error: allNotificationsError,
+    data: allNotificationsData,
+  } = useQuery(GET_ALL_GROUPS_AND_NOTIFICATIONS);
+
+  const [sendNotificationToGroup] = useMutation(SEND_NOTIFICATION_TO_GROUP);
+  const [createNotificationGroup] = useMutation(CREATE_NOTIFICATION_GROUP);
+  const [createAnnouncementGroup] = useMutation(CREATE_ANNOUNCEMENT_GROUP);
+
+  const sendNotification = async (
+    message: string,
+    groupId: string,
+    newGroup?: NotificationGroupResponse,
+  ) => {
+    try {
+      const newNotification: NotificationResponse = (
+        await sendNotificationToGroup({
+          variables: {
+            groupId,
+            notification: {
+              message,
+              // TODO: add author id
+            },
+          },
+        })
+      ).data.sendNotificationToGroup;
+
+      if (!newGroup) {
+        setAnnouncements((currentAnnouncements) =>
+          currentAnnouncements.map((group) => {
+            if (group.id === groupId) {
+              return {
+                ...group,
+                notifications: group.notifications
+                  ? [...group.notifications, newNotification]
+                  : [newNotification],
+              };
+            }
+            return group;
+          }),
+        );
+      } else {
+        setAnnouncements((currentAnnouncements) => [
+          ...currentAnnouncements,
+          {
+            ...newGroup,
+            notifications: newGroup.notifications
+              ? [...newGroup.notifications, newNotification]
+              : [newNotification],
+          },
+        ]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const createNotificationGroupAndSendNotification = async (
+    selectedIds: number[],
+    message: string,
+  ) => {
+    try {
+      if (selectedIds.length > 1) {
+        throw Object.assign(new Error("Only include one room id."), {
+          code: 400,
+        });
+      } else if (selectedIds.length === 0) {
+        throw Object.assign(new Error("No rooms selected."), { code: 400 });
+      }
+
+      let newGroup;
+      if (selectedIds[0] === -1) {
+        newGroup = (await createAnnouncementGroup({})).data
+          .createNotificationGroup;
+      } else {
+        newGroup = (
+          await createNotificationGroup({
+            variables: {
+              roomIds: selectedIds,
+            },
+          })
+        ).data.createNotificationGroup;
+      }
+
+      await sendNotification(message, newGroup.id, newGroup);
+    } catch (e: any) {
+      if (e.message === "Announcement Group already exists.") {
+        const announcementId = announcements.find(
+          (group) => group.announcementGroup === true,
+        )?.id;
+
+        if (announcementId) {
+          await sendNotification(message, announcementId);
+          setSelectedGroup(announcementId);
+        }
+      } else if (
+        e.message ===
+        "Notification Group already exists with specified roomIds."
+      ) {
+        const groupId = announcements.find((group) => {
+          if (
+            group.recipients &&
+            group.recipients.length === selectedIds.length
+          ) {
+            for (let i = 0; i < group.recipients.length; i += 1) {
+              if (!selectedIds.includes(group.recipients[i].roomNumber)) {
+                return false;
+              }
+            }
+            return true;
+          }
+          return false;
+        })?.id;
+
+        if (groupId) {
+          await sendNotification(message, groupId);
+          setSelectedGroup(groupId);
+        }
+      } else {
+        console.log(e);
+      }
+    }
+  };
+
   useEffect(() => {
     // TODO: Fetch announcements from API
-    const combinedAnnouncements: GroupAnnouncements = {};
-    Object.entries(announcementsMockData).forEach(([key, value]) => {
-      for (let i = 0; i < value.length; i += 1) {
-        const newAnnouncement: Announcement = {
-          room: key,
-          author: value[i].author,
-          message: value[i].message,
-          createdAt: value[i].createdAt,
-        };
-        // check if alr exists, if not create new
-        if (!combinedAnnouncements[key]) {
-          combinedAnnouncements[key] = [];
-        }
-        combinedAnnouncements[key].push(newAnnouncement);
-      }
-    });
+    if (allNotificationsData) {
+      setAnnouncements(allNotificationsData.getAllGroupsAndNotifications);
+    }
 
-    setAnnouncements(combinedAnnouncements);
-  }, []);
+    // const combinedAnnouncements: GroupAnnouncements = {};
+    // Object.entries(announcementsMockData).forEach(([key, value]) => {
+    //   for (let i = 0; i < value.length; i += 1) {
+    //     const newAnnouncement: Announcement = {
+    //       room: key,
+    //       author: value[i].author,
+    //       message: value[i].message,
+    //       createdAt: value[i].createdAt,
+    //     };
+    //     // check if alr exists, if not create new
+    //     if (!combinedAnnouncements[key]) {
+    //       combinedAnnouncements[key] = [];
+    //     }
+    //     combinedAnnouncements[key].push(newAnnouncement);
+    //   }
+    // });
+
+    // setAnnouncements(combinedAnnouncements);
+  }, [allNotificationsData]);
 
   return (
     <Flex flexDir="column" flexGrow={1}>
@@ -159,6 +308,10 @@ const AnnouncementsPage = (): React.ReactElement => {
           setAddingNewRoom={setAddingNewRoom}
           selectedRooms={selectedRooms}
           setSelectedRooms={setSelectedRooms}
+          sendNotification={sendNotification}
+          createNotificationGroupAndSendNotification={
+            createNotificationGroupAndSendNotification
+          }
         />
       </Flex>
     </Flex>

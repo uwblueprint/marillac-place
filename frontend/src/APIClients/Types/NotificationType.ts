@@ -1,15 +1,36 @@
+import { ResidentResponse } from "./ResidentsType";
+
 export type NotificationResponse = {
   id: string;
-  authorId?: string;
-  title: string;
   message: string;
-  createdAt: Date;
-  recipients?: [NotificationReceived];
+  createdAt?: Date;
+  authorId?: string;
+  recipients?: NotificationReceivedResponse[];
 };
 
-export type NotificationReceived = {
+export type NotificationCreateRequest = {
+  message: string;
+  createdAt?: Date;
+  authorId?: string;
+};
+
+export type NotificationUpdateRequest = {
+  message?: string;
+  createdAt?: Date;
+  authorId?: string;
+};
+
+export type NotificationGroupResponse = {
+  id: string;
+  recipients?: ResidentResponse[];
+  notifications?: NotificationResponse[];
+  announcementGroup: boolean;
+};
+
+export type NotificationReceivedResponse = {
   id: string;
   notificationId: string;
+  notification?: NotificationResponse;
   recipientId: number;
   seen: boolean;
 };
