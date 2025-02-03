@@ -54,7 +54,7 @@ const columnTypes: ColumnInfoTypes[] = [
   },
 ];
 
-const ResidentsPage = (): React.ReactElement => {
+const ParticipantsPage = (): React.ReactElement => {
   const [residents, setResidents] = useState<TableData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState("none");
   const [residentEditInfo, setEditInfo] = useState<ResidentEditInfo>();
@@ -208,4 +208,4 @@ const ResidentsPage = (): React.ReactElement => {
   );
 };
 
-export default ResidentsPage;
+export default ParticipantsPage;

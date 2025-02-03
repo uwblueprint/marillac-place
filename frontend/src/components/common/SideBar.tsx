@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-import * as Routes from "../../constants/Routes";
+import * as Routes from "../../constants/routes";
 import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import AuthContext from "../../contexts/AuthContext";
