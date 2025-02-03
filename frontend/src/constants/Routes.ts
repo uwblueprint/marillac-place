@@ -8,4 +8,3 @@ export const SCHEDULE_PAGE = "/schedule";
 
 export const PARTICIPANTS_PAGE = "/participants";
 
-export const INSIGHTS_PAGE = "/insights";
