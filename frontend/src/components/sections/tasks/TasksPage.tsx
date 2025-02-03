@@ -19,7 +19,7 @@ import {
   DELETE_TASK,
   ASSIGN_TASK,
   CHANGE_TASK_STATUS,
-} from "../../../APIClients/Mutations/TaskMutations";
+} from "../../../gql/mutations/TaskMutations";
 
 import {
   GET_TASK_BY_ID,
@@ -28,7 +28,7 @@ import {
   GET_TASKS_BY_ASSIGNER_ID,
   GET_TASKS_BY_START_DATE,
   GET_TASKS_BY_STATUS,
-} from "../../../APIClients/Queries/TaskQueries";
+} from "../../../gql/queries/TaskQueries";
 
 import {
   Status,
@@ -39,7 +39,7 @@ import {
   TaskRequest,
   TaskAssignedRequest,
   TaskAssignedResponse,
-} from "../../../APIClients/Types/TaskType";
+} from "../../../types/Types/TaskType";
 import TaskModal from "./TaskModal";
 import {
   TaskType,

@@ -17,13 +17,13 @@ import {
   UPDATE_NOTIFICATION_BY_ID,
   DELETE_NOTIFICATION_BY_IDS,
   UPDATE_SEEN_NOTIFICATION,
-} from "../../../APIClients/Mutations/NotificationMutations";
+} from "../../../gql/mutations/NotificationMutations";
 
 import {
   GET_NOTIFICATIONS_BY_IDS,
   GET_NOTIFCATION_BY_RESIDENT,
   GET_ALL_GROUPS_AND_NOTIFICATIONS,
-} from "../../../APIClients/Queries/NotificationQueries";
+} from "../../../gql/queries/NotificationQueries";
 
 import {
   NotificationResponse,
@@ -31,7 +31,7 @@ import {
   NotificationCreateRequest,
   NotificationGroupResponse,
   NotificationReceivedResponse,
-} from "../../../APIClients/Types/NotificationType";
+} from "../../../types/Types/NotificationType";
 
 const AnnouncementsPage = (): React.ReactElement => {
   const [announcements, setAnnouncements] = useState<

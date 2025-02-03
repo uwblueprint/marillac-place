@@ -19,7 +19,7 @@ import {
   // GET_RESIDENTS_BY_ID,
   GET_ALL_RESIDENTS,
   // GET_ACTIVE_RESIDENTS,
-} from "../../../APIClients/Queries/ResidentsQueries";
+} from "../../../gql/queries/ResidentsQueries";
 
 // import {
 //   UserResponse,
