@@ -8,10 +8,7 @@ import {
 } from "react-router-dom";
 
 import * as Routes from "./constants/Routes";
-import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
-import { AuthenticatedUser } from "./types/AuthTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
-import AuthContext from "./contexts/AuthContext";
 import SampleContext, {
   DEFAULT_SAMPLE_CONTEXT,
 } from "./contexts/SampleContext";
@@ -24,10 +21,6 @@ import buttonTheme from "./theme/buttons";
 import tabsTheme from "./theme/tabs";
 import { inputTheme, textareaTheme } from "./theme/inputs";
 
-import PrivateRoute from "./components/auth/PrivateRoute";
-import LoginPage from "./components/auth/LoginPage";
-import SignupPage from "./components/auth/SignupPage";
-import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 import HomePage from "./components/pages/home/HomePage";
 import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import TasksPage from "./components/pages/tasks/TasksPage";
@@ -37,12 +30,6 @@ import InsightsPage from "./components/pages/insights/InsightsPage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 
 const App = (): React.ReactElement => {
-  const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
-    AUTHENTICATED_USER_KEY,
-  );
-
-  const [authenticatedUser, setAuthenticatedUser] =
-    useState<AuthenticatedUser>(currentUser);
 
   // Some sort of global state. Context API replaces redux.
   // Split related states into different contexts as necessary.
@@ -69,69 +56,47 @@ const App = (): React.ReactElement => {
         <SampleContextDispatcherContext.Provider
           value={dispatchSampleContextUpdate}
         >
-          <AuthContext.Provider
-            value={{ authenticatedUser, setAuthenticatedUser }}
-          >
             <Router>
               <Switch>
-                <Route path={Routes.LOGIN_PAGE} element={<LoginPage />} />
-                <Route path={Routes.SIGNUP_PAGE} element={<SignupPage />} />
-                <Route
-                  path={Routes.RESET_PASSWORD_PAGE}
-                  element={<ResetPasswordPage />}
-                />
                 <Route
                   path={Routes.HOME_PAGE}
                   element={
-                    <PrivateRoute>
                       <HomePage />
-                    </PrivateRoute>
                   }
                 />
                 <Route
                   path={Routes.ANNOUNCEMENTS_PAGE}
                   element={
-                    <PrivateRoute>
                       <AnnouncementsPage />
-                    </PrivateRoute>
                   }
                 />
                 <Route
                   path={Routes.TASKS_PAGE}
                   element={
-                    <PrivateRoute>
                       <TasksPage />
-                    </PrivateRoute>
                   }
                 />
                 <Route
                   path={Routes.SCHEDULE_PAGE}
                   element={
-                    <PrivateRoute>
                       <SchedulePage />
-                    </PrivateRoute>
                   }
                 />
                 <Route
                   path={Routes.PARTICIPANTS_PAGE}
                   element={
-                    <PrivateRoute>
                       <ResidentsPage />
-                    </PrivateRoute>
                   }
                 />
                 <Route
                   path={Routes.INSIGHTS_PAGE}
                   element={
-                    <PrivateRoute>
                       <InsightsPage />
-                    </PrivateRoute>
                   }
                 />
                 <Route path="*" element={<NotFoundPage />} />
               </Switch>
             </Router>
-          </AuthContext.Provider>
         </SampleContextDispatcherContext.Provider>
       </SampleContext.Provider>
     </ChakraProvider>

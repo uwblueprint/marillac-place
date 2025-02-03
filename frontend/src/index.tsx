@@ -6,8 +6,6 @@ import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
 import { jwtDecode } from "jwt-decode";
 
-import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
-import { AuthenticatedUser, DecodedJWT } from "./types/AuthTypes";
 import {
   getLocalStorageObjProperty,
   setLocalStorageObjProperty,
@@ -29,35 +27,7 @@ const link = createUploadLink({
 });
 
 const authLink = setContext(async (_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  let token: string | null = getLocalStorageObjProperty<
-    NonNullable<AuthenticatedUser>,
-    string
-  >(AUTHENTICATED_USER_KEY, "accessToken");
-  if (token) {
-    const decodedToken = jwtDecode(token) as DecodedJWT;
-
-    // refresh if decodedToken has expired
-    if (
-      decodedToken &&
-      (typeof decodedToken === "string" ||
-        decodedToken.exp <= Math.round(new Date().getTime() / 1000))
-    ) {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/graphql`,
-        { query: REFRESH_MUTATION },
-        { withCredentials: true },
-      );
-
-      const accessToken: string = data.data.refresh;
-      setLocalStorageObjProperty(
-        AUTHENTICATED_USER_KEY,
-        "accessToken",
-        accessToken,
-      );
-      token = accessToken;
-    }
-  }
+  let token = null;
   // return the headers to the context so httpLink can read them
   return {
     headers: {

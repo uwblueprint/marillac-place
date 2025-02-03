@@ -6,14 +6,6 @@ import {
   resolvers as scalarResolvers,
 } from "graphql-scalars";
 
-// import { UserType } from "../prisma";
-// import {
-//   isAuthorizedByEmail,
-//   isAuthorizedByUserType,
-//   isAuthorizedByUserId,
-// } from "../middlewares/auth";
-import authResolvers from "./resolvers/authResolvers";
-import authType from "./types/authType";
 import notificationResolvers from "./resolvers/notificationResolvers";
 import notificationType from "./types/notificationType";
 import staffResolvers from "./resolvers/staffResolver";
@@ -40,7 +32,6 @@ const executableSchema = makeExecutableSchema({
     ...scalarTypeDefs,
     query,
     mutation,
-    authType,
     notificationType,
     staffType,
     residentType,
@@ -48,7 +39,6 @@ const executableSchema = makeExecutableSchema({
   ],
   resolvers: merge(
     scalarResolvers,
-    authResolvers,
     notificationResolvers,
     staffResolvers,
     residentResolvers,
@@ -79,10 +69,6 @@ const graphQLMiddlewares = {
     // getTasksByStatus: authorizedByAllUserTypes(),
   },
   Mutation: {
-    // login: isAuthorizedByEmail("email"),
-    // refresh: isAuthorizedByEmail("email"),
-    // logout: isAuthorizedByUserId("userId"),
-    // resetPassword: isAuthorizedByEmail("email"),
     // sendNotification: authorizedByAllUserTypes(),
     // deleteUserNotification: authorizedByStaff(),
     // updateSeenNotification: authorizedByAllUserTypes(),
