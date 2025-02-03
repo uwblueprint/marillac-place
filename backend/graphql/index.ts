@@ -22,8 +22,6 @@ import residentResolvers from "./resolvers/residentResolvers";
 import residentType from "./types/residentType";
 import taskResolvers from "./resolvers/taskResolvers";
 import taskType from "./types/taskType";
-import warningResolvers from "./resolvers/warningResolvers";
-import warningType from "./types/warningType";
 
 const query = gql`
   type Query {
@@ -47,7 +45,6 @@ const executableSchema = makeExecutableSchema({
     staffType,
     residentType,
     taskType,
-    warningType,
   ],
   resolvers: merge(
     scalarResolvers,
@@ -56,7 +53,6 @@ const executableSchema = makeExecutableSchema({
     staffResolvers,
     residentResolvers,
     taskResolvers,
-    warningResolvers,
   ),
 });
 
@@ -103,8 +99,6 @@ const graphQLMiddlewares = {
     // deleteTask: authorizedByAllUserTypes(),
     // assignTask: authorizedByStaff(),
     // changeTaskStatus: authorizedByStaff(),
-    // addWarning: authorizedByStaff(),
-    // deleteWarning: authorizedByStaff(),
   },
 };
 
