@@ -5,173 +5,59 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // uncomment this for neon db
-  // directUrl = env("DIRECT_URL")
 }
 
-enum UserType {
-  STAFF
-  RESIDENT
-}
-
-model User {
-  id                Int       @id @default(autoincrement())
-  type              UserType
-  staff             Staff?
-  resident          Resident?
-  authId            String    @unique @map("auth_id")
-  displayName       String?   @map("display_name")
-  profilePictureURL String?   @map("profile_picture_url")
-
-  @@map("users")
-}
-
-model Staff {
-  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId            Int            @id @map("user_id")
-  email             String         @unique @map("email")
-  phoneNumber       String?        @unique @map("phone_number")
-  firstName         String         @map("first_name")
-  lastName          String         @map("last_name")
-  isAdmin           Boolean        @default(false) @map("is_admin")
-  tasksAssigned     TaskAssigned[]
-  warningsAssigned  Warning[]
-  NotificationsSent Notification[]
-
-  @@map("staff")
-}
-
-model Resident {
-  user                 User                   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId               Int                    @id @map("user_id")
-  residentId           Int                    @unique @map("resident_id") // Differs from user id, this id is assigned by the staff
-  roomNumber           Int                    @map("room_number")
-  credits              Float                  @default(0)
-  dateJoined           DateTime               @default(now()) @map("date_joined") @db.Date
-  dateLeft             DateTime?              @map("date_left") @db.Date
-  tasks                TaskAssigned[]
-  warnings             Warning[]
-  notificationGroup    NotificationGroup[]
-  notificationRecieved NotificationReceived[]
-
-  @@map("residents")
+enum StaffType {
+  ADMIN
+  RELIEF
 }
 
 enum TaskType {
   REQUIRED
   OPTIONAL
   CHORE
-  ACHIEVEMENT
 }
 
-enum DaysOfWeek {
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
-  SUNDAY
-}
-
-enum RecurrenceFrequency {
-  ONE_TIME
-  REPEATS_PER_WEEK_SELECTED
-  REPEATS_PER_WEEK_ONCE
-}
-
-model Task {
-  id                  Int                 @id @default(autoincrement())
-  type                TaskType
-  title               String
-  description         String?
-  creditValue         Float               @map("credit_value")
-  // location            TaskLocation        @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  // locationId          Int                 @map("location_id")
-  tasksAssigned       TaskAssigned[]
-  relatedWarnings     Warning[]
-  endDate             DateTime?           @map("end_date")
-  recurrenceFrequency RecurrenceFrequency @map("recurrence_frequency")
-  specificDay         DaysOfWeek?         @map("specific_day") // used for one time tasks
-  repeatDays          DaysOfWeek[]        @map("repeat_days") // used for repeating tasks
-
-  @@map("tasks")
-}
-
-// model TaskLocation {
-//   id          Int    @id @default(autoincrement())
-//   title       String
-//   description String
-//   tasks       Task[]
-
-//   @@map("task_locations")
-// }
-
-model TaskAssigned {
-  id         Int      @id @default(autoincrement())
-  task       Task     @relation(fields: [taskId], references: [id])
-  taskId     Int      @map("task_id")
-  assigner   Staff?   @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
-  assignerId Int?     @map("assigner_id")
-  assignee   Resident @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  assigneeId Int      @map("assignee_id")
-  status     Status
-  startDate  DateTime @map("start_date")
-  comments   String?
-
-  @@map("tasks_assigned")
-}
-
-enum Status {
-  PENDING_APPROVAL
+enum TaskStatus {
   ASSIGNED
   INCOMPLETE
   COMPLETE
   EXCUSED
 }
 
-model Warning {
-  id            Int      @id @default(autoincrement())
-  assigner      Staff?   @relation(fields: [assignerId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
-  assignerId    Int?     @map("assigner_id")
-  assignee      Resident @relation(fields: [assigneeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  assigneeId    Int      @map("resident_id")
-  relatedTask   Task?    @relation(fields: [relatedTaskId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  relatedTaskId Int?     @map("related_task_id")
-  title         String
-  description   String
-  dateIssued    DateTime @default(now()) @map("date_issued") @db.Date
+model Participant {
+  participant_id    Int           @id
+  room_number       Int
+  arrival           DateTime
+  departure         DateTime?
+  is_active         Boolean       
+  password          String
+  credit_earned     Int           @default(0)
 
-  @@map("warnings")
+  @@map("participants")
 }
 
-model NotificationGroup {
-  id                Int            @id @default(autoincrement())
-  recipients        Resident[]
-  notifications     Notification[]
-  announcementGroup Boolean
+model Announcement {
+  announcement_id   Int           @id @default(autoincrement())
+  from              StaffType     
+  to                Int[]         
+  createdAt         DateTime
+  message           String
+
+  @@map("announcements")
 }
 
-model Notification {
-  id                   Int                    @id @default(autoincrement())
-  message              String
-  createdAt            DateTime               @default(now()) @map("created_at") @db.Date
-  author               Staff?                 @relation(fields: [authorId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
-  authorId             Int?                   @map("author_id")
-  group                NotificationGroup      @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId              Int                    @map("group_id")
-  notificationReceived NotificationReceived[]
+model Task {
+  task_id           Int           @id @default(autoincrement())
+  room_number       Int?
+  type              TaskType
+  status            TaskStatus  
+  name              String
+  is_recurring      Boolean
+  start             DateTime
+  end               DateTime
+  credit            Int
+  comment           String?
 
-  @@map("notifications")
-}
-
-model NotificationReceived {
-  id             Int          @id @default(autoincrement())
-  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  notificationId Int          @map("notification_id")
-  recipient      Resident     @relation(fields: [recipientId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  recipientId    Int          @map("recipient_id")
-  seen           Boolean      @default(false)
-
-  @@map("notifications_received")
+  @@map("tasks")
 }
