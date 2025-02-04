@@ -6,43 +6,22 @@ import {
   resolvers as scalarResolvers,
 } from "graphql-scalars";
 
-import notificationResolvers from "./resolvers/notificationResolvers";
-import notificationType from "./types/notificationType";
-import staffResolvers from "./resolvers/staffResolver";
-import staffType from "./types/staffType";
-import residentResolvers from "./resolvers/residentResolvers";
-import residentType from "./types/residentType";
-import taskResolvers from "./resolvers/taskResolvers";
-import taskType from "./types/taskType";
+import helloResolver from "./resolvers/helloResolver";
 
-const query = gql`
-  type Query {
-    _empty: String
-  }
-`;
-
-const mutation = gql`
-  type Mutation {
-    _empty: String
-  }
-`;
+import dataModels from "./types/dataModels";
+import customTypes from "./types/customTypes";
+import resolverTypes from "./types/resolverTypes";
 
 const executableSchema = makeExecutableSchema({
   typeDefs: [
     ...scalarTypeDefs,
-    query,
-    mutation,
-    notificationType,
-    staffType,
-    residentType,
-    taskType,
+    dataModels,
+    customTypes,
+    resolverTypes,
   ],
   resolvers: merge(
     scalarResolvers,
-    notificationResolvers,
-    staffResolvers,
-    residentResolvers,
-    taskResolvers,
+    helloResolver
   ),
 });
 

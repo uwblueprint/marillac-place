@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,13 +17,14 @@ import buttonTheme from "./theme/buttons";
 import tabsTheme from "./theme/tabs";
 import { inputTheme, textareaTheme } from "./theme/inputs";
 
-import HomePage from "./components/sections/home/HomePage";
-import SchedulePage from "./components/sections/schedule/SchedulePage";
-import AnnouncementsPage from "./components/sections/announcements/AnnouncementsPage";
-import ParticipantsPage from "./components/sections/participants/ParticipantsPage";
-import TasksPage from "./components/sections/tasks/TasksPage";
+import HelloPage from "./components/pages/hello/HelloPage";
+// import HomePage from "./components/pages/home/HomePage";
+// import SchedulePage from "./components/pages/schedule/SchedulePage";
+// import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
+// import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
+// import TasksPage from "./components/pages/tasks/TasksPage";
 import NotFoundPage from "./components/common/NotFoundPage";
-import * as Routes from "./constants/routes";
+import * as ROUTES from "./constants/routes";
 
 const App = (): React.ReactElement => {
   const theme = extendTheme({
@@ -55,7 +56,7 @@ const App = (): React.ReactElement => {
 
   const apolloClient = new ApolloClient({
     link: header.concat(endpoint as any),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
   });
 
   return (
@@ -63,11 +64,18 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Switch>
-            <Route path={Routes.HOME_PAGE} element={<HomePage />} />
-            <Route path={Routes.SCHEDULE_PAGE} element={<SchedulePage />} />
-            <Route path={Routes.ANNOUNCEMENTS_PAGE} element={<AnnouncementsPage />} />
-            <Route path={Routes.PARTICIPANTS_PAGE} element={<ParticipantsPage />} />
-            <Route path={Routes.TASKS_PAGE} element={<TasksPage />} />
+            <Route path={ROUTES.HELLO_PAGE} element={<HelloPage />} />
+            {/* <Route path={ROUTES.HOME_PAGE} element={<HomePage />} />
+            <Route path={ROUTES.SCHEDULE_PAGE} element={<SchedulePage />} />
+            <Route
+              path={ROUTES.ANNOUNCEMENTS_PAGE}
+              element={<AnnouncementsPage />}
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_PAGE}
+              element={<ParticipantsPage />}
+            />
+            <Route path={ROUTES.TASKS_PAGE} element={<TasksPage />} /> */}
             <Route path="*" element={<NotFoundPage />} />
           </Switch>
         </Router>
@@ -77,4 +85,3 @@ const App = (): React.ReactElement => {
 };
 
 export default App;
-

@@ -16,8 +16,6 @@ import { useNavigate } from "react-router-dom";
 
 import * as Routes from "../../constants/routes";
 import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
-import authAPIClient from "../../gql/AuthAPIClient";
-import AuthContext from "../../contexts/AuthContext";
 
 const mockAuthenticatedUser = {
   id: "1",
@@ -26,12 +24,6 @@ const mockAuthenticatedUser = {
   firstName: "Jane",
   lastName: "Doe",
 };
-
-const LOGOUT = gql`
-  mutation Logout($userId: ID!) {
-    logout(userId: $userId)
-  }
-`;
 
 const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
   label,
@@ -58,20 +50,6 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
 
 const SideBar: React.FC = () => {
   const navigate = useNavigate();
-  // const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
-  const { setAuthenticatedUser } = useContext(AuthContext); // Temp
-  const authenticatedUser = mockAuthenticatedUser; // Temp
-  const [logout] = useMutation<{ logout: null }>(LOGOUT);
-
-  const onLogOutClick = async () => {
-    const success = await authAPIClient.logout(
-      String(authenticatedUser?.id),
-      logout,
-    );
-    if (success) {
-      setAuthenticatedUser(null);
-    }
-  };
 
   const pages = [
     { label: "Home", route: Routes.HOME_PAGE },
@@ -148,7 +126,6 @@ const SideBar: React.FC = () => {
 
             <Button
               variant="del"
-              onClick={onLogOutClick}
               border="1px solid #C5C8D8"
               color="#B21D2F"
               fontWeight={400}

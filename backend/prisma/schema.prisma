@@ -19,6 +19,7 @@ enum TaskType {
 }
 
 enum TaskStatus {
+  UNASSIGNED
   ASSIGNED
   INCOMPLETE
   COMPLETE
