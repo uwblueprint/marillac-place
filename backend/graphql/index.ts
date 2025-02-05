@@ -8,9 +8,9 @@ import {
 
 import helloResolver from "./resolvers/helloResolver";
 
-import dataModels from "./types/dataModels";
-import customTypes from "./types/customTypes";
-import resolverTypes from "./types/resolverTypes";
+import dataModels from "./types/models";
+import customTypes from "./types/enums";
+import resolverTypes from "./types/resolvers";
 
 const executableSchema = makeExecutableSchema({
   typeDefs: [
