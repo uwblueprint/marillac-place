@@ -5,14 +5,8 @@ const helloService: IHelloService = new HelloService();
 
 const helloResolver = {
     Query: {
-        hello: (
-            _parent: undefined, {
-                name,
-            } : {
-                name: string;
-            }
-        ): string => {
-            return helloService.hello(name);
+        hello: (_parent: undefined): string => {
+            return helloService.hello();
         },
     }
 };

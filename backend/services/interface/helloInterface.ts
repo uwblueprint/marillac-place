@@ -1,5 +1,5 @@
 interface IHelloService {
-    hello(name: string): string;
+    hello(): string;
 }
  
 export default IHelloService;

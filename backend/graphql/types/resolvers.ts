@@ -2,7 +2,7 @@ import { gql } from "apollo-server-express";
 
 const resolverTypes = gql`
   type Query {
-    hello(name: String): String!
+    hello: String!
   }
 
   type Mutation {
