@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Input,
@@ -8,45 +8,43 @@ import {
   InputRightElement,
   InputGroup,
   InputLeftElement,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const FormField = ({
-  label,
-  value,
-  type = "text",
-  onChange,
-  onBlur,
-  submitPressed,
-  required = false,
-  error = false,
-  isPassword = false,
-  showPassword,
-  setShowPassword,
-  leftElement,
-}: {
+type FormInputFieldProps = {
   label: string;
+  placeholder?: string;
   value: string | number | undefined;
-  type?: string;
+  type: "text" | "password" | "date" | "number";
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: () => void;
-  submitPressed: boolean;
   required?: boolean;
-  error?: boolean;
-  isPassword?: boolean;
-  showPassword?: boolean;
-  setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
+  error?: string;
   leftElement?: string;
-}) => (
-  <Flex flexDir="column" flex="1">
-    <FormControl isRequired={required}>
+}
+
+const FormInputField = ({
+  label,
+  placeholder = "", 
+  value,
+  type,
+  onChange,
+  required = false,
+  error = "",
+  leftElement = "",
+}: FormInputFieldProps): React.ReactElement => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <FormControl isRequired={required} isInvalid={error !== ""}>
       {label && (
         <FormLabel mb="5px" color="gray.main" fontWeight="700">
           {label}
         </FormLabel>
       )}
+
       <InputGroup>
         {leftElement && (
           <InputLeftElement height="34px" pointerEvents="none" color="black">
@@ -55,33 +53,24 @@ const FormField = ({
         )}
 
         <Input
-          variant="primary"
-          placeholder=""
-          borderColor={
-            error || (submitPressed && !value && required)
-              ? "red.error"
-              : "gray.300"
-          }
-          boxShadow={
-            error || (submitPressed && !value && required)
-              ? "0 0 2px red.error"
-              : "none"
-          }
-          type={
-            isPassword && setShowPassword && !showPassword ? "password" : type
-          }
+          variant="outline"
+          placeholder={placeholder}
+          type={type === "password" && showPassword ? "text" : type}
           value={value}
           onChange={onChange}
-          onBlur={onBlur}
+          borderWidth="2px"
+          borderColor="gray.300"
+          errorBorderColor="red.300"
         />
-        {isPassword && setShowPassword && (
+
+        {type === "password" && (
           <InputRightElement h="34px">
             <Button
               onClick={() => setShowPassword(!showPassword)}
               bg="transparent"
               _hover={{ bg: "transparent" }}
             >
-              {!showPassword ? (
+              {showPassword ? (
                 <VisibilityIcon fontSize="small" />
               ) : (
                 <VisibilityOffIcon fontSize="small" />
@@ -90,8 +79,10 @@ const FormField = ({
           </InputRightElement>
         )}
       </InputGroup>
+      
+      {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
-  </Flex>
-);
+  )
+};
 
-export default FormField;
+export default FormInputField;

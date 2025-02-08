@@ -1,4 +1,4 @@
-export const HELLO_PAGE = "/hello";
+export const LOGIN_PAGE = "/login"
 
 export const HOME_PAGE = "/";
 

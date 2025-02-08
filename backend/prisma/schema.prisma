@@ -15,31 +15,30 @@ enum StaffType {
 enum TaskType {
   REQUIRED
   OPTIONAL
-  CHORE
 }
 
 enum TaskStatus {
   UNASSIGNED
   ASSIGNED
   INCOMPLETE
+  PENDING
   COMPLETE
   EXCUSED
 }
 
 model Participant {
-  participant_id    Int           @id
-  room_number       Int
-  arrival           DateTime
-  departure         DateTime?
-  is_active         Boolean       
+  participantId     String        @id
+  roomNumber        Int
+  arrival           String
+  departure         String?     
   password          String
-  credit_earned     Int           @default(0)
+  credit            Int           @default(0)
 
   @@map("participants")
 }
 
 model Announcement {
-  announcement_id   Int           @id @default(autoincrement())
+  announcementId    Int           @id @default(autoincrement())
   from              StaffType     
   to                Int[]         
   createdAt         DateTime
@@ -49,12 +48,12 @@ model Announcement {
 }
 
 model Task {
-  task_id           Int           @id @default(autoincrement())
-  room_number       Int?
+  taskId            Int           @id @default(autoincrement())
+  roomNumber        Int?
   type              TaskType
   status            TaskStatus  
   name              String
-  is_recurring      Boolean
+  isRecurring       Boolean
   start             DateTime
   end               DateTime
   credit            Int

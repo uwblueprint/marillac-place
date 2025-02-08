@@ -1,11 +1,11 @@
 // import { Status, TaskType } from "../../prisma";
-// import TaskService from "../../services/implementation/taskService";
+// import TaskService from "../../services/implementations/taskService";
 // import ITaskService, {
 //   TaskDTO,
 //   InputTaskDTO,
 //   InputTaskAssignedDTO,
 //   TaskAssignedDTO,
-// } from "../../services/interface/taskService";
+// } from "../../services/interfaces/taskService";
 
 // const taskService: ITaskService = new TaskService();
 

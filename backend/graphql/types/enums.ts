@@ -9,13 +9,13 @@ const customTypes = gql`
   enum TaskType {
     REQUIRED
     OPTIONAL
-    CHORE
   }
 
   enum TaskStatus {
     UNASSIGNED
     ASSIGNED
     INCOMPLETE
+    PENDING
     COMPLETE
     EXCUSED
   }

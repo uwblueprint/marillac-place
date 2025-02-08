@@ -1,13 +1,13 @@
-// import NotificationService from "../../services/implementation/announcementImplementation";
+// import NotificationService from "../../services/implementations/notificationService";
 // import INotificationService, {
 //   NotificationDTO,
 //   NotificationGroupDTO,
 //   NotificationReceivedDTO,
 //   UpdateNotificationDTO,
 //   CreateNotificationDTO,
-// } from "../../services/interface/notificationService";
-// import IResidentService from "../../services/interface/residentService";
-// import ResidentService from "../../services/implementation/residentService";
+// } from "../../services/interfaces/notificationService";
+// import IResidentService from "../../services/interfaces/residentService";
+// import ResidentService from "../../services/implementations/residentService";
 
 // const residentService: IResidentService = new ResidentService();
 // const notificationService: INotificationService = new NotificationService(

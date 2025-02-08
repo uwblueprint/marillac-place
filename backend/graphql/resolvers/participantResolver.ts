@@ -1,12 +1,49 @@
-// import ResidentService from "../../services/implementation/residentService";
+import ParticipantService from "../../services/implementation/participantImplementation";
+import IParticipantService from "../../services/interface/participantInterface";
+import { Participant } from "@prisma/client";
+
+const participantService: IParticipantService = new ParticipantService();
+const participantResolvers = {
+  Query: {
+    getAllParticipants: async (): Promise<Participant[]> => {
+      return participantService.getAllParticipants();
+    },
+    getParticipantById: async (
+      _parent: undefined,
+      { participantId }: { participantId: string },
+    ): Promise<Participant | null> => {
+      return participantService.getParticipantById(participantId);
+    },
+  },
+  Mutation: {
+    createParticipant: async (
+      _parent: undefined,
+      {
+        participantId, 
+        roomNumber,
+        arrival,
+        password
+      } : {
+        participantId: string;
+        roomNumber: number;
+        arrival: string;
+        password: string;
+      }
+    ): Promise<boolean> => {
+      return participantService.createParticipant(participantId, roomNumber, arrival, password);
+      
+    }
+  }
+};
+
+export default participantResolvers;
+
 // import IResidentService, {
 //   ResidentDTO,
 //   CreateResidentDTO,
 //   UpdateResidentDTO,
 //   RedeemCreditsResponse,
 // } from "../../services/interface/residentService";
-
-// const residentService: IResidentService = new ResidentService();
 
 // const residentResolvers = {
 //   Query: {
@@ -69,5 +106,3 @@
 //     },
 //   },
 // };
-
-// export default residentResolvers;

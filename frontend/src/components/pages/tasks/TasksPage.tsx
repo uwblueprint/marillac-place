@@ -20,7 +20,7 @@ export {}
 //   DELETE_TASK,
 //   ASSIGN_TASK,
 //   CHANGE_TASK_STATUS,
-// } from "../../../gql/mutations/TaskMutations";
+// } from "../../../APIClients/Mutations/TaskMutations";
 
 // import {
 //   GET_TASK_BY_ID,
@@ -29,7 +29,7 @@ export {}
 //   GET_TASKS_BY_ASSIGNER_ID,
 //   GET_TASKS_BY_START_DATE,
 //   GET_TASKS_BY_STATUS,
-// } from "../../../gql/queries/TaskQueries";
+// } from "../../../APIClients/Queries/TaskQueries";
 
 // import {
 //   Status,
@@ -40,7 +40,7 @@ export {}
 //   TaskRequest,
 //   TaskAssignedRequest,
 //   TaskAssignedResponse,
-// } from "../../../types/Types/TaskType";
+// } from "../../../APIClients/Types/TaskType";
 // import TaskModal from "./TaskModal";
 // import {
 //   TaskType,

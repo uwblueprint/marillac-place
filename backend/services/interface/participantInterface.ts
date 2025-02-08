@@ -1,8 +1,9 @@
+import { Participant } from "@prisma/client";
+
 interface IParticipantService {
-  // getParticipant(request: RequestType, ...): ResponseType;
-  // createParticipant(request: RequestType, ...): ResponseType;  
-  // updateParticipant(request: RequestType, ...): ResponseType; 
-  // deleteParticipant(request: RequestType, ...): ResponseType; 
+  getAllParticipants(): Promise<Participant[]>;
+  getParticipantById(participantId: string): Promise<Participant | null>;
+  createParticipant(participantId: string, roomNumber: number, arrival: string, password: string): Promise<boolean>;
 }
 
 export default IParticipantService;

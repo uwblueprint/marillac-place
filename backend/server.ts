@@ -4,7 +4,6 @@ import express from "express";
 
 import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql";
-
 const CORS_ALLOW_LIST = [
   "http://localhost:3000",
   "https://uw-blueprint-starter-code.firebaseapp.com",

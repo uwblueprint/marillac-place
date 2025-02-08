@@ -2,11 +2,13 @@ import { gql } from "apollo-server-express";
 
 const resolverTypes = gql`
   type Query {
-    hello: String!
+    getAllParticipants: [Participant]
+    getParticipantById(participantId: String): Participant
+    getAvailableRooms: [Int]
   }
 
   type Mutation {
-    _empty: String
+    createParticipant(participantId: String, roomNumber: Int, arrival: String, password: String): Boolean
   }
 `;
 
