@@ -1,0 +1,88 @@
+import React, { useState } from "react";
+import {
+  Button,
+  Input,
+  Flex,
+  FormControl,
+  FormLabel,
+  InputRightElement,
+  InputGroup,
+  InputLeftElement,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
+type FormInputFieldProps = {
+  label: string;
+  placeholder?: string;
+  value: string | number | undefined;
+  type: "text" | "password" | "date" | "number";
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+  error?: string;
+  leftElement?: string;
+};
+
+const FormInputField = ({
+  label,
+  placeholder = "",
+  value,
+  type,
+  onChange,
+  required = false,
+  error = "",
+  leftElement = "",
+}: FormInputFieldProps): React.ReactElement => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <FormControl isRequired={required} isInvalid={error !== ""}>
+      {label && (
+        <FormLabel mb="5px" color="gray.main" fontWeight="700">
+          {label}
+        </FormLabel>
+      )}
+
+      <InputGroup>
+        {leftElement && (
+          <InputLeftElement height="34px" pointerEvents="none" color="black">
+            <Flex>{leftElement}</Flex>
+          </InputLeftElement>
+        )}
+
+        <Input
+          variant="outline"
+          placeholder={placeholder}
+          type={type === "password" && showPassword ? "text" : type}
+          value={value}
+          onChange={onChange}
+          borderWidth="2px"
+          borderColor="gray.300"
+          errorBorderColor="red.300"
+        />
+
+        {type === "password" && (
+          <InputRightElement h="34px">
+            <Button
+              onClick={() => setShowPassword(!showPassword)}
+              bg="transparent"
+              _hover={{ bg: "transparent" }}
+            >
+              {showPassword ? (
+                <VisibilityIcon fontSize="small" />
+              ) : (
+                <VisibilityOffIcon fontSize="small" />
+              )}
+            </Button>
+          </InputRightElement>
+        )}
+      </InputGroup>
+
+      {error && <FormErrorMessage>{error}</FormErrorMessage>}
+    </FormControl>
+  );
+};
+
+export default FormInputField;

@@ -1,13 +1,4 @@
-import {
-  PrismaClient,
-  UserType,
-  TaskType,
-  Status,
-  RecurrenceFrequency,
-  DaysOfWeek,
-} from "@prisma/client";
-
-export { UserType, TaskType, Status, RecurrenceFrequency, DaysOfWeek };
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 

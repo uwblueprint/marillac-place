@@ -24,11 +24,11 @@ import ModalContainer from "./ModalContainer";
 
 type TableTypes = string | number | boolean | Date | string[];
 
-export type ColumnInfoTypes = { header: string; key: string };
-
 export interface TableData {
   [key: string]: TableTypes;
 }
+
+export type ColumnInfoTypes = { header: string; key: string };
 
 type Props = {
   data: TableData[];

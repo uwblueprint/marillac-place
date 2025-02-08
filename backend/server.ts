@@ -1,7 +1,6 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
-import * as firebaseAdmin from "firebase-admin";
 
 import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql";
@@ -38,17 +37,6 @@ server.applyMiddleware({
   app,
   path: "/graphql",
   cors: { origin: CORS_ALLOW_LIST, credentials: true },
-});
-
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    privateKey: process.env.FIREBASE_SVC_ACCOUNT_PRIVATE_KEY?.replace(
-      /\\n/g,
-      "\n",
-    ),
-    clientEmail: process.env.FIREBASE_SVC_ACCOUNT_CLIENT_EMAIL,
-  }),
 });
 
 app.listen({ port: process.env.PORT || 5000 }, () => {
