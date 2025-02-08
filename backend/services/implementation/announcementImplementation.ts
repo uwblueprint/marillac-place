@@ -1,11 +1,3 @@
-import IAnnouncementService from "../interface/announcementInterface";
-
-class AnnouncementService implements IAnnouncementService {
-
-}
-
-export default IAnnouncementService;
-
 // import prisma from "../../prisma";
 // import INotificationService, {
 //   NotificationDTO,

@@ -1,9 +1,3 @@
-interface IAnnouncementService {
-
-}
-
-export default IAnnouncementService;
-
 // import type { ResidentDTO } from "./residentService";
 
 // export interface NotificationDTO {

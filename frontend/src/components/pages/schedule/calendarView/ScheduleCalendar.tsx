@@ -1,4 +1,4 @@
-export {}
+export {};
 // import FullCalendar from "@fullcalendar/react";
 // import timeGridPlugin from "@fullcalendar/timegrid";
 // import { DayHeaderContentArg, EventContentArg } from "@fullcalendar/core";

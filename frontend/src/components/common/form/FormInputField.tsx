@@ -23,11 +23,11 @@ type FormInputFieldProps = {
   required?: boolean;
   error?: string;
   leftElement?: string;
-}
+};
 
 const FormInputField = ({
   label,
-  placeholder = "", 
+  placeholder = "",
   value,
   type,
   onChange,
@@ -79,10 +79,10 @@ const FormInputField = ({
           </InputRightElement>
         )}
       </InputGroup>
-      
+
       {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
-  )
+  );
 };
 
 export default FormInputField;

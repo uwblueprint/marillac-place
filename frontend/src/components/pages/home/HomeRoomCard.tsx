@@ -1,4 +1,4 @@
-export {}
+export {};
 // import React from "react";
 // import { Flex, Heading, Text, Box, Circle } from "@chakra-ui/react";
 

@@ -1,4 +1,4 @@
-export {}
+export {};
 // import React, { useState } from "react";
 // import moment from "moment";
 // import { Box, Text, Flex, Icon, IconButton } from "@chakra-ui/react";

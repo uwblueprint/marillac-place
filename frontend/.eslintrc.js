@@ -32,7 +32,7 @@ module.exports = {
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "no-nested-ternary": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
   },
   ignorePatterns: ["build/*"],
 };

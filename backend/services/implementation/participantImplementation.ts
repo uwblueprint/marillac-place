@@ -1,15 +1,12 @@
-import prisma from "../../prisma";
 import { Participant } from "@prisma/client";
+import prisma from "../../prisma";
 import IParticipantService from "../interface/participantInterface";
 
 class ParticipantService implements IParticipantService {
   async getAllParticipants(): Promise<Participant[]> {
     try {
       const participants = await prisma.participant.findMany({
-        orderBy: [
-          { departure: "asc" },
-          { arrival: "desc" }
-        ]
+        orderBy: [{ departure: "asc" }, { arrival: "desc" }],
       });
       return participants;
     } catch (err) {
@@ -20,11 +17,13 @@ class ParticipantService implements IParticipantService {
 
   async getParticipantById(participantId: string): Promise<Participant | null> {
     try {
-      const participant: Participant | null = await prisma.participant.findUnique({
-        where: {
-          participantId: participantId
-        }
-      });
+      const participant: Participant | null = await prisma.participant.findUnique(
+        {
+          where: {
+            participantId,
+          },
+        },
+      );
       return participant;
     } catch (err) {
       console.log(err);
@@ -32,14 +31,19 @@ class ParticipantService implements IParticipantService {
     }
   }
 
-  async createParticipant(participantId: string, roomNumber: number, arrival: string, password: string): Promise<boolean> {
+  async createParticipant(
+    participantId: string,
+    roomNumber: number,
+    arrival: string,
+    password: string,
+  ): Promise<boolean> {
     try {
       await prisma.participant.create({
         data: {
           participantId,
           roomNumber,
           arrival,
-          password
+          password,
         },
       });
       return true;

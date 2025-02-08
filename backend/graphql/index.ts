@@ -1,4 +1,4 @@
-import { makeExecutableSchema, gql } from "apollo-server-express";
+import { makeExecutableSchema } from "apollo-server-express";
 import { merge } from "lodash";
 // import { applyMiddleware } from "graphql-middleware";
 
@@ -6,7 +6,6 @@ import {
   typeDefs as scalarTypeDefs,
   resolvers as scalarResolvers,
 } from "graphql-scalars";
-
 
 import dataModels from "./types/models";
 import customTypes from "./types/enums";
@@ -16,17 +15,8 @@ import participantResolvers from "./resolvers/participantResolver";
 import miscResolvers from "./resolvers/miscResolver";
 
 const schema = makeExecutableSchema({
-  typeDefs: [
-    ...scalarTypeDefs,
-    dataModels,
-    customTypes,
-    resolverTypes,
-  ],
-  resolvers: merge(
-    scalarResolvers,
-    participantResolvers,
-    miscResolvers
-  ),
+  typeDefs: [...scalarTypeDefs, dataModels, customTypes, resolverTypes],
+  resolvers: merge(scalarResolvers, participantResolvers, miscResolvers),
 });
 
 export default schema;

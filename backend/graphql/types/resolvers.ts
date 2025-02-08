@@ -8,7 +8,12 @@ const resolverTypes = gql`
   }
 
   type Mutation {
-    createParticipant(participantId: String, roomNumber: Int, arrival: String, password: String): Boolean
+    createParticipant(
+      participantId: String
+      roomNumber: Int
+      arrival: String
+      password: String
+    ): Boolean
   }
 `;
 

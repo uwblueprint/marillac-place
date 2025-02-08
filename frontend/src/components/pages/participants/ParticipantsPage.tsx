@@ -6,7 +6,7 @@ import {
   Icon,
   InputGroup,
   InputLeftElement,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
 
@@ -40,7 +40,8 @@ const columnTypes: ColumnInfoTypes[] = [
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
-  const [addParticipantCardOpened, setAddParticipantCardOpened] = useState(false);
+  const [addParticipantCardOpened, setAddParticipantCardOpened] =
+    useState(false);
   // const [isModalOpen, setIsModalOpen] = useState("none");
 
   // const [addResident] = useMutation<{ addResident: UserResponse }>(
@@ -114,7 +115,11 @@ const ParticipantsPage = (): React.ReactElement => {
   //   data: residentActiveData,
   // } = useQuery(GET_ACTIVE_RESIDENTS);
 
-  const { loading: getAllParticipantsLoading, error: getAllParticipantsError, data: getAllParticipantsData } = useQuery(GET_ALL_PARTICIPANTS);
+  const {
+    loading: getAllParticipantsLoading,
+    error: getAllParticipantsError,
+    data: getAllParticipantsData,
+  } = useQuery(GET_ALL_PARTICIPANTS);
 
   // const handleResidentEdit = (row: any) => {
   //   setIsModalOpen("edit");
@@ -155,26 +160,26 @@ const ParticipantsPage = (): React.ReactElement => {
             Add Participant
           </Button>
         </Flex>
-        {
-          getAllParticipantsLoading ? (
-            <Spinner />
-          ) : getAllParticipantsError ? (
-            <Flex p="10px">{getAllParticipantsError.message}</Flex>
-          ) : getAllParticipantsData.getAllParticipants ? (
-            <CommonTable
-              data={getAllParticipantsData.getAllParticipants.map((participant: TableData) => ({
+        {getAllParticipantsLoading ? (
+          <Spinner />
+        ) : getAllParticipantsError ? (
+          <Flex p="10px">{getAllParticipantsError.message}</Flex>
+        ) : getAllParticipantsData.getAllParticipants ? (
+          <CommonTable
+            data={getAllParticipantsData.getAllParticipants.map(
+              (participant: TableData) => ({
                 participantId: participant.participantId,
                 roomNumber: participant.roomNumber,
                 arrival: participant.arrival,
                 departure: participant.departure || "",
-              }))}
-              columnInfo={columnTypes}
-              onEdit={() => {}}
-            />
-          ) : (
-            <Flex p="10px">No participants found.</Flex>
-          )
-        }
+              }),
+            )}
+            columnInfo={columnTypes}
+            onEdit={() => {}}
+          />
+        ) : (
+          <Flex p="10px">No participants found.</Flex>
+        )}
 
         <AddParticipantCard
           isOpen={addParticipantCardOpened}

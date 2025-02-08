@@ -1,11 +1,3 @@
-import ITaskService from "../interface/taskInterface";
-
-class TaskService implements ITaskService {
-
-}
-
-export default TaskService;
-
 // import prisma, { TaskType, Status } from "../../prisma";
 // import ITaskService, {
 //   InputTaskDTO,

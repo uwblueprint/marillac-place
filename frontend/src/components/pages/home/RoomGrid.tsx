@@ -1,4 +1,4 @@
-export {}
+export {};
 // import React, { useEffect, useState } from "react";
 // import { Flex, Grid } from "@chakra-ui/react";
 // import { useQuery } from "@apollo/client";

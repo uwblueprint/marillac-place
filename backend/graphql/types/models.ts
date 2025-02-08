@@ -2,18 +2,18 @@ import { gql } from "apollo-server-express";
 
 const dataModels = gql`
   type Participant {
-    participantId: String!          
+    participantId: String!
     roomNumber: Int!
     arrival: String!
-    departure: String     
+    departure: String
     password: String!
-    credit: Int!    
+    credit: Int!
   }
 
   type Announcement {
     announcementId: Int!
-    from: StaffType!    
-    to: [Int!]!         
+    from: StaffType!
+    to: [Int!]!
     createdAt: DateTime!
     message: String!
   }
@@ -22,7 +22,7 @@ const dataModels = gql`
     taskId: Int!
     roomNumber: Int
     type: TaskType!
-    status: TaskStatus!  
+    status: TaskStatus!
     name: String!
     isRecurring: Boolean!
     start: DateTime!

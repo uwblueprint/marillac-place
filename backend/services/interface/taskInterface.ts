@@ -1,11 +1,3 @@
-import { Task } from "@prisma/client";
-
-interface ITaskService {
-
-}
-
-export default ITaskService;
-
 // import {
 //   TaskType,
 //   Status,

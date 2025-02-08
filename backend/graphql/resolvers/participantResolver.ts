@@ -1,6 +1,6 @@
+import { Participant } from "@prisma/client";
 import ParticipantService from "../../services/implementation/participantImplementation";
 import IParticipantService from "../../services/interface/participantInterface";
-import { Participant } from "@prisma/client";
 
 const participantService: IParticipantService = new ParticipantService();
 const participantResolvers = {
@@ -19,21 +19,25 @@ const participantResolvers = {
     createParticipant: async (
       _parent: undefined,
       {
-        participantId, 
+        participantId,
         roomNumber,
         arrival,
-        password
-      } : {
+        password,
+      }: {
         participantId: string;
         roomNumber: number;
         arrival: string;
         password: string;
-      }
+      },
     ): Promise<boolean> => {
-      return participantService.createParticipant(participantId, roomNumber, arrival, password);
-      
-    }
-  }
+      return participantService.createParticipant(
+        participantId,
+        roomNumber,
+        arrival,
+        password,
+      );
+    },
+  },
 };
 
 export default participantResolvers;

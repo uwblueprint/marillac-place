@@ -1,4 +1,4 @@
-export {}
+export {};
 // import { ColumnInfoTypes } from "../../../common/CommonTable";
 
 // export const tasksColumnTypes: ColumnInfoTypes[] = [

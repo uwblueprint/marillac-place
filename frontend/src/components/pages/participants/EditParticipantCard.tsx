@@ -1,4 +1,4 @@
-export {}
+export {};
 // import React, { useState } from "react";
 // import { Button, Text, Flex } from "@chakra-ui/react";
 // import ModalContainer from "../../common/ModalContainer";
