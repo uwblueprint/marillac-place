@@ -17,13 +17,13 @@ import buttonTheme from "./theme/buttons";
 import tabsTheme from "./theme/tabs";
 import { inputTheme, textareaTheme } from "./theme/inputs";
 
+import * as ROUTES from "./constants/routes";
 // import HomePage from "./components/pages/home/HomePage";
 // import SchedulePage from "./components/pages/schedule/SchedulePage";
 // import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
 // import TasksPage from "./components/pages/tasks/TasksPage";
 import NotFoundPage from "./components/common/NotFoundPage";
-import * as ROUTES from "./constants/routes";
 
 const App = (): React.ReactElement => {
   const theme = extendTheme({
