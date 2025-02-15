@@ -17,6 +17,16 @@ enum TaskType {
   OPTIONAL
 }
 
+enum DaysOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
 enum TaskStatus {
   UNASSIGNED
   ASSIGNED
@@ -54,6 +64,7 @@ model Task {
   status            TaskStatus  
   name              String
   isRecurring       Boolean
+  repeatDays        DaysOfWeek
   start             DateTime
   end               DateTime
   credit            Int

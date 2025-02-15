@@ -17,12 +17,12 @@ import buttonTheme from "./theme/buttons";
 import tabsTheme from "./theme/tabs";
 import { inputTheme, textareaTheme } from "./theme/inputs";
 
-import * as ROUTES from "./constants/routes";
+import * as ROUTES from "./constants/Routes";
 // import HomePage from "./components/pages/home/HomePage";
 // import SchedulePage from "./components/pages/schedule/SchedulePage";
 // import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
-// import TasksPage from "./components/pages/tasks/TasksPage";
+import TasksPage from "./components/pages/tasks/TasksPage";
 import NotFoundPage from "./components/common/NotFoundPage";
 
 const App = (): React.ReactElement => {
@@ -69,7 +69,7 @@ const App = (): React.ReactElement => {
               path={ROUTES.PARTICIPANTS_PAGE}
               element={<ParticipantsPage />}
             />
-            {/* <Route path={ROUTES.TASKS_PAGE} element={<TasksPage />} /> */}
+            <Route path={ROUTES.TASKS_PAGE} element={<TasksPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Switch>
         </Router>
