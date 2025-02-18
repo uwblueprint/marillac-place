@@ -174,10 +174,15 @@ const SchedulePage = (): React.ReactElement => {
             Calendar
           </Button>
         </Flex>
-
+        <Flex justifyContent="end" gap="3" alignItems="end">
         <Button variant="primary" size="sm" onClick={() => {}}>
           Update Selected
         </Button>
+
+        <Button variant="primary" size="sm" onClick={() => {}}>
+        + Assign Task 
+        </Button>
+        </Flex>
       </Flex>
       <Box padding="40px">
         {scheduleType === "CALENDAR" ? (
