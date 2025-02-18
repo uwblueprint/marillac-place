@@ -15,6 +15,7 @@ enum StaffType {
 enum TaskType {
   REQUIRED
   OPTIONAL
+  CHORE
 }
 
 enum DaysOfWeek {
@@ -59,16 +60,13 @@ model Announcement {
 
 model Task {
   taskId            Int           @id @default(autoincrement())
-  roomNumber        Int?
   type              TaskType
-  status            TaskStatus  
   name              String
   isRecurring       Boolean
-  repeatDays        DaysOfWeek
+  repeatDays        DaysOfWeek[]
   start             DateTime
-  end               DateTime
+  end               DateTime?
   credit            Int
-  comment           String?
 
   @@map("tasks")
 }

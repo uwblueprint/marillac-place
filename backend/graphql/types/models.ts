@@ -25,6 +25,7 @@ const dataModels = gql`
     status: TaskStatus!
     name: String!
     isRecurring: Boolean!
+    repeatDays: [DaysOfWeek]
     start: DateTime!
     end: DateTime!
     credit: Int!
