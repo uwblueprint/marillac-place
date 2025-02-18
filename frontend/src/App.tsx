@@ -19,7 +19,7 @@ import { inputTheme, textareaTheme } from "./theme/inputs";
 
 import * as ROUTES from "./constants/routes";
 // import HomePage from "./components/pages/home/HomePage";
-// import SchedulePage from "./components/pages/schedule/SchedulePage";
+import SchedulePage from "./components/pages/schedule/SchedulePage";
 // import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
 // import TasksPage from "./components/pages/tasks/TasksPage";
@@ -63,7 +63,7 @@ const App = (): React.ReactElement => {
         <Router>
           <Switch>
             {/* <Route path={ROUTES.HOME_PAGE} element={<HomePage />} /> */}
-            {/* <Route path={ROUTES.SCHEDULE_PAGE} element={<SchedulePage />} /> */}
+            <Route path={ROUTES.SCHEDULE_PAGE} element={<SchedulePage />} />
             {/* <Route path={ROUTES.ANNOUNCEMENTS_PAGE} element={<AnnouncementsPage />} /> */}
             <Route
               path={ROUTES.PARTICIPANTS_PAGE}
