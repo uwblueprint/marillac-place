@@ -22,6 +22,7 @@ import * as ROUTES from "./constants/routes";
 // import SchedulePage from "./components/pages/schedule/SchedulePage";
 // import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
+import AdminLoginPage from "./components/pages/auth/AdminLoginPage";
 // import TasksPage from "./components/pages/tasks/TasksPage";
 import NotFoundPage from "./components/common/NotFoundPage";
 
@@ -62,6 +63,10 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Switch>
+          <Route
+              path={ROUTES.LOGIN_PAGE}
+              element={<AdminLoginPage />}
+            />
             {/* <Route path={ROUTES.HOME_PAGE} element={<HomePage />} /> */}
             {/* <Route path={ROUTES.SCHEDULE_PAGE} element={<SchedulePage />} /> */}
             {/* <Route path={ROUTES.ANNOUNCEMENTS_PAGE} element={<AnnouncementsPage />} /> */}
