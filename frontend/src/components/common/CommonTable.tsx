@@ -292,8 +292,6 @@ const CommonTable = ({
       {isPreviewModalOpen && selectedRow && (
         <ModalContainer
           title={colData[0].value}
-          isOpen={isPreviewModalOpen}
-          setIsOpen={setIsPreviewModalOpen}
         >
           <Flex flexDir="column" gap="5px" mt="10px">
             {colData.slice(1).map((column, index) => (

@@ -1,173 +1,220 @@
-export {};
-// import React, { useState } from "react";
-// import { Button, Text, Flex } from "@chakra-ui/react";
-// import ModalContainer from "../../common/ModalContainer";
-// import FormField from "../../common/FormField";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Text,
+  Flex,
+  Select,
+  FormLabel,
+  Spinner,
+} from "@chakra-ui/react";
 
-// export type ResidentEditInfo = {
-//   residentId: number;
-//   roomNumber: number;
-//   arrivalDate: string;
-//   departureDate: string;
-//   password: string;
-// };
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+import {
+  GET_AVAILABLE_ROOMS,
+  GET_PARTICIPANT_BY_ID,
+} from "../../../gql/queries";
+import { CREATE_PARTICIPANT } from "../../../gql/mutations";
 
-// type Props = {
-//   isOpen: boolean;
-//   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-//   residentInfo: ResidentEditInfo;
-//   onCloseEditModal: any;
-// };
+import ModalContainer from "../../common/ModalContainer";
+import FormInputField from "../../common/FormInputField";
+import FormSelectField from "../../common/FormSelectField";
 
-// const ResidentEditModal = ({
-//   isOpen,
-//   setIsOpen,
-//   residentInfo,
-//   onCloseEditModal,
-// }: Props): React.ReactElement => {
-//   const [residentId, setResidentId] = useState(residentInfo.residentId);
-//   const [password, setPassword] = useState(residentInfo.password);
-//   const [arrivalDate, setArrivalDate] = useState(residentInfo.arrivalDate);
-//   const [departureDate, setDepartureDate] = useState(
-//     residentInfo.departureDate,
-//   );
+type EditParticipantPreset = {
+  participantId: string;
+  roomNumber: number;
+  arrival: string;
+  departure: string;
+};
 
-//   const [roomNumber, setRoomNumber] = useState(residentInfo.roomNumber);
+type EditParticipantCardProps = {
+  preset: EditParticipantPreset | null;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [submitPressed, setSubmitPressed] = useState(false);
+const EditParticipantCard = ({
+  preset,
+  isOpen,
+  setIsOpen,
+}: EditParticipantCardProps): React.ReactElement => {
+  console.log(preset);
+  const [participantId, setParticipantId] = useState(preset ? preset.participantId : "");
+  const [roomNumber, setRoomNumber] = useState(preset ? preset.roomNumber.toString() : "");
+  const [arrivalDate, setArrivalDate] = useState(preset ? preset.arrival : "");
+  const [password, setPassword] = useState("");
 
-//   const [roomList, setRoomList] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
-//   const [residentIdList, setresidentIdList] = useState<Array<number>>([
-//     12345, 67890, 23456, 78901, 34567, 89012, 45678, 56789, 12346, 67891, 23457,
-//     78902, 34568, 89013, 45679, 90124, 56790, 12347, 67892,
-//   ]);
+  const [error, setError] = useState("");
+  const [participantIdError, setParticipantIdError] = useState("");
+  const [roomNumberError, setRoomNumberError] = useState("");
+  const [arrivalDateError, setArrivalDateError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-//   const [invalidRoomNumber, setInvalidRoomNumber] = useState("");
-//   const [invalidResidentId, setInvalidResidentId] = useState("");
-//   // useEffect(() => {
-//   //   // TODO: get roomList, residentIdList
-//   // }, []);
+  const {
+    loading: getAvailableRoomsLoading,
+    error: getAvailableRoomsError,
+    data: getAvailableRoomsData,
+  } = useQuery(GET_AVAILABLE_ROOMS);
 
-//   const handleSubmit = () => {
-//     setSubmitPressed(true);
-//     if (roomNumber !== residentInfo.roomNumber && roomNumber in roomList) {
-//       setInvalidRoomNumber(
-//         "This room number is already taken. Note: To set this field, please remove the room number from the Resident who occupies the room.",
-//       );
-//     } else {
-//       setInvalidRoomNumber("");
-//     }
+  const [
+    getParticipantById,
+    {
+      loading: getParticipantByIdLoading,
+      error: getParticipantByIdError,
+      data: getParticipantByIdData,
+    },
+  ] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
+    variables: { participantId },
+  });
 
-//     if (
-//       residentId !== residentInfo.residentId &&
-//       residentIdList.includes(residentId)
-//     ) {
-//       setInvalidResidentId("This ID number is already taken.");
-//     } else {
-//       setInvalidResidentId("");
-//     }
+  const [createParticipant] = useMutation(CREATE_PARTICIPANT);
 
-//     if (invalidRoomNumber || invalidResidentId) {
-//       return;
-//     }
+  const validate = async () => {
+    const errors = {
+      participantId: "",
+      roomNumber: "",
+      arrivalDate: "",
+      password: "",
+    };
 
-//     // TODO: API POST to Residents/Participants
+    if (participantId) {
+      await getParticipantById({ variables: { participantId } });
+      if (getParticipantByIdError) {
+        errors.participantId = "Unknown error has occurred.";
+      } else if (
+        getParticipantByIdData &&
+        getParticipantByIdData.getParticipantById != null
+      ) {
+        errors.participantId = "ID already exists";
+      } else {
+        errors.participantId = "";
+      }
+    } else {
+      errors.participantId = "ID Number is missing";
+    }
 
-//     if (!residentId || !password || !arrivalDate) {
-//       // TODO: Add error handling
-//     }
-//     // TODO: API call to add resident
-//   };
+    errors.roomNumber = roomNumber ? "" : "Room Number is missing";
+    errors.arrivalDate = arrivalDate ? "" : "Arrival Date is missing";
+    errors.password = password ? "" : "Password is missing";
 
-//   const resetFormState = () => {
-//     onCloseEditModal();
-//   };
+    return errors;
+  };
 
-//   return (
-//     <ModalContainer title="Edit Resident" isOpen={isOpen} setIsOpen={setIsOpen}>
-//       <Flex flexDir="column" gap="20px">
-//         <Flex flexDir="column">
-//           <FormField
-//             label="ID Number"
-//             value={residentId.toString()}
-//             type="number"
-//             onChange={(e) => setResidentId(parseInt(e.target.value, 10))}
-//             submitPressed={submitPressed}
-//             required
-//             error={invalidResidentId !== ""}
-//           />
-//           {invalidResidentId && (
-//             <Text mb="5px" mt="1px" color="red.error" fontWeight="700">
-//               {invalidResidentId}
-//             </Text>
-//           )}
-//         </Flex>
+  const handleSubmit = async () => {
+    const errors = await validate();
+    if (
+      !errors.participantId &&
+      !errors.roomNumber &&
+      !errors.arrivalDate &&
+      !errors.password
+    ) {
+      try {
+        const room = parseInt(roomNumber, 10);
+        await createParticipant({
+          variables: {
+            participantId,
+            roomNumber: room,
+            arrival: arrivalDate,
+            password,
+          },
+        });
+        setIsOpen(false);
+        window.location.reload();
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      setParticipantIdError(errors.participantId);
+      setRoomNumberError(errors.roomNumber);
+      setArrivalDateError(errors.arrivalDate);
+      setPasswordError(errors.password);
+    }
+  };
 
-//         <Flex flexDir="column">
-//           <FormField
-//             label="Room Number (Optional)"
-//             value={roomNumber.toString()}
-//             type="number"
-//             onChange={(e) => setRoomNumber(parseInt(e.target.value, 10))}
-//             submitPressed={submitPressed}
-//             error={invalidRoomNumber !== ""}
-//           />
-//           {invalidRoomNumber && (
-//             <Text mb="5px" color="red.error" fontWeight="700">
-//               {invalidRoomNumber}
-//             </Text>
-//           )}
-//         </Flex>
+  const reset = () => {
+    setParticipantId("");
+    setRoomNumber("");
+    setArrivalDate("");
+    setPassword("");
+    setParticipantIdError("");
+    setRoomNumberError("");
+    setArrivalDateError("");
+    setPasswordError("");
+  };
 
-//         <Flex gap="20px">
-//           <FormField
-//             label="Arrival Date"
-//             value={arrivalDate.toString()}
-//             type="date"
-//             onChange={() => {}}
-//             submitPressed={submitPressed}
-//             required
-//           />
-//           <FormField
-//             label="Departure Date (Optional)"
-//             value={departureDate.toString()}
-//             type="date"
-//             onChange={(e) => setDepartureDate(e.target.value)}
-//             submitPressed={submitPressed}
-//           />
-//         </Flex>
-//         <Flex>
-//           <FormField
-//             label="Password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             submitPressed={submitPressed}
-//             required
-//             isPassword
-//             showPassword={showPassword}
-//             setShowPassword={setShowPassword}
-//           />
-//         </Flex>
+  return (
+    <ModalContainer
+      title="Edit Participant"
+    >
+      <Flex flexDir="column" gap="20px">
+        <FormInputField
+          label="ID Number"
+          value={participantId}
+          type="text"
+          onChange={(e) => {
+            setParticipantId(e.target.value);
+          }}
+          required
+        />
 
-//         <Flex justifyContent="flex-end">
-//           <Button
-//             variant="cancel"
-//             mr="8px"
-//             onClick={() => {
-//               resetFormState();
-//               setIsOpen(false);
-//             }}
-//           >
-//             Cancel
-//           </Button>
-//           <Button variant="primary" onClick={handleSubmit}>
-//             Save
-//           </Button>
-//         </Flex>
-//       </Flex>
-//     </ModalContainer>
-//   );
-// };
+        {getAvailableRoomsLoading ? (
+          <Spinner />
+        ) : getAvailableRoomsError ? (
+          <Flex p="10px">Error getting rooms.</Flex>
+        ) : getAvailableRoomsData && getAvailableRoomsData.getAvailableRooms ? (
+          <FormSelectField
+            label="Room Number"
+            placeholder="Please select a room"
+            value={roomNumber}
+            options={getAvailableRoomsData.getAvailableRooms.map(
+              (room: number) => ({
+                key: room,
+                value: room,
+                display: `Room ${room}`,
+              }),
+            )}
+            onChange={(e) => setRoomNumber(e.target.value)}
+            required
+          />
+        ) : (
+          <Flex p="10px">No available rooms.</Flex>
+        )}
 
-// export default ResidentEditModal;
+        <FormInputField
+          label="Arrival Date"
+          value={arrivalDate}
+          type="date"
+          onChange={(e) => {
+            setArrivalDate(e.target.value);
+          }}
+          required
+        />
+
+        <FormInputField
+          label="Password"
+          value={password}
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <Flex justifyContent="flex-end">
+          <Button
+            variant="cancel"
+            mr="8px"
+            onClick={() => {
+              setIsOpen(false);
+              reset();
+            }}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            Save
+          </Button>
+        </Flex>
+      </Flex>
+    </ModalContainer>
+  );
+};
+
+export default EditParticipantCard;

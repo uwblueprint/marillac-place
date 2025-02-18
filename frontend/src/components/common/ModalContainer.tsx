@@ -13,44 +13,30 @@ import CloseIcon from "@mui/icons-material/Close";
 type Props = {
   title: string;
   onDelete?: () => void;
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
 };
 
 const ModalContainer = ({
   title,
   onDelete,
-  isOpen,
-  setIsOpen,
   children,
 }: Props): React.ReactElement => {
   return (
     <Modal
       closeOnOverlayClick={false}
-      isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
+      isOpen
+      onClose={() => {}}
       isCentered
     >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
           {title}
-          {onDelete ? (
+          {onDelete &&
             <Button variant="del" gap="2px" onClick={onDelete}>
               <DeleteOutlinedIcon />
               Delete
-            </Button>
-          ) : (
-            <Button
-              bg="transparent"
-              h="auto"
-              _hover={{ bg: "transparent" }}
-              onClick={() => setIsOpen(false)}
-            >
-              <CloseIcon />
-            </Button>
-          )}
+            </Button>}
         </ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>

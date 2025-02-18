@@ -20,7 +20,6 @@ type FormSelectFieldProps = {
   options: Option[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   required?: boolean;
-  error?: string;
 };
 
 const FormSelectField = ({
@@ -30,10 +29,9 @@ const FormSelectField = ({
   options,
   onChange,
   required = false,
-  error = "",
 }: FormSelectFieldProps): React.ReactElement => {
   return (
-    <FormControl isRequired={required} isInvalid={error !== ""}>
+    <FormControl isRequired={required}>
       {label && (
         <FormLabel mb="5px" color="gray.main" fontWeight="700">
           {label}
@@ -46,7 +44,6 @@ const FormSelectField = ({
         onChange={onChange}
         borderWidth="2px"
         borderColor="gray.300"
-        errorBorderColor="red.300"
       >
         {options.map((option: Option) => (
           <option key={option.key} value={option.value}>
@@ -54,7 +51,6 @@ const FormSelectField = ({
           </option>
         ))}
       </Select>
-      {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );
 };

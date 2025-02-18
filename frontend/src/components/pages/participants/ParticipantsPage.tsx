@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
 
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_ALL_PARTICIPANTS } from "../../../gql/queries";
 
 import CommonTable, {
@@ -19,6 +19,7 @@ import CommonTable, {
 } from "../../common/CommonTable";
 import SideBar from "../../common/SideBar";
 import AddParticipantCard from "./AddParticipantCard";
+import EditParticipantCard from "./EditParticipantCard";
 
 const columnTypes: ColumnInfoTypes[] = [
   {
@@ -40,105 +41,15 @@ const columnTypes: ColumnInfoTypes[] = [
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
-  const [addParticipantCardOpened, setAddParticipantCardOpened] =
-    useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState("none");
-
-  // const [addResident] = useMutation<{ addResident: UserResponse }>(
-  //   ADD_RESIDENT,
-  // );
-
-  // const [updateResident] = useMutation<{
-  //   userId: number;
-  //   resident: UserResponse;
-  // }>(UPDATE_RESIDENT);
-
-  // const [deleteResident] = useMutation<{ userId: number }>(DELETE_RESIDENT);
-
-  // const handleAddResident = async () => {
-  //   try {
-  //     const date = new Date();
-  //     const formattedDate = date.toISOString().split("T")[0];
-
-  //     const resident: UserRequest = {
-  //       email: "dasfhsahfsoad@gmail.com",
-  //       password: "qe8e9r789ewr",
-  //       firstName: "Bob",
-  //       lastName: "Bob",
-  //       residentId: 1248120,
-  //       birthDate: formattedDate,
-  //       roomNumber: 3,
-  //       credits: 500,
-  //       dateJoined: formattedDate,
-  //     };
-  //     await addResident({ variables: { resident } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const handleUpdateResident = async () => {
-  //   try {
-  //     const userId = 5;
-  //     const resident: UserRequestUpdate = {
-  //       lastName: "NEW NAME",
-  //       roomNumber: 3,
-  //       credits: 10,
-  //     };
-  //     await updateResident({ variables: { userId, resident } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const handleDeleteResident = async () => {
-  //   try {
-  //     const userId = 1;
-  //     await deleteResident({ variables: { userId } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const ids = [4];
-  // const {
-  //   loading: residentIdLoading,
-  //   error: residentIdError,
-  //   data: residentIdData,
-  // } = useQuery<{ userIds: [number] }>(GET_RESIDENTS_BY_ID, {
-  //   variables: { userIds: ids },
-  // });
-
-  // const {
-  //   loading: residentActiveLoading,
-  //   error: residentActiveError,
-  //   data: residentActiveData,
-  // } = useQuery(GET_ACTIVE_RESIDENTS);
+  const [addParticipant, setAddParticipant] = useState(false);
+  const [editParticipant, setEditParticipant] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   const {
     loading: getAllParticipantsLoading,
     error: getAllParticipantsError,
     data: getAllParticipantsData,
   } = useQuery(GET_ALL_PARTICIPANTS);
-
-  // const handleResidentEdit = (row: any) => {
-  //   setIsModalOpen("edit");
-  //   // console.log(row);
-  //   setEditInfo(row);
-  // };
-
-  // // CHANGE
-  // const handleRowClick = (row: any) => {
-  //   setIsModalOpen("edit");
-  //   // console.log(row);
-  //   setEditInfo(row);
-  // };
-
-  // const handleResidentSubmitEdit = () => {
-  //   setEditInfo(undefined);
-
-  //   // TODO: modify data
-  // };
 
   return (
     <Flex>
@@ -155,7 +66,7 @@ const ParticipantsPage = (): React.ReactElement => {
             variant="primary"
             leftIcon={<Icon as={Add} color="white" />}
             size="sm"
-            onClick={() => setAddParticipantCardOpened(true)}
+            onClick={() => setAddParticipant(true)}
           >
             Add Participant
           </Button>
@@ -175,26 +86,17 @@ const ParticipantsPage = (): React.ReactElement => {
               }),
             )}
             columnInfo={columnTypes}
-            onEdit={() => {}}
+            onEdit={(row: any) => {
+              setSelected(row);
+              setEditParticipant(true);
+            }}
           />
         ) : (
           <Flex p="10px">No participants found.</Flex>
         )}
 
-        <AddParticipantCard
-          isOpen={addParticipantCardOpened}
-          setIsOpen={setAddParticipantCardOpened}
-        />
-
-        {/* 
-        {residentEditInfo && (
-          <ResidentEditModal
-            residentInfo={residentEditInfo}
-            isOpen={isModalOpen === "edit"}
-            setIsOpen={() => setIsModalOpen("none")}
-            onCloseEditModal={handleResidentSubmitEdit}
-          /> 
-        )} */}
+        {addParticipant && <AddParticipantCard close={() => setAddParticipant(false)} />}
+        {/* {editParticipant && selected && <EditParticipantCard preset={selected} close={() => setEditParticipant(false)} />} */}
       </Flex>
     </Flex>
   );

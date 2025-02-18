@@ -21,7 +21,6 @@ type FormInputFieldProps = {
   type: "text" | "password" | "date" | "number";
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
-  error?: string;
   leftElement?: string;
 };
 
@@ -32,13 +31,12 @@ const FormInputField = ({
   type,
   onChange,
   required = false,
-  error = "",
   leftElement = "",
 }: FormInputFieldProps): React.ReactElement => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <FormControl isRequired={required} isInvalid={error !== ""}>
+    <FormControl isRequired={required}>
       {label && (
         <FormLabel mb="5px" color="gray.main" fontWeight="700">
           {label}
@@ -60,7 +58,6 @@ const FormInputField = ({
           onChange={onChange}
           borderWidth="2px"
           borderColor="gray.300"
-          errorBorderColor="red.300"
         />
 
         {type === "password" && (
@@ -79,8 +76,6 @@ const FormInputField = ({
           </InputRightElement>
         )}
       </InputGroup>
-
-      {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );
 };
