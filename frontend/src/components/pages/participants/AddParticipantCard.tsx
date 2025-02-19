@@ -37,11 +37,8 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
     data: getAvailableRoomsData,
   } = useQuery(GET_AVAILABLE_ROOMS);
 
-  const [getParticipantById, {
-    error: getParticipantByIdError,
-    data: getParticipantByIdData,
-  }] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
-    variables: { participantId },
+  const [getParticipantById] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
+    variables: { participantId }
   });
 
   const [createParticipant] = useMutation(CREATE_PARTICIPANT);
@@ -49,20 +46,26 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
   const validate = async () => {
     if (!participantId || !roomNumber || !arrivalDate || !password) {
       setError("Missing fields.");
-      return;
+      return false;
     }
-    await getParticipantById({ variables: { participantId } });
-    if (getParticipantByIdError) {
+    try {
+      const { data } = await getParticipantById({ variables: { participantId } });
+      if (data.getParticipantById) {
+        setError("ID already exists");
+        return false;
+      }
+      return true;
+    } catch (err) {
       setError("Unknown error has occurred.");
-    } else if (getParticipantByIdData && getParticipantByIdData.getParticipantById) {
-      setError("ID already exists");
+      console.error(err);
+      return false;
     }
   };
 
   const handleSubmit = async () => {
     setError("");
-    await validate();
-    if (!error) {
+    const valid: boolean = await validate();
+    if (valid) {
       try {
         const room = parseInt(roomNumber, 10);
         await createParticipant({
@@ -106,9 +109,9 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
 
         {getAvailableRoomsLoading ? (
           <Spinner />
-        ) : getAvailableRoomsError ? (
+        ) : getAvailableRoomsError || !getAvailableRoomsData ? (
           <Flex p="10px">Error getting rooms.</Flex>
-        ) : getAvailableRoomsData && getAvailableRoomsData.getAvailableRooms ? (
+        ) : (
           <FormSelectField
             label="Room Number"
             placeholder="Please select a room"
@@ -123,8 +126,6 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
             onChange={(e) => setRoomNumber(e.target.value)}
             required
           />
-        ) : (
-          <Flex p="10px">No available rooms.</Flex>
         )}
 
         <FormInputField

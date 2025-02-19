@@ -61,7 +61,7 @@ const FormInputField = ({
         />
 
         {type === "password" && (
-          <InputRightElement h="34px">
+          <InputRightElement>
             <Button
               onClick={() => setShowPassword(!showPassword)}
               bg="transparent"
