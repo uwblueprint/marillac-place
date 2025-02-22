@@ -164,8 +164,17 @@ class TaskService implements ITaskService {
         //   location: true,
         // },
       });
-
-      return newTask;
+      const taskDto: TaskDTO = {
+        id: newTask.taskId,
+        title: newTask.name,
+        creditValue: newTask.credit,
+        type: newTask.type,
+        isRecurring: newTask.isRecurring,
+        repeatDays: newTask.repeatDays,
+        start: newTask.start,
+        end: newTask.end || null,
+      };
+      return taskDto;
     } catch (error: unknown) {
       Logger.error(`Failed to create task. Reason = ${getErrorMessage(error)}`);
       throw error;
@@ -179,11 +188,30 @@ class TaskService implements ITaskService {
     try {
       const updatedTask = await prisma.task.update({
         where: {
-          id: taskId,
+          taskId: taskId,
         },
-        data: updateTask,
+        data: {
+          name: updateTask.title,
+          credit: updateTask.creditValue,
+          type: updateTask.type,
+          isRecurring: updateTask.isRecurring,
+          repeatDays: updateTask.repeatDays,
+          start: updateTask.start,
+          end: updateTask.end || null,
+        },
       });
-      return updatedTask;
+
+      const taskDto: TaskDTO = {
+        id: updatedTask.taskId,
+        title: updatedTask.name,
+        creditValue: updatedTask.credit,
+        type: updatedTask.type,
+        isRecurring: updatedTask.isRecurring,
+        repeatDays: updatedTask.repeatDays,
+        start: updatedTask.start,
+        end: updatedTask.end || null,
+      };
+      return taskDto;
     } catch (error: unknown) {
       Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
       throw error;
@@ -192,19 +220,24 @@ class TaskService implements ITaskService {
 
   async deleteTaskById(taskId: number): Promise<TaskDTO> {
     try {
-      await prisma.task.deleteMany({
+      const deletedTask = await prisma.task.delete({
         where: {
           taskId: taskId,
         },
       });
 
-      const deletedTask = await prisma.task.delete({
-        where: {
-          id: taskId,
-        },
-      });
+      const taskDto: TaskDTO = {
+        id: deletedTask.taskId,
+        title: deletedTask.name,
+        creditValue: deletedTask.credit,
+        type: deletedTask.type,
+        isRecurring: deletedTask.isRecurring,
+        repeatDays: deletedTask.repeatDays,
+        start: deletedTask.start,
+        end: deletedTask.end || null,
+      };
 
-      return deletedTask;
+      return taskDto;
     } catch (error: unknown) {
       Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
       throw error;
