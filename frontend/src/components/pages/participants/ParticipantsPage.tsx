@@ -9,7 +9,6 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
-
 import { useQuery } from "@apollo/client";
 import { GET_ALL_PARTICIPANTS } from "../../../gql/queries";
 

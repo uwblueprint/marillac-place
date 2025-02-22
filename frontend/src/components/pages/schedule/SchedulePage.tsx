@@ -24,6 +24,7 @@ import { CalendarApi } from "@fullcalendar/core";
 import { ScheduleType } from "../../../types/ScheduleTypes";
 import ScheduleListView from "./listView/ScheduleListView";
 import ScheduleCalendar from "./calendarView/ScheduleCalendar";
+import SideBar from "../../common/SideBar"
 
 const SchedulePage = (): React.ReactElement => {
   const [rooms, setRooms] = useState<number[]>([]);
@@ -79,6 +80,8 @@ const SchedulePage = (): React.ReactElement => {
   };
 
   return (
+    <Flex>
+      <SideBar/>
     <Flex flexDir="column" flexGrow={1}>
       <Tabs variant="horizontal" h="30px" mb={6}>
         {formatTabs(rooms)}
@@ -194,6 +197,7 @@ const SchedulePage = (): React.ReactElement => {
           <ScheduleListView />
         )}
       </Box>
+    </Flex>
     </Flex>
   );
 };

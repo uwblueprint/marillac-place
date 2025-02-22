@@ -10,6 +10,7 @@ import React, {
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import "./ScheduleCalendar.css";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
+import SideBar from "../../../common/SideBar"
 
 const events = [
   {
@@ -36,6 +37,7 @@ function renderEventContent(eventInfo: EventContentArg) {
         justifyContent: isAllDay ? "space-between" : "flex-start",
       }}
     >
+      <SideBar/>
       <div>
         <b>{eventInfo.event.title}</b>
       </div>
