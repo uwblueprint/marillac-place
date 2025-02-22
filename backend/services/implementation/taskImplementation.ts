@@ -1,5 +1,5 @@
 import prisma from "../../prisma";
-import { TaskType, TaskStatus } from "@prisma/client";
+import { TaskType } from "@prisma/client";
 import ITaskService, {
   InputTaskDTO,
   TaskDTO,
@@ -157,8 +157,8 @@ class TaskService implements ITaskService {
           credit: task.creditValue,
           start: task.start,
           isRecurring: task.isRecurring,
-          end: task.end,
-          repeatDays: task.repeatDays,
+          end: task.end || null,
+          repeatDays: task.repeatDays || [],
         },
         // include: {
         //   location: true,
@@ -172,7 +172,7 @@ class TaskService implements ITaskService {
         isRecurring: newTask.isRecurring,
         repeatDays: newTask.repeatDays,
         start: newTask.start,
-        end: newTask.end || null,
+        end: newTask.end,
       };
       return taskDto;
     } catch (error: unknown) {
@@ -181,67 +181,67 @@ class TaskService implements ITaskService {
     }
   }
 
-  async updateTaskById(
-    taskId: number,
-    updateTask: InputTaskDTO,
-  ): Promise<TaskDTO> {
-    try {
-      const updatedTask = await prisma.task.update({
-        where: {
-          taskId: taskId,
-        },
-        data: {
-          name: updateTask.title,
-          credit: updateTask.creditValue,
-          type: updateTask.type,
-          isRecurring: updateTask.isRecurring,
-          repeatDays: updateTask.repeatDays,
-          start: updateTask.start,
-          end: updateTask.end || null,
-        },
-      });
+  // async updateTaskById(
+  //   taskId: number,
+  //   updateTask: InputTaskDTO,
+  // ): Promise<TaskDTO> {
+  //   try {
+  //     const updatedTask = await prisma.task.update({
+  //       where: {
+  //         taskId: taskId,
+  //       },
+  //       data: {
+  //         name: updateTask.title,
+  //         credit: updateTask.creditValue,
+  //         type: updateTask.type,
+  //         isRecurring: updateTask.isRecurring,
+  //         repeatDays: updateTask.repeatDays,
+  //         start: updateTask.start,
+  //         end: updateTask.end || null,
+  //       },
+  //     });
 
-      const taskDto: TaskDTO = {
-        id: updatedTask.taskId,
-        title: updatedTask.name,
-        creditValue: updatedTask.credit,
-        type: updatedTask.type,
-        isRecurring: updatedTask.isRecurring,
-        repeatDays: updatedTask.repeatDays,
-        start: updatedTask.start,
-        end: updatedTask.end || null,
-      };
-      return taskDto;
-    } catch (error: unknown) {
-      Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
-      throw error;
-    }
-  }
+  //     const taskDto: TaskDTO = {
+  //       id: updatedTask.taskId,
+  //       title: updatedTask.name,
+  //       creditValue: updatedTask.credit,
+  //       type: updatedTask.type,
+  //       isRecurring: updatedTask.isRecurring,
+  //       repeatDays: updatedTask.repeatDays,
+  //       start: updatedTask.start,
+  //       end: updatedTask.end || null,
+  //     };
+  //     return taskDto;
+  //   } catch (error: unknown) {
+  //     Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
+  //     throw error;
+  //   }
+  // }
 
-  async deleteTaskById(taskId: number): Promise<TaskDTO> {
-    try {
-      const deletedTask = await prisma.task.delete({
-        where: {
-          taskId: taskId,
-        },
-      });
+  // async deleteTaskById(taskId: number): Promise<TaskDTO> {
+  //   try {
+  //     const deletedTask = await prisma.task.delete({
+  //       where: {
+  //         taskId: taskId,
+  //       },
+  //     });
 
-      const taskDto: TaskDTO = {
-        id: deletedTask.taskId,
-        title: deletedTask.name,
-        creditValue: deletedTask.credit,
-        type: deletedTask.type,
-        isRecurring: deletedTask.isRecurring,
-        repeatDays: deletedTask.repeatDays,
-        start: deletedTask.start,
-        end: deletedTask.end || null,
-      };
+  //     const taskDto: TaskDTO = {
+  //       id: deletedTask.taskId,
+  //       title: deletedTask.name,
+  //       creditValue: deletedTask.credit,
+  //       type: deletedTask.type,
+  //       isRecurring: deletedTask.isRecurring,
+  //       repeatDays: deletedTask.repeatDays,
+  //       start: deletedTask.start,
+  //       end: deletedTask.end || null,
+  //     };
 
-      return taskDto;
-    } catch (error: unknown) {
-      Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
-      throw error;
-    }
+  //     return taskDto;
+  //   } catch (error: unknown) {
+  //     Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
+  //     throw error;
+  //   }
   }
 
   // async assignTask(
@@ -294,6 +294,6 @@ class TaskService implements ITaskService {
   //     throw error;
   //   }
   // }
-}
+// }
 
 export default TaskService;

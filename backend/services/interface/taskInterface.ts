@@ -18,8 +18,8 @@ export interface TaskDTO {
 // }
 
 export interface InputTaskDTO {
-  type: TaskType;
   title: string;
+  type: TaskType;
   creditValue: number;
   start: Date;
   end: Date | null;
@@ -118,7 +118,7 @@ interface ITaskService {
    * @returns a TaskDTO with the updated task's information
    * @throws Error if task update fails
    */
-  updateTaskById(taskId: number, task: InputTaskDTO): Promise<TaskDTO>;
+  // updateTaskById(taskId: number, task: InputTaskDTO): Promise<TaskDTO>;
 
   /**
    * Delete a task by id
@@ -126,7 +126,7 @@ interface ITaskService {
    * @returns a TaskDTO with the deleted task's information
    * @throws Error if task deletion fails
    */
-  deleteTaskById(taskId: number): Promise<TaskDTO>;
+  // deleteTaskById(taskId: number): Promise<TaskDTO>;
 
   // /**
   //  * Assign a task to a resident

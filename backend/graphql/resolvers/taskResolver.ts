@@ -67,20 +67,20 @@ const taskResolvers = {
       const newTask = await taskService.createTask(task);
       return newTask;
     },
-    updateTask: async (
-      _parent: undefined,
-      { taskId, task }: { taskId: number; task: InputTaskDTO },
-    ): Promise<TaskDTO> => {
-      const updatedTask = await taskService.updateTaskById(taskId, task);
-      return updatedTask;
-    },
-    deleteTask: async (
-      _parent: undefined,
-      { taskId }: { taskId: number },
-    ): Promise<TaskDTO> => {
-      const deletedTask = await taskService.deleteTaskById(taskId);
-      return deletedTask;
-    },
+    // updateTask: async (
+    //   _parent: undefined,
+    //   { taskId, task }: { taskId: number; task: InputTaskDTO },
+    // ): Promise<TaskDTO> => {
+    //   const updatedTask = await taskService.updateTaskById(taskId, task);
+    //   return updatedTask;
+    // },
+    // deleteTask: async (
+    //   _parent: undefined,
+    //   { taskId }: { taskId: number },
+    // ): Promise<TaskDTO> => {
+    //   const deletedTask = await taskService.deleteTaskById(taskId);
+    //   return deletedTask;
+    // },
     // assignTask: async (
     //   _parent: undefined,
     //   { taskAssigned }: { taskAssigned: InputTaskAssignedDTO },

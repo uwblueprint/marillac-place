@@ -5,6 +5,10 @@ const resolverTypes = gql`
     getAllParticipants: [Participant]
     getParticipantById(participantId: String): Participant
     getAvailableRooms: [Int]
+
+    getTaskById: Task
+    getTasksByType: [Task]
+    getTasksByStartDate: [Task]
   }
 
   type Mutation {
@@ -14,6 +18,8 @@ const resolverTypes = gql`
       arrival: String
       password: String
     ): Boolean
+
+    createTask(task: InputTaskDTO): Task
   }
 `;
 

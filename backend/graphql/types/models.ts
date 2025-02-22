@@ -28,6 +28,26 @@ const dataModels = gql`
     end: DateTime!
     credit: Int!
   }
+
+  input InputTaskDTO {
+    type: TaskType!
+    title: String!
+    creditValue: Int!
+    start: DateTime!
+    end: DateTime!
+    isRecurring: Boolean!
+    repeatDays: [DaysOfWeek!]
+  }
+
+  input TaskInput {
+    type: TaskType!
+    title: String!
+    creditValue: Int!
+    start: String!
+    end: String
+    isRecurring: Boolean!
+    repeatDays: [DaysOfWeek]
+  }
 `;
 
 export default dataModels;
