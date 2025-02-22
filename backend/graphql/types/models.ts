@@ -20,16 +20,13 @@ const dataModels = gql`
 
   type Task {
     taskId: Int!
-    roomNumber: Int
     type: TaskType!
-    status: TaskStatus!
     name: String!
     isRecurring: Boolean!
-    repeatDays: [DaysOfWeek]
+    repeatDays: [DaysOfWeek!]!
     start: DateTime!
     end: DateTime!
     credit: Int!
-    comment: String
   }
 `;
 

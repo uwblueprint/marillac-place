@@ -19,6 +19,16 @@ const customTypes = gql`
     COMPLETE
     EXCUSED
   }
+
+  enum DaysOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+  }
 `;
 
 export default customTypes;
