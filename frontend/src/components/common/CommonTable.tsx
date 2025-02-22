@@ -22,7 +22,8 @@ import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutl
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import ModalContainer from "./ModalContainer";
 
-type TableTypes = string | number | boolean | Date | string[];
+type TableTypes = string;
+// | number | boolean | Date | string[]
 
 export interface TableData {
   [key: string]: TableTypes;

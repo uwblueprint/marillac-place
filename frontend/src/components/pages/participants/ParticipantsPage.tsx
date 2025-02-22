@@ -52,6 +52,7 @@ const columnTypes: ColumnInfoTypes[] = [
 const ParticipantsPage = (): React.ReactElement => {
   const [addParticipant, setAddParticipant] = useState(false);
   const [editParticipant, setEditParticipant] = useState(false);
+  const [participantFilter, setParticipantFilter] = useState("");
 
   const {
     loading: getAllParticipantsLoading,
@@ -68,7 +69,10 @@ const ParticipantsPage = (): React.ReactElement => {
             <InputLeftElement pointerEvents="none">
               <Icon as={Search} color="gray.300" />
             </InputLeftElement>
-            <Input placeholder="Search" />
+            <Input 
+              placeholder="Search"
+              onChange={(e) => setParticipantFilter(e.target.value)}
+            />
           </InputGroup>
           <Button
             variant="primary"
@@ -85,7 +89,9 @@ const ParticipantsPage = (): React.ReactElement => {
           <Flex p="10px">{getAllParticipantsError.message}</Flex>
         ) : getAllParticipantsData.getAllParticipants ? (
           <CommonTable
-            data={getAllParticipantsData.getAllParticipants.map(
+            data={getAllParticipantsData.getAllParticipants.filter(
+              (participant: TableData) => participant.participantId.includes(participantFilter)
+            ).map(
               (participant: TableData) => ({
                 participantId: participant.participantId,
                 roomNumber: participant.roomNumber,
