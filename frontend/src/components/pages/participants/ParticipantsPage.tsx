@@ -53,6 +53,7 @@ const ParticipantsPage = (): React.ReactElement => {
   const [addParticipant, setAddParticipant] = useState(false);
   const [editParticipant, setEditParticipant] = useState(false);
   const [participantFilter, setParticipantFilter] = useState("");
+  const [selectedParticipant, setSelectedParticipant] = useState({});
 
   const {
     loading: getAllParticipantsLoading,
@@ -102,6 +103,7 @@ const ParticipantsPage = (): React.ReactElement => {
             )}
             columnInfo={columnTypes}
             onEdit={(row: any) => {
+              setSelectedParticipant(row);
               setEditParticipant(true);
             }}
           />
@@ -110,7 +112,7 @@ const ParticipantsPage = (): React.ReactElement => {
         )}
 
         {addParticipant && <AddParticipantCard close={() => setAddParticipant(false)} />}
-        {editParticipant && <EditParticipantCard close={() => setEditParticipant(false)} />}
+        {editParticipant && selectedParticipant && <EditParticipantCard selected={selectedParticipant} close={() => setEditParticipant(false)} />}
       </Flex>
     </Flex>
   );

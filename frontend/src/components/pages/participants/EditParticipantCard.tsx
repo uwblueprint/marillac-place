@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  Text,
   Flex,
-  Select,
-  FormLabel,
   Spinner,
+  Input
 } from "@chakra-ui/react";
 
 import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+
 import {
   GET_AVAILABLE_ROOMS,
   GET_PARTICIPANT_BY_ID,
@@ -18,16 +17,18 @@ import { CREATE_PARTICIPANT } from "../../../gql/mutations";
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
 import FormSelectField from "../../common/FormSelectField";
+import { TableData } from "../../common/CommonTable";
 
 type EditParticipantCardProps = {
+  selected: TableData;
   close: () => void;
 };
 
-const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElement => {
-  const [participantId, setParticipantId] = useState("");
-  const [roomNumber, setRoomNumber] = useState("");
-  const [arrivalDate, setArrivalDate] = useState("");
-  const [password, setPassword] = useState("");
+const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React.ReactElement => {
+  const [roomNumber, setRoomNumber] = useState(selected.roomNumber);
+  const [arrivalDate, setArrivalDate] = useState(selected.arrival);
+  const [departureDate, setDepartureDate] = useState(selected.departure);
+  const [password, setPassword] = useState(selected.password);
 
   const [error, setError] = useState("");
 
@@ -37,29 +38,16 @@ const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElem
     data: getAvailableRoomsData,
   } = useQuery(GET_AVAILABLE_ROOMS);
 
-  const [getParticipantById] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
-    variables: { participantId }
-  });
-
-  const [createParticipant] = useMutation(CREATE_PARTICIPANT);
-
   const validate = async () => {
-    if (!participantId || !roomNumber || !arrivalDate || !password) {
+    if (!roomNumber || !arrivalDate || !password) {
       setError("Missing fields.");
       return false;
-    }
-    try {
-      const { data } = await getParticipantById({ variables: { participantId } });
-      if (data.getParticipantById) {
-        setError("ID already exists");
-        return false;
-      }
-      return true;
-    } catch (err) {
-      setError("Unknown error has occurred.");
-      console.error(err);
+    } 
+    if (roomNumber === selected.roomNumber && arrivalDate === selected.arrival && departureDate === selected.departure && password === selected.password) {
+      setError("No changes made.");
       return false;
     }
+    return true;
   };
 
   const handleSubmit = async () => {
@@ -68,14 +56,14 @@ const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElem
     if (valid) {
       try {
         const room = parseInt(roomNumber, 10);
-        await createParticipant({
-          variables: {
-            participantId,
-            roomNumber: room,
-            arrival: arrivalDate,
-            password,
-          },
-        });
+        // await createParticipant({
+        //   variables: {
+        //     participantId,
+        //     roomNumber: room,
+        //     arrival: arrivalDate,
+        //     password,
+        //   },
+        // });
         close();
         window.location.reload();
       } catch (err) {
@@ -85,7 +73,6 @@ const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElem
   };
 
   const reset = () => {
-    setParticipantId("");
     setRoomNumber("");
     setArrivalDate("");
     setPassword("");
@@ -97,15 +84,10 @@ const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElem
       <Flex flexDir="column" gap="20px">
         {error && <Flex textColor="red.500">{error}</Flex>}
 
-        <FormInputField
-          label="ID Number"
-          value={participantId}
-          type="text"
-          onChange={(e) => {
-            setParticipantId(e.target.value);
-          }}
-          required
-        />
+        <Flex flexDir="column">
+          <Flex mb="5px" color="gray.main" fontWeight="700">ID Number</Flex>
+          <Flex>{selected.participantId}</Flex>
+        </Flex>
 
         {getAvailableRoomsLoading ? (
           <Spinner />
@@ -114,7 +96,7 @@ const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElem
         ) : (
           <FormSelectField
             label="Room Number"
-            placeholder="Please select a room"
+            placeholder={`Room ${selected.roomNumber}`}
             value={roomNumber}
             options={getAvailableRoomsData.getAvailableRooms.map(
               (room: number) => ({
@@ -123,8 +105,7 @@ const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElem
                 display: `Room ${room}`,
               }),
             )}
-            onChange={(e) => setRoomNumber(e.target.value)}
-            required
+            onChange={(e) => setRoomNumber(e.target.value || selected.roomNumber)}
           />
         )}
 
@@ -135,7 +116,15 @@ const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElem
           onChange={(e) => {
             setArrivalDate(e.target.value);
           }}
-          required
+        />
+
+        <FormInputField
+          label="Departure Date"
+          value={departureDate}
+          type="date"
+          onChange={(e) => {
+            setDepartureDate(e.target.value);
+          }}
         />
 
         <FormInputField
@@ -143,7 +132,6 @@ const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElem
           value={password}
           type="password"
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
 
         <Flex justifyContent="flex-end">
