@@ -25,25 +25,33 @@ const columnTypes: ColumnInfoTypes[] = [
   {
     header: "ID Number",
     key: "participantId",
+    display: true
   },
   {
     header: "Room #",
     key: "roomNumber",
+    display: true
   },
   {
     header: "Arrival Date",
     key: "arrival",
+    display: true
   },
   {
     header: "Departure Date",
     key: "departure",
+    display: true
   },
+  {
+    header: "Password",
+    key: "password",
+    display: false
+  }
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
   const [addParticipant, setAddParticipant] = useState(false);
   const [editParticipant, setEditParticipant] = useState(false);
-  const [selected, setSelected] = useState(null);
 
   const {
     loading: getAllParticipantsLoading,
@@ -83,11 +91,11 @@ const ParticipantsPage = (): React.ReactElement => {
                 roomNumber: participant.roomNumber,
                 arrival: participant.arrival,
                 departure: participant.departure || "",
+                password: participant.password
               }),
             )}
             columnInfo={columnTypes}
             onEdit={(row: any) => {
-              setSelected(row);
               setEditParticipant(true);
             }}
           />
@@ -96,7 +104,7 @@ const ParticipantsPage = (): React.ReactElement => {
         )}
 
         {addParticipant && <AddParticipantCard close={() => setAddParticipant(false)} />}
-        {/* {editParticipant && selected && <EditParticipantCard preset={selected} close={() => setEditParticipant(false)} />} */}
+        {editParticipant && <EditParticipantCard close={() => setEditParticipant(false)} />}
       </Flex>
     </Flex>
   );

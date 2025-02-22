@@ -13,12 +13,14 @@ import CloseIcon from "@mui/icons-material/Close";
 type Props = {
   title: string;
   onDelete?: () => void;
+  close?: () => void;
   children: React.ReactNode;
 };
 
 const ModalContainer = ({
   title,
   onDelete,
+  close,
   children,
 }: Props): React.ReactElement => {
   return (
@@ -32,11 +34,28 @@ const ModalContainer = ({
       <ModalContent>
         <ModalHeader>
           {title}
-          {onDelete &&
-            <Button variant="del" gap="2px" onClick={onDelete}>
+          { 
+            onDelete &&
+            <Button 
+              variant="del" 
+              gap="2px" 
+              onClick={onDelete}
+            >
               <DeleteOutlinedIcon />
               Delete
-            </Button>}
+            </Button>
+          }
+          {
+            close &&
+            <Button
+              bg="transparent"
+              h="auto"
+              _hover={{ bg: "transparent" }}
+              onClick={close}
+            >
+              <CloseIcon />
+            </Button>
+          }
         </ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>

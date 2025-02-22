@@ -28,7 +28,7 @@ export interface TableData {
   [key: string]: TableTypes;
 }
 
-export type ColumnInfoTypes = { header: string; key: string };
+export type ColumnInfoTypes = { header: string; key: string; display: boolean };
 
 type Props = {
   data: TableData[];
@@ -202,7 +202,7 @@ const CommonTable = ({
                   />
                 </Th>
               ) : null}
-              {columnInfo.map((header, index) => (
+              {columnInfo.map((header, index) => header.display && (
                 <Th key={index}>
                   <Flex alignItems="center">
                     {header.header}
@@ -261,7 +261,7 @@ const CommonTable = ({
                         />
                       </Td>
                     ) : null}
-                    {columnInfo.map((column, i) => (
+                    {columnInfo.map((column, i) => column.display && (
                       <Td
                         onClick={() => {
                           handleRowClick(row);
@@ -292,6 +292,7 @@ const CommonTable = ({
       {isPreviewModalOpen && selectedRow && (
         <ModalContainer
           title={colData[0].value}
+          close={() => setIsPreviewModalOpen(false)}
         >
           <Flex flexDir="column" gap="5px" mt="10px">
             {colData.slice(1).map((column, index) => (

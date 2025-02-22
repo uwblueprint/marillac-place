@@ -19,35 +19,17 @@ import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
 import FormSelectField from "../../common/FormSelectField";
 
-type EditParticipantPreset = {
-  participantId: string;
-  roomNumber: number;
-  arrival: string;
-  departure: string;
-};
-
 type EditParticipantCardProps = {
-  preset: EditParticipantPreset | null;
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  close: () => void;
 };
 
-const EditParticipantCard = ({
-  preset,
-  isOpen,
-  setIsOpen,
-}: EditParticipantCardProps): React.ReactElement => {
-  console.log(preset);
-  const [participantId, setParticipantId] = useState(preset ? preset.participantId : "");
-  const [roomNumber, setRoomNumber] = useState(preset ? preset.roomNumber.toString() : "");
-  const [arrivalDate, setArrivalDate] = useState(preset ? preset.arrival : "");
+const EditParticipantCard = ({close}: EditParticipantCardProps): React.ReactElement => {
+  const [participantId, setParticipantId] = useState("");
+  const [roomNumber, setRoomNumber] = useState("");
+  const [arrivalDate, setArrivalDate] = useState("");
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
-  const [participantIdError, setParticipantIdError] = useState("");
-  const [roomNumberError, setRoomNumberError] = useState("");
-  const [arrivalDateError, setArrivalDateError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   const {
     loading: getAvailableRoomsLoading,
@@ -55,58 +37,35 @@ const EditParticipantCard = ({
     data: getAvailableRoomsData,
   } = useQuery(GET_AVAILABLE_ROOMS);
 
-  const [
-    getParticipantById,
-    {
-      loading: getParticipantByIdLoading,
-      error: getParticipantByIdError,
-      data: getParticipantByIdData,
-    },
-  ] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
-    variables: { participantId },
+  const [getParticipantById] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
+    variables: { participantId }
   });
 
   const [createParticipant] = useMutation(CREATE_PARTICIPANT);
 
   const validate = async () => {
-    const errors = {
-      participantId: "",
-      roomNumber: "",
-      arrivalDate: "",
-      password: "",
-    };
-
-    if (participantId) {
-      await getParticipantById({ variables: { participantId } });
-      if (getParticipantByIdError) {
-        errors.participantId = "Unknown error has occurred.";
-      } else if (
-        getParticipantByIdData &&
-        getParticipantByIdData.getParticipantById != null
-      ) {
-        errors.participantId = "ID already exists";
-      } else {
-        errors.participantId = "";
-      }
-    } else {
-      errors.participantId = "ID Number is missing";
+    if (!participantId || !roomNumber || !arrivalDate || !password) {
+      setError("Missing fields.");
+      return false;
     }
-
-    errors.roomNumber = roomNumber ? "" : "Room Number is missing";
-    errors.arrivalDate = arrivalDate ? "" : "Arrival Date is missing";
-    errors.password = password ? "" : "Password is missing";
-
-    return errors;
+    try {
+      const { data } = await getParticipantById({ variables: { participantId } });
+      if (data.getParticipantById) {
+        setError("ID already exists");
+        return false;
+      }
+      return true;
+    } catch (err) {
+      setError("Unknown error has occurred.");
+      console.error(err);
+      return false;
+    }
   };
 
   const handleSubmit = async () => {
-    const errors = await validate();
-    if (
-      !errors.participantId &&
-      !errors.roomNumber &&
-      !errors.arrivalDate &&
-      !errors.password
-    ) {
+    setError("");
+    const valid: boolean = await validate();
+    if (valid) {
       try {
         const room = parseInt(roomNumber, 10);
         await createParticipant({
@@ -117,16 +76,11 @@ const EditParticipantCard = ({
             password,
           },
         });
-        setIsOpen(false);
+        close();
         window.location.reload();
       } catch (err) {
         console.error(err);
       }
-    } else {
-      setParticipantIdError(errors.participantId);
-      setRoomNumberError(errors.roomNumber);
-      setArrivalDateError(errors.arrivalDate);
-      setPasswordError(errors.password);
     }
   };
 
@@ -135,17 +89,14 @@ const EditParticipantCard = ({
     setRoomNumber("");
     setArrivalDate("");
     setPassword("");
-    setParticipantIdError("");
-    setRoomNumberError("");
-    setArrivalDateError("");
-    setPasswordError("");
+    setError("");
   };
 
   return (
-    <ModalContainer
-      title="Edit Participant"
-    >
+    <ModalContainer title="Edit Participant">
       <Flex flexDir="column" gap="20px">
+        {error && <Flex textColor="red.500">{error}</Flex>}
+
         <FormInputField
           label="ID Number"
           value={participantId}
@@ -158,9 +109,9 @@ const EditParticipantCard = ({
 
         {getAvailableRoomsLoading ? (
           <Spinner />
-        ) : getAvailableRoomsError ? (
+        ) : getAvailableRoomsError || !getAvailableRoomsData ? (
           <Flex p="10px">Error getting rooms.</Flex>
-        ) : getAvailableRoomsData && getAvailableRoomsData.getAvailableRooms ? (
+        ) : (
           <FormSelectField
             label="Room Number"
             placeholder="Please select a room"
@@ -175,8 +126,6 @@ const EditParticipantCard = ({
             onChange={(e) => setRoomNumber(e.target.value)}
             required
           />
-        ) : (
-          <Flex p="10px">No available rooms.</Flex>
         )}
 
         <FormInputField
@@ -202,7 +151,7 @@ const EditParticipantCard = ({
             variant="cancel"
             mr="8px"
             onClick={() => {
-              setIsOpen(false);
+              close();
               reset();
             }}
           >
