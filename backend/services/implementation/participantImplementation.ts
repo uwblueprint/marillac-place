@@ -43,6 +43,31 @@ class ParticipantService implements IParticipantService {
           participantId,
           roomNumber,
           arrival,
+          departure: "",
+          password,
+        },
+      });
+      return true;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async updateParticipantById(
+    participantId: string,
+    roomNumber: number,
+    arrival: string,
+    departure: string,
+    password: string,
+  ): Promise<boolean> {
+    try {
+      await prisma.participant.update({
+        where: { participantId },
+        data: {
+          roomNumber,
+          arrival,
+          departure,
           password,
         },
       });

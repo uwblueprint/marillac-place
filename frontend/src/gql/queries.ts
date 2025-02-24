@@ -20,7 +20,7 @@ export const GET_ALL_PARTICIPANTS = gql`
 `;
 
 export const GET_PARTICIPANT_BY_ID = gql`
-  query getParticipantById($participantId: String) {
+  query getParticipantById($participantId: String!) {
     getParticipantById(participantId: $participantId) {
       participantId
       roomNumber

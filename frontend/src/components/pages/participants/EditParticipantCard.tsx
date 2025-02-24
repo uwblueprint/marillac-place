@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Flex,
-  Spinner,
-  Input
+  Spinner
 } from "@chakra-ui/react";
 
-import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 
-import {
-  GET_AVAILABLE_ROOMS,
-  GET_PARTICIPANT_BY_ID,
-} from "../../../gql/queries";
-import { CREATE_PARTICIPANT } from "../../../gql/mutations";
+import { GET_AVAILABLE_ROOMS } from "../../../gql/queries";
+import { UPDATE_PARTICIPANT_BY_ID } from "../../../gql/mutations";
 
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
@@ -37,6 +33,15 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
     error: getAvailableRoomsError,
     data: getAvailableRoomsData,
   } = useQuery(GET_AVAILABLE_ROOMS);
+  const [updateParticipantById] = useMutation(UPDATE_PARTICIPANT_BY_ID);
+
+  const reset = () => {
+    setRoomNumber(selected.roomNumber);
+    setArrivalDate(selected.arrival);
+    setDepartureDate(selected.departure)
+    setPassword(selected.password);
+    setError("");
+  };
 
   const validate = async () => {
     if (!roomNumber || !arrivalDate || !password) {
@@ -56,27 +61,22 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
     if (valid) {
       try {
         const room = parseInt(roomNumber, 10);
-        // await createParticipant({
-        //   variables: {
-        //     participantId,
-        //     roomNumber: room,
-        //     arrival: arrivalDate,
-        //     password,
-        //   },
-        // });
+        await updateParticipantById({
+          variables: {
+            participantId: selected.participantId,
+            roomNumber: room,
+            arrival: arrivalDate,
+            departure: departureDate,
+            password,
+          },
+        });
+        reset();
         close();
         window.location.reload();
       } catch (err) {
         console.error(err);
       }
     }
-  };
-
-  const reset = () => {
-    setRoomNumber("");
-    setArrivalDate("");
-    setPassword("");
-    setError("");
   };
 
   return (
@@ -139,8 +139,8 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
             variant="cancel"
             mr="8px"
             onClick={() => {
-              close();
               reset();
+              close();
             }}
           >
             Cancel

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Text,
   Flex,
-  Select,
-  FormLabel,
   Spinner,
 } from "@chakra-ui/react";
 
@@ -36,12 +34,16 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
     error: getAvailableRoomsError,
     data: getAvailableRoomsData,
   } = useQuery(GET_AVAILABLE_ROOMS);
-
-  const [getParticipantById] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
-    variables: { participantId }
-  });
-
+  const [getParticipantById] = useLazyQuery(GET_PARTICIPANT_BY_ID);
   const [createParticipant] = useMutation(CREATE_PARTICIPANT);
+
+  const reset = () => {
+    setParticipantId("");
+    setRoomNumber("");
+    setArrivalDate("");
+    setPassword("");
+    setError("");
+  };
 
   const validate = async () => {
     if (!participantId || !roomNumber || !arrivalDate || !password) {
@@ -76,20 +78,13 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
             password,
           },
         });
+        reset();
         close();
         window.location.reload();
       } catch (err) {
         console.error(err);
       }
     }
-  };
-
-  const reset = () => {
-    setParticipantId("");
-    setRoomNumber("");
-    setArrivalDate("");
-    setPassword("");
-    setError("");
   };
 
   return (
@@ -151,8 +146,8 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
             variant="cancel"
             mr="8px"
             onClick={() => {
-              close();
               reset();
+              close();
             }}
           >
             Cancel

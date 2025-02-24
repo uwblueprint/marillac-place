@@ -37,6 +37,30 @@ const participantResolvers = {
         password,
       );
     },
+    updateParticipantById: async (
+      _parent: undefined,
+      {
+        participantId,
+        roomNumber,
+        arrival,
+        departure,
+        password,
+      }: {
+        participantId: string;
+        roomNumber: number;
+        arrival: string;
+        departure: string;
+        password: string;
+      },
+    ): Promise<boolean> => {
+      return participantService.updateParticipantById(
+        participantId,
+        roomNumber,
+        arrival,
+        departure,
+        password,
+      );
+    },
   },
 };
 

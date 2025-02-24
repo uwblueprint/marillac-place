@@ -9,6 +9,13 @@ interface IParticipantService {
     arrival: string,
     password: string,
   ): Promise<boolean>;
+  updateParticipantById(
+    participantId: string,
+    roomNumber: number,
+    arrival: string,
+    departure: string,
+    password: string,
+  ): Promise<boolean>;
 }
 
 export default IParticipantService;
