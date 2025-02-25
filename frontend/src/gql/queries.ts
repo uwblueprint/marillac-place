@@ -1,5 +1,7 @@
 import { gql } from "@apollo/client";
 
+// Participant Queries
+
 export const GET_AVAILABLE_ROOMS = gql`
   query getAvailableRooms {
     getAvailableRooms
@@ -27,6 +29,38 @@ export const GET_PARTICIPANT_BY_ID = gql`
       arrival
       departure
       password
+      credit
+    }
+  }
+`;
+
+// Task Queries
+export const GET_TASK_BY_ID = gql`
+  query getTaskById($taskId: Int!) {
+    getTaskById(taskId: $taskId) {
+      type
+      name
+      credit
+      start
+      end
+      isRecurring
+      repeatDays
+    }
+  }
+`;
+export const GET_TASKS_BY_TYPE = gql`
+  query GetTasksByStartDate($startDate: DateTime!) {
+    getTasksByStartDate(startDate: $startDate) {
+      name
+      credit
+    }
+  }
+`;
+export const GET_TASKS_BY_START_DATE = gql`
+  query GetTasksByType($taskType: TaskType!) {
+    getTasksByType(type: $taskType) {
+      taskId
+      name
       credit
     }
   }

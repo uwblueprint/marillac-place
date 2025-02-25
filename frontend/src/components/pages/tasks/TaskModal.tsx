@@ -21,8 +21,6 @@ import {
   TaskTypeEnum,
   TaskResponse,
   TaskRequest,
-  TaskAssignedRequest,
-  TaskAssignedResponse,
 } from "../../../types/TaskTypes";
 // import {
 //   TaskRequest,
@@ -218,7 +216,7 @@ const TaskModal = ({
 
   return (
     <ModalContainer
-      title={task ? task.title : "Assign Task"}
+      title={task ? task.name : "Assign Task"}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       onDelete={isEditMode ? handleDelete : undefined}

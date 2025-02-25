@@ -6,9 +6,9 @@ const resolverTypes = gql`
     getParticipantById(participantId: String): Participant
     getAvailableRooms: [Int]
 
-    getTaskById: Task
-    getTasksByType: [Task]
-    getTasksByStartDate: [Task]
+    getTaskById(taskId: Int!): Task!
+    getTasksByType(type: TaskType!): [Task!]
+    getTasksByStartDate(startDate: DateTime!): [Task!]
   }
 
   type Mutation {
@@ -19,7 +19,28 @@ const resolverTypes = gql`
       password: String
     ): Boolean
 
-    createTask(task: InputTaskDTO): Task
+    createTask(
+      type: TaskType!
+      name: String!
+      credit: Int!
+      start: DateTime!
+      end: DateTime
+      isRecurring: Boolean!
+      repeatDays: [DaysOfWeek!]
+    ): Task!
+
+    updateTask(
+      taskId: Int!
+      type: TaskType
+      name: String
+      credit: Int
+      start: DateTime
+      end: DateTime
+      isRecurring: Boolean
+      repeatDays: [DaysOfWeek]
+    ): Task!
+
+    deleteTask(taskId: Int!): Task!
   }
 `;
 

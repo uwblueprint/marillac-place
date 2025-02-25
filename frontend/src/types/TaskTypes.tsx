@@ -42,53 +42,23 @@ export enum TaskTypeEnum {
   ACHIEVEMENT = "ACHIEVEMENT",
 }
 
-export type TaskLocation = {
-  id: number;
-  title: string;
-  description: string;
-};
-
 export type TaskResponse = {
   id: number;
   type: TaskTypeEnum;
-  title: string;
-  description: string;
-  creditValue: number;
-  location: TaskLocation;
-  tasksAssigned: TaskResponse[];
-  endDate?: Date;
-  recurrenceFrequency: RecurrenceFrequency;
-  specificDay?: DaysOfWeek;
+  name: string;
+  credit: number;
+  start: Date;
+  end?: Date;
+  isReccuring: boolean;
   repeatDays?: DaysOfWeek[];
 };
 
 export type TaskRequest = {
   type: TaskTypeEnum;
-  title: string;
-  description: string;
-  creditValue: number;
-  locationId: number;
-  endDate?: Date;
-  recurrenceFrequency: RecurrenceFrequency;
-  specificDay?: DaysOfWeek;
+  name: string;
+  credit: number;
+  start: Date;
+  end?: Date;
+  isRecurring: boolean;
   repeatDays?: DaysOfWeek[];
-};
-
-export type TaskAssignedResponse = {
-  id: number;
-  taskId: number;
-  assigneeId: number;
-  assignerId: number;
-  status: Status;
-  startDate: Date;
-  comments?: string;
-};
-
-export type TaskAssignedRequest = {
-  taskId?: number;
-  assigneeId?: number;
-  assignerId?: number;
-  status?: Status;
-  startDate?: Date;
-  comments?: string;
 };

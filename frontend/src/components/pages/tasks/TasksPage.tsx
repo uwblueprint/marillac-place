@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   Flex,
   Input,
@@ -12,63 +13,23 @@ import {
 } from "@chakra-ui/react";
 import { Add, Search, FileDownloadOutlined } from "@mui/icons-material";
 import SideBar from "../../common/SideBar";
-// import { useMutation, useQuery } from "@apollo/client";
-
-// import {
-//   CREATE_TASK,
-//   UPDATE_TASK,
-//   DELETE_TASK,
-//   ASSIGN_TASK,
-//   CHANGE_TASK_STATUS,
-// } from "../../../APIClients/Mutations/TaskMutations";
-
-// import {
-//   GET_TASK_BY_ID,
-//   GET_TASKS_BY_TYPE,
-//   GET_TASKS_BY_ASSIGNEE_ID,
-//   GET_TASKS_BY_ASSIGNER_ID,
-//   GET_TASKS_BY_START_DATE,
-//   GET_TASKS_BY_STATUS,
-// } from "../../../APIClients/Queries/TaskQueries";
-
-// import {
-//   Status,
-//   RecurrenceFrequency,
-//   DaysOfWeek,
-//   TaskTypeEnum,
-//   TaskResponse,
-//   TaskRequest,
-//   TaskAssignedRequest,
-//   TaskAssignedResponse,
-// } from "../../../APIClients/Types/TaskType";
 import TaskModal from "./TaskModal";
 import {
   TaskType,
   Task,
   ChoreTask,
-  Status,
-  RecurrenceFrequency,
   DaysOfWeek,
   TaskTypeEnum,
   TaskResponse,
   TaskRequest,
-  TaskAssignedRequest,
-  TaskAssignedResponse,
 } from "../../../types/TaskTypes";
 import CommonTable, {
   ColumnInfoTypes,
   TableData,
 } from "../../common/CommonTable";
-import {
-  tasksColumnTypes,
-  choreTasksColumnTypes,
-} from "./columnKeys";
-// import {
-//   requiredTasksMockData,
-//   optionalTasksMockData,
-//   customTasksMockData,
-//   choreTasksMockData,
-// } from "../../../mocks/tasks"; // TODO: Replace mock data
+import { tasksColumnTypes, choreTasksColumnTypes } from "./columnKeys";
+import { CREATE_TASK } from "../../../gql/mutations";
+import { GET_TASKS_BY_TYPE } from "../../../gql/queries";
 
 const TasksPage = (): React.ReactElement => {
   const [requiredTasks, setRequiredTasks] = useState<Task[]>([]);
@@ -94,11 +55,11 @@ const TasksPage = (): React.ReactElement => {
     },
   ];
 
-  //   const { loading, error, data, refetch } = useQuery(GET_TASKS_BY_TYPE, {
-  //     variables: { type: taskType === "CUSTOM" ? "OPTIONAL" : taskType },
-  //   });
+  // const { loading, error, data, refetch } = useQuery(GET_TASKS_BY_TYPE, {
+  //   variables: { type: taskType === "CUSTOM" ? "OPTIONAL" : taskType },
+  // });
 
-  //   const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
+  const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
 
   //   const [updateTask] = useMutation<{
   //     taskID: number;
@@ -193,12 +154,23 @@ const TasksPage = (): React.ReactElement => {
   //   // };
 
   const handleAddTask = async (task: TaskRequest) => {
-    //     try {
-    //       await createTask({ variables: { task } });
-    //       await refetch();
-    //     } catch (e) {
-    //       console.log(e);
-    //     }
+    try {
+      await createTask({
+        variables: {
+          type: task.type,
+          name: task.name,
+          credit: task.credit,
+          start: task.start,
+          end: task.end || null,
+          isRecurring: task.isRecurring,
+          repeatDays: task.repeatDays,
+        },
+      });
+      console.log("created");
+      // await refetch();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleUpdateTask = async (taskId: string, task: TaskRequest) => {
@@ -307,10 +279,22 @@ const TasksPage = (): React.ReactElement => {
     //     }
   }, [taskType]);
 
+  const date = new Date("2025-02-24T15:30:00Z");
+
+  const taskToCreate: TaskRequest = {
+    type: TaskTypeEnum.OPTIONAL,
+    name: "Test Front End",
+    credit: 5,
+    start: date,
+    end: date,
+    isRecurring: true,
+    repeatDays: [DaysOfWeek.MONDAY],
+  };
+
   return (
     <Flex>
+      <Button onClick={() => handleAddTask(taskToCreate)}>Click</Button>
       <SideBar />
-
       <Flex flexDir="column" flexGrow={1}>
         <Tabs
           variant="horizontal"
