@@ -25,8 +25,13 @@ import { ScheduleType } from "../../../types/ScheduleTypes";
 import ScheduleListView from "./listView/ScheduleListView";
 import ScheduleCalendar from "./calendarView/ScheduleCalendar";
 import SideBar from "../../common/SideBar"
+import AddTaskCard from "./AddTaskCard"
+
+
+
 
 const SchedulePage = (): React.ReactElement => {
+  const [addTaskCardOpened, setAddTaskCardOpened] = useState(false);
   const [rooms, setRooms] = useState<number[]>([]);
   const [scheduleType, setScheduleType] = useState<ScheduleType>("LIST");
   const [scheduleData, setScheduleData] = useState<string>("");
@@ -64,7 +69,7 @@ const SchedulePage = (): React.ReactElement => {
   const selectOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     setActive(e.currentTarget.innerText);
   };
-
+  
   const formatTabs = (roomNums: number[]) => {
     return (
       <Tabs variant="horizontal" h="30px" mb={6}>
@@ -149,6 +154,10 @@ const SchedulePage = (): React.ReactElement => {
 
       <Flex justifyContent="space-between" mt={-5} ml={8} mr={10}>
         <Flex>
+        <AddTaskCard
+          isOpen={addTaskCardOpened}
+          setIsOpen={setAddTaskCardOpened}
+        />
           <Button
             variant={active === "List" ? "primary" : "secondary"}
             w="8em"
@@ -182,7 +191,7 @@ const SchedulePage = (): React.ReactElement => {
           Update Selected
         </Button>
 
-        <Button variant="primary" size="sm" onClick={() => {}}>
+        <Button variant="primary" size="sm" onClick={() => setAddTaskCardOpened(true)}>
         + Assign Task 
         </Button>
         </Flex>
