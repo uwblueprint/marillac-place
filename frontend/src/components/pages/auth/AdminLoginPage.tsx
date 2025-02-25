@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
 
 import {
+  Select,
   Button,
   Flex,
   Text,
@@ -29,7 +30,7 @@ const LOGIN = gql`
 const LoginPage = (): React.ReactElement => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -62,17 +63,23 @@ const LoginPage = (): React.ReactElement => {
         </Text>
 
         <FormControl isInvalid={!!error} alignItems="center">
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
+          <Select
+            id="role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            placeholder="Role"
             h="49px"
             borderColor="black"
             mb="24px"
             fontSize="18px"
-          />
+            color="black"
+          >
+            <option value="" disabled selected hidden style={{ color: "gray" }}>
+              Role
+            </option>
+            <option value="admin_staff">Administrative Staff</option>
+            <option value="release_staff">Release Staff</option>
+          </Select>
           <Input
             id="password"
             type="password"
