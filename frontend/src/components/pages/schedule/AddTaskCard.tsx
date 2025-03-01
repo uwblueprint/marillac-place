@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
-  Button,
   Text,
-  Flex,
+  Button,
+  Input,
   Select,
+  Flex,
+  FormControl,
   FormLabel,
-  Spinner,
+  Checkbox,
 } from "@chakra-ui/react";
 
 import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
@@ -137,30 +139,23 @@ const AddTaskCard = ({
       setIsOpen={setIsOpen}
     >
       <Flex flexDir="column" gap="20px">
-      {getAvailableRoomsLoading ? (
-          <Spinner />
-        ) : getAvailableRoomsError ? (
-          <Flex p="10px">Error getting rooms.</Flex>
-        ) : getAvailableRoomsData && getAvailableRoomsData.getAvailableRooms ? (
-          <FormSelectField
-            label="Task Type"
-            placeholder="Please select a room"
-            value={roomNumber}
-            options={getAvailableRoomsData.getAvailableRooms.map(
-              (room: number) => ({
-                key: room,
-                value: room,
-                display: `Room ${room}`,
-              }),
-            )}
-            onChange={(e) => setRoomNumber(e.target.value)}
-            required
-            error={roomNumberError}
-          />
-        ) : (
-          <Flex p="10px">No available rooms.</Flex>
-        )}
-
+      
+      <FormLabel mb="-15px" color="gray.main" fontWeight="700">
+        Task Type
+      </FormLabel>
+      <Select
+        variant="primary"
+                     border="solid"
+                     borderWidth="2px"
+                     borderColor="gray.300"
+                     height="34px"
+      >
+        <option> Custom </option>
+        <option> Required </option>
+        <option> Optional </option>
+        <option> Chore </option>
+      </Select>
+      
         <FormInputField
           label="Task Name"
           value={participantId}
@@ -173,29 +168,30 @@ const AddTaskCard = ({
         />
         
 
-{getAvailableRoomsLoading ? (
-          <Spinner />
-        ) : getAvailableRoomsError ? (
-          <Flex p="10px">Error getting rooms.</Flex>
-        ) : getAvailableRoomsData && getAvailableRoomsData.getAvailableRooms ? (
-          <FormSelectField
-            label="Recurrence"
-            placeholder="Please select a room"
-            value={roomNumber}
-            options={getAvailableRoomsData.getAvailableRooms.map(
-              (room: number) => ({
-                key: room,
-                value: room,
-                display: `Room ${room}`,
-              }),
-            )}
-            onChange={(e) => setRoomNumber(e.target.value)}
-            required
-            error={roomNumberError}
-          />
-        ) : (
-          <Flex p="10px">No available rooms.</Flex>
-        )}        
+        <FormLabel mb="-15px" color="gray.main" fontWeight="700">
+        Recurrence
+      </FormLabel>
+      <Select
+        variant="primary"
+                     border="solid"
+                     borderWidth="2px"
+                     borderColor="gray.300"
+                     height="34px"
+      >
+        <option> Does Not Repeat </option>
+        <option> Repeats </option>
+      </Select>        
+    <FormControl>
+      <FormLabel mb="-15px" color="gray.main" fontWeight="700">
+        Date
+      </FormLabel>
+      <Flex>
+        <input
+          variant="primary"
+        
+        />
+      </Flex>
+    </FormControl>
 
     <FormInputField
           label="Marillac Bucks"
