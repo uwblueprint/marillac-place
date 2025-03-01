@@ -52,23 +52,23 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
     }
     try {
       const { data } = await getParticipantById({ variables: { participantId } });
-      if (data.getParticipantById) {
-        setError("ID already exists");
+      if (data && data.getParticipantById) {
+        setError("ID already exists.");
         return false;
       }
       return true;
     } catch (err) {
       setError("Unknown error has occurred.");
-      console.error(err);
+      console.log(err);
       return false;
     }
   };
 
   const handleSubmit = async () => {
     setError("");
-    const valid: boolean = await validate();
-    if (valid) {
-      try {
+    try {
+      const valid: boolean = await validate();
+      if (valid) {
         const room = parseInt(roomNumber, 10);
         await createParticipant({
           variables: {
@@ -81,9 +81,10 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
         reset();
         close();
         window.location.reload();
-      } catch (err) {
-        console.error(err);
       }
+    } catch (err) {
+      setError("Unable to create participant.")
+      console.log(err);
     }
   };
 

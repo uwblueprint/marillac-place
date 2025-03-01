@@ -57,9 +57,9 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
 
   const handleSubmit = async () => {
     setError("");
-    const valid: boolean = await validate();
-    if (valid) {
-      try {
+    try {
+      const valid: boolean = await validate();
+      if (valid) {
         const room = parseInt(roomNumber, 10);
         await updateParticipantById({
           variables: {
@@ -73,9 +73,10 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
         reset();
         close();
         window.location.reload();
-      } catch (err) {
-        console.error(err);
-      }
+      } 
+    } catch (err) {
+      setError("Unable to update participant.");
+      console.log(err);
     }
   };
 
