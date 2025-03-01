@@ -49,16 +49,16 @@ export const GET_TASK_BY_ID = gql`
   }
 `;
 export const GET_TASKS_BY_TYPE = gql`
-  query GetTasksByStartDate($startDate: DateTime!) {
-    getTasksByStartDate(startDate: $startDate) {
+  query GetTasksByType($type: TaskType!) {
+    getTasksByType(type: $type) {
       name
       credit
     }
   }
 `;
 export const GET_TASKS_BY_START_DATE = gql`
-  query GetTasksByType($taskType: TaskType!) {
-    getTasksByType(type: $taskType) {
+  query GetTasksByStartDate($startDate: DateTime!) {
+    getTasksByStartDate(startDate: $startDate) {
       taskId
       name
       credit

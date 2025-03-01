@@ -24,7 +24,7 @@ export const CREATE_TASK = gql`
     $name: String!
     $credit: Int!
     $start: DateTime!
-    $end: DateTime!
+    $end: DateTime
     $isRecurring: Boolean!
     $repeatDays: [DaysOfWeek!]
   ) {
@@ -36,7 +36,16 @@ export const CREATE_TASK = gql`
       end: $end
       isRecurring: $isRecurring
       repeatDays: $repeatDays
-    )
+    ) {
+      taskId
+      type
+      name
+      isRecurring
+      repeatDays
+      start
+      end
+      credit
+    }
   }
 `;
 
@@ -60,12 +69,30 @@ export const UPDATE_TASK = gql`
       end: $end
       isRecurring: $isRecurring
       repeatDays: $repeatDays
-    )
+    ) {
+      taskId
+      type
+      name
+      isRecurring
+      repeatDays
+      start
+      end
+      credit
+    }
   }
 `;
 
 export const DELETE_TASK = gql`
   mutation deleteTask($taskId: Int!) {
-    deleteTask(taskId: $taskId)
+    deleteTask(taskId: $taskId) {
+      taskId
+      type
+      name
+      isRecurring
+      repeatDays
+      start
+      end
+      credit
+    }
   }
 `;

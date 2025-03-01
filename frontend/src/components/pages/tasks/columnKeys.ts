@@ -3,37 +3,38 @@ import { ColumnInfoTypes } from "../../common/CommonTable";
 export const tasksColumnTypes: ColumnInfoTypes[] = [
   {
     header: "Task Name",
-    key: "title",
+    key: "name",
   },
   {
     header: "Recurrence",
-    key: "recurrenceFrequency",
+    key: "isRecurring",
   },
   {
     header: "Due Date",
-    key: "endDate",
+    key: "end",
   },
   {
     header: "Marillac Bucks",
-    key: "creditValue",
+    key: "credit",
   },
 ];
 
 export const choreTasksColumnTypes: ColumnInfoTypes[] = [
   {
     header: "Chore Name",
-    key: "title",
+    key: "name",
   },
   {
     header: "Recurrence",
-    key: "recurrenceFrequency",
+    key: "isRecurring",
+
   },
   {
     header: "Due Date",
-    key: "endDate",
+    key: "end",
   },
   {
     header: "Marillac Bucks",
-    key: "creditValue",
+    key: "credit",
   },
 ];

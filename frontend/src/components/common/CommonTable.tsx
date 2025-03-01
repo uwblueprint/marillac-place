@@ -301,7 +301,7 @@ const CommonTable = ({
                 <Text as="span" fontWeight="700">
                   {column.header}:{" "}
                 </Text>{" "}
-                {column.value}
+                {colData[index+1].value || "null"}
               </Text>
             ))}
           </Flex>

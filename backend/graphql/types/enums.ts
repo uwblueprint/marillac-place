@@ -9,6 +9,7 @@ const customTypes = gql`
   enum TaskType {
     REQUIRED
     OPTIONAL
+    CHORE
   }
 
   enum TaskStatus {
