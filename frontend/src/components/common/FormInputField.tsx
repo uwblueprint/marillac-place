@@ -7,8 +7,7 @@ import {
   FormLabel,
   InputRightElement,
   InputGroup,
-  InputLeftElement,
-  FormErrorMessage,
+  InputLeftElement
 } from "@chakra-ui/react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";

@@ -25,28 +25,28 @@ const columnTypes: ColumnInfoTypes[] = [
   {
     header: "ID Number",
     key: "participantId",
-    display: true
+    display: true,
   },
   {
     header: "Room #",
     key: "roomNumber",
-    display: true
+    display: true,
   },
   {
     header: "Arrival Date",
     key: "arrival",
-    display: true
+    display: true,
   },
   {
     header: "Departure Date",
     key: "departure",
-    display: true
+    display: true,
   },
   {
     header: "Password",
     key: "password",
-    display: false
-  }
+    display: false,
+  },
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
@@ -70,7 +70,7 @@ const ParticipantsPage = (): React.ReactElement => {
             <InputLeftElement pointerEvents="none">
               <Icon as={Search} color="gray.300" />
             </InputLeftElement>
-            <Input 
+            <Input
               placeholder="Search"
               onChange={(e) => setParticipantFilter(e.target.value)}
             />
@@ -90,17 +90,17 @@ const ParticipantsPage = (): React.ReactElement => {
           <Flex p="10px">{getAllParticipantsError.message}</Flex>
         ) : getAllParticipantsData.getAllParticipants ? (
           <CommonTable
-            data={getAllParticipantsData.getAllParticipants.filter(
-              (participant: TableData) => participant.participantId.includes(participantFilter)
-            ).map(
-              (participant: TableData) => ({
+            data={getAllParticipantsData.getAllParticipants
+              .filter((participant: TableData) =>
+                participant.participantId.includes(participantFilter),
+              )
+              .map((participant: TableData) => ({
                 participantId: participant.participantId,
                 roomNumber: participant.roomNumber,
                 arrival: participant.arrival,
                 departure: participant.departure || "",
-                password: participant.password
-              }),
-            )}
+                password: participant.password,
+              }))}
             columnInfo={columnTypes}
             onEdit={(row: any) => {
               setSelectedParticipant(row);
@@ -111,8 +111,15 @@ const ParticipantsPage = (): React.ReactElement => {
           <Flex p="10px">No participants found.</Flex>
         )}
 
-        {addParticipant && <AddParticipantCard close={() => setAddParticipant(false)} />}
-        {editParticipant && selectedParticipant && <EditParticipantCard selected={selectedParticipant} close={() => setEditParticipant(false)} />}
+        {addParticipant && (
+          <AddParticipantCard close={() => setAddParticipant(false)} />
+        )}
+        {editParticipant && selectedParticipant && (
+          <EditParticipantCard
+            selected={selectedParticipant}
+            close={() => setEditParticipant(false)}
+          />
+        )}
       </Flex>
     </Flex>
   );

@@ -1,29 +1,17 @@
-import React, { useContext } from "react";
-import { gql, useMutation } from "@apollo/client";
+import React from "react";
 import {
   Tabs,
   TabList,
   Tab,
   Box,
   Button,
-  Avatar,
   Text,
-  Flex,
-  Heading,
-  useBreakpointValue,
+  Flex
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 import * as Routes from "../../constants/routes";
 import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
-
-const mockAuthenticatedUser = {
-  id: "1",
-  type: "STAFF",
-  email: "janedoe@gmail.com",
-  firstName: "Jane",
-  lastName: "Doe",
-};
 
 const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
   label,

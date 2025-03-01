@@ -203,41 +203,48 @@ const CommonTable = ({
                   />
                 </Th>
               ) : null}
-              {columnInfo.map((header, index) => header.display && (
-                <Th key={index}>
-                  <Flex alignItems="center">
-                    {header.header}
-                    <Flex
-                      alignItems="center"
-                      flexDirection="column"
-                      paddingLeft="2.5px"
-                    >
-                      <KeyboardArrowUpOutlinedIcon
-                        style={{
-                          height: "0.5em",
-                          cursor: "pointer",
-                          color:
-                            sortingColumn[header.key] === 1 ? "" : "#c4c8d8",
-                        }}
-                        onClick={() => {
-                          sortColumn(header.key);
-                        }}
-                      />
-                      <KeyboardArrowDownOutlinedIcon
-                        style={{
-                          height: "0.5em",
-                          cursor: "pointer",
-                          color:
-                            sortingColumn[header.key] === 2 ? "" : "#c4c8d8",
-                        }}
-                        onClick={() => {
-                          sortColumn(header.key);
-                        }}
-                      />
-                    </Flex>
-                  </Flex>
-                </Th>
-              ))}
+              {columnInfo.map(
+                (header, index) =>
+                  header.display && (
+                    <Th key={index}>
+                      <Flex alignItems="center">
+                        {header.header}
+                        <Flex
+                          alignItems="center"
+                          flexDirection="column"
+                          paddingLeft="2.5px"
+                        >
+                          <KeyboardArrowUpOutlinedIcon
+                            style={{
+                              height: "0.5em",
+                              cursor: "pointer",
+                              color:
+                                sortingColumn[header.key] === 1
+                                  ? ""
+                                  : "#c4c8d8",
+                            }}
+                            onClick={() => {
+                              sortColumn(header.key);
+                            }}
+                          />
+                          <KeyboardArrowDownOutlinedIcon
+                            style={{
+                              height: "0.5em",
+                              cursor: "pointer",
+                              color:
+                                sortingColumn[header.key] === 2
+                                  ? ""
+                                  : "#c4c8d8",
+                            }}
+                            onClick={() => {
+                              sortColumn(header.key);
+                            }}
+                          />
+                        </Flex>
+                      </Flex>
+                    </Th>
+                  ),
+              )}
               <Th />
             </Tr>
           </Thead>
@@ -262,16 +269,19 @@ const CommonTable = ({
                         />
                       </Td>
                     ) : null}
-                    {columnInfo.map((column, i) => column.display && (
-                      <Td
-                        onClick={() => {
-                          handleRowClick(row);
-                        }}
-                        key={i}
-                      >
-                        {String(row[column.key])}
-                      </Td>
-                    ))}
+                    {columnInfo.map(
+                      (column, i) =>
+                        column.display && (
+                          <Td
+                            onClick={() => {
+                              handleRowClick(row);
+                            }}
+                            key={i}
+                          >
+                            {String(row[column.key])}
+                          </Td>
+                        ),
+                    )}
                     <Td
                       onClick={(e) => {
                         e.stopPropagation();

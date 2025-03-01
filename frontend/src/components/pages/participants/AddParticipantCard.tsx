@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Text,
-  Flex,
-  Spinner,
-} from "@chakra-ui/react";
+import { Button, Flex, Spinner } from "@chakra-ui/react";
 
 import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import {
@@ -21,7 +16,9 @@ type AddParticipantCardProps = {
   close: () => void;
 };
 
-const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElement => {
+const AddParticipantCard = ({
+  close,
+}: AddParticipantCardProps): React.ReactElement => {
   const [participantId, setParticipantId] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
@@ -51,7 +48,9 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
       return false;
     }
     try {
-      const { data } = await getParticipantById({ variables: { participantId } });
+      const { data } = await getParticipantById({
+        variables: { participantId },
+      });
       if (data && data.getParticipantById) {
         setError("ID already exists.");
         return false;
@@ -83,7 +82,7 @@ const AddParticipantCard = ({close}: AddParticipantCardProps): React.ReactElemen
         window.location.reload();
       }
     } catch (err) {
-      setError("Unable to create participant.")
+      setError("Unable to create participant.");
       console.log(err);
     }
   };

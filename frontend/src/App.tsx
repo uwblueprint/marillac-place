@@ -65,7 +65,10 @@ const App = (): React.ReactElement => {
             {/* <Route path={ROUTES.HOME_PAGE} element={<HomePage />} /> */}
             {/* <Route path={ROUTES.SCHEDULE_PAGE} element={<SchedulePage />} /> */}
             {/* <Route path={ROUTES.ANNOUNCEMENTS_PAGE} element={<AnnouncementsPage />} /> */}
-            <Route path={ROUTES.PARTICIPANTS_PAGE} element={<ParticipantsPage />} />
+            <Route
+              path={ROUTES.PARTICIPANTS_PAGE}
+              element={<ParticipantsPage />}
+            />
             {/* <Route path={ROUTES.TASKS_PAGE} element={<TasksPage />} /> */}
             <Route path="*" element={<NotFoundPage />} />
           </Switch>

@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Flex,
-  Spinner
-} from "@chakra-ui/react";
+import { Button, Flex, Spinner } from "@chakra-ui/react";
 
 import { useMutation, useQuery } from "@apollo/client";
 
@@ -20,7 +16,10 @@ type EditParticipantCardProps = {
   close: () => void;
 };
 
-const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React.ReactElement => {
+const EditParticipantCard = ({
+  selected,
+  close,
+}: EditParticipantCardProps): React.ReactElement => {
   const [roomNumber, setRoomNumber] = useState(selected.roomNumber);
   const [arrivalDate, setArrivalDate] = useState(selected.arrival);
   const [departureDate, setDepartureDate] = useState(selected.departure);
@@ -38,7 +37,7 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
   const reset = () => {
     setRoomNumber(selected.roomNumber);
     setArrivalDate(selected.arrival);
-    setDepartureDate(selected.departure)
+    setDepartureDate(selected.departure);
     setPassword(selected.password);
     setError("");
   };
@@ -47,8 +46,13 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
     if (!roomNumber || !arrivalDate || !password) {
       setError("Missing fields.");
       return false;
-    } 
-    if (roomNumber === selected.roomNumber && arrivalDate === selected.arrival && departureDate === selected.departure && password === selected.password) {
+    }
+    if (
+      roomNumber === selected.roomNumber &&
+      arrivalDate === selected.arrival &&
+      departureDate === selected.departure &&
+      password === selected.password
+    ) {
       setError("No changes made.");
       return false;
     }
@@ -73,7 +77,7 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
         reset();
         close();
         window.location.reload();
-      } 
+      }
     } catch (err) {
       setError("Unable to update participant.");
       console.log(err);
@@ -86,7 +90,9 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
         {error && <Flex textColor="red.500">{error}</Flex>}
 
         <Flex flexDir="column">
-          <Flex mb="5px" color="gray.main" fontWeight="700">ID Number</Flex>
+          <Flex mb="5px" color="gray.main" fontWeight="700">
+            ID Number
+          </Flex>
           <Flex>{selected.participantId}</Flex>
         </Flex>
 
@@ -106,7 +112,9 @@ const EditParticipantCard = ({selected, close}: EditParticipantCardProps): React
                 display: `Room ${room}`,
               }),
             )}
-            onChange={(e) => setRoomNumber(e.target.value || selected.roomNumber)}
+            onChange={(e) =>
+              setRoomNumber(e.target.value || selected.roomNumber)
+            }
           />
         )}
 

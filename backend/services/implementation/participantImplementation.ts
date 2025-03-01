@@ -6,7 +6,7 @@ class ParticipantService implements IParticipantService {
   async getAllParticipants(): Promise<Participant[]> {
     try {
       const participants = await prisma.participant.findMany({
-        orderBy: [{ departure: "asc" }, { arrival: "desc" }],
+        orderBy: [{ departure: "asc" }, { arrival: "asc" }],
       });
       return participants;
     } catch (err) {

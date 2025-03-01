@@ -24,29 +24,18 @@ const ModalContainer = ({
   children,
 }: Props): React.ReactElement => {
   return (
-    <Modal
-      closeOnOverlayClick={false}
-      isOpen
-      onClose={() => {}}
-      isCentered
-    >
+    <Modal closeOnOverlayClick={false} isOpen onClose={() => {}} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
           {title}
-          { 
-            onDelete &&
-            <Button 
-              variant="del" 
-              gap="2px" 
-              onClick={onDelete}
-            >
+          {onDelete && (
+            <Button variant="del" gap="2px" onClick={onDelete}>
               <DeleteOutlinedIcon />
               Delete
             </Button>
-          }
-          {
-            close &&
+          )}
+          {close && (
             <Button
               bg="transparent"
               h="auto"
@@ -55,7 +44,7 @@ const ModalContainer = ({
             >
               <CloseIcon />
             </Button>
-          }
+          )}
         </ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>
