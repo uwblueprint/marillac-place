@@ -15,11 +15,10 @@ import {
 import { ReactComponent as Logo } from "../../../assets/marillacPlaceLogo.svg";
 
 const LOGIN = gql`
-  mutation Login($email: String!, $password: String!, $userType: UserType!) {
-    login(email: $email, password: $password, userType: $userType) {
+  mutation Login($password: String!, $role: UserType!) {
+    login(password: $password, role: $role) {
       id
       type
-      email
       firstName
       lastName
       accessToken
@@ -33,6 +32,25 @@ const LoginPage = (): React.ReactElement => {
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const [login, { loading }] = useMutation(LOGIN, {
+    onCompleted: (data) => {
+      // Handle successful login, e.g., store token and navigate
+      navigate("/dashboard");
+    },
+    onError: (err) => {
+      // Handle login error
+      setError(err.message);
+    },
+  });
+
+  const handleSubmit = () => {
+    if (!role || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    login({ variables: { password, role } });
+  };
 
   return (
     <Flex
@@ -67,7 +85,7 @@ const LoginPage = (): React.ReactElement => {
             id="role"
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            placeholder="Role"
+            placeholder="Roles"
             h="49px"
             borderColor="black"
             mb="24px"
@@ -109,6 +127,8 @@ const LoginPage = (): React.ReactElement => {
             w="100%"
             h="60px"
             borderRadius="48px"
+            onClick={handleSubmit}
+            isLoading={loading}
           >
             <Text fontSize="24px">Sign In</Text>
           </Button>
