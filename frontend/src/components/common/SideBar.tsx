@@ -28,8 +28,7 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
       pt={1}
       pb={1}
       mt={5}
-      _selected={{ bg: "purple.main", color: "white" }}
-      _hover={{ bg: "purple.100", color: "purple.main" }}
+      _selected={{ bg: "orange.500", color: "orange.50" }}
     >
       {label}
     </Tab>
@@ -106,23 +105,16 @@ const SideBar: React.FC = () => {
               </TabList>
             </Tabs>
           </Flex>
-
-          <Flex flexDirection="column" alignItems="left">
-            <Text whiteSpace="nowrap" fontWeight="bold" mb="3">
-              Administrative Staff
-            </Text>
-
-            <Button
-              variant="del"
-              border="1px solid #C5C8D8"
-              color="#B21D2F"
-              fontWeight={400}
-              fontSize="14px"
-              width="fit-content"
-            >
-              Sign out
-            </Button>
-          </Flex>
+          <Button
+            variant="del"
+            border="1px solid #C5C8D8"
+            color="#B21D2F"
+            fontWeight={400}
+            fontSize="14px"
+            width="fit-content"
+          >
+            Sign out
+          </Button>
         </Flex>
       </Box>
     </Flex>
