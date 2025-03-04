@@ -33,25 +33,4 @@ export const GET_PARTICIPANT_BY_ID = gql`
 `;
 
 
-export const GET_ALL_GROUPS_AND_NOTIFICATIONS = gql`
-  query getAllGroupsAndNotifications {
-    getAllGroupsAndNotifications {
-      id
-      announcementGroup
-      notifications {
-        id
-        message
-        createdAt
-        authorId
-      }
-      recipients {
-        userId
-        residentId
-        roomNumber
-        credits
-        dateJoined
-        dateLeft
-      }
-    }
-  }
-`;
+

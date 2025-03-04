@@ -2,7 +2,7 @@ import { Announcement, StaffType } from "@prisma/client";
 
 interface IAnnouncementService {
   getAllAnnouncements(): Promise<Announcement[]>;
-  // getAnnouncementById(announcementId: string): Promise<Announcement | null>;
+  getAnnouncementByRoom (room: number): Promise<Announcement[] | null>;
   createAnnouncement(
     announcementId: number,
     from: StaffType,     

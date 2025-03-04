@@ -15,6 +15,25 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
+  async getAnnouncementByRoom(
+    room: number,
+  ): Promise<Announcement[]> {
+    try {
+      const annoucements = await prisma.announcement.findMany({
+        where: {
+          to: {
+            has: room
+          }
+        }
+      });
+      return annoucements;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+
+  }
+
   async createAnnouncement(
     announcementId: number,
     from: StaffType,     
