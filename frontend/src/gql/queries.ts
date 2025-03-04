@@ -33,4 +33,43 @@ export const GET_PARTICIPANT_BY_ID = gql`
 `;
 
 
+export const GET_ALL_ANNOUNCEMENTS = gql`
+  query getAllAnnouncements {
+    getAllAnnouncements {
+      announcementId
+      from     
+      to         
+      createdAt
+      message 
+    }
+  }
+`
 
+/*export const GET_ANNOUNCEMENT_BY_ROOM = gql`
+  query getAnnouncementByRoom($room: number) {
+    getAnnouncementByRoom(room: $room) {
+      announcementId
+      from     
+      to         
+      createdAt
+      message 
+    }
+  }
+`*/
+
+export const Create_Announcement = gql`
+  query createAnnouncement($announcementId: number,
+    $from: StaffType,     
+    $to: number[],          
+    $createdAt: Date,
+    $message: string,
+    ) {
+    createAnnouncement(announcementId: $announcementId, from: $from, to: $to, createdAt: $createdAt, message: $message) {
+      announcementId
+      from     
+      to         
+      createdAt
+      message 
+    }
+  }
+`

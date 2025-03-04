@@ -15,7 +15,7 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
-  async getAnnouncementByRoom(
+  async getAnnouncementByRoom( // FIX IT IS BY PARTICAPANT
     room: number,
   ): Promise<Announcement[]> {
     try {
