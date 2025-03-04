@@ -1,3 +1,27 @@
+import { Announcement, StaffType } from "@prisma/client";
+
+interface IAnnouncementService {
+  getAllAnnouncements(): Promise<Announcement[]>;
+  // getAnnouncementById(announcementId: string): Promise<Announcement | null>;
+  createAnnouncement(
+    announcementId: number,
+    from: StaffType,     
+    to: number[],          
+    createdAt: Date,
+    message: string,
+  ): Promise<boolean>;
+}
+
+export default IAnnouncementService;
+
+
+
+
+
+
+
+
+
 // import type { ResidentDTO } from "./residentService";
 
 // export interface NotificationDTO {

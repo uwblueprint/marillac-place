@@ -1,3 +1,66 @@
+import { Announcement, StaffType } from "@prisma/client";
+import prisma from "../../prisma";
+import IAnnouncementService from "../interface/announcementInterface.js";
+
+class AnnouncementService implements IAnnouncementService {
+  async getAllAnnouncements(): Promise<Announcement[]> {
+    try {
+      const announcements = await prisma.announcement.findMany({
+        orderBy: [{ createdAt: "asc" }],
+      });
+      return announcements;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async createAnnouncement(
+    announcementId: number,
+    from: StaffType,     
+    to: number[],          
+    createdAt: Date,
+    message: string,
+  ): Promise<boolean> {
+    try {
+      await prisma.announcement.create({
+        data: {
+          announcementId,
+          from,
+          to,
+          createdAt,
+          message,
+        },
+      });
+      return true;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+}
+
+export default AnnouncementService;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import prisma from "../../prisma";
 // import INotificationService, {
 //   NotificationDTO,
