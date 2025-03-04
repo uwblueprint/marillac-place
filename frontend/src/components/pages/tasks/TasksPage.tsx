@@ -45,19 +45,11 @@ const TasksPage = (): React.ReactElement => {
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
   const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
-  const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
+  const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([
+  ]);
 
   const [taskFilter, setTaskFilter] = useState<string>("");
   const [modalTask, setModalTask] = useState<TaskResponse | null>(null);
-
-  const tempData = [
-    {
-      id: 1,
-      title: "Clean room",
-      description: "Clean garbage and remove unwanted objects",
-      creditValue: 5,
-    },
-  ];
 
   const { loading, error, data, refetch } = useQuery(GET_TASKS_BY_TYPE, {
     variables: { type: taskType },
@@ -182,11 +174,13 @@ const TasksPage = (): React.ReactElement => {
   }, [taskFilter, storedTaskData, taskData]);
 
   useEffect(() => {
+    console.log("taskType Changed.")
     if (data) {
       if (taskType === "REQUIRED") {
         setRequiredTasks(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
       } else if (taskType === "OPTIONAL") {
+        console.log("Setting optional tasks to: ", data.getTasksByType);
         setOptionalTasks(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
       } else if (taskType === "CHORE") {
@@ -226,7 +220,9 @@ const TasksPage = (): React.ReactElement => {
           variant="horizontal"
           h="30px"
           mb={6}
-          onChange={(value) => setTabIndex(value)}
+          onChange={(value: any) => {
+            setTabIndex(value)
+          }}
         >
           <TabList pl={6}>
             <Tab>Required</Tab>

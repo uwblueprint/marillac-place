@@ -53,6 +53,10 @@ export const GET_TASKS_BY_TYPE = gql`
     getTasksByType(type: $type) {
       name
       credit
+      isRecurring
+      repeatDays
+      start
+      end
     }
   }
 `;
