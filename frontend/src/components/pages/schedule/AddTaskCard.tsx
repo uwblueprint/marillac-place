@@ -61,7 +61,18 @@ const AddTaskCard = ({
           required
         />
 
-
+        <Flex flexDir="column">
+          <FormInputField
+            label="Date"
+            value={participantId}
+            type="text"
+            onChange={(e) => {
+              setParticipantId(e.target.value);
+            }}
+            required
+          />
+          <Checkbox>All Day</Checkbox>
+        </Flex>
         <FormLabel mb="-15px" color="gray.main" fontWeight="700">
           Recurrence
         </FormLabel>
@@ -76,18 +87,6 @@ const AddTaskCard = ({
           <option> Repeats </option>
         </Select>
 
-        <FormLabel mb="-15px" color="gray.main" fontWeight="700">
-          Date
-        </FormLabel>
-        
-        <Flex>
-          <input
-            width={10}
-
-          />
-        </Flex>
-
-
         <FormInputField
           label="Marillac Bucks"
           value={participantId}
@@ -98,7 +97,17 @@ const AddTaskCard = ({
           required
           error={participantIdError}
         />
-
+        <Flex flexDir="column">
+          <FormLabel>
+            Comments
+          </FormLabel>
+          <Button
+            variant="cancel"
+            mr="8px"
+          >
+            + Comment
+          </Button>
+        </Flex>
         <Flex justifyContent="flex-end">
           <Button
             variant="cancel"
