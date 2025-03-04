@@ -175,12 +175,12 @@ const CommonTable = ({
       <TableContainer
         m="10px"
         border="2px solid"
-        borderColor="gray.200"
+        borderColor="#E3ECEB"
         borderRadius="6px"
       >
         <Table>
           <Thead>
-            <Tr backgroundColor="gray.200" w="100%">
+            <Tr backgroundColor="#E3ECEB" w="100%">
               {isSelectable ? (
                 <Th p="0px 0px 0px 20px" w="16px">
                   <Checkbox
@@ -338,7 +338,7 @@ const CommonTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.main"
+              color="#0E373B"
               backgroundColor="white"
               aria-label="Previous Page"
               icon={<ChevronLeftOutlinedIcon />}
@@ -347,7 +347,7 @@ const CommonTable = ({
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={item === page ? "purple.main" : "white"}
+                  backgroundColor={item === page ? "#0E373B" : "white"}
                   h="35px"
                   p="10px"
                   flexBasis="35px"
@@ -355,7 +355,7 @@ const CommonTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "purple.main",
+                    backgroundColor: "#0E373B",
                   }}
                   textColor={item === page ? "white" : "gray.main"}
                   onClick={() => numberPaginate(item)}
@@ -371,7 +371,7 @@ const CommonTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.main"
+              color="#0E373B"
               backgroundColor="white"
               aria-label="Next Page"
               icon={<ChevronRightOutlinedIcon />}

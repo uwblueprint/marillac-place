@@ -77,6 +77,7 @@ const ParticipantsPage = (): React.ReactElement => {
           </InputGroup>
           <Button
             variant="primary"
+            bg="orange.500"
             leftIcon={<Icon as={Add} color="white" />}
             size="sm"
             onClick={() => setAddParticipant(true)}

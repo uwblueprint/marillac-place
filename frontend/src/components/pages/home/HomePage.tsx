@@ -79,7 +79,7 @@ const HomePage = (): React.ReactElement => {
             >
                 <Text
                     fontSize="2xl"
-                    fontWeight="bold"
+                    fontWeight="600"
                     color="gray.900"
                     marginTop="16px"
                 >
@@ -87,8 +87,8 @@ const HomePage = (): React.ReactElement => {
                 </Text>
 
                 <Text
-                    fontSize="l"
-                    fontWeight="bold"
+                    fontSize="lg"
+                    fontWeight="600"
                     color="gray.900"
                     marginTop="16px"
                 >
