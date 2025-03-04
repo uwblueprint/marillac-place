@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Flex, Box, Text } from "@chakra-ui/react";
 import SideBar from "../../common/SideBar";
+import AnnouncementSection from "./AnnouncementSection";
+import RoomSection from "./RoomSection";
+import NoteSection from "./NoteSection";
 // import { announcementsMockData } from "../../../mocks/notifications";
 // import AnnouncementNotification from "./AnnouncementsCard";
 // import { Announcement } from "../../../types/NotificationType";
@@ -54,104 +57,105 @@ const HomePage = (): React.ReactElement => {
   };
 
   return (
-    <Flex>
+    <Flex
+        w="100vw"
+        h="100vh"
+    >
         <SideBar />
         <Flex
-            flexDir="column"
-            alignItems="center"
-            overflow="scroll"
-            position="relative"
-            width="100%"
-        >
-        <Box
             w="100%"
-            h="150px"
-            borderWidth={0}
-            bg="purple.50"
-            position="absolute"
-            zIndex="-1"
-            top="0"
-        />
-        <Flex
+            h="100%"
             flexDir="column"
-            w="75%"
-            flexGrow={1}
-            top="2%"
-            justifyContent="center"
         >
+            {/* Header */}
             <Flex
-            flexDir="row"
-            justifyContent="space-between"
-            alignItems="center"
-            marginTop="24px"
-            >
-            <Text
-                fontSize="3xl"
-                fontWeight="bold"
-                textAlign="left"
+                w="100%"
+                h="12%"
+                bg="#E3ECEB"
+                flexDir="row"
+                justifyContent="space-between"
                 alignItems="center"
-                paddingY="8px"
+                paddingX="40px"
             >
-                Marillac Place Overview
-            </Text>
-
-            <Text
-                fontSize="xl"
-                fontWeight="bold"
-                textAlign="left"
-                alignItems="center"
-                paddingY="8px"
-                color="#382584"
-            >
-                {getDate()}
-            </Text>
-            </Flex>
-            {/* <RoomGrid /> */}
-            {/* <Box
-            border="2px solid #E3E4EA"
-            p={6}
-            justifyContent="space-between"
-            borderRadius="8px"
-            marginTop="36px"
-            marginBottom="36px"
-            w="100%"
-            >
-            <Flex justifyContent="space-between" alignItems="center" mb={2}>
-                <Flex alignItems="baseline">
-                <Text fontSize="md" as="b">
-                    Announcements
+                <Text
+                    fontSize="2xl"
+                    fontWeight="bold"
+                    color="gray.900"
+                    marginTop="16px"
+                >
+                    Marillac Place Overview
                 </Text>
-                <Text ml={6} fontSize="smaller">
-                    {numberPosts === 0
-                    ? "You're all caught up!"
-                    : `${numberPosts} new posts today`}
-                </Text>
-                </Flex>
 
                 <Text
-                onClick={() => setViewAll(!viewAll)}
-                cursor="pointer"
-                textDecoration="underline"
+                    fontSize="l"
+                    fontWeight="bold"
+                    color="gray.900"
+                    marginTop="16px"
                 >
-                {viewAll ? "Collapse All" : "View all"}
+                    {getDate()}
                 </Text>
             </Flex>
-            {(viewAll ? announcements : recentAnnouncements).map(
-                (announcement, index) => (
-                <AnnouncementNotification
-                    room={announcement.room}
-                    author={announcement.author}
-                    message={announcement.message}
-                    createdAt={announcement.createdAt}
-                    key={index}
-                />
-                ),
-            )}
-            </Box> */}
-        </Flex>
+            {/* Main Section */}
+            <Flex
+                w="100%"
+                h="88%"
+                padding="10px"
+                bg="white"
+            >
+                <Flex
+                    flexGrow={1}
+                    flexDir="column"
+                >
+                    <RoomSection />
+                    <AnnouncementSection />
+                </Flex>
+                <NoteSection />
+            </Flex>
         </Flex>
     </Flex>
   );
 };
+            // {/* <RoomGrid /> */}
+            // {/* <Box
+            // border="2px solid #E3E4EA"
+            // p={6}
+            // justifyContent="space-between"
+            // borderRadius="8px"
+            // marginTop="36px"
+            // marginBottom="36px"
+            // w="100%"
+            // >
+            // <Flex justifyContent="space-between" alignItems="center" mb={2}>
+            //     <Flex alignItems="baseline">
+            //     <Text fontSize="md" as="b">
+            //         Announcements
+            //     </Text>
+            //     <Text ml={6} fontSize="smaller">
+            //         {numberPosts === 0
+            //         ? "You're all caught up!"
+            //         : `${numberPosts} new posts today`}
+            //     </Text>
+            //     </Flex>
+
+            //     <Text
+            //     onClick={() => setViewAll(!viewAll)}
+            //     cursor="pointer"
+            //     textDecoration="underline"
+            //     >
+            //     {viewAll ? "Collapse All" : "View all"}
+            //     </Text>
+            // </Flex>
+            // {(viewAll ? announcements : recentAnnouncements).map(
+            //     (announcement, index) => (
+            //     <AnnouncementNotification
+            //         room={announcement.room}
+            //         author={announcement.author}
+            //         message={announcement.message}
+            //         createdAt={announcement.createdAt}
+            //         key={index}
+            //     />
+            //     ),
+            // )}
+            // </Box> */}
 
 export default HomePage;
