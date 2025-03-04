@@ -18,13 +18,17 @@ class TaskService implements ITaskService {
   }
 
   async getTasksByType(type: TaskType): Promise<Task[]> {
+    const defaultEnd: Date = new Date("2030-01-01T08:00:00.000Z");
     try {
       const tasks = await prisma.task.findMany({
         where: { type },
       });
       if (!tasks) throw new Error(`task type ${type} not found`);
 
-      return tasks;
+      return tasks.map((task) => ({
+        ...task,
+        end: task.end ?? defaultEnd,
+      }));
     } catch (error: unknown) {
       console.log(error);
       throw error;

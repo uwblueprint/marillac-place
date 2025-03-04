@@ -7,7 +7,7 @@ export const tasksColumnTypes: ColumnInfoTypes[] = [
   },
   {
     header: "Recurrence",
-    key: "isRecurring",
+    key: "repeatDays",
   },
   {
     header: "Due Date",
