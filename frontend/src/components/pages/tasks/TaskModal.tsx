@@ -68,150 +68,110 @@ const TaskModal = ({
   handleSaveClick,
 }: Props): React.ReactElement => {
   const [taskType, setTaskType] = useState("OPTIONAL");
-  const [recurrence, setRecurrence] = useState("Does Not Repeat");
+  const [recurrence, setRecurrence] = useState<boolean>(false);
   const [marillacBucks, setMarillacBucks] = useState<number | undefined>(
     undefined,
   );
-  const [comments, setComments] = useState("");
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [selectedDays, setSelectedDays] = useState<(string | undefined)[]>([]);
   const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
 
   const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [dueTime, setDueTime] = useState("");
-  const [completedOn, setCompletedOn] = useState("every");
   const [endsOn, setEndsOn] = useState("never");
   const [endsOnDate, setEndsOnDate] = useState("");
   const [isAllDay, setIsAllDay] = useState(false);
-  const [recurrenceFrequency, setRecurrenceFrequency] = useState("");
-
-  const [submitPressed, setSubmitPressed] = useState(false);
+  const [recurrenceFrequency, setRecurrenceFrequency] = useState<DaysOfWeek[]>(
+    [],
+  );
   const [errorSubmitting, setError] = useState("");
   const isEditMode = !!task;
 
   const dayIdMap = [
-    { key: "MONDAY", short: "M" },
-    { key: "TUESDAY", short: "Tu" },
-    { key: "WEDNESDAY", short: "W" },
-    { key: "THURSDAY", short: "Th" },
-    { key: "FRIDAY", short: "F" },
-    { key: "SATURDAY", short: "Sa" },
-    { key: "SUNDAY", short: "Su" },
+    { key: DaysOfWeek.MONDAY, short: "M" },
+    { key: DaysOfWeek.TUESDAY, short: "Tu" },
+    { key: DaysOfWeek.WEDNESDAY, short: "W" },
+    { key: DaysOfWeek.THURSDAY, short: "Th" },
+    { key: DaysOfWeek.FRIDAY, short: "F" },
+    { key: DaysOfWeek.SATURDAY, short: "Sa" },
+    { key: DaysOfWeek.SUNDAY, short: "Su" },
   ];
 
   useEffect(() => {
-    // if (!isOpen) {
-    //   return;
-    // }
-    // if (task) {
-    //   setTaskType(task.type);
-    //   setRecurrence(
-    //     task.recurrenceFrequency === "ONE_TIME" ? "Does Not Repeat" : "Repeats",
-    //   );
-    //   setMarillacBucks(task.creditValue);
-    //   if (task.recurrenceFrequency === "ONE_TIME") {
-    //     const day = dayIdMap.find(
-    //       (dayMp) => dayMp.key === task.specificDay,
-    //     )?.short;
-    //     if (day) {
-    //       setSelectedDays([day]);
-    //     }
-    //   } else {
-    //     setSelectedDays(
-    //       task.repeatDays
-    //         .map((day) => dayIdMap.find((dayMp) => dayMp.key === day)?.short)
-    //         .filter((day): day is string => day !== undefined),
-    //     );
-    //   }
-    //   setTitle(task.title);
-    //   setDueDate(task.endDate ? task.endDate.toString() : "");
-    //   setDueTime("");
-    // } else {
-    //   setTaskType("OPTIONAL");
-    //   setRecurrence("Does Not Repeat");
-    //   setMarillacBucks(undefined);
-    //   setSelectedDays([]);
-    //   setTitle("");
-    //   setDueDate("");
-    //   setDueTime("");
-    // }
+    if (!isOpen) {
+      return;
+    }
+    if (task) {
+      setTaskType(task.type);
+      setRecurrence(task.isReccuring);
+      setMarillacBucks(task.credit);
+      if (task.isReccuring) {
+        const daysShort = task.repeatDays
+          ?.map((day) => dayIdMap.find((item) => item.key === day)?.short)
+          .filter((short) => short !== undefined);
+
+        setRecurrenceFrequency(task.repeatDays || []);
+        setSelectedDays(daysShort || []);
+      }
+      setTitle(task.name);
+    } else {
+      setTaskType("OPTIONAL");
+      setRecurrence(false);
+      setMarillacBucks(undefined);
+      setSelectedDays([]);
+      setTitle("");
+    }
   }, [task, isOpen]);
 
   const handleSubmit = () => {
-    //     setSubmitPressed(true);
-    //     if (title === "") {
-    //       console.log("Title is required");
-    //       return;
-    //     }
-    //     // TODO: API call to add task
-    //     let recurrenceFrequency = "ONE_TIME";
-    //     if (recurrence === "Repeats") {
-    //       if (completedOn === "every") {
-    //         recurrenceFrequency = "REPEATS_PER_WEEK_SELECTED";
-    //       } else {
-    //         recurrenceFrequency = "REPEATS_PER_WEEK_ONCE";
-    //       }
-    //       if (selectedDays.length === 0) {
-    //         console.log("Days are required");
-    //         return;
-    //       }
-    //     }
-    //     const taskRequest: TaskRequest = {
-    //       type: taskType as TaskTypeEnum,
-    //       title,
-    //       description: task?.description || "No field in modal",
-    //       creditValue: marillacBucks || 0,
-    //       endDate: endsOn === "never" ? undefined : new Date(endsOnDate),
-    //       recurrenceFrequency: recurrenceFrequency as RecurrenceFrequency,
-    //       repeatDays:
-    //         recurrenceFrequency === "ONE_TIME"
-    //           ? []
-    //           : selectedDays.map(
-    //               (day) =>
-    //                 dayIdMap.find((dayMp) => dayMp.short === day)
-    //                   ?.key as DaysOfWeek,
-    //             ),
-    //     };
-    //     handleSaveClick(task?.id || "", taskRequest);
-    //     setIsOpen(false);
+    if (title === "") {
+      console.log("Title is required");
+      return;
+    }
+    if (recurrence) {
+      if (selectedDays.length === 0) {
+        console.log("Days are required");
+        return;
+      }
+    }
+    const taskRequest: TaskRequest = {
+      type: taskType as TaskTypeEnum,
+      name: title,
+      credit: marillacBucks || 0,
+      start: new Date(),
+      end: endsOn === "never" ? undefined : new Date(endsOnDate),
+      isRecurring: recurrence,
+      repeatDays: recurrence
+        ? selectedDays.map(
+            (day) =>
+              dayIdMap.find((dayMp) => dayMp.short === day)?.key as DaysOfWeek,
+          )
+        : undefined,
+    };
+    handleSaveClick(task?.id.toString() || "", taskRequest);
+    setIsOpen(false);
   };
 
   const resetFormState = () => {
     setTitle("");
-    setLocation("");
-    setDueDate("");
-    setDueTime("");
-    setIsAllDay(false);
-    setRecurrenceFrequency("");
+    setRecurrenceFrequency([]);
     setMarillacBucks(undefined);
-
-    setSubmitPressed(false);
-  };
-
-  const handleMoneyInput = () => {
-    //   const inputValue = marillacBucks.replace(/[^0-9.]/g, ""); //Remove non-numeric and non-period characters
-    //   if (inputValue) {
-    //     const numberValue = parseFloat(inputValue).toFixed(2);
-    //     setMarillacBucks(numberValue);
-    //   }
   };
 
   //   // delete task api stuff
   const handleDelete = () => {
-    // if (handleDeleteTask && task) {
-    //   handleDeleteTask(task.id);
-    //   setIsOpen(false);
-    //   resetFormState();
-    // }
+    if (handleDeleteTask && task && isEditMode) {
+      console.log(task.id.toString());
+      // handleDeleteTask(task.id.toString());
+      // setIsOpen(false);
+      // resetFormState();
+    }
   };
 
   const selectDay = (day: string) => {
-    // if (selectedDays.includes(day)) {
-    //   setSelectedDays(selectedDays.filter((d) => d !== day));
-    // } else {
-    //   setSelectedDays([...selectedDays, day]);
-    // }
+    if (selectedDays.includes(day)) {
+      setSelectedDays(selectedDays.filter((d) => d !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
   };
 
   return (
@@ -247,7 +207,6 @@ const TaskModal = ({
           value={title}
           type="text"
           onChange={(e: any) => setTitle(e.target.value)}
-          //   submitPressed={submitPressed}
         />
         <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
@@ -256,8 +215,8 @@ const TaskModal = ({
 
           <Select
             variant="primary"
-            value={recurrence}
-            onChange={(e) => setRecurrence(e.target.value)}
+            value={recurrence ? "Repeats" : "Does Not Repeat"}
+            onChange={(e) => setRecurrence(e.target.value === "Repeats")}
             border="solid"
             borderWidth="2px"
             borderColor="gray.300"
@@ -267,7 +226,7 @@ const TaskModal = ({
             <option value="Does Not Repeat">Does Not Repeat</option>
           </Select>
         </FormControl>
-        {recurrence === "Repeats" && (
+        {recurrence && (
           <>
             <Flex flexDir="row">
               <h6 style={{ marginTop: "10px" }}>Select Days:</h6>
@@ -305,7 +264,7 @@ const TaskModal = ({
               ))}
             </Flex>
 
-            <Flex flexDir="column">
+            {/* <Flex flexDir="column">
               <h6 style={{ marginBottom: "8px" }}>Completed On</h6>
 
               <RadioGroup
@@ -318,7 +277,7 @@ const TaskModal = ({
                 <Radio value="every"> Every Selected Day </Radio>
                 <Radio value="once">One of the selected days</Radio>
               </RadioGroup>
-            </Flex>
+            </Flex> */}
 
             <Flex flexDir="column">
               <h6 style={{ marginBottom: "8px" }}>Ends On</h6>
@@ -342,7 +301,6 @@ const TaskModal = ({
                       onChange={(e: any) => {
                         setEndsOnDate(e.target.value);
                       }}
-                      //   submitPressed={submitPressed}
                     />
                   </Flex>
                 </Radio>
@@ -361,8 +319,6 @@ const TaskModal = ({
               setMarillacBucks(undefined);
             }
           }}
-          //   onBlur={handleMoneyInput}
-          //   submitPressed={submitPressed}
           leftElement="$"
         />
         <Flex justifyContent="flex-end">

@@ -11,7 +11,7 @@ export const tasksColumnTypes: ColumnInfoTypes[] = [
   },
   {
     header: "Due Date",
-    key: "end",
+    key: "start",
   },
   {
     header: "Marillac Bucks",

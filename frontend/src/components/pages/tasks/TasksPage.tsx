@@ -135,11 +135,11 @@ const TasksPage = (): React.ReactElement => {
   };
 
   const handleSaveClick = async (taskId: string, task: TaskRequest) => {
-    // if (taskId === "") {
-    //   await handleAddTask(task);
-    // } else {
-    //   await handleUpdateTask(taskId, task);
-    // }
+    if (taskId === "") {
+      await handleAddTask(task);
+    } else {
+      await handleUpdateTask(taskId, task);
+    }
   };
 
   const handleDeleteTask = async (taskId: string) => {
@@ -272,19 +272,19 @@ const TasksPage = (): React.ReactElement => {
               </Button>
             </Flex>
           </Flex>
-    
+
           {loading || error ? (
-           <p>Loading...</p>
-         ) : ( 
-          <CommonTable
-            data={taskData}
-            columnInfo={taskDataColumns}
-            maxResults={8}
-            onEdit={(row: any) => {
-              setModalTask(row);
-              setIsModalOpen(true);
-            }}
-          />
+            <p>Loading...</p>
+          ) : (
+            <CommonTable
+              data={taskData}
+              columnInfo={taskDataColumns}
+              maxResults={8}
+              onEdit={(row: any) => {
+                setModalTask(row);
+                setIsModalOpen(true);
+              }}
+            />
           )}
           <TaskModal
             isOpen={isModalOpen}
