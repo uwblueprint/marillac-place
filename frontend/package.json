@@ -29,7 +29,7 @@
     "@types/react-jsonschema-form": "^1.7.4",
     "@types/react-table": "^7.0.29",
     "apollo-upload-client": "^16.0.0",
-    "axios": "^1.6.0",
+    "axios": "^1.8.2",
     "bootstrap": "^4.6.0",
     "framer-motion": "^7.6.12",
     "graphql": "^15.5.0",
