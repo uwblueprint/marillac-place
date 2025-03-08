@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
+import CryptoJS from "crypto-js";
 
 import {
   Select,
@@ -15,12 +16,9 @@ import {
 import logo from "../../../assets/Marillac-Place-Logo.webp";
 
 const LOGIN = gql`
-  mutation Login($password: String!, $role: UserType!) {
-    login(password: $password, role: $role) {
-      id
+  mutation Login($encryptedPassword: String!, $role: String!) {
+    login(encryptedPassword: $encryptedPassword, role: $role) {
       type
-      firstName
-      lastName
       accessToken
     }
   }
@@ -49,7 +47,14 @@ const LoginPage = (): React.ReactElement => {
       setError("Please fill in all fields.");
       return;
     }
-    login({ variables: { password, role } });
+
+    // Encrypt the password
+    const encryptedPassword = CryptoJS.AES.encrypt(
+      password,
+      "your-secret-key",
+    ).toString();
+
+    login({ variables: { role, encryptedPassword } });
   };
 
   return (
