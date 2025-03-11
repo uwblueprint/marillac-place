@@ -38,34 +38,51 @@ export const GET_PARTICIPANT_BY_ID = gql`
 export const GET_TASK_BY_ID = gql`
   query getTaskById($taskId: Int!) {
     getTaskById(taskId: $taskId) {
+      taskId
       type
       name
-      credit
-      start
-      end
-      isRecurring
+      recurrencePreference
       repeatDays
+      timePreference
+      start
+      end      
+      credit     
+      deduction
+      comment
     }
   }
 `;
 export const GET_TASKS_BY_TYPE = gql`
   query GetTasksByType($type: TaskType!) {
     getTasksByType(type: $type) {
+      taskId
+      type
       name
-      credit
-      isRecurring
+      recurrencePreference
       repeatDays
+      timePreference
       start
-      end
+      end      
+      credit     
+      deduction
+      comment
     }
   }
 `;
-export const GET_TASKS_BY_START_DATE = gql`
-  query GetTasksByStartDate($startDate: DateTime!) {
-    getTasksByStartDate(startDate: $startDate) {
+export const GET_TASKS_BY_RECURRENCE_FREQUENCY = gql`
+  query GetTasksByRecurrenceFrequency($recurrencePreference: RecurrenceFrequency!) {
+    getTasksByRecurrenceFrequency(recurrencePreference: $recurrencePreference) {
       taskId
+      type
       name
-      credit
+      recurrencePreference
+      repeatDays
+      timePreference
+      start
+      end      
+      credit     
+      deduction
+      comment
     }
   }
 `;

@@ -20,31 +20,40 @@ export const CREATE_PARTICIPANT = gql`
 // Task Mutations
 export const CREATE_TASK = gql`
   mutation createTask(
-    $type: TaskType!
-    $name: String!
-    $credit: Int!
-    $start: DateTime!
-    $end: DateTime
-    $isRecurring: Boolean!
-    $repeatDays: [DaysOfWeek!]
+    $type: TaskType
+    $name: String
+    $recurrencePreference: RecurrenceFrequency
+    $repeatDays: [DaysOfWeek]
+    $timePreference: TimeOption 
+    $start: String
+    $end: String
+    $credit: Int
+    $deduction: Int
+    $comment: String
   ) {
     createTask(
       type: $type
       name: $name
-      credit: $credit
+      recurrencePreference: $recurrencePreference
+      repeatDays: $repeatDays
+      timePreference: $timePreference 
       start: $start
       end: $end
-      isRecurring: $isRecurring
-      repeatDays: $repeatDays
+      credit: $credit
+      deduction: $deduction
+      comment: $comment
     ) {
       taskId
       type
       name
-      isRecurring
+      recurrencePreference
       repeatDays
+      timePreference
       start
       end
       credit
+      deduction
+      comment
     }
   }
 `;
@@ -54,30 +63,39 @@ export const UPDATE_TASK = gql`
     $taskId: Int!
     $type: TaskType
     $name: String
-    $credit: Int
-    $start: DateTime
-    $end: DateTime
-    $isRecurring: Boolean
+    $recurrencePreference: RecurrenceFrequency
     $repeatDays: [DaysOfWeek]
+    $timePreference: TimeOption
+    $start: String
+    $end: String
+    $credit: Int
+    $deduction: Int
+    $comment: String
   ) {
     updateTask(
       taskId: $taskId
       type: $type
       name: $name
-      credit: $credit
+      recurrencePreference: $recurrencePreference
+      repeatDays: $repeatDays
+      timePreference: $timePreference
       start: $start
       end: $end
-      isRecurring: $isRecurring
-      repeatDays: $repeatDays
+      credit: $credit
+      deduction: $deduction
+      comment: $comment
     ) {
       taskId
       type
       name
-      isRecurring
+      recurrencePreference
       repeatDays
+      timePreference
       start
       end
       credit
+      deduction
+      comment
     }
   }
 `;
@@ -88,11 +106,14 @@ export const DELETE_TASK = gql`
       taskId
       type
       name
-      isRecurring
+      recurrencePreference
       repeatDays
+      timePreference
       start
       end
       credit
+      deduction
+      comment
     }
   }
 `;

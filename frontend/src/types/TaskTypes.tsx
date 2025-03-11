@@ -1,4 +1,4 @@
-export type TaskType = "REQUIRED" | "OPTIONAL" | "CUSTOM" | "CHORE";
+export type TaskType = "REQUIRED" | "OPTIONAL" | "CUSTOM";
 
 export interface Task {
   id: number;
@@ -19,12 +19,6 @@ export enum Status {
   EXCUSED = "EXCUSED",
 }
 
-export enum RecurrenceFrequency {
-  ONE_TIME = "ONE_TIME",
-  REPEATS_PER_WEEK_SELECTED = "REPEATS_PER_WEEK_SELECTED",
-  REPEATS_PER_WEEK_ONCE = "REPEATS_PER_WEEK_ONCE",
-}
-
 export enum DaysOfWeek {
   MONDAY = "MONDAY",
   TUESDAY = "TUESDAY",
@@ -38,27 +32,41 @@ export enum DaysOfWeek {
 export enum TaskTypeEnum {
   REQUIRED = "REQUIRED",
   OPTIONAL = "OPTIONAL",
-  CHORE = "CHORE",
-  ACHIEVEMENT = "ACHIEVEMENT",
+  CUSTOM = "CUSTOM",
+}
+export enum RecurrenceFrequency {
+  DAILY = "DAILY",
+  EVERY_SELECTED_DAYS = "EVERY_SELECTED_DAYS",
+  ANY_SELECTED_DAYS = "ANY_SELECTED_DAYS",
+}
+export enum TimeOption {
+  ANYTIME = "ANYTIME",
+  SPECIFIC = "SPECIFIC",
 }
 
 export type TaskResponse = {
   id: number;
   type: TaskTypeEnum;
   name: string;
+  recurrencePreference: RecurrenceFrequency;
+  repeatDays: DaysOfWeek[];
+  timePreference: TimeOption;
   credit: number;
-  start: Date;
-  end?: Date;
-  isReccuring: boolean;
-  repeatDays?: DaysOfWeek[];
+  deduction: number;
+  start?: string;
+  end?: string;
+  comment?: string;
 };
 
 export type TaskRequest = {
   type: TaskTypeEnum;
   name: string;
+  recurrencePreference: RecurrenceFrequency;
+  repeatDays: DaysOfWeek[];
+  timePreference: TimeOption;
   credit: number;
-  start: Date;
-  end?: Date;
-  isRecurring: boolean;
-  repeatDays?: DaysOfWeek[];
+  deduction: number;
+  start?: string;
+  end?: string;
+  comment?: string;
 };

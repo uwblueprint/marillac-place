@@ -7,7 +7,11 @@ import {
   FormLabel,
   RadioGroup,
   Radio,
+  Box,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
+import { FilePresent } from "@mui/icons-material";
 import colors from "../../../theme/colors";
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/form/FormInputField";
@@ -21,7 +25,9 @@ import {
   TaskTypeEnum,
   TaskResponse,
   TaskRequest,
+  TimeOption,
 } from "../../../types/TaskTypes";
+import NumberInput from "./NumberInput";
 // import {
 //   TaskRequest,
 //   TaskTypeEnum,
@@ -35,6 +41,7 @@ type Props = {
   task: TaskResponse | null;
   handleDeleteTask?: (taskId: string) => Promise<void>;
   handleSaveClick: (taskId: string, task: TaskRequest) => Promise<void>;
+  type: TaskType;
 };
 
 // returns an array of times in 30 minute increments
@@ -66,33 +73,38 @@ const TaskModal = ({
   task,
   handleDeleteTask,
   handleSaveClick,
+  type,
 }: Props): React.ReactElement => {
-  const [taskType, setTaskType] = useState("OPTIONAL");
-  const [recurrence, setRecurrence] = useState<boolean>(false);
-  const [marillacBucks, setMarillacBucks] = useState<number | undefined>(
-    undefined,
+  const [taskType, setTaskType] = useState<TaskTypeEnum>(TaskTypeEnum.OPTIONAL);
+  const [recurrence, setRecurrence] = useState<RecurrenceFrequency>(
+    RecurrenceFrequency.EVERY_SELECTED_DAYS,
   );
+  const [timePreference, setTimePreference] = useState<TimeOption>(
+    TimeOption.ANYTIME,
+  );
+  const [marillacBucks, setMarillacBucks] = useState<number>(0);
+  const [deduction, setDeduction] = useState<number>(0);
+  const [comment, setComment] = useState<string | undefined>();
   const [selectedDays, setSelectedDays] = useState<(string | undefined)[]>([]);
-  const days = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const [title, setTitle] = useState("");
-  const [endsOn, setEndsOn] = useState("never");
-  const [endsOnDate, setEndsOnDate] = useState("");
-  const [isAllDay, setIsAllDay] = useState(false);
-  const [recurrenceFrequency, setRecurrenceFrequency] = useState<DaysOfWeek[]>(
-    [],
-  );
+  const [start, setStart] = useState<string | undefined>();
+  const [end, setEnd] = useState<string | undefined>();
+  const [recurrenceFrequency, setRecurrenceFrequency] = useState<
+    DaysOfWeek[] | undefined[]
+  >([]);
   const [errorSubmitting, setError] = useState("");
   const isEditMode = !!task;
 
   const dayIdMap = [
-    { key: DaysOfWeek.MONDAY, short: "M" },
-    { key: DaysOfWeek.TUESDAY, short: "Tu" },
-    { key: DaysOfWeek.WEDNESDAY, short: "W" },
-    { key: DaysOfWeek.THURSDAY, short: "Th" },
-    { key: DaysOfWeek.FRIDAY, short: "F" },
-    { key: DaysOfWeek.SATURDAY, short: "Sa" },
-    { key: DaysOfWeek.SUNDAY, short: "Su" },
+    { key: DaysOfWeek.MONDAY, short: "Mon" },
+    { key: DaysOfWeek.TUESDAY, short: "Tue" },
+    { key: DaysOfWeek.WEDNESDAY, short: "Wed" },
+    { key: DaysOfWeek.THURSDAY, short: "Thu" },
+    { key: DaysOfWeek.FRIDAY, short: "Fri" },
+    { key: DaysOfWeek.SATURDAY, short: "Sat" },
+    { key: DaysOfWeek.SUNDAY, short: "Sun" },
   ];
 
   useEffect(() => {
@@ -101,21 +113,21 @@ const TaskModal = ({
     }
     if (task) {
       setTaskType(task.type);
-      setRecurrence(task.isReccuring);
+      setRecurrence(task.recurrencePreference);
       setMarillacBucks(task.credit);
-      if (task.isReccuring) {
-        const daysShort = task.repeatDays
-          ?.map((day) => dayIdMap.find((item) => item.key === day)?.short)
-          .filter((short) => short !== undefined);
+      // if (task.recurrencePreference !== RecurrenceFrequency.DAILY) {
+      //   const daysShort = task.repeatDays
+      //     ?.map((day) => dayIdMap.find((item) => item.key === day).short)
+      //     .filter((short) => short !== undefined);
 
-        setRecurrenceFrequency(task.repeatDays || []);
-        setSelectedDays(daysShort || []);
-      }
+      //   setRecurrenceFrequency(task.repeatDays || []);
+      //   setSelectedDays(daysShort || []);
+      // }
       setTitle(task.name);
     } else {
-      setTaskType("OPTIONAL");
-      setRecurrence(false);
-      setMarillacBucks(undefined);
+      setTaskType(TaskTypeEnum.OPTIONAL);
+      setRecurrence(RecurrenceFrequency.EVERY_SELECTED_DAYS);
+      setMarillacBucks(0);
       setSelectedDays([]);
       setTitle("");
     }
@@ -135,25 +147,26 @@ const TaskModal = ({
     const taskRequest: TaskRequest = {
       type: taskType as TaskTypeEnum,
       name: title,
-      credit: marillacBucks || 0,
-      start: new Date(),
-      end: endsOn === "never" ? undefined : new Date(endsOnDate),
-      isRecurring: recurrence,
-      repeatDays: recurrence
-        ? selectedDays.map(
-            (day) =>
-              dayIdMap.find((dayMp) => dayMp.short === day)?.key as DaysOfWeek,
-          )
-        : undefined,
+      credit: marillacBucks,
+      deduction,
+      start,
+      end,
+      recurrencePreference: recurrence,
+      repeatDays: selectedDays.map(
+        (day) =>
+          dayIdMap.find((dayMp) => dayMp.short === day)?.key as DaysOfWeek,
+      ),
+      comment,
+      timePreference,
     };
-    handleSaveClick(task?.id.toString() || "", taskRequest);
+    if (task) handleSaveClick(task.id.toString() || "", taskRequest);
     setIsOpen(false);
   };
 
   const resetFormState = () => {
     setTitle("");
     setRecurrenceFrequency([]);
-    setMarillacBucks(undefined);
+    setMarillacBucks(0);
   };
 
   //   // delete task api stuff
@@ -174,6 +187,12 @@ const TaskModal = ({
     }
   };
 
+  useEffect(() => {
+    if (recurrence === RecurrenceFrequency.DAILY)
+      setSelectedDays(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
+    else setSelectedDays([]);
+  }, [recurrence]);
+
   return (
     <ModalContainer
       title={task ? task.name : "Assign Task"}
@@ -182,145 +201,148 @@ const TaskModal = ({
       onDelete={isEditMode ? handleDelete : undefined}
     >
       <Flex flexDir="column" gap="20px">
+        {/* Task Type Selection */}
         <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
             Task Type
           </FormLabel>
-
-          <Select
-            variant="primary"
-            value={taskType}
-            onChange={(e) => setTaskType(e.target.value)}
-            border="solid"
-            borderWidth="2px"
-            borderColor="gray.300"
-            height="34px"
-          >
-            <option value="OPTIONAL">Optional</option>
-            <option value="REQUIRED">Required</option>
-            <option value="CHORE">Chores</option>
-          </Select>
+          {type === "REQUIRED" ? (
+            <FormLabel>Required</FormLabel>
+          ) : (
+            <RadioGroup
+              variant="primary"
+              value={taskType}
+              onChange={(value) => setTaskType(value as TaskTypeEnum)}
+              style={{ flexDirection: "column", display: "flex" }}
+            >
+              <Radio value="OPTIONAL">Optional</Radio>
+              <Radio value="CUSTOM">Custom</Radio>
+            </RadioGroup>
+          )}
         </FormControl>
 
+        {/* Task Name Input */}
         <FormInputField
           label="Task Name"
           value={title}
           type="text"
           onChange={(e: any) => setTitle(e.target.value)}
         />
+
+        {/* Recurrence Frequency Selection */}
         <FormControl>
           <FormLabel mb="5px" color="gray.main" fontWeight="700">
-            Recurrence
+            Select Days
           </FormLabel>
 
-          <Select
+          <RadioGroup
             variant="primary"
-            value={recurrence ? "Repeats" : "Does Not Repeat"}
-            onChange={(e) => setRecurrence(e.target.value === "Repeats")}
-            border="solid"
-            borderWidth="2px"
-            borderColor="gray.300"
-            height="34px"
+            value={recurrence}
+            onChange={(value) => setRecurrence(value as RecurrenceFrequency)}
+            style={{ flexDirection: "column", display: "flex" }}
           >
-            <option value="Repeats">Repeats</option>
-            <option value="Does Not Repeat">Does Not Repeat</option>
-          </Select>
+            <Radio value="DAILY">Daily</Radio>
+            <Radio value="EVERY_SELECTED_DAYS">Every Selected Days</Radio>
+            <Radio value="ANY_SELECTED_DAYS">Any Selected Days</Radio>
+          </RadioGroup>
+
+          <Flex flexDir="row" gap={2}>
+            {days.map((day, i) => (
+              <Button
+                key={i}
+                // text colour (based on if day is selected)
+                color={
+                  selectedDays.includes(day) ? "white" : colors.purple.main
+                }
+                backgroundColor={
+                  selectedDays.includes(day)
+                    ? colors.purple.main
+                    : "transparent"
+                }
+                // if button is clicked, calls selectDay on day
+                onClick={() => selectDay(day)}
+                _hover={{
+                  bg: selectedDays.includes(day)
+                    ? colors.purple.main
+                    : "#e2e2e2",
+                  color: selectedDays.includes(day) ? "white" : "gray",
+                }}
+                style={{
+                  borderRadius: "5px",
+                  width: "55px",
+                  height: "35px",
+                  border: `1px solid ${colors.purple.main}`,
+                }}
+              >
+                {day}
+              </Button>
+            ))}
+          </Flex>
         </FormControl>
-        {recurrence && (
-          <>
-            <Flex flexDir="row">
-              <h6 style={{ marginTop: "10px" }}>Select Days:</h6>
 
-              {days.map((day, i) => (
-                <Button
-                  key={i}
-                  // text colour (based on if day is selected)
-                  color={selectedDays.includes(day) ? "white" : "gray"}
-                  backgroundColor={
-                    selectedDays.includes(day)
-                      ? colors.purple.main
-                      : "transparent"
-                  }
-                  // if button is clicked, calls selectDay on day
-                  onClick={() => selectDay(day)}
-                  // hover style based on if day is selected
-                  _hover={{
-                    bg: selectedDays.includes(day)
-                      ? colors.purple.main
-                      : "#e2e2e2",
-                    color: selectedDays.includes(day) ? "white" : "gray",
-                  }}
-                  // same styling as before
-                  style={{
-                    padding: "4px",
-                    width: "30px",
-                    borderRadius: "50%",
-                    left: `${(i + 1) * 10}px`,
-                    margin: "0 5px",
-                  }}
-                >
-                  {day}
-                </Button>
-              ))}
-            </Flex>
+        {/* Time Option Selection */}
+        <FormControl>
+          <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            Select Time
+          </FormLabel>
 
-            {/* <Flex flexDir="column">
-              <h6 style={{ marginBottom: "8px" }}>Completed On</h6>
+          <RadioGroup
+            variant="primary"
+            value={timePreference}
+            onChange={(value) => setTimePreference(value as TimeOption)}
+            style={{ flexDirection: "column", display: "flex" }}
+          >
+            <Radio value="ANYTIME">Anytime</Radio>
+            <Radio value="SPECIFIC">Select Time</Radio>
+          </RadioGroup>
+        </FormControl>
 
-              <RadioGroup
-                variant="outline"
-                value={completedOn}
-                onChange={(value) => setCompletedOn(value)}
-                colorScheme="purple"
-                style={{ flexDirection: "column", display: "flex" }}
-              >
-                <Radio value="every"> Every Selected Day </Radio>
-                <Radio value="once">One of the selected days</Radio>
-              </RadioGroup>
-            </Flex> */}
-
-            <Flex flexDir="column">
-              <h6 style={{ marginBottom: "8px" }}>Ends On</h6>
-              <RadioGroup
-                variant="outline"
-                value={endsOn}
-                onChange={(value) => setEndsOn(value)}
-                colorScheme="purple"
-                style={{ flexDirection: "column", display: "flex" }}
-              >
-                <Radio value="never" margin="0">
-                  Never
-                </Radio>
-                <Radio value="endsOn">
-                  <Flex alignItems="center" gap="12px">
-                    On
-                    <FormInputField
-                      label=""
-                      value={endsOnDate}
-                      type="date"
-                      onChange={(e: any) => {
-                        setEndsOnDate(e.target.value);
-                      }}
-                    />
-                  </Flex>
-                </Radio>
-              </RadioGroup>
-            </Flex>
-          </>
+        {timePreference === TimeOption.SPECIFIC && (
+          <Flex flexDir="row" gap={2}>
+            <Box w="50%" flexDir="column" gap="5px">
+              <FormInputField
+                label="Start"
+                type="text"
+                value={start}
+                onChange={(e: any) => setStart(e.target.value)}
+              />
+            </Box>
+            <Box w="50%" flexDir="column" gap="5px">
+              <FormInputField
+                label="End"
+                type="text"
+                value={end}
+                onChange={(e: any) => setEnd(e.target.value)}
+              />
+            </Box>
+          </Flex>
         )}
+
+        {/* Marillac Bucks */}
+        <Flex flexDir="row">
+          <FormControl>
+            <FormLabel mb="5px" color="gray.main" fontWeight="700">
+              Marillac Bucks
+            </FormLabel>
+            <NumberInput value={marillacBucks} setValue={setMarillacBucks} />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel mb="5px" color="gray.main" fontWeight="700">
+              Marillac Bucks Deduction
+            </FormLabel>
+            <NumberInput value={deduction} setValue={setDeduction} />
+          </FormControl>
+        </Flex>
+
+        {/* Comments */}
         <FormInputField
-          label="Marillac Bucks"
-          value={marillacBucks || ""}
-          type="number"
-          onChange={(e: any) => {
-            if (e.target.value) {
-              setMarillacBucks(parseInt(e.target.value, 10));
-            } else if (e.target.value === "") {
-              setMarillacBucks(undefined);
-            }
-          }}
-          leftElement="$"
+          label="Comments"
+          type="text"
+          value={comment}
+          onChange={(e: any) => setComment(e.target.value)}
         />
+
         <Flex justifyContent="flex-end">
           <Button
             variant="cancel"

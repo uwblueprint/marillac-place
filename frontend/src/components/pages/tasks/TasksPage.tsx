@@ -22,6 +22,8 @@ import {
   TaskTypeEnum,
   TaskResponse,
   TaskRequest,
+  RecurrenceFrequency,
+  TimeOption,
 } from "../../../types/TaskTypes";
 import CommonTable, {
   ColumnInfoTypes,
@@ -31,8 +33,8 @@ import { tasksColumnTypes, choreTasksColumnTypes } from "./columnKeys";
 import { CREATE_TASK, UPDATE_TASK, DELETE_TASK } from "../../../gql/mutations";
 import {
   GET_TASKS_BY_TYPE,
-  GET_TASKS_BY_START_DATE,
   GET_TASK_BY_ID,
+  GET_TASKS_BY_RECURRENCE_FREQUENCY,
 } from "../../../gql/queries";
 
 const TasksPage = (): React.ReactElement => {
@@ -45,8 +47,7 @@ const TasksPage = (): React.ReactElement => {
   const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
   const [taskData, setTaskData] = useState<TableData[]>([]);
   const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
-  const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([
-  ]);
+  const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
 
   const [taskFilter, setTaskFilter] = useState<string>("");
   const [modalTask, setModalTask] = useState<TaskResponse | null>(null);
@@ -74,28 +75,16 @@ const TasksPage = (): React.ReactElement => {
     return taskByIdData;
   }, [taskByIdData]);
 
-  //   // const {
-  //   //   loading: tasksbyTypeLoading,
-  //   //   error: tasksByTypeError,
-  //   //   data: tassByTypeData,
-  //   // } = useQuery<{ type: TaskTypeEnum }>(GET_TASKS_BY_TYPE, {
-  //   //   variables: {type: TaskTypeEnum.REQUIRED},
-  //   // });
-  //   // const tasksByType = React.useMemo(() => {
-  //   //   return tassByTypeData;
-  //   // }, [tassByTypeData]);
-
-  const startDateVar = new Date("2025-02-24T15:30:00Z");
   const {
-    loading: tasksByStartDateLoading,
-    error: tasksByStartDateError,
-    data: taskByStartDateData,
-  } = useQuery<{ startDate: Date }>(GET_TASKS_BY_START_DATE, {
-    variables: { startDate: startDateVar },
+    loading: tasksByRecurrenceFrequencyLoading,
+    error: tasksByRecurrenceFrequencyError,
+    data: tasksByRecurrenceFrequencyData,
+  } = useQuery(GET_TASKS_BY_RECURRENCE_FREQUENCY, {
+    variables: { recurrencePreference: RecurrenceFrequency.DAILY },
   });
-  const tasksByStartDate = React.useMemo(() => {
-    return taskByStartDateData;
-  }, [taskByStartDateData]);
+  const tasksByRecurrenceFrequency = React.useMemo(() => {
+    return tasksByRecurrenceFrequencyData;
+  }, [tasksByRecurrenceFrequencyData]);
 
   const handleAddTask = async (task: TaskRequest) => {
     try {
@@ -103,11 +92,14 @@ const TasksPage = (): React.ReactElement => {
         variables: {
           type: task.type,
           name: task.name,
-          credit: task.credit,
-          start: task.start,
-          end: task.end || null,
-          isRecurring: task.isRecurring,
+          recurrencePreference: task.recurrencePreference,
           repeatDays: task.repeatDays,
+          timePreference: task.timePreference,
+          start: task.start || null,
+          end: task.end || null,
+          credit: task.credit,
+          deduction: task.deduction,
+          comment: task.comment || null,
         },
       });
       await refetch();
@@ -150,13 +142,8 @@ const TasksPage = (): React.ReactElement => {
   }, []);
 
   useEffect(() => {
-    if (tabIndex === 0) {
-      setTaskType("REQUIRED");
-    } else if (tabIndex === 1) {
-      setTaskType("OPTIONAL");
-    } else {
-      setTaskType("CHORE");
-    }
+    if (tabIndex === 0) setTaskType("REQUIRED");
+    else setTaskType("OPTIONAL");
   }, [tabIndex]);
 
   useEffect(() => {
@@ -174,20 +161,16 @@ const TasksPage = (): React.ReactElement => {
   }, [taskFilter, storedTaskData, taskData]);
 
   useEffect(() => {
-    console.log("taskType Changed.")
+    console.log("taskType Changed.");
     if (data) {
       if (taskType === "REQUIRED") {
         setRequiredTasks(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
-      } else if (taskType === "OPTIONAL") {
+      } else {
         console.log("Setting optional tasks to: ", data.getTasksByType);
         setOptionalTasks(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
-      } else if (taskType === "CHORE") {
-        setChoreTasks(data.getTasksByType);
-        setTaskDataColumns(choreTasksColumnTypes);
       }
-
       setStoredTaskData(
         data.getTasksByType.map((task: any) => {
           return {
@@ -199,21 +182,29 @@ const TasksPage = (): React.ReactElement => {
     }
   }, [taskType]);
 
-  const date = new Date("2025-02-24T15:30:00Z");
-
-  const taskToUpdate: TaskRequest = {
+  const taskToAdd: TaskRequest = {
     type: TaskTypeEnum.OPTIONAL,
-    name: "Test Front End Update",
+    name: "Test Front End Add",
+    recurrencePreference: RecurrenceFrequency.EVERY_SELECTED_DAYS,
+    repeatDays: [DaysOfWeek.MONDAY, DaysOfWeek.FRIDAY],
+    timePreference: TimeOption.ANYTIME,
     credit: 5,
-    start: date,
-    end: date,
-    isRecurring: true,
-    repeatDays: [DaysOfWeek.MONDAY],
+    deduction: 5,
+    start: "Monday, March 10, 2025",
+    end: "Saturday, March 16, 2026",
+    comment: "test",
   };
 
   return (
     <Flex>
-      {/* <Button onClick={() => tasksByStartDate()}>Click</Button> */}
+      <Button
+        onClick={() => {
+          console.log("Adding: ", taskToAdd);
+          handleAddTask(taskToAdd);
+        }}
+      >
+        Add Task Here
+      </Button>
       <SideBar />
       <Flex flexDir="column" flexGrow={1}>
         <Tabs
@@ -221,13 +212,12 @@ const TasksPage = (): React.ReactElement => {
           h="30px"
           mb={6}
           onChange={(value: any) => {
-            setTabIndex(value)
+            setTabIndex(value);
           }}
         >
           <TabList pl={6}>
             <Tab>Required</Tab>
             <Tab>Optional</Tab>
-            <Tab>Chores</Tab>
           </TabList>
         </Tabs>
 
@@ -264,7 +254,7 @@ const TasksPage = (): React.ReactElement => {
                   setIsModalOpen(true);
                 }}
               >
-                {taskType === "CHORE" ? "Add Chore" : "Add Task"}
+                Add Task
               </Button>
             </Flex>
           </Flex>
@@ -288,6 +278,7 @@ const TasksPage = (): React.ReactElement => {
             task={modalTask}
             handleSaveClick={handleSaveClick}
             handleDeleteTask={modalTask ? handleDeleteTask : undefined}
+            type={taskType}
           />
         </Flex>
       </Flex>
