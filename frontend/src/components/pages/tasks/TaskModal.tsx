@@ -10,6 +10,7 @@ import {
   Box,
   InputGroup,
   InputRightElement,
+  Textarea,
 } from "@chakra-ui/react";
 import { FilePresent } from "@mui/icons-material";
 import colors from "../../../theme/colors";
@@ -230,72 +231,77 @@ const TaskModal = ({
         />
 
         {/* Recurrence Frequency Selection */}
-        <FormControl>
-          <FormLabel mb="5px" color="gray.main" fontWeight="700">
-            Select Days
-          </FormLabel>
+        {taskType !== TaskTypeEnum.CUSTOM && (
+          <FormControl>
+            <FormLabel mb="5px" color="gray.main" fontWeight="700">
+              Select Days
+            </FormLabel>
 
-          <RadioGroup
-            variant="primary"
-            value={recurrence}
-            onChange={(value) => setRecurrence(value as RecurrenceFrequency)}
-            style={{ flexDirection: "column", display: "flex" }}
-          >
-            <Radio value="DAILY">Daily</Radio>
-            <Radio value="EVERY_SELECTED_DAYS">Every Selected Days</Radio>
-            <Radio value="ANY_SELECTED_DAYS">Any Selected Days</Radio>
-          </RadioGroup>
+            <RadioGroup
+              variant="primary"
+              value={recurrence}
+              onChange={(value) => setRecurrence(value as RecurrenceFrequency)}
+              style={{ flexDirection: "column", display: "flex" }}
+            >
+              <Radio value="DAILY">Daily</Radio>
+              <Radio value="EVERY_SELECTED_DAYS">Every Selected Days</Radio>
+              <Radio value="ANY_SELECTED_DAYS">Any Selected Days</Radio>
+            </RadioGroup>
 
-          <Flex flexDir="row" gap={2}>
-            {days.map((day, i) => (
-              <Button
-                key={i}
-                // text colour (based on if day is selected)
-                color={
-                  selectedDays.includes(day) ? "white" : colors.purple.main
-                }
-                backgroundColor={
-                  selectedDays.includes(day)
-                    ? colors.purple.main
-                    : "transparent"
-                }
-                // if button is clicked, calls selectDay on day
-                onClick={() => selectDay(day)}
-                _hover={{
-                  bg: selectedDays.includes(day)
-                    ? colors.purple.main
-                    : "#e2e2e2",
-                  color: selectedDays.includes(day) ? "white" : "gray",
-                }}
-                style={{
-                  borderRadius: "5px",
-                  width: "55px",
-                  height: "35px",
-                  border: `1px solid ${colors.purple.main}`,
-                }}
-              >
-                {day}
-              </Button>
-            ))}
-          </Flex>
-        </FormControl>
+            <Flex flexDir="row" gap={2}>
+              {days.map((day, i) => (
+                <Button
+                  isDisabled={recurrence === RecurrenceFrequency.DAILY}
+                  key={i}
+                  // text colour (based on if day is selected)
+                  color={
+                    selectedDays.includes(day) ? "white" : colors.purple.main
+                  }
+                  backgroundColor={
+                    selectedDays.includes(day)
+                      ? colors.purple.main
+                      : "transparent"
+                  }
+                  // if button is clicked, calls selectDay on day
+                  onClick={() => selectDay(day)}
+                  _hover={{
+                    bg: selectedDays.includes(day)
+                      ? colors.purple.main
+                      : "#e2e2e2",
+                    color: selectedDays.includes(day) ? "white" : "gray",
+                  }}
+                  style={{
+                    borderRadius: "5px",
+                    width: "55px",
+                    height: "35px",
+                    border: `1px solid ${colors.purple.main}`,
+                  }}
+                >
+                  {day}
+                </Button>
+              ))}
+            </Flex>
+          </FormControl>
+        )}
 
         {/* Time Option Selection */}
-        <FormControl>
-          <FormLabel mb="5px" color="gray.main" fontWeight="700">
-            Select Time
-          </FormLabel>
+        {taskType !== TaskTypeEnum.CUSTOM && (
+          <FormControl>
+            <FormLabel mb="5px" color="gray.main" fontWeight="700">
+              Select Time
+            </FormLabel>
 
-          <RadioGroup
-            variant="primary"
-            value={timePreference}
-            onChange={(value) => setTimePreference(value as TimeOption)}
-            style={{ flexDirection: "column", display: "flex" }}
-          >
-            <Radio value="ANYTIME">Anytime</Radio>
-            <Radio value="SPECIFIC">Select Time</Radio>
-          </RadioGroup>
-        </FormControl>
+            <RadioGroup
+              variant="primary"
+              value={timePreference}
+              onChange={(value) => setTimePreference(value as TimeOption)}
+              style={{ flexDirection: "column", display: "flex" }}
+            >
+              <Radio value="ANYTIME">Anytime</Radio>
+              <Radio value="SPECIFIC">Select Time</Radio>
+            </RadioGroup>
+          </FormControl>
+        )}
 
         {timePreference === TimeOption.SPECIFIC && (
           <Flex flexDir="row" gap={2}>
@@ -336,12 +342,18 @@ const TaskModal = ({
         </Flex>
 
         {/* Comments */}
-        <FormInputField
-          label="Comments"
-          type="text"
-          value={comment}
-          onChange={(e: any) => setComment(e.target.value)}
-        />
+        <FormControl>
+          <FormLabel>Comments</FormLabel>
+          <Textarea
+            variant="outline"
+            placeholder="Add comments here"
+            borderWidth="2px"
+            borderColor="gray.300"
+            errorBorderColor="red.300"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+        </FormControl>
 
         <Flex justifyContent="flex-end">
           <Button

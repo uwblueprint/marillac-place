@@ -5,6 +5,7 @@ import {
   HStack,
   InputLeftElement,
   InputGroup,
+  Flex,
 } from "@chakra-ui/react";
 import colors from "../../../theme/colors";
 import FormInputField from "../../common/form/FormInputField";
@@ -26,7 +27,7 @@ export default function NumberInput({ value, setValue }: Props) {
   };
 
   return (
-    <HStack w="175px">
+    <Flex flexDir="row" w="200px" gap="5px">
       <Button
         style={{
           border: `1px solid ${colors.purple.main}`,
@@ -56,6 +57,6 @@ export default function NumberInput({ value, setValue }: Props) {
       >
         +
       </Button>
-    </HStack>
+    </Flex>
   );
 }
