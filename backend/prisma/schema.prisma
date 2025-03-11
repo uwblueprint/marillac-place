@@ -15,7 +15,7 @@ enum StaffType {
 enum TaskType {
   REQUIRED
   OPTIONAL
-  CHORE
+  CUSTOM
 }
 
 enum DaysOfWeek {
@@ -37,36 +37,50 @@ enum TaskStatus {
   EXCUSED
 }
 
+enum TimeOption {
+  ANYTIME
+  SPECIFIC
+}
+
+enum RecurrenceFrequency {
+  DAILY
+  EVERY_SELECTED_DAYS
+  ANY_SELECTED_DAYS
+}
+
 model Participant {
-  participantId     String        @id
-  roomNumber        Int
-  arrival           String
-  departure         String?     
-  password          String
-  credit            Int           @default(0)
+  participantId           String        @id
+  roomNumber              Int
+  arrival                 String
+  departure               String?     
+  password                String
+  credit                  Int           @default(0)
 
   @@map("participants")
 }
 
 model Announcement {
-  announcementId    Int           @id @default(autoincrement())
-  from              StaffType     
-  to                Int[]         
-  createdAt         DateTime
-  message           String
+  announcementId          Int           @id @default(autoincrement())
+  from                    StaffType     
+  to                      Int[]         
+  createdAt               DateTime
+  message                 String
 
   @@map("announcements")
 }
 
 model Task {
-  taskId            Int           @id @default(autoincrement())
-  type              TaskType
-  name              String
-  isRecurring       Boolean
-  repeatDays        DaysOfWeek[]
-  start             DateTime
-  end               DateTime?
-  credit            Int
+  taskId                  Int           @id @default(autoincrement())
+  type                    TaskType
+  name                    String
+  recurrencePreference    RecurrenceFrequency
+  repeatDays              DaysOfWeek[]
+  timePreference          TimeOption
+  start                   String?
+  end                     String?
+  credit                  Int
+  deduction               Int
+  comment                 String?
 
   @@map("tasks")
 }

@@ -1,12 +1,18 @@
 import prisma from "../../prisma";
-import { DaysOfWeek, Task, TaskType } from "@prisma/client";
+import {
+  DaysOfWeek,
+  RecurrenceFrequency,
+  Task,
+  TaskType,
+  TimeOption,
+} from "@prisma/client";
 import ITaskService from "../interface/taskInterface";
 
 class TaskService implements ITaskService {
   async getTaskById(taskId: number): Promise<Task> {
     try {
       const task = await prisma.task.findUnique({
-        where: { taskId: taskId },
+        where: { taskId },
       });
       if (!task) throw new Error(`task id ${taskId} not found`);
 
@@ -18,29 +24,25 @@ class TaskService implements ITaskService {
   }
 
   async getTasksByType(type: TaskType): Promise<Task[]> {
-    const defaultEnd: Date = new Date("2030-01-01T08:00:00.000Z");
     try {
       const tasks = await prisma.task.findMany({
         where: { type },
       });
       if (!tasks) throw new Error(`task type ${type} not found`);
 
-      return tasks.map((task) => ({
-        ...task,
-        end: task.end ?? defaultEnd,
-      }));
+      return tasks;
     } catch (error: unknown) {
       console.log(error);
       throw error;
     }
   }
 
-  async getTasksByStartDate(startDate: Date): Promise<Task[]> {
+  async getTasksByRecurrenceFrequency(
+    recurrencePreference: RecurrenceFrequency,
+  ): Promise<Task[]> {
     try {
       const tasks = await prisma.task.findMany({
-        where: {
-          start: startDate,
-        },
+        where: { recurrencePreference },
       });
       return tasks;
     } catch (error: unknown) {
@@ -52,22 +54,28 @@ class TaskService implements ITaskService {
   async createTask(
     type: TaskType,
     name: string,
-    credit: number,
-    start: Date,
-    end: Date,
-    isRecurring: boolean,
+    recurrencePreference: RecurrenceFrequency,
     repeatDays: DaysOfWeek[],
+    timePreference: TimeOption,
+    credit: number,
+    deduction: number,
+    start: string,
+    end: string,
+    comment: string,
   ): Promise<Task> {
     try {
       const newTask = await prisma.task.create({
         data: {
           type,
           name,
+          recurrencePreference,
+          repeatDays,
+          timePreference,
           credit,
+          deduction,
           start,
           end,
-          isRecurring,
-          repeatDays,
+          comment,
         },
       });
 
@@ -82,11 +90,14 @@ class TaskService implements ITaskService {
     taskId: number,
     type: TaskType,
     name: string,
-    credit: number,
-    start: Date,
-    end: Date,
-    isRecurring: boolean,
+    recurrencePreference: RecurrenceFrequency,
     repeatDays: DaysOfWeek[],
+    timePreference: TimeOption,
+    credit: number,
+    deduction: number,
+    start: string,
+    end: string,
+    comment: string,
   ): Promise<Task> {
     try {
       const updatedTask = await prisma.task.update({
@@ -96,11 +107,14 @@ class TaskService implements ITaskService {
         data: {
           type,
           name,
+          recurrencePreference,
+          repeatDays,
+          timePreference,
           credit,
+          deduction,
           start,
           end,
-          isRecurring,
-          repeatDays,
+          comment,
         },
       });
 

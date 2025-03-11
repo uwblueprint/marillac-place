@@ -22,11 +22,14 @@ const dataModels = gql`
     taskId: Int!
     type: TaskType!
     name: String!
-    isRecurring: Boolean!
+    recurrencePreference: RecurrenceFrequency!
     repeatDays: [DaysOfWeek!]!
-    start: DateTime!
-    end: DateTime!
+    timePreference: TimeOption!
     credit: Int!
+    deduction: Int!
+    start: String
+    end: String
+    comment: String
   }
 `;
 

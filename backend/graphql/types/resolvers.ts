@@ -8,7 +8,9 @@ const resolverTypes = gql`
 
     getTaskById(taskId: Int!): Task!
     getTasksByType(type: TaskType!): [Task!]
-    getTasksByStartDate(startDate: DateTime!): [Task!]
+    getTasksByRecurrenceFrequency(
+      recurrencePreference: RecurrenceFrequency!
+    ): [Task!]
   }
 
   type Mutation {
@@ -22,22 +24,28 @@ const resolverTypes = gql`
     createTask(
       type: TaskType!
       name: String!
+      recurrencePreference: RecurrenceFrequency!
+      repeatDays: [DaysOfWeek!]!
+      timePreference: TimeOption!
       credit: Int!
-      start: DateTime!
-      end: DateTime
-      isRecurring: Boolean!
-      repeatDays: [DaysOfWeek!]
+      deduction: Int!
+      start: String
+      end: String
+      comment: String
     ): Task!
 
     updateTask(
       taskId: Int!
       type: TaskType
       name: String
-      credit: Int
-      start: DateTime
-      end: DateTime
-      isRecurring: Boolean
+      recurrencePreference: RecurrenceFrequency
       repeatDays: [DaysOfWeek]
+      timePreference: TimeOption
+      credit: Int
+      deduction: Int
+      start: String
+      end: String
+      comment: String
     ): Task!
 
     deleteTask(taskId: Int!): Task!

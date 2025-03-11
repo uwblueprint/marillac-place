@@ -1,4 +1,10 @@
-import { DaysOfWeek, Task, TaskType } from "@prisma/client";
+import {
+  DaysOfWeek,
+  RecurrenceFrequency,
+  Task,
+  TaskType,
+  TimeOption,
+} from "@prisma/client";
 import TaskService from "../../services/implementation/taskImplementation";
 import ITaskService from "../../services/interface/taskInterface";
 
@@ -20,11 +26,12 @@ const taskResolvers = {
       const tasks = await taskService.getTasksByType(type);
       return tasks;
     },
-    getTasksByStartDate: async (
+    getTasksByRecurrenceFrequency: async (
       _parent: undefined,
-      { startDate }: { startDate: Date },
+      { recurrencePreference }: { recurrencePreference: RecurrenceFrequency },
     ): Promise<Task[]> => {
-      const tasks = await taskService.getTasksByStartDate(startDate);
+      const tasks =
+        await taskService.getTasksByRecurrenceFrequency(recurrencePreference);
       return tasks;
     },
   },
@@ -34,29 +41,38 @@ const taskResolvers = {
       {
         type,
         name,
+        recurrencePreference,
+        repeatDays,
+        timePreference,
         credit,
+        deduction,
         start,
         end,
-        isRecurring,
-        repeatDays,
+        comment,
       }: {
         type: TaskType;
         name: string;
-        credit: number;
-        start: Date;
-        end: Date;
-        isRecurring: boolean;
+        recurrencePreference: RecurrenceFrequency;
         repeatDays: DaysOfWeek[];
+        timePreference: TimeOption;
+        credit: number;
+        deduction: number;
+        start: string;
+        end: string;
+        comment: string;
       },
     ): Promise<Task> => {
       const newTask = await taskService.createTask(
         type,
         name,
+        recurrencePreference,
+        repeatDays,
+        timePreference,
         credit,
+        deduction,
         start,
         end,
-        isRecurring,
-        repeatDays,
+        comment,
       );
       return newTask;
     },
@@ -66,31 +82,40 @@ const taskResolvers = {
         taskId,
         type,
         name,
+        recurrencePreference,
+        repeatDays,
+        timePreference,
         credit,
+        deduction,
         start,
         end,
-        isRecurring,
-        repeatDays,
+        comment,
       }: {
         taskId: number;
         type: TaskType;
         name: string;
-        credit: number;
-        start: Date;
-        end: Date;
-        isRecurring: boolean;
+        recurrencePreference: RecurrenceFrequency;
         repeatDays: DaysOfWeek[];
+        timePreference: TimeOption;
+        credit: number;
+        deduction: number;
+        start: string;
+        end: string;
+        comment: string;
       },
     ): Promise<Task> => {
       const updatedTask = await taskService.updateTaskById(
         taskId,
         type,
         name,
+        recurrencePreference,
+        repeatDays,
+        timePreference,
         credit,
+        deduction,
         start,
         end,
-        isRecurring,
-        repeatDays,
+        comment,
       );
       return updatedTask;
     },
@@ -101,23 +126,6 @@ const taskResolvers = {
       const deletedTask = await taskService.deleteTaskById(taskId);
       return deletedTask;
     },
-    // assignTask: async (
-    //   _parent: undefined,
-    //   { taskAssigned }: { taskAssigned: InputTaskAssignedDTO },
-    // ): Promise<TaskAssignedDTO> => {
-    //   const newTask = await taskService.assignTask(taskAssigned);
-    //   return newTask;
-    // },
-    // changeTaskStatus: async (
-    //   _parent: undefined,
-    //   { taskAssignedId, status }: { taskAssignedId: number; status: Status },
-    // ): Promise<TaskAssignedDTO> => {
-    //   const updatedTask = await taskService.changeTaskStatus(
-    //     taskAssignedId,
-    //     status,
-    //   );
-    //   return updatedTask;
-    // },
   },
 };
 

@@ -1,40 +1,40 @@
-import { TaskType, DaysOfWeek, Task } from "@prisma/client";
-
-export interface TaskDTO {
-  id: number;
-  type: TaskType;
-  title: string;
-  creditValue: number;
-  start: Date;
-  end: Date | null;
-  isRecurring: boolean;
-  repeatDays: DaysOfWeek[];
-}
+import {
+  TaskType,
+  DaysOfWeek,
+  Task,
+  RecurrenceFrequency,
+  TimeOption,
+} from "@prisma/client";
 
 interface ITaskService {
-
   getTaskById(taskId: number): Promise<Task>;
   getTasksByType(type: TaskType): Promise<Task[]>;
-  getTasksByStartDate(startDate: Date): Promise<Task[]>;
+  getTasksByRecurrenceFrequency(recurrencePreference: RecurrenceFrequency): Promise<Task[]>;
 
   createTask(
     type: TaskType,
     name: string,
-    credit: number,
-    start: Date,
-    end: Date,
-    isRecurring: boolean,
+    recurrencePreference: RecurrenceFrequency,
     repeatDays: DaysOfWeek[],
+    timePreference: TimeOption,
+    credit: number,
+    deduction: number,
+    start?: string,
+    end?: string,
+    comment?: string,
   ): Promise<Task>;
   updateTaskById(
     taskId: number,
     type: TaskType,
     name: string,
-    credit: number,
-    start: Date,
-    end: Date,
-    isRecurring: boolean,
+    recurrencePreference: RecurrenceFrequency,
     repeatDays: DaysOfWeek[],
+    timePreference: TimeOption,
+    credit: number,
+    deduction: number,
+    start?: string,
+    end?: string,
+    comment?: string,
   ): Promise<Task>;
   deleteTaskById(taskId: number): Promise<Task>;
 }
