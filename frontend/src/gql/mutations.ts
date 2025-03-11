@@ -16,30 +16,42 @@ export const CREATE_PARTICIPANT = gql`
   }
 `;
 
-export const CREATE_TASK = gql`
-  mutation createTask(
-    $taskId: Int
-    $roomNumber: Int?
-    $Type: TaskType
-    $Status: TaskStatus
-    $Name: String
-    $isRecurring: Boolean
-    $Start: DateTime
-    $End: DateTime
-    $Credit: Int
-    $Comment: String?
+// export const CREATE_TASK = gql`
+//   mutation createTask(
+//     $taskId: Int
+//     $roomNumber: Int?
+//     $Type: TaskType
+//     $Status: TaskStatus
+//     $Name: String
+//     $isRecurring: Boolean
+//     $Start: DateTime
+//     $End: DateTime
+//     $Credit: Int
+//     $Comment: String?
+//   ) {
+//     createTask(
+//       taskId: $taskId
+//       roomNumber: $roomNumber
+//       Type: $Type
+//       Status: $Status
+//       Name: $Name
+//       isRecurring: $isRecurring
+//       Start: $Start
+//       End: $End
+//       Credit: $Credit
+//       Comment: $Comment
+//     )
+//   }
+// `;
+
+export const EDIT_MARILLAC_BUCKS = gql`
+  mutation EditMarillacBucks(
+    $participantId: String
+    $credit : Int
   ) {
-    createTask(
-      taskId: $taskId
-      roomNumber: $roomNumber
-      Type: $Type
-      Status: $Status
-      Name: $Name
-      isRecurring: $isRecurring
-      Start: $Start
-      End: $End
-      Credit: $Credit
-      Comment: $Comment
+    editMarillacBucks(
+      participantId: $participantId
+      credit: $credit
     )
   }
-`;
+`

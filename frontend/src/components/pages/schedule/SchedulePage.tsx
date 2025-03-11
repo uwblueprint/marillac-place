@@ -26,6 +26,7 @@ import ScheduleListView from "./listView/ScheduleListView";
 import ScheduleCalendar from "./calendarView/ScheduleCalendar";
 import SideBar from "../../common/SideBar"
 import AddTaskCard from "./AddTaskCard"
+import AddMarillacBucks from "./AddMarillacBucks";
 
 
 
@@ -37,6 +38,7 @@ const SchedulePage = (): React.ReactElement => {
   const [scheduleData, setScheduleData] = useState<string>("");
   const [active, setActive] = useState<string>("List");
   const [dateRange, setDateRange] = useState("Jan 1 - 7");
+  const [addBucksCardOpened, setAddBucksCardOpened] = useState(false);
 
   const calendarRef = useRef<CalendarApi | null>(null);
 
@@ -144,7 +146,7 @@ const SchedulePage = (): React.ReactElement => {
             variant="success"
             rightIcon={<Icon as={Edit} color="green.main" />}
             size="sm"
-            onClick={() => {}}
+            onClick={() => setAddBucksCardOpened(true)}
             mr={5}
           >
             200 M-Bucks
@@ -207,6 +209,10 @@ const SchedulePage = (): React.ReactElement => {
         )}
       </Box>
     </Flex>
+    <AddMarillacBucks
+          isOpen={addBucksCardOpened}
+          setIsOpen={setAddBucksCardOpened}
+        />
     </Flex>
   );
 };
