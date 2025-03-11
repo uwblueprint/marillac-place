@@ -102,10 +102,10 @@ const AddTaskCard = ({
             Comments
           </FormLabel>
           <Button
-            variant="cancel"
+            variant="comment"
             mr="8px"
           >
-            + Comment
+          + Create Comment
           </Button>
         </Flex>
         <Flex justifyContent="flex-end">

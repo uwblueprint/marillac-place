@@ -16,6 +16,7 @@ export const CREATE_PARTICIPANT = gql`
   }
 `;
 
+/*
 export const CREATE_TASK = gql`
   mutation createTask(
     $taskId: Int
@@ -43,3 +44,4 @@ export const CREATE_TASK = gql`
     )
   }
 `;
+*/

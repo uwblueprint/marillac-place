@@ -1,4 +1,4 @@
-import { defineStyle, defineStyleConfig } from "@chakra-ui/react";
+import { defineStyle, defineStyleConfig, TagLeftIcon } from "@chakra-ui/react";
 
 const primary = defineStyle({
   height: "34px",
@@ -60,8 +60,21 @@ const error = defineStyle({
   _hover: { bg: "red.main", color: "red.100" },
 });
 
+const comment = defineStyle({
+  height: "34px",
+  borderRadius: "8px",
+  padding: "4px 16px",
+  bg: "transparent",
+  color: "blue",
+  textAlign: "left",
+  alignSelf: "flex-start",
+  marginLeft: "-5",
+  border: "2px solid transparent",
+  display: "block",
+});
+
 const buttonTheme = defineStyleConfig({
-  variants: { primary, secondary, cancel, del, success, error },
+  variants: { primary, secondary, cancel, del, success, error, comment },
 });
 
 export default buttonTheme;
