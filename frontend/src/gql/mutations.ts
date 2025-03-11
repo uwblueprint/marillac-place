@@ -19,10 +19,10 @@ export const CREATE_PARTICIPANT = gql`
 export const UPDATE_PARTICIPANT_BY_ID = gql`
   mutation updateParticipantById(
     $participantId: String!
-    $roomNumber: Int!
-    $arrival: String!
-    $departure: String!
-    $password: String!
+    $roomNumber: Int
+    $arrival: String
+    $departure: String
+    $password: String
   ) {
     updateParticipantById(
       participantId: $participantId

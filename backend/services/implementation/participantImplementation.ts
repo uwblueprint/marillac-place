@@ -3,10 +3,11 @@ import prisma from "../../prisma";
 import IParticipantService from "../interface/participantInterface";
 
 class ParticipantService implements IParticipantService {
-  async getAllParticipants(): Promise<Participant[]> {
+  async getPastParticipants(): Promise<Participant[]> {
     try {
       const participants = await prisma.participant.findMany({
-        orderBy: [{ departure: "asc" }, { arrival: "asc" }],
+        where: {departure: { not: "" }},
+        orderBy: [{ departure: "desc" }],
       });
       return participants;
     } catch (err) {
@@ -56,20 +57,21 @@ class ParticipantService implements IParticipantService {
 
   async updateParticipantById(
     participantId: string,
-    roomNumber: number,
-    arrival: string,
-    departure: string,
-    password: string,
+    roomNumber?: number,
+    arrival?: string,
+    departure?: string,
+    password?: string,
   ): Promise<boolean> {
+    const updatedData: Record<string, any> = {};
+    if (roomNumber) updatedData.roomNumber = roomNumber;
+    if (arrival) updatedData.arrival = arrival;
+    if (departure) updatedData.departure = departure;
+    if (password) updatedData.password = password;
+
     try {
       await prisma.participant.update({
         where: { participantId },
-        data: {
-          roomNumber,
-          arrival,
-          departure,
-          password,
-        },
+        data: updatedData,
       });
       return true;
     } catch (err) {

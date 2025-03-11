@@ -5,8 +5,8 @@ import IParticipantService from "../../services/interface/participantInterface";
 const participantService: IParticipantService = new ParticipantService();
 const participantResolvers = {
   Query: {
-    getAllParticipants: async (): Promise<Participant[]> => {
-      return participantService.getAllParticipants();
+    getPastParticipants: async (): Promise<Participant[]> => {
+      return participantService.getPastParticipants();
     },
     getParticipantById: async (
       _parent: undefined,
@@ -47,10 +47,10 @@ const participantResolvers = {
         password,
       }: {
         participantId: string;
-        roomNumber: number;
-        arrival: string;
-        departure: string;
-        password: string;
+        roomNumber?: number;
+        arrival?: string;
+        departure?: string;
+        password?: string;
       },
     ): Promise<boolean> => {
       return participantService.updateParticipantById(
