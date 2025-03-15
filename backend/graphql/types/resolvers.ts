@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 const resolverTypes = gql`
   type Query {
     getPastParticipants: [Participant]
+    getCurrentParticipants: [Participant]
     getParticipantById(participantId: String!): Participant
     getAvailableRooms: [Int]
   }

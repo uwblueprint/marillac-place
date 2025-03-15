@@ -5,9 +5,12 @@ const primary = defineStyle({
   borderRadius: "8px",
   padding: "4px 16px",
   border: "0",
-  bg: "purple.main",
-  color: "white",
-  _hover: { bg: "purple.100", color: "purple.main" },
+  bg: "orange.500",
+  color: "orange.50",
+  _hover: { 
+    bg: "orange.50", 
+    color: "orange.500" 
+  }
 });
 
 const secondary = defineStyle({

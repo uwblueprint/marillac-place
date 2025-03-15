@@ -16,6 +16,19 @@ class ParticipantService implements IParticipantService {
     }
   }
 
+  async getCurrentParticipants(): Promise<Participant[]> {
+    try {
+      const participants = await prisma.participant.findMany({
+        where: {departure: ""},
+        orderBy: [{ arrival: "desc" }],
+      });
+      return participants;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
   async getParticipantById(participantId: string): Promise<Participant | null> {
     try {
       const participant: Participant | null = await prisma.participant.findUnique(

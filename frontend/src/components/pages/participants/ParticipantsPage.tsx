@@ -12,7 +12,7 @@ import {
 import { Add, Search } from "@mui/icons-material";
 
 import { useQuery } from "@apollo/client";
-import { GET_PAST_PARTICIPANTS } from "../../../gql/queries";
+import { GET_PAST_PARTICIPANTS, GET_CURRENT_PARTICIPANTS } from "../../../gql/queries";
 
 import CommonTable, {
   ColumnInfoTypes,
@@ -22,6 +22,7 @@ import SideBar from "../../common/SideBar";
 import AddParticipantCard from "./AddParticipantCard";
 import EditParticipantCard from "./EditParticipantCard";
 import EditPastParticipantCard from "./EditPastParticipantCard";
+import CurrentParticipantCard from "./CurrentParticipantCard";
 
 const columnTypes: ColumnInfoTypes[] = [
   {
@@ -51,6 +52,12 @@ const ParticipantsPage = (): React.ReactElement => {
     error: getPastParticipantsError,
     data: getPastParticipantsData,
   } = useQuery(GET_PAST_PARTICIPANTS);
+  
+  const {
+    loading: getCurrentParticipantsLoading,
+    error: getCurrentParticipantsError,
+    data: getCurrentParticipantsData,
+  } = useQuery(GET_CURRENT_PARTICIPANTS);
 
   return (
     <Flex
@@ -81,6 +88,17 @@ const ParticipantsPage = (): React.ReactElement => {
             marginBottom="20px"
           >
             <Text fontSize="lg" fontWeight="600" color="#15646E">Current Participants</Text>
+            {getCurrentParticipantsLoading ? (
+              <Spinner />
+            ) : getCurrentParticipantsError ? (
+              <Flex>{getCurrentParticipantsError.message}</Flex>
+            ) : getCurrentParticipantsData.getCurrentParticipants ? 
+              getCurrentParticipantsData.getCurrentParticipants.map((participant: TableData) =>
+                <CurrentParticipantCard key={participant.participantId} roomNumber={participant.roomNumber} participantId={participant.participantId} arrival={participant.arrival} password={participant.password} />
+              )
+            : (
+              <Flex>An unknown issue has occured.</Flex>
+            )}
           </Flex>
           <Flex
             w="100%"

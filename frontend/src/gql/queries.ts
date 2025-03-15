@@ -16,6 +16,17 @@ export const GET_PAST_PARTICIPANTS = gql`
   }
 `;
 
+export const GET_CURRENT_PARTICIPANTS = gql`
+  query getCurrentParticipants {
+    getCurrentParticipants {
+      participantId
+      roomNumber
+      arrival
+      password
+    }
+  }
+`;
+
 export const GET_PARTICIPANT_BY_ID = gql`
   query getParticipantById($participantId: String!) {
     getParticipantById(participantId: $participantId) {

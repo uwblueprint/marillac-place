@@ -8,6 +8,9 @@ const participantResolvers = {
     getPastParticipants: async (): Promise<Participant[]> => {
       return participantService.getPastParticipants();
     },
+    getCurrentParticipants: async (): Promise<Participant[]> => {
+      return participantService.getCurrentParticipants();
+    },
     getParticipantById: async (
       _parent: undefined,
       { participantId }: { participantId: string },

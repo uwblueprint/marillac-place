@@ -174,7 +174,7 @@ const CommonTable = ({
       <TableContainer
         border="2px solid"
         borderColor="#E2E8F0"
-        borderRadius="6px"
+        borderRadius="5px"
       >
         <Table>
           <Thead>
