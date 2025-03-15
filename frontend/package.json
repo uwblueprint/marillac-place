@@ -23,7 +23,6 @@
     "@types/apollo-upload-client": "^14.1.0",
     "@types/jest": "^26.0.15",
     "@types/json2csv": "^5.0.3",
-    "@types/node": "^12.0.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
     "@types/react-jsonschema-form": "^1.7.4",
@@ -31,6 +30,7 @@
     "apollo-upload-client": "^16.0.0",
     "axios": "^1.6.0",
     "bootstrap": "^4.6.0",
+    "crypto-js": "^4.2.0",
     "framer-motion": "^7.6.12",
     "graphql": "^15.5.0",
     "humps": "^2.0.1",
@@ -78,7 +78,9 @@
     ]
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/humps": "^2.0.0",
+    "@types/node": "^22.13.10",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-test-renderer": "^17.0.1",
     "@typescript-eslint/eslint-plugin": "^5.44.0",

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
-import CryptoJS from "crypto-js";
+// import CryptoJS from "crypto-js";
 
 import {
   Select,
@@ -48,13 +48,17 @@ const LoginPage = (): React.ReactElement => {
       return;
     }
 
-    // Encrypt the password
-    const encryptedPassword = CryptoJS.AES.encrypt(
-      password,
-      "your-secret-key",
-    ).toString();
+    // // Encrypt the password
+    // const encryptedPassword = CryptoJS.AES.encrypt(
+    //   password,
+    //   "your-secret-key",
+    // ).toString();
 
-    login({ variables: { role, encryptedPassword } });
+    // login({ variables: { role, encryptedPassword } });
+    
+
+
+    login({ variables: { role, password } });
   };
 
   return (

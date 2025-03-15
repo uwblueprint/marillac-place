@@ -6,7 +6,13 @@ const authService: IAuthService = new AuthService();
 
 const authResolver = {
   Mutation: {
-    login: async ({ role, encryptedPassword }: { role: string; encryptedPassword: string }) => {
+    login: async ({
+      role,
+      encryptedPassword,
+    }: {
+      role: string;
+      encryptedPassword: string;
+    }) => {
       try {
         return await authService.login(role, encryptedPassword);
       } catch (error) {
