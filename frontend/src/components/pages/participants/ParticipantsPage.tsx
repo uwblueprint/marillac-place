@@ -92,12 +92,41 @@ const ParticipantsPage = (): React.ReactElement => {
               <Spinner />
             ) : getCurrentParticipantsError ? (
               <Flex>{getCurrentParticipantsError.message}</Flex>
-            ) : getCurrentParticipantsData.getCurrentParticipants ? 
-              getCurrentParticipantsData.getCurrentParticipants.map((participant: TableData) =>
-                <CurrentParticipantCard key={participant.participantId} roomNumber={participant.roomNumber} participantId={participant.participantId} arrival={participant.arrival} password={participant.password} />
-              )
-            : (
-              <Flex>An unknown issue has occured.</Flex>
+            ) : getCurrentParticipantsData?.getCurrentParticipants ? (
+              <Flex
+                w="100%"
+                alignItems="center"
+                gap="15px"
+                justifyContent="space-between"
+                wrap="wrap"
+              >
+                {[...Array(10)].map((_, index) => {
+                  const roomNumber = (index + 1).toString();
+                  const participant = getCurrentParticipantsData.getCurrentParticipants.find(
+                    (p: TableData) => p.roomNumber === roomNumber
+                  );
+
+                  return participant ? (
+                    <CurrentParticipantCard
+                      key={roomNumber}
+                      roomNumber={roomNumber}
+                      participantId={participant.participantId}
+                      arrival={participant.arrival}
+                      password={participant.password}
+                    />
+                  ) : (
+                    <CurrentParticipantCard
+                      key={roomNumber}
+                      roomNumber={roomNumber}
+                      participantId="edit"
+                      arrival="edit"
+                      password="edit"
+                    />
+                  );
+                })}
+              </Flex>
+            ) : (
+              <Flex>An unknown issue has occurred.</Flex>
             )}
           </Flex>
           <Flex
