@@ -16,32 +16,39 @@ export const CREATE_PARTICIPANT = gql`
   }
 `;
 
-/*
 export const CREATE_TASK = gql`
   mutation createTask(
-    $taskId: Int
-    $roomNumber: Int?
-    $Type: TaskType
-    $Status: TaskStatus
-    $Name: String
-    $isRecurring: Boolean
-    $Start: DateTime
-    $End: DateTime
-    $Credit: Int
-    $Comment: String?
+    $roomNumber: Int
+    $type: TaskType!
+    $status: TaskStatus!
+    $name: String!
+    $isRecurring: Boolean!
+    $start: DateTime!
+    $end: DateTime!
+    $credit: Int!
+    $comment: String
   ) {
     createTask(
-      taskId: $taskId
       roomNumber: $roomNumber
-      Type: $Type
-      Status: $Status
-      Name: $Name
+      type: $type
+      status: $status
+      name: $name
       isRecurring: $isRecurring
-      Start: $Start
-      End: $End
-      Credit: $Credit
-      Comment: $Comment
-    )
+      start: $start
+      end: $end
+      credit: $credit
+      comment: $comment
+    ) {
+      taskId
+      roomNumber
+      type
+      status
+      name
+      isRecurring
+      start
+      end
+      credit
+      comment
+    }
   }
 `;
-*/
