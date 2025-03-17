@@ -30,7 +30,7 @@ const dataModels = gql`
     credit: Int!
     comment: String
   }
-  
+
   type AuthResponse {
     type: String!
     accessToken: String!

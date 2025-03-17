@@ -1,5 +1,7 @@
 import { AuthenticationError } from "apollo-server-express";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
+// import * as jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 // import bcrypt from "bcrypt";
 // import CryptoJS from "crypto-js";
 import { IAuthService } from "../interface/authInterface";
