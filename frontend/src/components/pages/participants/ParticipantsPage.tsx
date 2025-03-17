@@ -23,6 +23,7 @@ import AddParticipantCard from "./AddParticipantCard";
 import EditParticipantCard from "./EditParticipantCard";
 import EditPastParticipantCard from "./EditPastParticipantCard";
 import CurrentParticipantCard from "./CurrentParticipantCard";
+import EmptyParticipantCard from "./EmptyParticipantCard";
 
 const columnTypes: ColumnInfoTypes[] = [
   {
@@ -43,6 +44,7 @@ const columnTypes: ColumnInfoTypes[] = [
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
+  const roomNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [addParticipant, setAddParticipant] = useState(false);
   const [editPastParticipant, setEditPastParticipant] = useState(false);
   const [selected, setSelected] = useState({});
@@ -100,28 +102,24 @@ const ParticipantsPage = (): React.ReactElement => {
                 justifyContent="space-between"
                 wrap="wrap"
               >
-                {[...Array(10)].map((_, index) => {
-                  const roomNumber = (index + 1).toString();
+                {roomNumbers.map((num: number) => {
                   const participant = getCurrentParticipantsData.getCurrentParticipants.find(
-                    (p: TableData) => p.roomNumber === roomNumber
+                    (p: any) => {
+                      console.log(num)
+                      return p.roomNumber === num;
+                    }
                   );
 
                   return participant ? (
                     <CurrentParticipantCard
-                      key={roomNumber}
-                      roomNumber={roomNumber}
+                      key={num}
+                      roomNumber={num.toString()}
                       participantId={participant.participantId}
                       arrival={participant.arrival}
                       password={participant.password}
                     />
                   ) : (
-                    <CurrentParticipantCard
-                      key={roomNumber}
-                      roomNumber={roomNumber}
-                      participantId="edit"
-                      arrival="edit"
-                      password="edit"
-                    />
+                    <EmptyParticipantCard roomNumber={num.toString()} />
                   );
                 })}
               </Flex>

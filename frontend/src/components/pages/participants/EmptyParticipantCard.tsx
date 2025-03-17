@@ -1,14 +1,11 @@
 import { Button, Flex, Text } from '@chakra-ui/react';
 import React from 'react'
 
-type CurrentParticipantCardProps = {
+type EmptyParticipantCardProps = {
     roomNumber: string;
-    participantId: string;
-    arrival: string;
-    password: string;
 }
 
-const CurrentParticipantCard = ({roomNumber, participantId, arrival, password}: CurrentParticipantCardProps) => {
+const EmptyParticipantCard = ({roomNumber}: EmptyParticipantCardProps) => {
   return (
     <Flex 
         w="180px"
@@ -29,12 +26,11 @@ const CurrentParticipantCard = ({roomNumber, participantId, arrival, password}: 
             justifyContent="center"
             gap="5px"
         >
-            <Flex fontSize="xs">ID Number: { participantId }</Flex>
-            <Flex fontSize="xs">Arrival Date: { arrival }</Flex>
-            <Button size="xs" bg="orange.500" color="white" mt="3px">Edit Participant</Button>
+            <Flex fontSize="xs">The room is empty.</Flex>
+            <Button size="xs" bg="orange.500" color="white" mt="3px">Add Participant</Button>
         </Flex>
     </Flex>
   )
 }
 
-export default CurrentParticipantCard
+export default EmptyParticipantCard
