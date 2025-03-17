@@ -3,7 +3,7 @@ import prisma from "../../prisma";
 import IAnnouncementService from "../interface/announcementInterface.js";
 
 class AnnouncementService implements IAnnouncementService {
-  async getAllAnnouncements(): Promise<Announcement[]> {
+  async getAllAnnouncements(): Promise<Announcement[] | null> {
     try {
       const announcements = await prisma.announcement.findMany({
         orderBy: [{ createdAt: "asc" }],
@@ -15,14 +15,14 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
-  async getAnnouncementByRoom( // FIX IT IS BY PARTICAPANT
-    room: number,
-  ): Promise<Announcement[]> {
+  async getAnnouncementByParticipants( // FIX IT IS BY PARTICAPANT
+    participant: number[],
+  ): Promise<Announcement[] | null> {
     try {
       const annoucements = await prisma.announcement.findMany({
         where: {
           to: {
-            has: room
+            hasSome: participant
           }
         }
       });
