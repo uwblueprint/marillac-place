@@ -10,6 +10,8 @@ import {
   Checkbox,
 } from "@chakra-ui/react";
 
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+import { CREATE_TASK } from "../../../gql/mutations";
 
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/form/FormInputField";
@@ -24,8 +26,42 @@ const AddTaskCard = ({
   isOpen,
   setIsOpen,
 }: AddTaskCardProps): React.ReactElement => {
-  const [participantId, setParticipantId] = useState("");
+
+  const [participantId, setParticipantId] = useState(""); // Remove the participant references when possible
   const [participantIdError, setParticipantIdError] = useState("");
+
+  const [taskType, setTaskType] = useState("");
+  const [taskName, setTaskName] = useState("");
+  const [recurrence, setRecurrence] = useState("");
+  const [marillacBucks, setMarillacBucks] = useState(""); // use for credit field
+  const [comment, setComment] = useState("");
+
+  const [createTask] = useMutation(CREATE_TASK);
+
+  const handleSubmit = async () => {
+    try {
+      await createTask({
+        variables: {
+          roomNumber: 1,
+          type: "REQUIRED",
+          status: "ASSIGNED",
+          name: "test",
+          isRecurring: true,
+          
+
+          credit: 10,
+          comment: "this is a test"
+        },
+      });
+      console.log("Successfully added task");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const reset = () => {
+    
+  }
 
   return (
     <ModalContainer
@@ -118,7 +154,7 @@ const AddTaskCard = ({
           >
             Cancel
           </Button>
-          <Button variant="primary">
+          <Button variant="primary" onClick={handleSubmit}>
             Assign
           </Button>
         </Flex>
