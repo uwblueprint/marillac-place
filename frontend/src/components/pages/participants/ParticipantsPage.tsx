@@ -20,7 +20,6 @@ import CommonTable, {
 } from "../../common/CommonTable";
 import SideBar from "../../common/SideBar";
 import AddParticipantCard from "./AddParticipantCard";
-import EditParticipantCard from "./EditParticipantCard";
 import EditPastParticipantCard from "./EditPastParticipantCard";
 import CurrentParticipantCard from "./CurrentParticipantCard";
 import EmptyParticipantCard from "./EmptyParticipantCard";

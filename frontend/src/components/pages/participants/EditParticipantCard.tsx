@@ -9,49 +9,50 @@ import { UPDATE_PARTICIPANT_BY_ID } from "../../../gql/mutations";
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
 import FormSelectField from "../../common/FormSelectField";
-import { TableData } from "../../common/CommonTable";
 
 type EditParticipantCardProps = {
-  selected: TableData;
+  selectedRoomNumber: string;
+  selectedParticipantId: string;
+  selectedArrival: string;
+  selectedPassword: string;
   close: () => void;
 };
 
 const EditParticipantCard = ({
-  selected,
+  selectedRoomNumber,
+  selectedParticipantId,
+  selectedArrival,
+  selectedPassword,
   close,
 }: EditParticipantCardProps): React.ReactElement => {
-  const [roomNumber, setRoomNumber] = useState(selected.roomNumber);
-  const [arrivalDate, setArrivalDate] = useState(selected.arrival);
-  const [departureDate, setDepartureDate] = useState(selected.departure);
-  const [password, setPassword] = useState(selected.password);
+  // eslint-disable-next-line prefer-template
+  const title = "Edit Participant in Room " + selectedRoomNumber;
 
+  const [arrivalDate, setArrivalDate] = useState(selectedArrival);
+  const [password, setPassword] = useState(selectedPassword);
   const [error, setError] = useState("");
 
-  const {
-    loading: getAvailableRoomsLoading,
-    error: getAvailableRoomsError,
-    data: getAvailableRoomsData,
-  } = useQuery(GET_AVAILABLE_ROOMS);
+  // const {
+  //   loading: getAvailableRoomsLoading,
+  //   error: getAvailableRoomsError,
+  //   data: getAvailableRoomsData,
+  // } = useQuery(GET_AVAILABLE_ROOMS);
   const [updateParticipantById] = useMutation(UPDATE_PARTICIPANT_BY_ID);
 
   const reset = () => {
-    setRoomNumber(selected.roomNumber);
-    setArrivalDate(selected.arrival);
-    setDepartureDate(selected.departure);
-    setPassword(selected.password);
+    setArrivalDate(selectedArrival);
+    setPassword(selectedPassword);
     setError("");
   };
 
-  const validate = async () => {
-    if (!roomNumber || !arrivalDate || !password) {
+  const validate = () => {
+    if (!arrivalDate || !password) {
       setError("Missing fields.");
       return false;
     }
     if (
-      roomNumber === selected.roomNumber &&
-      arrivalDate === selected.arrival &&
-      departureDate === selected.departure &&
-      password === selected.password
+      arrivalDate === selectedArrival &&
+      password === selectedPassword
     ) {
       setError("No changes made.");
       return false;
@@ -62,15 +63,12 @@ const EditParticipantCard = ({
   const handleSubmit = async () => {
     setError("");
     try {
-      const valid: boolean = await validate();
+      const valid: boolean = validate();
       if (valid) {
-        const room = parseInt(roomNumber, 10);
         await updateParticipantById({
-          variables: {
-            participantId: selected.participantId,
-            roomNumber: room,
+          variables: { 
+            participantId: selectedParticipantId,
             arrival: arrivalDate,
-            departure: departureDate,
             password,
           },
         });
@@ -85,7 +83,7 @@ const EditParticipantCard = ({
   };
 
   return (
-    <ModalContainer title="Edit Participant">
+    <ModalContainer title={title}>
       <Flex flexDir="column" gap="20px">
         {error && <Flex textColor="red.500">{error}</Flex>}
 
@@ -93,10 +91,10 @@ const EditParticipantCard = ({
           <Flex mb="5px" color="gray.main" fontWeight="700">
             ID Number
           </Flex>
-          <Flex>{selected.participantId}</Flex>
+          <Flex>{selectedParticipantId}</Flex>
         </Flex>
 
-        {getAvailableRoomsLoading ? (
+        {/* {getAvailableRoomsLoading ? (
           <Spinner />
         ) : getAvailableRoomsError || !getAvailableRoomsData ? (
           <Flex p="10px">Error getting rooms.</Flex>
@@ -116,7 +114,7 @@ const EditParticipantCard = ({
               setRoomNumber(e.target.value || selected.roomNumber)
             }
           />
-        )}
+        )} */}
 
         <FormInputField
           label="Arrival Date"
@@ -124,15 +122,6 @@ const EditParticipantCard = ({
           type="date"
           onChange={(e) => {
             setArrivalDate(e.target.value);
-          }}
-        />
-
-        <FormInputField
-          label="Departure Date"
-          value={departureDate}
-          type="date"
-          onChange={(e) => {
-            setDepartureDate(e.target.value);
           }}
         />
 
