@@ -45,9 +45,9 @@ export const GET_ALL_ANNOUNCEMENTS = gql`
   }
 `
 
-export const GET_ANNOUNCEMENT_BY_PARTICAPANTS = gql`
-  query getAnnouncementByParticipants($participants: number[]) {
-    getAnnouncementByParticipants(participants: $participants) {
+export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
+  query getAnnouncementByRooms($rooms: number[]) {
+    getAnnouncementByRooms(rooms: $rooms) {
       announcementId
       from     
       to         
@@ -57,7 +57,7 @@ export const GET_ANNOUNCEMENT_BY_PARTICAPANTS = gql`
   }
 `
 
-export const Create_Announcement = gql`
+export const CREATE_ANNOUNCEMENT = gql`
   query createAnnouncement($announcementId: number,
     $from: StaffType,     
     $to: number[],          

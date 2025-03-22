@@ -15,14 +15,14 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
-  async getAnnouncementByParticipants( // FIX IT IS BY PARTICAPANT
-    participant: number[],
+  async getAnnouncementByRooms(
+    rooms: number[],
   ): Promise<Announcement[] | null> {
     try {
       const annoucements = await prisma.announcement.findMany({
         where: {
           to: {
-            hasSome: participant
+            hasSome: rooms
           }
         }
       });

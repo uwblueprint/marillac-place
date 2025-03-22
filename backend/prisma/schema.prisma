@@ -17,6 +17,12 @@ enum TaskType {
   OPTIONAL
 }
 
+enum PriorityType {
+  NORMAL
+  HIGH
+  CRITICAL
+}
+
 enum TaskStatus {
   UNASSIGNED
   ASSIGNED
@@ -41,6 +47,7 @@ model Announcement {
   announcementId    Int           @id @default(autoincrement())
   from              StaffType     
   to                Int[]         
+  priority          
   createdAt         DateTime
   message           String
 
