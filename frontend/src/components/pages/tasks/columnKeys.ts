@@ -10,8 +10,8 @@ export const tasksColumnTypes: ColumnInfoTypes[] = [
     key: "repeatDays",
   },
   {
-    header: "Due Date",
-    key: "start",
+    header: "End Date",
+    key: "end",
   },
   {
     header: "Marillac Bucks",

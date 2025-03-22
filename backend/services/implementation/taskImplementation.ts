@@ -102,7 +102,7 @@ class TaskService implements ITaskService {
     try {
       const updatedTask = await prisma.task.update({
         where: {
-          taskId: taskId,
+          taskId,
         },
         data: {
           type,
@@ -129,7 +129,7 @@ class TaskService implements ITaskService {
     try {
       const deletedTask = await prisma.task.delete({
         where: {
-          taskId: taskId,
+          taskId,
         },
       });
       return deletedTask;

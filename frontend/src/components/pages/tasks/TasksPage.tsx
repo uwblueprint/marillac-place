@@ -160,6 +160,13 @@ const TasksPage = (): React.ReactElement => {
     }
   }, [taskFilter, storedTaskData, taskData]);
 
+  const formattedTaskData = taskData.map(task => ({
+    ...task,
+    end: task.end ? task.end : "Never", 
+    credit: `$ ${task.credit}`, 
+  }));
+  
+
   useEffect(() => {
     console.log("taskType Changed.");
     if (data) {
@@ -197,14 +204,6 @@ const TasksPage = (): React.ReactElement => {
 
   return (
     <Flex>
-      <Button
-        onClick={() => {
-          console.log("Adding: ", taskToAdd);
-          handleAddTask(taskToAdd);
-        }}
-      >
-        Add Task Here
-      </Button>
       <SideBar />
       <Flex flexDir="column" flexGrow={1}>
         <Tabs
@@ -263,7 +262,7 @@ const TasksPage = (): React.ReactElement => {
             <p>Loading...</p>
           ) : (
             <CommonTable
-              data={taskData}
+              data={formattedTaskData}
               columnInfo={taskDataColumns}
               maxResults={8}
               onEdit={(row: any) => {
