@@ -1,4 +1,4 @@
-import { Announcement, StaffType } from "@prisma/client";
+import { Announcement, StaffType, PriorityType } from "@prisma/client";
 
 interface IAnnouncementService {
   getAllAnnouncements(): Promise<Announcement[] | null>;
@@ -6,9 +6,21 @@ interface IAnnouncementService {
   createAnnouncement(
     announcementId: number,
     from: StaffType,     
-    to: number[],          
+    to: number[],   
+    priority: PriorityType,       
     createdAt: Date,
     message: string,
+  ): Promise<boolean>;
+  editAnnouncement(
+    announcementId: number,
+    from: StaffType,     
+    to: number[],
+    priority: PriorityType,           
+    createdAt: Date,
+    message: string,
+  ): Promise<boolean>;
+  deleteAnnouncement(
+    announcementId: number,
   ): Promise<boolean>;
 }
 

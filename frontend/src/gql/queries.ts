@@ -43,7 +43,7 @@ export const GET_ALL_ANNOUNCEMENTS = gql`
       message 
     }
   }
-`
+`;
 
 export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
   query getAnnouncementByRooms($rooms: number[]) {
@@ -55,21 +55,4 @@ export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
       message 
     }
   }
-`
-
-export const CREATE_ANNOUNCEMENT = gql`
-  query createAnnouncement($announcementId: number,
-    $from: StaffType,     
-    $to: number[],          
-    $createdAt: Date,
-    $message: string,
-    ) {
-    createAnnouncement(announcementId: $announcementId, from: $from, to: $to, createdAt: $createdAt, message: $message) {
-      announcementId
-      from     
-      to         
-      createdAt
-      message 
-    }
-  }
-`
+`;

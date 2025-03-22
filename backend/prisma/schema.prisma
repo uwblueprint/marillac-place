@@ -47,7 +47,7 @@ model Announcement {
   announcementId    Int           @id @default(autoincrement())
   from              StaffType     
   to                Int[]         
-  priority          
+  priority          PriorityType
   createdAt         DateTime
   message           String
 

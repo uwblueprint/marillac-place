@@ -24,7 +24,8 @@ class AnnouncementService implements IAnnouncementService {
           to: {
             hasSome: rooms
           }
-        }
+        },
+        orderBy: [{ createdAt: "asc" }],
       });
       return annoucements;
     } catch (err) {
@@ -37,18 +38,20 @@ class AnnouncementService implements IAnnouncementService {
   async createAnnouncement(
     announcementId: number,
     from: StaffType,     
-    to: number[],          
+    to: number[],      
+    priority: PriorityType,    
     createdAt: Date,
     message: string,
   ): Promise<boolean> {
     try {
       await prisma.announcement.create({
         data: {
-          announcementId,
-          from,
-          to,
-          createdAt,
-          message,
+          announcementId: announcementId,
+          from: from,
+          to: to,
+          priority: priority,
+          createdAt: createdAt,
+          message: message,
         },
       });
       return true;
@@ -57,7 +60,53 @@ class AnnouncementService implements IAnnouncementService {
       throw err;
     }
   }
+
+  async editAnnouncement(
+    announcementId: number,
+    from: StaffType,     
+    to: number[],      
+    priority: PriorityType,    
+    createdAt: Date,
+    message: string,
+  ): Promise<boolean> {
+    try {
+      await prisma.announcement.update({
+        where: {
+          announcementId: announcementId,
+        },
+        data: {
+          from: from,
+          to: to,
+          priority: priority,
+          createdAt: createdAt,
+          message: message,
+        },
+    });
+      return true;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async deleteAnnouncement(
+    announcementId: number,
+  ): Promise<boolean> {
+    try {
+      await prisma.announcement.delete({
+        where: {
+          announcementId: announcementId,
+        }
+    });
+      return true;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
 }
+
+
 
 export default AnnouncementService;
 
