@@ -1,5 +1,5 @@
 import { AuthenticationError } from "apollo-server-express";
-import { IAuthService } from "../../services/interface/authInterface";
+import { IAuthService } from "../../services/interface/auth";
 import AuthService from "../../services/implementation/auth";
 
 const authService: IAuthService = new AuthService();
