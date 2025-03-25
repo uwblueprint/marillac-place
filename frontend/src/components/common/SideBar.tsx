@@ -50,6 +50,11 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
 
 const SideBar: React.FC = () => {
   const navigate = useNavigate();
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    // localStorage.removeItem("type");
+    navigate(Routes.LOGIN_PAGE);
+  };
 
   const pages = [
     { label: "Home", route: Routes.HOME_PAGE },
@@ -131,6 +136,7 @@ const SideBar: React.FC = () => {
               fontWeight={400}
               fontSize="14px"
               width="fit-content"
+              onClick={() => handleSignOut()}
             >
               Sign out
             </Button>
