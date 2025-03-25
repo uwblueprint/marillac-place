@@ -24,6 +24,13 @@ const LOGIN = gql`
   }
 `;
 
+const isTokenValid = (token: string | null): boolean => {
+  if (!token) return false;
+  const payload = JSON.parse(atob(token.split('.')[1])); // Decode the JWT payload
+  const currentTime = Date.now() / 1000; // Current time in seconds
+  return payload.exp > currentTime; // Check if the token is expired
+};
+
 const LoginPage = (): React.ReactElement => {
   const navigate = useNavigate();
 
@@ -32,16 +39,19 @@ const LoginPage = (): React.ReactElement => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const tokenType = localStorage.getItem("type");
-    if (tokenType) {
-      // Set default role based on token type
+    const token = localStorage.getItem("token");
+    if (isTokenValid(token)) {
+      navigate("/");
+    } else {
+      const tokenType = localStorage.getItem("type");
+      // default role dropdown based on last login type
       if (tokenType === "admin_staff") {
         setRole("admin_staff");
       } else if (tokenType === "release_staff") {
         setRole("release_staff");
       }
     }
-  }, []);
+  }, [navigate]);
 
   const [login, { loading }] = useMutation(LOGIN, {
     onCompleted: (data) => {
