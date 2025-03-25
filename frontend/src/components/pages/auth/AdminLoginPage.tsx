@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
 // import CryptoJS from "crypto-js";
-
 import {
   Select,
   Button,
@@ -12,8 +11,9 @@ import {
   FormControl,
   FormErrorMessage,
 } from "@chakra-ui/react";
-
 import logo from "../../../assets/Marillac-Place-Logo.webp";
+
+// const CryptoJS = require("crypto-js");
 
 const LOGIN = gql`
   mutation Login($encryptedPassword: String!, $role: String!) {
@@ -31,9 +31,24 @@ const LoginPage = (): React.ReactElement => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    const tokenType = localStorage.getItem("type");
+    if (tokenType) {
+      // Set default role based on token type
+      if (tokenType === "admin_staff") {
+        setRole("admin_staff");
+      } else if (tokenType === "release_staff") {
+        setRole("release_staff");
+      }
+    }
+  }, []);
+
   const [login, { loading }] = useMutation(LOGIN, {
     onCompleted: (data) => {
       // Handle successful login, e.g., store token and navigate
+
+      localStorage.setItem("type", data.login.type);
+      localStorage.setItem("token", data.login.accessToken);
       navigate("/dashboard");
     },
     onError: (err) => {
@@ -47,18 +62,14 @@ const LoginPage = (): React.ReactElement => {
       setError("Please fill in all fields.");
       return;
     }
-
+    const encryptedPassword = password;
     // // Encrypt the password
     // const encryptedPassword = CryptoJS.AES.encrypt(
     //   password,
     //   "your-secret-key",
     // ).toString();
 
-    // login({ variables: { role, encryptedPassword } });
-    
-
-
-    login({ variables: { role, password } });
+    login({ variables: { role, encryptedPassword } });
   };
 
   return (
