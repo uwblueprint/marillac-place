@@ -1,10 +1,12 @@
 import { AuthenticationError } from "apollo-server-express";
+import { IAuthService } from "../interface/auth";
 // import jwt from "jsonwebtoken";
 // import * as jwt from "jsonwebtoken";
 const jwt = require("jsonwebtoken");
+// const bcrypt = require("bcrypt");
+// const CryptoJS = require("crypto-js");
 // import bcrypt from "bcrypt";
 // import CryptoJS from "crypto-js";
-import { IAuthService } from "../interface/authInterface";
 
 class AuthService implements IAuthService {
   async login(
@@ -36,15 +38,13 @@ class AuthService implements IAuthService {
       throw new AuthenticationError("Invalid password");
     }
 
-    const jwtSecretKey = process.env.JWT_SECRET
-      ? process.env.JWT_SECRET
-      : "asdfasdf";
+    const jwtSecretKey = process.env.JWT_SECRET;
 
     const token = jwt.sign(
       { role, password: storedPasswordHash },
       jwtSecretKey,
       {
-        expiresIn: "1h",
+        expiresIn: "8h",
       },
     );
 
