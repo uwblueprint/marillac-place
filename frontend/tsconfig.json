@@ -15,7 +15,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["node"]
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types"]
   },
   "include": ["src", "middleware/apiHandler.ts"]
 }
