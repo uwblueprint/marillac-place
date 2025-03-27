@@ -187,7 +187,7 @@ const TasksPage = (): React.ReactElement => {
         }),
       );
     }
-  }, [taskType]);
+  }, [taskType, data]);
 
   const taskToAdd: TaskRequest = {
     type: TaskTypeEnum.OPTIONAL,
