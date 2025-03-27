@@ -40,7 +40,7 @@ type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   task: TaskResponse | null;
-  handleDeleteTask?: (taskId: string) => Promise<void>;
+  handleDeleteTask?: (taskId: number) => Promise<void>;
   handleSaveClick: (taskId: string, task: TaskRequest) => Promise<void>;
   type: TaskType;
 };
@@ -116,21 +116,29 @@ const TaskModal = ({
       setTaskType(task.type);
       setRecurrence(task.recurrencePreference);
       setMarillacBucks(task.credit);
-      // if (task.recurrencePreference !== RecurrenceFrequency.DAILY) {
-      //   const daysShort = task.repeatDays
-      //     ?.map((day) => dayIdMap.find((item) => item.key === day).short)
-      //     .filter((short) => short !== undefined);
+      if (task.recurrencePreference !== RecurrenceFrequency.DAILY) {
+        const daysShort = task.repeatDays
+          .map(
+            (day) => dayIdMap.find((dayShort) => dayShort.key === day)?.short,
+          )
+          .filter((short) => short !== undefined);
 
-      //   setRecurrenceFrequency(task.repeatDays || []);
-      //   setSelectedDays(daysShort || []);
-      // }
+        setRecurrenceFrequency(task.repeatDays || []);
+        setSelectedDays(daysShort || []);
+      } else {
+        setSelectedDays(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
+      }
       setTitle(task.name);
     } else {
-      setTaskType(TaskTypeEnum.OPTIONAL);
+      setTaskType(type as TaskTypeEnum);
       setRecurrence(RecurrenceFrequency.EVERY_SELECTED_DAYS);
       setMarillacBucks(0);
+      setDeduction(0);
+      setStart(undefined);
+      setEnd(undefined);
       setSelectedDays([]);
       setTitle("");
+      setComment(undefined);
     }
   }, [task, isOpen]);
 
@@ -160,24 +168,20 @@ const TaskModal = ({
       comment,
       timePreference,
     };
-    if (task) handleSaveClick(task.id.toString() || "", taskRequest);
+    handleSaveClick(task?.id.toString() || "", taskRequest);
     setIsOpen(false);
   };
 
   const resetFormState = () => {
-    setTitle("");
-    setRecurrenceFrequency([]);
+    setTaskType(type as TaskTypeEnum);
+    setRecurrence(RecurrenceFrequency.EVERY_SELECTED_DAYS);
     setMarillacBucks(0);
-  };
-
-  //   // delete task api stuff
-  const handleDelete = () => {
-    if (handleDeleteTask && task && isEditMode) {
-      console.log(task.id.toString());
-      // handleDeleteTask(task.id.toString());
-      // setIsOpen(false);
-      // resetFormState();
-    }
+    setDeduction(0);
+    setStart(undefined);
+    setEnd(undefined);
+    setSelectedDays([]);
+    setTitle("");
+    setComment(undefined);
   };
 
   const selectDay = (day: string) => {
@@ -199,7 +203,9 @@ const TaskModal = ({
       title={task ? task.name : "Assign Task"}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      onDelete={isEditMode ? handleDelete : undefined}
+      onDelete={() =>
+        handleDeleteTask && task ? handleDeleteTask(task.id) : null
+      }
     >
       <Flex flexDir="column" gap="20px">
         {/* Task Type Selection */}
@@ -217,7 +223,7 @@ const TaskModal = ({
               style={{ flexDirection: "column", display: "flex" }}
             >
               <Radio value="OPTIONAL">Optional</Radio>
-              <Radio value="CUSTOM">Custom</Radio>
+              <Radio value="CUSTOM">Participant Preference</Radio>
             </RadioGroup>
           )}
         </FormControl>

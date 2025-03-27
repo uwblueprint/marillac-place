@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import {
   Table,
   Thead,
@@ -20,7 +20,9 @@ import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import ModalContainer from "./ModalContainer";
+import colors from "../../theme/colors";
 
 type TableTypes = string | number | boolean | Date | string[];
 
@@ -28,14 +30,20 @@ export interface TableData {
   [key: string]: TableTypes;
 }
 
-export type ColumnInfoTypes = { header: string; key: string };
+export type ColumnInfoTypes = {
+  header: string;
+  key: string;
+  // render?: (row: TableData) => React.ReactNode;
+};
 
 type Props = {
   data: TableData[];
   columnInfo: ColumnInfoTypes[];
   onEdit: (row: unknown) => unknown;
+  onDelete?: (row: unknown) => unknown;
   maxResults?: number;
   isSelectable?: boolean;
+  previewModal?: boolean;
 };
 
 type SortState = {
@@ -46,6 +54,8 @@ const CommonTable = ({
   columnInfo,
   data,
   onEdit,
+  onDelete,
+  previewModal = true,
   maxResults = 10,
   isSelectable = false,
 }: Props): React.ReactElement => {
@@ -82,6 +92,7 @@ const CommonTable = ({
   interface ColumnInfo {
     header: string;
     value: string;
+    // render?: (row: TableData) => React.ReactNode;
   }
 
   const colData: ColumnInfo[] = columnInfo.map((col, index) => {
@@ -89,6 +100,7 @@ const CommonTable = ({
     return {
       header: String(col.header),
       value: String(value),
+      // render: col.render || undefined,
     };
   });
 
@@ -269,6 +281,9 @@ const CommonTable = ({
                         key={i}
                       >
                         {String(row[column.key])}
+                        {/* {column.render
+                          ? column.render(row)
+                          : String(row[column.key])} */}
                       </Td>
                     ))}
                     <Td
@@ -281,6 +296,13 @@ const CommonTable = ({
                         as={EditOutlinedIcon}
                         _hover={{ cursor: "pointer" }}
                       />
+                      {onDelete && (
+                        <Icon
+                          as={DeleteOutlinedIcon}
+                          color={colors.red.main}
+                          _hover={{ cursor: "pointer" }}
+                        />
+                      )}
                     </Td>
                   </Tr>
                 );
@@ -289,19 +311,19 @@ const CommonTable = ({
         </Table>
       </TableContainer>
 
-      {isPreviewModalOpen && selectedRow && (
+      {previewModal && isPreviewModalOpen && selectedRow && (
         <ModalContainer
           title={colData[0].value}
           isOpen={isPreviewModalOpen}
           setIsOpen={setIsPreviewModalOpen}
         >
           <Flex flexDir="column" gap="5px" mt="10px">
-            {colData.slice(1).map((column, index) => (
+            {colData.map((column, index) => (
               <Text key={index}>
                 <Text as="span" fontWeight="700">
                   {column.header}:{" "}
                 </Text>{" "}
-                {column.value}
+                {column.value ? column.value : " "}
               </Text>
             ))}
           </Flex>

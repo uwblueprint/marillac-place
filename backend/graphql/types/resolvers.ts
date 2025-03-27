@@ -22,20 +22,20 @@ const resolverTypes = gql`
     ): Boolean
 
     createTask(
-      type: TaskType!
-      name: String!
-      recurrencePreference: RecurrenceFrequency!
-      repeatDays: [DaysOfWeek!]!
-      timePreference: TimeOption!
-      credit: Int!
-      deduction: Int!
+      type: TaskType
+      name: String
+      recurrencePreference: RecurrenceFrequency
+      repeatDays: [DaysOfWeek]
+      timePreference: TimeOption
+      credit: Int
+      deduction: Int
       start: String
       end: String
       comment: String
     ): Task!
 
     updateTask(
-      taskId: Int!
+      taskId: Int
       type: TaskType
       name: String
       recurrencePreference: RecurrenceFrequency

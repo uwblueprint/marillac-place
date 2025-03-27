@@ -119,6 +119,7 @@ const TasksPage = (): React.ReactElement => {
   };
 
   const handleSaveClick = async (taskId: string, task: TaskRequest) => {
+    console.log("saving");
     if (taskId === "") {
       await handleAddTask(task);
     } else {
@@ -126,9 +127,10 @@ const TasksPage = (): React.ReactElement => {
     }
   };
 
-  const handleDeleteTask = async (taskId: string) => {
+  const handleDeleteTask = async (taskId: number) => {
+    console.log("deleting");
     try {
-      await deleteTask({ variables: { taskId: parseInt(taskId, 10) } });
+      await deleteTask({ variables: { taskId } });
       await refetch();
     } catch (e) {
       console.log(e);
@@ -161,13 +163,11 @@ const TasksPage = (): React.ReactElement => {
   }, [taskFilter, storedTaskData, taskData]);
 
   useEffect(() => {
-    console.log("taskType Changed.");
     if (data) {
       if (taskType === "REQUIRED") {
         setRequiredTasks(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
       } else {
-        console.log("Setting optional tasks to: ", data.getTasksByType);
         setOptionalTasks(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
       }
@@ -181,6 +181,38 @@ const TasksPage = (): React.ReactElement => {
       );
     }
   }, [taskType]);
+
+  const short = {
+    [DaysOfWeek.MONDAY]: "M",
+    [DaysOfWeek.TUESDAY]: "Tue",
+    [DaysOfWeek.WEDNESDAY]: "W",
+    [DaysOfWeek.THURSDAY]: "Thu",
+    [DaysOfWeek.FRIDAY]: "F",
+    [DaysOfWeek.SATURDAY]: "Sat",
+    [DaysOfWeek.SUNDAY]: "Sun",
+  };
+
+  useEffect(() => {
+    const formattedData = taskData.map((task) => {
+      let assignedDaysText = "";
+
+      if (task.type === TaskTypeEnum.CUSTOM)
+        assignedDaysText = "Participant Preference";
+      else if (task.recurrencePreference === RecurrenceFrequency.DAILY)
+        assignedDaysText = "Anytime";
+      else if (
+        task.recurrencePreference === RecurrenceFrequency.EVERY_SELECTED_DAYS
+      )
+        assignedDaysText = `Weekly on`;
+
+      return {
+        name: task.name,
+        repeatedDay: assignedDaysText,
+        start: "test",
+        credit: "test",
+      };
+    });
+  });
 
   const taskToAdd: TaskRequest = {
     type: TaskTypeEnum.OPTIONAL,
@@ -199,7 +231,6 @@ const TasksPage = (): React.ReactElement => {
     <Flex>
       <Button
         onClick={() => {
-          console.log("Adding: ", taskToAdd);
           handleAddTask(taskToAdd);
         }}
       >
@@ -270,6 +301,7 @@ const TasksPage = (): React.ReactElement => {
                 setModalTask(row);
                 setIsModalOpen(true);
               }}
+              previewModal={false}
             />
           )}
           <TaskModal
