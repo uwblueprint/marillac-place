@@ -5,6 +5,8 @@ const resolverTypes = gql`
     getAllParticipants: [Participant]
     getParticipantById(participantId: String): Participant
     getAvailableRooms: [Int]
+    getAllAnnouncements: [Announcement]
+    getAnnouncementByRooms(rooms: [Int]): [Announcement]
   }
 
   type Mutation {

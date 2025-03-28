@@ -14,6 +14,43 @@
 //   residentService,
 // );
 
+const resolvers = {
+Query: {
+    // Resolver for getAllAnnouncements
+    getAllAnnouncements: async (_parent, _args, context) => {
+    try {
+        // Fetch all announcements from the database
+        const announcements = await context.db.Announcement.findMany();
+        return announcements;
+    } catch (error) {
+        console.error("Error fetching all announcements:", error);
+        throw new Error("Failed to fetch announcements");
+    }
+    },
+
+    // Resolver for getAnnouncementByRooms
+    getAnnouncementByRooms: async (_parent, args, context) => {
+    const { rooms } = args;
+    try {
+        // Fetch announcements filtered by room numbers
+        const announcements = await context.db.Announcement.findMany({
+        where: {
+            roomNumber: {
+            in: rooms, // Filter by room numbers
+            },
+        },
+        });
+        return announcements;
+    } catch (error) {
+        console.error("Error fetching announcements by rooms:", error);
+        throw new Error("Failed to fetch announcements by rooms");
+    }
+    },
+},
+};
+  
+export default resolvers;
+
 // const notificationResolvers = {
 //   Query: {
 //     getNotificationsByIds: async (
