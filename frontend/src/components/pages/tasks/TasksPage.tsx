@@ -52,6 +52,16 @@ const TasksPage = (): React.ReactElement => {
   const [taskFilter, setTaskFilter] = useState<string>("");
   const [modalTask, setModalTask] = useState<TaskResponse | null>(null);
 
+  const dayShortMap = {
+    MONDAY: "M",
+    TUESDAY: "Tue",
+    WEDNESDAY: "W",
+    THURSDAY: "Thu",
+    FRIDAY: "F",
+    SATURDAY: "Sat",
+    SUNDAY: "Sun",
+  };
+
   const { loading, error, data, refetch } = useQuery(GET_TASKS_BY_TYPE, {
     variables: { type: taskType },
   });
@@ -64,27 +74,27 @@ const TasksPage = (): React.ReactElement => {
 
   const [deleteTask] = useMutation<{ taskId: number }>(DELETE_TASK);
 
-  const {
-    loading: taskByIdLoading,
-    error: taskByIdError,
-    data: taskByIdData,
-  } = useQuery<{ taskId: number }>(GET_TASK_BY_ID, {
-    variables: { taskId: 1 },
-  });
-  const taskById = React.useMemo(() => {
-    return taskByIdData;
-  }, [taskByIdData]);
+  // const {
+  //   loading: taskByIdLoading,
+  //   error: taskByIdError,
+  //   data: taskByIdData,
+  // } = useQuery<{ taskId: number }>(GET_TASK_BY_ID, {
+  //   variables: { taskId: 1 },
+  // });
+  // const taskById = React.useMemo(() => {
+  //   return taskByIdData;
+  // }, [taskByIdData]);
 
-  const {
-    loading: tasksByRecurrenceFrequencyLoading,
-    error: tasksByRecurrenceFrequencyError,
-    data: tasksByRecurrenceFrequencyData,
-  } = useQuery(GET_TASKS_BY_RECURRENCE_FREQUENCY, {
-    variables: { recurrencePreference: RecurrenceFrequency.DAILY },
-  });
-  const tasksByRecurrenceFrequency = React.useMemo(() => {
-    return tasksByRecurrenceFrequencyData;
-  }, [tasksByRecurrenceFrequencyData]);
+  // const {
+  //   loading: tasksByRecurrenceFrequencyLoading,
+  //   error: tasksByRecurrenceFrequencyError,
+  //   data: tasksByRecurrenceFrequencyData,
+  // } = useQuery(GET_TASKS_BY_RECURRENCE_FREQUENCY, {
+  //   variables: { recurrencePreference: RecurrenceFrequency.DAILY },
+  // });
+  // const tasksByRecurrenceFrequency = React.useMemo(() => {
+  //   return tasksByRecurrenceFrequencyData;
+  // }, [tasksByRecurrenceFrequencyData]);
 
   const handleAddTask = async (task: TaskRequest) => {
     try {
@@ -155,18 +165,12 @@ const TasksPage = (): React.ReactElement => {
       setTaskData(
         storedTaskData.filter(
           (task) =>
-            typeof task.title === "string" &&
-            task.title.toLowerCase().includes(taskFilter.toLowerCase()),
+            typeof task.name === "string" &&
+            task.name.toLowerCase().includes(taskFilter.toLowerCase()),
         ),
       );
     }
   }, [taskFilter, storedTaskData, taskData]);
-
-  const formattedTaskData = taskData.map((task) => ({
-    ...task,
-    end: task.end ? task.end : "Never",
-    credit: `$ ${task.credit}`,
-  }));
 
   useEffect(() => {
     if (data) {
@@ -179,46 +183,45 @@ const TasksPage = (): React.ReactElement => {
       }
       setStoredTaskData(
         data.getTasksByType.map((task: any) => {
+          let assignedDaysText = "";
+          let repeatedDayShort = [];
+
+          if (task.repeatedDays) {
+            repeatedDayShort = task.repeatedDays.map(
+              (day: keyof typeof dayShortMap) =>
+                dayShortMap[day as keyof typeof dayShortMap],
+            );
+          }
+
+          console.log(task.recurrencePreference);
+          console.log(repeatedDayShort.join(", "));
+
+          if (task.type === "CUSTOM")
+            assignedDaysText = "Participant Preference";
+          else if (task.recurrencePreference === "DAILY")
+            assignedDaysText = "Anytime";
+          else if (task.recurrencePreference === "EVERY_SELECTED_DAY")
+            assignedDaysText = `${repeatedDayShort.join(", ")}.`;
+          else if (task.recurrencePreference === "ANY_SELECTED_DAYS")
+            assignedDaysText = `Weekly on ${repeatedDayShort.join(", ")}.`;
+
           return {
             ...task,
-            endDate: new Date(task.endDate).toDateString(),
+            name: task.name,
+            repeatedDay: assignedDaysText,
+            end: task.end ? task.end : "Never",
+            credit: `${task.credit}`,
           };
         }),
       );
     }
   }, [taskType, data]);
 
-  const short = {
-    [DaysOfWeek.MONDAY]: "M",
-    [DaysOfWeek.TUESDAY]: "Tue",
-    [DaysOfWeek.WEDNESDAY]: "W",
-    [DaysOfWeek.THURSDAY]: "Thu",
-    [DaysOfWeek.FRIDAY]: "F",
-    [DaysOfWeek.SATURDAY]: "Sat",
-    [DaysOfWeek.SUNDAY]: "Sun",
-  };
-
-  useEffect(() => {
-    const formattedData = taskData.map((task) => {
-      let assignedDaysText = "";
-
-      if (task.type === TaskTypeEnum.CUSTOM)
-        assignedDaysText = "Participant Preference";
-      else if (task.recurrencePreference === RecurrenceFrequency.DAILY)
-        assignedDaysText = "Anytime";
-      else if (
-        task.recurrencePreference === RecurrenceFrequency.EVERY_SELECTED_DAYS
-      )
-        assignedDaysText = `Weekly on`;
-
-      return {
-        name: task.name,
-        repeatedDay: assignedDaysText,
-        start: "test",
-        credit: "test",
-      };
-    });
-  });
+  const formattedTaskData = taskData.map((task) => ({
+    ...task,
+    end: task.end ? task.end : "Never",
+    credit: `$ ${task.credit}`,
+  }));
 
   const taskToAdd: TaskRequest = {
     type: TaskTypeEnum.OPTIONAL,
@@ -293,7 +296,7 @@ const TasksPage = (): React.ReactElement => {
             <p>Loading...</p>
           ) : (
             <CommonTable
-              data={formattedTaskData}
+              data={taskData}
               columnInfo={taskDataColumns}
               maxResults={8}
               onEdit={(row: any) => {
