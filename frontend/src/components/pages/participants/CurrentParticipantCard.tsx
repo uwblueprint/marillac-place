@@ -4,12 +4,10 @@ import EditParticipantCard from './EditParticipantCard';
 
 type CurrentParticipantCardProps = {
     roomNumber: string;
-    participantId: string;
-    arrival: string;
-    password: string;
+    participants: Record<string, any>
 }
 
-const CurrentParticipantCard = ({roomNumber, participantId, arrival, password}: CurrentParticipantCardProps) => {
+const CurrentParticipantCard = ({roomNumber, participants}: CurrentParticipantCardProps) => {
     const [editParticipant, setEditParticipant] = useState(false);
     return (
         <Flex 
@@ -31,8 +29,8 @@ const CurrentParticipantCard = ({roomNumber, participantId, arrival, password}: 
                 justifyContent="center"
                 gap="5px"
             >
-                <Flex fontSize="xs">ID Number: { participantId }</Flex>
-                <Flex fontSize="xs">Arrival Date: { arrival }</Flex>
+                <Flex fontSize="xs">ID Number: { participants[roomNumber].participantId }</Flex>
+                <Flex fontSize="xs">Arrival Date: { participants[roomNumber].arrival }</Flex>
                 <Button 
                     size="xs" 
                     bg="orange.500" 
@@ -46,9 +44,7 @@ const CurrentParticipantCard = ({roomNumber, participantId, arrival, password}: 
             {editParticipant && 
                 <EditParticipantCard 
                     selectedRoomNumber={roomNumber} 
-                    selectedParticipantId={participantId} 
-                    selectedArrival={arrival} 
-                    selectedPassword={password} 
+                    participants={participants}
                     close={() => setEditParticipant(false)}
                 /> 
             }

@@ -43,7 +43,7 @@ const columnTypes: ColumnInfoTypes[] = [
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
-  const roomNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const roomNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const [addParticipant, setAddParticipant] = useState(false);
   const [editPastParticipant, setEditPastParticipant] = useState(false);
   const [selected, setSelected] = useState({});
@@ -58,16 +58,7 @@ const ParticipantsPage = (): React.ReactElement => {
     loading: getCurrentParticipantsLoading,
     error: getCurrentParticipantsError,
     data: getCurrentParticipantsData,
-  } = useQuery(GET_CURRENT_PARTICIPANTS);
-
-  const ids = [];
-  for (let i = 0; i < 10; i++) {
-    const participant = getCurrentParticipantsData.getCurrentParticipants.find(
-      (p: any) => {
-        return p.roomNumber === i + 1;
-      }
-    );
-  }  
+  } = useQuery(GET_CURRENT_PARTICIPANTS); 
 
   return (
     <Flex
@@ -110,26 +101,24 @@ const ParticipantsPage = (): React.ReactElement => {
                 justifyContent="space-between"
                 wrap="wrap"
               >
-                {roomNumbers.map((num: number) => {
-                  const participant = getCurrentParticipantsData.getCurrentParticipants.find(
-                    (p: any) => {
-                      console.log(num)
-                      return p.roomNumber === num;
-                    }
-                  );
+                {(() => {
+                  const currentParticipants: Record<string, any> = {};
+                  getCurrentParticipantsData.getCurrentParticipants.forEach((participant: any) => {
+                    currentParticipants[participant.roomNumber] = participant;
+                  });
 
-                  return participant ? (
-                    <CurrentParticipantCard
-                      key={num}
-                      roomNumber={num.toString()}
-                      participantId={participant.participantId}
-                      arrival={participant.arrival}
-                      password={participant.password}
-                    />
-                  ) : (
-                    <EmptyParticipantCard roomNumber={num.toString()} />
+                  return roomNumbers.map((num) =>
+                    num in currentParticipants ? (
+                      <CurrentParticipantCard
+                        key={num}
+                        roomNumber={num}
+                        participants={currentParticipants}
+                      />
+                    ) : (
+                      <EmptyParticipantCard key={num} roomNumber={num} />
+                    )
                   );
-                })}
+                })()}
               </Flex>
             ) : (
               <Flex>An unknown issue has occurred.</Flex>

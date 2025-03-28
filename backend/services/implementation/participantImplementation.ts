@@ -20,7 +20,7 @@ class ParticipantService implements IParticipantService {
     try {
       const participants = await prisma.participant.findMany({
         where: {departure: ""},
-        orderBy: [{ arrival: "desc" }],
+        orderBy: [{ roomNumber: "asc" }],
       });
       return participants;
     } catch (err) {
