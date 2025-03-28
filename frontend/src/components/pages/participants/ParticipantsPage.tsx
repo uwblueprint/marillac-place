@@ -60,6 +60,15 @@ const ParticipantsPage = (): React.ReactElement => {
     data: getCurrentParticipantsData,
   } = useQuery(GET_CURRENT_PARTICIPANTS);
 
+  const ids = [];
+  for (let i = 0; i < 10; i++) {
+    const participant = getCurrentParticipantsData.getCurrentParticipants.find(
+      (p: any) => {
+        return p.roomNumber === i + 1;
+      }
+    );
+  }  
+
   return (
     <Flex
       w="100vw"

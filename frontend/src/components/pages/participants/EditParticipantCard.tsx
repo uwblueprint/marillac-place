@@ -27,21 +27,26 @@ const EditParticipantCard = ({
 }: EditParticipantCardProps): React.ReactElement => {
   // eslint-disable-next-line prefer-template
   const title = "Edit Participant in Room " + selectedRoomNumber;
+  const roomNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const [arrivalDate, setArrivalDate] = useState(selectedArrival);
+  const [departureDate, setDepartureDate] = useState("");
   const [password, setPassword] = useState(selectedPassword);
+  const [swappedRoom, setSwappedRoom] = useState<number | null>(null);
+
+  const [endStay, setEndStay] = useState(false);
+  const [swapParticipant, setSwapParticipant] = useState(false);
   const [error, setError] = useState("");
 
-  // const {
-  //   loading: getAvailableRoomsLoading,
-  //   error: getAvailableRoomsError,
-  //   data: getAvailableRoomsData,
-  // } = useQuery(GET_AVAILABLE_ROOMS);
   const [updateParticipantById] = useMutation(UPDATE_PARTICIPANT_BY_ID);
 
   const reset = () => {
     setArrivalDate(selectedArrival);
+    setDepartureDate("");
     setPassword(selectedPassword);
+    setSwappedRoom(null);
+    setEndStay(false);
+    setSwapParticipant(false);
     setError("");
   };
 
@@ -52,7 +57,8 @@ const EditParticipantCard = ({
     }
     if (
       arrivalDate === selectedArrival &&
-      password === selectedPassword
+      password === selectedPassword &&
+      (!endStay || (endStay && departureDate === ""))
     ) {
       setError("No changes made.");
       return false;
@@ -69,6 +75,7 @@ const EditParticipantCard = ({
           variables: { 
             participantId: selectedParticipantId,
             arrival: arrivalDate,
+            departure: departureDate,
             password,
           },
         });
@@ -94,28 +101,6 @@ const EditParticipantCard = ({
           <Flex>{selectedParticipantId}</Flex>
         </Flex>
 
-        {/* {getAvailableRoomsLoading ? (
-          <Spinner />
-        ) : getAvailableRoomsError || !getAvailableRoomsData ? (
-          <Flex p="10px">Error getting rooms.</Flex>
-        ) : (
-          <FormSelectField
-            label="Room Number"
-            placeholder={`Room ${selected.roomNumber}`}
-            value={roomNumber}
-            options={getAvailableRoomsData.getAvailableRooms.map(
-              (room: number) => ({
-                key: room,
-                value: room,
-                display: `Room ${room}`,
-              }),
-            )}
-            onChange={(e) =>
-              setRoomNumber(e.target.value || selected.roomNumber)
-            }
-          />
-        )} */}
-
         <FormInputField
           label="Arrival Date"
           value={arrivalDate}
@@ -131,6 +116,42 @@ const EditParticipantCard = ({
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        <Button onClick={() => { setEndStay(!endStay); setSwapParticipant(false); }}>End Stay</Button>
+        <Button onClick={() => { setSwapParticipant(!swapParticipant); setEndStay(false); }}>Swap Participant</Button>
+
+        { endStay && 
+          <FormInputField
+            label="Departure Date"
+            value={departureDate}
+            type="date"
+            onChange={(e) => {
+              setDepartureDate(e.target.value);
+            }}
+          />
+        }
+
+        { swapParticipant && 
+          <div>
+            <div>Available Rooms</div>
+            <Flex>
+              {roomNumbers.map((num: number) => 
+                <Button key={num} onClick={() => setSwappedRoom(num)}>
+                  {num}
+                </Button>
+              )}
+            </Flex>
+            {swappedRoom && (
+              swappedRoom === parseInt(selectedRoomNumber, 10) ? (
+                <div>Participant #{selectedParticipantId} is already in Room {swappedRoom}</div>
+              ) : (
+                <div>
+                  Participant #{selectedParticipantId} in Room {selectedRoomNumber} will be moved to Room {swappedRoom}
+                </div>
+              )
+            )}
+          </div>
+        }
 
         <Flex justifyContent="flex-end">
           <Button
