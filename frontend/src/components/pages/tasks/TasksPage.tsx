@@ -123,6 +123,7 @@ const TasksPage = (): React.ReactElement => {
     if (taskId === "") {
       await handleAddTask(task);
     } else {
+      console.log(task)
       await handleUpdateTask(taskId, task);
     }
   };
@@ -155,8 +156,8 @@ const TasksPage = (): React.ReactElement => {
       setTaskData(
         storedTaskData.filter(
           (task) =>
-            typeof task.title === "string" &&
-            task.title.toLowerCase().includes(taskFilter.toLowerCase()),
+            typeof task.name === "string" &&
+            task.name.toLowerCase().includes(taskFilter.toLowerCase()),
         ),
       );
     }
@@ -165,7 +166,7 @@ const TasksPage = (): React.ReactElement => {
   const formattedTaskData = taskData.map((task) => ({
     ...task,
     end: task.end ? task.end : "Never",
-    credit: `$ ${task.credit}`,
+    // credit: `$ ${task.credit}`,
   }));
 
   useEffect(() => {
@@ -181,12 +182,12 @@ const TasksPage = (): React.ReactElement => {
         data.getTasksByType.map((task: any) => {
           return {
             ...task,
-            endDate: new Date(task.endDate).toDateString(),
+            end: new Date(task.end).toDateString(),
           };
         }),
       );
     }
-  }, [taskType, data]);
+  }, [taskType, data, refetch]);
 
   const short = {
     [DaysOfWeek.MONDAY]: "M",
