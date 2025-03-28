@@ -7,7 +7,7 @@ export const tasksColumnTypes: ColumnInfoTypes[] = [
   },
   {
     header: "Recurrence",
-    key: "repeatDays",
+    key: "repeatDaysString",
   },
   {
     header: "End Date",
@@ -15,7 +15,7 @@ export const tasksColumnTypes: ColumnInfoTypes[] = [
   },
   {
     header: "Marillac Bucks",
-    key: "credit",
+    key: "creditString",
   },
 ];
 
@@ -27,7 +27,6 @@ export const choreTasksColumnTypes: ColumnInfoTypes[] = [
   {
     header: "Recurrence",
     key: "isRecurring",
-
   },
   {
     header: "Due Date",

@@ -129,22 +129,23 @@ const TasksPage = (): React.ReactElement => {
   };
 
   const handleSaveClick = async (taskId: string, task: TaskRequest) => {
-    console.log("saving");
     if (taskId === "") {
       await handleAddTask(task);
     } else {
+      console.log(task);
       await handleUpdateTask(taskId, task);
     }
+    refetch();
   };
 
   const handleDeleteTask = async (taskId: number) => {
-    console.log("deleting");
     try {
       await deleteTask({ variables: { taskId } });
       await refetch();
     } catch (e) {
       console.log(e);
     }
+    refetch();
   };
 
   useEffect(() => {
@@ -156,6 +157,7 @@ const TasksPage = (): React.ReactElement => {
   useEffect(() => {
     if (tabIndex === 0) setTaskType("REQUIRED");
     else setTaskType("OPTIONAL");
+    refetch();
   }, [tabIndex]);
 
   useEffect(() => {
@@ -186,12 +188,10 @@ const TasksPage = (): React.ReactElement => {
           let assignedDaysText = "";
           let repeatedDayShort = [];
 
-          if (task.repeatedDays) {
-            repeatedDayShort = task.repeatedDays.map(
-              (day: keyof typeof dayShortMap) =>
-                dayShortMap[day as keyof typeof dayShortMap],
-            );
-          }
+          repeatedDayShort = task.repeatDays.map(
+            (day: keyof typeof dayShortMap) =>
+              dayShortMap[day as keyof typeof dayShortMap],
+          );
 
           console.log(task.recurrencePreference);
           console.log(repeatedDayShort.join(", "));
@@ -200,7 +200,7 @@ const TasksPage = (): React.ReactElement => {
             assignedDaysText = "Participant Preference";
           else if (task.recurrencePreference === "DAILY")
             assignedDaysText = "Anytime";
-          else if (task.recurrencePreference === "EVERY_SELECTED_DAY")
+          else if (task.recurrencePreference === "EVERY_SELECTED_DAYS")
             assignedDaysText = `${repeatedDayShort.join(", ")}.`;
           else if (task.recurrencePreference === "ANY_SELECTED_DAYS")
             assignedDaysText = `Weekly on ${repeatedDayShort.join(", ")}.`;
@@ -208,14 +208,14 @@ const TasksPage = (): React.ReactElement => {
           return {
             ...task,
             name: task.name,
-            repeatedDay: assignedDaysText,
+            repeatDaysString: assignedDaysText,
             end: task.end ? task.end : "Never",
-            credit: `${task.credit}`,
+            creditString: `$${task.credit}`,
           };
         }),
       );
     }
-  }, [taskType, data]);
+  }, [taskType, data, refetch]);
 
   const formattedTaskData = taskData.map((task) => ({
     ...task,

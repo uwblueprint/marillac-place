@@ -83,7 +83,7 @@ const TaskModal = ({
   const [timePreference, setTimePreference] = useState<TimeOption>(
     TimeOption.ANYTIME,
   );
-  const [marillacBucks, setMarillacBucks] = useState<number>(0);
+  const [credit, setCredit] = useState<number>(0);
   const [deduction, setDeduction] = useState<number>(0);
   const [comment, setComment] = useState<string | undefined>();
   const [selectedDays, setSelectedDays] = useState<(string | undefined)[]>([]);
@@ -113,9 +113,15 @@ const TaskModal = ({
       return;
     }
     if (task) {
+      console.log("Current Task: ", task);
       setTaskType(task.type);
       setRecurrence(task.recurrencePreference);
-      setMarillacBucks(task.credit);
+      setCredit(task.credit);
+      setDeduction(task.deduction);
+      setComment(task.comment);
+      if (task.end) {
+        setEnd(task.end);
+      }
       if (task.recurrencePreference !== RecurrenceFrequency.DAILY) {
         const daysShort = task.repeatDays
           .map(
@@ -129,10 +135,11 @@ const TaskModal = ({
         setSelectedDays(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
       }
       setTitle(task.name);
+      setStart(task.start);
     } else {
       setTaskType(type as TaskTypeEnum);
       setRecurrence(RecurrenceFrequency.EVERY_SELECTED_DAYS);
-      setMarillacBucks(0);
+      setCredit(0);
       setDeduction(0);
       setStart(undefined);
       setEnd(undefined);
@@ -156,7 +163,7 @@ const TaskModal = ({
     const taskRequest: TaskRequest = {
       type: taskType as TaskTypeEnum,
       name: title,
-      credit: marillacBucks,
+      credit,
       deduction,
       start,
       end,
@@ -168,14 +175,14 @@ const TaskModal = ({
       comment,
       timePreference,
     };
-    handleSaveClick(task?.id.toString() || "", taskRequest);
+    handleSaveClick(task?.taskId.toString() || "", taskRequest);
     setIsOpen(false);
   };
 
   const resetFormState = () => {
     setTaskType(type as TaskTypeEnum);
     setRecurrence(RecurrenceFrequency.EVERY_SELECTED_DAYS);
-    setMarillacBucks(0);
+    setCredit(0);
     setDeduction(0);
     setStart(undefined);
     setEnd(undefined);
@@ -204,7 +211,7 @@ const TaskModal = ({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       onDelete={() =>
-        handleDeleteTask && task ? handleDeleteTask(task.id) : null
+        handleDeleteTask && task ? handleDeleteTask(task.taskId) : null
       }
     >
       <Flex flexDir="column" gap="20px">
@@ -336,7 +343,7 @@ const TaskModal = ({
             <FormLabel mb="5px" color="gray.main" fontWeight="700">
               Marillac Bucks
             </FormLabel>
-            <NumberInput value={marillacBucks} setValue={setMarillacBucks} />
+            <NumberInput value={credit} setValue={setCredit} />
           </FormControl>
 
           <FormControl>

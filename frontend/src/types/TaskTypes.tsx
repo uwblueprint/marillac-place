@@ -45,7 +45,7 @@ export enum TimeOption {
 }
 
 export type TaskResponse = {
-  id: number;
+  taskId: number;
   type: TaskTypeEnum;
   name: string;
   recurrencePreference: RecurrenceFrequency;
