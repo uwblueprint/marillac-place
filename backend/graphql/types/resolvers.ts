@@ -14,6 +14,10 @@ const resolverTypes = gql`
       arrival: String
       password: String
     ): Boolean
+    editMarillacBucks(
+      participantId: String
+      credit: Int
+    ): Boolean
   }
 `;
 

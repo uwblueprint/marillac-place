@@ -52,6 +52,24 @@ class ParticipantService implements IParticipantService {
       throw err;
     }
   }
+  async updateParticipantCredit(
+    participantId: string,
+    credit: number,
+  ): Promise<boolean> {
+    const updatedData: Record<string, any> = {};
+    if (credit !== undefined) updatedData.credit = credit;
+    if (!participantId) throw new Error("participantId is required");
+    try {
+      await prisma.participant.update({
+        where: { participantId },
+        data: updatedData,
+      });
+      return true;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
 }
 
 export default ParticipantService;

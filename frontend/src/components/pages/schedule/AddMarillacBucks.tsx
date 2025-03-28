@@ -29,13 +29,14 @@ const AddMarillacBucks = ({
   setIsOpen,
 }: AddMarillacBucksProps): React.ReactElement => {
   const [participantId, setParticipantId] = useState("");
-  const [credit, setCredit] = useState("");
-  const [currentBalance, setCurrentBalance] = useState('')
-  const [adding, setAdding] = useState("");
-
+  const [credit, setCredit] = useState(0);
+  const [creditChange, setCreditChange] = useState(0)
+  const [adding, setAdding] = useState(true);
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [reason, setReason] = useState("");
   const [participantIdError, setParticipantIdError] = useState("");
   const [creditError, setCreditError] = useState("");
-  const [balanceError, setBalanceError] = useState("");
+  const [creditChangeError, setCreditChangeError] = useState("");
   const [addingError, setAddingError] = useState("");
 
   const [
@@ -46,20 +47,22 @@ const AddMarillacBucks = ({
       data: getParticipantByIdData,
     },
   ] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
-    variables: { participantId },
+    variables: { participantId, credit },
   });
-
+  console.log(participantId, "od");
+  console.log(credit, "cred");
   const [editMarillacBucks] = useMutation(EDIT_MARILLAC_BUCKS);
 
   const validate = async () => {
     const errors = {
       participantId: "",
       credit: "",
-      currentBalance: "",
+      creditChange: "",
       adding: "",
     };
 
     if (participantId) {
+      console.log(participantId)
       await getParticipantById({ variables: { participantId } });
       if (getParticipantByIdError) {
         errors.participantId = "Unknown error has occurred.";
@@ -75,19 +78,42 @@ const AddMarillacBucks = ({
       errors.participantId = "ID Number is missing";
     }
 
+    if (credit) {
+      console.log(credit);
+      await getParticipantById({ variables: { credit } });
+      setCurrentBalance(credit);
+      if (creditError) {
+        errors.credit = "Unknown error has occurred.";
+      } else if (
+        credit && credit != null
+      ) {
+        errors.credit = "ID already exists";
+      } else {
+        errors.credit = "";
+      }
+    } else {
+      errors.credit = "ID Number is missing";
+    }
+
     errors.credit = credit ? "" : "Credit is missing";
-    errors.currentBalance = currentBalance ? "" : "Current Balance is missing";
+    errors.creditChange = creditChange ? "" : "New credit is missing";
     errors.adding = adding ? "" : "Adding is missing";
 
     return errors;
   };
-
+  const updateCredit = () => {
+    if (adding) {
+      setCredit(credit + creditChange);
+    }
+    setCredit(credit - creditChange); }
   const handleSubmit = async () => {
+    console.log(credit);
+    console.log(credit);
     const errors = await validate();
     if (
       !errors.participantId &&
       !errors.credit &&
-      !errors.currentBalance &&
+      !errors.creditChange &&
       !errors.adding
     ) {
       try {
@@ -105,19 +131,19 @@ const AddMarillacBucks = ({
     } else {
       setParticipantIdError(errors.participantId);
       setCreditError(errors.credit);
-      setBalanceError(errors.currentBalance);
+      setCreditChangeError(errors.creditChange);
       setAddingError(errors.adding);
     }
   };
 
   const reset = () => {
     setParticipantId("");
-    setCredit("");
-    setCurrentBalance("");
-    setAdding("");
+    setCredit(0);
+    setCreditChange(0);
+    setAdding(true);
     setParticipantIdError("");
     setCreditError("");
-    setBalanceError("");
+    setCreditChangeError("");
     setAddingError("");
   };
 
@@ -128,35 +154,61 @@ const AddMarillacBucks = ({
       setIsOpen={setIsOpen}
     >
       <Flex flexDir="column" gap="20px">
-      <FormInputField
-          label="ID Number"
-          value={participantId}
-          type="text"
-          onChange={(e) => {
-            setParticipantId(e.target.value);
-          }}
-          required
-          error={participantIdError}
-        />  
+        <h3>Current Balance</h3>
+        <input
+      type="text"
+      value={currentBalance}
+      readOnly
+      className="w-[120px] px-3 text-[#0C727E] py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0C727E] focus:border-[#0C727E] text-sm"
+    />   
         <FormInputField
-          label="ID Number"
-          value={participantId}
+          label="Enter Amount"
+          value={creditChange === 0 ? "" : creditChange}
+          placeholder="$"
           type="text"
           onChange={(e) => {
-            setParticipantId(e.target.value);
+            const value = parseFloat(e.target.value) || 0;
+            setCreditChange(value);
+            console.log(value);
+            console.log(credit);
+            console.log(participantId);
           }}
           required
-          error={participantIdError}
-        />   
+          error={creditChangeError}
+        />
+        <div className="flex flex-row items-start space-x-1">
+        <input
+  type="radio"
+  id="add"
+  name="action"
+  value="Add"
+  onChange={(e) => setAdding(e.target.value === "Add")}
+  className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+/>
+
+                  <p>Add</p>
+                </div>
+                <div className="flex flex-row items-start space-x-1">
+                <input
+  type="radio"
+  id="add"
+  name="action"
+  value="Add"
+  onChange={(e) => setAdding(e.target.value === "Add")}
+  className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+/>
+
+                  <p>Remove</p>
+                </div>
         <FormInputField
-          label="Edit Marillac Bucks"
-          value={credit}
+          label="Reason"
+          value={reason}
           type="text"
           onChange={(e) => {
-            setCredit(e.target.value);
+            setReason(e.target.value);
           }}
           required
-          error={creditError}
+          error={creditChangeError}
         />
 
         <Flex justifyContent="flex-end">
@@ -170,7 +222,8 @@ const AddMarillacBucks = ({
           >
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button variant="primary" onClick={()=>{updateCredit();
+          handleSubmit();}}>
             Save
           </Button>
         </Flex>

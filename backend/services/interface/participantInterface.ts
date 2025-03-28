@@ -9,6 +9,10 @@ interface IParticipantService {
     arrival: string,
     password: string,
   ): Promise<boolean>;
+  updateParticipantCredit(
+    participantId: string,
+    credit: number,
+  ): Promise<boolean>;
 }
 
 export default IParticipantService;

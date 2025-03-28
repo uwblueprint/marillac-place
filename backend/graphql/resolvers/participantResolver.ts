@@ -37,6 +37,21 @@ const participantResolvers = {
         password,
       );
     },
+    editMarillacBucks: async (
+      _parent: undefined,
+      {
+        participantId,
+        credit
+      }: {
+        participantId: string;
+        credit: number;
+      },
+    ): Promise<boolean> => {
+      return participantService.updateParticipantCredit(
+        participantId,
+        credit
+      );
+    },
   },
 };
 
