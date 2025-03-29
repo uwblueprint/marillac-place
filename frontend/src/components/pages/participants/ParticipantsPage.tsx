@@ -23,6 +23,7 @@ import AddParticipantCard from "./AddParticipantCard";
 import EditPastParticipantCard from "./EditPastParticipantCard";
 import CurrentParticipantCard from "./CurrentParticipantCard";
 import EmptyParticipantCard from "./EmptyParticipantCard";
+import CheckmarkSvg from "../../../assets/svg/CheckmarkSvg";
 
 const columnTypes: ColumnInfoTypes[] = [
   {
@@ -47,6 +48,14 @@ const ParticipantsPage = (): React.ReactElement => {
   const [addParticipant, setAddParticipant] = useState(false);
   const [editPastParticipant, setEditPastParticipant] = useState(false);
   const [selected, setSelected] = useState({});
+  const [notification, setNotification] = useState(localStorage.getItem("notification"));
+  console.log(notification);
+  if (notification) {
+    setTimeout(() => {
+      localStorage.setItem('notification', "");
+      setNotification("");
+    }, 3000);
+  }
 
   const {
     loading: getPastParticipantsLoading,
@@ -65,6 +74,27 @@ const ParticipantsPage = (): React.ReactElement => {
       w="100vw"
       h="100vh"
     >
+      {notification && (
+        <Flex
+          position="fixed"
+          top="30px"
+          left="50%"
+          transform="translateX(-50%)"
+          border="solid"
+          borderColor="#259E29"
+          zIndex="1000"
+          paddingY="5px"
+          paddingX="15px"
+          justifyContent="center"
+          alignItems="center"
+          gap="10px"
+          boxShadow="lg"
+          bg="#EAFFEB"
+        >
+          <CheckmarkSvg />
+          <Text color="#259E29" fontSize="xl" fontWeight="500" mb="0px">{notification}</Text>
+        </Flex>
+      )}
       <SideBar />
       <Flex
         w="100%"
@@ -79,7 +109,7 @@ const ParticipantsPage = (): React.ReactElement => {
           borderBottom="solid"
           borderBottomColor="gray.200"
           top="0px"
-          zIndex="1000"
+          zIndex="999"
         />
         <Flex
           w="100%"

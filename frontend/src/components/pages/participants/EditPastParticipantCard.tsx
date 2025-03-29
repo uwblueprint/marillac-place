@@ -17,7 +17,7 @@ type EditParticipantCardProps = {
 
 const EditPastParticipantCard = ({
   selected,
-  close,
+  close
 }: EditParticipantCardProps): React.ReactElement => {
   const [arrivalDate, setArrivalDate] = useState(selected.arrival);
   const [departureDate, setDepartureDate] = useState(selected.departure);
@@ -63,6 +63,7 @@ const EditPastParticipantCard = ({
         });
         reset();
         close();
+        localStorage.setItem("notification", "Changes saved.");
         window.location.reload();
       }
     } catch (err) {

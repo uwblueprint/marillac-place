@@ -97,6 +97,13 @@ const EditParticipantCard = ({
             },
           });
         }
+        if (endStay) {
+          localStorage.setItem("notification", "Removed participant.");
+        } else if (swapParticipant) {
+          localStorage.setItem("notification", "Swapped.")
+        } else {
+          localStorage.setItem("notification", "Changes saved.");
+        }
         reset();
         close();
         window.location.reload();

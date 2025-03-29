@@ -67,6 +67,7 @@ const AddParticipantCard = ({roomNumber, close}: AddParticipantCardProps): React
             password,
           },
         });
+        localStorage.setItem("notification", "Added participant.");
         reset();
         close();
         window.location.reload();
