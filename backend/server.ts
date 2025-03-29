@@ -41,5 +41,5 @@ server.applyMiddleware({
 
 app.listen({ port: process.env.PORT || 5001 }, () => {
   /* eslint-disable-next-line no-console */
-  console.info(`Server is listening on port ${process.env.PORT || 5001 !`);
+  console.info(`Server is listening on port ${process.env.PORT || 5001} !`);
 });
