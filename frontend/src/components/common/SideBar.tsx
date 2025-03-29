@@ -71,7 +71,7 @@ const SideBar: React.FC = () => {
         h="100%"
         w="240px"
         borderRight="solid"
-        borderRightColor="gray.300"
+        borderRightColor="gray.200"
         background="white"
         position="fixed"
         pt={6}
@@ -107,9 +107,10 @@ const SideBar: React.FC = () => {
           </Flex>
           <Button
             variant="del"
-            border="1px solid #C5C8D8"
+            border="solid"
+            borderColor="gray.200"
             color="#B21D2F"
-            fontWeight={400}
+            fontWeight={600}
             fontSize="14px"
             width="fit-content"
           >

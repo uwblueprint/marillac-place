@@ -75,20 +75,28 @@ const ParticipantsPage = (): React.ReactElement => {
           w="100%"
           h="50px"
           bg="#E3ECEB"
+          position="fixed"
+          borderBottom="solid"
+          borderBottomColor="gray.200"
+          top="0px"
+          zIndex="1000"
         />
         <Flex
           w="100%"
           h="100%"
-          padding="30px"
+          marginTop="50px"
+          paddingY="30px"
+          paddingX="45px"
           flexDir="column"
           justifyContent="space-between"
         >
           <Flex
             w="100%"
+            h="40%"
             flexDir="column"
-            marginBottom="20px"
+            marginBottom="30px"
           >
-            <Text fontSize="lg" fontWeight="600" color="#15646E">Current Participants</Text>
+            <Text fontSize="2xl" fontWeight="600" color="#15646E">Current Participants</Text>
             {getCurrentParticipantsLoading ? (
               <Spinner />
             ) : getCurrentParticipantsError ? (
@@ -97,9 +105,9 @@ const ParticipantsPage = (): React.ReactElement => {
               <Flex
                 w="100%"
                 alignItems="center"
-                gap="15px"
                 justifyContent="space-between"
                 wrap="wrap"
+                position="relative"
               >
                 {(() => {
                   const currentParticipants: Record<string, any> = {};
@@ -128,7 +136,7 @@ const ParticipantsPage = (): React.ReactElement => {
             w="100%"
             flexDir="column"
           >
-            <Text fontSize="lg" fontWeight="600" color="#15646E">Past Participants</Text>
+            <Text fontSize="2xl" fontWeight="600" color="#15646E">Past Participants</Text>
             {getPastParticipantsLoading ? (
               <Spinner />
             ) : getPastParticipantsError ? (
@@ -158,64 +166,6 @@ const ParticipantsPage = (): React.ReactElement => {
             )}
           </Flex>
         </Flex>
-        {/* <Flex flexDir="column" flexGrow={1} p="20px">
-          <Flex justifyContent="space-between" p="10px">
-            <InputGroup w="30%">
-              <InputLeftElement pointerEvents="none">
-                <Icon as={Search} color="gray.300" />
-              </InputLeftElement>
-              <Input
-                placeholder="Search"
-                onChange={(e) => setParticipantFilter(e.target.value)}
-              />
-            </InputGroup>
-            <Button
-              variant="primary"
-              bg="orange.500"
-              leftIcon={<Icon as={Add} color="white" />}
-              size="sm"
-              onClick={() => setAddParticipant(true)}
-            >
-              Add Participant
-            </Button>
-          </Flex>
-          {getAllParticipantsLoading ? (
-            <Spinner />
-          ) : getAllParticipantsError ? (
-            <Flex p="10px">{getAllParticipantsError.message}</Flex>
-          ) : getAllParticipantsData.getAllParticipants ? (
-            <CommonTable
-              data={getAllParticipantsData.getAllParticipants
-                .filter((participant: TableData) =>
-                  participant.participantId.includes(participantFilter),
-                )
-                .map((participant: TableData) => ({
-                  participantId: participant.participantId,
-                  roomNumber: participant.roomNumber,
-                  arrival: participant.arrival,
-                  departure: participant.departure || "",
-                  password: participant.password,
-                }))}
-              columnInfo={columnTypes}
-              onEdit={(row: any) => {
-                setSelectedParticipant(row);
-                setEditParticipant(true);
-              }}
-            />
-          ) : (
-            <Flex p="10px">No participants found.</Flex>
-          )}
-
-          {addParticipant && (
-            <AddParticipantCard close={() => setAddParticipant(false)} />
-          )}
-          {editParticipant && selectedParticipant && (
-            <EditParticipantCard
-              selected={selectedParticipant}
-              close={() => setEditParticipant(false)}
-            />
-          )}
-        </Flex> */}
       </Flex>
     </Flex>
   );

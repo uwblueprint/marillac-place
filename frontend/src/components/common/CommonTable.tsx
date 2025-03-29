@@ -172,8 +172,8 @@ const CommonTable = ({
       justifyContent="space-between"
     >
       <TableContainer
-        border="2px solid"
-        borderColor="#E2E8F0"
+        border="solid"
+        borderColor="gray.200"
         borderRadius="5px"
       >
         <Table>

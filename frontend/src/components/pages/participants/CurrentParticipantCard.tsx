@@ -11,14 +11,16 @@ const CurrentParticipantCard = ({roomNumber, participants}: CurrentParticipantCa
     const [editParticipant, setEditParticipant] = useState(false);
     return (
         <Flex 
-            w="180px"
-            h="130px"
-            border="2px solid"
-            borderColor="#E2E8F0"
+            w="17%"
+            h="150px"
+            border="solid"
+            borderColor="gray.200"
             borderRadius="5px"
             flexDir="column"
             justifyContent="top"
             alignItems="center"
+            marginBottom="20px"
+            position="relative"
         >
             <Flex w="full" justifyContent="center" p="5px" bg="#E3ECEB" fontSize="small" fontWeight="700">Room {roomNumber}</Flex>
             <Flex
@@ -41,13 +43,18 @@ const CurrentParticipantCard = ({roomNumber, participants}: CurrentParticipantCa
                     Edit Participant
                 </Button>
             </Flex>
-            {editParticipant && 
-                <EditParticipantCard 
-                    selectedRoomNumber={roomNumber} 
-                    participants={participants}
-                    close={() => setEditParticipant(false)}
-                /> 
-            }
+            <Flex
+                position="absolute"
+                top="0px"
+            >
+                {editParticipant && 
+                    <EditParticipantCard 
+                        selectedRoomNumber={roomNumber} 
+                        participants={participants}
+                        close={() => setEditParticipant(false)}
+                    /> 
+                }
+            </Flex>
         </Flex>
     )
 }

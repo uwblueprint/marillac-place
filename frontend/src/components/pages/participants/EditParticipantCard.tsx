@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Flex, Spinner } from "@chakra-ui/react";
+import { Button, Flex, Spinner, Text } from "@chakra-ui/react";
 
 import { useMutation, useQuery } from "@apollo/client";
 
@@ -8,7 +8,9 @@ import { UPDATE_PARTICIPANT_BY_ID } from "../../../gql/mutations";
 
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
-import FormSelectField from "../../common/FormSelectField";
+
+import SwapSvg from "../../../assets/svg/SwapSvg";
+import EndStaySvg from "../../../assets/svg/EndStaySvg";
 
 type EditParticipantCardProps = {
   selectedRoomNumber: string;
@@ -75,7 +77,7 @@ const EditParticipantCard = ({
           variables: { 
             participantId: participants[selectedRoomNumber].participantId,
             arrival: arrivalDate,
-            departure: departureDate,
+            departure: endStay ? departureDate : "",
             password,
           },
         });
@@ -133,8 +135,41 @@ const EditParticipantCard = ({
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Button onClick={() => { setEndStay(!endStay); setSwapParticipant(false); }}>End Stay</Button>
-        <Button onClick={() => { setSwapParticipant(!swapParticipant); setEndStay(false); }}>Swap Participant</Button>
+        <Flex justifyContent="flex-start">
+          <Button 
+            variant="greenOutline" 
+            _hover={{ bg: "#E3ECEB" }}
+            bg={swapParticipant ? "#E3ECEB" : ""}
+            mr="8px"
+            onClick={() => {
+              setSwapParticipant(!swapParticipant);
+              setSwappedRoom("");
+              setEndStay(false);
+            }}
+          >
+            <SwapSvg />
+            <Flex ml="7px">Swap Participant</Flex>
+          </Button>
+
+          <Button
+            _hover={{ bg: "red.100" }}
+            bg={endStay ? "red.100" : ""}
+            variant="redOutline"
+            onClick={() => { 
+              setEndStay(!endStay); 
+              setDepartureDate("");
+              setSwapParticipant(false); 
+            }}
+          >
+            <EndStaySvg />
+            <Flex ml="7px">End Stay</Flex>
+          </Button>
+        </Flex>
+
+        {
+          (endStay || swapParticipant) && 
+          <Flex w="100%" h="0px" borderTop="2px solid" borderColor="gray.200" />
+        }
 
         { endStay && 
           <FormInputField
@@ -149,28 +184,38 @@ const EditParticipantCard = ({
 
         { swapParticipant && 
           <div>
-            <div>Available Rooms</div>
-            <Flex>
+            <Text mb="5px" color="gray.main" fontWeight="700">Available Rooms</Text>
+            <Flex
+              gap="5px"
+              wrap="wrap"
+              mb="10px"
+            >
               {roomNumbers.map((num: string) => 
-                <Button key={num} onClick={() => setSwappedRoom(num)}>
-                  {num}
+                <Button 
+                  key={num} 
+                  onClick={() => setSwappedRoom(num)}
+                  variant="greenOutline"
+                  bg={swappedRoom === num ? "#0C727E" : "white"}
+                  color={swappedRoom === num ? "white" : "#0C727E"}
+                >
+                  Room {num}
                 </Button>
               )}
             </Flex>
             { swappedRoom !== "" && (
               swappedRoom === selectedRoomNumber ? (
-                <div>Participant #{participants[selectedRoomNumber].participantId} is already in Room {selectedRoomNumber}</div>
+                <Flex>Participant #{participants[selectedRoomNumber].participantId} is already in Room {selectedRoomNumber}.</Flex>
               ) : (
-                <div>
+                <Flex flexDir="column" gap="5px">
                   <div>
-                    Participant #{participants[selectedRoomNumber].participantId} in Room {selectedRoomNumber} will be moved to Room {swappedRoom}
+                    Participant #{participants[selectedRoomNumber].participantId} in Room {selectedRoomNumber} will be moved to Room {swappedRoom}.
                   </div>
                   { swappedRoom in participants && 
                     <div>
-                      Participant #{participants[swappedRoom].participantId} in Room {swappedRoom} will be moved to Room {selectedRoomNumber}
+                      Participant #{participants[swappedRoom].participantId} in Room {swappedRoom} will be moved to Room {selectedRoomNumber}.
                     </div>
                   }
-                </div>
+                </Flex>
               )
             )}
           </div>

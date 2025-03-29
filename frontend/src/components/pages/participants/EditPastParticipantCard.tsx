@@ -8,7 +8,6 @@ import { UPDATE_PARTICIPANT_BY_ID } from "../../../gql/mutations";
 
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
-import FormSelectField from "../../common/FormSelectField";
 import { TableData } from "../../common/CommonTable";
 
 type EditParticipantCardProps = {
