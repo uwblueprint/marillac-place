@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Flex, Spinner } from "@chakra-ui/react";
+import { Button, Flex, Input, Spinner, Text } from "@chakra-ui/react";
 
 import { useMutation, useQuery } from "@apollo/client";
 
@@ -8,50 +8,59 @@ import { UPDATE_PARTICIPANT_BY_ID } from "../../../gql/mutations";
 
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
-import FormSelectField from "../../common/FormSelectField";
-import { TableData } from "../../common/CommonTable";
+
+import SwapSvg from "../../../assets/svg/SwapSvg";
+import EndStaySvg from "../../../assets/svg/EndStaySvg";
 
 type EditParticipantCardProps = {
-  selected: TableData;
+  selectedRoomNumber: string;
+  participants: Record<string, any>;
   close: () => void;
 };
 
 const EditParticipantCard = ({
-  selected,
+  selectedRoomNumber,
+  participants,
   close,
 }: EditParticipantCardProps): React.ReactElement => {
-  const [roomNumber, setRoomNumber] = useState(selected.roomNumber);
-  const [arrivalDate, setArrivalDate] = useState(selected.arrival);
-  const [departureDate, setDepartureDate] = useState(selected.departure);
-  const [password, setPassword] = useState(selected.password);
+  // eslint-disable-next-line prefer-template
+  const title = "Edit Participant in Room " + selectedRoomNumber;
+  const roomNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
+  const [arrivalDate, setArrivalDate] = useState(participants[selectedRoomNumber].arrival);
+  const [departureDate, setDepartureDate] = useState("");
+  const [password, setPassword] = useState(participants[selectedRoomNumber].password);
+  const [swappedRoom, setSwappedRoom] = useState("");
+
+  const [endStay, setEndStay] = useState(false);
+  const [swapParticipant, setSwapParticipant] = useState(false);
   const [error, setError] = useState("");
 
-  const {
-    loading: getAvailableRoomsLoading,
-    error: getAvailableRoomsError,
-    data: getAvailableRoomsData,
-  } = useQuery(GET_AVAILABLE_ROOMS);
   const [updateParticipantById] = useMutation(UPDATE_PARTICIPANT_BY_ID);
 
   const reset = () => {
-    setRoomNumber(selected.roomNumber);
-    setArrivalDate(selected.arrival);
-    setDepartureDate(selected.departure);
-    setPassword(selected.password);
+    setArrivalDate(participants[selectedRoomNumber].arrival);
+    setDepartureDate("");
+    setPassword(participants[selectedRoomNumber].password);
+    setSwappedRoom("");
+    setEndStay(false);
+    setSwapParticipant(false);
     setError("");
   };
 
-  const validate = async () => {
-    if (!roomNumber || !arrivalDate || !password) {
+  const validate = () => {
+    if (!arrivalDate || !password || (endStay && !departureDate) || (swapParticipant && !swappedRoom)) {
       setError("Missing fields.");
       return false;
     }
+    if (swapParticipant && swappedRoom === selectedRoomNumber) {
+      setError("Invalid swap.");
+      return false;
+    }
     if (
-      roomNumber === selected.roomNumber &&
-      arrivalDate === selected.arrival &&
-      departureDate === selected.departure &&
-      password === selected.password
+      arrivalDate === participants[selectedRoomNumber].arrival &&
+      password === participants[selectedRoomNumber].password && 
+      !endStay && !swapParticipant
     ) {
       setError("No changes made.");
       return false;
@@ -62,18 +71,39 @@ const EditParticipantCard = ({
   const handleSubmit = async () => {
     setError("");
     try {
-      const valid: boolean = await validate();
-      if (valid) {
-        const room = parseInt(roomNumber, 10);
+      const valid: boolean = validate();
+      if (valid && (arrivalDate || departureDate || password)) {
         await updateParticipantById({
-          variables: {
-            participantId: selected.participantId,
-            roomNumber: room,
+          variables: { 
+            participantId: participants[selectedRoomNumber].participantId,
             arrival: arrivalDate,
-            departure: departureDate,
+            departure: endStay ? departureDate : "",
             password,
           },
         });
+        if (swapParticipant) {
+          if (swappedRoom in participants) {
+            await updateParticipantById({
+              variables: { 
+                participantId: participants[swappedRoom].participantId,
+                roomNumber: parseInt(selectedRoomNumber, 10)
+              },
+            });
+          } 
+          await updateParticipantById({
+            variables: { 
+              participantId: participants[selectedRoomNumber].participantId,
+              roomNumber: parseInt(swappedRoom, 10)
+            },
+          });
+        }
+        if (endStay) {
+          localStorage.setItem("notification", "Removed participant.");
+        } else if (swapParticipant) {
+          localStorage.setItem("notification", "Swapped.")
+        } else {
+          localStorage.setItem("notification", "Changes saved.");
+        }
         reset();
         close();
         window.location.reload();
@@ -85,7 +115,7 @@ const EditParticipantCard = ({
   };
 
   return (
-    <ModalContainer title="Edit Participant">
+    <ModalContainer title={title}>
       <Flex flexDir="column" gap="20px">
         {error && <Flex textColor="red.500">{error}</Flex>}
 
@@ -93,30 +123,15 @@ const EditParticipantCard = ({
           <Flex mb="5px" color="gray.main" fontWeight="700">
             ID Number
           </Flex>
-          <Flex>{selected.participantId}</Flex>
-        </Flex>
-
-        {getAvailableRoomsLoading ? (
-          <Spinner />
-        ) : getAvailableRoomsError || !getAvailableRoomsData ? (
-          <Flex p="10px">Error getting rooms.</Flex>
-        ) : (
-          <FormSelectField
-            label="Room Number"
-            placeholder={`Room ${selected.roomNumber}`}
-            value={roomNumber}
-            options={getAvailableRoomsData.getAvailableRooms.map(
-              (room: number) => ({
-                key: room,
-                value: room,
-                display: `Room ${room}`,
-              }),
-            )}
-            onChange={(e) =>
-              setRoomNumber(e.target.value || selected.roomNumber)
-            }
+          <Input
+            variant="outline"
+            type="text"
+            isDisabled
+            value={participants[selectedRoomNumber].participantId}
+            borderWidth="2px"
+            borderColor="gray.300"
           />
-        )}
+        </Flex>
 
         <FormInputField
           label="Arrival Date"
@@ -128,20 +143,97 @@ const EditParticipantCard = ({
         />
 
         <FormInputField
-          label="Departure Date"
-          value={departureDate}
-          type="date"
-          onChange={(e) => {
-            setDepartureDate(e.target.value);
-          }}
-        />
-
-        <FormInputField
           label="Password"
           value={password}
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        <Flex justifyContent="flex-start">
+          <Button 
+            variant="greenOutline" 
+            _hover={{ bg: "#E3ECEB" }}
+            bg={swapParticipant ? "#E3ECEB" : ""}
+            mr="8px"
+            onClick={() => {
+              setSwapParticipant(!swapParticipant);
+              setSwappedRoom("");
+              setEndStay(false);
+            }}
+          >
+            <SwapSvg />
+            <Flex ml="7px">Swap Participant</Flex>
+          </Button>
+
+          <Button
+            _hover={{ bg: "red.100" }}
+            bg={endStay ? "red.100" : ""}
+            variant="redOutline"
+            onClick={() => { 
+              setEndStay(!endStay); 
+              setDepartureDate("");
+              setSwapParticipant(false); 
+            }}
+          >
+            <EndStaySvg />
+            <Flex ml="7px">End Stay</Flex>
+          </Button>
+        </Flex>
+
+        {
+          (endStay || swapParticipant) && 
+          <Flex w="100%" h="0px" borderTop="2px solid" borderColor="gray.200" />
+        }
+
+        { endStay && 
+          <FormInputField
+            label="Departure Date"
+            value={departureDate}
+            type="date"
+            onChange={(e) => {
+              setDepartureDate(e.target.value);
+            }}
+          />
+        }
+
+        { swapParticipant && 
+          <div>
+            <Text mb="5px" color="gray.main" fontWeight="700">Available Rooms</Text>
+            <Flex
+              gap="5px"
+              wrap="wrap"
+              mb="10px"
+            >
+              {roomNumbers.map((num: string) => 
+                <Button 
+                  key={num} 
+                  onClick={() => setSwappedRoom(num)}
+                  variant="greenOutline"
+                  bg={swappedRoom === num ? "#0C727E" : "white"}
+                  color={swappedRoom === num ? "white" : "#0C727E"}
+                >
+                  Room {num}
+                </Button>
+              )}
+            </Flex>
+            { swappedRoom !== "" && (
+              swappedRoom === selectedRoomNumber ? (
+                <Flex>Participant #{participants[selectedRoomNumber].participantId} is already in Room {selectedRoomNumber}.</Flex>
+              ) : (
+                <Flex flexDir="column" gap="5px">
+                  <div>
+                    Participant #{participants[selectedRoomNumber].participantId} in Room {selectedRoomNumber} will be moved to Room {swappedRoom}.
+                  </div>
+                  { swappedRoom in participants && 
+                    <div>
+                      Participant #{participants[swappedRoom].participantId} in Room {swappedRoom} will be moved to Room {selectedRoomNumber}.
+                    </div>
+                  }
+                </Flex>
+              )
+            )}
+          </div>
+        }
 
         <Flex justifyContent="flex-end">
           <Button

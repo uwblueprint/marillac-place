@@ -6,15 +6,23 @@ export const GET_AVAILABLE_ROOMS = gql`
   }
 `;
 
-export const GET_ALL_PARTICIPANTS = gql`
-  query getAllParticipants {
-    getAllParticipants {
+export const GET_PAST_PARTICIPANTS = gql`
+  query getPastParticipants {
+    getPastParticipants {
+      participantId
+      arrival
+      departure
+    }
+  }
+`;
+
+export const GET_CURRENT_PARTICIPANTS = gql`
+  query getCurrentParticipants {
+    getCurrentParticipants {
       participantId
       roomNumber
       arrival
-      departure
       password
-      credit
     }
   }
 `;

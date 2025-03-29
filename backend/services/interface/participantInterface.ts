@@ -1,7 +1,8 @@
 import { Participant } from "@prisma/client";
 
 interface IParticipantService {
-  getAllParticipants(): Promise<Participant[]>;
+  getPastParticipants(): Promise<Participant[]>;
+  getCurrentParticipants(): Promise<Participant[]>;
   getParticipantById(participantId: string): Promise<Participant | null>;
   createParticipant(
     participantId: string,
@@ -11,10 +12,10 @@ interface IParticipantService {
   ): Promise<boolean>;
   updateParticipantById(
     participantId: string,
-    roomNumber: number,
-    arrival: string,
-    departure: string,
-    password: string,
+    roomNumber?: number,
+    arrival?: string,
+    departure?: string,
+    password?: string,
   ): Promise<boolean>;
 }
 

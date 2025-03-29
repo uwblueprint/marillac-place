@@ -2,7 +2,8 @@ import { gql } from "apollo-server-express";
 
 const resolverTypes = gql`
   type Query {
-    getAllParticipants: [Participant]
+    getPastParticipants: [Participant]
+    getCurrentParticipants: [Participant]
     getParticipantById(participantId: String!): Participant
     getAvailableRooms: [Int]
   }
@@ -16,10 +17,10 @@ const resolverTypes = gql`
     ): Boolean
     updateParticipantById(
       participantId: String!
-      roomNumber: Int!
-      arrival: String!
-      departure: String!
-      password: String!
+      roomNumber: Int
+      arrival: String
+      departure: String
+      password: String
     ): Boolean
   }
 `;

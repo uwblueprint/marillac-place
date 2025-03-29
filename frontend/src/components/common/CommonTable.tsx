@@ -170,17 +170,15 @@ const CommonTable = ({
       flexDir="column"
       alignContent="space-between"
       justifyContent="space-between"
-      h="100%"
     >
       <TableContainer
-        m="10px"
-        border="2px solid"
-        borderColor="#E3ECEB"
-        borderRadius="6px"
+        border="solid"
+        borderColor="gray.200"
+        borderRadius="5px"
       >
         <Table>
           <Thead>
-            <Tr backgroundColor="#E3ECEB" w="100%">
+            <Tr backgroundColor="#EDF2F7" w="100%">
               {isSelectable ? (
                 <Th p="0px 0px 0px 20px" w="16px">
                   <Checkbox
@@ -253,7 +251,7 @@ const CommonTable = ({
               .slice((page - 1) * maxResults, page * maxResults)
               .map((row, index) => {
                 return (
-                  <Tr key={index}>
+                  <Tr key={index} borderTop="2px solid" borderColor="#E2E8F0">
                     {isSelectable ? (
                       <Td p="0px 0px 0px 20px" w="16px">
                         <Checkbox
@@ -300,7 +298,7 @@ const CommonTable = ({
         </Table>
       </TableContainer>
 
-      {isPreviewModalOpen && selectedRow && (
+      {/* {isPreviewModalOpen && selectedRow && (
         <ModalContainer
           title={colData[0].value}
           close={() => setIsPreviewModalOpen(false)}
@@ -316,10 +314,10 @@ const CommonTable = ({
             ))}
           </Flex>
         </ModalContainer>
-      )}
+      )} */}
 
-      <Box h="50px" position="relative">
-        <Box position="absolute" w="250px" h="50px" ml="10px">
+      <Box h="50px" position="relative" mt="20px">
+        <Box position="absolute" w="250px" h="50px">
           {`Showing ${(page - 1) * maxResults + 1} to ${Math.min(
             page * maxResults,
             data.length,
@@ -338,7 +336,7 @@ const CommonTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="#0E373B"
+              color="#15646E"
               backgroundColor="white"
               aria-label="Previous Page"
               icon={<ChevronLeftOutlinedIcon />}
@@ -347,7 +345,7 @@ const CommonTable = ({
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={item === page ? "#0E373B" : "white"}
+                  backgroundColor={item === page ? "#15646E" : "white"}
                   h="35px"
                   p="10px"
                   flexBasis="35px"
@@ -355,7 +353,7 @@ const CommonTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "#0E373B",
+                    backgroundColor: "#15646E",
                   }}
                   textColor={item === page ? "white" : "gray.main"}
                   onClick={() => numberPaginate(item)}
@@ -371,7 +369,7 @@ const CommonTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="#0E373B"
+              color="#15646E"
               backgroundColor="white"
               aria-label="Next Page"
               icon={<ChevronRightOutlinedIcon />}

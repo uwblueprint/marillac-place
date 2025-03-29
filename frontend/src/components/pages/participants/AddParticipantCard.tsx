@@ -1,49 +1,39 @@
 import React, { useState } from "react";
-import { Button, Flex, Spinner } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 
-import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
-import {
-  GET_AVAILABLE_ROOMS,
-  GET_PARTICIPANT_BY_ID,
-} from "../../../gql/queries";
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { GET_PARTICIPANT_BY_ID } from "../../../gql/queries";
 import { CREATE_PARTICIPANT } from "../../../gql/mutations";
 
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
-import FormSelectField from "../../common/FormSelectField";
 
 type AddParticipantCardProps = {
+  roomNumber: string;
   close: () => void;
 };
 
-const AddParticipantCard = ({
-  close,
-}: AddParticipantCardProps): React.ReactElement => {
+const AddParticipantCard = ({roomNumber, close}: AddParticipantCardProps): React.ReactElement => {
+  // eslint-disable-next-line prefer-template
+  const title = "Add Participant to Room " + roomNumber;
   const [participantId, setParticipantId] = useState("");
-  const [roomNumber, setRoomNumber] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
 
-  const {
-    loading: getAvailableRoomsLoading,
-    error: getAvailableRoomsError,
-    data: getAvailableRoomsData,
-  } = useQuery(GET_AVAILABLE_ROOMS);
   const [getParticipantById] = useLazyQuery(GET_PARTICIPANT_BY_ID);
   const [createParticipant] = useMutation(CREATE_PARTICIPANT);
 
   const reset = () => {
     setParticipantId("");
-    setRoomNumber("");
     setArrivalDate("");
     setPassword("");
     setError("");
   };
 
   const validate = async () => {
-    if (!participantId || !roomNumber || !arrivalDate || !password) {
+    if (!participantId || !arrivalDate || !password) {
       setError("Missing fields.");
       return false;
     }
@@ -77,6 +67,7 @@ const AddParticipantCard = ({
             password,
           },
         });
+        localStorage.setItem("notification", "Added participant.");
         reset();
         close();
         window.location.reload();
@@ -88,7 +79,7 @@ const AddParticipantCard = ({
   };
 
   return (
-    <ModalContainer title="Add Participant">
+    <ModalContainer title={title}>
       <Flex flexDir="column" gap="20px">
         {error && <Flex textColor="red.500">{error}</Flex>}
 
@@ -101,27 +92,6 @@ const AddParticipantCard = ({
           }}
           required
         />
-
-        {getAvailableRoomsLoading ? (
-          <Spinner />
-        ) : getAvailableRoomsError || !getAvailableRoomsData ? (
-          <Flex p="10px">Error getting rooms.</Flex>
-        ) : (
-          <FormSelectField
-            label="Room Number"
-            placeholder="Please select a room"
-            value={roomNumber}
-            options={getAvailableRoomsData.getAvailableRooms.map(
-              (room: number) => ({
-                key: room,
-                value: room,
-                display: `Room ${room}`,
-              }),
-            )}
-            onChange={(e) => setRoomNumber(e.target.value)}
-            required
-          />
-        )}
 
         <FormInputField
           label="Arrival Date"
