@@ -16,6 +16,7 @@ const dataModels = gql`
     to: [Int!]!
     createdAt: DateTime!
     message: String!
+    priority: PriorityType!
   }
 
   type Task {

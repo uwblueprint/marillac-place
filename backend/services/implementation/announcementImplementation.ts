@@ -1,6 +1,6 @@
-import { Announcement, StaffType } from "@prisma/client";
+import { Announcement, StaffType, PriorityType } from "@prisma/client";
 import prisma from "../../prisma";
-import IAnnouncementService from "../interface/announcementInterface.js";
+import IAnnouncementService from "../interface/announcementInterface";
 
 class AnnouncementService implements IAnnouncementService {
   async getAllAnnouncements(): Promise<Announcement[] | null> {
@@ -22,8 +22,8 @@ class AnnouncementService implements IAnnouncementService {
       const annoucements = await prisma.announcement.findMany({
         where: {
           to: {
-            hasSome: rooms
-          }
+            hasSome: rooms,
+          },
         },
         orderBy: [{ createdAt: "asc" }],
       });
@@ -32,26 +32,25 @@ class AnnouncementService implements IAnnouncementService {
       console.log(err);
       throw err;
     }
-
   }
 
   async createAnnouncement(
     announcementId: number,
-    from: StaffType,     
-    to: number[],      
-    priority: PriorityType,    
+    from: StaffType,
+    to: number[],
+    priority: PriorityType,
     createdAt: Date,
     message: string,
   ): Promise<boolean> {
     try {
       await prisma.announcement.create({
         data: {
-          announcementId: announcementId,
-          from: from,
-          to: to,
-          priority: priority,
-          createdAt: createdAt,
-          message: message,
+          announcementId,
+          from,
+          to,
+          priority,
+          createdAt,
+          message,
         },
       });
       return true;
@@ -63,25 +62,25 @@ class AnnouncementService implements IAnnouncementService {
 
   async editAnnouncement(
     announcementId: number,
-    from: StaffType,     
-    to: number[],      
-    priority: PriorityType,    
+    from: StaffType,
+    to: number[],
+    priority: PriorityType,
     createdAt: Date,
     message: string,
   ): Promise<boolean> {
     try {
       await prisma.announcement.update({
         where: {
-          announcementId: announcementId,
+          announcementId,
         },
         data: {
-          from: from,
-          to: to,
-          priority: priority,
-          createdAt: createdAt,
-          message: message,
+          from,
+          to,
+          priority,
+          createdAt,
+          message,
         },
-    });
+      });
       return true;
     } catch (err) {
       console.log(err);
@@ -89,15 +88,13 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
-  async deleteAnnouncement(
-    announcementId: number,
-  ): Promise<boolean> {
+  async deleteAnnouncement(announcementId: number): Promise<boolean> {
     try {
       await prisma.announcement.delete({
         where: {
-          announcementId: announcementId,
-        }
-    });
+          announcementId,
+        },
+      });
       return true;
     } catch (err) {
       console.log(err);
@@ -106,28 +103,7 @@ class AnnouncementService implements IAnnouncementService {
   }
 }
 
-
-
 export default AnnouncementService;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import prisma from "../../prisma";
 // import INotificationService, {

@@ -16,6 +16,23 @@ const resolverTypes = gql`
       arrival: String
       password: String
     ): Boolean
+    createAnnouncement(
+      announcementId: Int
+      from: StaffType
+      to: [Int]
+      priority: PriorityType
+      createdAt: String
+      message: String
+    ): Boolean
+    editAnnouncement(
+      announcementId: Int
+      from: StaffType
+      to: [Int]
+      priority: PriorityType
+      createdAt: String
+      message: String
+    ): Boolean
+    deleteAnnouncement(announcementId: Int): Boolean
   }
 `;
 

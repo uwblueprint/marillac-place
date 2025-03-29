@@ -39,7 +39,7 @@ server.applyMiddleware({
   cors: { origin: CORS_ALLOW_LIST, credentials: true },
 });
 
-app.listen({ port: process.env.PORT || 5000 }, () => {
+app.listen({ port: process.env.PORT || 5001 }, () => {
   /* eslint-disable-next-line no-console */
-  console.info(`Server is listening on port ${process.env.PORT || 5000}!`);
+  console.info(`Server is listening on port ${process.env.PORT || 5001 !`);
 });

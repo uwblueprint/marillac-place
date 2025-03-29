@@ -30,7 +30,6 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
   Announcement,
   GroupAnnouncements,
 } from "../../../types/NotificationTypes"; */
-import { truncateMessage } from "../../../utils/StringUtils";
 import {
   NotificationGroupResponse,
   NotificationResponse,

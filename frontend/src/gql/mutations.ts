@@ -43,7 +43,7 @@ export const EDIT_ANNOUNCEMENT = gql`
     $createdAt: Date,
     $message: string,
     ) {
-    createAnnouncement(
+    editAnnouncement(
       announcementId: $announcementId
       from: $from
       to: $to
@@ -55,10 +55,7 @@ export const EDIT_ANNOUNCEMENT = gql`
 `;
 
 export const DELETE_ANNOUNCEMENT = gql`
-  mutation deleteAnnouncement($announcementId: number,
-    ) {
-    deleteAnnouncement(
-      announcementId: $announcementId
-    )
+  mutation deleteAnnouncement($announcementId: number) {
+    deleteAnnouncement(announcementId: $announcementId)
   }
 `;
