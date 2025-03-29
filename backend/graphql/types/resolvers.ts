@@ -14,6 +14,18 @@ const resolverTypes = gql`
       arrival: String
       password: String
     ): Boolean
+
+     createTask(
+      roomNumber: Int
+      type: TaskType
+      status: TaskStatus
+      name: String!
+      isRecurring: Boolean!
+      start: DateTime!
+      end: DateTime!
+      credit: Int!
+      comment: String
+    ): Task
   }
 `;
 
