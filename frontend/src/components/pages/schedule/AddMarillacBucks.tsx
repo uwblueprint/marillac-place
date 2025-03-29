@@ -12,6 +12,7 @@ import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import {
   GET_AVAILABLE_ROOMS,
   GET_PARTICIPANT_BY_ID,
+  GET_PARTICIPANT_BY_ROOM,
 } from "../../../gql/queries";
 import { EDIT_MARILLAC_BUCKS } from "../../../gql/mutations";
 
@@ -20,16 +21,21 @@ import FormInputField from "../../common/form/FormInputField";
 import FormSelectField from "../../common/form/FormSelectField";
 
 type AddMarillacBucksProps = {
+  currentRoom: number;
+  credit: number;
+  setCredit: React.Dispatch<React.SetStateAction<number>>;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AddMarillacBucks = ({
+  currentRoom,
+  credit, 
+  setCredit,
   isOpen,
   setIsOpen,
 }: AddMarillacBucksProps): React.ReactElement => {
   const [participantId, setParticipantId] = useState("");
-  const [credit, setCredit] = useState(0);
   const [creditChange, setCreditChange] = useState(0)
   const [adding, setAdding] = useState(true);
   const [currentBalance, setCurrentBalance] = useState(0);
@@ -40,17 +46,31 @@ const AddMarillacBucks = ({
   const [addingError, setAddingError] = useState("");
 
   const [
-    getParticipantById,
+    getParticipantByRoom,
     {
       loading: getParticipantByIdLoading,
-      error: getParticipantByIdError,
-      data: getParticipantByIdData,
+      error: getParticipantByRoomError,
+      data: getParticipantByRoomData,
     },
-  ] = useLazyQuery(GET_PARTICIPANT_BY_ID, {
-    variables: { participantId, credit },
+  ] = useLazyQuery(GET_PARTICIPANT_BY_ROOM, {
+    variables: {currentRoom},
   });
-  console.log(participantId, "od");
-  console.log(credit, "cred");
+
+  useEffect(() => {
+    if (currentRoom) {
+      getParticipantByRoom(); 
+    }
+  }, [currentRoom, getParticipantByRoom]);
+  
+  useEffect(() => {
+    if (getParticipantByRoomData) {
+      console.log(getParticipantByRoomData, "Participant data fetched");
+      if (getParticipantByRoomData.getParticipantByRoom) {
+        setCurrentBalance(getParticipantByRoomData.getParticipantByRoom.credit);
+        setParticipantId(getParticipantByRoomData.getParticipantByRoom.participantId);
+      }
+    }
+  }, [getParticipantByRoomData]);
   const [editMarillacBucks] = useMutation(EDIT_MARILLAC_BUCKS);
 
   const validate = async () => {
@@ -63,12 +83,12 @@ const AddMarillacBucks = ({
 
     if (participantId) {
       console.log(participantId)
-      await getParticipantById({ variables: { participantId } });
-      if (getParticipantByIdError) {
+      await getParticipantByRoom({ variables: { currentRoom } });
+      if (getParticipantByRoomError) {
         errors.participantId = "Unknown error has occurred.";
       } else if (
-        getParticipantByIdData &&
-        getParticipantByIdData.getParticipantById != null
+        getParticipantByRoomData &&
+        getParticipantByRoomData.getParticipantById != null
       ) {
         errors.participantId = "ID already exists";
       } else {
@@ -78,38 +98,19 @@ const AddMarillacBucks = ({
       errors.participantId = "ID Number is missing";
     }
 
-    if (credit) {
-      console.log(credit);
-      await getParticipantById({ variables: { credit } });
-      setCurrentBalance(credit);
-      if (creditError) {
-        errors.credit = "Unknown error has occurred.";
-      } else if (
-        credit && credit != null
-      ) {
-        errors.credit = "ID already exists";
-      } else {
-        errors.credit = "";
-      }
-    } else {
-      errors.credit = "ID Number is missing";
-    }
-
-    errors.credit = credit ? "" : "Credit is missing";
+    
     errors.creditChange = creditChange ? "" : "New credit is missing";
-    errors.adding = adding ? "" : "Adding is missing";
 
     return errors;
   };
-  const updateCredit = () => {
-    if (adding) {
-      setCredit(credit + creditChange);
-    }
-    setCredit(credit - creditChange); }
+useEffect(() => {
+  console.log(adding);
+},[adding])
   const handleSubmit = async () => {
-    console.log(credit);
-    console.log(credit);
+    const updatedCredit = adding? currentBalance + creditChange : currentBalance - creditChange;
+    console.log(updatedCredit, 'cred');
     const errors = await validate();
+    console.log('validated');
     if (
       !errors.participantId &&
       !errors.credit &&
@@ -117,14 +118,8 @@ const AddMarillacBucks = ({
       !errors.adding
     ) {
       try {
-        await editMarillacBucks({
-          variables: {
-            participantId,
-            credit,
-          },
-        });
-        setIsOpen(false);
-        window.location.reload();
+        console.log('trying');
+          setCredit(updatedCredit);
       } catch (err) {
         console.error(err);
       }
@@ -133,19 +128,41 @@ const AddMarillacBucks = ({
       setCreditError(errors.credit);
       setCreditChangeError(errors.creditChange);
       setAddingError(errors.adding);
+      console.log('errors', errors);
     }
   };
-
   const reset = () => {
-    setParticipantId("");
-    setCredit(0);
     setCreditChange(0);
     setAdding(true);
-    setParticipantIdError("");
-    setCreditError("");
     setCreditChangeError("");
     setAddingError("");
   };
+  useEffect(()=>{
+    console.log('called', credit, )
+    const executeMutation = async () => {
+      try {
+        await editMarillacBucks({
+          variables: {
+            participantId,
+            credit,
+          },
+        });
+        console.log('success')
+        setIsOpen(false);
+        setCurrentBalance(credit);
+        reset();
+        // window.location.reload();
+      }
+      catch (err) {
+        console.error(err);
+      }
+    }
+    if (credit !== currentBalance){
+      console.log('executing mutation')
+      executeMutation();
+    }
+  }, [credit])
+  
 
   return (
     <ModalContainer
@@ -154,13 +171,16 @@ const AddMarillacBucks = ({
       setIsOpen={setIsOpen}
     >
       <Flex flexDir="column" gap="20px">
-        <h3>Current Balance</h3>
+        <div className='flex flex-row space-y-1'>
+
+        <p className='text-lg text-[#626262] font-semibold'>Current Balance</p>
         <input
-      type="text"
-      value={currentBalance}
-      readOnly
-      className="w-[120px] px-3 text-[#0C727E] py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0C727E] focus:border-[#0C727E] text-sm"
-    />   
+            type="text"
+            value={currentBalance}
+            readOnly
+            className="w-[120px] px-3 py-2 text-[#0C727E] bg-[#FAFAFA] border border-[##C5C8D8] rounded-lg border-[1px]"
+          />   
+        </div>
         <FormInputField
           label="Enter Amount"
           value={creditChange === 0 ? "" : creditChange}
@@ -169,37 +189,43 @@ const AddMarillacBucks = ({
           onChange={(e) => {
             const value = parseFloat(e.target.value) || 0;
             setCreditChange(value);
-            console.log(value);
-            console.log(credit);
-            console.log(participantId);
           }}
           required
           error={creditChangeError}
         />
-        <div className="flex flex-row items-start space-x-1">
-        <input
-  type="radio"
-  id="add"
-  name="action"
-  value="Add"
-  onChange={(e) => setAdding(e.target.value === "Add")}
-  className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-/>
+<div className="flex flex-col space-y-2">
+  <div className="flex flex-row items-center space-x-10">
+    <input
+      type="radio"
+      id="add"
+      name="action"
+      value="Add"
+      defaultChecked
+      onChange={(e) => {
+        setAdding(e.target.value === "Add");
+         console.log(e);}}
+      className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+    />
+    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+    <label htmlFor="add" className='ml-2'>Add</label>
+  </div>
 
-                  <p>Add</p>
-                </div>
-                <div className="flex flex-row items-start space-x-1">
-                <input
-  type="radio"
-  id="add"
-  name="action"
-  value="Add"
-  onChange={(e) => setAdding(e.target.value === "Add")}
-  className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-/>
+  <div className="flex flex-row items-center space-x-10">
+    <input
+      type="radio"
+      id="remove"
+      name="action"
+      value="Remove"
+      onChange={(e) => {
+        setAdding(e.target.value === "Add");
+         console.log(e);}}
+      className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+    />
+    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+    <label htmlFor="remove" className='ml-2'>Remove</label>
+  </div>
+</div>
 
-                  <p>Remove</p>
-                </div>
         <FormInputField
           label="Reason"
           value={reason}
@@ -207,7 +233,6 @@ const AddMarillacBucks = ({
           onChange={(e) => {
             setReason(e.target.value);
           }}
-          required
           error={creditChangeError}
         />
 
@@ -222,8 +247,7 @@ const AddMarillacBucks = ({
           >
             Cancel
           </Button>
-          <Button variant="primary" onClick={()=>{updateCredit();
-          handleSubmit();}}>
+          <Button variant="primary" onClick={handleSubmit}>
             Save
           </Button>
         </Flex>

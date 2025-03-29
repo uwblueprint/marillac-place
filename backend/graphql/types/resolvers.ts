@@ -4,6 +4,7 @@ const resolverTypes = gql`
   type Query {
     getAllParticipants: [Participant]
     getParticipantById(participantId: String): Participant
+    getParticipantByRoom(roomNumber: Int): Participant
     getAvailableRooms: [Int]
   }
 

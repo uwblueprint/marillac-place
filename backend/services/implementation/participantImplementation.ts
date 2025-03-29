@@ -30,6 +30,21 @@ class ParticipantService implements IParticipantService {
       throw err;
     }
   }
+  async getParticipantByRoom(roomNumber: number): Promise<Participant | null> {
+    try {
+      const participant: Participant | null = await prisma.participant.findFirst(
+        {
+          where: {
+            roomNumber,
+          },
+        },
+      );
+      return participant;
+    } catch (err) {
+      console.log(err);
+      throw err
+    }
+  } 
 
   async createParticipant(
     participantId: string,

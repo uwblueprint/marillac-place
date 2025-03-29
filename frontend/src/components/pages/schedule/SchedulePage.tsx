@@ -39,8 +39,9 @@ const SchedulePage = (): React.ReactElement => {
   const [active, setActive] = useState<string>("List");
   const [dateRange, setDateRange] = useState("Jan 1 - 7");
   const [addBucksCardOpened, setAddBucksCardOpened] = useState(false);
-
+  const [currentRoom, setCurrentRoom] = useState(1);
   const calendarRef = useRef<CalendarApi | null>(null);
+  const [credit, setCredit] = useState(0);
 
   const handleNext = () => {
     console.log(scheduleType);
@@ -48,7 +49,9 @@ const SchedulePage = (): React.ReactElement => {
       calendarRef.current?.next();
     }
   };
-
+  useEffect(()=>{
+    console.log(currentRoom);
+  }, [currentRoom])
   const handlePrev = () => {
     if (scheduleType === "CALENDAR") {
       calendarRef.current?.prev();
@@ -67,9 +70,13 @@ const SchedulePage = (): React.ReactElement => {
       setScheduleData("Calendar");
     }
   }, [scheduleType]);
+  useEffect(() => {
+    console.log('CREDIT UPDATED IN PARENT:', credit);
+  }, [credit]);
 
   const selectOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     setActive(e.currentTarget.innerText);
+    console.log(e.currentTarget.innerText, 'hello ');
   };
   
   const formatTabs = (roomNums: number[]) => {
@@ -77,7 +84,7 @@ const SchedulePage = (): React.ReactElement => {
       <Tabs variant="horizontal" h="30px" mb={6}>
         <TabList pl={6}>
           {roomNums.map((room) => (
-            <Tab key={room} width="10%">
+            <Tab key={room} onClick={() => setCurrentRoom(room)} width="10%">
               Room {room}
             </Tab>
           ))}
@@ -149,7 +156,7 @@ const SchedulePage = (): React.ReactElement => {
             onClick={() => setAddBucksCardOpened(true)}
             mr={5}
           >
-            200 M-Bucks
+            {credit} M-Bucks
           </Button>
         </Flex>
       </Flex>
@@ -210,6 +217,9 @@ const SchedulePage = (): React.ReactElement => {
       </Box>
     </Flex>
     <AddMarillacBucks
+          currentRoom={currentRoom}
+          credit={credit}
+          setCredit={setCredit}
           isOpen={addBucksCardOpened}
           setIsOpen={setAddBucksCardOpened}
         />

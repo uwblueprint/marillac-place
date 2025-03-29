@@ -3,6 +3,7 @@ import { Participant } from "@prisma/client";
 interface IParticipantService {
   getAllParticipants(): Promise<Participant[]>;
   getParticipantById(participantId: string): Promise<Participant | null>;
+  getParticipantByRoom(roomNumber: number): Promise<Participant | null>;
   createParticipant(
     participantId: string,
     roomNumber: number,
