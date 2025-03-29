@@ -13,9 +13,9 @@ const NoteSection = () => {
             borderRadius="md"
         >
             <Text
-                fontSize="md"
-                fontWeight="500"
-                color="#0E373B"
+                fontSize="lg"
+                fontWeight="600"
+                color="#0C727E"
             >
                 Notes
             </Text>

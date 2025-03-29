@@ -13,9 +13,9 @@ const RoomSection = () => {
             borderRadius="md"
         >
             <Text
-                fontSize="md"
-                fontWeight="500"
-                color="#0E373B"
+                fontSize="lg"
+                fontWeight="600"
+                color="#0C727E"
             >
                 Rooms
             </Text>
