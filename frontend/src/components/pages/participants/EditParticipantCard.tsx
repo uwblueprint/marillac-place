@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Flex, Spinner, Text } from "@chakra-ui/react";
+import { Button, Flex, Input, Spinner, Text } from "@chakra-ui/react";
 
 import { useMutation, useQuery } from "@apollo/client";
 
@@ -123,7 +123,14 @@ const EditParticipantCard = ({
           <Flex mb="5px" color="gray.main" fontWeight="700">
             ID Number
           </Flex>
-          <Flex>{participants[selectedRoomNumber].participantId}</Flex>
+          <Input
+            variant="outline"
+            type="text"
+            isDisabled
+            value={participants[selectedRoomNumber].participantId}
+            borderWidth="2px"
+            borderColor="gray.300"
+          />
         </Flex>
 
         <FormInputField

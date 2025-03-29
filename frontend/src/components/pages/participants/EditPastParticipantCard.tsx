@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Flex, Spinner } from "@chakra-ui/react";
+import { Button, Flex, Input, Spinner } from "@chakra-ui/react";
 
 import { useMutation, useQuery } from "@apollo/client";
 
@@ -81,26 +81,35 @@ const EditPastParticipantCard = ({
           <Flex mb="5px" color="gray.main" fontWeight="700">
             ID Number
           </Flex>
-          <Flex>{selected.participantId}</Flex>
+          <Input
+            variant="outline"
+            type="text"
+            isDisabled
+            value={selected.participantId}
+            borderWidth="2px"
+            borderColor="gray.300"
+          />
         </Flex>
 
-        <FormInputField
-            label="Arrival Date"
-            value={arrivalDate}
-            type="date"
-            onChange={(e) => {
-                setArrivalDate(e.target.value);
-            }}
-        />
+        <Flex gap="15px">
+          <FormInputField
+              label="Arrival Date"
+              value={arrivalDate}
+              type="date"
+              onChange={(e) => {
+                  setArrivalDate(e.target.value);
+              }}
+          />
 
-        <FormInputField
-            label="Departure Date"
-            value={departureDate}
-            type="date"
-            onChange={(e) => {
-                setDepartureDate(e.target.value);
-            }}
-        />
+          <FormInputField
+              label="Departure Date"
+              value={departureDate}
+              type="date"
+              onChange={(e) => {
+                  setDepartureDate(e.target.value);
+              }}
+          />
+        </Flex>
 
         <Flex justifyContent="flex-end" mt="10px">
           <Button
