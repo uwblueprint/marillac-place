@@ -298,7 +298,7 @@ const CommonTable = ({
         </Table>
       </TableContainer>
 
-      {isPreviewModalOpen && selectedRow && (
+      {/* {isPreviewModalOpen && selectedRow && (
         <ModalContainer
           title={colData[0].value}
           close={() => setIsPreviewModalOpen(false)}
@@ -314,7 +314,7 @@ const CommonTable = ({
             ))}
           </Flex>
         </ModalContainer>
-      )}
+      )} */}
 
       <Box h="50px" position="relative" mt="20px">
         <Box position="absolute" w="250px" h="50px">

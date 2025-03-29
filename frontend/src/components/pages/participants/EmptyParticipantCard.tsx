@@ -10,36 +10,43 @@ const EmptyParticipantCard = ({roomNumber}: EmptyParticipantCardProps) => {
     const [addParticipant, setAddParticipant] = useState(false);
     return (
         <Flex 
-            w="17%"
-            h="150px"
+            w="19%"
+            h="45%"
             border="solid"
             borderColor="gray.200"
             borderRadius="5px"
             flexDir="column"
-            justifyContent="top"
+            justifyContent="center"
             alignItems="center"
-            marginBottom="20px"
+            position="relative"
+            pb="1.2%"
         >
-            <Flex w="full" justifyContent="center" p="5px" bg="#E3ECEB" fontSize="small" fontWeight="700">Room {roomNumber}</Flex>
-            <Flex
-                w="full"
-                h="full"
-                flexDir="column"
-                alignItems="center"
-                justifyContent="center"
-                gap="5px"
+            <Flex 
+                position="absolute"
+                top="0px"
+                w="100%" 
+                justifyContent="center" 
+                p="1.5%" 
+                borderBottom="solid" 
+                borderColor="gray.200" 
+                bg="#E3ECEB" 
+                fontSize="small" 
+                fontWeight="700"
             >
-                <Flex fontSize="xs">The room is empty.</Flex>
-                    <Button 
-                        size="xs" 
-                        bg="orange.500" 
-                        color="white" 
-                        mt="3px"
-                        onClick={() => setAddParticipant(true)}
-                    >
-                        Add Participant
-                    </Button>
-                </Flex>
+                Room {roomNumber}
+            </Flex>
+            <Flex fontSize="xs">This room is empty.</Flex>
+            <Button 
+                position="absolute"
+                bottom="10%"
+                size="xs" 
+                fontSize="xs"
+                bg="orange.500" 
+                color="white" 
+                onClick={() => setAddParticipant(true)}
+            >
+                Add Participant
+            </Button>
             {addParticipant && <AddParticipantCard roomNumber={roomNumber} close={() => setAddParticipant(false)} />}
         </Flex>
     )

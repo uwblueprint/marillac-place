@@ -114,19 +114,17 @@ const ParticipantsPage = (): React.ReactElement => {
         <Flex
           w="100%"
           h="100%"
-          marginTop="50px"
-          paddingY="30px"
-          paddingX="45px"
+          paddingY="15px"
+          paddingX="30px"
           flexDir="column"
-          justifyContent="space-between"
         >
           <Flex
             w="100%"
-            h="40%"
+            h="50%"
             flexDir="column"
-            marginBottom="30px"
+            paddingTop="50px"
           >
-            <Text fontSize="2xl" fontWeight="600" color="#15646E">Current Participants</Text>
+            <Text fontSize="xl" fontWeight="600" color="#15646E" mb="10px">Current Participants</Text>
             {getCurrentParticipantsLoading ? (
               <Spinner />
             ) : getCurrentParticipantsError ? (
@@ -134,10 +132,10 @@ const ParticipantsPage = (): React.ReactElement => {
             ) : getCurrentParticipantsData?.getCurrentParticipants ? (
               <Flex
                 w="100%"
-                alignItems="center"
+                h="100%"
+                alignItems="top"
                 justifyContent="space-between"
                 wrap="wrap"
-                position="relative"
               >
                 {(() => {
                   const currentParticipants: Record<string, any> = {};
@@ -164,9 +162,10 @@ const ParticipantsPage = (): React.ReactElement => {
           </Flex>
           <Flex
             w="100%"
+            h="50%"
             flexDir="column"
           >
-            <Text fontSize="2xl" fontWeight="600" color="#15646E">Past Participants</Text>
+            <Text fontSize="xl" fontWeight="600" color="#15646E" mb="10px">Past Participants</Text>
             {getPastParticipantsLoading ? (
               <Spinner />
             ) : getPastParticipantsError ? (
@@ -184,6 +183,7 @@ const ParticipantsPage = (): React.ReactElement => {
                   setSelected(row);
                   setEditPastParticipant(true);
                 }}
+                maxResults={4}
               />
             ) : (
               <Flex>No participants found.</Flex>
