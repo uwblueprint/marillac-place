@@ -1,4 +1,3 @@
-export {};
 import React, { useEffect, useState } from "react";
 import { Flex, Button } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@apollo/client";
@@ -14,25 +13,27 @@ import {
   CREATE_NOTIFICATION_GROUP,
   CREATE_ANNOUNCEMENT_GROUP,
   SEND_NOTIFICATION_TO_GROUP,
-//  DELETE_NOTIFICATION_GROUP,
-//  UPDATE_NOTIFICATION_BY_ID,
-//  DELETE_NOTIFICATION_BY_IDS,
-//  UPDATE_SEEN_NOTIFICATION,
+  //  DELETE_NOTIFICATION_GROUP,
+  //  UPDATE_NOTIFICATION_BY_ID,
+  //  DELETE_NOTIFICATION_BY_IDS,
+  //  UPDATE_SEEN_NOTIFICATION,
 } from "../../../gql/mutations";
 
 import {
-//  GET_NOTIFICATIONS_BY_IDS,
-//  GET_NOTIFCATION_BY_RESIDENT,
+  //  GET_NOTIFICATIONS_BY_IDS,
+  //  GET_NOTIFCATION_BY_RESIDENT,
   GET_ALL_GROUPS_AND_NOTIFICATIONS,
 } from "../../../gql/queries";
 
 import {
   NotificationResponse,
-//  NotificationUpdateRequest,
-//  NotificationCreateRequest,
+  //  NotificationUpdateRequest,
+  //  NotificationCreateRequest,
   NotificationGroupResponse,
-//  NotificationReceivedResponse,
+  //  NotificationReceivedResponse,
 } from "../../../APIClients/Types/NotificationType";
+
+export {};
 
 const AnnouncementsPage = (): React.ReactElement => {
   const [announcements, setAnnouncements] = useState<

@@ -1,4 +1,3 @@
-export {};
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import {
@@ -34,6 +33,8 @@ import {
   NotificationGroupResponse,
   NotificationResponse,
 } from "../../../APIClients/Types/NotificationType";
+
+export {};
 
 interface ProcessedGroupAnnouncements {
   all: NotificationGroupResponse[];

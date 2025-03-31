@@ -1,4 +1,3 @@
-export {};
 import React, { useState } from "react";
 import moment from "moment";
 import {
@@ -30,6 +29,8 @@ import {
   NotificationGroupResponse,
 } from "../../../APIClients/Types/NotificationType";
 import { SEND_NOTIFICATION_TO_GROUP } from "../../../APIClients/Mutations/NotificationMutations";
+
+export {};
 
 const MessageInput = ({
   handlePost,

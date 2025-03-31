@@ -32,15 +32,14 @@ export const GET_PARTICIPANT_BY_ID = gql`
   }
 `;
 
-
 export const GET_ALL_ANNOUNCEMENTS = gql`
   query getAllAnnouncements {
     getAllAnnouncements {
       announcementId
-      from     
-      to         
+      from
+      to
       createdAt
-      message 
+      message
     }
   }
 `;
