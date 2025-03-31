@@ -5,13 +5,13 @@ import IAnnouncementService from "../../services/interface/announcementInterface
 const announcementService: IAnnouncementService = new AnnouncementService();
 const announcementResolvers = {
   Query: {
-    getAllAnnouncements: async (): Promise<Announcement[]> => {
+    getAllAnnouncements: async (): Promise<Announcement[] | null> => {
       return announcementService.getAllAnnouncements();
     },
     getAnnouncementByRooms: async (
       _parent: undefined,
       { rooms }: { rooms: number[] },
-    ): Promise<Announcement[]> => {
+    ): Promise<Announcement[] | null> => {
       return announcementService.getAnnouncementByRooms(rooms);
     },
   },
