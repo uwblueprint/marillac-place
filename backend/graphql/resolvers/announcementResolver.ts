@@ -1,7 +1,8 @@
-import { Announcement } from "@prisma/client";
+import { Announcement, PriorityType, StaffType } from "@prisma/client";
 import AnnouncementService from "../../services/implementation/announcementImplementation";
+import IAnnouncementService from "../../services/interface/announcementInterface";
 
-const announcementService = new AnnouncementService();
+const announcementService: IAnnouncementService = new AnnouncementService();
 const announcementResolvers = {
   Query: {
     getAllAnnouncements: async (): Promise<Announcement[]> => {
@@ -26,10 +27,10 @@ const announcementResolvers = {
         message,
       }: {
         announcementId: number;
-        from: string;
+        from: StaffType;
         to: number[];
-        priority: string;
-        createdAt: string;
+        priority: PriorityType;
+        createdAt: Date;
         message: string;
       },
     ): Promise<boolean> => {
@@ -53,10 +54,10 @@ const announcementResolvers = {
         message,
       }: {
         announcementId: number;
-        from: string;
+        from: StaffType;
         to: number[];
-        priority: string;
-        createdAt: string;
+        priority: PriorityType;
+        createdAt: Date;
         message: string;
       },
     ): Promise<boolean> => {
