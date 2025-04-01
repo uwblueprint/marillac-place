@@ -61,3 +61,9 @@ model Task {
 
   @@map("tasks")
 }
+
+model Note {
+  noteId            Int           @id @default(autoincrement())
+  message           String
+  date              String
+}
