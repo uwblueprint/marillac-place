@@ -11,6 +11,7 @@ import {
   InputGroup,
   InputRightElement,
   Textarea,
+  Text,
 } from "@chakra-ui/react";
 import { FilePresent } from "@mui/icons-material";
 import colors from "../../../theme/colors";
@@ -92,20 +93,21 @@ const TaskModal = ({
   const [title, setTitle] = useState("");
   const [start, setStart] = useState<string | undefined>();
   const [end, setEnd] = useState<string | undefined>();
-  const [recurrenceFrequency, setRecurrenceFrequency] = useState<
-    DaysOfWeek[] | undefined[]
-  >([]);
-  const [errorSubmitting, setError] = useState("");
+  const [error, setError] = useState({
+    title: false,
+    recurrence: false,
+    consecutive: false,
+  });
   const isEditMode = !!task;
 
   const dayIdMap = [
-    { key: DaysOfWeek.MONDAY, short: "Mon" },
-    { key: DaysOfWeek.TUESDAY, short: "Tue" },
-    { key: DaysOfWeek.WEDNESDAY, short: "Wed" },
-    { key: DaysOfWeek.THURSDAY, short: "Thu" },
-    { key: DaysOfWeek.FRIDAY, short: "Fri" },
-    { key: DaysOfWeek.SATURDAY, short: "Sat" },
-    { key: DaysOfWeek.SUNDAY, short: "Sun" },
+    { key: DaysOfWeek.SUNDAY, short: "Sun", num: 0 },
+    { key: DaysOfWeek.MONDAY, short: "Mon", num: 1 },
+    { key: DaysOfWeek.TUESDAY, short: "Tue", num: 2 },
+    { key: DaysOfWeek.WEDNESDAY, short: "Wed", num: 3 },
+    { key: DaysOfWeek.THURSDAY, short: "Thu", num: 4 },
+    { key: DaysOfWeek.FRIDAY, short: "Fri", num: 5 },
+    { key: DaysOfWeek.SATURDAY, short: "Sat", num: 6 },
   ];
 
   useEffect(() => {
@@ -113,7 +115,6 @@ const TaskModal = ({
       return;
     }
     if (task) {
-      console.log("Current Task: ", task);
       setTaskType(task.type);
       setRecurrence(task.recurrencePreference);
       setCredit(task.credit);
@@ -129,29 +130,51 @@ const TaskModal = ({
           )
           .filter((short) => short !== undefined);
 
-        setRecurrenceFrequency(task.repeatDays || []);
         setSelectedDays(daysShort || []);
       } else {
         setSelectedDays(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
       }
       setTitle(task.name);
       setStart(task.start);
-    } else {
-      setTaskType(type as TaskTypeEnum);
-      setRecurrence(RecurrenceFrequency.EVERY_SELECTED_DAYS);
-      setCredit(0);
-      setDeduction(0);
-      setStart(undefined);
-      setEnd(undefined);
-      setSelectedDays([]);
-      setTitle("");
-      setComment(undefined);
     }
   }, [task, isOpen]);
 
+  const resetFormState = () => {
+    setTaskType(type as TaskTypeEnum);
+    setRecurrence(RecurrenceFrequency.EVERY_SELECTED_DAYS);
+    setCredit(0);
+    setDeduction(0);
+    setStart(undefined);
+    setEnd(undefined);
+    setSelectedDays([]);
+    setTitle("");
+    setComment(undefined);
+    setError((prevError) => ({ ...prevError, consecutive: false }));
+  };
+
+  const checkConsecutive = () => {
+    if (selectedDays && selectedDays.length > 1) {
+      const selectedDaysInfo = dayIdMap.filter((d) =>
+        selectedDays.includes(d.short),
+      );
+
+      for (let i = 1; i < selectedDaysInfo.length; i += 1) {
+        if (selectedDaysInfo[i].num - 1 !== selectedDaysInfo[i - 1].num) {
+          setError((prevError) => ({ ...prevError, consecutive: true }));
+          return false;
+        }
+      }
+
+      setError((prevError) => ({ ...prevError, consecutive: false }));
+      return true;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
+    setError((prevError) => ({ ...prevError, title: false }));
     if (title === "") {
-      console.log("Title is required");
+      setError((prevError) => ({ ...prevError, title: true }));
       return;
     }
     if (recurrence) {
@@ -159,7 +182,12 @@ const TaskModal = ({
         console.log("Days are required");
         return;
       }
+      if (recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS) {
+        const isConsecutive = checkConsecutive();
+        if (!isConsecutive) return;
+      }
     }
+
     const taskRequest: TaskRequest = {
       type: taskType as TaskTypeEnum,
       name: title,
@@ -177,18 +205,7 @@ const TaskModal = ({
     };
     handleSaveClick(task?.taskId.toString() || "", taskRequest);
     setIsOpen(false);
-  };
-
-  const resetFormState = () => {
-    setTaskType(type as TaskTypeEnum);
-    setRecurrence(RecurrenceFrequency.EVERY_SELECTED_DAYS);
-    setCredit(0);
-    setDeduction(0);
-    setStart(undefined);
-    setEnd(undefined);
-    setSelectedDays([]);
-    setTitle("");
-    setComment(undefined);
+    resetFormState();
   };
 
   const selectDay = (day: string) => {
@@ -199,20 +216,21 @@ const TaskModal = ({
     }
   };
 
-  useEffect(() => {
+  const resetValues = () => {
     if (recurrence === RecurrenceFrequency.DAILY)
       setSelectedDays(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
     else setSelectedDays([]);
-  }, [recurrence]);
+  };
 
   return (
     <ModalContainer
       title={task ? task.name : "Assign Task"}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      onDelete={() =>
-        handleDeleteTask && task ? handleDeleteTask(task.taskId) : null
-      }
+      onDelete={() => {
+        if (handleDeleteTask && task) handleDeleteTask(task.taskId);
+        setIsOpen(false);
+      }}
     >
       <Flex flexDir="column" gap="20px">
         {/* Task Type Selection */}
@@ -235,13 +253,16 @@ const TaskModal = ({
           )}
         </FormControl>
 
-        {/* Task Name Input */}
-        <FormInputField
-          label="Task Name"
-          value={title}
-          type="text"
-          onChange={(e: any) => setTitle(e.target.value)}
-        />
+        <FormControl>
+          {/* Task Name Input */}
+          <FormInputField
+            label="Task Name"
+            value={title}
+            type="text"
+            onChange={(e: any) => setTitle(e.target.value)}
+            error={error.title ? "Title Required" : undefined}
+          />
+        </FormControl>
 
         {/* Recurrence Frequency Selection */}
         {taskType !== TaskTypeEnum.CUSTOM && (
@@ -253,13 +274,22 @@ const TaskModal = ({
             <RadioGroup
               variant="primary"
               value={recurrence}
-              onChange={(value) => setRecurrence(value as RecurrenceFrequency)}
+              onChange={(value) => {
+                setRecurrence(value as RecurrenceFrequency);
+                resetValues();
+              }}
               style={{ flexDirection: "column", display: "flex" }}
             >
               <Radio value="DAILY">Daily</Radio>
               <Radio value="EVERY_SELECTED_DAYS">Every Selected Days</Radio>
               <Radio value="ANY_SELECTED_DAYS">Any Selected Days</Radio>
             </RadioGroup>
+
+            {error.consecutive && (
+              <Text color={colors.red.main}>
+                Days must be consecutive for Any Selected Days
+              </Text>
+            )}
 
             <Flex flexDir="row" gap={2}>
               {days.map((day, i) => (

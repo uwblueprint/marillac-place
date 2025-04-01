@@ -61,7 +61,15 @@ const TasksPage = (): React.ReactElement => {
     SATURDAY: "Sat",
     SUNDAY: "Sun",
   };
-
+  const daysLongToShort = [
+    { long: "MONDAY", short: "M" },
+    { long: "TUESDAY", short: "Tu" },
+    { long: "WEDNESDAY", short: "W" },
+    { long: "THURSDAY", short: "Th" },
+    { long: "FRIDAY", short: "F" },
+    { long: "SATURDAY", short: "Sa" },
+    { long: "SUNDAY", short: "Su" },
+  ];
   const { loading, error, data, refetch } = useQuery(GET_TASKS_BY_TYPE, {
     variables: { type: taskType },
   });
@@ -188,13 +196,9 @@ const TasksPage = (): React.ReactElement => {
           let assignedDaysText = "";
           let repeatedDayShort = [];
 
-          repeatedDayShort = task.repeatDays.map(
-            (day: keyof typeof dayShortMap) =>
-              dayShortMap[day as keyof typeof dayShortMap],
-          );
-
-          console.log(task.recurrencePreference);
-          console.log(repeatedDayShort.join(", "));
+          repeatedDayShort = daysLongToShort
+            .filter((day) => task.repeatDays.includes(day.long))
+            .map((day) => day.short);
 
           if (task.type === "CUSTOM")
             assignedDaysText = "Participant Preference";
@@ -215,13 +219,7 @@ const TasksPage = (): React.ReactElement => {
         }),
       );
     }
-  }, [taskType, data, refetch]);
-
-  const formattedTaskData = taskData.map((task) => ({
-    ...task,
-    end: task.end ? task.end : "Never",
-    credit: `$ ${task.credit}`,
-  }));
+  }, [taskType, data]);
 
   const taskToAdd: TaskRequest = {
     type: TaskTypeEnum.OPTIONAL,

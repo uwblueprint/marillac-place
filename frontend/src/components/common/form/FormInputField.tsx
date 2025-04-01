@@ -47,8 +47,14 @@ const FormInputField = ({
 
       <InputGroup>
         {leftElement && (
-          <InputLeftElement height="34px" pointerEvents="none" color="black">
-            <Flex>{leftElement}</Flex>
+          <InputLeftElement height="34px" color="black">
+            <Flex
+              alignItems="center"
+              textAlign="center"
+              justifyContent="center"
+            >
+              {leftElement}
+            </Flex>
           </InputLeftElement>
         )}
 

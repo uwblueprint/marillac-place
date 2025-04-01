@@ -33,7 +33,6 @@ export interface TableData {
 export type ColumnInfoTypes = {
   header: string;
   key: string;
-  // render?: (row: TableData) => React.ReactNode;
 };
 
 type Props = {
@@ -92,7 +91,6 @@ const CommonTable = ({
   interface ColumnInfo {
     header: string;
     value: string;
-    // render?: (row: TableData) => React.ReactNode;
   }
 
   const colData: ColumnInfo[] = columnInfo.map((col, index) => {
@@ -281,9 +279,6 @@ const CommonTable = ({
                         key={i}
                       >
                         {String(row[column.key])}
-                        {/* {column.render
-                          ? column.render(row)
-                          : String(row[column.key])} */}
                       </Td>
                     ))}
                     <Td
