@@ -77,7 +77,7 @@ const TaskModal = ({
   handleSaveClick,
   type,
 }: Props): React.ReactElement => {
-  const [taskType, setTaskType] = useState<TaskTypeEnum>(TaskTypeEnum.OPTIONAL);
+  const [taskType, setTaskType] = useState<TaskTypeEnum>(type as TaskTypeEnum);
   const [recurrence, setRecurrence] = useState<RecurrenceFrequency>(
     RecurrenceFrequency.EVERY_SELECTED_DAYS,
   );
@@ -178,7 +178,7 @@ const TaskModal = ({
       return;
     }
     if (recurrence) {
-      if (selectedDays.length === 0) {
+      if (selectedDays.length === 0 && recurrence !== RecurrenceFrequency.DAILY) {
         console.log("Days are required");
         return;
       }
@@ -230,6 +230,7 @@ const TaskModal = ({
       onDelete={() => {
         if (handleDeleteTask && task) handleDeleteTask(task.taskId);
         setIsOpen(false);
+        resetFormState();
       }}
     >
       <Flex flexDir="column" gap="20px">

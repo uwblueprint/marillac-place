@@ -9,6 +9,7 @@ import {
   Tabs,
   TabList,
   Tab,
+  Text,
   Icon,
 } from "@chakra-ui/react";
 import { Add, Search, FileDownloadOutlined } from "@mui/icons-material";
@@ -36,6 +37,7 @@ import {
   GET_TASK_BY_ID,
   GET_TASKS_BY_RECURRENCE_FREQUENCY,
 } from "../../../gql/queries";
+import CheckmarkSvg from "../../../assets/svg/CheckmarkSvg";
 
 const TasksPage = (): React.ReactElement => {
   const [requiredTasks, setRequiredTasks] = useState<Task[]>([]);
@@ -44,7 +46,7 @@ const TasksPage = (): React.ReactElement => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
-  const [taskType, setTaskType] = useState<TaskType>("REQUIRED");
+  const [taskType, setTaskType] = useState<TaskType>(TaskTypeEnum.REQUIRED);
   const [taskData, setTaskData] = useState<TableData[]>([]);
   const [storedTaskData, setStoredTaskData] = useState<TableData[]>([]);
   const [taskDataColumns, setTaskDataColumns] = useState<ColumnInfoTypes[]>([]);
@@ -52,15 +54,6 @@ const TasksPage = (): React.ReactElement => {
   const [taskFilter, setTaskFilter] = useState<string>("");
   const [modalTask, setModalTask] = useState<TaskResponse | null>(null);
 
-  const dayShortMap = {
-    MONDAY: "M",
-    TUESDAY: "Tue",
-    WEDNESDAY: "W",
-    THURSDAY: "Thu",
-    FRIDAY: "F",
-    SATURDAY: "Sat",
-    SUNDAY: "Sun",
-  };
   const daysLongToShort = [
     { long: "MONDAY", short: "M" },
     { long: "TUESDAY", short: "Tu" },
@@ -104,6 +97,15 @@ const TasksPage = (): React.ReactElement => {
   //   return tasksByRecurrenceFrequencyData;
   // }, [tasksByRecurrenceFrequencyData]);
 
+  const [notification, setNotification] = useState(localStorage.getItem("notification"));
+  console.log(notification);
+  if (notification) {
+    setTimeout(() => {
+      localStorage.setItem('notification', "");
+      setNotification("");
+    }, 3000);
+  }
+
   const handleAddTask = async (task: TaskRequest) => {
     try {
       await createTask({
@@ -139,17 +141,22 @@ const TasksPage = (): React.ReactElement => {
   const handleSaveClick = async (taskId: string, task: TaskRequest) => {
     if (taskId === "") {
       await handleAddTask(task);
+      localStorage.setItem("notification", `Success: "${task.name}" added.`);
     } else {
       console.log(task);
       await handleUpdateTask(taskId, task);
+      localStorage.setItem("notification", `Success: "${task.name}" updated.`);
     }
     refetch();
+    window.location.reload();
   };
 
   const handleDeleteTask = async (taskId: number) => {
     try {
       await deleteTask({ variables: { taskId } });
+      localStorage.setItem("notification", "Deleted task.");
       await refetch();
+      window.location.reload();
     } catch (e) {
       console.log(e);
     }
@@ -163,8 +170,8 @@ const TasksPage = (): React.ReactElement => {
   }, []);
 
   useEffect(() => {
-    if (tabIndex === 0) setTaskType("REQUIRED");
-    else setTaskType("OPTIONAL");
+    if (tabIndex === 0) setTaskType(TaskTypeEnum.REQUIRED);
+    else setTaskType(TaskTypeEnum.OPTIONAL);
     refetch();
   }, [tabIndex]);
 
@@ -184,7 +191,7 @@ const TasksPage = (): React.ReactElement => {
 
   useEffect(() => {
     if (data) {
-      if (taskType === "REQUIRED") {
+      if (taskType === TaskTypeEnum.REQUIRED) {
         setRequiredTasks(data.getTasksByType);
         setTaskDataColumns(tasksColumnTypes);
       } else {
@@ -221,21 +228,51 @@ const TasksPage = (): React.ReactElement => {
     }
   }, [taskType, data]);
 
-  const taskToAdd: TaskRequest = {
-    type: TaskTypeEnum.OPTIONAL,
-    name: "Test Front End Add",
-    recurrencePreference: RecurrenceFrequency.EVERY_SELECTED_DAYS,
-    repeatDays: [DaysOfWeek.MONDAY, DaysOfWeek.FRIDAY],
-    timePreference: TimeOption.ANYTIME,
-    credit: 5,
-    deduction: 5,
-    start: "Monday, March 10, 2025",
-    end: "Saturday, March 16, 2026",
-    comment: "test",
-  };
-
   return (
     <Flex>
+            {notification && notification !== "Deleted task."  && (
+        <Flex
+          position="fixed"
+          top="30px"
+          left="50%"
+          transform="translateX(-50%)"
+          border="solid"
+          borderColor="#259E29"
+          zIndex="1000"
+          paddingY="5px"
+          paddingX="15px"
+          justifyContent="center"
+          alignItems="center"
+          gap="10px"
+          boxShadow="lg"
+          bg="#EAFFEB"
+        >
+          <CheckmarkSvg />
+          <Text color="
+          #259E29" fontSize="xl" fontWeight="500" mb="0px">{notification}</Text>
+        </Flex>
+            )}
+            {notification && notification === "Deleted task."  && (
+        <Flex
+          position="fixed"
+          top="30px"
+          left="50%"
+          transform="translateX(-50%)"
+          border="solid"
+          borderColor="#B21D2F"
+          zIndex="1000"
+          paddingY="5px"
+          paddingX="15px"
+          justifyContent="center"
+          alignItems="center"
+          gap="10px"
+          boxShadow="lg"
+          bg="#FEF1F2"
+        >
+          <Text color="
+          #B21D2F" fontSize="xl" fontWeight="500" mb="0px">{notification}</Text>
+        </Flex>
+            )}
       <SideBar />
       <Flex flexDir="column" flexGrow={1}>
         <Tabs
