@@ -35,6 +35,7 @@ const dataModels = gql`
     noteId: Int!
     message: String!
     date: String!
+    formattedDate: String!
   }
 `;
 

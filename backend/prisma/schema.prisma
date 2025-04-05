@@ -66,4 +66,7 @@ model Note {
   noteId            Int           @id @default(autoincrement())
   message           String
   date              String
+  formattedDate     String
+
+  @@map("notes")
 }

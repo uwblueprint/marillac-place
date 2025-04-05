@@ -22,7 +22,7 @@ const resolverTypes = gql`
       departure: String
       password: String
     ): Boolean
-    createNote(message: String!, date: String!): Boolean
+    createNote(message: String!, date: String!, formattedDate: String!): Boolean
     deleteNote(noteId: Int!): Boolean
   }
 `;
