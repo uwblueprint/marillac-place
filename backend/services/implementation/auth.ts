@@ -13,19 +13,18 @@ class AuthService implements IAuthService {
     role: string,
     encryptedPassword: string,
   ): Promise<{ type: string; accessToken: string }> {
-    const storedPasswordHash = "abc123";
-
+    let storedPasswordHash = "";
     // Decrypt the password
     // const bytes = CryptoJS.AES.decrypt(encryptedPassword, 'secret-key');
     // const password = bytes.toString(CryptoJS.enc.Utf8);
 
-    // if (role === "admin_staff") {
-    //   storedPasswordHash = process.env.ADMIN_STAFF_PASSWORD_HASH;
-    // } else if (role === "release_staff") {
-    //   storedPasswordHash = process.env.RELEASE_STAFF_PASSWORD_HASH;
-    // } else {
-    //   throw new AuthenticationError("Invalid role");
-    // }
+    if (role === "admin_staff") {
+      storedPasswordHash = process.env.ADMIN_STAFF_PASSWORD_HASH ?? "";
+    } else if (role === "release_staff") {
+      storedPasswordHash = process.env.RELEASE_STAFF_PASSWORD_HASH ?? "";
+    } else {
+      throw new AuthenticationError("Invalid role");
+    }
 
     // const isPasswordValid = await bcrypt.compare(
     //   encryptedPassword,
@@ -38,7 +37,11 @@ class AuthService implements IAuthService {
       throw new AuthenticationError("Invalid password");
     }
 
-    const jwtSecretKey = process.env.JWT_SECRET;
+    const jwtSecretKey = process.env.JWT_SECRET ?? "";
+
+    if (!jwtSecretKey) {
+      throw new Error("JWT_SECRET is not defined");
+    }
 
     const token = jwt.sign(
       { role, password: storedPasswordHash },
