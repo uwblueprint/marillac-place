@@ -42,6 +42,7 @@ import CheckmarkSvg from "../../../assets/svg/CheckmarkSvg";
 const TasksPage = (): React.ReactElement => {
   const [requiredTasks, setRequiredTasks] = useState<Task[]>([]);
   const [optionalTasks, setOptionalTasks] = useState<Task[]>([]);
+  const [customTasks, setCustomTasks] = useState<Task[]>([]);
   const [choreTasks, setChoreTasks] = useState<ChoreTask[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
@@ -65,6 +66,16 @@ const TasksPage = (): React.ReactElement => {
   ];
   const { loading, error, data, refetch } = useQuery(GET_TASKS_BY_TYPE, {
     variables: { type: taskType },
+  });
+
+  const { data: optionalTasksData } = useQuery(GET_TASKS_BY_TYPE, {
+    variables: { type: TaskTypeEnum.OPTIONAL },
+    skip: taskType !== TaskTypeEnum.OPTIONAL,
+  });
+  
+  const { data: customTasksData } = useQuery(GET_TASKS_BY_TYPE, {
+    variables: { type: TaskTypeEnum.CUSTOM },
+    skip: taskType !== TaskTypeEnum.OPTIONAL,
   });
 
   const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
@@ -163,9 +174,41 @@ const TasksPage = (): React.ReactElement => {
     refetch();
   };
 
+  const formatTaskData = (tasks: Task[]): TableData[] => {
+    return tasks.map((task: any) => {
+      let assignedDaysText = "";
+      const repeatedDayShort = daysLongToShort
+        .filter((day) => task.repeatDays.includes(day.long))
+        .map((day) => day.short);
+  
+      if (task.type === "CUSTOM")
+        assignedDaysText = "Participant Preference";
+      else if (task.recurrencePreference === "DAILY")
+        assignedDaysText = "Daily";
+      else if (task.recurrencePreference === "EVERY_SELECTED_DAYS")
+        assignedDaysText = `${repeatedDayShort.join(", ")}.`;
+      else if (task.recurrencePreference === "ANY_SELECTED_DAYS")
+        assignedDaysText = `Weekly on ${repeatedDayShort.join(", ")}.`;
+  
+      return {
+        ...task,
+        name: task.name,
+        repeatDaysString: assignedDaysText,
+        end: task.type === "CUSTOM"
+        ? "Participant Preference"
+        : task.end
+          ? task.end
+          : "Anytime",
+        creditString: `$${task.credit}`,
+        start: task.start ? task.start : "Anytime"
+      };
+    });
+  };
+  
+
   useEffect(() => {
     setRequiredTasks(requiredTasks);
-    setOptionalTasks(optionalTasks);
+    setOptionalTasks([...optionalTasks, ...customTasks]);
     setChoreTasks(choreTasks);
   }, []);
 
@@ -190,44 +233,22 @@ const TasksPage = (): React.ReactElement => {
   }, [taskFilter, storedTaskData, taskData]);
 
   useEffect(() => {
-    if (data) {
-      if (taskType === TaskTypeEnum.REQUIRED) {
-        setRequiredTasks(data.getTasksByType);
-        setTaskDataColumns(tasksColumnTypes);
-      } else {
-        setOptionalTasks(data.getTasksByType);
-        setTaskDataColumns(tasksColumnTypes);
-      }
-      setStoredTaskData(
-        data.getTasksByType.map((task: any) => {
-          let assignedDaysText = "";
-          let repeatedDayShort = [];
-
-          repeatedDayShort = daysLongToShort
-            .filter((day) => task.repeatDays.includes(day.long))
-            .map((day) => day.short);
-
-          if (task.type === "CUSTOM")
-            assignedDaysText = "Participant Preference";
-          else if (task.recurrencePreference === "DAILY")
-            assignedDaysText = "Anytime";
-          else if (task.recurrencePreference === "EVERY_SELECTED_DAYS")
-            assignedDaysText = `${repeatedDayShort.join(", ")}.`;
-          else if (task.recurrencePreference === "ANY_SELECTED_DAYS")
-            assignedDaysText = `Weekly on ${repeatedDayShort.join(", ")}.`;
-
-          return {
-            ...task,
-            name: task.name,
-            repeatDaysString: assignedDaysText,
-            end: task.end ? task.end : "Never",
-            creditString: `$${task.credit}`,
-          };
-        }),
-      );
+    if (taskType === TaskTypeEnum.REQUIRED && data) {
+      setRequiredTasks(data.getTasksByType);
+      setTaskDataColumns(tasksColumnTypes);
+      setStoredTaskData(formatTaskData(data.getTasksByType));
+    } else if (taskType === TaskTypeEnum.OPTIONAL && optionalTasksData && customTasksData) {
+      const optional = optionalTasksData.getTasksByType;
+      const custom = customTasksData.getTasksByType;
+  
+      const merged = [...optional, ...custom];
+      setOptionalTasks(optional);
+      setCustomTasks(custom);
+      setTaskDataColumns(tasksColumnTypes);
+      setStoredTaskData(formatTaskData(merged));
     }
-  }, [taskType, data]);
-
+  }, [taskType, data, optionalTasksData, customTasksData]);
+  
   return (
     <Flex>
             {notification && notification !== "Deleted task."  && (

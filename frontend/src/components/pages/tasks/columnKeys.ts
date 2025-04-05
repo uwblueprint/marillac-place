@@ -2,16 +2,16 @@ import { ColumnInfoTypes } from "../../common/CommonTable";
 
 export const tasksColumnTypes: ColumnInfoTypes[] = [
   {
-    header: "Task Name",
+    header: "Name",
     key: "name",
   },
   {
-    header: "Recurrence",
+    header: "Assigned Days",
     key: "repeatDaysString",
   },
   {
-    header: "End Date",
-    key: "end",
+    header: "Assigned Times",
+    key: "start",
   },
   {
     header: "Marillac Bucks",

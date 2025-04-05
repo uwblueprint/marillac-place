@@ -177,7 +177,7 @@ const TaskModal = ({
       setError((prevError) => ({ ...prevError, title: true }));
       return;
     }
-    if (recurrence) {
+    if (recurrence && taskType !== TaskTypeEnum.CUSTOM) {
       if (selectedDays.length === 0 && recurrence !== RecurrenceFrequency.DAILY) {
         console.log("Days are required");
         return;
