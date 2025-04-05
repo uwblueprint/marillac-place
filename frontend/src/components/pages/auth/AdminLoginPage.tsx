@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
-// import CryptoJS from "crypto-js";
 import {
   Select,
   Button,
@@ -12,8 +11,6 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import logo from "../../../assets/Marillac-Place-Logo.webp";
-
-// const CryptoJS = require("crypto-js");
 
 const LOGIN = gql`
   mutation Login($encryptedPassword: String!, $role: String!) {
@@ -26,7 +23,7 @@ const LOGIN = gql`
 
 const isTokenValid = (token: string | null): boolean => {
   if (!token) return false;
-  const payload = JSON.parse(atob(token.split('.')[1])); // Decode the JWT payload
+  const payload = JSON.parse(atob(token.split(".")[1])); // Decode the JWT payload
   const currentTime = Date.now() / 1000; // Current time in seconds
   return payload.exp > currentTime; // Check if the token is expired
 };
@@ -72,14 +69,8 @@ const LoginPage = (): React.ReactElement => {
       setError("Please fill in all fields.");
       return;
     }
-    const encryptedPassword = password;
-    // // Encrypt the password
-    // const encryptedPassword = CryptoJS.AES.encrypt(
-    //   password,
-    //   "your-secret-key",
-    // ).toString();
 
-    login({ variables: { role, encryptedPassword } });
+    login({ variables: { role, password } });
   };
 
   return (
