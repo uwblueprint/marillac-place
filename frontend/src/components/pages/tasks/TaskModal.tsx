@@ -30,12 +30,6 @@ import {
   TimeOption,
 } from "../../../types/TaskTypes";
 import NumberInput from "./NumberInput";
-// import {
-//   TaskRequest,
-//   TaskTypeEnum,
-//   RecurrenceFrequency,
-//   DaysOfWeek,
-// } from "../../../APIClients/Types/TaskType";
 
 type Props = {
   isOpen: boolean;
@@ -227,11 +221,6 @@ const TaskModal = ({
       title={task ? task.name : "Assign Task"}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      onDelete={() => {
-        if (handleDeleteTask && task) handleDeleteTask(task.taskId);
-        setIsOpen(false);
-        resetFormState();
-      }}
     >
       <Flex flexDir="column" gap="20px">
         {/* Task Type Selection */}
