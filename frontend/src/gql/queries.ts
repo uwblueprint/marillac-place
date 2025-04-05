@@ -45,7 +45,7 @@ export const GET_NOTES = gql`
     getNotes {
       noteId
       message
-      date
+      formattedDate
     }
   }
 `;

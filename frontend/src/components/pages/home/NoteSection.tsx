@@ -43,7 +43,8 @@ const NoteSection = () => {
       await createNote({
         variables: {
           message: newNote,
-          date: formatted,
+          date: now.toISOString(),
+          formattedDate: formatted,
         },
       });
       window.location.reload();
@@ -158,7 +159,7 @@ const NoteSection = () => {
                     alignItems="flex-end"
                   >
                     <Flex fontSize="sm" color="gray.500">
-                      {note.date}
+                      {note.formattedDate}
                     </Flex>
                     <Flex
                       onClick={() => dismissNote(note.noteId)}
