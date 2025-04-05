@@ -108,11 +108,12 @@ const TasksPage = (): React.ReactElement => {
   //   return tasksByRecurrenceFrequencyData;
   // }, [tasksByRecurrenceFrequencyData]);
 
-  const [notification, setNotification] = useState(localStorage.getItem("notification"));
-  console.log(notification);
+  const [notification, setNotification] = useState(
+    localStorage.getItem("notification"),
+  );
   if (notification) {
     setTimeout(() => {
-      localStorage.setItem('notification', "");
+      localStorage.setItem("notification", "");
       setNotification("");
     }, 3000);
   }
@@ -248,10 +249,37 @@ const TasksPage = (): React.ReactElement => {
       setStoredTaskData(formatTaskData(merged));
     }
   }, [taskType, data, optionalTasksData, customTasksData]);
-  
+
+  const exportCSV = () => {
+    const headers = [
+      'Task Name', 'Recurrence', 'End Date', 'Marillac Bucks'
+    ];
+    const csvContent = [
+      headers.join(','),
+      ...taskData.map(task => {
+      return [
+          task.name,
+          task.repeatDaysString,
+          task.end ? task.end : "Never",
+          task.credit,
+      ].join(',');
+      })
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+
+    link.setAttribute('download', `tasks.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <Flex>
-            {notification && notification !== "Deleted task."  && (
+      {notification && notification !== "Deleted task." && (
         <Flex
           position="fixed"
           top="30px"
@@ -269,11 +297,18 @@ const TasksPage = (): React.ReactElement => {
           bg="#EAFFEB"
         >
           <CheckmarkSvg />
-          <Text color="
-          #259E29" fontSize="xl" fontWeight="500" mb="0px">{notification}</Text>
+          <Text
+            color="
+          #259E29"
+            fontSize="xl"
+            fontWeight="500"
+            mb="0px"
+          >
+            {notification}
+          </Text>
         </Flex>
-            )}
-            {notification && notification === "Deleted task."  && (
+      )}
+      {notification && notification === "Deleted task." && (
         <Flex
           position="fixed"
           top="30px"
@@ -290,10 +325,17 @@ const TasksPage = (): React.ReactElement => {
           boxShadow="lg"
           bg="#FEF1F2"
         >
-          <Text color="
-          #B21D2F" fontSize="xl" fontWeight="500" mb="0px">{notification}</Text>
+          <Text
+            color="
+          #B21D2F"
+            fontSize="xl"
+            fontWeight="500"
+            mb="0px"
+          >
+            {notification}
+          </Text>
         </Flex>
-            )}
+      )}
       <SideBar />
       <Flex flexDir="column" flexGrow={1}>
         <Tabs
@@ -327,10 +369,7 @@ const TasksPage = (): React.ReactElement => {
                 variant="secondary"
                 leftIcon={<Icon as={FileDownloadOutlined} />}
                 size="sm"
-                onClick={() => {
-                  setModalTask(null);
-                  setIsModalOpen(true);
-                }}
+                onClick={exportCSV}
               >
                 Export
               </Button>
@@ -359,6 +398,9 @@ const TasksPage = (): React.ReactElement => {
                 setModalTask(row);
                 setIsModalOpen(true);
               }}
+              onDelete={(row: any) => {
+                handleDeleteTask(row.taskId);
+              }}
               previewModal={false}
             />
           )}
@@ -367,7 +409,6 @@ const TasksPage = (): React.ReactElement => {
             setIsOpen={setIsModalOpen}
             task={modalTask}
             handleSaveClick={handleSaveClick}
-            handleDeleteTask={modalTask ? handleDeleteTask : undefined}
             type={taskType}
           />
         </Flex>

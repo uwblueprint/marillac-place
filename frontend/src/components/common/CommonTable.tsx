@@ -293,6 +293,10 @@ const CommonTable = ({
                       />
                       {onDelete && (
                         <Icon
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(row);
+                          }}
                           as={DeleteOutlinedIcon}
                           color={colors.red.main}
                           _hover={{ cursor: "pointer" }}
