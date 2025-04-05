@@ -1,12 +1,7 @@
 import { AuthenticationError } from "apollo-server-express";
 import { IAuthService } from "../interface/auth";
 // import jwt from "jsonwebtoken";
-// import * as jwt from "jsonwebtoken";
 const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcrypt");
-// const CryptoJS = require("crypto-js");
-// import bcrypt from "bcrypt";
-// import CryptoJS from "crypto-js";
 
 class AuthService implements IAuthService {
   async login(
@@ -14,9 +9,6 @@ class AuthService implements IAuthService {
     encryptedPassword: string,
   ): Promise<{ type: string; accessToken: string }> {
     let storedPasswordHash = "";
-    // Decrypt the password
-    // const bytes = CryptoJS.AES.decrypt(encryptedPassword, 'secret-key');
-    // const password = bytes.toString(CryptoJS.enc.Utf8);
 
     if (role === "admin_staff") {
       storedPasswordHash = process.env.ADMIN_STAFF_PASSWORD_HASH ?? "";
@@ -25,11 +17,6 @@ class AuthService implements IAuthService {
     } else {
       throw new AuthenticationError("Invalid role");
     }
-
-    // const isPasswordValid = await bcrypt.compare(
-    //   encryptedPassword,
-    //   storedPasswordHash,
-    // );
 
     const isPasswordValid = encryptedPassword === storedPasswordHash;
 
