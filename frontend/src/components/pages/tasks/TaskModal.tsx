@@ -151,14 +151,12 @@ const TaskModal = ({
       const selectedDaysInfo = dayIdMap.filter((d) =>
         selectedDays.includes(d.short),
       );
-
       for (let i = 1; i < selectedDaysInfo.length; i += 1) {
         if (selectedDaysInfo[i].num - 1 !== selectedDaysInfo[i - 1].num) {
           setError((prevError) => ({ ...prevError, consecutive: true }));
           return false;
         }
       }
-
       setError((prevError) => ({ ...prevError, consecutive: false }));
       return true;
     }
@@ -172,8 +170,10 @@ const TaskModal = ({
       return;
     }
     if (recurrence && taskType !== TaskTypeEnum.CUSTOM) {
-      if (selectedDays.length === 0 && recurrence !== RecurrenceFrequency.DAILY) {
-        console.log("Days are required");
+      if (
+        selectedDays.length === 0 &&
+        recurrence !== RecurrenceFrequency.DAILY
+      ) {
         return;
       }
       if (recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS) {

@@ -19,24 +19,17 @@ import {
   TaskType,
   Task,
   ChoreTask,
-  DaysOfWeek,
   TaskTypeEnum,
   TaskResponse,
   TaskRequest,
-  RecurrenceFrequency,
-  TimeOption,
 } from "../../../types/TaskTypes";
 import CommonTable, {
   ColumnInfoTypes,
   TableData,
 } from "../../common/CommonTable";
-import { tasksColumnTypes, choreTasksColumnTypes } from "./columnKeys";
+import { tasksColumnTypes } from "./columnKeys";
 import { CREATE_TASK, UPDATE_TASK, DELETE_TASK } from "../../../gql/mutations";
-import {
-  GET_TASKS_BY_TYPE,
-  GET_TASK_BY_ID,
-  GET_TASKS_BY_RECURRENCE_FREQUENCY,
-} from "../../../gql/queries";
+import { GET_TASKS_BY_TYPE } from "../../../gql/queries";
 import CheckmarkSvg from "../../../assets/svg/CheckmarkSvg";
 
 const TasksPage = (): React.ReactElement => {
@@ -68,15 +61,20 @@ const TasksPage = (): React.ReactElement => {
     variables: { type: taskType },
   });
 
-  const { data: optionalTasksData } = useQuery(GET_TASKS_BY_TYPE, {
-    variables: { type: TaskTypeEnum.OPTIONAL },
-    skip: taskType !== TaskTypeEnum.OPTIONAL,
-  });
-  
-  const { data: customTasksData } = useQuery(GET_TASKS_BY_TYPE, {
-    variables: { type: TaskTypeEnum.CUSTOM },
-    skip: taskType !== TaskTypeEnum.OPTIONAL,
-  });
+  const { data: optionalTasksData, refetch: refetchOptional } = useQuery(
+    GET_TASKS_BY_TYPE,
+    {
+      variables: { type: TaskTypeEnum.OPTIONAL },
+      skip: taskType !== TaskTypeEnum.OPTIONAL,
+    },
+  );
+
+  const { data: customTasksData, refetch: refetchCustom } = useQuery(
+    GET_TASKS_BY_TYPE,
+    {
+      variables: { type: TaskTypeEnum.CUSTOM },
+    },
+  );
 
   const [createTask] = useMutation<{ createTask: TaskResponse }>(CREATE_TASK);
 
@@ -85,28 +83,6 @@ const TasksPage = (): React.ReactElement => {
   }>(UPDATE_TASK);
 
   const [deleteTask] = useMutation<{ taskId: number }>(DELETE_TASK);
-
-  // const {
-  //   loading: taskByIdLoading,
-  //   error: taskByIdError,
-  //   data: taskByIdData,
-  // } = useQuery<{ taskId: number }>(GET_TASK_BY_ID, {
-  //   variables: { taskId: 1 },
-  // });
-  // const taskById = React.useMemo(() => {
-  //   return taskByIdData;
-  // }, [taskByIdData]);
-
-  // const {
-  //   loading: tasksByRecurrenceFrequencyLoading,
-  //   error: tasksByRecurrenceFrequencyError,
-  //   data: tasksByRecurrenceFrequencyData,
-  // } = useQuery(GET_TASKS_BY_RECURRENCE_FREQUENCY, {
-  //   variables: { recurrencePreference: RecurrenceFrequency.DAILY },
-  // });
-  // const tasksByRecurrenceFrequency = React.useMemo(() => {
-  //   return tasksByRecurrenceFrequencyData;
-  // }, [tasksByRecurrenceFrequencyData]);
 
   const [notification, setNotification] = useState(
     localStorage.getItem("notification"),
@@ -134,10 +110,12 @@ const TasksPage = (): React.ReactElement => {
           comment: task.comment || null,
         },
       });
-      await refetch();
     } catch (e) {
       console.log(e);
     }
+    await refetch();
+    await refetchOptional();
+    await refetchCustom();
   };
 
   const handleUpdateTask = async (taskId: string, task: TaskRequest) => {
@@ -155,24 +133,26 @@ const TasksPage = (): React.ReactElement => {
       await handleAddTask(task);
       localStorage.setItem("notification", `Success: "${task.name}" added.`);
     } else {
-      console.log(task);
       await handleUpdateTask(taskId, task);
       localStorage.setItem("notification", `Success: "${task.name}" updated.`);
     }
-    refetch();
     window.location.reload();
+    await refetch();
+    await refetchOptional();
+    await refetchCustom();
   };
 
   const handleDeleteTask = async (taskId: number) => {
     try {
       await deleteTask({ variables: { taskId } });
       localStorage.setItem("notification", "Deleted task.");
-      await refetch();
       window.location.reload();
     } catch (e) {
       console.log(e);
     }
-    refetch();
+    await refetch();
+    await refetchOptional();
+    await refetchCustom();
   };
 
   const formatTaskData = (tasks: Task[]): TableData[] => {
@@ -181,31 +161,35 @@ const TasksPage = (): React.ReactElement => {
       const repeatedDayShort = daysLongToShort
         .filter((day) => task.repeatDays.includes(day.long))
         .map((day) => day.short);
-  
-      if (task.type === "CUSTOM")
-        assignedDaysText = "Participant Preference";
+
+      if (task.type === "CUSTOM") assignedDaysText = "Participant Preference";
       else if (task.recurrencePreference === "DAILY")
         assignedDaysText = "Daily";
       else if (task.recurrencePreference === "EVERY_SELECTED_DAYS")
         assignedDaysText = `${repeatedDayShort.join(", ")}.`;
       else if (task.recurrencePreference === "ANY_SELECTED_DAYS")
         assignedDaysText = `Weekly on ${repeatedDayShort.join(", ")}.`;
-  
+
       return {
         ...task,
         name: task.name,
         repeatDaysString: assignedDaysText,
-        end: task.type === "CUSTOM"
-        ? "Participant Preference"
-        : task.end
-          ? task.end
-          : "Anytime",
+        end:
+          task.type === "CUSTOM"
+            ? "Participant Preference"
+            : task.end
+              ? task.end
+              : "Anytime",
         creditString: `$${task.credit}`,
-        start: task.start ? task.start : "Anytime"
+        start:
+          task.type === "CUSTOM"
+            ? "Participant Preference"
+            : task.start
+              ? task.start
+              : "Anytime",
       };
     });
   };
-  
 
   useEffect(() => {
     setRequiredTasks(requiredTasks);
@@ -217,6 +201,8 @@ const TasksPage = (): React.ReactElement => {
     if (tabIndex === 0) setTaskType(TaskTypeEnum.REQUIRED);
     else setTaskType(TaskTypeEnum.OPTIONAL);
     refetch();
+    refetchOptional();
+    refetchCustom();
   }, [tabIndex]);
 
   useEffect(() => {
@@ -238,10 +224,14 @@ const TasksPage = (): React.ReactElement => {
       setRequiredTasks(data.getTasksByType);
       setTaskDataColumns(tasksColumnTypes);
       setStoredTaskData(formatTaskData(data.getTasksByType));
-    } else if (taskType === TaskTypeEnum.OPTIONAL && optionalTasksData && customTasksData) {
+    } else if (
+      taskType === TaskTypeEnum.OPTIONAL &&
+      optionalTasksData &&
+      customTasksData
+    ) {
       const optional = optionalTasksData.getTasksByType;
       const custom = customTasksData.getTasksByType;
-  
+
       const merged = [...optional, ...custom];
       setOptionalTasks(optional);
       setCustomTasks(custom);
@@ -251,31 +241,29 @@ const TasksPage = (): React.ReactElement => {
   }, [taskType, data, optionalTasksData, customTasksData]);
 
   const exportCSV = () => {
-    const headers = [
-      'Task Name', 'Recurrence', 'End Date', 'Marillac Bucks'
-    ];
+    const headers = ["Task Name", "Recurrence", "End Date", "Marillac Bucks"];
     const csvContent = [
-      headers.join(','),
-      ...taskData.map(task => {
-      return [
+      headers.join(","),
+      ...taskData.map((task) => {
+        return [
           task.name,
           task.repeatDaysString,
           task.end ? task.end : "Never",
           task.credit,
-      ].join(',');
-      })
-    ].join('\n');
+        ].join(",");
+      }),
+    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
 
-    link.setAttribute('download', `tasks.csv`);
+    link.setAttribute("download", `tasks.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
+  };
 
   return (
     <Flex>
@@ -295,6 +283,7 @@ const TasksPage = (): React.ReactElement => {
           gap="10px"
           boxShadow="lg"
           bg="#EAFFEB"
+          borderRadius="6px"
         >
           <CheckmarkSvg />
           <Text
@@ -324,6 +313,7 @@ const TasksPage = (): React.ReactElement => {
           gap="10px"
           boxShadow="lg"
           bg="#FEF1F2"
+          borderRadius="6px"
         >
           <Text
             color="
