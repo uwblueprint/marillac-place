@@ -33,3 +33,15 @@ export const UPDATE_PARTICIPANT_BY_ID = gql`
     )
   }
 `;
+
+export const CREATE_NOTE = gql`
+  mutation createNote($message: String!, $date: String!) {
+    createNote(message: $message, date: $date)
+  }
+`;
+
+export const DELETE_NOTE = gql`
+  mutation deleteNote($noteId: Int!) {
+    deleteNote(noteId: $noteId)
+  }
+`;

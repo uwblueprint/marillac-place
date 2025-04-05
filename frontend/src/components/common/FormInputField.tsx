@@ -7,7 +7,7 @@ import {
   FormLabel,
   InputRightElement,
   InputGroup,
-  InputLeftElement
+  InputLeftElement,
 } from "@chakra-ui/react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -55,8 +55,8 @@ const FormInputField = ({
           type={type === "password" && showPassword ? "text" : type}
           value={value}
           onChange={onChange}
-          borderWidth="2px"
-          borderColor="gray.300"
+          border="solid"
+          borderColor="gray.200"
         />
 
         {type === "password" && (

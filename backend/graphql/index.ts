@@ -12,11 +12,11 @@ import customTypes from "./types/enums";
 import resolverTypes from "./types/resolvers";
 
 import participantResolvers from "./resolvers/participantResolver";
-import miscResolvers from "./resolvers/miscResolver";
+import noteResolvers from "./resolvers/noteResolver";
 
 const schema = makeExecutableSchema({
   typeDefs: [...scalarTypeDefs, dataModels, customTypes, resolverTypes],
-  resolvers: merge(scalarResolvers, participantResolvers, miscResolvers),
+  resolvers: merge(scalarResolvers, participantResolvers, noteResolvers),
 });
 
 export default schema;

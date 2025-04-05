@@ -7,12 +7,15 @@ import {
   InputGroup,
   InputLeftElement,
   Spinner,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
 
 import { useQuery } from "@apollo/client";
-import { GET_PAST_PARTICIPANTS, GET_CURRENT_PARTICIPANTS } from "../../../gql/queries";
+import {
+  GET_PAST_PARTICIPANTS,
+  GET_CURRENT_PARTICIPANTS,
+} from "../../../gql/queries";
 
 import CommonTable, {
   ColumnInfoTypes,
@@ -40,7 +43,7 @@ const columnTypes: ColumnInfoTypes[] = [
     header: "Departure Date",
     key: "departure",
     display: true,
-  }
+  },
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
@@ -48,11 +51,13 @@ const ParticipantsPage = (): React.ReactElement => {
   const [addParticipant, setAddParticipant] = useState(false);
   const [editPastParticipant, setEditPastParticipant] = useState(false);
   const [selected, setSelected] = useState({});
-  const [notification, setNotification] = useState(localStorage.getItem("notification"));
+  const [notification, setNotification] = useState(
+    localStorage.getItem("notification"),
+  );
   console.log(notification);
   if (notification) {
     setTimeout(() => {
-      localStorage.setItem('notification', "");
+      localStorage.setItem("notification", "");
       setNotification("");
     }, 3000);
   }
@@ -62,18 +67,15 @@ const ParticipantsPage = (): React.ReactElement => {
     error: getPastParticipantsError,
     data: getPastParticipantsData,
   } = useQuery(GET_PAST_PARTICIPANTS);
-  
+
   const {
     loading: getCurrentParticipantsLoading,
     error: getCurrentParticipantsError,
     data: getCurrentParticipantsData,
-  } = useQuery(GET_CURRENT_PARTICIPANTS); 
+  } = useQuery(GET_CURRENT_PARTICIPANTS);
 
   return (
-    <Flex
-      w="100vw"
-      h="100vh"
-    >
+    <Flex w="100vw" h="100vh">
       {notification && (
         <Flex
           position="fixed"
@@ -92,15 +94,13 @@ const ParticipantsPage = (): React.ReactElement => {
           bg="#EAFFEB"
         >
           <CheckmarkSvg />
-          <Text color="#259E29" fontSize="xl" fontWeight="500" mb="0px">{notification}</Text>
+          <Text color="#259E29" fontSize="xl" fontWeight="500" mb="0px">
+            {notification}
+          </Text>
         </Flex>
       )}
       <SideBar />
-      <Flex
-        w="100%"
-        h="100%"
-        flexDir="column"
-      >
+      <Flex w="100%" h="100%" flexDir="column">
         <Flex
           w="100%"
           h="50px"
@@ -118,13 +118,10 @@ const ParticipantsPage = (): React.ReactElement => {
           paddingX="30px"
           flexDir="column"
         >
-          <Flex
-            w="100%"
-            h="50%"
-            flexDir="column"
-            paddingTop="50px"
-          >
-            <Text fontSize="xl" fontWeight="600" color="#15646E" mb="10px">Current Participants</Text>
+          <Flex w="100%" h="50%" flexDir="column" paddingTop="50px">
+            <Text fontSize="xl" fontWeight="600" color="#15646E" mb="10px">
+              Current Participants
+            </Text>
             {getCurrentParticipantsLoading ? (
               <Spinner />
             ) : getCurrentParticipantsError ? (
@@ -137,11 +134,13 @@ const ParticipantsPage = (): React.ReactElement => {
                 justifyContent="space-between"
                 wrap="wrap"
               >
-                {(() => {
+                {((): any => {
                   const currentParticipants: Record<string, any> = {};
-                  getCurrentParticipantsData.getCurrentParticipants.forEach((participant: any) => {
-                    currentParticipants[participant.roomNumber] = participant;
-                  });
+                  getCurrentParticipantsData.getCurrentParticipants.forEach(
+                    (participant: any) => {
+                      currentParticipants[participant.roomNumber] = participant;
+                    },
+                  );
 
                   return roomNumbers.map((num) =>
                     num in currentParticipants ? (
@@ -152,7 +151,7 @@ const ParticipantsPage = (): React.ReactElement => {
                       />
                     ) : (
                       <EmptyParticipantCard key={num} roomNumber={num} />
-                    )
+                    ),
                   );
                 })()}
               </Flex>
@@ -160,24 +159,23 @@ const ParticipantsPage = (): React.ReactElement => {
               <Flex>An unknown issue has occurred.</Flex>
             )}
           </Flex>
-          <Flex
-            w="100%"
-            h="50%"
-            flexDir="column"
-          >
-            <Text fontSize="xl" fontWeight="600" color="#15646E" mb="10px">Past Participants</Text>
+          <Flex w="100%" h="50%" flexDir="column">
+            <Text fontSize="xl" fontWeight="600" color="#15646E" mb="10px">
+              Past Participants
+            </Text>
             {getPastParticipantsLoading ? (
               <Spinner />
             ) : getPastParticipantsError ? (
               <Flex>{getPastParticipantsError.message}</Flex>
             ) : getPastParticipantsData.getPastParticipants ? (
               <CommonTable
-                data={getPastParticipantsData.getPastParticipants
-                  .map((participant: TableData) => ({
+                data={getPastParticipantsData.getPastParticipants.map(
+                  (participant: TableData) => ({
                     participantId: participant.participantId,
                     arrival: participant.arrival,
                     departure: participant.departure,
-                  }))}
+                  }),
+                )}
                 columnInfo={columnTypes}
                 onEdit={(row: any) => {
                   setSelected(row);

@@ -17,6 +17,8 @@ import buttonTheme from "./theme/buttons";
 import tabsTheme from "./theme/tabs";
 import { inputTheme, textareaTheme } from "./theme/inputs";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import * as ROUTES from "./constants/routes";
 import HomePage from "./components/pages/home/HomePage";
 // import SchedulePage from "./components/pages/schedule/SchedulePage";
