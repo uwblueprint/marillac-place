@@ -1,11 +1,16 @@
 import React from "react";
+import { Flex, Text } from "@chakra-ui/react";
+import SideBar from "./SideBar";
 
-const NotFoundPage = (): React.ReactElement => {
+const NotFound: React.FC = () => {
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1>404 Not Found 🙁</h1>
-    </div>
+    <Flex>
+      <SideBar />
+      <Flex flex="1" justifyContent="center" alignItems="center">
+        <Text fontSize="2xl">404 - Page Not Found</Text>
+      </Flex>
+    </Flex>
   );
 };
 
-export default NotFoundPage;
+export default NotFound;
