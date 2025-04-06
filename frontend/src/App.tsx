@@ -19,11 +19,10 @@ import tabsTheme from "./theme/tabs";
 import { inputTheme, textareaTheme } from "./theme/inputs";
 
 import * as ROUTES from "./constants/Routes";
-// import HomePage from "./components/pages/home/HomePage";
+import HomePage from "./components/pages/home/HomePage";
 // import SchedulePage from "./components/pages/schedule/SchedulePage";
 // import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
-// import DashboardPage from "./components/pages/dashboard/DashboardPage";
-// import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
+import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
 // import TasksPage from "./components/pages/tasks/TasksPage";
 import AdminLoginPage from "./components/pages/auth/AdminLoginPage";
 import NotFoundPage from "./components/common/NotFoundPage";
@@ -106,54 +105,40 @@ const App = (): React.ReactElement => {
                 </ProtectedRoute>
               }
             /> */}
-            {/* <Route 
-              path={ROUTES.HOME_PAGE} 
+            <Route
+              path={ROUTES.HOME_PAGE}
               element={
                 <ProtectedRoute>
                   <HomePage />
                 </ProtectedRoute>
-              } 
-            /> */}
-            {/* <Route 
-              path={ROUTES.SCHEDULE_PAGE} 
+              }
+            />
+            {/* <Route
+              path={ROUTES.SCHEDULE_PAGE}
               element={
                 <ProtectedRoute>
                   <SchedulePage />
                 </ProtectedRoute>
-              } 
+              }
             /> */}
-            {/* <Route 
-              path={ROUTES.ANNOUNCEMENTS_PAGE} 
+            {/* <Route
+              path={ROUTES.ANNOUNCEMENTS_PAGE}
               element={
                 <ProtectedRoute>
                   <AnnouncementsPage />
                 </ProtectedRoute>
-              } 
+              }
             /> */}
-            {/* <Route
+            <Route
               path={ROUTES.PARTICIPANTS_PAGE}
               element={
                 <ProtectedRoute>
                   <ParticipantsPage />
                 </ProtectedRoute>
               }
-            /> */}
-            {/* <Route 
-              path={ROUTES.TASKS_PAGE} 
-              element={
-                <ProtectedRoute>
-                  <TasksPage />
-                </ProtectedRoute>
-              } 
-            /> */}
-            <Route
-              path="*"
-              element={
-                <ProtectedRoute>
-                  <NotFoundPage />
-                </ProtectedRoute>
-              }
             />
+            {/* <Route path={ROUTES.TASKS_PAGE} element={<TasksPage />} /> */}
+            <Route path="*" element={<NotFoundPage />} />
           </Switch>
         </Router>
       </ChakraProvider>

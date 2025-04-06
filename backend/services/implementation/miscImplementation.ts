@@ -7,10 +7,7 @@ class MiscService implements IMiscService {
       const today = new Date();
       const rooms = await prisma.participant.findMany({
         where: {
-          OR: [
-            { departure: null },
-            { departure: { gte: today.toISOString() } },
-          ],
+          OR: [{ departure: "" }, { departure: { gte: today.toISOString() } }],
         },
         select: {
           roomNumber: true,

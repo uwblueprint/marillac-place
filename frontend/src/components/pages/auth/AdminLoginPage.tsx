@@ -70,7 +70,7 @@ const LoginPage = (): React.ReactElement => {
       return;
     }
 
-    login({ variables: { role, password } });
+    login({ variables: { role, encryptedPassword: password } });
   };
 
   return (
