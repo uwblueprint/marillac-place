@@ -9,6 +9,7 @@ const resolverTypes = gql`
   }
 
   type Mutation {
+    login(role: String!, encryptedPassword: String!): AuthResponse
     createParticipant(
       participantId: String!
       roomNumber: Int!

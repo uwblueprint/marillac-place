@@ -13,10 +13,16 @@ import resolverTypes from "./types/resolvers";
 
 import participantResolvers from "./resolvers/participantResolver";
 import noteResolvers from "./resolvers/noteResolver";
+import authResolver from "./resolvers/auth";
 
 const schema = makeExecutableSchema({
   typeDefs: [...scalarTypeDefs, dataModels, customTypes, resolverTypes],
-  resolvers: merge(scalarResolvers, participantResolvers, noteResolvers),
+  resolvers: merge(
+      scalarResolvers,
+      participantResolvers,
+      noteResolvers,
+      authResolver
+  ),
 });
 
 export default schema;

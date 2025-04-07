@@ -37,6 +37,11 @@ const dataModels = gql`
     date: String!
     formattedDate: String!
   }
+
+  type AuthResponse {
+      type: String!
+      accessToken: String!
+  }
 `;
 
 export default dataModels;
