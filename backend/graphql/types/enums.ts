@@ -9,6 +9,7 @@ const customTypes = gql`
   enum TaskType {
     REQUIRED
     OPTIONAL
+    CUSTOM
   }
 
   enum TaskStatus {
@@ -19,6 +20,18 @@ const customTypes = gql`
     COMPLETE
     EXCUSED
   }
+
+  enum TimeOption{
+    ANYTIME
+    SPECIFIC
+  }
+  
+  enum RecurrenceFrequency{
+    DAILY
+    EVERY_SELECTED_DAYS
+    ANY_SELECTED_DAYS
+  }
+    
 `;
 
 export default customTypes;

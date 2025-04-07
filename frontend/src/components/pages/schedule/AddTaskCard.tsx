@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   Button,
@@ -12,24 +12,12 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
-import { CREATE_TASK } from "../../../gql/mutations";
 
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/form/FormInputField";
+import { CREATE_ASSIGNED_TASK } from "../../../gql/mutations";
 
-enum TaskType {
-  "REQUIRED",
-  "OPTIONAL",
-}
 
-enum TaskStatus {
-  "UNASSIGNED",
-  "ASSIGNED",
-  "INCOMPLETE",
-  "PENDING",
-  "COMPLETE",
-  "EXCUSED",
-}
 
 type AddTaskCardProps = {
   isOpen: boolean;
@@ -43,41 +31,47 @@ const AddTaskCard = ({
   const [taskDate, setTaskDate] = useState("");
   const [startTime, setStartTime] = useState("11:59 PM"); // Default to 11:59 PM
   const [endTime, setEndTime] = useState("11:59 PM"); // Default to 11:59 PM
-  const [taskType, setTaskType] = useState("");
+  const [taskType, setTaskType] = useState("CUSTOM");
   const [taskName, setTaskName] = useState("");
   const [recurrence, setRecurrence] = useState(""); 
   const [marillacBucks, setMarillacBucks] = useState(""); 
   const [comment, setComment] = useState("");
   const [showCommentInput, setShowCommentInput] = useState(false); // State to show comment input
 
-  const [createTask] = useMutation(CREATE_TASK);
+  const [createAssignedTask] = useMutation(CREATE_ASSIGNED_TASK);
 
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [selectedDays, setSelectedDays] = useState<string[]>([]); // Array to store selected days
   const [completedOn, setCompletedOn] = useState("every"); // Tracks which radio button is selected
   const [ends, setEnds] = useState("never"); // Tracks ends radio button selection
   const [endsOnDate, setEndsOnDate] = useState(""); // State for "On" date input
 
   const handleSubmit = async () => {
     try {
-      await createTask({
+      await createAssignedTask({
         variables: {
-          roomNumber: 1,
+          userID: 1,
           type: "REQUIRED",
-          status: "COMPLETE",
-          name: taskName,
-          isRecurring: recurrence === "Repeats",
-          recurrenceDays: selectedDays, // Pass the selected days as recurrence days
-          start: new Date().toISOString(),
-          end: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-          credit: parseInt(marillacBucks, 10) || 0,
-          comment: comment || "No comment" // Pass the comment if provided
+          name: "Test",
+          recurrencePreference: "DAILY",
+          repeatDays: ["Test"],
+          timePreference: "ANYTIME",
+          start: "Test",
+          end: "Test",
+          credit: 5,
+          deduction: 10,
+          comment: "Test"
         },
       });
       console.log("Successfully added task");
+      setIsOpen(false);
     } catch (err) {
       console.error(err);
     }
   }
+
+  useEffect (() => {
+    console.log(selectedDays);
+  }) 
 
   // Generate time options for 12-hour format (AM/PM)
   const timeOptions = [
@@ -92,6 +86,7 @@ const AddTaskCard = ({
     "11:59 PM"
   ];
 
+  // Handle toggling of day selection
   const handleDayToggle = (day: string) => {
     setSelectedDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
@@ -116,10 +111,10 @@ const AddTaskCard = ({
           height="34px"
           onChange={(e) => setTaskType(e.target.value)}
         >
-          <option> Custom </option>
-          <option> Required </option>
-          <option> Optional </option>
-          <option> Chore </option>
+          <option value="CUSTOM"> Custom </option>
+          <option value="REQUIRED"> Required </option>
+          <option value="OPTIONAL"> Optional </option>
+          <option value="CHORE"> Chore </option>
         </Select>
 
         <FormInputField
@@ -200,9 +195,9 @@ const AddTaskCard = ({
         {recurrence === "Repeats" && (
           <Flex gap="10px" mt="30px" ml="10px"> {/* Increased top margin */}
             <Flex mt = "5px">
-            <Text>Select Days:</Text>
+              <Text>Select Days:</Text>
             </Flex>
-            {["M", "T", "W", "Th", "F", "S"].map((day) => (
+            {["S", "M", "T", "W", "Th", "F", "Su"].map((day) => (
               <Button
                 key={day}
                 onClick={() => handleDayToggle(day)}
