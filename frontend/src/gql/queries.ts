@@ -39,3 +39,14 @@ export const GET_PARTICIPANT_BY_ID = gql`
     }
   }
 `;
+
+export const GET_NOTES = gql`
+  query getNotes {
+    getNotes {
+      noteId
+      message
+      formattedDate
+    }
+  }
+`;
+

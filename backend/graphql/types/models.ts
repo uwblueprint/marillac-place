@@ -14,7 +14,7 @@ const dataModels = gql`
     announcementId: Int!
     from: StaffType!
     to: [Int!]!
-    createdAt: DateTime!
+    createdAt: String!
     message: String!
   }
 
@@ -25,15 +25,22 @@ const dataModels = gql`
     status: TaskStatus!
     name: String!
     isRecurring: Boolean!
-    start: DateTime!
-    end: DateTime!
+    start: String!
+    end: String!
     credit: Int!
     comment: String
   }
 
+  type Note {
+    noteId: Int!
+    message: String!
+    date: String!
+    formattedDate: String!
+  }
+
   type AuthResponse {
-    type: String!
-    accessToken: String!
+      type: String!
+      accessToken: String!
   }
 `;
 

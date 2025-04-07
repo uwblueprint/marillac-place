@@ -7,10 +7,10 @@ const primary = defineStyle({
   border: "0",
   bg: "orange.500",
   color: "orange.50",
-  _hover: { 
-    bg: "orange.50", 
-    color: "orange.500" 
-  }
+  _hover: {
+    bg: "orange.50",
+    color: "orange.500",
+  },
 });
 
 const secondary = defineStyle({
@@ -68,7 +68,7 @@ const greenOutline = defineStyle({
   borderRadius: "8px",
   padding: "4px 16px",
   border: "2px solid #0C727E",
-  color: "#0C727E"
+  color: "#0C727E",
 });
 
 const redOutline = defineStyle({
@@ -76,11 +76,20 @@ const redOutline = defineStyle({
   borderRadius: "8px",
   padding: "4px 16px",
   border: "2px solid #D34C5C",
-  color: "#D34C5C"
+  color: "#D34C5C",
 });
 
 const buttonTheme = defineStyleConfig({
-  variants: { primary, secondary, cancel, del, success, error, redOutline, greenOutline },
+  variants: {
+    primary,
+    secondary,
+    cancel,
+    del,
+    success,
+    error,
+    redOutline,
+    greenOutline,
+  },
 });
 
 export default buttonTheme;

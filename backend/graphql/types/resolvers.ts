@@ -5,7 +5,7 @@ const resolverTypes = gql`
     getPastParticipants: [Participant]
     getCurrentParticipants: [Participant]
     getParticipantById(participantId: String!): Participant
-    getAvailableRooms: [Int]
+    getNotes: [Note]
   }
 
   type Mutation {
@@ -23,6 +23,8 @@ const resolverTypes = gql`
       departure: String
       password: String
     ): Boolean
+    createNote(message: String!, date: String!, formattedDate: String!): Boolean
+    deleteNote(noteId: Int!): Boolean
   }
 `;
 
