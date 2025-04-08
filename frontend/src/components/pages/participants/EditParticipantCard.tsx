@@ -27,9 +27,13 @@ const EditParticipantCard = ({
   const title = "Edit Participant in Room " + selectedRoomNumber;
   const roomNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-  const [arrivalDate, setArrivalDate] = useState(participants[selectedRoomNumber].arrival);
+  const [arrivalDate, setArrivalDate] = useState(
+    participants[selectedRoomNumber].arrival,
+  );
   const [departureDate, setDepartureDate] = useState("");
-  const [password, setPassword] = useState(participants[selectedRoomNumber].password);
+  const [password, setPassword] = useState(
+    participants[selectedRoomNumber].password,
+  );
   const [swappedRoom, setSwappedRoom] = useState("");
 
   const [endStay, setEndStay] = useState(false);
@@ -49,7 +53,12 @@ const EditParticipantCard = ({
   };
 
   const validate = () => {
-    if (!arrivalDate || !password || (endStay && !departureDate) || (swapParticipant && !swappedRoom)) {
+    if (
+      !arrivalDate ||
+      !password ||
+      (endStay && !departureDate) ||
+      (swapParticipant && !swappedRoom)
+    ) {
       setError("Missing fields.");
       return false;
     }
@@ -59,8 +68,9 @@ const EditParticipantCard = ({
     }
     if (
       arrivalDate === participants[selectedRoomNumber].arrival &&
-      password === participants[selectedRoomNumber].password && 
-      !endStay && !swapParticipant
+      password === participants[selectedRoomNumber].password &&
+      !endStay &&
+      !swapParticipant
     ) {
       setError("No changes made.");
       return false;
@@ -74,7 +84,7 @@ const EditParticipantCard = ({
       const valid: boolean = validate();
       if (valid && (arrivalDate || departureDate || password)) {
         await updateParticipantById({
-          variables: { 
+          variables: {
             participantId: participants[selectedRoomNumber].participantId,
             arrival: arrivalDate,
             departure: endStay ? departureDate : "",
@@ -84,23 +94,23 @@ const EditParticipantCard = ({
         if (swapParticipant) {
           if (swappedRoom in participants) {
             await updateParticipantById({
-              variables: { 
+              variables: {
                 participantId: participants[swappedRoom].participantId,
-                roomNumber: parseInt(selectedRoomNumber, 10)
+                roomNumber: parseInt(selectedRoomNumber, 10),
               },
             });
-          } 
+          }
           await updateParticipantById({
-            variables: { 
+            variables: {
               participantId: participants[selectedRoomNumber].participantId,
-              roomNumber: parseInt(swappedRoom, 10)
+              roomNumber: parseInt(swappedRoom, 10),
             },
           });
         }
         if (endStay) {
           localStorage.setItem("notification", "Removed participant.");
         } else if (swapParticipant) {
-          localStorage.setItem("notification", "Swapped.")
+          localStorage.setItem("notification", "Swapped.");
         } else {
           localStorage.setItem("notification", "Changes saved.");
         }
@@ -150,8 +160,8 @@ const EditParticipantCard = ({
         />
 
         <Flex justifyContent="flex-start">
-          <Button 
-            variant="greenOutline" 
+          <Button
+            variant="greenOutline"
             _hover={{ bg: "#E3ECEB" }}
             bg={swapParticipant ? "#E3ECEB" : ""}
             mr="8px"
@@ -169,10 +179,10 @@ const EditParticipantCard = ({
             _hover={{ bg: "red.100" }}
             bg={endStay ? "red.100" : ""}
             variant="redOutline"
-            onClick={() => { 
-              setEndStay(!endStay); 
+            onClick={() => {
+              setEndStay(!endStay);
               setDepartureDate("");
-              setSwapParticipant(false); 
+              setSwapParticipant(false);
             }}
           >
             <EndStaySvg />
@@ -180,12 +190,11 @@ const EditParticipantCard = ({
           </Button>
         </Flex>
 
-        {
-          (endStay || swapParticipant) && 
+        {(endStay || swapParticipant) && (
           <Flex w="100%" h="0px" borderTop="2px solid" borderColor="gray.200" />
-        }
+        )}
 
-        { endStay && 
+        {endStay && (
           <FormInputField
             label="Departure Date"
             value={departureDate}
@@ -194,19 +203,17 @@ const EditParticipantCard = ({
               setDepartureDate(e.target.value);
             }}
           />
-        }
+        )}
 
-        { swapParticipant && 
+        {swapParticipant && (
           <div>
-            <Text mb="5px" color="gray.main" fontWeight="700">Available Rooms</Text>
-            <Flex
-              gap="5px"
-              wrap="wrap"
-              mb="10px"
-            >
-              {roomNumbers.map((num: string) => 
-                <Button 
-                  key={num} 
+            <Text mb="5px" color="gray.main" fontWeight="700">
+              Available Rooms
+            </Text>
+            <Flex gap="5px" wrap="wrap" mb="10px">
+              {roomNumbers.map((num: string) => (
+                <Button
+                  key={num}
                   onClick={() => setSwappedRoom(num)}
                   variant="greenOutline"
                   bg={swappedRoom === num ? "#0C727E" : "white"}
@@ -214,26 +221,32 @@ const EditParticipantCard = ({
                 >
                   Room {num}
                 </Button>
-              )}
+              ))}
             </Flex>
-            { swappedRoom !== "" && (
-              swappedRoom === selectedRoomNumber ? (
-                <Flex>Participant #{participants[selectedRoomNumber].participantId} is already in Room {selectedRoomNumber}.</Flex>
+            {swappedRoom !== "" &&
+              (swappedRoom === selectedRoomNumber ? (
+                <Flex>
+                  Participant #{participants[selectedRoomNumber].participantId}{" "}
+                  is already in Room {selectedRoomNumber}.
+                </Flex>
               ) : (
                 <Flex flexDir="column" gap="5px">
                   <div>
-                    Participant #{participants[selectedRoomNumber].participantId} in Room {selectedRoomNumber} will be moved to Room {swappedRoom}.
+                    Participant #
+                    {participants[selectedRoomNumber].participantId} in Room{" "}
+                    {selectedRoomNumber} will be moved to Room {swappedRoom}.
                   </div>
-                  { swappedRoom in participants && 
+                  {swappedRoom in participants && (
                     <div>
-                      Participant #{participants[swappedRoom].participantId} in Room {swappedRoom} will be moved to Room {selectedRoomNumber}.
+                      Participant #{participants[swappedRoom].participantId} in
+                      Room {swappedRoom} will be moved to Room{" "}
+                      {selectedRoomNumber}.
                     </div>
-                  }
+                  )}
                 </Flex>
-              )
-            )}
+              ))}
           </div>
-        }
+        )}
 
         <Flex justifyContent="flex-end">
           <Button

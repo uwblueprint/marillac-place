@@ -73,4 +73,3 @@ export const GET_NOTES = gql`
     }
   }
 `;
-

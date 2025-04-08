@@ -6,7 +6,7 @@ class ParticipantService implements IParticipantService {
   async getPastParticipants(): Promise<Participant[]> {
     try {
       const participants = await prisma.participant.findMany({
-        where: {departure: { not: "" }},
+        where: { departure: { not: "" } },
         orderBy: [{ departure: "desc" }],
       });
       return participants;
@@ -19,7 +19,7 @@ class ParticipantService implements IParticipantService {
   async getCurrentParticipants(): Promise<Participant[]> {
     try {
       const participants = await prisma.participant.findMany({
-        where: {departure: ""},
+        where: { departure: "" },
         orderBy: [{ roomNumber: "asc" }],
       });
       return participants;

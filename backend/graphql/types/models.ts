@@ -40,8 +40,8 @@ const dataModels = gql`
   }
 
   type AuthResponse {
-      type: String!
-      accessToken: String!
+    type: String!
+    accessToken: String!
   }
 `;
 

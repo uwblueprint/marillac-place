@@ -19,15 +19,13 @@ import authResolver from "./resolvers/auth";
 const schema = makeExecutableSchema({
   typeDefs: [...scalarTypeDefs, dataModels, customTypes, resolverTypes],
   resolvers: merge(
-      
     scalarResolvers,
-     
+
     participantResolvers,
     announcementResolvers,
-   
-      noteResolvers,
-      authResolver
-  ,
+
+    noteResolvers,
+    authResolver,
   ),
 });
 
