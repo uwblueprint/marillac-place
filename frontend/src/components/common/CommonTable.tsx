@@ -22,13 +22,14 @@ import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutl
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import ModalContainer from "./ModalContainer";
 
-type TableTypes = string | number | boolean | Date | string[];
+type TableTypes = string;
+// | number | boolean | Date | string[]
 
 export interface TableData {
   [key: string]: TableTypes;
 }
 
-export type ColumnInfoTypes = { header: string; key: string };
+export type ColumnInfoTypes = { header: string; key: string; display: boolean };
 
 type Props = {
   data: TableData[];
@@ -169,17 +170,15 @@ const CommonTable = ({
       flexDir="column"
       alignContent="space-between"
       justifyContent="space-between"
-      h="100%"
     >
       <TableContainer
-        m="10px"
-        border="2px solid"
+        border="solid"
         borderColor="gray.200"
-        borderRadius="6px"
+        borderRadius="5px"
       >
         <Table>
           <Thead>
-            <Tr backgroundColor="gray.200" w="100%">
+            <Tr backgroundColor="#EDF2F7" w="100%">
               {isSelectable ? (
                 <Th p="0px 0px 0px 20px" w="16px">
                   <Checkbox
@@ -202,41 +201,48 @@ const CommonTable = ({
                   />
                 </Th>
               ) : null}
-              {columnInfo.map((header, index) => (
-                <Th key={index}>
-                  <Flex alignItems="center">
-                    {header.header}
-                    <Flex
-                      alignItems="center"
-                      flexDirection="column"
-                      paddingLeft="2.5px"
-                    >
-                      <KeyboardArrowUpOutlinedIcon
-                        style={{
-                          height: "0.5em",
-                          cursor: "pointer",
-                          color:
-                            sortingColumn[header.key] === 1 ? "" : "#c4c8d8",
-                        }}
-                        onClick={() => {
-                          sortColumn(header.key);
-                        }}
-                      />
-                      <KeyboardArrowDownOutlinedIcon
-                        style={{
-                          height: "0.5em",
-                          cursor: "pointer",
-                          color:
-                            sortingColumn[header.key] === 2 ? "" : "#c4c8d8",
-                        }}
-                        onClick={() => {
-                          sortColumn(header.key);
-                        }}
-                      />
-                    </Flex>
-                  </Flex>
-                </Th>
-              ))}
+              {columnInfo.map(
+                (header, index) =>
+                  header.display && (
+                    <Th key={index}>
+                      <Flex alignItems="center">
+                        {header.header}
+                        <Flex
+                          alignItems="center"
+                          flexDirection="column"
+                          paddingLeft="2.5px"
+                        >
+                          <KeyboardArrowUpOutlinedIcon
+                            style={{
+                              height: "0.5em",
+                              cursor: "pointer",
+                              color:
+                                sortingColumn[header.key] === 1
+                                  ? ""
+                                  : "#c4c8d8",
+                            }}
+                            onClick={() => {
+                              sortColumn(header.key);
+                            }}
+                          />
+                          <KeyboardArrowDownOutlinedIcon
+                            style={{
+                              height: "0.5em",
+                              cursor: "pointer",
+                              color:
+                                sortingColumn[header.key] === 2
+                                  ? ""
+                                  : "#c4c8d8",
+                            }}
+                            onClick={() => {
+                              sortColumn(header.key);
+                            }}
+                          />
+                        </Flex>
+                      </Flex>
+                    </Th>
+                  ),
+              )}
               <Th />
             </Tr>
           </Thead>
@@ -245,7 +251,7 @@ const CommonTable = ({
               .slice((page - 1) * maxResults, page * maxResults)
               .map((row, index) => {
                 return (
-                  <Tr key={index}>
+                  <Tr key={index} borderTop="2px solid" borderColor="#E2E8F0">
                     {isSelectable ? (
                       <Td p="0px 0px 0px 20px" w="16px">
                         <Checkbox
@@ -261,16 +267,19 @@ const CommonTable = ({
                         />
                       </Td>
                     ) : null}
-                    {columnInfo.map((column, i) => (
-                      <Td
-                        onClick={() => {
-                          handleRowClick(row);
-                        }}
-                        key={i}
-                      >
-                        {String(row[column.key])}
-                      </Td>
-                    ))}
+                    {columnInfo.map(
+                      (column, i) =>
+                        column.display && (
+                          <Td
+                            onClick={() => {
+                              handleRowClick(row);
+                            }}
+                            key={i}
+                          >
+                            {String(row[column.key])}
+                          </Td>
+                        ),
+                    )}
                     <Td
                       onClick={(e) => {
                         e.stopPropagation();
@@ -289,11 +298,10 @@ const CommonTable = ({
         </Table>
       </TableContainer>
 
-      {isPreviewModalOpen && selectedRow && (
+      {/* {isPreviewModalOpen && selectedRow && (
         <ModalContainer
           title={colData[0].value}
-          isOpen={isPreviewModalOpen}
-          setIsOpen={setIsPreviewModalOpen}
+          close={() => setIsPreviewModalOpen(false)}
         >
           <Flex flexDir="column" gap="5px" mt="10px">
             {colData.slice(1).map((column, index) => (
@@ -306,10 +314,10 @@ const CommonTable = ({
             ))}
           </Flex>
         </ModalContainer>
-      )}
+      )} */}
 
-      <Box h="50px" position="relative">
-        <Box position="absolute" w="250px" h="50px" ml="10px">
+      <Box h="50px" position="relative" mt="20px">
+        <Box position="absolute" w="250px" h="50px">
           {`Showing ${(page - 1) * maxResults + 1} to ${Math.min(
             page * maxResults,
             data.length,
@@ -328,7 +336,7 @@ const CommonTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.main"
+              color="#15646E"
               backgroundColor="white"
               aria-label="Previous Page"
               icon={<ChevronLeftOutlinedIcon />}
@@ -337,7 +345,7 @@ const CommonTable = ({
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={item === page ? "purple.main" : "white"}
+                  backgroundColor={item === page ? "#15646E" : "white"}
                   h="35px"
                   p="10px"
                   flexBasis="35px"
@@ -345,7 +353,7 @@ const CommonTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "purple.main",
+                    backgroundColor: "#15646E",
                   }}
                   textColor={item === page ? "white" : "gray.main"}
                   onClick={() => numberPaginate(item)}
@@ -361,7 +369,7 @@ const CommonTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.main"
+              color="#15646E"
               backgroundColor="white"
               aria-label="Next Page"
               icon={<ChevronRightOutlinedIcon />}

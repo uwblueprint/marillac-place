@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Input,
@@ -7,11 +7,15 @@ import {
   InputGroup,
   InputLeftElement,
   Spinner,
+  Text,
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
 
 import { useQuery } from "@apollo/client";
-import { GET_ALL_PARTICIPANTS } from "../../../gql/queries";
+import {
+  GET_PAST_PARTICIPANTS,
+  GET_CURRENT_PARTICIPANTS,
+} from "../../../gql/queries";
 
 import CommonTable, {
   ColumnInfoTypes,
@@ -19,182 +23,177 @@ import CommonTable, {
 } from "../../common/CommonTable";
 import SideBar from "../../common/SideBar";
 import AddParticipantCard from "./AddParticipantCard";
+import EditPastParticipantCard from "./EditPastParticipantCard";
+import CurrentParticipantCard from "./CurrentParticipantCard";
+import EmptyParticipantCard from "./EmptyParticipantCard";
+import CheckmarkSvg from "../../../assets/svg/CheckmarkSvg";
 
 const columnTypes: ColumnInfoTypes[] = [
   {
     header: "ID Number",
     key: "participantId",
-  },
-  {
-    header: "Room #",
-    key: "roomNumber",
+    display: true,
   },
   {
     header: "Arrival Date",
     key: "arrival",
+    display: true,
   },
   {
     header: "Departure Date",
     key: "departure",
+    display: true,
   },
 ];
 
 const ParticipantsPage = (): React.ReactElement => {
-  const [addParticipantCardOpened, setAddParticipantCardOpened] =
-    useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState("none");
-
-  // const [addResident] = useMutation<{ addResident: UserResponse }>(
-  //   ADD_RESIDENT,
-  // );
-
-  // const [updateResident] = useMutation<{
-  //   userId: number;
-  //   resident: UserResponse;
-  // }>(UPDATE_RESIDENT);
-
-  // const [deleteResident] = useMutation<{ userId: number }>(DELETE_RESIDENT);
-
-  // const handleAddResident = async () => {
-  //   try {
-  //     const date = new Date();
-  //     const formattedDate = date.toISOString().split("T")[0];
-
-  //     const resident: UserRequest = {
-  //       email: "dasfhsahfsoad@gmail.com",
-  //       password: "qe8e9r789ewr",
-  //       firstName: "Bob",
-  //       lastName: "Bob",
-  //       residentId: 1248120,
-  //       birthDate: formattedDate,
-  //       roomNumber: 3,
-  //       credits: 500,
-  //       dateJoined: formattedDate,
-  //     };
-  //     await addResident({ variables: { resident } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const handleUpdateResident = async () => {
-  //   try {
-  //     const userId = 5;
-  //     const resident: UserRequestUpdate = {
-  //       lastName: "NEW NAME",
-  //       roomNumber: 3,
-  //       credits: 10,
-  //     };
-  //     await updateResident({ variables: { userId, resident } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const handleDeleteResident = async () => {
-  //   try {
-  //     const userId = 1;
-  //     await deleteResident({ variables: { userId } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const ids = [4];
-  // const {
-  //   loading: residentIdLoading,
-  //   error: residentIdError,
-  //   data: residentIdData,
-  // } = useQuery<{ userIds: [number] }>(GET_RESIDENTS_BY_ID, {
-  //   variables: { userIds: ids },
-  // });
-
-  // const {
-  //   loading: residentActiveLoading,
-  //   error: residentActiveError,
-  //   data: residentActiveData,
-  // } = useQuery(GET_ACTIVE_RESIDENTS);
+  const roomNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const [addParticipant, setAddParticipant] = useState(false);
+  const [editPastParticipant, setEditPastParticipant] = useState(false);
+  const [selected, setSelected] = useState({});
+  const [notification, setNotification] = useState(
+    localStorage.getItem("notification"),
+  );
+  console.log(notification);
+  if (notification) {
+    setTimeout(() => {
+      localStorage.setItem("notification", "");
+      setNotification("");
+    }, 3000);
+  }
 
   const {
-    loading: getAllParticipantsLoading,
-    error: getAllParticipantsError,
-    data: getAllParticipantsData,
-  } = useQuery(GET_ALL_PARTICIPANTS);
+    loading: getPastParticipantsLoading,
+    error: getPastParticipantsError,
+    data: getPastParticipantsData,
+  } = useQuery(GET_PAST_PARTICIPANTS);
 
-  // const handleResidentEdit = (row: any) => {
-  //   setIsModalOpen("edit");
-  //   // console.log(row);
-  //   setEditInfo(row);
-  // };
-
-  // // CHANGE
-  // const handleRowClick = (row: any) => {
-  //   setIsModalOpen("edit");
-  //   // console.log(row);
-  //   setEditInfo(row);
-  // };
-
-  // const handleResidentSubmitEdit = () => {
-  //   setEditInfo(undefined);
-
-  //   // TODO: modify data
-  // };
+  const {
+    loading: getCurrentParticipantsLoading,
+    error: getCurrentParticipantsError,
+    data: getCurrentParticipantsData,
+  } = useQuery(GET_CURRENT_PARTICIPANTS);
 
   return (
-    <Flex>
-      <SideBar />
-      <Flex flexDir="column" flexGrow={1} p="20px">
-        <Flex justifyContent="space-between" p="10px">
-          <InputGroup w="30%">
-            <InputLeftElement pointerEvents="none">
-              <Icon as={Search} color="gray.300" />
-            </InputLeftElement>
-            <Input placeholder="Search" />
-          </InputGroup>
-          <Button
-            variant="primary"
-            leftIcon={<Icon as={Add} color="white" />}
-            size="sm"
-            onClick={() => setAddParticipantCardOpened(true)}
-          >
-            Add Participant
-          </Button>
+    <Flex w="100vw" h="100vh">
+      {notification && (
+        <Flex
+          position="fixed"
+          top="30px"
+          left="50%"
+          transform="translateX(-50%)"
+          border="solid"
+          borderColor="#259E29"
+          zIndex="1000"
+          paddingY="5px"
+          paddingX="15px"
+          justifyContent="center"
+          alignItems="center"
+          gap="10px"
+          boxShadow="lg"
+          bg="#EAFFEB"
+        >
+          <CheckmarkSvg />
+          <Text color="#259E29" fontSize="xl" fontWeight="500" mb="0px">
+            {notification}
+          </Text>
         </Flex>
-        {getAllParticipantsLoading ? (
-          <Spinner />
-        ) : getAllParticipantsError ? (
-          <Flex p="10px">{getAllParticipantsError.message}</Flex>
-        ) : getAllParticipantsData.getAllParticipants ? (
-          <CommonTable
-            data={getAllParticipantsData.getAllParticipants.map(
-              (participant: TableData) => ({
-                participantId: participant.participantId,
-                roomNumber: participant.roomNumber,
-                arrival: participant.arrival,
-                departure: participant.departure || "",
-              }),
-            )}
-            columnInfo={columnTypes}
-            onEdit={() => {}}
-          />
-        ) : (
-          <Flex p="10px">No participants found.</Flex>
-        )}
-
-        <AddParticipantCard
-          isOpen={addParticipantCardOpened}
-          setIsOpen={setAddParticipantCardOpened}
+      )}
+      <SideBar />
+      <Flex w="100%" h="100%" flexDir="column">
+        <Flex
+          w="100%"
+          h="50px"
+          bg="#E3ECEB"
+          position="fixed"
+          borderBottom="solid"
+          borderBottomColor="gray.200"
+          top="0px"
+          zIndex="999"
         />
+        <Flex
+          w="100%"
+          h="100%"
+          paddingY="15px"
+          paddingX="30px"
+          flexDir="column"
+        >
+          <Flex w="100%" h="50%" flexDir="column" paddingTop="50px">
+            <Text fontSize="xl" fontWeight="600" color="#15646E" mb="10px">
+              Current Participants
+            </Text>
+            {getCurrentParticipantsLoading ? (
+              <Spinner />
+            ) : getCurrentParticipantsError ? (
+              <Flex>{getCurrentParticipantsError.message}</Flex>
+            ) : getCurrentParticipantsData?.getCurrentParticipants ? (
+              <Flex
+                w="100%"
+                h="100%"
+                alignItems="top"
+                justifyContent="space-between"
+                wrap="wrap"
+              >
+                {((): any => {
+                  const currentParticipants: Record<string, any> = {};
+                  getCurrentParticipantsData.getCurrentParticipants.forEach(
+                    (participant: any) => {
+                      currentParticipants[participant.roomNumber] = participant;
+                    },
+                  );
 
-        {/* 
-        {residentEditInfo && (
-          <ResidentEditModal
-            residentInfo={residentEditInfo}
-            isOpen={isModalOpen === "edit"}
-            setIsOpen={() => setIsModalOpen("none")}
-            onCloseEditModal={handleResidentSubmitEdit}
-          /> 
-        )} */}
+                  return roomNumbers.map((num) =>
+                    num in currentParticipants ? (
+                      <CurrentParticipantCard
+                        key={num}
+                        roomNumber={num}
+                        participants={currentParticipants}
+                      />
+                    ) : (
+                      <EmptyParticipantCard key={num} roomNumber={num} />
+                    ),
+                  );
+                })()}
+              </Flex>
+            ) : (
+              <Flex>An unknown issue has occurred.</Flex>
+            )}
+          </Flex>
+          <Flex w="100%" h="50%" flexDir="column">
+            <Text fontSize="xl" fontWeight="600" color="#15646E" mb="10px">
+              Past Participants
+            </Text>
+            {getPastParticipantsLoading ? (
+              <Spinner />
+            ) : getPastParticipantsError ? (
+              <Flex>{getPastParticipantsError.message}</Flex>
+            ) : getPastParticipantsData.getPastParticipants ? (
+              <CommonTable
+                data={getPastParticipantsData.getPastParticipants.map(
+                  (participant: TableData) => ({
+                    participantId: participant.participantId,
+                    arrival: participant.arrival,
+                    departure: participant.departure,
+                  }),
+                )}
+                columnInfo={columnTypes}
+                onEdit={(row: any) => {
+                  setSelected(row);
+                  setEditPastParticipant(true);
+                }}
+                maxResults={4}
+              />
+            ) : (
+              <Flex>No participants found.</Flex>
+            )}
+            {editPastParticipant && selected && (
+              <EditPastParticipantCard
+                selected={selected}
+                close={() => setEditPastParticipant(false)}
+              />
+            )}
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );

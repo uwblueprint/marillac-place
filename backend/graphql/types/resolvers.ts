@@ -2,18 +2,27 @@ import { gql } from "apollo-server-express";
 
 const resolverTypes = gql`
   type Query {
-    getAllParticipants: [Participant]
-    getParticipantById(participantId: String): Participant
-    getAvailableRooms: [Int]
+    getPastParticipants: [Participant]
+    getCurrentParticipants: [Participant]
+    getParticipantById(participantId: String!): Participant
+    getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementByRooms(rooms: [Int]): [Announcement]
   }
 
   type Mutation {
+    login(role: String!, encryptedPassword: String!): AuthResponse
     createParticipant(
-      participantId: String
+      participantId: String!
+      roomNumber: Int!
+      arrival: String!
+      password: String!
+    ): Boolean
+    updateParticipantById(
+      participantId: String!
       roomNumber: Int
       arrival: String
+      departure: String
       password: String
     ): Boolean
     createAnnouncement(
@@ -33,6 +42,8 @@ const resolverTypes = gql`
       message: String
     ): Boolean
     deleteAnnouncement(announcementId: Int): Boolean
+    createNote(message: String!, date: String!, formattedDate: String!): Boolean
+    deleteNote(noteId: Int!): Boolean
   }
 `;
 

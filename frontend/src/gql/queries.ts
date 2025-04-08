@@ -6,21 +6,29 @@ export const GET_AVAILABLE_ROOMS = gql`
   }
 `;
 
-export const GET_ALL_PARTICIPANTS = gql`
-  query getAllParticipants {
-    getAllParticipants {
+export const GET_PAST_PARTICIPANTS = gql`
+  query getPastParticipants {
+    getPastParticipants {
+      participantId
+      arrival
+      departure
+    }
+  }
+`;
+
+export const GET_CURRENT_PARTICIPANTS = gql`
+  query getCurrentParticipants {
+    getCurrentParticipants {
       participantId
       roomNumber
       arrival
-      departure
       password
-      credit
     }
   }
 `;
 
 export const GET_PARTICIPANT_BY_ID = gql`
-  query getParticipantById($participantId: String) {
+  query getParticipantById($participantId: String!) {
     getParticipantById(participantId: $participantId) {
       participantId
       roomNumber
@@ -55,3 +63,14 @@ export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
     }
   }
 `;
+
+export const GET_NOTES = gql`
+  query getNotes {
+    getNotes {
+      noteId
+      message
+      formattedDate
+    }
+  }
+`;
+
