@@ -15,6 +15,33 @@ const resolverTypes = gql`
       arrival: String
       password: String
     ): Boolean
+
+     createTask(
+      roomNumber: Int
+      type: TaskType
+      status: TaskStatus
+      name: String!
+      isRecurring: Boolean!
+      start: DateTime!
+      end: DateTime!
+      credit: Int!
+      comment: String
+    ): Task
+
+    createAssignedTask(
+      assignedTaskId: Int
+      userID: Int
+      type: TaskType!
+      name: String!
+      recurrencePreference: RecurrenceFrequency
+      repeatDays: [String]
+      timePreference: TimeOption!
+      start: String
+      end: String
+      credit: Int!
+      deduction: Int
+      comment: String
+    ): AssignedTask
     editMarillacBucks(
       participantId: String
       credit: Int
