@@ -4,130 +4,88 @@ import IParticipantService from "../../services/interface/participantInterface";
 
 const participantService: IParticipantService = new ParticipantService();
 const participantResolvers = {
-  Query: {
-    getAllParticipants: async (): Promise<Participant[]> => {
-      return participantService.getAllParticipants();
+    Query: {
+        getPastParticipants: async (): Promise<Participant[]> => {
+            return participantService.getPastParticipants();
+        },
+        getCurrentParticipants: async (): Promise<Participant[]> => {
+            return participantService.getCurrentParticipants();
+        },
+        getParticipantById: async (
+            _parent: undefined,
+            { participantId }: { participantId: string },
+        ): Promise<Participant | null> => {
+            return participantService.getParticipantById(participantId);
+        },
+        getParticipantByRoom: async (
+            _parent: undefined,
+            { roomNumber }: { roomNumber: number },
+        ): Promise<Participant | null> => {
+            return participantService.getParticipantByRoom(roomNumber);
+        }
     },
-    getParticipantById: async (
-      _parent: undefined,
-      { participantId }: { participantId: string },
-    ): Promise<Participant | null> => {
-      return participantService.getParticipantById(participantId);
+    Mutation: {
+        createParticipant: async (
+            _parent: undefined,
+            {
+                participantId,
+                roomNumber,
+                arrival,
+                password,
+            }: {
+                participantId: string;
+                roomNumber: number;
+                arrival: string;
+                password: string;
+            },
+        ): Promise<boolean> => {
+            return participantService.createParticipant(
+                participantId,
+                roomNumber,
+                arrival,
+                password,
+            );
+        },
+        updateParticipantById: async (
+            _parent: undefined,
+            {
+                participantId,
+                roomNumber,
+                arrival,
+                departure,
+                password,
+            }: {
+                participantId: string;
+                roomNumber?: number;
+                arrival?: string;
+                departure?: string;
+                password?: string;
+            },
+        ): Promise<boolean> => {
+            return participantService.updateParticipantById(
+                participantId,
+                roomNumber,
+                arrival,
+                departure,
+                password,
+            );
+        },
+        editMarillacBucks: async (
+            _parent: undefined,
+            {
+                participantId,
+                credit
+            }: {
+                participantId: string;
+                credit: number;
+            },
+        ): Promise<boolean> => {
+            return participantService.updateParticipantCredit(
+                participantId,
+                credit
+            );
+        },
     },
-    getParticipantByRoom: async (
-      _parent: undefined,
-      { roomNumber }: { roomNumber: number }, 
-    ): Promise<Participant | null> => {
-      return participantService.getParticipantByRoom(roomNumber);
-    }
-  },
-  Mutation: {
-    createParticipant: async (
-      _parent: undefined,
-      {
-        participantId,
-        roomNumber,
-        arrival,
-        password,
-      }: {
-        participantId: string;
-        roomNumber: number;
-        arrival: string;
-        password: string;
-      },
-    ): Promise<boolean> => {
-      return participantService.createParticipant(
-        participantId,
-        roomNumber,
-        arrival,
-        password,
-      );
-    },
-    editMarillacBucks: async (
-      _parent: undefined,
-      {
-        participantId,
-        credit
-      }: {
-        participantId: string;
-        credit: number;
-      },
-    ): Promise<boolean> => {
-      return participantService.updateParticipantCredit(
-        participantId,
-        credit
-      );
-    },
-  },
 };
 
 export default participantResolvers;
-
-// import IResidentService, {
-//   ResidentDTO,
-//   CreateResidentDTO,
-//   UpdateResidentDTO,
-//   RedeemCreditsResponse,
-// } from "../../services/interface/residentService";
-
-// const residentResolvers = {
-//   Query: {
-//     getResidentsByIds: async (
-//       _parent: undefined,
-//       { userIds }: { userIds: string[] },
-//     ): Promise<Array<ResidentDTO>> => {
-//       return residentService.getResidentsByIds(userIds.map(Number));
-//     },
-//     getAllResidents: async (): Promise<Array<ResidentDTO>> => {
-//       return residentService.getAllResidents();
-//     },
-//     getActiveResidents: async (): Promise<ResidentDTO[]> => {
-//       const activeResidents = await residentService.getActiveResidents();
-//       return activeResidents;
-//     },
-//   },
-//   Mutation: {
-//     addResident: async (
-//       _parent: undefined,
-//       {
-//         resident,
-//       }: {
-//         resident: CreateResidentDTO;
-//       },
-//     ): Promise<ResidentDTO> => {
-//       const newResident = await residentService.addResident(resident);
-//       return newResident;
-//     },
-//     updateResident: async (
-//       _parent: undefined,
-//       {
-//         userId,
-//         resident,
-//       }: {
-//         userId: string;
-//         resident: UpdateResidentDTO;
-//       },
-//     ): Promise<ResidentDTO> => {
-//       const newResident = await residentService.updateResident(
-//         parseInt(userId, 10),
-//         resident,
-//       );
-//       return newResident;
-//     },
-//     deleteResident: async (
-//       _parent: undefined,
-//       { userId }: { userId: string },
-//     ): Promise<ResidentDTO> => {
-//       const deletedResident = await residentService.deleteResident(
-//         parseInt(userId, 10),
-//       );
-//       return deletedResident;
-//     },
-//     redeemCredits: async (
-//       _parent: undefined,
-//       { userId, credits }: { userId: string; credits: number },
-//     ): Promise<RedeemCreditsResponse> => {
-//       return residentService.redeemCredits(parseInt(userId, 10), credits);
-//     },
-//   },
-// };

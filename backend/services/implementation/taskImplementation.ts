@@ -1,249 +1,143 @@
-// import prisma, { TaskType, Status } from "../../prisma";
-// import ITaskService, {
-//   InputTaskDTO,
-//   TaskDTO,
-//   InputTaskAssignedDTO,
-//   TaskAssignedDTO,
-// } from "../interfaces/taskService";
-// import logger from "../../utilities/logger";
-// import { getErrorMessage } from "../../utilities/errorUtils";
+import prisma from "../../prisma";
+import {
+  DaysOfWeek,
+  RecurrenceFrequency,
+  Task,
+  TaskType,
+  TimeOption,
+} from "@prisma/client";
+import ITaskService from "../interface/taskInterface";
 
-// const Logger = logger(__filename);
+class TaskService implements ITaskService {
+  async getTaskById(taskId: number): Promise<Task> {
+    try {
+      const task = await prisma.task.findUnique({
+        where: { taskId },
+      });
+      if (!task) throw new Error(`task id ${taskId} not found`);
 
-// class TaskService implements ITaskService {
-//   async getTaskById(taskId: number): Promise<TaskDTO> {
-//     try {
-//       const task = await prisma.task.findUnique({
-//         where: {
-//           id: taskId,
-//         },
-//         // include: {
-//         //   location: true,
-//         // },
-//       });
-//       if (!task) throw new Error(`task id ${taskId} not found`);
-//       return task;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to get task. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
+      return task;
+    } catch (error: unknown) {
+      console.log(error);
+      throw error;
+    }
+  }
 
-//   async getTasksByType(type: TaskType): Promise<TaskDTO[]> {
-//     try {
-//       const tasks = await prisma.task.findMany({
-//         where: { type },
-//         // include: {
-//         //   location: true,
-//         // },
-//       });
-//       if (!tasks) throw new Error(`task type ${type} not found`);
+  async getTasksByType(type: TaskType): Promise<Task[]> {
+    try {
+      const tasks = await prisma.task.findMany({
+        where: { type },
+      });
+      if (!tasks) throw new Error(`task type ${type} not found`);
 
-//       return tasks;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
+      return tasks;
+    } catch (error: unknown) {
+      console.log(error);
+      throw error;
+    }
+  }
 
-//   async getTasksByAssigneeId(assigneeId: number): Promise<TaskAssignedDTO[]> {
-//     try {
-//       const tasks = await prisma.taskAssigned.findMany({
-//         where: {
-//           assigneeId,
-//         },
-//       });
+  async getTasksByRecurrenceFrequency(
+    recurrencePreference: RecurrenceFrequency,
+  ): Promise<Task[]> {
+    try {
+      const tasks = await prisma.task.findMany({
+        where: { recurrencePreference },
+      });
+      return tasks;
+    } catch (error: unknown) {
+      console.log(error);
+      throw error;
+    }
+  }
 
-//       return tasks;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
+  async createTask(
+    type: TaskType,
+    name: string,
+    recurrencePreference: RecurrenceFrequency,
+    repeatDays: DaysOfWeek[],
+    timePreference: TimeOption,
+    credit: number,
+    deduction: number,
+    start: string,
+    end: string,
+    comment: string,
+  ): Promise<Task> {
+    try {
+      const newTask = await prisma.task.create({
+        data: {
+          type,
+          name,
+          recurrencePreference,
+          repeatDays,
+          timePreference,
+          credit,
+          deduction,
+          start,
+          end,
+          comment,
+        },
+      });
 
-//   async getTasksByAssignerId(assignerId: number): Promise<TaskAssignedDTO[]> {
-//     try {
-//       const tasks = await prisma.taskAssigned.findMany({
-//         where: {
-//           assignerId,
-//         },
-//       });
+      return newTask;
+    } catch (error: unknown) {
+      console.log(error);
+      throw error;
+    }
+  }
 
-//       return tasks;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
+  async updateTaskById(
+    taskId: number,
+    type: TaskType,
+    name: string,
+    recurrencePreference: RecurrenceFrequency,
+    repeatDays: DaysOfWeek[],
+    timePreference: TimeOption,
+    credit: number,
+    deduction: number,
+    start: string,
+    end: string,
+    comment: string,
+  ): Promise<Task> {
+    try {
+      const updatedTask = await prisma.task.update({
+        where: {
+          taskId,
+        },
+        data: {
+          type,
+          name,
+          recurrencePreference,
+          repeatDays,
+          timePreference,
+          credit,
+          deduction,
+          start,
+          end,
+          comment,
+        },
+      });
 
-//   async getTasksByStartDate(startDate: Date): Promise<TaskAssignedDTO[]> {
-//     try {
-//       const tasks = await prisma.taskAssigned.findMany({
-//         where: {
-//           startDate,
-//         },
-//       });
+      return updatedTask;
+    } catch (error: unknown) {
+      console.log(error);
+      throw error;
+    }
+  }
 
-//       return tasks;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
+  async deleteTaskById(taskId: number): Promise<Task> {
+    try {
+      const deletedTask = await prisma.task.delete({
+        where: {
+          taskId,
+        },
+      });
+      return deletedTask;
+    } catch (error: unknown) {
+      console.log(error);
+      throw error;
+    }
+  }
+}
 
-//   // async getTasksByEndDate(endDate: Date): Promise<TaskAssignedDTO[]> {
-//   //   try {
-//   //     const tasks = await prisma.taskAssigned.findMany({
-//   //       where: {
-//   //         endDate,
-//   //       },
-//   //     });
-
-//   //     return tasks;
-//   //   } catch (error: unknown) {
-//   //     Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
-//   //     throw error;
-//   //   }
-//   // }
-
-//   async getTasksByStatus(status: Status): Promise<TaskAssignedDTO[]> {
-//     try {
-//       const tasks = await prisma.taskAssigned.findMany({
-//         where: {
-//           status,
-//         },
-//       });
-
-//       return tasks;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to get tasks. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
-
-//   async createTask(task: InputTaskDTO): Promise<TaskDTO> {
-//     try {
-//       const newTask = await prisma.task.create({
-//         data: {
-//           title: task.title,
-//           type: task.type,
-//           description: task.description ?? "",
-//           creditValue: task.creditValue,
-//           // location: {
-//           //   connect: { id: task.locationId },
-//           // },
-//           endDate: task.endDate,
-//           recurrenceFrequency: task.recurrenceFrequency,
-//           specificDay: task.specificDay,
-//           repeatDays: task.repeatDays,
-//         },
-//         // include: {
-//         //   location: true,
-//         // },
-//       });
-
-//       return newTask;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to create task. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
-
-//   async updateTaskById(
-//     taskId: number,
-//     updateTask: InputTaskDTO,
-//   ): Promise<TaskDTO> {
-//     try {
-//       const updatedTask = await prisma.task.update({
-//         where: {
-//           id: taskId,
-//         },
-//         data: updateTask,
-//         // include: {
-//         //   location: true,
-//         // },
-//       });
-//       return updatedTask;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
-
-//   async deleteTaskById(taskId: number): Promise<TaskDTO> {
-//     try {
-//       await prisma.taskAssigned.deleteMany({
-//         where: {
-//           taskId,
-//         },
-//       });
-
-//       const deletedTask = await prisma.task.delete({
-//         where: {
-//           id: taskId,
-//         },
-//         // include: {
-//         //   location: true,
-//         // },
-//       });
-
-//       return deletedTask;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to update task. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
-
-//   async assignTask(
-//     taskAssigned: InputTaskAssignedDTO,
-//   ): Promise<TaskAssignedDTO> {
-//     try {
-//       const newTaskAssigned = await prisma.taskAssigned.create({
-//         data: {
-//           task: {
-//             connect: { id: taskAssigned.taskId },
-//           },
-//           assigner: {
-//             connect: { userId: taskAssigned.assignerId },
-//           },
-//           assignee: {
-//             connect: { userId: taskAssigned.assigneeId },
-//           },
-//           status: taskAssigned.status,
-//           startDate: taskAssigned.startDate,
-//           comments: taskAssigned.comments,
-//         },
-//       });
-
-//       return newTaskAssigned;
-//     } catch (error: unknown) {
-//       Logger.error(`Failed to assign task. Reason = ${getErrorMessage(error)}`);
-//       throw error;
-//     }
-//   }
-
-//   async changeTaskStatus(
-//     taskAssignedId: number,
-//     status: Status,
-//   ): Promise<TaskAssignedDTO> {
-//     try {
-//       const updatedTask = await prisma.taskAssigned.update({
-//         where: {
-//           id: taskAssignedId,
-//         },
-//         data: {
-//           status,
-//         },
-//       });
-
-//       return updatedTask;
-//     } catch (error: unknown) {
-//       Logger.error(
-//         `Failed to update task status. Reason = ${getErrorMessage(error)}`,
-//       );
-//       throw error;
-//     }
-//   }
-// }
-
-// export default TaskService;
+export default TaskService;

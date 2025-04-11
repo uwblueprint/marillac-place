@@ -21,17 +21,27 @@ const customTypes = gql`
     EXCUSED
   }
 
-  enum TimeOption{
-    ANYTIME
-    SPECIFIC
+  enum DaysOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
   }
-  
-  enum RecurrenceFrequency{
+
+  enum RecurrenceFrequency {
     DAILY
     EVERY_SELECTED_DAYS
     ANY_SELECTED_DAYS
   }
-    
+
+  enum TimeOption {
+    ANYTIME
+    SPECIFIC
+  }
+
 `;
 
 export default customTypes;

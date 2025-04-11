@@ -18,6 +18,16 @@ enum TaskType {
   CUSTOM
 }
 
+enum DaysOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
 enum TaskStatus {
   UNASSIGNED
   ASSIGNED
@@ -25,16 +35,6 @@ enum TaskStatus {
   PENDING
   COMPLETE
   EXCUSED
-}
-
-enum DaysOfWeek {
-  M
-  T
-  W
-  Th
-  F
-  S
-  Su
 }
 
 enum TimeOption {
@@ -49,22 +49,22 @@ enum RecurrenceFrequency {
 }
 
 model Participant {
-  participantId     String        @id
-  roomNumber        Int
-  arrival           String
-  departure         String?     
-  password          String
-  credit            Int           @default(0)
+  participantId           String        @id
+  roomNumber              Int
+  arrival                 String
+  departure               String?
+  password                String
+  credit                  Int           @default(0)
 
   @@map("participants")
 }
 
 model Announcement {
-  announcementId    Int           @id @default(autoincrement())
-  from              StaffType     
-  to                Int[]         
-  createdAt         DateTime
-  message           String
+  announcementId          Int           @id @default(autoincrement())
+  from                    StaffType
+  to                      Int[]
+  createdAt               DateTime
+  message                 String
 
   @@map("announcements")
 }
@@ -74,7 +74,7 @@ model Task {
   type                    TaskType
   name                    String
   recurrencePreference    RecurrenceFrequency
-  repeatDays              String[]
+  repeatDays              DaysOfWeek[]
   timePreference          TimeOption
   start                   String?
   end                     String?
@@ -100,4 +100,13 @@ model AssignedTask {
   comment                 String?
 
   @@map("assignedtasks")
+}
+
+model Note {
+  noteId            Int           @id @default(autoincrement())
+  message           String
+  date              String
+  formattedDate     String
+
+  @@map("notes")
 }
