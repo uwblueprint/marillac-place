@@ -8,7 +8,6 @@ import {
   InputRightElement,
   InputGroup,
   InputLeftElement,
-  FormErrorMessage,
 } from "@chakra-ui/react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -21,7 +20,6 @@ type FormInputFieldProps = {
   type: "text" | "password" | "date" | "number";
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
-  error?: string;
   leftElement?: string;
 };
 
@@ -32,13 +30,12 @@ const FormInputField = ({
   type,
   onChange,
   required = false,
-  error = "",
   leftElement = "",
 }: FormInputFieldProps): React.ReactElement => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <FormControl isRequired={required} isInvalid={error !== ""}>
+    <FormControl isRequired={required}>
       {label && (
         <FormLabel mb="5px" color="gray.main" fontWeight="700">
           {label}
@@ -64,13 +61,12 @@ const FormInputField = ({
           type={type === "password" && showPassword ? "text" : type}
           value={value}
           onChange={onChange}
-          borderWidth="2px"
-          borderColor="gray.300"
-          errorBorderColor="red.300"
+          border="solid"
+          borderColor="gray.200"
         />
 
         {type === "password" && (
-          <InputRightElement h="34px">
+          <InputRightElement>
             <Button
               onClick={() => setShowPassword(!showPassword)}
               bg="transparent"
@@ -85,8 +81,6 @@ const FormInputField = ({
           </InputRightElement>
         )}
       </InputGroup>
-
-      {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );
 };

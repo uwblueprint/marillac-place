@@ -1,29 +1,17 @@
-import React, { useContext } from "react";
-import { gql, useMutation } from "@apollo/client";
+import React from "react";
 import {
   Tabs,
   TabList,
   Tab,
   Box,
   Button,
-  Avatar,
   Text,
-  Flex,
-  Heading,
-  useBreakpointValue,
+  Flex
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 import * as Routes from "../../constants/Routes";
 import { ReactComponent as Logo } from "../../assets/marillacPlaceLogo.svg";
-
-const mockAuthenticatedUser = {
-  id: "1",
-  type: "STAFF",
-  email: "janedoe@gmail.com",
-  firstName: "Jane",
-  lastName: "Doe",
-};
 
 const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
   label,
@@ -40,8 +28,7 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
       pt={1}
       pb={1}
       mt={5}
-      _selected={{ bg: "purple.main", color: "white" }}
-      _hover={{ bg: "purple.100", color: "purple.main" }}
+      _selected={{ bg: "orange.500", color: "orange.50" }}
     >
       {label}
     </Tab>
@@ -50,6 +37,12 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
 
 const SideBar: React.FC = () => {
   const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    // localStorage.removeItem("type");
+    navigate(Routes.LOGIN_PAGE);
+  };
 
   const pages = [
     { label: "Home", route: Routes.HOME_PAGE },
@@ -84,7 +77,7 @@ const SideBar: React.FC = () => {
         h="100%"
         w="240px"
         borderRight="solid"
-        borderRightColor="gray.300"
+        borderRightColor="gray.200"
         background="white"
         position="fixed"
         pt={6}
@@ -118,23 +111,18 @@ const SideBar: React.FC = () => {
               </TabList>
             </Tabs>
           </Flex>
-
-          <Flex flexDirection="column" alignItems="left">
-            <Text whiteSpace="nowrap" fontWeight="bold" mb="3">
-              Administrative Staff
-            </Text>
-
-            <Button
-              variant="del"
-              border="1px solid #C5C8D8"
-              color="#B21D2F"
-              fontWeight={400}
-              fontSize="14px"
-              width="fit-content"
-            >
-              Sign out
-            </Button>
-          </Flex>
+          <Button
+            variant="del"
+            border="solid"
+            borderColor="gray.200"
+            color="#B21D2F"
+            fontWeight={600}
+            fontSize="14px"
+            width="fit-content"
+            onClick={() => handleSignOut()}
+          >
+            Sign out
+          </Button>
         </Flex>
       </Box>
     </Flex>
