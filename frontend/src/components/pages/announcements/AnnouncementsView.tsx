@@ -1,4 +1,4 @@
-export {};
+export {}
 // import React, { useState } from "react";
 // import moment from "moment";
 // import {
@@ -21,7 +21,7 @@ export {};
 // } from "@chakra-ui/react";
 // import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 // import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-
+//
 // import { useMutation } from "@apollo/client";
 // import { GroupAnnouncements } from "../../../types/NotificationTypes";
 // import { formatRooms } from "./AnnouncementsGroups";
@@ -30,14 +30,16 @@ export {};
 //   NotificationGroupResponse,
 // } from "../../../APIClients/Types/NotificationType";
 // import { SEND_NOTIFICATION_TO_GROUP } from "../../../APIClients/Mutations/NotificationMutations";
-
+//
+// export {};
+//
 // const MessageInput = ({
 //   handlePost,
 // }: {
 //   handlePost: (message: string) => void;
 // }) => {
 //   const [message, setMessage] = useState("");
-
+//
 //   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 //     event.preventDefault();
 //     if (message.trim() !== "") {
@@ -45,7 +47,7 @@ export {};
 //       setMessage("");
 //     }
 //   };
-
+//
 //   return (
 //     <form onSubmit={handleSubmit}>
 //       <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
@@ -68,7 +70,7 @@ export {};
 //     </form>
 //   );
 // };
-
+//
 // type Props = {
 //   announcements: NotificationGroupResponse[];
 //   selectedGroup: string;
@@ -82,18 +84,18 @@ export {};
 //     message: string,
 //   ) => Promise<void>;
 // };
-
+//
 // type PropsList = {
 //   announcements: NotificationGroupResponse[];
 //   selectedGroup: string;
 // };
-
+//
 // const AnnouncementsList = ({ announcements, selectedGroup }: PropsList) => {
 //   console.log(announcements, selectedGroup);
 //   if (selectedGroup.length === 0) {
 //     return <></>;
 //   }
-
+//
 //   return (
 //     <Box>
 //       {announcements
@@ -131,7 +133,7 @@ export {};
 //     </Box>
 //   );
 // };
-
+//
 // const AnnouncementsView = ({
 //   announcements,
 //   selectedGroup,
@@ -148,19 +150,19 @@ export {};
 //       ? groupInfo.recipients.map((recipient) => recipient.roomNumber)
 //       : [];
 //   const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
-
+//
 //   const addRoomToNewRoom = (roomId: number) => {
 //     if (!selectedRooms.includes(roomId)) {
 //       setSelectedRooms([...selectedRooms, roomId]);
 //     }
 //   };
-
+//
 //   const deleteRoomSelected = (roomId: number) => {
 //     if (selectedRooms.includes(roomId)) {
 //       setSelectedRooms(selectedRooms.filter((room) => room !== roomId));
 //     }
 //   };
-
+//
 //   const handlePost = async (message: string) => {
 //     if (addingNewRoom && selectedRooms.length > 0) {
 //       await createNotificationGroupAndSendNotification(selectedRooms, message);
@@ -170,7 +172,7 @@ export {};
 //     }
 //     await sendNotification(message, selectedGroup);
 //   };
-
+//
 //   const formatHeader = (roomIDs: number[]) => {
 //     if (addingNewRoom && selectedGroup === "0") {
 //       return (
@@ -228,7 +230,7 @@ export {};
 //     }
 //     return "All Rooms";
 //   };
-
+//
 //   const getHeader = () => {
 //     if (selectedGroup === "" || selectedGroup === "0") {
 //       return formatHeader(rooms);
@@ -238,7 +240,7 @@ export {};
 //     }
 //     return formatRooms(rooms);
 //   };
-
+//
 //   return (
 //     <Box h="100vh" w="100%">
 //       <Flex align="left" flexDir="column" h="100%">
@@ -277,5 +279,5 @@ export {};
 //     </Box>
 //   );
 // };
-
+//
 // export default AnnouncementsView;

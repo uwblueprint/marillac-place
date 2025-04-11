@@ -1,39 +1,42 @@
-export {};
+export {}
+
 // import React, { useEffect, useState } from "react";
 // import { Flex, Button } from "@chakra-ui/react";
 // import { useMutation, useQuery } from "@apollo/client";
-// import {
+// /* import {
 //   GroupAnnouncements,
 //   Announcement,
-// } from "../../../types/NotificationTypes";
+// } from "../../../types/NotificationTypes"; */
 // import AnnouncementsGroups from "./AnnouncementsGroups";
 // import AnnouncementsView from "./AnnouncementsView";
-// import { announcementsMockData } from "../../../mocks/notifications";
-
+// // import { announcementsMockData } from "../../../mocks/notifications";
+//
 // import {
 //   CREATE_NOTIFICATION_GROUP,
 //   CREATE_ANNOUNCEMENT_GROUP,
 //   SEND_NOTIFICATION_TO_GROUP,
-//   DELETE_NOTIFICATION_GROUP,
-//   UPDATE_NOTIFICATION_BY_ID,
-//   DELETE_NOTIFICATION_BY_IDS,
-//   UPDATE_SEEN_NOTIFICATION,
-// } from "../../../APIClients/Mutations/NotificationMutations";
-
+//   //  DELETE_NOTIFICATION_GROUP,
+//   //  UPDATE_NOTIFICATION_BY_ID,
+//   //  DELETE_NOTIFICATION_BY_IDS,
+//   //  UPDATE_SEEN_NOTIFICATION,
+// } from "../../../gql/mutations";
+//
 // import {
-//   GET_NOTIFICATIONS_BY_IDS,
-//   GET_NOTIFCATION_BY_RESIDENT,
+//   //  GET_NOTIFICATIONS_BY_IDS,
+//   //  GET_NOTIFCATION_BY_RESIDENT,
 //   GET_ALL_GROUPS_AND_NOTIFICATIONS,
-// } from "../../../APIClients/Queries/NotificationQueries";
-
+// } from "../../../gql/queries";
+//
 // import {
 //   NotificationResponse,
-//   NotificationUpdateRequest,
-//   NotificationCreateRequest,
+//   //  NotificationUpdateRequest,
+//   //  NotificationCreateRequest,
 //   NotificationGroupResponse,
-//   NotificationReceivedResponse,
+//   //  NotificationReceivedResponse,
 // } from "../../../APIClients/Types/NotificationType";
-
+//
+// export {};
+//
 // const AnnouncementsPage = (): React.ReactElement => {
 //   const [announcements, setAnnouncements] = useState<
 //     NotificationGroupResponse[]
@@ -41,28 +44,28 @@ export {};
 //   const [selectedGroup, setSelectedGroup] = useState<string>("");
 //   const [addingNewRoom, setAddingNewRoom] = useState<boolean>(false);
 //   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
-
+//
 //   // const [sendNotification] = useMutation<{
 //   //   authorId: string;
 //   //   title: string;
 //   //   message: string;
 //   //   recipientIds: [number];
 //   // }>(SEND_NOTIFICATION);
-
+//
 //   // const [deleteUserNotification] = useMutation<{
 //   //   notificationId: string;
 //   // }>(DELETE_USER_NOTIFICATION);
-
+//
 //   // const [updateSeenNotification] = useMutation<{
 //   //   notificationId: string;
 //   // }>(UPDATE_SEEN_NOTIFICATION);
-
+//
 //   // const [sendAnnouncement] = useMutation<{
 //   //   title: string;
 //   //   message: string;
 //   //   userId: number;
 //   // }>(SEND_ANNOUNCEMENT);
-
+//
 //   // const {
 //   //   loading: notificationByIdLoading,
 //   //   error: notificationByIdError,
@@ -70,7 +73,7 @@ export {};
 //   // } = useQuery<{ id: string }>(GET_NOTIFCATION_BY_ID, {
 //   //   variables: { id: "8" },
 //   // });
-
+//
 //   // const handleSendNotification = async () => {
 //   //   try {
 //   //     const authorId = "6";
@@ -84,7 +87,7 @@ export {};
 //   //     console.log(e);
 //   //   }
 //   // };
-
+//
 //   // const handleSendAnnouncement = async () => {
 //   //   console.log(notificationsByUserIdData);
 //   //   console.log(notificationByIdData);
@@ -99,7 +102,7 @@ export {};
 //   //     console.log(e);
 //   //   }
 //   // };
-
+//
 //   // const handleDeleteNotification = async () => {
 //   //   try {
 //   //     const notificationId = "4";
@@ -110,7 +113,7 @@ export {};
 //   //     console.log(e);
 //   //   }
 //   // };
-
+//
 //   // const handleUpdateSeenNotification = async () => {
 //   //   try {
 //   //     const notificationId = "4";
@@ -121,7 +124,7 @@ export {};
 //   //     console.log(e);
 //   //   }
 //   // };
-
+//
 //   /*
 // [
 //     {
@@ -140,17 +143,17 @@ export {};
 //     }
 // ]
 //   */
-
+//
 //   const {
 //     loading: allNotificationsLoading,
 //     error: allNotificationsError,
 //     data: allNotificationsData,
 //   } = useQuery(GET_ALL_GROUPS_AND_NOTIFICATIONS);
-
+//
 //   const [sendNotificationToGroup] = useMutation(SEND_NOTIFICATION_TO_GROUP);
 //   const [createNotificationGroup] = useMutation(CREATE_NOTIFICATION_GROUP);
 //   const [createAnnouncementGroup] = useMutation(CREATE_ANNOUNCEMENT_GROUP);
-
+//
 //   const sendNotification = async (
 //     message: string,
 //     groupId: string,
@@ -168,7 +171,7 @@ export {};
 //           },
 //         })
 //       ).data.sendNotificationToGroup;
-
+//
 //       if (!newGroup) {
 //         setAnnouncements((currentAnnouncements) =>
 //           currentAnnouncements.map((group) => {
@@ -198,7 +201,7 @@ export {};
 //       console.log(e);
 //     }
 //   };
-
+//
 //   const createNotificationGroupAndSendNotification = async (
 //     selectedIds: number[],
 //     message: string,
@@ -211,7 +214,7 @@ export {};
 //       } else if (selectedIds.length === 0) {
 //         throw Object.assign(new Error("No rooms selected."), { code: 400 });
 //       }
-
+//
 //       let newGroup;
 //       if (selectedIds[0] === -1) {
 //         newGroup = (await createAnnouncementGroup({})).data
@@ -225,14 +228,14 @@ export {};
 //           })
 //         ).data.createNotificationGroup;
 //       }
-
+//
 //       await sendNotification(message, newGroup.id, newGroup);
 //     } catch (e: any) {
 //       if (e.message === "Announcement Group already exists.") {
 //         const announcementId = announcements.find(
 //           (group) => group.announcementGroup === true,
 //         )?.id;
-
+//
 //         if (announcementId) {
 //           await sendNotification(message, announcementId);
 //           setSelectedGroup(announcementId);
@@ -255,7 +258,7 @@ export {};
 //           }
 //           return false;
 //         })?.id;
-
+//
 //         if (groupId) {
 //           await sendNotification(message, groupId);
 //           setSelectedGroup(groupId);
@@ -265,13 +268,13 @@ export {};
 //       }
 //     }
 //   };
-
+//
 //   useEffect(() => {
 //     // TODO: Fetch announcements from API
 //     if (allNotificationsData) {
 //       setAnnouncements(allNotificationsData.getAllGroupsAndNotifications);
 //     }
-
+//
 //     // const combinedAnnouncements: GroupAnnouncements = {};
 //     // Object.entries(announcementsMockData).forEach(([key, value]) => {
 //     //   for (let i = 0; i < value.length; i += 1) {
@@ -288,10 +291,10 @@ export {};
 //     //     combinedAnnouncements[key].push(newAnnouncement);
 //     //   }
 //     // });
-
+//
 //     // setAnnouncements(combinedAnnouncements);
 //   }, [allNotificationsData]);
-
+//
 //   return (
 //     <Flex flexDir="column" flexGrow={1}>
 //       <Flex flexDir="row" alignItems="flex-start" w="100%" flexGrow={1}>
@@ -318,5 +321,5 @@ export {};
 //     </Flex>
 //   );
 // };
-
+//
 // export default AnnouncementsPage;

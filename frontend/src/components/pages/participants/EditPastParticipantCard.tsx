@@ -17,7 +17,7 @@ type EditParticipantCardProps = {
 
 const EditPastParticipantCard = ({
   selected,
-  close
+  close,
 }: EditParticipantCardProps): React.ReactElement => {
   const [arrivalDate, setArrivalDate] = useState(selected.arrival);
   const [departureDate, setDepartureDate] = useState(selected.departure);
@@ -36,15 +36,18 @@ const EditPastParticipantCard = ({
       setError("Missing fields.");
       return false;
     }
-    if (arrivalDate === selected.arrival && departureDate === selected.departure) {
+    if (
+      arrivalDate === selected.arrival &&
+      departureDate === selected.departure
+    ) {
       setError("No changes made.");
       return false;
     }
     const start = new Date(arrivalDate);
     const end = new Date(departureDate);
     if (start > end) {
-        setError("Invalid update.")
-        return false;
+      setError("Invalid update.");
+      return false;
     }
     return true;
   };
@@ -58,7 +61,7 @@ const EditPastParticipantCard = ({
           variables: {
             participantId: selected.participantId,
             arrival: arrivalDate,
-            departure: departureDate
+            departure: departureDate,
           },
         });
         reset();
@@ -93,21 +96,21 @@ const EditPastParticipantCard = ({
 
         <Flex gap="15px">
           <FormInputField
-              label="Arrival Date"
-              value={arrivalDate}
-              type="date"
-              onChange={(e) => {
-                  setArrivalDate(e.target.value);
-              }}
+            label="Arrival Date"
+            value={arrivalDate}
+            type="date"
+            onChange={(e) => {
+              setArrivalDate(e.target.value);
+            }}
           />
 
           <FormInputField
-              label="Departure Date"
-              value={departureDate}
-              type="date"
-              onChange={(e) => {
-                  setDepartureDate(e.target.value);
-              }}
+            label="Departure Date"
+            value={departureDate}
+            type="date"
+            onChange={(e) => {
+              setDepartureDate(e.target.value);
+            }}
           />
         </Flex>
 

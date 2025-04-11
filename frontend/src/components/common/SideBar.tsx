@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Tabs,
-  TabList,
-  Tab,
-  Box,
-  Button,
-  Text,
-  Flex
-} from "@chakra-ui/react";
+import { Tabs, TabList, Tab, Box, Button, Text, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 import * as Routes from "../../constants/Routes";

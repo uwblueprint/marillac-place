@@ -13,7 +13,10 @@ type AddParticipantCardProps = {
   close: () => void;
 };
 
-const AddParticipantCard = ({roomNumber, close}: AddParticipantCardProps): React.ReactElement => {
+const AddParticipantCard = ({
+  roomNumber,
+  close,
+}: AddParticipantCardProps): React.ReactElement => {
   // eslint-disable-next-line prefer-template
   const title = "Add Participant to Room " + roomNumber;
   const [participantId, setParticipantId] = useState("");

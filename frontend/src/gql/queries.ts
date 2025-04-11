@@ -53,6 +53,30 @@ export const GET_PARTICIPANT_BY_ID = gql`
     }
 `;
 
+export const GET_ALL_ANNOUNCEMENTS = gql`
+  query getAllAnnouncements {
+    getAllAnnouncements {
+      announcementId
+      from
+      to
+      createdAt
+      message
+    }
+  }
+`;
+
+export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
+  query getAnnouncementByRooms($rooms: [Int]) {
+    getAnnouncementByRooms(rooms: $rooms) {
+      announcementId
+      from     
+      to         
+      createdAt
+      message 
+    }
+  }
+`;
+
 export const GET_NOTES = gql`
     query getNotes {
         getNotes {

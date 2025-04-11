@@ -12,6 +12,8 @@ const resolverTypes = gql`
         getTasksByRecurrenceFrequency(
             recurrencePreference: RecurrenceFrequency!
         ): [Task!]
+        getAllAnnouncements: [Announcement]
+        getAnnouncementByRooms(rooms: [Int]): [Announcement]
     }
 
     type Mutation {
@@ -75,6 +77,23 @@ const resolverTypes = gql`
             participantId: String
             credit: Int
         ): Boolean
+        createAnnouncement(
+            announcementId: Int
+            from: StaffType
+            to: [Int]
+            priority: PriorityType
+            createdAt: String
+            message: String
+        ): Boolean
+        editAnnouncement(
+            announcementId: Int
+            from: StaffType
+            to: [Int]
+            priority: PriorityType
+            createdAt: String
+            message: String
+        ): Boolean
+        deleteAnnouncement(announcementId: Int): Boolean
     }
 `;
 

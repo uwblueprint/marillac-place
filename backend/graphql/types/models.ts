@@ -16,6 +16,7 @@ const dataModels = gql`
     to: [Int!]!
     createdAt: String!
     message: String!
+    priority: PriorityType!
   }
 
   type Task {
@@ -40,8 +41,8 @@ const dataModels = gql`
   }
 
   type AuthResponse {
-      type: String!
-      accessToken: String!
+    type: String!
+    accessToken: String!
   }
   type AssignedTask {
     assignedTaskId: Int!

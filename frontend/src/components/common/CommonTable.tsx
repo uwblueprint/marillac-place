@@ -181,11 +181,7 @@ const CommonTable = ({
       justifyContent="space-between"
       h="100%"
     >
-      <TableContainer
-        border="solid"
-        borderColor="gray.200"
-        borderRadius="5px"
-      >
+      <TableContainer border="solid" borderColor="gray.200" borderRadius="5px">
         <Table>
           <Thead>
             <Tr backgroundColor="#EDF2F7" w="100%">

@@ -1,4 +1,5 @@
-export {};
+export {}
+
 // import React, { useState, useEffect } from "react";
 // import moment from "moment";
 // import {
@@ -25,23 +26,24 @@ export {};
 // import EditNoteIcon from "@mui/icons-material/EditNote";
 // import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 // import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-
-// import {
+//
+// /* import {
 //   Announcement,
 //   GroupAnnouncements,
-// } from "../../../types/NotificationTypes";
-// import { truncateMessage } from "../../../utils/StringUtils";
+// } from "../../../types/NotificationTypes"; */
 // import {
 //   NotificationGroupResponse,
 //   NotificationResponse,
 // } from "../../../APIClients/Types/NotificationType";
-
+//
+// export {};
+//
 // interface ProcessedGroupAnnouncements {
 //   all: NotificationGroupResponse[];
 //   private: NotificationGroupResponse[];
 //   groups: NotificationGroupResponse[];
 // }
-
+//
 // export const formatRooms = (roomIDs: number[]) => {
 //   // Map each room ID to its formatted string
 //   const formattedRooms = roomIDs.map((id) => {
@@ -56,7 +58,7 @@ export {};
 //   // Join the formatted room strings with commas
 //   return formattedRooms.join(", ");
 // };
-
+//
 // const GroupTab = ({
 //   roomId,
 //   roomKey,
@@ -78,7 +80,7 @@ export {};
 //     selectedRooms && selectedRooms.length > 0
 //       ? selectedRooms
 //       : roomKey.split(",").map(Number);
-
+//
 //   return (
 //     <Box
 //       onClick={() => setSelectedGroup(roomId)}
@@ -117,7 +119,7 @@ export {};
 //                 : moment(Date.now()).fromNow()}
 //             </Text>
 //           </Flex>
-
+//
 //           <Text marginBottom="0" marginTop="4px">
 //             {truncateMessage(
 //               firstAnnouncement ? firstAnnouncement.message : "",
@@ -129,7 +131,7 @@ export {};
 //     </Box>
 //   );
 // };
-
+//
 // const GroupList: React.FC<{
 //   announcements: NotificationGroupResponse[];
 //   setSelectedGroup: React.Dispatch<React.SetStateAction<string>>;
@@ -147,7 +149,7 @@ export {};
 //   const [allRooms, setAllRooms] = useState([1, 2, 3, 4, 5, 6]);
 //   const [processedAnnouncements, setProcessedAnnouncements] =
 //     useState<ProcessedGroupAnnouncements>();
-
+//
 //   useEffect(() => {
 //     const processedData: ProcessedGroupAnnouncements = {
 //       all: [],
@@ -167,11 +169,11 @@ export {};
 //         processedData.groups.push(group);
 //       }
 //     });
-
+//
 //     // Object.keys(announcements).forEach((key) => {
 //     //   const rooms = key.split(",").map((room) => parseInt(room.trim(), 10));
 //     //   const announcementData = announcements[key];
-
+//
 //     //   if (rooms.length === 1) {
 //     //     // Add announcement to 'all' and 'private' if there is only 1 room
 //     //     processedData.all[key] = announcementData;
@@ -182,10 +184,10 @@ export {};
 //     //     processedData.groups[key] = announcementData;
 //     //   }
 //     // });
-
+//
 //     setProcessedAnnouncements(processedData);
 //   }, [announcements]);
-
+//
 //   const renderGroupTabs = (announcementsGroup: NotificationGroupResponse[]) => {
 //     return (
 //       announcementsGroup &&
@@ -234,7 +236,7 @@ export {};
 //       )
 //     );
 //   };
-
+//
 //   const deleteSearchRoom = (
 //     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
 //     roomId: number,
@@ -243,17 +245,17 @@ export {};
 //       setSearchRooms(searchRooms.filter((room) => room !== roomId));
 //     }
 //   };
-
+//
 //   const addRoomToSearch = (roomId: number) => {
 //     if (!searchRooms.includes(roomId)) {
 //       setSearchRooms([...searchRooms, roomId]);
 //     }
 //   };
-
+//
 //   const addRoom = () => {
 //     setAddingNewRoom(true);
 //   };
-
+//
 //   return (
 //     <Box h="100vh" w="100%" borderRight="solid" borderRightColor="gray.300">
 //       <Flex flexDir="column" bg="purple.50" w="100%">
@@ -294,7 +296,7 @@ export {};
 //                   ))}
 //               </MenuList>
 //             </Menu>
-
+//
 //             <HStack spacing={2} height="100%" paddingLeft="8px">
 //               <Icon as={Search} color="gray.300" />
 //               {searchRooms.map((room) => (
@@ -315,7 +317,7 @@ export {};
 //               ))}
 //             </HStack>
 //           </Box>
-
+//
 //           <IconButton
 //             icon={<EditNoteIcon />}
 //             aria-label="Edit"
@@ -328,7 +330,7 @@ export {};
 //             onClick={addRoom}
 //           />
 //         </Flex>
-
+//
 //         <Tabs isFitted variant="horizontal">
 //           <TabList borderBottom="solid" borderBottomColor="gray.300" w="100%">
 //             <Tab>All</Tab>
@@ -354,5 +356,5 @@ export {};
 //     </Box>
 //   );
 // };
-
+//
 // export default GroupList;

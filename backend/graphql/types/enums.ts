@@ -12,6 +12,12 @@ const customTypes = gql`
     CUSTOM
   }
 
+  enum PriorityType {
+    LOW
+    MEDIUM
+    HIGH
+  }
+
   enum TaskStatus {
     UNASSIGNED
     ASSIGNED

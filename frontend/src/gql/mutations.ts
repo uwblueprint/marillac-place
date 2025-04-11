@@ -17,6 +17,50 @@ export const CREATE_PARTICIPANT = gql`
   }
 `;
 
+export const CREATE_ANNOUNCEMENT = gql`
+  mutation createAnnouncement($announcementId: number,
+    $from: StaffType,     
+    $to: [Int],   
+    $priority: PriorityType,       
+    $createdAt: Date,
+    $message: String,
+    ) {
+    createAnnouncement(
+      announcementId: $announcementId
+      from: $from
+      to: $to
+      priority: $priority
+      createdAt: $createdAt
+      message: $message
+    )
+  }
+`;
+
+export const EDIT_ANNOUNCEMENT = gql`
+  mutation editAnnouncement($announcementId: number,
+    $from: StaffType,     
+    $to: [Int],          
+    $priority: PriorityType,   
+    $createdAt: Date,
+    $message: String,
+    ) {
+    editAnnouncement(
+      announcementId: $announcementId
+      from: $from
+      to: $to
+      priority: $priority
+      createdAt: $createdAt
+      message: $message
+    )
+  }
+`;
+
+export const DELETE_ANNOUNCEMENT = gql`
+  mutation deleteAnnouncement($announcementId: Int) {
+    deleteAnnouncement(announcementId: $announcementId)
+  }
+`;
+
 export const UPDATE_PARTICIPANT_BY_ID = gql`
   mutation updateParticipantById(
     $participantId: String!

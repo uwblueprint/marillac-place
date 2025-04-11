@@ -28,6 +28,12 @@ enum DaysOfWeek {
   SUNDAY
 }
 
+enum PriorityType {
+  NORMAL
+  HIGH
+  CRITICAL
+}
+
 enum TaskStatus {
   UNASSIGNED
   ASSIGNED
@@ -60,11 +66,12 @@ model Participant {
 }
 
 model Announcement {
-  announcementId          Int           @id @default(autoincrement())
-  from                    StaffType
-  to                      Int[]
-  createdAt               DateTime
-  message                 String
+  announcementId    Int           @id @default(autoincrement())
+  from              StaffType     
+  to                Int[]         
+  priority          PriorityType
+  createdAt         DateTime
+  message           String
 
   @@map("announcements")
 }
