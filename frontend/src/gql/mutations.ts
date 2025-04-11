@@ -35,6 +35,18 @@ export const UPDATE_PARTICIPANT_BY_ID = gql`
   }
 `;
 
+export const EDIT_MARILLAC_BUCKS = gql`
+    mutation EditMarillacBucks(
+        $participantId: String
+        $credit : Int
+    ) {
+        editMarillacBucks(
+            participantId: $participantId
+            credit: $credit
+        )
+    }
+`;
+
 // Note Mutations
 export const CREATE_NOTE = gql`
   mutation createNote(
@@ -91,6 +103,49 @@ export const CREATE_TASK = gql`
       comment
     }
   }
+`;
+
+export const CREATE_ASSIGNED_TASK = gql`
+    mutation createAssignedTask(
+        $userID: Int
+        $type: TaskType!
+        $name: String!
+        $recurrencePreference: RecurrenceFrequency
+        $repeatDays: [String]
+        $timePreference: TimeOption!
+        $start: String
+        $end: String
+        $credit: Int!
+        $deduction: Int
+        $comment: String
+    ) {
+        createAssignedTask(
+            userID: $userID
+            type: $type
+            name: $name
+            recurrencePreference: $recurrencePreference
+            repeatDays: $repeatDays
+            timePreference: $timePreference
+            start: $start
+            end: $end
+            credit: $credit
+            deduction: $deduction
+            comment: $comment
+        ) {
+            assignedTaskId
+            userID
+            type
+            name
+            recurrencePreference
+            repeatDays
+            timePreference
+            start
+            end
+            credit
+            deduction
+            comment
+        }
+    }
 `;
 
 export const UPDATE_TASK = gql`

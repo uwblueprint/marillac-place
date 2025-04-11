@@ -43,6 +43,20 @@ const dataModels = gql`
       type: String!
       accessToken: String!
   }
+  type AssignedTask {
+    assignedTaskId: Int!
+    userID: Int!
+    type: TaskType!
+    name: String!
+    recurrencePreference: RecurrenceFrequency!
+    repeatDays: [String]!
+    timePreference: TimeOption!
+    start: String
+    end: String
+    credit: Int!
+    deduction: Int!
+    comment: String
+  }
 `;
 
 export default dataModels;

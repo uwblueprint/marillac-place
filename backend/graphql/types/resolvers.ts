@@ -5,6 +5,7 @@ const resolverTypes = gql`
         getPastParticipants: [Participant]
         getCurrentParticipants: [Participant]
         getParticipantById(participantId: String!): Participant
+        getParticipantByRoom(roomNumber: Int): Participant
         getNotes: [Note]
         getTaskById(taskId: Int!): Task!
         getTasksByType(type: TaskType!): [Task!]
@@ -56,6 +57,24 @@ const resolverTypes = gql`
             comment: String
         ): Task!
         deleteTask(taskId: Int!): Task!
+        createAssignedTask(
+            assignedTaskId: Int
+            userID: Int
+            type: TaskType!
+            name: String!
+            recurrencePreference: RecurrenceFrequency
+            repeatDays: [String]
+            timePreference: TimeOption!
+            start: String
+            end: String
+            credit: Int!
+            deduction: Int
+            comment: String
+        ): AssignedTask
+        editMarillacBucks(
+            participantId: String
+            credit: Int
+        ): Boolean
     }
 `;
 
