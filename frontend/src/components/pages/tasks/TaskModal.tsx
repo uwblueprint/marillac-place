@@ -16,7 +16,7 @@ import {
 import { FilePresent } from "@mui/icons-material";
 import colors from "../../../theme/colors";
 import ModalContainer from "../../common/ModalContainer";
-import FormInputField from "../../common/form/FormInputField";
+import FormInputField from "../../common/FormInputField";
 import {
   TaskType,
   Task,
@@ -216,11 +216,14 @@ const TaskModal = ({
     else setSelectedDays([]);
   };
 
+  if (!isOpen) {
+    return <div> </div>
+  }
+
   return (
     <ModalContainer
       title={task ? task.name : "Assign Task"}
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
+      close={() => setIsOpen(false)}
     >
       <Flex flexDir="column" gap="20px">
         {/* Task Type Selection */}
@@ -250,7 +253,7 @@ const TaskModal = ({
             value={title}
             type="text"
             onChange={(e: any) => setTitle(e.target.value)}
-            error={error.title ? "Title Required" : undefined}
+            required
           />
         </FormControl>
 

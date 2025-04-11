@@ -8,7 +8,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import colors from "../../../theme/colors";
-import FormInputField from "../../common/form/FormInputField";
+import FormInputField from "../../common/FormInputField";
 
 interface Props {
   value: number;

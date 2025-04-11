@@ -99,14 +99,6 @@ const App = (): React.ReactElement => {
         <Router>
           <Switch>
             <Route path={ROUTES.LOGIN_PAGE} element={<AdminLoginPage />} />
-            {/* <Route
-              path={ROUTES.DASHBOARD}
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            /> */}
             <Route
               path={ROUTES.HOME_PAGE}
               element={

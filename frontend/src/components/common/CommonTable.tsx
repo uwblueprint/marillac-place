@@ -24,10 +24,10 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import ModalContainer from "./ModalContainer";
 import colors from "../../theme/colors";
 
-type TableTypes = string | number | boolean | Date | string[];
+// type TableTypes = string | number | boolean | Date | string[];
 
 export interface TableData {
-  [key: string]: TableTypes;
+  [key: string]: string; // TableTypes
 }
 
 export type ColumnInfoTypes = {
