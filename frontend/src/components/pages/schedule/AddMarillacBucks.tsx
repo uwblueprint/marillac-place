@@ -17,8 +17,7 @@ import {
 import { EDIT_MARILLAC_BUCKS } from "../../../gql/mutations";
 import ExportToCSV from "../../common/ExportToCSV";
 import ModalContainer from "../../common/ModalContainer";
-import FormInputField from "../../common/form/FormInputField";
-import FormSelectField from "../../common/form/FormSelectField";
+import FormInputField from "../../common/FormInputField";
 
 type AddMarillacBucksProps = {
   currentRoom: number;
@@ -162,13 +161,15 @@ useEffect(() => {
       executeMutation();
     }
   }, [credit])
-  
+
+  if (!isOpen) {
+    return <div> </div>
+  }
 
   return (
     <ModalContainer
       title="Marillac Balance"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
+      close={() => setIsOpen(false)}
     >
       <Flex flexDir="column" gap="20px">
         <div className='flex flex-row space-y-1'>
@@ -191,7 +192,6 @@ useEffect(() => {
             setCreditChange(value);
           }}
           required
-          error={creditChangeError}
         />
 <div className="flex flex-col space-y-2">
   <div className="flex flex-row items-center space-x-10">
@@ -233,7 +233,6 @@ useEffect(() => {
           onChange={(e) => {
             setReason(e.target.value);
           }}
-          error={creditChangeError}
         />
 
         <Flex justifyContent="flex-end">

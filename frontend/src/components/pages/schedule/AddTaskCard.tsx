@@ -14,7 +14,7 @@ import {
 import { useMutation } from "@apollo/client";
 
 import ModalContainer from "../../common/ModalContainer";
-import FormInputField from "../../common/form/FormInputField";
+import FormInputField from "../../common/FormInputField";
 import { CREATE_ASSIGNED_TASK } from "../../../gql/mutations";
 
 
@@ -93,11 +93,14 @@ const AddTaskCard = ({
     );
   };
 
+  if (!isOpen) {
+    return <div> </div>
+  }
+
   return (
     <ModalContainer
       title="Assign Task"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
+      close={() => setIsOpen(false)}
     >
       <Flex flexDir="column" gap="20px">
         <FormLabel mb="-15px" color="gray.main" fontWeight="700">
