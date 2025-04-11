@@ -20,10 +20,10 @@ export const CREATE_PARTICIPANT = gql`
 export const CREATE_ANNOUNCEMENT = gql`
   mutation createAnnouncement($announcementId: number,
     $from: StaffType,     
-    $to: number[],   
+    $to: [Int],   
     $priority: PriorityType,       
     $createdAt: Date,
-    $message: string,
+    $message: String,
     ) {
     createAnnouncement(
       announcementId: $announcementId
@@ -39,10 +39,10 @@ export const CREATE_ANNOUNCEMENT = gql`
 export const EDIT_ANNOUNCEMENT = gql`
   mutation editAnnouncement($announcementId: number,
     $from: StaffType,     
-    $to: number[],          
+    $to: [Int],          
     $priority: PriorityType,   
     $createdAt: Date,
-    $message: string,
+    $message: String,
     ) {
     editAnnouncement(
       announcementId: $announcementId
@@ -56,7 +56,7 @@ export const EDIT_ANNOUNCEMENT = gql`
 `;
 
 export const DELETE_ANNOUNCEMENT = gql`
-  mutation deleteAnnouncement($announcementId: number) {
+  mutation deleteAnnouncement($announcementId: Int) {
     deleteAnnouncement(announcementId: $announcementId)
   }
 `;

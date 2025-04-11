@@ -66,7 +66,7 @@ export const GET_ALL_ANNOUNCEMENTS = gql`
 `;
 
 export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
-  query getAnnouncementByRooms($rooms: number[]) {
+  query getAnnouncementByRooms($rooms: [Int]) {
     getAnnouncementByRooms(rooms: $rooms) {
       announcementId
       from     

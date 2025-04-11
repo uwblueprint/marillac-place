@@ -23,7 +23,7 @@ import { inputTheme, textareaTheme } from "./theme/inputs";
 import * as ROUTES from "./constants/Routes";
 import HomePage from "./components/pages/home/HomePage";
 import SchedulePage from "./components/pages/schedule/SchedulePage";
-import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
+// import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
 import TasksPage from "./components/pages/tasks/TasksPage";
 import AdminLoginPage from "./components/pages/auth/AdminLoginPage";
