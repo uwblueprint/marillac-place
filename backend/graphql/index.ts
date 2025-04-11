@@ -14,6 +14,7 @@ import resolverTypes from "./types/resolvers";
 import participantResolvers from "./resolvers/participantResolver";
 import noteResolvers from "./resolvers/noteResolver";
 import authResolver from "./resolvers/auth";
+import taskResolvers from "./resolvers/taskResolver";
 
 const schema = makeExecutableSchema({
   typeDefs: [...scalarTypeDefs, dataModels, customTypes, resolverTypes],
@@ -21,7 +22,8 @@ const schema = makeExecutableSchema({
       scalarResolvers,
       participantResolvers,
       noteResolvers,
-      authResolver
+      authResolver,
+      taskResolvers
   ),
 });
 

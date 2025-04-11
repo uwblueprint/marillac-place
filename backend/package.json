@@ -83,7 +83,7 @@
     "node-cron": "^3.0.3",
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
-    "prisma": "5.11.0",
+    "prisma": "6.4.1",
     "ts-jest": "^27.0.3",
     "typescript": "^5.2.2"
   },

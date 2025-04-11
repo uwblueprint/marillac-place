@@ -25,7 +25,7 @@ import HomePage from "./components/pages/home/HomePage";
 // import SchedulePage from "./components/pages/schedule/SchedulePage";
 // import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
 import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
-// import TasksPage from "./components/pages/tasks/TasksPage";
+import TasksPage from "./components/pages/tasks/TasksPage";
 import AdminLoginPage from "./components/pages/auth/AdminLoginPage";
 import NotFoundPage from "./components/common/NotFoundPage";
 
@@ -99,14 +99,6 @@ const App = (): React.ReactElement => {
         <Router>
           <Switch>
             <Route path={ROUTES.LOGIN_PAGE} element={<AdminLoginPage />} />
-            {/* <Route
-              path={ROUTES.DASHBOARD}
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            /> */}
             <Route
               path={ROUTES.HOME_PAGE}
               element={
@@ -139,7 +131,14 @@ const App = (): React.ReactElement => {
                 </ProtectedRoute>
               }
             />
-            {/* <Route path={ROUTES.TASKS_PAGE} element={<TasksPage />} /> */}
+            <Route
+                path={ROUTES.TASKS_PAGE}
+                element={
+                    <ProtectedRoute>
+                        <TasksPage />
+                    </ProtectedRoute>
+                }
+            />
             <Route path="*" element={<NotFoundPage />} />
           </Switch>
         </Router>

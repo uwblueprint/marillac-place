@@ -56,7 +56,7 @@ const LoginPage = (): React.ReactElement => {
 
       localStorage.setItem("type", data.login.type);
       localStorage.setItem("token", data.login.accessToken);
-      navigate("/dashboard");
+      navigate("/");
     },
     onError: (err) => {
       // Handle login error
