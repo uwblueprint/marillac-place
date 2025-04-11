@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import {
   Table,
   Thead,
@@ -20,23 +20,29 @@ import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import ModalContainer from "./ModalContainer";
+import colors from "../../theme/colors";
 
-type TableTypes = string;
-// | number | boolean | Date | string[]
+// type TableTypes = string | number | boolean | Date | string[];
 
 export interface TableData {
-  [key: string]: TableTypes;
+  [key: string]: string; // TableTypes
 }
 
-export type ColumnInfoTypes = { header: string; key: string; display: boolean };
+export type ColumnInfoTypes = {
+  header: string;
+  key: string;
+};
 
 type Props = {
   data: TableData[];
   columnInfo: ColumnInfoTypes[];
   onEdit: (row: unknown) => unknown;
+  onDelete?: (row: unknown) => unknown;
   maxResults?: number;
   isSelectable?: boolean;
+  previewModal?: boolean;
 };
 
 type SortState = {
@@ -47,6 +53,8 @@ const CommonTable = ({
   columnInfo,
   data,
   onEdit,
+  onDelete,
+  previewModal = true,
   maxResults = 10,
   isSelectable = false,
 }: Props): React.ReactElement => {
@@ -90,6 +98,7 @@ const CommonTable = ({
     return {
       header: String(col.header),
       value: String(value),
+      // render: col.render || undefined,
     };
   });
 
@@ -170,6 +179,7 @@ const CommonTable = ({
       flexDir="column"
       alignContent="space-between"
       justifyContent="space-between"
+      h="100%"
     >
       <TableContainer border="solid" borderColor="gray.200" borderRadius="5px">
         <Table>
@@ -199,7 +209,7 @@ const CommonTable = ({
               ) : null}
               {columnInfo.map(
                 (header, index) =>
-                  header.display && (
+                  (
                     <Th key={index}>
                       <Flex alignItems="center">
                         {header.header}
@@ -265,7 +275,7 @@ const CommonTable = ({
                     ) : null}
                     {columnInfo.map(
                       (column, i) =>
-                        column.display && (
+                        (
                           <Td
                             onClick={() => {
                               handleRowClick(row);
@@ -286,6 +296,17 @@ const CommonTable = ({
                         as={EditOutlinedIcon}
                         _hover={{ cursor: "pointer" }}
                       />
+                      {onDelete && (
+                        <Icon
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(row);
+                          }}
+                          as={DeleteOutlinedIcon}
+                          color={colors.red.main}
+                          _hover={{ cursor: "pointer" }}
+                        />
+                      )}
                     </Td>
                   </Tr>
                 );
@@ -294,23 +315,23 @@ const CommonTable = ({
         </Table>
       </TableContainer>
 
-      {/* {isPreviewModalOpen && selectedRow && (
+      {previewModal && isPreviewModalOpen && selectedRow && (
         <ModalContainer
           title={colData[0].value}
           close={() => setIsPreviewModalOpen(false)}
         >
           <Flex flexDir="column" gap="5px" mt="10px">
-            {colData.slice(1).map((column, index) => (
+            {colData.map((column, index) => (
               <Text key={index}>
                 <Text as="span" fontWeight="700">
                   {column.header}:{" "}
                 </Text>{" "}
-                {column.value}
+                {column.value ? column.value : " "}
               </Text>
             ))}
           </Flex>
         </ModalContainer>
-      )} */}
+      )}
 
       <Box h="50px" position="relative" mt="20px">
         <Box position="absolute" w="250px" h="50px">

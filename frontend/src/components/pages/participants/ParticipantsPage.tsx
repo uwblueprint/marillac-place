@@ -10,7 +10,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Add, Search } from "@mui/icons-material";
-
 import { useQuery } from "@apollo/client";
 import {
   GET_PAST_PARTICIPANTS,
@@ -31,18 +30,15 @@ import CheckmarkSvg from "../../../assets/svg/CheckmarkSvg";
 const columnTypes: ColumnInfoTypes[] = [
   {
     header: "ID Number",
-    key: "participantId",
-    display: true,
+    key: "participantId"
   },
   {
     header: "Arrival Date",
-    key: "arrival",
-    display: true,
+    key: "arrival"
   },
   {
     header: "Departure Date",
-    key: "departure",
-    display: true,
+    key: "departure"
   },
 ];
 

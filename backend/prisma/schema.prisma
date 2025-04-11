@@ -15,6 +15,17 @@ enum StaffType {
 enum TaskType {
   REQUIRED
   OPTIONAL
+  CUSTOM
+}
+
+enum DaysOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }
 
 enum PriorityType {
@@ -32,13 +43,24 @@ enum TaskStatus {
   EXCUSED
 }
 
+enum TimeOption {
+  ANYTIME
+  SPECIFIC
+}
+
+enum RecurrenceFrequency {
+  DAILY
+  EVERY_SELECTED_DAYS
+  ANY_SELECTED_DAYS
+}
+
 model Participant {
-  participantId     String        @id
-  roomNumber        Int
-  arrival           String
-  departure         String?     
-  password          String
-  credit            Int           @default(0)
+  participantId           String        @id
+  roomNumber              Int
+  arrival                 String
+  departure               String?
+  password                String
+  credit                  Int           @default(0)
 
   @@map("participants")
 }
@@ -55,18 +77,36 @@ model Announcement {
 }
 
 model Task {
-  taskId            Int           @id @default(autoincrement())
-  roomNumber        Int?
-  type              TaskType
-  status            TaskStatus  
-  name              String
-  isRecurring       Boolean
-  start             DateTime
-  end               DateTime
-  credit            Int
-  comment           String?
+  taskId                  Int           @id @default(autoincrement())
+  type                    TaskType
+  name                    String
+  recurrencePreference    RecurrenceFrequency
+  repeatDays              DaysOfWeek[]
+  timePreference          TimeOption
+  start                   String?
+  end                     String?
+  credit                  Int
+  deduction               Int
+  comment                 String?
 
   @@map("tasks")
+}
+
+model AssignedTask {
+  assignedTaskId          Int           @id @default(autoincrement())
+  userID                  Int
+  type                    TaskType
+  name                    String
+  recurrencePreference    RecurrenceFrequency
+  repeatDays              String[]
+  timePreference          TimeOption
+  start                   String?
+  end                     String?
+  credit                  Int
+  deduction               Int?
+  comment                 String?
+
+  @@map("assignedtasks")
 }
 
 model Note {

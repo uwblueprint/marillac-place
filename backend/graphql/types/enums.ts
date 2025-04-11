@@ -9,6 +9,7 @@ const customTypes = gql`
   enum TaskType {
     REQUIRED
     OPTIONAL
+    CUSTOM
   }
 
   enum PriorityType {
@@ -25,6 +26,28 @@ const customTypes = gql`
     COMPLETE
     EXCUSED
   }
+
+  enum DaysOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+  }
+
+  enum RecurrenceFrequency {
+    DAILY
+    EVERY_SELECTED_DAYS
+    ANY_SELECTED_DAYS
+  }
+
+  enum TimeOption {
+    ANYTIME
+    SPECIFIC
+  }
+
 `;
 
 export default customTypes;

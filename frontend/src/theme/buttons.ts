@@ -64,19 +64,32 @@ const error = defineStyle({
 });
 
 const greenOutline = defineStyle({
-  height: "34px",
-  borderRadius: "8px",
-  padding: "4px 16px",
-  border: "2px solid #0C727E",
-  color: "#0C727E",
+    height: "34px",
+    borderRadius: "8px",
+    padding: "4px 16px",
+    border: "2px solid #0C727E",
+    color: "#0C727E",
 });
 
 const redOutline = defineStyle({
+    height: "34px",
+    borderRadius: "8px",
+    padding: "4px 16px",
+    border: "2px solid #D34C5C",
+    color: "#D34C5C",
+});
+
+const comment = defineStyle({
   height: "34px",
   borderRadius: "8px",
   padding: "4px 16px",
-  border: "2px solid #D34C5C",
-  color: "#D34C5C",
+  bg: "transparent",
+  color: "blue",
+  textAlign: "left",
+  alignSelf: "flex-start",
+  marginLeft: "-5",
+  border: "2px solid transparent",
+  display: "block",
 });
 
 const buttonTheme = defineStyleConfig({
@@ -89,6 +102,7 @@ const buttonTheme = defineStyleConfig({
     error,
     redOutline,
     greenOutline,
+    comment
   },
 });
 

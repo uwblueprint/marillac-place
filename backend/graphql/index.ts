@@ -1,10 +1,10 @@
-import { makeExecutableSchema } from "apollo-server-express";
-import { merge } from "lodash";
+import {makeExecutableSchema} from "apollo-server-express";
+import {merge} from "lodash";
 // import { applyMiddleware } from "graphql-middleware";
 
 import {
-  typeDefs as scalarTypeDefs,
-  resolvers as scalarResolvers,
+    typeDefs as scalarTypeDefs,
+    resolvers as scalarResolvers,
 } from "graphql-scalars";
 
 import dataModels from "./types/models";
@@ -15,18 +15,18 @@ import participantResolvers from "./resolvers/participantResolver";
 import noteResolvers from "./resolvers/noteResolver";
 import announcementResolvers from "./resolvers/announcementResolver";
 import authResolver from "./resolvers/auth";
+import taskResolvers from "./resolvers/taskResolver";
 
 const schema = makeExecutableSchema({
-  typeDefs: [...scalarTypeDefs, dataModels, customTypes, resolverTypes],
-  resolvers: merge(
-    scalarResolvers,
-
-    participantResolvers,
-    announcementResolvers,
-
-    noteResolvers,
-    authResolver,
-  ),
+    typeDefs: [...scalarTypeDefs, dataModels, customTypes, resolverTypes],
+    resolvers: merge(
+        scalarResolvers,
+        announcementResolvers,
+        participantResolvers,
+        noteResolvers,
+        authResolver,
+        taskResolvers
+    ),
 });
 
 export default schema;

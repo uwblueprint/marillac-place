@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   frontend:
     container_name: mp_frontend
