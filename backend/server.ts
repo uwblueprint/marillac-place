@@ -8,7 +8,7 @@ import schema from "./graphql";
 require("./crons/index.ts");
 
 const CORS_ALLOW_LIST = [
-  "http://localhost:3000",
+  "http://localhost:3001",
   "https://uw-blueprint-starter-code.firebaseapp.com",
   "https://uw-blueprint-starter-code.web.app",
   /^https:\/\/uw-blueprint-starter-code--pr.*\.web\.app$/,

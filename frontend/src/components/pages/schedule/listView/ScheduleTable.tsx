@@ -300,7 +300,7 @@ const ScheduleTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.main"
+              color="teal.main"
               backgroundColor="white"
               aria-label="Previous Page"
               icon={<ChevronLeftOutlinedIcon />}
@@ -309,7 +309,7 @@ const ScheduleTable = ({
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={item === page ? "purple.main" : "white"}
+                  backgroundColor={item === page ? "teal.main" : "white"}
                   h="35px"
                   p="10px"
                   flexBasis="35px"
@@ -317,7 +317,7 @@ const ScheduleTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "purple.main",
+                    backgroundColor: "teal.main",
                   }}
                   textColor={item === page ? "white" : "gray.main"}
                   onClick={() => numberPaginate(item)}
@@ -333,7 +333,7 @@ const ScheduleTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.main"
+              color="teal.main"
               backgroundColor="white"
               aria-label="Next Page"
               icon={<ChevronRightOutlinedIcon />}

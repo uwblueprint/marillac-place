@@ -12,16 +12,29 @@ const primary = defineStyle({
     color: "orange.500",
   },
 });
+const primaryInactive = defineStyle({
+  height: "34px",
+  borderRadius: "8px",
+  padding: "4px 16px",
+  border: "2px solid",
+  borderColor: "grey.50",
+  bg: "white",
+  color: "orange.main",
+  _hover: {
+    bg: "orange.100",
+    color: "orange.main",
+  },
+});
 
 const secondary = defineStyle({
   height: "34px",
   borderRadius: "8px",
   padding: "4px 16px",
   border: "2px solid",
-  borderColor: "purple.main",
-  bg: "purple.100",
-  color: "purple.main",
-  _hover: { bg: "purple.main", color: "white" },
+  borderColor: "teal.main",
+  bg: "teal.100",
+  color: "teal.main",
+  _hover: { bg: "teal.main", color: "white" },
 });
 
 const cancel = defineStyle({
@@ -64,19 +77,19 @@ const error = defineStyle({
 });
 
 const greenOutline = defineStyle({
-    height: "34px",
-    borderRadius: "8px",
-    padding: "4px 16px",
-    border: "2px solid #0C727E",
-    color: "#0C727E",
+  height: "34px",
+  borderRadius: "8px",
+  padding: "4px 16px",
+  border: "2px solid teal.main",
+  color: "teal.main",
 });
 
 const redOutline = defineStyle({
-    height: "34px",
-    borderRadius: "8px",
-    padding: "4px 16px",
-    border: "2px solid #D34C5C",
-    color: "#D34C5C",
+  height: "34px",
+  borderRadius: "8px",
+  padding: "4px 16px",
+  border: "2px solid #D34C5C",
+  color: "#D34C5C",
 });
 
 const comment = defineStyle({
@@ -95,6 +108,7 @@ const comment = defineStyle({
 const buttonTheme = defineStyleConfig({
   variants: {
     primary,
+    primaryInactive,
     secondary,
     cancel,
     del,
@@ -102,7 +116,7 @@ const buttonTheme = defineStyleConfig({
     error,
     redOutline,
     greenOutline,
-    comment
+    comment,
   },
 });
 

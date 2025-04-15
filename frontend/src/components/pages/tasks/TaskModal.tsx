@@ -291,18 +291,18 @@ const TaskModal = ({
                   key={i}
                   // text colour (based on if day is selected)
                   color={
-                    selectedDays.includes(day) ? "white" : colors.purple.main
+                    selectedDays.includes(day) ? "white" : colors.teal.main
                   }
                   backgroundColor={
                     selectedDays.includes(day)
-                      ? colors.purple.main
+                      ? colors.teal.main
                       : "transparent"
                   }
                   // if button is clicked, calls selectDay on day
                   onClick={() => selectDay(day)}
                   _hover={{
                     bg: selectedDays.includes(day)
-                      ? colors.purple.main
+                      ? colors.teal.main
                       : "#e2e2e2",
                     color: selectedDays.includes(day) ? "white" : "gray",
                   }}
@@ -310,7 +310,7 @@ const TaskModal = ({
                     borderRadius: "5px",
                     width: "55px",
                     height: "35px",
-                    border: `1px solid ${colors.purple.main}`,
+                    border: `1px solid ${colors.teal.main}`,
                   }}
                 >
                   {day}

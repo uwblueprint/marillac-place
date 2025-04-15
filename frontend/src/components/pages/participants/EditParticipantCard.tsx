@@ -216,8 +216,8 @@ const EditParticipantCard = ({
                   key={num}
                   onClick={() => setSwappedRoom(num)}
                   variant="greenOutline"
-                  bg={swappedRoom === num ? "#0C727E" : "white"}
-                  color={swappedRoom === num ? "white" : "#0C727E"}
+                  bg={swappedRoom === num ? "teal.main" : "white"}
+                  color={swappedRoom === num ? "white" : "teal.main"}
                 >
                   Room {num}
                 </Button>

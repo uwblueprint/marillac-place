@@ -1,4 +1,4 @@
-export {}
+export {};
 // import React, { useState } from "react";
 // import moment from "moment";
 // import {
@@ -61,7 +61,7 @@ export {}
 //         <Button
 //           w="120px"
 //           color="white"
-//           backgroundColor="purple.main"
+//           backgroundColor="teal.main"
 //           type="submit"
 //         >
 //           Post
@@ -256,7 +256,7 @@ export {}
 //           <h1 style={{ fontSize: "24px", margin: "0" }}>{getHeader()}</h1>
 //           <IconButton
 //             aria-label="info"
-//             color="purple.main"
+//             color="teal.main"
 //             backgroundColor="white"
 //             borderRadius="50%"
 //             fontSize="30px"

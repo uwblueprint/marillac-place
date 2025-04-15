@@ -12,7 +12,7 @@ const RoomSection = () => {
       borderColor="gray.200"
       borderRadius="md"
     >
-      <Text fontSize="lg" fontWeight="600" color="#0C727E">
+      <Text fontSize="lg" fontWeight="600" color="teal.main">
         Rooms
       </Text>
     </Flex>

@@ -1,4 +1,4 @@
-export {}
+export {};
 
 // import React, { useState, useEffect } from "react";
 // import moment from "moment";
@@ -88,13 +88,13 @@ export {}
 //       p={3}
 //       borderBottom="solid"
 //       borderBottomColor="gray.300"
-//       _hover={{ bg: "purple.100", cursor: "pointer" }}
+//       _hover={{ bg: "teal.100", cursor: "pointer" }}
 //     >
 //       <Flex alignItems="center" minH="93px">
 //         <Box
 //           borderRadius="full"
 //           border="1px solid"
-//           borderColor="purple.300"
+//           borderColor="teal.300"
 //           p={1}
 //           mr={3}
 //         >
@@ -105,7 +105,7 @@ export {}
 //                 : PeopleAltOutlinedIcon
 //             }
 //             boxSize={10}
-//             color="purple.main"
+//             color="teal.main"
 //           />
 //         </Box>
 //         <Flex flexDir="column" w="100%">
@@ -258,14 +258,14 @@ export {}
 //
 //   return (
 //     <Box h="100vh" w="100%" borderRight="solid" borderRightColor="gray.300">
-//       <Flex flexDir="column" bg="purple.50" w="100%">
+//       <Flex flexDir="column" bg="teal.50" w="100%">
 //         <Flex
 //           w="100%"
 //           alignItems="center"
 //           justifyContent="space-between"
 //           mt={5}
 //           mb={4}
-//           bg="purple.50"
+//           bg="teal.50"
 //         >
 //           <Box
 //             width="100%"
@@ -321,7 +321,7 @@ export {}
 //           <IconButton
 //             icon={<EditNoteIcon />}
 //             aria-label="Edit"
-//             color="purple.500"
+//             color="teal.500"
 //             bg="white"
 //             _hover={{ bg: "white" }}
 //             border="solid"

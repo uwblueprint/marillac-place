@@ -24,12 +24,9 @@ import { CalendarApi } from "@fullcalendar/core";
 import { ScheduleType } from "../../../types/ScheduleTypes";
 import ScheduleListView from "./listView/ScheduleListView";
 import ScheduleCalendar from "./calendarView/ScheduleCalendar";
-import SideBar from "../../common/SideBar"
-import AddTaskCard from "./AddTaskCard"
+import SideBar from "../../common/SideBar";
+import AddTaskCard from "./AddTaskCard";
 import AddMarillacBucks from "./AddMarillacBucks";
-
-
-
 
 const SchedulePage = (): React.ReactElement => {
   const [addTaskCardOpened, setAddTaskCardOpened] = useState(false);
@@ -49,9 +46,9 @@ const SchedulePage = (): React.ReactElement => {
       calendarRef.current?.next();
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     console.log(currentRoom);
-  }, [currentRoom])
+  }, [currentRoom]);
   const handlePrev = () => {
     if (scheduleType === "CALENDAR") {
       calendarRef.current?.prev();
@@ -71,14 +68,14 @@ const SchedulePage = (): React.ReactElement => {
     }
   }, [scheduleType]);
   useEffect(() => {
-    console.log('CREDIT UPDATED IN PARENT:', credit);
+    console.log("CREDIT UPDATED IN PARENT:", credit);
   }, [credit]);
 
   const selectOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     setActive(e.currentTarget.innerText);
-    console.log(e.currentTarget.innerText, 'hello ');
+    console.log(e.currentTarget.innerText, "hello ");
   };
-  
+
   const formatTabs = (roomNums: number[]) => {
     return (
       <Tabs variant="horizontal" h="30px" mb={6}>
@@ -95,134 +92,148 @@ const SchedulePage = (): React.ReactElement => {
 
   return (
     <Flex>
-      <SideBar/>
-    <Flex flexDir="column" flexGrow={1}>
-      <Tabs variant="horizontal" h="30px" mb={6}>
-        {formatTabs(rooms)}
-      </Tabs>
+      <SideBar />
+      <Flex flexDir="column" flexGrow={1}>
+        <Tabs variant="horizontal" h="30px" mb={6}>
+          {formatTabs(rooms)}
+        </Tabs>
 
-      <Flex justifyContent="space-between" mt={10} ml={8} mr={5}>
-        <Flex>
-          <Heading
-            size="lg"
-            fontSize="36px"
-            color="purple.main"
-            whiteSpace="nowrap"
-          >
-            January 2025
-            {/* see announcements page for how to determine what text shows */}
-          </Heading>
-
-          <Flex w="200px" flexDir="row" height="100px" ml={5}>
-            <IconButton
-              onClick={handlePrev}
-              _hover={{
-                cursor: "pointer",
-              }}
-              color="purple.main"
-              backgroundColor="grey.50"
-              borderRightRadius="0"
-              aria-label="Previous Week"
-              icon={<ArrowBackIosNew fontSize="small" />}
-            />
-            <Button
-              alignContent="center"
-              borderRadius="0"
-              color="purple.main"
-              size="md"
-              fontSize="lg"
+        <Flex justifyContent="space-between" mt={10} ml={8} mr={5}>
+          <Flex>
+            <Heading
+              size="lg"
+              fontSize="36px"
+              color="teal.main"
+              whiteSpace="nowrap"
             >
-              {dateRange}
+              January 2025
+              {/* see announcements page for how to determine what text shows */}
+            </Heading>
+
+            <Flex w="200px" flexDir="row" height="100px" ml={5}>
+              <IconButton
+                onClick={handlePrev}
+                _hover={{
+                  cursor: "pointer",
+                }}
+                color="teal.main"
+                backgroundColor="grey.50"
+                borderRightRadius="0"
+                aria-label="Previous Week"
+                icon={<ArrowBackIosNew fontSize="small" />}
+              />
+              <Button
+                alignContent="center"
+                borderRadius="0"
+                color="teal.main"
+                size="md"
+                fontSize="lg"
+              >
+                {dateRange}
+              </Button>
+              <IconButton
+                onClick={handleNext}
+                _hover={{
+                  cursor: "pointer",
+                }}
+                color="teal.main"
+                backgroundColor="grey.50"
+                borderLeftRadius="0"
+                aria-label="Previous Week"
+                icon={<ArrowForwardIos fontSize="small" />}
+              />
+            </Flex>
+          </Flex>
+
+          <Flex flexDir="row" height="100px" justifyContent="space-between">
+            <Button
+              variant="success"
+              rightIcon={<Icon as={Edit} color="green.main" />}
+              size="sm"
+              onClick={() => setAddBucksCardOpened(true)}
+              mr={5}
+            >
+              {credit} M-Bucks
             </Button>
-            <IconButton
-              onClick={handleNext}
-              _hover={{
-                cursor: "pointer",
-              }}
-              color="purple.main"
-              backgroundColor="grey.50"
-              borderLeftRadius="0"
-              aria-label="Previous Week"
-              icon={<ArrowForwardIos fontSize="small" />}
-            />
           </Flex>
         </Flex>
 
-        <Flex flexDir="row" height="100px" justifyContent="space-between">
-          <Button
-            variant="success"
-            rightIcon={<Icon as={Edit} color="green.main" />}
-            size="sm"
-            onClick={() => setAddBucksCardOpened(true)}
-            mr={5}
-          >
-            {credit} M-Bucks
-          </Button>
+        <Flex justifyContent="space-between" mt={-5} ml={8} mr={10}>
+          <Flex>
+            <AddTaskCard
+              isOpen={addTaskCardOpened}
+              setIsOpen={setAddTaskCardOpened}
+            />
+            <Button
+              variant={active === "List" ? "primary" : "primaryInactive"}
+              w="8em"
+              borderRightRadius="0"
+              leftIcon={
+                <Icon
+                  as={FormatListBulleted}
+                  color={active === "List" ? "white" : "orange.main"}
+                />
+              }
+              size="sm"
+              onClick={(event) => {
+                selectOption(event);
+                setScheduleType("LIST");
+              }}
+            >
+              List
+            </Button>
+
+            <Button
+              variant={active === "Calendar" ? "primary" : "primaryInactive"}
+              w="8em"
+              borderLeftRadius="0"
+              leftIcon={
+                <Icon
+                  as={CalendarMonth}
+                  color={active === "Calendar" ? "white" : "orange.main"}
+                />
+              }
+              size="sm"
+              onClick={(event) => {
+                selectOption(event);
+                setScheduleType("CALENDAR");
+              }}
+            >
+              Calendar
+            </Button>
+          </Flex>
+          <Flex justifyContent="end" gap="3" alignItems="end">
+            <Button variant="primary" size="sm" onClick={() => {}}>
+              Update Selected
+            </Button>
+
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setAddTaskCardOpened(true)}
+            >
+              + Assign Task
+            </Button>
+          </Flex>
         </Flex>
+        <Box padding="40px">
+          {scheduleType === "CALENDAR" ? (
+            <ScheduleCalendar
+              ref={calendarRef}
+              setDateRange={(range: string) => setDateRange(range)}
+            />
+          ) : (
+            <ScheduleListView />
+          )}
+        </Box>
       </Flex>
-
-      <Flex justifyContent="space-between" mt={-5} ml={8} mr={10}>
-        <Flex>
-        <AddTaskCard
-          isOpen={addTaskCardOpened}
-          setIsOpen={setAddTaskCardOpened}
-        />
-          <Button
-            variant={active === "List" ? "primary" : "secondary"}
-            w="8em"
-            borderRightRadius="0"
-            leftIcon={<Icon as={FormatListBulleted} color="white" />}
-            size="sm"
-            onClick={(event) => {
-              selectOption(event);
-              setScheduleType("LIST");
-            }}
-          >
-            List
-          </Button>
-
-          <Button
-            variant={active === "Calendar" ? "primary" : "secondary"}
-            w="8em"
-            borderLeftRadius="0"
-            leftIcon={<Icon as={CalendarMonth} color="white" />}
-            size="sm"
-            onClick={(event) => {
-              selectOption(event);
-              setScheduleType("CALENDAR");
-            }}
-          >
-            Calendar
-          </Button>
-        </Flex>
-        <Flex justifyContent="end" gap="3" alignItems="end">
-        <Button variant="primary" size="sm" onClick={() => {}}>
-          Update Selected
-        </Button>
-
-        <Button variant="primary" size="sm" onClick={() => setAddTaskCardOpened(true)}>
-        + Assign Task 
-        </Button>
-        </Flex>
-      </Flex>
-      <Box padding="40px">
-        {scheduleType === "CALENDAR" ? (
-          <ScheduleCalendar
-            ref={calendarRef}
-            setDateRange={(range: string) => setDateRange(range)}
-          />
-        ) : (
-          <ScheduleListView />
-        )}
-      </Box>
-    </Flex>
-    <AddMarillacBucks
-          currentRoom={currentRoom}
-          credit={credit}
-          setCredit={setCredit}
-          isOpen={addBucksCardOpened}
-          setIsOpen={setAddBucksCardOpened}
-        />
+      <AddMarillacBucks
+        currentRoom={currentRoom}
+        credit={credit}
+        setCredit={setCredit}
+        isOpen={addBucksCardOpened}
+        setIsOpen={setAddBucksCardOpened}
+      />
     </Flex>
   );
 };

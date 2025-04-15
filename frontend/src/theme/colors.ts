@@ -8,12 +8,15 @@ const colors = {
     200: "#E3E4EA",
     300: "#C5C8D8",
   },
-  purple: {
-    main: "#57469D",
-    50: "#F9F7FF",
-    100: "#F1ECFF",
-    300: "#B1A7D7",
-    500: "#382584",
+  teal: {
+    main: "#0C727E",
+    100: "#E3ECEB",
+
+  },
+  orange: {
+    main: "#E67D4F",
+    100: "#FCF2ED",
+    700: "#E67D4F",
   },
   red: {
     main: "#D34C5C",

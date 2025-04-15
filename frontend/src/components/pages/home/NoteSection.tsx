@@ -85,7 +85,7 @@ const NoteSection = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Text fontSize="lg" fontWeight="600" color="#0C727E" mb="0px">
+        <Text fontSize="lg" fontWeight="600" color="teal.main" mb="0px">
           Admin Notes
         </Text>
         <Text fontSize="xs" fontWeight="400" color="gray.500" mb="0px">

@@ -12,7 +12,7 @@ const AnnouncementSection = () => {
       borderColor="gray.200"
       borderRadius="md"
     >
-      <Text fontSize="lg" fontWeight="600" color="#0C727E">
+      <Text fontSize="lg" fontWeight="600" color="teal.main">
         Announcements
       </Text>
     </Flex>

@@ -29,13 +29,13 @@ type AddMarillacBucksProps = {
 
 const AddMarillacBucks = ({
   currentRoom,
-  credit, 
+  credit,
   setCredit,
   isOpen,
   setIsOpen,
 }: AddMarillacBucksProps): React.ReactElement => {
   const [participantId, setParticipantId] = useState("");
-  const [creditChange, setCreditChange] = useState(0)
+  const [creditChange, setCreditChange] = useState(0);
   const [adding, setAdding] = useState(true);
   const [currentBalance, setCurrentBalance] = useState(0);
   const [reason, setReason] = useState("");
@@ -52,21 +52,23 @@ const AddMarillacBucks = ({
       data: getParticipantByRoomData,
     },
   ] = useLazyQuery(GET_PARTICIPANT_BY_ROOM, {
-    variables: {currentRoom},
+    variables: { currentRoom },
   });
 
   useEffect(() => {
     if (currentRoom) {
-      getParticipantByRoom(); 
+      getParticipantByRoom();
     }
   }, [currentRoom, getParticipantByRoom]);
-  
+
   useEffect(() => {
     if (getParticipantByRoomData) {
       console.log(getParticipantByRoomData, "Participant data fetched");
       if (getParticipantByRoomData.getParticipantByRoom) {
         setCurrentBalance(getParticipantByRoomData.getParticipantByRoom.credit);
-        setParticipantId(getParticipantByRoomData.getParticipantByRoom.participantId);
+        setParticipantId(
+          getParticipantByRoomData.getParticipantByRoom.participantId,
+        );
       }
     }
   }, [getParticipantByRoomData]);
@@ -81,7 +83,7 @@ const AddMarillacBucks = ({
     };
 
     if (participantId) {
-      console.log(participantId)
+      console.log(participantId);
       await getParticipantByRoom({ variables: { currentRoom } });
       if (getParticipantByRoomError) {
         errors.participantId = "Unknown error has occurred.";
@@ -97,19 +99,20 @@ const AddMarillacBucks = ({
       errors.participantId = "ID Number is missing";
     }
 
-    
     errors.creditChange = creditChange ? "" : "New credit is missing";
 
     return errors;
   };
-useEffect(() => {
-  console.log(adding);
-},[adding])
+  useEffect(() => {
+    console.log(adding);
+  }, [adding]);
   const handleSubmit = async () => {
-    const updatedCredit = adding? currentBalance + creditChange : currentBalance - creditChange;
-    console.log(updatedCredit, 'cred');
+    const updatedCredit = adding
+      ? currentBalance + creditChange
+      : currentBalance - creditChange;
+    console.log(updatedCredit, "cred");
     const errors = await validate();
-    console.log('validated');
+    console.log("validated");
     if (
       !errors.participantId &&
       !errors.credit &&
@@ -117,8 +120,8 @@ useEffect(() => {
       !errors.adding
     ) {
       try {
-        console.log('trying');
-          setCredit(updatedCredit);
+        console.log("trying");
+        setCredit(updatedCredit);
       } catch (err) {
         console.error(err);
       }
@@ -127,7 +130,7 @@ useEffect(() => {
       setCreditError(errors.credit);
       setCreditChangeError(errors.creditChange);
       setAddingError(errors.adding);
-      console.log('errors', errors);
+      console.log("errors", errors);
     }
   };
   const reset = () => {
@@ -136,8 +139,8 @@ useEffect(() => {
     setCreditChangeError("");
     setAddingError("");
   };
-  useEffect(()=>{
-    console.log('called', credit, )
+  useEffect(() => {
+    console.log("called", credit);
     const executeMutation = async () => {
       try {
         await editMarillacBucks({
@@ -146,41 +149,38 @@ useEffect(() => {
             credit,
           },
         });
-        console.log('success')
+        console.log("success");
         setIsOpen(false);
         setCurrentBalance(credit);
         reset();
         // window.location.reload();
-      }
-      catch (err) {
+      } catch (err) {
         console.error(err);
       }
-    }
-    if (credit !== currentBalance){
-      console.log('executing mutation')
+    };
+    if (credit !== currentBalance) {
+      console.log("executing mutation");
       executeMutation();
     }
-  }, [credit])
+  }, [credit]);
 
   if (!isOpen) {
-    return <div> </div>
+    return <div> </div>;
   }
 
   return (
-    <ModalContainer
-      title="Marillac Balance"
-      close={() => setIsOpen(false)}
-    >
+    <ModalContainer title="Marillac Balance" close={() => setIsOpen(false)}>
       <Flex flexDir="column" gap="20px">
-        <div className='flex flex-row space-y-1'>
-
-        <p className='text-lg text-[#626262] font-semibold'>Current Balance</p>
-        <input
+        <div className="flex flex-row space-y-1">
+          <p className="text-lg text-[#626262] font-semibold">
+            Current Balance
+          </p>
+          <input
             type="text"
             value={currentBalance}
             readOnly
             className="w-[120px] px-3 py-2 text-[#0C727E] bg-[#FAFAFA] border border-[##C5C8D8] rounded-lg border-[1px]"
-          />   
+          />
         </div>
         <FormInputField
           label="Enter Amount"
@@ -193,38 +193,44 @@ useEffect(() => {
           }}
           required
         />
-<div className="flex flex-col space-y-2">
-  <div className="flex flex-row items-center space-x-10">
-    <input
-      type="radio"
-      id="add"
-      name="action"
-      value="Add"
-      defaultChecked
-      onChange={(e) => {
-        setAdding(e.target.value === "Add");
-         console.log(e);}}
-      className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-    />
-    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-    <label htmlFor="add" className='ml-2'>Add</label>
-  </div>
+        <div className="flex flex-col space-y-2">
+          <div className="flex flex-row items-center space-x-10">
+            <input
+              type="radio"
+              id="add"
+              name="action"
+              value="Add"
+              defaultChecked
+              onChange={(e) => {
+                setAdding(e.target.value === "Add");
+                console.log(e);
+              }}
+              className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+            />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="add" className="ml-2">
+              Add
+            </label>
+          </div>
 
-  <div className="flex flex-row items-center space-x-10">
-    <input
-      type="radio"
-      id="remove"
-      name="action"
-      value="Remove"
-      onChange={(e) => {
-        setAdding(e.target.value === "Add");
-         console.log(e);}}
-      className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-    />
-    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-    <label htmlFor="remove" className='ml-2'>Remove</label>
-  </div>
-</div>
+          <div className="flex flex-row items-center space-x-10">
+            <input
+              type="radio"
+              id="remove"
+              name="action"
+              value="Remove"
+              onChange={(e) => {
+                setAdding(e.target.value === "Add");
+                console.log(e);
+              }}
+              className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+            />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="remove" className="ml-2">
+              Remove
+            </label>
+          </div>
+        </div>
 
         <FormInputField
           label="Reason"
