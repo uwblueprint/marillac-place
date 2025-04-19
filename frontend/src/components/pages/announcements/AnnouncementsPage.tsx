@@ -29,9 +29,9 @@ const AnnouncementsPage = (): React.ReactElement => {
 
   return (
     <Flex>
-      <SideBar /> {/* Using sidebar */ }
-      
-      <Flex flexDir="column" flex="1" position="relative"> { /* Box for design at the top */ }
+      <SideBar /> {/* Using sidebar */}
+
+      <Flex flexDir="column" flex="1" position="relative"> { /* Box for design at the top */}
         <Box  // Box for header
           position="absolute"
           top="0"
@@ -42,27 +42,32 @@ const AnnouncementsPage = (): React.ReactElement => {
           zIndex={-1}
         />
 
-        <Flex direction="column" px={10} pt={20}> 
+        <Flex direction="column" ml={10} mt={20}>
           <Flex justifyContent="space-between" alignItems="center">
             <Flex>
-              <Heading size="lg" mr={3} color="#2c7a7b"> { /* Announcements text, expires in 48h text, and the announcements button created in a row */ }
+              <Heading size="lg" mr={3} color="#2c7a7b"> { /* Announcements text, expires in 48h text, and the announcements button created in a row */}
                 Announcements
               </Heading>
               <Flex mt={3}>
-              <Text fontSize="sm" color="gray.500">
-                Expires in 48h
-              </Text>
+                <Text fontSize="sm" color="gray.500">
+                  Expires in 48h
+                </Text>
+              </Flex>
+              <Flex ml={650} mt={5}>
+              <Button
+                colorScheme="orange"
+                size="sm"
+              >
+                + Create Announcement
+              </Button>
               </Flex>
             </Flex>
-            <Button colorScheme="orange" size="sm" mr={150} mt={2}>
-              + Create Announcement
-            </Button>
           </Flex>
-
+          
           <Flex wrap="wrap" alignItems="center" gap="10px">
-            <Text color="#2c7a7b" fontWeight="semibold" mr={2} mt={3}> { /* Filters text */ }
+            <Text color="#2c7a7b" fontWeight="semibold" mr={2} mt={3}> { /* Filters text */}
               Filters:
-            </Text> { /* Selectall button handing below */ }
+            </Text> { /* Selectall button handing below */}
             {selectedButtons.map((isSelected, index) => (
               <Button
                 key={index}
@@ -76,7 +81,7 @@ const AnnouncementsPage = (): React.ReactElement => {
               >
                 Room {index + 1}
               </Button>
-            ))} { /* Select all button */ }
+            ))} { /* Select all button */}
             <Button
               variant="link"
               textDecoration="underline"
@@ -84,10 +89,10 @@ const AnnouncementsPage = (): React.ReactElement => {
               onClick={handleSelectAll}
               size="sm"
               ml={2}
-            > 
+            >
               Select All
             </Button>
-            { /* Deselect all button */ }
+            { /* Deselect all button */}
             <Button
               variant="link"
               textDecoration="underline"
