@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // Imports
 import {
   Flex,
   Button,
@@ -29,9 +29,9 @@ const AnnouncementsPage = (): React.ReactElement => {
 
   return (
     <Flex>
-      <SideBar /> 
+      <SideBar /> {/* Using sidebar */ }
       
-      <Flex flexDir="column" flex="1" position="relative"> 
+      <Flex flexDir="column" flex="1" position="relative"> { /* Box for design at the top */ }
         <Box  // Box for header
           position="absolute"
           top="0"
@@ -45,7 +45,7 @@ const AnnouncementsPage = (): React.ReactElement => {
         <Flex direction="column" px={10} pt={20}> 
           <Flex justifyContent="space-between" alignItems="center">
             <Flex>
-              <Heading size="lg" mr={3} color="#2c7a7b">
+              <Heading size="lg" mr={3} color="#2c7a7b"> { /* Announcements text, expires in 48h text, and the announcements button created in a row */ }
                 Announcements
               </Heading>
               <Flex mt={3}>
@@ -60,9 +60,9 @@ const AnnouncementsPage = (): React.ReactElement => {
           </Flex>
 
           <Flex wrap="wrap" alignItems="center" gap="10px">
-            <Text color="#2c7a7b" fontWeight="semibold" mr={2} mt={3}>
+            <Text color="#2c7a7b" fontWeight="semibold" mr={2} mt={3}> { /* Filters text */ }
               Filters:
-            </Text>
+            </Text> { /* Selectall button handing below */ }
             {selectedButtons.map((isSelected, index) => (
               <Button
                 key={index}
@@ -76,7 +76,7 @@ const AnnouncementsPage = (): React.ReactElement => {
               >
                 Room {index + 1}
               </Button>
-            ))}
+            ))} { /* Select all button */ }
             <Button
               variant="link"
               textDecoration="underline"
@@ -87,6 +87,7 @@ const AnnouncementsPage = (): React.ReactElement => {
             > 
               Select All
             </Button>
+            { /* Deselect all button */ }
             <Button
               variant="link"
               textDecoration="underline"
