@@ -3,14 +3,15 @@ import {
   Flex,
   Button,
   Heading,
-  Text
+  Text,
+  Box,
 } from "@chakra-ui/react";
 import SideBar from '../../common/SideBar';
 
 const AnnouncementsPage = (): React.ReactElement => {
-  const [selectedButtons, setSelectedButtons] = useState<boolean[]>(new Array(10).fill(false));
+  const [selectedButtons, setSelectedButtons] = useState<boolean[]>(new Array(10).fill(false)); // Keeping track of buttons on and off
 
-  const handleButtonClick = (id: number) => {
+  const handleButtonClick = (id: number) => { // Handing button clicks
     setSelectedButtons((prevSelected) => {
       const newSelected = [...prevSelected];
       newSelected[id] = !newSelected[id];
@@ -18,37 +19,50 @@ const AnnouncementsPage = (): React.ReactElement => {
     });
   };
 
-  const handleSelectAll = () => {
+  const handleSelectAll = () => { // Select all, makes the array all true
     setSelectedButtons(new Array(10).fill(true));
   };
 
-  const handleDeselectAll = () => {
+  const handleDeselectAll = () => { // Deselect all, makes the array all false
     setSelectedButtons(new Array(10).fill(false));
   };
 
   return (
     <Flex>
-      <SideBar />
-      <Flex flexDir="column" flex={1} ml={20} mr={5} mt={20}>
-        {/* Header */}
-        <Flex alignItems="center" justifyContent="space-between" mb={4}>
-          <Flex alignItems="flex-end">
-            <Heading size="lg" mr={3}>Announcements</Heading>
-            <Flex mb={1.5} ml={2}>
-              <h6 color="lightgray.600">Expires in 48h</h6>
-            </Flex>
-          </Flex>
-          <Flex mt={3} mr={20}>
-          <Button colorScheme="orange" size="sm">
-            + Create Announcement
-          </Button>
-          </Flex>
-        </Flex>
+      <SideBar /> 
+      
+      <Flex flexDir="column" flex="1" position="relative"> 
+        <Box  // Box for header
+          position="absolute"
+          top="0"
+          left="0"
+          right="0"
+          height="60px"
+          bg="#e6eeee"
+          zIndex={-1}
+        />
 
-        {/* Filters */}
-        <Flex alignItems="center" wrap="wrap" mb={4} ml={1}>
-          <Text mr={4} mb={2} whiteSpace="nowrap" color="black.1000">Filters:</Text>
-          <Flex wrap="wrap" alignItems="center">
+        <Flex direction="column" px={10} pt={20}> 
+          <Flex justifyContent="space-between" alignItems="center">
+            <Flex>
+              <Heading size="lg" mr={3} color="#2c7a7b">
+                Announcements
+              </Heading>
+              <Flex mt={3}>
+              <Text fontSize="sm" color="gray.500">
+                Expires in 48h
+              </Text>
+              </Flex>
+            </Flex>
+            <Button colorScheme="orange" size="sm" mr={150} mt={2}>
+              + Create Announcement
+            </Button>
+          </Flex>
+
+          <Flex wrap="wrap" alignItems="center" gap="10px">
+            <Text color="#2c7a7b" fontWeight="semibold" mr={2} mt={3}>
+              Filters:
+            </Text>
             {selectedButtons.map((isSelected, index) => (
               <Button
                 key={index}
@@ -59,8 +73,6 @@ const AnnouncementsPage = (): React.ReactElement => {
                 color={isSelected ? "white" : "teal.600"}
                 bg={isSelected ? "teal.500" : "transparent"}
                 _hover={{ bg: isSelected ? "teal.600" : "teal.50" }}
-                mr={3}
-                mb={2}
               >
                 Room {index + 1}
               </Button>
@@ -71,9 +83,8 @@ const AnnouncementsPage = (): React.ReactElement => {
               color="gray.600"
               onClick={handleSelectAll}
               size="sm"
-              mr={3}
-              mb={2}
-            >
+              ml={2}
+            > 
               Select All
             </Button>
             <Button
@@ -82,7 +93,6 @@ const AnnouncementsPage = (): React.ReactElement => {
               color="gray.600"
               onClick={handleDeselectAll}
               size="sm"
-              mb={2}
             >
               Deselect All
             </Button>
@@ -93,4 +103,4 @@ const AnnouncementsPage = (): React.ReactElement => {
   );
 };
 
-export default AnnouncementsPage;
+export default AnnouncementsPage; // Exports page
