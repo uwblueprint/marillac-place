@@ -1,325 +1,112 @@
-export {}
+import React, { useState } from 'react'; // Imports
+import {
+  Flex,
+  Button,
+  Heading,
+  Text,
+  Box,
+} from "@chakra-ui/react";
+import SideBar from '../../common/SideBar';
 
-// import React, { useEffect, useState } from "react";
-// import { Flex, Button } from "@chakra-ui/react";
-// import { useMutation, useQuery } from "@apollo/client";
-// /* import {
-//   GroupAnnouncements,
-//   Announcement,
-// } from "../../../types/NotificationTypes"; */
-// import AnnouncementsGroups from "./AnnouncementsGroups";
-// import AnnouncementsView from "./AnnouncementsView";
-// // import { announcementsMockData } from "../../../mocks/notifications";
-//
-// import {
-//   CREATE_NOTIFICATION_GROUP,
-//   CREATE_ANNOUNCEMENT_GROUP,
-//   SEND_NOTIFICATION_TO_GROUP,
-//   //  DELETE_NOTIFICATION_GROUP,
-//   //  UPDATE_NOTIFICATION_BY_ID,
-//   //  DELETE_NOTIFICATION_BY_IDS,
-//   //  UPDATE_SEEN_NOTIFICATION,
-// } from "../../../gql/mutations";
-//
-// import {
-//   //  GET_NOTIFICATIONS_BY_IDS,
-//   //  GET_NOTIFCATION_BY_RESIDENT,
-//   GET_ALL_GROUPS_AND_NOTIFICATIONS,
-// } from "../../../gql/queries";
-//
-// import {
-//   NotificationResponse,
-//   //  NotificationUpdateRequest,
-//   //  NotificationCreateRequest,
-//   NotificationGroupResponse,
-//   //  NotificationReceivedResponse,
-// } from "../../../APIClients/Types/NotificationType";
-//
-// export {};
-//
-// const AnnouncementsPage = (): React.ReactElement => {
-//   const [announcements, setAnnouncements] = useState<
-//     NotificationGroupResponse[]
-//   >([]);
-//   const [selectedGroup, setSelectedGroup] = useState<string>("");
-//   const [addingNewRoom, setAddingNewRoom] = useState<boolean>(false);
-//   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
-//
-//   // const [sendNotification] = useMutation<{
-//   //   authorId: string;
-//   //   title: string;
-//   //   message: string;
-//   //   recipientIds: [number];
-//   // }>(SEND_NOTIFICATION);
-//
-//   // const [deleteUserNotification] = useMutation<{
-//   //   notificationId: string;
-//   // }>(DELETE_USER_NOTIFICATION);
-//
-//   // const [updateSeenNotification] = useMutation<{
-//   //   notificationId: string;
-//   // }>(UPDATE_SEEN_NOTIFICATION);
-//
-//   // const [sendAnnouncement] = useMutation<{
-//   //   title: string;
-//   //   message: string;
-//   //   userId: number;
-//   // }>(SEND_ANNOUNCEMENT);
-//
-//   // const {
-//   //   loading: notificationByIdLoading,
-//   //   error: notificationByIdError,
-//   //   data: notificationByIdData,
-//   // } = useQuery<{ id: string }>(GET_NOTIFCATION_BY_ID, {
-//   //   variables: { id: "8" },
-//   // });
-//
-//   // const handleSendNotification = async () => {
-//   //   try {
-//   //     const authorId = "6";
-//   //     const title = "TITLE NOTIF";
-//   //     const message = "message";
-//   //     const recipientIds = [4];
-//   //     await sendNotification({
-//   //       variables: { authorId, title, message, recipientIds },
-//   //     });
-//   //   } catch (e) {
-//   //     console.log(e);
-//   //   }
-//   // };
-//
-//   // const handleSendAnnouncement = async () => {
-//   //   console.log(notificationsByUserIdData);
-//   //   console.log(notificationByIdData);
-//   //   try {
-//   //     const title = "TITLE NOTIF";
-//   //     const message = "message";
-//   //     const userId = 4;
-//   //     await sendAnnouncement({
-//   //       variables: { title, message, userId },
-//   //     });
-//   //   } catch (e) {
-//   //     console.log(e);
-//   //   }
-//   // };
-//
-//   // const handleDeleteNotification = async () => {
-//   //   try {
-//   //     const notificationId = "4";
-//   //     await deleteUserNotification({
-//   //       variables: { notificationId },
-//   //     });
-//   //   } catch (e) {
-//   //     console.log(e);
-//   //   }
-//   // };
-//
-//   // const handleUpdateSeenNotification = async () => {
-//   //   try {
-//   //     const notificationId = "4";
-//   //     await updateSeenNotification({
-//   //       variables: { notificationId },
-//   //     });
-//   //   } catch (e) {
-//   //     console.log(e);
-//   //   }
-//   // };
-//
-//   /*
-// [
-//     {
-//         "__typename": "NotificationGroupDTO",
-//         "id": "1",
-//         "announcementGroup": true,
-//         "notifications": [],
-//         "recipients": null
-//     },
-//     {
-//         "__typename": "NotificationGroupDTO",
-//         "id": "34",
-//         "announcementGroup": false,
-//         "notifications": [],
-//         "recipients": null
-//     }
-// ]
-//   */
-//
-//   const {
-//     loading: allNotificationsLoading,
-//     error: allNotificationsError,
-//     data: allNotificationsData,
-//   } = useQuery(GET_ALL_GROUPS_AND_NOTIFICATIONS);
-//
-//   const [sendNotificationToGroup] = useMutation(SEND_NOTIFICATION_TO_GROUP);
-//   const [createNotificationGroup] = useMutation(CREATE_NOTIFICATION_GROUP);
-//   const [createAnnouncementGroup] = useMutation(CREATE_ANNOUNCEMENT_GROUP);
-//
-//   const sendNotification = async (
-//     message: string,
-//     groupId: string,
-//     newGroup?: NotificationGroupResponse,
-//   ) => {
-//     try {
-//       const newNotification: NotificationResponse = (
-//         await sendNotificationToGroup({
-//           variables: {
-//             groupId,
-//             notification: {
-//               message,
-//               // TODO: add author id
-//             },
-//           },
-//         })
-//       ).data.sendNotificationToGroup;
-//
-//       if (!newGroup) {
-//         setAnnouncements((currentAnnouncements) =>
-//           currentAnnouncements.map((group) => {
-//             if (group.id === groupId) {
-//               return {
-//                 ...group,
-//                 notifications: group.notifications
-//                   ? [...group.notifications, newNotification]
-//                   : [newNotification],
-//               };
-//             }
-//             return group;
-//           }),
-//         );
-//       } else {
-//         setAnnouncements((currentAnnouncements) => [
-//           ...currentAnnouncements,
-//           {
-//             ...newGroup,
-//             notifications: newGroup.notifications
-//               ? [...newGroup.notifications, newNotification]
-//               : [newNotification],
-//           },
-//         ]);
-//       }
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   };
-//
-//   const createNotificationGroupAndSendNotification = async (
-//     selectedIds: number[],
-//     message: string,
-//   ) => {
-//     try {
-//       if (selectedIds.length > 1) {
-//         throw Object.assign(new Error("Only include one room id."), {
-//           code: 400,
-//         });
-//       } else if (selectedIds.length === 0) {
-//         throw Object.assign(new Error("No rooms selected."), { code: 400 });
-//       }
-//
-//       let newGroup;
-//       if (selectedIds[0] === -1) {
-//         newGroup = (await createAnnouncementGroup({})).data
-//           .createNotificationGroup;
-//       } else {
-//         newGroup = (
-//           await createNotificationGroup({
-//             variables: {
-//               roomIds: selectedIds,
-//             },
-//           })
-//         ).data.createNotificationGroup;
-//       }
-//
-//       await sendNotification(message, newGroup.id, newGroup);
-//     } catch (e: any) {
-//       if (e.message === "Announcement Group already exists.") {
-//         const announcementId = announcements.find(
-//           (group) => group.announcementGroup === true,
-//         )?.id;
-//
-//         if (announcementId) {
-//           await sendNotification(message, announcementId);
-//           setSelectedGroup(announcementId);
-//         }
-//       } else if (
-//         e.message ===
-//         "Notification Group already exists with specified roomIds."
-//       ) {
-//         const groupId = announcements.find((group) => {
-//           if (
-//             group.recipients &&
-//             group.recipients.length === selectedIds.length
-//           ) {
-//             for (let i = 0; i < group.recipients.length; i += 1) {
-//               if (!selectedIds.includes(group.recipients[i].roomNumber)) {
-//                 return false;
-//               }
-//             }
-//             return true;
-//           }
-//           return false;
-//         })?.id;
-//
-//         if (groupId) {
-//           await sendNotification(message, groupId);
-//           setSelectedGroup(groupId);
-//         }
-//       } else {
-//         console.log(e);
-//       }
-//     }
-//   };
-//
-//   useEffect(() => {
-//     // TODO: Fetch announcements from API
-//     if (allNotificationsData) {
-//       setAnnouncements(allNotificationsData.getAllGroupsAndNotifications);
-//     }
-//
-//     // const combinedAnnouncements: GroupAnnouncements = {};
-//     // Object.entries(announcementsMockData).forEach(([key, value]) => {
-//     //   for (let i = 0; i < value.length; i += 1) {
-//     //     const newAnnouncement: Announcement = {
-//     //       room: key,
-//     //       author: value[i].author,
-//     //       message: value[i].message,
-//     //       createdAt: value[i].createdAt,
-//     //     };
-//     //     // check if alr exists, if not create new
-//     //     if (!combinedAnnouncements[key]) {
-//     //       combinedAnnouncements[key] = [];
-//     //     }
-//     //     combinedAnnouncements[key].push(newAnnouncement);
-//     //   }
-//     // });
-//
-//     // setAnnouncements(combinedAnnouncements);
-//   }, [allNotificationsData]);
-//
-//   return (
-//     <Flex flexDir="column" flexGrow={1}>
-//       <Flex flexDir="row" alignItems="flex-start" w="100%" flexGrow={1}>
-//         <AnnouncementsGroups
-//           announcements={announcements}
-//           setSelectedGroup={setSelectedGroup}
-//           addingNewRoom={addingNewRoom}
-//           setAddingNewRoom={setAddingNewRoom}
-//           selectedRooms={selectedRooms}
-//         />
-//         <AnnouncementsView
-//           announcements={announcements}
-//           selectedGroup={selectedGroup}
-//           addingNewRoom={addingNewRoom}
-//           setAddingNewRoom={setAddingNewRoom}
-//           selectedRooms={selectedRooms}
-//           setSelectedRooms={setSelectedRooms}
-//           sendNotification={sendNotification}
-//           createNotificationGroupAndSendNotification={
-//             createNotificationGroupAndSendNotification
-//           }
-//         />
-//       </Flex>
-//     </Flex>
-//   );
-// };
-//
-// export default AnnouncementsPage;
+const AnnouncementsPage = (): React.ReactElement => {
+  const [selectedButtons, setSelectedButtons] = useState<boolean[]>(new Array(10).fill(false)); // Keeping track of buttons on and off
+
+  const handleButtonClick = (id: number) => { // Handing button clicks
+    setSelectedButtons((prevSelected) => {
+      const newSelected = [...prevSelected];
+      newSelected[id] = !newSelected[id];
+      return newSelected;
+    });
+  };
+
+  const handleSelectAll = () => { // Select all, makes the array all true
+    setSelectedButtons(new Array(10).fill(true));
+  };
+
+  const handleDeselectAll = () => { // Deselect all, makes the array all false
+    setSelectedButtons(new Array(10).fill(false));
+  };
+
+  return (
+    <Flex>
+      <SideBar /> {/* Using sidebar */}
+
+      <Flex flexDir="column" flex="1" position="relative"> { /* Box for design at the top */}
+        <Box  // Box for header
+          position="absolute"
+          top="0"
+          left="0"
+          right="0"
+          height="60px"
+          bg="#e6eeee"
+          zIndex={-1}
+        />
+
+        <Flex direction="column" ml={10} mt={20}>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Flex>
+              <Heading size="lg" mr={3} color="#2c7a7b"> { /* Announcements text, expires in 48h text, and the announcements button created in a row */}
+                Announcements
+              </Heading>
+              <Flex mt={3}>
+                <Text fontSize="sm" color="gray.500">
+                  Expires in 48h
+                </Text>
+              </Flex>
+              <Flex ml={650} mt={5}>
+              <Button
+                colorScheme="orange"
+                size="sm"
+              >
+                + Create Announcement
+              </Button>
+              </Flex>
+            </Flex>
+          </Flex>
+          
+          <Flex wrap="wrap" alignItems="center" gap="10px">
+            <Text color="#2c7a7b" fontWeight="semibold" mr={2} mt={3}> { /* Filters text */}
+              Filters:
+            </Text> { /* Selectall button handing below */}
+            {selectedButtons.map((isSelected, index) => (
+              <Button
+                key={index}
+                onClick={() => handleButtonClick(index)}
+                variant={isSelected ? "solid" : "outline"}
+                size="sm"
+                borderColor="teal.500"
+                color={isSelected ? "white" : "teal.600"}
+                bg={isSelected ? "teal.500" : "transparent"}
+                _hover={{ bg: isSelected ? "teal.600" : "teal.50" }}
+              >
+                Room {index + 1}
+              </Button>
+            ))} { /* Select all button */}
+            <Button
+              variant="link"
+              textDecoration="underline"
+              color="gray.600"
+              onClick={handleSelectAll}
+              size="sm"
+              ml={2}
+            >
+              Select All
+            </Button>
+            { /* Deselect all button */}
+            <Button
+              variant="link"
+              textDecoration="underline"
+              color="gray.600"
+              onClick={handleDeselectAll}
+              size="sm"
+            >
+              Deselect All
+            </Button>
+          </Flex>
+        </Flex>
+      </Flex>
+    </Flex>
+  );
+};
+
+export default AnnouncementsPage; // Exports page
