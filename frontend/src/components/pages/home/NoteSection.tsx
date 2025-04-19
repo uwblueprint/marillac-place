@@ -73,7 +73,7 @@ const NoteSection = () => {
       paddingX="20px"
       w="300px"
       border="2px"
-      borderColor="gray.200"
+      borderColor="neutral.200"
       borderRadius="md"
       flexDir="column"
       justifyContent="space-between"
@@ -85,10 +85,10 @@ const NoteSection = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Text fontSize="lg" fontWeight="600" color="teal.main" mb="0px">
+        <Text fontSize="lg" fontWeight="600" color="primary.700" mb="0px">
           Admin Notes
         </Text>
-        <Text fontSize="xs" fontWeight="400" color="gray.500" mb="0px">
+        <Text fontSize="xs" fontWeight="400" color="text.secondary" mb="0px">
           Expires in 48h
         </Text>
       </Flex>
@@ -104,14 +104,14 @@ const NoteSection = () => {
         }}
       >
         {getNotesLoading ? (
-          <Text fontSize="sm" fontWeight="500" color="gray.500">
+          <Text fontSize="sm" fontWeight="500" color="text.secondary">
             Loading...
           </Text>
         ) : getNotesError ? (
           <Text
             fontSize="sm"
             fontWeight="500"
-            color="gray.500"
+            color="text.secondary"
             textAlign="center"
             width="100%"
             flexWrap="wrap"
@@ -121,7 +121,7 @@ const NoteSection = () => {
           </Text>
         ) : getNotesData?.getNotes ? (
           getNotesData.getNotes.length === 0 ? (
-            <Text fontSize="sm" fontWeight="500" color="gray.500">
+            <Text fontSize="sm" fontWeight="500" color="text.secondary">
               No Admin Notes Yet
             </Text>
           ) : (
@@ -139,7 +139,7 @@ const NoteSection = () => {
                   width="100%"
                   bg="#F7FAFC"
                   border="solid"
-                  borderColor="gray.200"
+                  borderColor="neutral.200"
                   rounded="md"
                   paddingX="10px"
                   paddingY="5px"
@@ -158,7 +158,7 @@ const NoteSection = () => {
                     justifyContent="space-between"
                     alignItems="flex-end"
                   >
-                    <Flex fontSize="sm" color="gray.500">
+                    <Flex fontSize="sm" color="text.secondary">
                       {note.formattedDate}
                     </Flex>
                     <Flex
@@ -177,7 +177,7 @@ const NoteSection = () => {
             </Flex>
           )
         ) : (
-          <Text fontSize="sm" fontWeight="500" color="gray.500">
+          <Text fontSize="sm" fontWeight="500" color="text.secondary">
             An unknown issue has occured
           </Text>
         )}
@@ -190,7 +190,7 @@ const NoteSection = () => {
           value={newNote}
           onChange={(e) => setNewNote(e.target.value)}
           border="solid"
-          borderColor="gray.200"
+          borderColor="neutral.200"
         />
 
         <InputRightElement>

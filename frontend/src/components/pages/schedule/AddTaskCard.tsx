@@ -17,8 +17,6 @@ import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
 import { CREATE_ASSIGNED_TASK } from "../../../gql/mutations";
 
-
-
 type AddTaskCardProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,8 +31,8 @@ const AddTaskCard = ({
   const [endTime, setEndTime] = useState("11:59 PM"); // Default to 11:59 PM
   const [taskType, setTaskType] = useState("CUSTOM");
   const [taskName, setTaskName] = useState("");
-  const [recurrence, setRecurrence] = useState(""); 
-  const [marillacBucks, setMarillacBucks] = useState(""); 
+  const [recurrence, setRecurrence] = useState("");
+  const [marillacBucks, setMarillacBucks] = useState("");
   const [comment, setComment] = useState("");
   const [showCommentInput, setShowCommentInput] = useState(false); // State to show comment input
 
@@ -59,7 +57,7 @@ const AddTaskCard = ({
           end: "Test",
           credit: 5,
           deduction: 10,
-          comment: "Test"
+          comment: "Test",
         },
       });
       console.log("Successfully added task");
@@ -67,50 +65,87 @@ const AddTaskCard = ({
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
-  useEffect (() => {
+  useEffect(() => {
     console.log(selectedDays);
-  }) 
+  });
 
   // Generate time options for 12-hour format (AM/PM)
   const timeOptions = [
-    "12:00 AM", "12:30 AM", "01:00 AM", "01:30 AM", "02:00 AM", "02:30 AM", 
-    "03:00 AM", "03:30 AM", "04:00 AM", "04:30 AM", "05:00 AM", "05:30 AM", 
-    "06:00 AM", "06:30 AM", "07:00 AM", "07:30 AM", "08:00 AM", "08:30 AM", 
-    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", 
-    "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM", 
-    "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM", 
-    "06:00 PM", "06:30 PM", "07:00 PM", "07:30 PM", "08:00 PM", "08:30 PM", 
-    "09:00 PM", "09:30 PM", "10:00 PM", "10:30 PM", "11:00 PM", "11:30 PM", 
-    "11:59 PM"
+    "12:00 AM",
+    "12:30 AM",
+    "01:00 AM",
+    "01:30 AM",
+    "02:00 AM",
+    "02:30 AM",
+    "03:00 AM",
+    "03:30 AM",
+    "04:00 AM",
+    "04:30 AM",
+    "05:00 AM",
+    "05:30 AM",
+    "06:00 AM",
+    "06:30 AM",
+    "07:00 AM",
+    "07:30 AM",
+    "08:00 AM",
+    "08:30 AM",
+    "09:00 AM",
+    "09:30 AM",
+    "10:00 AM",
+    "10:30 AM",
+    "11:00 AM",
+    "11:30 AM",
+    "12:00 PM",
+    "12:30 PM",
+    "01:00 PM",
+    "01:30 PM",
+    "02:00 PM",
+    "02:30 PM",
+    "03:00 PM",
+    "03:30 PM",
+    "04:00 PM",
+    "04:30 PM",
+    "05:00 PM",
+    "05:30 PM",
+    "06:00 PM",
+    "06:30 PM",
+    "07:00 PM",
+    "07:30 PM",
+    "08:00 PM",
+    "08:30 PM",
+    "09:00 PM",
+    "09:30 PM",
+    "10:00 PM",
+    "10:30 PM",
+    "11:00 PM",
+    "11:30 PM",
+    "11:59 PM",
   ];
 
   // Handle toggling of day selection
   const handleDayToggle = (day: string) => {
     setSelectedDays((prev) =>
-      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day],
     );
   };
 
   if (!isOpen) {
-    return <div> </div>
+    return <div> </div>;
   }
 
   return (
-    <ModalContainer
-      title="Assign Task"
-      close={() => setIsOpen(false)}
-    >
+    <ModalContainer title="Assign Task" close={() => setIsOpen(false)}>
       <Flex flexDir="column" gap="20px">
-        <FormLabel mb="-15px" color="gray.main" fontWeight="700">
+        <FormLabel mb="-15px" color="neutral.300" fontWeight="700">
           Task Type
         </FormLabel>
         <Select
           variant="primary"
           border="solid"
           borderWidth="2px"
-          borderColor="gray.300"
+          borderColor="neutral.300"
           height="34px"
           onChange={(e) => setTaskType(e.target.value)}
         >
@@ -179,14 +214,14 @@ const AddTaskCard = ({
           </Flex>
         </Flex>
 
-        <FormLabel mb="-15px" color="gray.main" fontWeight="700">
+        <FormLabel mb="-15px" color="neutral.300" fontWeight="700">
           Recurrence
         </FormLabel>
         <Select
           variant="primary"
           border="solid"
           borderWidth="2px"
-          borderColor="gray.300"
+          borderColor="neutral.300"
           height="34px"
           onChange={(e) => setRecurrence(e.target.value)}
         >
@@ -196,8 +231,10 @@ const AddTaskCard = ({
 
         {/* Select Days section */}
         {recurrence === "Repeats" && (
-          <Flex gap="10px" mt="30px" ml="10px"> {/* Increased top margin */}
-            <Flex mt = "5px">
+          <Flex gap="10px" mt="30px" ml="10px">
+            {" "}
+            {/* Increased top margin */}
+            <Flex mt="5px">
               <Text>Select Days:</Text>
             </Flex>
             {["S", "M", "T", "W", "Th", "F", "Su"].map((day) => (
@@ -219,10 +256,14 @@ const AddTaskCard = ({
 
         {/* Completed on section */}
         {recurrence === "Repeats" && (
-          <Flex flexDir="column" gap="5px" mt="10px"> {/* Reduced gap */}
+          <Flex flexDir="column" gap="5px" mt="10px">
+            {" "}
+            {/* Reduced gap */}
             <Text>Completed on:</Text>
             <RadioGroup onChange={setCompletedOn} value={completedOn}>
-              <Stack direction="column"> {/* Stack direction changed to column */}
+              <Stack direction="column">
+                {" "}
+                {/* Stack direction changed to column */}
                 <Radio value="every">Every Selected Day</Radio>
                 <Radio value="one">One of the selected days</Radio>
               </Stack>
@@ -232,10 +273,14 @@ const AddTaskCard = ({
 
         {/* Ends section */}
         {recurrence === "Repeats" && (
-          <Flex flexDir="column" gap="5px" mt="10px"> {/* Reduced gap */}
+          <Flex flexDir="column" gap="5px" mt="10px">
+            {" "}
+            {/* Reduced gap */}
             <Text>Ends:</Text>
             <RadioGroup onChange={setEnds} value={ends}>
-              <Stack direction="column"> {/* Stack direction changed to column */}
+              <Stack direction="column">
+                {" "}
+                {/* Stack direction changed to column */}
                 <Radio value="never">Never</Radio>
                 <Flex alignItems="center">
                   <Radio value="on">On</Radio>
@@ -263,7 +308,11 @@ const AddTaskCard = ({
 
         <Flex flexDir="column">
           <FormLabel>Comments</FormLabel>
-          <Button variant="comment" mr="8px" onClick={() => setShowCommentInput(true)}>
+          <Button
+            variant="comment"
+            mr="8px"
+            onClick={() => setShowCommentInput(true)}
+          >
             + Create Comment
           </Button>
           {showCommentInput && (

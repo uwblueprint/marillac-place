@@ -87,14 +87,14 @@ export {};
 //       w="100%"
 //       p={3}
 //       borderBottom="solid"
-//       borderBottomColor="gray.300"
-//       _hover={{ bg: "teal.100", cursor: "pointer" }}
+//       borderBottomColor="neutral.300"
+//       _hover={{ bg: "primary.100", cursor: "pointer" }}
 //     >
 //       <Flex alignItems="center" minH="93px">
 //         <Box
 //           borderRadius="full"
 //           border="1px solid"
-//           borderColor="teal.300"
+//           borderColor="primary.300"
 //           p={1}
 //           mr={3}
 //         >
@@ -105,15 +105,15 @@ export {};
 //                 : PeopleAltOutlinedIcon
 //             }
 //             boxSize={10}
-//             color="teal.main"
+//             color="primary.700"
 //           />
 //         </Box>
 //         <Flex flexDir="column" w="100%">
 //           <Flex justifyContent="space-between">
-//             <Text as="b" color={isDraft ? "gray.500" : "black"}>
+//             <Text as="b" color={isDraft ? "text.secondary" : "black"}>
 //               {announcementGroup ? "All Rooms" : formatRooms(rooms)}
 //             </Text>
-//             <Text margin="0" color="gray.500">
+//             <Text margin="0" color="text.secondary">
 //               {firstAnnouncement
 //                 ? moment(firstAnnouncement.createdAt).fromNow()
 //                 : moment(Date.now()).fromNow()}
@@ -257,15 +257,15 @@ export {};
 //   };
 //
 //   return (
-//     <Box h="100vh" w="100%" borderRight="solid" borderRightColor="gray.300">
-//       <Flex flexDir="column" bg="teal.50" w="100%">
+//     <Box h="100vh" w="100%" borderRight="solid" borderRightColor="neutral.300">
+//       <Flex flexDir="column" bg="primary.50" w="100%">
 //         <Flex
 //           w="100%"
 //           alignItems="center"
 //           justifyContent="space-between"
 //           mt={5}
 //           mb={4}
-//           bg="teal.50"
+//           bg="primary.50"
 //         >
 //           <Box
 //             width="100%"
@@ -298,7 +298,7 @@ export {};
 //             </Menu>
 //
 //             <HStack spacing={2} height="100%" paddingLeft="8px">
-//               <Icon as={Search} color="gray.300" />
+//               <Icon as={Search} color="neutral.300" />
 //               {searchRooms.map((room) => (
 //                 <Tag
 //                   key={room}
@@ -321,18 +321,18 @@ export {};
 //           <IconButton
 //             icon={<EditNoteIcon />}
 //             aria-label="Edit"
-//             color="teal.500"
+//             color="primary.500"
 //             bg="white"
 //             _hover={{ bg: "white" }}
 //             border="solid"
-//             borderColor="gray.200"
+//             borderColor="neutral.200"
 //             mr={5}
 //             onClick={addRoom}
 //           />
 //         </Flex>
 //
 //         <Tabs isFitted variant="horizontal">
-//           <TabList borderBottom="solid" borderBottomColor="gray.300" w="100%">
+//           <TabList borderBottom="solid" borderBottomColor="neutral.300" w="100%">
 //             <Tab>All</Tab>
 //             <Tab>Private</Tab>
 //             <Tab>Groups</Tab>

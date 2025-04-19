@@ -30,15 +30,15 @@ import CheckmarkSvg from "../../../assets/svg/CheckmarkSvg";
 const columnTypes: ColumnInfoTypes[] = [
   {
     header: "ID Number",
-    key: "participantId"
+    key: "participantId",
   },
   {
     header: "Arrival Date",
-    key: "arrival"
+    key: "arrival",
   },
   {
     header: "Departure Date",
-    key: "departure"
+    key: "departure",
   },
 ];
 
@@ -103,7 +103,7 @@ const ParticipantsPage = (): React.ReactElement => {
           bg="#E3ECEB"
           position="fixed"
           borderBottom="solid"
-          borderBottomColor="gray.200"
+          borderBottomColor="neutral.200"
           top="0px"
           zIndex="999"
         />

@@ -181,14 +181,18 @@ const CommonTable = ({
       justifyContent="space-between"
       h="100%"
     >
-      <TableContainer border="solid" borderColor="gray.200" borderRadius="5px">
+      <TableContainer
+        border="solid"
+        borderColor="neutral.200"
+        borderRadius="5px"
+      >
         <Table>
           <Thead>
             <Tr backgroundColor="#EDF2F7" w="100%">
               {isSelectable ? (
                 <Th p="0px 0px 0px 20px" w="16px">
                   <Checkbox
-                    borderColor="gray.300"
+                    borderColor="neutral.300"
                     verticalAlign="middle"
                     m="0"
                     isChecked={allChecked}
@@ -207,48 +211,41 @@ const CommonTable = ({
                   />
                 </Th>
               ) : null}
-              {columnInfo.map(
-                (header, index) =>
-                  (
-                    <Th key={index}>
-                      <Flex alignItems="center">
-                        {header.header}
-                        <Flex
-                          alignItems="center"
-                          flexDirection="column"
-                          paddingLeft="2.5px"
-                        >
-                          <KeyboardArrowUpOutlinedIcon
-                            style={{
-                              height: "0.5em",
-                              cursor: "pointer",
-                              color:
-                                sortingColumn[header.key] === 1
-                                  ? ""
-                                  : "#c4c8d8",
-                            }}
-                            onClick={() => {
-                              sortColumn(header.key);
-                            }}
-                          />
-                          <KeyboardArrowDownOutlinedIcon
-                            style={{
-                              height: "0.5em",
-                              cursor: "pointer",
-                              color:
-                                sortingColumn[header.key] === 2
-                                  ? ""
-                                  : "#c4c8d8",
-                            }}
-                            onClick={() => {
-                              sortColumn(header.key);
-                            }}
-                          />
-                        </Flex>
-                      </Flex>
-                    </Th>
-                  ),
-              )}
+              {columnInfo.map((header, index) => (
+                <Th key={index}>
+                  <Flex alignItems="center">
+                    {header.header}
+                    <Flex
+                      alignItems="center"
+                      flexDirection="column"
+                      paddingLeft="2.5px"
+                    >
+                      <KeyboardArrowUpOutlinedIcon
+                        style={{
+                          height: "0.5em",
+                          cursor: "pointer",
+                          color:
+                            sortingColumn[header.key] === 1 ? "" : "#c4c8d8",
+                        }}
+                        onClick={() => {
+                          sortColumn(header.key);
+                        }}
+                      />
+                      <KeyboardArrowDownOutlinedIcon
+                        style={{
+                          height: "0.5em",
+                          cursor: "pointer",
+                          color:
+                            sortingColumn[header.key] === 2 ? "" : "#c4c8d8",
+                        }}
+                        onClick={() => {
+                          sortColumn(header.key);
+                        }}
+                      />
+                    </Flex>
+                  </Flex>
+                </Th>
+              ))}
               <Th />
             </Tr>
           </Thead>
@@ -273,19 +270,16 @@ const CommonTable = ({
                         />
                       </Td>
                     ) : null}
-                    {columnInfo.map(
-                      (column, i) =>
-                        (
-                          <Td
-                            onClick={() => {
-                              handleRowClick(row);
-                            }}
-                            key={i}
-                          >
-                            {String(row[column.key])}
-                          </Td>
-                        ),
-                    )}
+                    {columnInfo.map((column, i) => (
+                      <Td
+                        onClick={() => {
+                          handleRowClick(row);
+                        }}
+                        key={i}
+                      >
+                        {String(row[column.key])}
+                      </Td>
+                    ))}
                     <Td
                       onClick={(e) => {
                         e.stopPropagation();
@@ -303,7 +297,7 @@ const CommonTable = ({
                             onDelete(row);
                           }}
                           as={DeleteOutlinedIcon}
-                          color={colors.red.main}
+                          color={colors.danger[800]}
                           _hover={{ cursor: "pointer" }}
                         />
                       )}
@@ -372,7 +366,7 @@ const CommonTable = ({
                     color: "white",
                     backgroundColor: "#15646E",
                   }}
-                  textColor={item === page ? "white" : "gray.main"}
+                  textColor={item === page ? "white" : "neutral.300"}
                   onClick={() => numberPaginate(item)}
                   key={index}
                 >

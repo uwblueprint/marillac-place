@@ -12,7 +12,8 @@ const primaryInput = definePartsStyle({
   field: {
     height: "34px",
     borderRadius: "8px",
-    border: "2px solid #C5C8D8",
+    borderWidth: "2px",
+    borderColor: "netural.300",
   },
 });
 
@@ -22,7 +23,8 @@ export const inputTheme = defineMultiStyleConfig({
 
 const primaryTextarea = defineStyle({
   borderRadius: "8px",
-  border: "2px solid #C5C8D8",
+  borderWidth: "2px",
+  borderColor: "netural.300",
   resize: "none",
   padding: "8px 12px",
 });

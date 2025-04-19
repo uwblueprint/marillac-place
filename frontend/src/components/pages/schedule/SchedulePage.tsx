@@ -103,7 +103,7 @@ const SchedulePage = (): React.ReactElement => {
             <Heading
               size="lg"
               fontSize="36px"
-              color="teal.main"
+              color="primary.700"
               whiteSpace="nowrap"
             >
               January 2025
@@ -116,7 +116,7 @@ const SchedulePage = (): React.ReactElement => {
                 _hover={{
                   cursor: "pointer",
                 }}
-                color="teal.main"
+                color="primary.700"
                 backgroundColor="grey.50"
                 borderRightRadius="0"
                 aria-label="Previous Week"
@@ -125,7 +125,7 @@ const SchedulePage = (): React.ReactElement => {
               <Button
                 alignContent="center"
                 borderRadius="0"
-                color="teal.main"
+                color="primary.700"
                 size="md"
                 fontSize="lg"
               >
@@ -136,7 +136,7 @@ const SchedulePage = (): React.ReactElement => {
                 _hover={{
                   cursor: "pointer",
                 }}
-                color="teal.main"
+                color="primary.700"
                 backgroundColor="grey.50"
                 borderLeftRadius="0"
                 aria-label="Previous Week"
@@ -148,7 +148,7 @@ const SchedulePage = (): React.ReactElement => {
           <Flex flexDir="row" height="100px" justifyContent="space-between">
             <Button
               variant="success"
-              rightIcon={<Icon as={Edit} color="green.main" />}
+              rightIcon={<Icon as={Edit} />}
               size="sm"
               onClick={() => setAddBucksCardOpened(true)}
               mr={5}
@@ -171,7 +171,7 @@ const SchedulePage = (): React.ReactElement => {
               leftIcon={
                 <Icon
                   as={FormatListBulleted}
-                  color={active === "List" ? "white" : "orange.main"}
+                  color={active === "List" ? "white" : "secondary.700"}
                 />
               }
               size="sm"
@@ -190,7 +190,7 @@ const SchedulePage = (): React.ReactElement => {
               leftIcon={
                 <Icon
                   as={CalendarMonth}
-                  color={active === "Calendar" ? "white" : "orange.main"}
+                  color={active === "Calendar" ? "white" : "secondary.700"}
                 />
               }
               size="sm"

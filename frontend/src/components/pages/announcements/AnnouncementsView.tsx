@@ -61,7 +61,7 @@ export {};
 //         <Button
 //           w="120px"
 //           color="white"
-//           backgroundColor="teal.main"
+//           backgroundColor="primary.700"
 //           type="submit"
 //         >
 //           Post
@@ -120,7 +120,7 @@ export {};
 //                 <Heading size="sm" fontSize="16px" mt={4} mb={0}>
 //                   {notification.authorId || ""}
 //                 </Heading>
-//                 <Text color="gray.main" fontSize="12px">
+//                 <Text color="neutral.300" fontSize="12px">
 //                   {moment(notification.createdAt).fromNow()}
 //                 </Text>
 //               </Flex>
@@ -247,7 +247,7 @@ export {};
 //         <Box
 //           p="22px 47px"
 //           borderBottom="solid"
-//           borderBottomColor="gray.300"
+//           borderBottomColor="neutral.300"
 //           display="flex"
 //           alignItems="center"
 //           justifyContent="space-between"
@@ -256,7 +256,7 @@ export {};
 //           <h1 style={{ fontSize: "24px", margin: "0" }}>{getHeader()}</h1>
 //           <IconButton
 //             aria-label="info"
-//             color="teal.main"
+//             color="primary.700"
 //             backgroundColor="white"
 //             borderRadius="50%"
 //             fontSize="30px"

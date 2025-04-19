@@ -127,10 +127,10 @@ const EditParticipantCard = ({
   return (
     <ModalContainer title={title}>
       <Flex flexDir="column" gap="20px">
-        {error && <Flex textColor="red.500">{error}</Flex>}
+        {error && <Flex textColor="red.800">{error}</Flex>}
 
         <Flex flexDir="column">
-          <Flex mb="5px" color="gray.main" fontWeight="700">
+          <Flex mb="5px" color="neutral.300" fontWeight="700">
             ID Number
           </Flex>
           <Input
@@ -139,7 +139,7 @@ const EditParticipantCard = ({
             isDisabled
             value={participants[selectedRoomNumber].participantId}
             borderWidth="2px"
-            borderColor="gray.300"
+            borderColor="neutral.300"
           />
         </Flex>
 
@@ -176,8 +176,8 @@ const EditParticipantCard = ({
           </Button>
 
           <Button
-            _hover={{ bg: "red.100" }}
-            bg={endStay ? "red.100" : ""}
+            _hover={{ bg: "danger.100" }}
+            bg={endStay ? "danger.100" : ""}
             variant="redOutline"
             onClick={() => {
               setEndStay(!endStay);
@@ -191,7 +191,12 @@ const EditParticipantCard = ({
         </Flex>
 
         {(endStay || swapParticipant) && (
-          <Flex w="100%" h="0px" borderTop="2px solid" borderColor="gray.200" />
+          <Flex
+            w="100%"
+            h="0px"
+            borderTop="2px solid"
+            borderColor="neutral.200"
+          />
         )}
 
         {endStay && (
@@ -207,7 +212,7 @@ const EditParticipantCard = ({
 
         {swapParticipant && (
           <div>
-            <Text mb="5px" color="gray.main" fontWeight="700">
+            <Text mb="5px" color="neutral.300" fontWeight="700">
               Available Rooms
             </Text>
             <Flex gap="5px" wrap="wrap" mb="10px">
@@ -216,8 +221,8 @@ const EditParticipantCard = ({
                   key={num}
                   onClick={() => setSwappedRoom(num)}
                   variant="greenOutline"
-                  bg={swappedRoom === num ? "teal.main" : "white"}
-                  color={swappedRoom === num ? "white" : "teal.main"}
+                  bg={swappedRoom === num ? "primary.700" : "white"}
+                  color={swappedRoom === num ? "white" : "primary.700"}
                 >
                   Room {num}
                 </Button>

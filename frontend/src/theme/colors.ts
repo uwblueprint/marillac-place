@@ -1,31 +1,43 @@
 const colors = {
   black: "#000",
   white: "#fff",
-  gray: {
-    main: "#808080",
-    50: "FBFBFB",
-    100: "#F5F6F8",
-    200: "#E3E4EA",
+  neutral: {
+    0: "#000",
+    100: "#FAFAFA",
+    200: "#F5F6F8",
     300: "#C5C8D8",
   },
-  teal: {
-    main: "#0C727E",
+  primary: {
     100: "#E3ECEB",
-
+    700: "#0C727E",
   },
-  orange: {
-    main: "#E67D4F",
+  secondary: {
     100: "#FCF2ED",
     700: "#E67D4F",
   },
-  red: {
-    main: "#D34C5C",
-    100: "#FFE6E6",
+  danger: {
+    100: "#FEF1F2",
+    700: "#F0A5AE",
+    800: "#D34C5C",
+    900: "#B21D2F",
   },
-  green: {
-    main: "#0D8312",
-    100: "#ECFFED",
+  warning: {
+    100: "#FFF8EB",
+    700: "#FEDEA0",
+    800: "#DFA431",
+    900: "#B07D18",
   },
+  success: {
+    background: "#EAFFEB",
+    100: "#A2E3A4",
+    700: "#1BB421",
+    800: "#0D8312",
+  },
+  text: {
+    primary: "#1D2433",
+    secondary: "#4A505C",
+    disabled: "#6C707A",
+  }
 };
 
 export default colors;

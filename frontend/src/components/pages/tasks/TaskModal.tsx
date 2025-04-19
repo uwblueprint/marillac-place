@@ -8,20 +8,14 @@ import {
   RadioGroup,
   Radio,
   Box,
-  InputGroup,
-  InputRightElement,
   Textarea,
   Text,
 } from "@chakra-ui/react";
-import { FilePresent } from "@mui/icons-material";
 import colors from "../../../theme/colors";
 import ModalContainer from "../../common/ModalContainer";
 import FormInputField from "../../common/FormInputField";
 import {
   TaskType,
-  Task,
-  ChoreTask,
-  Status,
   RecurrenceFrequency,
   DaysOfWeek,
   TaskTypeEnum,
@@ -217,7 +211,7 @@ const TaskModal = ({
   };
 
   if (!isOpen) {
-    return <div> </div>
+    return <div> </div>;
   }
 
   return (
@@ -228,7 +222,7 @@ const TaskModal = ({
       <Flex flexDir="column" gap="20px">
         {/* Task Type Selection */}
         <FormControl>
-          <FormLabel mb="5px" color="gray.main" fontWeight="700">
+          <FormLabel mb="5px" color="text.secondary" fontWeight="500">
             Task Type
           </FormLabel>
           {type === "REQUIRED" ? (
@@ -260,7 +254,7 @@ const TaskModal = ({
         {/* Recurrence Frequency Selection */}
         {taskType !== TaskTypeEnum.CUSTOM && (
           <FormControl>
-            <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            <FormLabel mb="5px" color="text.secondary" fontWeight="500">
               Select Days
             </FormLabel>
 
@@ -271,7 +265,11 @@ const TaskModal = ({
                 setRecurrence(value as RecurrenceFrequency);
                 resetValues();
               }}
-              style={{ flexDirection: "column", display: "flex" }}
+              style={{
+                flexDirection: "column",
+                display: "flex",
+                color: "primary.700",
+              }}
             >
               <Radio value="DAILY">Daily</Radio>
               <Radio value="EVERY_SELECTED_DAYS">Every Selected Days</Radio>
@@ -279,7 +277,7 @@ const TaskModal = ({
             </RadioGroup>
 
             {error.consecutive && (
-              <Text color={colors.red.main}>
+              <Text color={colors.danger[700]}>
                 Days must be consecutive for Any Selected Days
               </Text>
             )}
@@ -291,18 +289,18 @@ const TaskModal = ({
                   key={i}
                   // text colour (based on if day is selected)
                   color={
-                    selectedDays.includes(day) ? "white" : colors.teal.main
+                    selectedDays.includes(day) ? "white" : colors.primary[700]
                   }
                   backgroundColor={
                     selectedDays.includes(day)
-                      ? colors.teal.main
+                      ? colors.primary[700]
                       : "transparent"
                   }
                   // if button is clicked, calls selectDay on day
                   onClick={() => selectDay(day)}
                   _hover={{
                     bg: selectedDays.includes(day)
-                      ? colors.teal.main
+                      ? colors.primary[700]
                       : "#e2e2e2",
                     color: selectedDays.includes(day) ? "white" : "gray",
                   }}
@@ -310,7 +308,7 @@ const TaskModal = ({
                     borderRadius: "5px",
                     width: "55px",
                     height: "35px",
-                    border: `1px solid ${colors.teal.main}`,
+                    border: `1px solid ${colors.primary[700]}`,
                   }}
                 >
                   {day}
@@ -323,7 +321,7 @@ const TaskModal = ({
         {/* Time Option Selection */}
         {taskType !== TaskTypeEnum.CUSTOM && (
           <FormControl>
-            <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            <FormLabel mb="5px" color="text.secondary" fontWeight="500">
               Select Time
             </FormLabel>
 
@@ -363,14 +361,14 @@ const TaskModal = ({
         {/* Marillac Bucks */}
         <Flex flexDir="row">
           <FormControl>
-            <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            <FormLabel mb="5px" color="text.secondary" fontWeight="500">
               Marillac Bucks
             </FormLabel>
             <NumberInput value={credit} setValue={setCredit} />
           </FormControl>
 
           <FormControl>
-            <FormLabel mb="5px" color="gray.main" fontWeight="700">
+            <FormLabel mb="5px" color="text.secondary" fontWeight="500">
               Marillac Bucks Deduction
             </FormLabel>
             <NumberInput value={deduction} setValue={setDeduction} />
@@ -379,13 +377,14 @@ const TaskModal = ({
 
         {/* Comments */}
         <FormControl>
-          <FormLabel>Comments</FormLabel>
+          <FormLabel mb="5px" color="text.secondary" fontWeight="500">
+            Comments
+          </FormLabel>
           <Textarea
-            variant="outline"
             placeholder="Add comments here"
             borderWidth="2px"
-            borderColor="gray.300"
-            errorBorderColor="red.300"
+            borderColor="neutral.300"
+            errorBorderColor="red.800"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />

@@ -11,16 +11,16 @@ const horizontalVariant = definePartsStyle({
     marginBottom: "0",
     marginTop: "25px",
     _selected: {
-      color: "teal.main",
-      borderColor: "teal.main",
+      color: "primary.700",
+      borderColor: "primary.700",
       borderWidth: "0 0 3px 0",
     },
   },
   tablist: {
     height: "60px",
-    borderColor: "gray.300",
+    borderColor: "neutral.300",
     borderWidth: "0 0 3px 0",
-    bg: "teal.100",
+    bg: "primary.100",
   },
 });
 

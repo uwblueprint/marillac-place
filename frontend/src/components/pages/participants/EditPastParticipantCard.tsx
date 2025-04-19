@@ -78,10 +78,10 @@ const EditPastParticipantCard = ({
   return (
     <ModalContainer title="Edit Past Participant">
       <Flex flexDir="column" gap="10px">
-        {error && <Flex textColor="red.500">{error}</Flex>}
+        {error && <Flex textColor="red.800">{error}</Flex>}
 
         <Flex flexDir="column">
-          <Flex mb="5px" color="gray.main" fontWeight="700">
+          <Flex mb="5px" color="neutral.300" fontWeight="700">
             ID Number
           </Flex>
           <Input
@@ -90,7 +90,7 @@ const EditPastParticipantCard = ({
             isDisabled
             value={selected.participantId}
             borderWidth="2px"
-            borderColor="gray.300"
+            borderColor="neutral.300"
           />
         </Flex>
 

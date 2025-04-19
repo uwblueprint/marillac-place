@@ -37,14 +37,14 @@ const FormInputField = ({
   return (
     <FormControl isRequired={required}>
       {label && (
-        <FormLabel mb="5px" color="gray.main" fontWeight="700">
+        <FormLabel mb="5px" color="text.secondary" fontWeight="500">
           {label}
         </FormLabel>
       )}
 
       <InputGroup>
         {leftElement && (
-          <InputLeftElement height="34px" color="black">
+          <InputLeftElement color="black">
             <Flex
               alignItems="center"
               textAlign="center"
@@ -62,7 +62,7 @@ const FormInputField = ({
           value={value}
           onChange={onChange}
           border="solid"
-          borderColor="gray.200"
+          borderColor="neutral.300"
         />
 
         {type === "password" && (

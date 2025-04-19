@@ -20,7 +20,7 @@ const SideBarTab: React.FC<{ label: string; handleClick: () => void }> = ({
       pt={1}
       pb={1}
       mt={5}
-      _selected={{ bg: "orange.500", color: "orange.50" }}
+      _selected={{ bg: "secondary.500", color: "secondary.50" }}
     >
       {label}
     </Tab>
@@ -69,7 +69,7 @@ const SideBar: React.FC = () => {
         h="100%"
         w="240px"
         borderRight="solid"
-        borderRightColor="gray.200"
+        borderRightColor="neutral.200"
         background="white"
         position="fixed"
         pt={6}
@@ -106,7 +106,7 @@ const SideBar: React.FC = () => {
           <Button
             variant="del"
             border="solid"
-            borderColor="gray.200"
+            borderColor="neutral.200"
             color="#B21D2F"
             fontWeight={600}
             fontSize="14px"

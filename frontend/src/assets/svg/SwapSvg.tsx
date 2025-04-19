@@ -11,7 +11,7 @@ function SwapSvg() {
     >
       <path
         d="M9.61198 6.41667L11.9453 4.08333M11.9453 4.08333L9.61198 1.75M11.9453 4.08333H2.61198M4.94531 7.58333L2.61198 9.91667M2.61198 9.91667L4.94531 12.25M2.61198 9.91667H11.9453"
-        stroke="teal.main"
+        stroke="primary.700"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.5px"

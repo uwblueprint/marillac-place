@@ -84,7 +84,7 @@ const AddParticipantCard = ({
   return (
     <ModalContainer title={title}>
       <Flex flexDir="column" gap="20px">
-        {error && <Flex textColor="red.500">{error}</Flex>}
+        {error && <Flex textColor="red.800">{error}</Flex>}
 
         <FormInputField
           label="ID Number"
