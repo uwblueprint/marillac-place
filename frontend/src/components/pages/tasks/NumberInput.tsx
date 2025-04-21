@@ -30,10 +30,10 @@ export default function NumberInput({ value, setValue }: Props) {
     <Flex flexDir="row" w="200px" gap="5px">
       <Button
         style={{
-          border: `1px solid ${colors.purple.main}`,
+          border: `1px solid ${colors.primary[700]}`,
           backgroundColor: "transparent",
           padding: "0px",
-          color: colors.purple.main,
+          color: colors.primary[700],
         }}
         onClick={decrement}
       >
@@ -48,10 +48,10 @@ export default function NumberInput({ value, setValue }: Props) {
       />
       <Button
         style={{
-          border: `1px solid ${colors.purple.main}`,
+          border: `1px solid ${colors.primary[700]}`,
           backgroundColor: "transparent",
           padding: "0px",
-          color: colors.purple.main,
+          color: colors.primary[700],
         }}
         onClick={increment}
       >

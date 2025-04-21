@@ -75,7 +75,7 @@ const ScheduleListView = (): React.ReactElement => {
         <Tabs variant="enclosed-colored" h="30px" mb="10px" isFitted>
           <TabList>
             <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
+              _selected={{ color: "white", bg: "primary.700" }}
               borderRadius="8px 8px 0 0"
               onClick={() => {
                 setTaskDate(Dates.SUNDAY);
@@ -84,7 +84,7 @@ const ScheduleListView = (): React.ReactElement => {
               Sunday
             </Tab>
             <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
+              _selected={{ color: "white", bg: "primary.700" }}
               borderRadius="8px 8px 0 0"
               onClick={() => {
                 setTaskDate(Dates.MONDAY);
@@ -93,7 +93,7 @@ const ScheduleListView = (): React.ReactElement => {
               Monday
             </Tab>
             <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
+              _selected={{ color: "white", bg: "primary.700" }}
               borderRadius="8px 8px 0 0"
               onClick={() => {
                 setTaskDate(Dates.TUESDAY);
@@ -102,7 +102,7 @@ const ScheduleListView = (): React.ReactElement => {
               Tuesday
             </Tab>
             <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
+              _selected={{ color: "white", bg: "primary.700" }}
               borderRadius="8px 8px 0 0"
               onClick={() => {
                 setTaskDate(Dates.WEDNESDAY);
@@ -111,7 +111,7 @@ const ScheduleListView = (): React.ReactElement => {
               Wednesday
             </Tab>
             <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
+              _selected={{ color: "white", bg: "primary.700" }}
               borderRadius="8px 8px 0 0"
               onClick={() => {
                 setTaskDate(Dates.THURSDAY);
@@ -120,7 +120,7 @@ const ScheduleListView = (): React.ReactElement => {
               Thursday
             </Tab>
             <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
+              _selected={{ color: "white", bg: "primary.700" }}
               borderRadius="8px 8px 0 0"
               onClick={() => {
                 setTaskDate(Dates.FRIDAY);
@@ -129,7 +129,7 @@ const ScheduleListView = (): React.ReactElement => {
               Friday
             </Tab>
             <Tab
-              _selected={{ color: "white", bg: "purple.main" }}
+              _selected={{ color: "white", bg: "primary.700" }}
               borderRadius="8px 8px 0 0"
               onClick={() => {
                 setTaskDate(Dates.SATURDAY);

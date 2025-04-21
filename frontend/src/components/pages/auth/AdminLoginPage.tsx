@@ -122,7 +122,7 @@ const LoginPage = (): React.ReactElement => {
               placeholder="Role"
               mb="4"
               h="48px"
-              borderColor="gray.300"
+              borderColor="neutral.300"
             >
               <option value="admin_staff">Administrative Staff</option>
               <option value="release_staff">Release Staff</option>
@@ -135,13 +135,13 @@ const LoginPage = (): React.ReactElement => {
               placeholder="Password"
               mb="4"
               h="48px"
-              borderColor="gray.300"
+              borderColor="neutral.300"
             />
 
             <FormErrorMessage>{error}</FormErrorMessage>
             <Button
               variant="solid"
-              colorScheme="orange"
+              colorScheme="secondary"
               mt="4"
               w="100%"
               h="50px"

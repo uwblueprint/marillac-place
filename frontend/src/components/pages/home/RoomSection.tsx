@@ -9,10 +9,10 @@ const RoomSection = () => {
       paddingX="20px"
       flexGrow={1}
       border="2px"
-      borderColor="gray.200"
+      borderColor="neutral.200"
       borderRadius="md"
     >
-      <Text fontSize="lg" fontWeight="600" color="#0C727E">
+      <Text fontSize="lg" fontWeight="600" color="primary.700">
         Rooms
       </Text>
     </Flex>

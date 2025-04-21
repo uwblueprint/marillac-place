@@ -17,7 +17,7 @@ const CurrentParticipantCard = ({
       w="19%"
       h="45%"
       border="solid"
-      borderColor="gray.200"
+      borderColor="neutral.200"
       borderRadius="5px"
       flexDir="column"
       justifyContent="center"
@@ -32,7 +32,7 @@ const CurrentParticipantCard = ({
         justifyContent="center"
         p="1.5%"
         borderBottom="solid"
-        borderColor="gray.200"
+        borderColor="neutral.200"
         bg="#E3ECEB"
         fontSize="small"
         fontWeight="700"
@@ -58,7 +58,7 @@ const CurrentParticipantCard = ({
         bottom="10%"
         size="xs"
         fontSize="xs"
-        bg="orange.500"
+        bg="secondary.500"
         color="white"
         onClick={() => setEditParticipant(true)}
       >

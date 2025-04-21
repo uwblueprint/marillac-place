@@ -73,7 +73,7 @@ const HomePage = (): React.ReactElement => {
           <Text
             fontSize="2xl"
             fontWeight="600"
-            color="gray.900"
+            color="text.primary"
             marginTop="16px"
           >
             Marillac Place Overview
@@ -82,7 +82,7 @@ const HomePage = (): React.ReactElement => {
           <Text
             fontSize="lg"
             fontWeight="600"
-            color="gray.900"
+            color="text.primary"
             marginTop="16px"
           >
             {getDate()}

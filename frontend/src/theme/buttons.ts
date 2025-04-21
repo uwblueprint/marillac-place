@@ -5,11 +5,24 @@ const primary = defineStyle({
   borderRadius: "8px",
   padding: "4px 16px",
   border: "0",
-  bg: "orange.500",
-  color: "orange.50",
+  bg: "secondary.700",
+  color: "secondary.100",
   _hover: {
-    bg: "orange.50",
-    color: "orange.500",
+    bg: "secondary.100",
+    color: "secondary.700",
+  },
+});
+const primaryInactive = defineStyle({
+  height: "34px",
+  borderRadius: "8px",
+  padding: "4px 16px",
+  border: "2px solid",
+  borderColor: "grey.50",
+  bg: "white",
+  color: "secondary.700",
+  _hover: {
+    bg: "secondary.100",
+    color: "secondary.700",
   },
 });
 
@@ -18,10 +31,10 @@ const secondary = defineStyle({
   borderRadius: "8px",
   padding: "4px 16px",
   border: "2px solid",
-  borderColor: "purple.main",
-  bg: "purple.100",
-  color: "purple.main",
-  _hover: { bg: "purple.main", color: "white" },
+  borderColor: "primary.700",
+  bg: "primary.100",
+  color: "primary.700",
+  _hover: { bg: "primary.700", color: "white" },
 });
 
 const cancel = defineStyle({
@@ -30,7 +43,7 @@ const cancel = defineStyle({
   padding: "4px 16px",
   border: "2px solid #C5C8D8",
   bg: "white",
-  _hover: { bg: "gray.200" },
+  _hover: { bg: "neutral.200" },
 });
 
 const del = defineStyle({
@@ -47,10 +60,11 @@ const success = defineStyle({
   height: "34px",
   borderRadius: "8px",
   padding: "4px 16px",
-  border: "2px solid #0D8312",
-  bg: "green.100",
-  color: "green.main",
-  _hover: { bg: "green.main", color: "green.100" },
+  border: "2px solid success.800",
+  borderColor: "success.800",
+  bg: "success.background",
+  color: "success.700",
+  _hover: { bg: "success.700", color: "success.100" },
 });
 
 const error = defineStyle({
@@ -58,25 +72,25 @@ const error = defineStyle({
   borderRadius: "8px",
   padding: "4px 16px",
   border: "2px solid #D34C5C",
-  bg: "red.100",
-  color: "red.main",
-  _hover: { bg: "red.main", color: "red.100" },
+  bg: "danger.100",
+  color: "danger.700",
+  _hover: { bg: "danger.700", color: "danger.100" },
 });
 
 const greenOutline = defineStyle({
-    height: "34px",
-    borderRadius: "8px",
-    padding: "4px 16px",
-    border: "2px solid #0C727E",
-    color: "#0C727E",
+  height: "34px",
+  borderRadius: "8px",
+  padding: "4px 16px",
+  border: "2px solid primary.700",
+  color: "primary.700",
 });
 
 const redOutline = defineStyle({
-    height: "34px",
-    borderRadius: "8px",
-    padding: "4px 16px",
-    border: "2px solid #D34C5C",
-    color: "#D34C5C",
+  height: "34px",
+  borderRadius: "8px",
+  padding: "4px 16px",
+  border: "2px solid danger.700",
+  color: "#D34C5C",
 });
 
 const comment = defineStyle({
@@ -95,6 +109,7 @@ const comment = defineStyle({
 const buttonTheme = defineStyleConfig({
   variants: {
     primary,
+    primaryInactive,
     secondary,
     cancel,
     del,
@@ -102,7 +117,7 @@ const buttonTheme = defineStyleConfig({
     error,
     redOutline,
     greenOutline,
-    comment
+    comment,
   },
 });
 

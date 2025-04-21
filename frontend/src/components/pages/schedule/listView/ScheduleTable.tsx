@@ -152,12 +152,12 @@ const ScheduleTable = ({
       <TableContainer
         mb="10px"
         border="2px solid"
-        borderColor="gray.200"
+        borderColor="neutral.200"
         borderRadius="6px"
       >
         <Table>
           <Thead>
-            <Tr backgroundColor="gray.200" w="100%">
+            <Tr backgroundColor="neutral.200" w="100%">
               {isSelectable ? (
                 <Th p="0px 0px 0px 20px" w="16px">
                   {null}
@@ -225,16 +225,16 @@ const ScheduleTable = ({
                     ) : null}
                     {columnInfo.map((column, i) => {
                       const getColor = (status: string) => {
-                        if (status === "Completed") return "#0D8312";
-                        if (status === "Excused") return "#B07D18";
-                        if (status === "Incomplete") return "#B21D2F";
+                        if (status === "Completed") return "success.800";
+                        if (status === "Excused") return "warning.900";
+                        if (status === "Incomplete") return "danger.900";
                         return "black";
                       };
 
                       const getBoxColor = (status: string) => {
-                        if (status === "Completed") return "#CDEECE";
-                        if (status === "Excused") return "#FFE5B2";
-                        if (status === "Incomplete") return "#F8D7DB";
+                        if (status === "Completed") return "success.700";
+                        if (status === "Excused") return "warning.700";
+                        if (status === "Incomplete") return "danger.700";
                         return "black";
                       };
 
@@ -300,7 +300,7 @@ const ScheduleTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.main"
+              color="primary.700"
               backgroundColor="white"
               aria-label="Previous Page"
               icon={<ChevronLeftOutlinedIcon />}
@@ -309,7 +309,7 @@ const ScheduleTable = ({
             {pageArray.map((item, index) => {
               return (
                 <Center
-                  backgroundColor={item === page ? "purple.main" : "white"}
+                  backgroundColor={item === page ? "primary.700" : "white"}
                   h="35px"
                   p="10px"
                   flexBasis="35px"
@@ -317,9 +317,9 @@ const ScheduleTable = ({
                   _hover={{
                     cursor: "pointer",
                     color: "white",
-                    backgroundColor: "purple.main",
+                    backgroundColor: "primary.700",
                   }}
-                  textColor={item === page ? "white" : "gray.main"}
+                  textColor={item === page ? "white" : "neutral.300"}
                   onClick={() => numberPaginate(item)}
                   key={index}
                 >
@@ -333,7 +333,7 @@ const ScheduleTable = ({
               _hover={{
                 cursor: "pointer",
               }}
-              color="purple.main"
+              color="primary.700"
               backgroundColor="white"
               aria-label="Next Page"
               icon={<ChevronRightOutlinedIcon />}

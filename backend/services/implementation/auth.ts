@@ -1,6 +1,5 @@
 import { AuthenticationError } from "apollo-server-express";
 import { IAuthService } from "../interface/auth";
-// import jwt from "jsonwebtoken";
 const jwt = require("jsonwebtoken");
 
 class AuthService implements IAuthService {

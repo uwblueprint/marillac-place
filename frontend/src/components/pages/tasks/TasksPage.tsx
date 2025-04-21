@@ -178,15 +178,15 @@ const TasksPage = (): React.ReactElement => {
           task.type === "CUSTOM"
             ? "Participant Preference"
             : task.end
-              ? task.end
-              : "Anytime",
+            ? task.end
+            : "Anytime",
         creditString: `$${task.credit}`,
         start:
           task.type === "CUSTOM"
             ? "Participant Preference"
             : task.start
-              ? task.start
-              : "Anytime",
+            ? task.start
+            : "Anytime",
       };
     });
   };
@@ -346,7 +346,7 @@ const TasksPage = (): React.ReactElement => {
           <Flex justifyContent="space-between" p="10px">
             <InputGroup w="30%">
               <InputLeftElement pointerEvents="none">
-                <Icon as={Search} color="gray.300" />
+                <Icon as={Search} color="neutral.300" />
               </InputLeftElement>
               .
               <Input
