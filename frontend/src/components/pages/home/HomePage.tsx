@@ -71,9 +71,7 @@ const HomePage = (): React.ReactElement => {
           paddingX="40px"
         >
           <Text
-            fontSize="2xl"
-            fontWeight="600"
-            color="text.primary"
+            textStyle="web.h1"
             marginTop="16px"
           >
             Marillac Place Overview

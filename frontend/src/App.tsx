@@ -13,6 +13,7 @@ import { setContext } from "@apollo/client/link/context";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import colors from "./theme/colors";
+import textStyles from "./theme/typography";
 import modalTheme from "./theme/modals";
 import buttonTheme from "./theme/buttons";
 import tabsTheme from "./theme/tabs";
@@ -64,6 +65,7 @@ const ProtectedRoute = ({
 const App = (): React.ReactElement => {
   const theme = extendTheme({
     colors,
+    textStyles,
     components: {
       Modal: modalTheme,
       Button: buttonTheme,
@@ -139,7 +141,12 @@ const App = (): React.ReactElement => {
                     </ProtectedRoute>
                 }
             />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route
+              path="*"
+              element={
+                <NotFoundPage />
+              }
+            />
           </Switch>
         </Router>
       </ChakraProvider>

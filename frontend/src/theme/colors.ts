@@ -40,9 +40,9 @@ const colors = {
     dark: {
       primary: "#FFFFFF",
       secondary: "#B5B5B8",
-        disabled: "#8B8C8F",
-    }
-  }
+      disabled: "#8B8C8F",
+    },
+  },
 };
 
 export default colors;
