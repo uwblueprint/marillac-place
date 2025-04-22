@@ -13,22 +13,19 @@ import { setContext } from "@apollo/client/link/context";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import colors from "./theme/colors";
-import textStyles from "./theme/typography";
-import modalTheme from "./theme/modals";
-import buttonTheme from "./theme/buttons";
-import tabsTheme from "./theme/tabs";
-import { inputTheme, textareaTheme } from "./theme/inputs";
+import { Text, textStyles } from "./theme/typography";
+import Button from "./theme/buttons";
+import { Select, Input } from "./theme/form";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import * as ROUTES from "./constants/Routes";
-import HomePage from "./components/pages/home/HomePage";
-import SchedulePage from "./components/pages/schedule/SchedulePage";
-import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
-import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
-import TasksPage from "./components/pages/tasks/TasksPage";
-import AdminLoginPage from "./components/pages/auth/AdminLoginPage";
-import NotFoundPage from "./components/common/NotFoundPage";
+import * as ROUTES from "./constants/routes";
+// import HomePage from "./components/pages/home/HomePage";
+// import SchedulePage from "./components/pages/schedule/SchedulePage";
+// import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
+// import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
+// import TasksPage from "./components/pages/tasks/TasksPage";
+// import NotFoundPage from "./components/common/NotFoundPage";
+import SideBar from "./components/common/SideBar";
+import LoginPage from "./components/pages/login/LoginPage";
 
 interface ProtectedRouteProps {
   children: React.ReactElement;
@@ -67,11 +64,10 @@ const App = (): React.ReactElement => {
     colors,
     textStyles,
     components: {
-      Modal: modalTheme,
-      Button: buttonTheme,
-      Input: inputTheme,
-      Textarea: textareaTheme,
-      Tabs: tabsTheme,
+      Button,
+      Text,
+      Input,
+      Select,
     },
   });
 
@@ -100,8 +96,17 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Switch>
-            <Route path={ROUTES.LOGIN_PAGE} element={<AdminLoginPage />} />
-            <Route
+            <Route path={ROUTES.LOGIN_PAGE} element={<LoginPage />} />
+            <Route path="*" element={<SideBar />} />
+          </Switch>
+        </Router>
+      </ChakraProvider>
+    </ApolloProvider>
+  );
+};
+
+// eslint-disable-next-line
+{/*<Route
               path={ROUTES.HOME_PAGE}
               element={
                 <ProtectedRoute>
@@ -124,7 +129,7 @@ const App = (): React.ReactElement => {
                   <AnnouncementsPage />
                 </ProtectedRoute>
               }
-            /> 
+            />
             <Route
               path={ROUTES.PARTICIPANTS_PAGE}
               element={
@@ -146,12 +151,6 @@ const App = (): React.ReactElement => {
               element={
                 <NotFoundPage />
               }
-            />
-          </Switch>
-        </Router>
-      </ChakraProvider>
-    </ApolloProvider>
-  );
-};
+            /> */}
 
 export default App;

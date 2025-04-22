@@ -14,13 +14,14 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 type FormInputFieldProps = {
-  label: string;
+  label?: string;
   placeholder?: string;
   value: string | number | undefined;
   type: "text" | "password" | "date" | "number";
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
-  leftElement?: string;
+  leftElement?: any;
+  rightElement?: any;
 };
 
 const FormInputField = ({

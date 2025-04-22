@@ -9,3 +9,5 @@ export const ANNOUNCEMENTS_PAGE = "/announcements";
 export const PARTICIPANTS_PAGE = "/participants";
 
 export const TASKS_PAGE = "/tasks";
+
+export const BADGES_PAGE = "/badges";
