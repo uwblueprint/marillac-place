@@ -36,6 +36,7 @@ import ParticipantLoginPage from "./pages/participant/login/index";
 import AdminRoute from "./components/admin/AdminRoute";
 import ParticipantRoute from "./components/participant/ParticipantRoute";
 import NotFound from "./components/NotFound";
+import Loading from "./components/Loading";
 
 const App = (): React.ReactElement => {
   const theme = extendTheme({
@@ -84,9 +85,10 @@ const App = (): React.ReactElement => {
               <Route path={ROUTES.PARTICIPANTS_LOGIN_PAGE} element={<ParticipantLoginPage />} />
               <Route path={ROUTES.PARTICIPANTS_HOME_PAGE} element={
                 <ParticipantRoute>
-                  <NotFound />
+                  <Loading />
                 </ParticipantRoute>
               }/>
+              <Route path="*" element={<NotFound />} />
             </Switch>
           </Router>
       </ChakraProvider>

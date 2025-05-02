@@ -77,7 +77,7 @@ const ParticipantsLoginPage = (): React.ReactElement => {
         alignItems="center"
         justifyContent="center"
         gap="45px"
-        padding="45px 15px"
+        padding="35px 15px"
       >
         <Flex width="75%">
           <img
@@ -89,7 +89,7 @@ const ParticipantsLoginPage = (): React.ReactElement => {
         <Flex
           width="100%"
           flexDir="column"
-          gap="10px"
+          gap="15px"
           bg="neutral.0"
           padding="25px 15px"
           borderRadius="8px"
