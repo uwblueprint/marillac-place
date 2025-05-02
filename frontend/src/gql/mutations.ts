@@ -1,12 +1,11 @@
 import { gql } from "@apollo/client";
 
-export const LOGIN = gql`
-    mutation Login($encryptedPassword: String!, $role: String!) {
-        login(encryptedPassword: $encryptedPassword, role: $role) {
-            type
-            accessToken
-        }
+export const ADMIN_LOGIN = gql`
+  mutation adminLogin($role: String!, $password: String!) {
+    adminLogin(role: $role, password: $password) {
+      token
     }
+  }
 `;
 
 // Participant Mutations

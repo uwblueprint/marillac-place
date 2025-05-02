@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes as Switch,
-  Navigate,
 } from "react-router-dom";
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
@@ -11,53 +10,32 @@ import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme, Flex } from "@chakra-ui/react";
 import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
 import Button from "./theme/buttons";
 import { Select, Input } from "./theme/form";
 
 import * as ROUTES from "./constants/routes";
-// import HomePage from "./components/pages/home/HomePage";
-// import SchedulePage from "./components/pages/schedule/SchedulePage";
-// import AnnouncementsPage from "./components/pages/announcements/AnnouncementsPage";
-// import ParticipantsPage from "./components/pages/participants/ParticipantsPage";
-// import TasksPage from "./components/pages/tasks/TasksPage";
-// import NotFoundPage from "./components/common/NotFoundPage";
-import SideBar from "./components/common/SideBar";
-import LoginPage from "./components/pages/login/LoginPage";
 
-interface ProtectedRouteProps {
-  children: React.ReactElement;
-}
+import AdminLoginPage from "./pages/admin/login/index";
+// import AdminHomePage from "./pages/admin/home/index";
+// import AdminSchedulePage from "./pages/admin/schedule/index";
+// import AdminAnnouncementsPage from "./pages/admin/announcements/index";
+// import AdminParticipantsPage from "./pages/admin/participants/index";
+// import AdminTasksPage from "./pages/admin/tasks/index";
+// import AdminBadgesPage from "./pages/admin/badges/index";
 
-const ProtectedRoute = ({
-  children,
-}: ProtectedRouteProps): React.ReactElement => {
-  const token = localStorage.getItem("token");
+import ParticipantLoginPage from "./pages/participant/login/index";
+// import ParticipantHomePage from "./pages/participant/home/index";
+// import ParticipantSchedulePage from "./pages/participant/schedule/index";
+// import ParticipantAnnouncementsPage from "./pages/participant/announcements/index";
+// import ParticipantTasksPage from "./pages/participant/tasks/index";
+// import ParticipantProgressPage from "./pages/participant/progress/index";
 
-  // Check if token exists
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  try {
-    // Basic JWT expiration check
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    const isExpired = payload.exp * 1000 < Date.now();
-
-    if (isExpired) {
-      localStorage.removeItem("token"); // Clear expired token
-      return <Navigate to="/login" replace />;
-    }
-
-    return children;
-  } catch (error) {
-    // If token is malformed or can't be decoded
-    localStorage.removeItem("token");
-    return <Navigate to="/login" replace />;
-  }
-};
+import AdminRoute from "./components/admin/AdminRoute";
+import ParticipantRoute from "./components/participant/ParticipantRoute";
+import NotFound from "./components/NotFound";
 
 const App = (): React.ReactElement => {
   const theme = extendTheme({
@@ -94,12 +72,23 @@ const App = (): React.ReactElement => {
   return (
     <ApolloProvider client={apolloClient}>
       <ChakraProvider theme={theme}>
-        <Router>
-          <Switch>
-            <Route path={ROUTES.LOGIN_PAGE} element={<LoginPage />} />
-            <Route path="*" element={<SideBar />} />
-          </Switch>
-        </Router>
+          <Router>
+            <Switch>
+              <Route path={ROUTES.ADMIN_LOGIN_PAGE} element={<AdminLoginPage />} />
+              <Route path={ROUTES.ADMIN_HOME_PAGE} element={
+                <AdminRoute>
+                  <NotFound />
+                </AdminRoute>
+              }/>
+
+              <Route path={ROUTES.PARTICIPANTS_LOGIN_PAGE} element={<ParticipantLoginPage />} />
+              <Route path={ROUTES.PARTICIPANTS_HOME_PAGE} element={
+                <ParticipantRoute>
+                  <NotFound />
+                </ParticipantRoute>
+              }/>
+            </Switch>
+          </Router>
       </ChakraProvider>
     </ApolloProvider>
   );
