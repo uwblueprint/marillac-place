@@ -7,7 +7,9 @@ import {
   Input,
   FormControl,
 } from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
 import hasRole from "../../../utils/hasRole";
+import { PARTICIPANT_LOGIN } from "../../../gql/mutations";
 import * as ROUTES from "../../../constants/routes";
 import Loading from "../../../components/Loading";
 
@@ -21,6 +23,16 @@ const ParticipantsLoginPage = (): React.ReactElement => {
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
+
+  const [login, { loading }] = useMutation(PARTICIPANT_LOGIN, {
+    onCompleted: (data) => {
+      localStorage.setItem("token", data.participantLogin.token);
+      navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
+    },
+    onError: (err: Error) => {
+      setError(err.message);
+    },
+  });
 
   useEffect(() => {
     const tokenCheck = async () => {
@@ -38,6 +50,8 @@ const ParticipantsLoginPage = (): React.ReactElement => {
 
     if (!id || !password) {
       setError("Missing fields");
+    } else {
+      login({ variables: { id, password } });
     }
   };
 

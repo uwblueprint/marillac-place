@@ -8,6 +8,14 @@ export const ADMIN_LOGIN = gql`
   }
 `;
 
+export const PARTICIPANT_LOGIN = gql`
+  mutation participantLogin($id: String!, $password: String!) {
+    participantLogin(id: $id, password: $password) {
+      token
+    }
+  }
+`;
+
 // Participant Mutations
 export const CREATE_PARTICIPANT = gql`
   mutation createParticipant(
