@@ -51,11 +51,11 @@ const ParticipantsLoginPage = (): React.ReactElement => {
     if (!id || !password) {
       setError("Missing fields");
     } else {
-      login({ variables: { id, password } });
+      login({ variables: { id: Number(id), password } });
     }
   };
 
-  if (!checkLoggedIn) {
+  if (!checkLoggedIn || loading) {
     return <Loading />
   }
 
@@ -134,7 +134,7 @@ const ParticipantsLoginPage = (): React.ReactElement => {
             fontWeight="700"
             fontSize="16px"
             onClick={handleSubmit}
-            isLoading={false}
+            isLoading={loading}
           >
             Sign in
           </Button>

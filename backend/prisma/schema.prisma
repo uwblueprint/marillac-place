@@ -7,18 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum StaffType {
-  ADMIN
-  RELIEF
-}
-
 enum TaskType {
   REQUIRED
   OPTIONAL
+  INDIVIDUAL_GOAL
+}
+
+enum TransactionType {
+  EARNING
+  PURCHASE
+  REFUND
+}
+
+enum BadgeType {
+  SYSTEM
   CUSTOM
 }
 
-enum DaysOfWeek {
+enum RecurrenceFrequency {
+  DAILY
+  EVERY_SELECTED_DAYS
+  ANY_SELECTED_DAYS
+  PARTICIPANT_PREFERENCE
+}
+
+enum DayOfWeek {
   MONDAY
   TUESDAY
   WEDNESDAY
@@ -28,92 +41,223 @@ enum DaysOfWeek {
   SUNDAY
 }
 
-enum PriorityType {
+enum TimeOption {
+  ANYTIME
+  SPECIFIC
+  PARTICIPANT_PREFERENCE
+}
+
+enum Priority {
   NORMAL
   HIGH
   CRITICAL
 }
 
-enum TaskStatus {
-  UNASSIGNED
+enum Status {
   ASSIGNED
   INCOMPLETE
-  PENDING
   COMPLETE
   EXCUSED
 }
 
-enum TimeOption {
-  ANYTIME
-  SPECIFIC
-}
-
-enum RecurrenceFrequency {
-  DAILY
-  EVERY_SELECTED_DAYS
-  ANY_SELECTED_DAYS
+enum Icon {
+  FIVE_STAR
+  FOUR_STAR
+  GROUP
+  HEART
+  HOME
+  BABY
+  WINGS
+  FLOWER
+  MONEY
+  GEMSTONE
+  DIAMOND
+  PENCIL
+  TOOL
 }
 
 model Participant {
-  participantId           String        @id
-  roomNumber              Int
-  arrival                 String
-  departure               String?
+  participant_id          Int                   @id
   password                String
-  credit                  Int           @default(0)
+  room_number             Int
+  arrival_date            DateTime
+  departure_date          DateTime?
+  account_creation_date   DateTime              @default(now())
+  account_removal_date    DateTime?
+  marillac_bucks          Int                   @default(0)
+  marillac_bucks_goal     Int?
 
-  @@map("participants")
-}
+  assigned_tasks          AssignedTask[]
+  user_announcements      UserAnnouncement[]
+  logins                  Login[]
+  transactions            Transaction[]
+  earned_badges           EarnedBadge[]
+  participant_progress    ParticipantProgress?
 
-model Announcement {
-  announcementId    Int           @id @default(autoincrement())
-  from              StaffType     
-  to                Int[]         
-  priority          PriorityType
-  createdAt         DateTime
-  message           String
-
-  @@map("announcements")
+  @@map("participant")
 }
 
 model Task {
-  taskId                  Int           @id @default(autoincrement())
-  type                    TaskType
-  name                    String
-  recurrencePreference    RecurrenceFrequency
-  repeatDays              DaysOfWeek[]
-  timePreference          TimeOption
-  start                   String?
-  end                     String?
-  credit                  Int
-  deduction               Int
-  comment                 String?
+  task_id                    Int                   @id @default(autoincrement())
+  task_name                  String                @unique
+  task_type                  TaskType
+  recurrence_preference      RecurrenceFrequency
+  repeat_days                DayOfWeek[]
+  time_preference            TimeOption
+  start_time                 String?
+  end_time                   String?
+  marillac_bucks_addition    Int
+  marillac_bucks_deduction   Int
+  comment                    String?
 
-  @@map("tasks")
+  @@map("task")
 }
 
 model AssignedTask {
-  assignedTaskId          Int           @id @default(autoincrement())
-  userID                  Int
-  type                    TaskType
-  name                    String
-  recurrencePreference    RecurrenceFrequency
-  repeatDays              String[]
-  timePreference          TimeOption
-  start                   String?
-  end                     String?
-  credit                  Int
-  deduction               Int?
-  comment                 String?
+  assigned_task_id           Int           @id @default(autoincrement())
+  participant_id             Int
+  task_name                  String
+  task_status                Status        @default(ASSIGNED)
+  task_type                  TaskType
+  goal_name                  String?
+  goal_description           String?
+  repeats                    Boolean
+  start_date                 DateTime
+  end_date                   DateTime
+  marillac_bucks_addition    Int
+  marillac_bucks_deduction   Int
+  comment                    String?
 
-  @@map("assignedtasks")
+  participant                Participant   @relation(fields: [participant_id], references: [participant_id])
+
+  @@map("assigned_task")
 }
 
 model Note {
-  noteId            Int           @id @default(autoincrement())
-  message           String
-  date              String
-  formattedDate     String
+  note_id         Int        @id @default(autoincrement())
+  message         String
+  creation_date   DateTime   @default(now())
 
-  @@map("notes")
+  @@map("note")
 }
+
+model Announcement {
+  announcement_id      Int                  @id @default(autoincrement())
+  priority             Priority             @default(NORMAL)
+  creation_date        DateTime             @default(now())
+  message              String
+
+  user_announcements   UserAnnouncement[]
+
+  @@map("announcement")
+}
+
+model UserAnnouncement {
+  read              Boolean        @default(false)
+  pinned            Boolean        @default(false)
+  announcement_id   Int
+  participant_id    Int
+
+  announcement      Announcement   @relation(fields: [announcement_id], references: [announcement_id])
+  participant       Participant    @relation(fields: [participant_id], references: [participant_id])
+
+  @@id([announcement_id, participant_id])
+  @@map("user_announcement")
+}
+
+model Login {
+  participant_id   Int
+  login_date       DateTime      @default(now())
+
+  participant      Participant   @relation(fields: [participant_id], references: [participant_id])
+
+  @@id([participant_id, login_date])
+  @@map("login")
+}
+
+model Transaction {
+  transaction_id     Int               @id @default(autoincrement())
+  participant_id     Int
+  transaction_date   DateTime          @default(now())
+  transaction_type   TransactionType
+  marillac_bucks     Int
+
+  participant        Participant       @relation(fields: [participant_id], references: [participant_id])
+
+  @@map("transaction")
+}
+
+model Badge {
+  badge_id         Int            @id @default(autoincrement())
+  badge_type       BadgeType
+  name             String         @unique
+  description      String
+  is_active        Boolean        @default(true)
+  is_consecutive   Boolean
+  icon             Icon
+
+  badge_level      BadgeLevel[]
+
+  @@map("badge")
+}
+
+model BadgeLevel {
+  badge_id         Int
+  level            Int
+  benchmark        Int
+  marillac_bucks   Int
+
+  badge            Badge   @relation(fields: [badge_id], references: [badge_id])
+
+  @@id([badge_id, level])
+  @@map("badge_level")
+}
+
+model EarnedBadge {
+  earned_badge_id   Int           @id @default(autoincrement())
+  participant_id    Int
+  date_received     DateTime      @default(now())
+  name              String
+  description       String
+  badge_icon        Icon
+  level             Int
+
+  participant       Participant   @relation(fields: [participant_id], references: [participant_id])
+
+  @@map("earned_badge")
+}
+
+model ParticipantProgress {
+  participant_id                           Int           @id
+  optional_tasks_completed                 Int           @default(0)
+  first_goals_set_badge_level              Int           @default(0)
+  weeks_optional_tasks_complete            Int           @default(0)
+  perfect_score_optional_badge_level       Int           @default(0)
+  weeks_mandatory_tasks_complete           Int           @default(0)
+  perfect_score_mandatory_badge_level      Int           @default(0)
+  weeks_individual_goal_complete           Int           @default(0)
+  individual_goals_completed_badge_level   Int           @default(0)
+  days_logged_in                           Int           @default(0)
+  login_badge_level                        Int           @default(0)
+  total_earnings                           Int           @default(0)
+  money_earned_badge_level                 Int           @default(0)
+  beginner_badges_achieved                 Int           @default(0)
+  bronze_badges_achieved                   Int           @default(0)
+  silver_badges_achieved                   Int           @default(0)
+  gold_badges_achieved                     Int           @default(0)
+  diamond_badges_achieved                  Int           @default(0)
+  pr_leader_badge_level                    Int           @default(0)
+  task_types_tried                         String[]      @default([])
+  jack_of_all_trades_badge_level           Int           @default(0)
+
+  participant                              Participant   @relation(fields: [participant_id], references: [participant_id])
+
+  @@map("participant_progress")
+}
+
+
+
+
+
+
+

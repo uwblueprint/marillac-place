@@ -9,7 +9,7 @@ export const ADMIN_LOGIN = gql`
 `;
 
 export const PARTICIPANT_LOGIN = gql`
-  mutation participantLogin($id: String!, $password: String!) {
+  mutation participantLogin($id: Int!, $password: String!) {
     participantLogin(id: $id, password: $password) {
       token
     }

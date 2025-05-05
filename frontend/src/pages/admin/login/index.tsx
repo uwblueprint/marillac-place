@@ -57,7 +57,7 @@ const AdminLoginPage = (): React.ReactElement => {
     }
   };
 
-  if (!checkLoggedIn) {
+  if (!checkLoggedIn || loading) {
     return <Loading />
   }
 
