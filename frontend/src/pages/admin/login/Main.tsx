@@ -10,11 +10,11 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import { ADMIN_LOGIN } from "../../../gql/mutations";
-import hasRole from "../../../utils/hasRole";
+import { isAdmin, isRelief } from "../../../utils/checkRole";
 import * as ROUTES from "../../../constants/routes";
-import Loading from "../../../components/Loading";
+import Loading from "../../Loading";
 
-const AdminLoginPage = (): React.ReactElement => {
+export default function AdminLoginPage() {
   const navigate = useNavigate();
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -27,7 +27,7 @@ const AdminLoginPage = (): React.ReactElement => {
 
   const [login, { loading }] = useMutation(ADMIN_LOGIN, {
     onCompleted: (data) => {
-      localStorage.setItem("token", data.adminLogin.token);
+      localStorage.setItem("admin_token", data.adminLogin.token);
       navigate(ROUTES.ADMIN_HOME_PAGE);
     },
     onError: (err: Error) => {
@@ -37,9 +37,9 @@ const AdminLoginPage = (): React.ReactElement => {
 
   useEffect(() => {
     const tokenCheck = async () => {
-      const isAdmin = await hasRole("admin")
-      const isRelief = await hasRole("relief");
-      if (isAdmin || isRelief) {
+      const adminUser = await isAdmin();
+      const reliefUser = await isRelief();
+      if (adminUser || reliefUser) {
         setLoggedIn(true);
       }
       setCheckLoggedIn(true);
@@ -140,6 +140,7 @@ const AdminLoginPage = (): React.ReactElement => {
           </Flex>
 
           <Button
+            width="100%"
             variant="primaryFilled"
             borderRadius="full"
             fontWeight="700"
@@ -154,5 +155,3 @@ const AdminLoginPage = (): React.ReactElement => {
     </Flex>
   );
 };
-
-export default AdminLoginPage;

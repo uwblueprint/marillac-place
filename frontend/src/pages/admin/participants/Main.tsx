@@ -1,113 +1,56 @@
-export {}
-// import React, { useState } from "react";
-// import {
-//   Flex,
-//   Input,
-//   Button,
-//   Icon,
-//   InputGroup,
-//   InputLeftElement,
-//   Spinner,
-//   Text,
-// } from "@chakra-ui/react";
-// import { Add, Search } from "@mui/icons-material";
-// import { useQuery } from "@apollo/client";
-// import {
-//   GET_PAST_PARTICIPANTS,
-//   GET_CURRENT_PARTICIPANTS,
-// } from "../../../gql/queries";
-//
-// import CommonTable, {
-//   ColumnInfoTypes,
-//   TableData,
-// } from "../../common/CommonTable";
-// import SideBar from "../../common/SideBar";
-// import AddParticipantCard from "./AddParticipantCard";
-// import EditPastParticipantCard from "./EditPastParticipantCard";
-// import CurrentParticipantCard from "./CurrentParticipantCard";
-// import EmptyParticipantCard from "./EmptyParticipantCard";
-// import CheckmarkSvg from "../../../assets/svg/CheckmarkSvg";
-//
-// const columnTypes: ColumnInfoTypes[] = [
-//   {
-//     header: "ID Number",
-//     key: "participantId",
-//   },
-//   {
-//     header: "Arrival Date",
-//     key: "arrival",
-//   },
-//   {
-//     header: "Departure Date",
-//     key: "departure",
-//   },
-// ];
-//
-// const ParticipantsPage = (): React.ReactElement => {
-//   const roomNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-//   const [addParticipant, setAddParticipant] = useState(false);
-//   const [editPastParticipant, setEditPastParticipant] = useState(false);
-//   const [selected, setSelected] = useState({});
-//   const [notification, setNotification] = useState(
-//     localStorage.getItem("notification"),
-//   );
-//   console.log(notification);
-//   if (notification) {
-//     setTimeout(() => {
-//       localStorage.setItem("notification", "");
-//       setNotification("");
-//     }, 3000);
-//   }
-//
+import { Flex, Spinner, Text, Grid } from "@chakra-ui/react";
+import React from "react";
+import { useQuery } from "@apollo/client";
+import { GET_CURRENT_PARTICIPANTS } from "../../../gql/queries";
+import { ROOM_NUMBERS } from "../../../constants/rooms";
+import OccupiedRoomCard from "./elements/OccupiedRoomCard";
+import EmptyRoomCard from "./elements/EmptyRoomCard";
+import PastParticipantTable from "./elements/PastParticipantTable";
+
+export default function AdminParticipantsPage() {
+  const { loading, error, data } = useQuery(GET_CURRENT_PARTICIPANTS);
+
+  const currentParticipants: Record<number, any> = {};
+  if (data && data.getCurrentParticipants) {
+    data.getCurrentParticipants.forEach((participant: any) => {
+      currentParticipants[participant.room_number] = participant;
+    });
+  }
+
+  return (
+    <Flex w="100%" flexDir="column" minHeight="fit-content">
+      <Text textStyle="web.h2" color="primary.700" mb="10px">Current Participants</Text>
+
+      { loading ? (
+        <Spinner />
+      ) : error ? (
+        <Flex>{error.message}</Flex>
+      ) : (
+        <Grid w="100%" templateColumns='repeat(5, 1fr)' gap="15px">
+          { ROOM_NUMBERS.map((num) =>
+            num in currentParticipants ? (
+              <OccupiedRoomCard key={num} roomNumber={num} participants={currentParticipants} />
+            ) : (
+              <EmptyRoomCard key={num} roomNumber={num} />
+            )
+          )}
+        </Grid>
+      )}
+
+      <Text textStyle="web.h2" color="primary.700" mt="20px" mb="10px">Past Participants</Text>
+      <PastParticipantTable />
+    </Flex>
+  )
+}
 //   const {
 //     loading: getPastParticipantsLoading,
 //     error: getPastParticipantsError,
 //     data: getPastParticipantsData,
 //   } = useQuery(GET_PAST_PARTICIPANTS);
 //
-//   const {
-//     loading: getCurrentParticipantsLoading,
-//     error: getCurrentParticipantsError,
-//     data: getCurrentParticipantsData,
-//   } = useQuery(GET_CURRENT_PARTICIPANTS);
-//
 //   return (
 //     <Flex w="100vw" h="100vh">
-//       {notification && (
-//         <Flex
-//           position="fixed"
-//           top="30px"
-//           left="50%"
-//           transform="translateX(-50%)"
-//           border="solid"
-//           borderColor="#259E29"
-//           zIndex="1000"
-//           paddingY="5px"
-//           paddingX="15px"
-//           justifyContent="center"
-//           alignItems="center"
-//           gap="10px"
-//           boxShadow="lg"
-//           bg="#EAFFEB"
-//         >
-//           <CheckmarkSvg />
-//           <Text color="#259E29" fontSize="xl" fontWeight="500" mb="0px">
-//             {notification}
-//           </Text>
-//         </Flex>
-//       )}
-//       <SideBar />
 //       <Flex w="100%" h="100%" flexDir="column">
-//         <Flex
-//           w="100%"
-//           h="50px"
-//           bg="#E3ECEB"
-//           position="fixed"
-//           borderBottom="solid"
-//           borderBottomColor="neutral.200"
-//           top="0px"
-//           zIndex="999"
-//         />
 //         <Flex
 //           w="100%"
 //           h="100%"

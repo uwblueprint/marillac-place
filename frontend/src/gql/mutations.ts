@@ -16,22 +16,48 @@ export const PARTICIPANT_LOGIN = gql`
   }
 `;
 
-// Participant Mutations
 export const CREATE_PARTICIPANT = gql`
   mutation createParticipant(
-    $participantId: String!
-    $roomNumber: Int!
-    $arrival: String!
-    $password: String!
+    $participant_id: Int!,
+    $room_number: Int!,
+    $arrival_date: String!,
+    $password: String!,
   ) {
     createParticipant(
-      participantId: $participantId
-      roomNumber: $roomNumber
-      arrival: $arrival
-      password: $password
+      participant_id: $participant_id,
+      room_number: $room_number,
+      arrival_date: $arrival_date,
+      password: $password,
     )
   }
 `;
+
+export const UPDATE_PARTICIPANT = gql`
+  mutation updateParticipant(
+    $participant_id: Int!,
+    $room_number: Int,
+    $arrival_date: String,
+    $departure_date: String,
+    $account_creation_date: String,
+    $account_removal_date: String,
+    $marillac_bucks: Int,
+    $marillac_bucks_goal: Int,
+    $password: String,
+  ) {
+    updateParticipant(
+      participant_id: $participant_id,
+      room_number: $room_number,
+      arrival_date: $arrival_date,
+      departure_date: $departure_date,
+      account_creation_date: $account_creation_date,
+      account_removal_date: $account_removal_date,
+      marillac_bucks: $marillac_bucks,
+      marillac_bucks_goal: $marillac_bucks_goal,
+      password: $password,
+    )
+  }
+`;
+
 
 export const CREATE_ANNOUNCEMENT = gql`
   mutation createAnnouncement($announcementId: number,
@@ -77,24 +103,6 @@ export const DELETE_ANNOUNCEMENT = gql`
   }
 `;
 
-export const UPDATE_PARTICIPANT_BY_ID = gql`
-  mutation updateParticipantById(
-    $participantId: String!
-    $roomNumber: Int
-    $arrival: String
-    $departure: String
-    $password: String
-  ) {
-    updateParticipantById(
-      participantId: $participantId
-      roomNumber: $roomNumber
-      arrival: $arrival
-      departure: $departure
-      password: $password
-    )
-  }
-`;
-
 export const EDIT_MARILLAC_BUCKS = gql`
     mutation EditMarillacBucks(
         $participantId: String
@@ -107,20 +115,18 @@ export const EDIT_MARILLAC_BUCKS = gql`
     }
 `;
 
-// Note Mutations
 export const CREATE_NOTE = gql`
   mutation createNote(
     $message: String!
-    $date: String!
-    $formattedDate: String!
+    $creation_date: String!
   ) {
-    createNote(message: $message, date: $date, formattedDate: $formattedDate)
+    createNote(message: $message, creation_date: $creation_date)
   }
 `;
 
 export const DELETE_NOTE = gql`
-  mutation deleteNote($noteId: Int!) {
-    deleteNote(noteId: $noteId)
+  mutation deleteNote($note_id: Int!) {
+    deleteNote(note_id: $note_id)
   }
 `;
 

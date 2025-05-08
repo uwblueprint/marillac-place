@@ -51,7 +51,7 @@ type SignOutPopUpProps = {
 function SignOutPopUp({ cancel }: SignOutPopUpProps) {
   const navigate = useNavigate();
   const handleSignOut = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("admin_token");
     return navigate(ROUTES.ADMIN_LOGIN_PAGE);
   };
 
@@ -147,7 +147,6 @@ export default function SideBar() {
       </Flex>
 
       <Button
-        width="fit-content"
         variant="white"
         color="danger.900"
         fontWeight={700}

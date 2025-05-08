@@ -20,12 +20,11 @@ export const textStyles = {
       fontSize: "24px",
     },
     h3: {
-      color: "#0C727E",
-      fontWeight: "600",
+      fontWeight: "700",
       fontSize: "20px",
     },
     s1: {
-      fontWeight: "600",
+      fontWeight: "700",
       fontSize: "12px",
     },
     b1: {
@@ -35,6 +34,10 @@ export const textStyles = {
     b2: {
       fontWeight: "400",
       fontSize: "14px",
+    },
+    b3: {
+      fontWeight: "400",
+      fontSize: "12px",
     },
     c1: {
       color: "#808080",
@@ -57,7 +60,6 @@ export const textStyles = {
       fontSize: "18px",
     },
     h3: {
-      color: "#0C727E",
       fontWeight: "600",
       fontSize: "16px",
     },
@@ -73,6 +75,10 @@ export const textStyles = {
     b2: {
       fontWeight: "400",
       fontSize: "10px",
+    },
+    b3: {
+      fontWeight: "400",
+      fontSize: "8px",
     },
     c1: {
       color: "#808080",

@@ -5,10 +5,10 @@ const models = gql`
     participant_id: Int!
     password: String!
     room_number: Int!
-    arrival_date: DateTime!
-    departure_date: DateTime
-    account_creation_date: DateTime!
-    account_removal_date: DateTime
+    arrival_date: String!
+    departure_date: String
+    account_creation_date: String!
+    account_removal_date: String
     marillac_bucks: Int!
     marillac_bucks_goal: Int
   }
@@ -36,8 +36,8 @@ const models = gql`
     goal_name: String
     goal_description: String
     repeats: Boolean!
-    start_date: DateTime!
-    end_date: DateTime!
+    start_date: String!
+    end_date: String!
     marillac_bucks_addition: Int!
     marillac_bucks_deduction: Int!
     comment: String
@@ -46,13 +46,13 @@ const models = gql`
   type Note {
     note_id: Int!
     message: String!
-    creation_date: DateTime!
+    creation_date: String!
   }
 
   type Announcement {
     announcement_id: Int!
     priority: Priority!
-    creation_date: DateTime!
+    creation_date: String!
     message: String!
   }
 
@@ -65,13 +65,13 @@ const models = gql`
 
   type Login {
     participant_id: Int!
-    login_date: DateTime!
+    login_date: String!
   }
 
   type Transaction {
     transaction_id: Int!
     participant_id: Int!
-    transaction_date: DateTime!
+    transaction_date: String!
     transaction_type: TransactionType!
     marillac_bucks: Int!
   }
@@ -96,7 +96,7 @@ const models = gql`
   type EarnedBadge {
     earned_badge_id: Int!
     participant_id: Int!
-    date_received: DateTime!
+    date_received: String!
     name: String!
     description: String!
     badge_icon: Icon!

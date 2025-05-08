@@ -8,12 +8,12 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
-import hasRole from "../../../utils/hasRole";
+import { isParticipant } from "../../../utils/checkRole";
 import { PARTICIPANT_LOGIN } from "../../../gql/mutations";
 import * as ROUTES from "../../../constants/routes";
-import Loading from "../../../components/Loading";
+import Loading from "../../Loading";
 
-const ParticipantsLoginPage = (): React.ReactElement => {
+export default function ParticipantsLoginPage() {
   const navigate = useNavigate();
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -26,7 +26,7 @@ const ParticipantsLoginPage = (): React.ReactElement => {
 
   const [login, { loading }] = useMutation(PARTICIPANT_LOGIN, {
     onCompleted: (data) => {
-      localStorage.setItem("token", data.participantLogin.token);
+      localStorage.setItem("participant_token", data.participantLogin.token);
       navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
     },
     onError: (err: Error) => {
@@ -36,8 +36,8 @@ const ParticipantsLoginPage = (): React.ReactElement => {
 
   useEffect(() => {
     const tokenCheck = async () => {
-      const isParticipant = await hasRole("participant");
-      if (isParticipant) {
+      const participantUser = await isParticipant();
+      if (participantUser) {
         setLoggedIn(true);
       }
       setCheckLoggedIn(true);
@@ -129,6 +129,7 @@ const ParticipantsLoginPage = (): React.ReactElement => {
           { error && <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">{error}</Text> }
 
           <Button
+            width="full"
             variant="primaryFilled"
             borderRadius="full"
             fontWeight="700"
@@ -143,5 +144,3 @@ const ParticipantsLoginPage = (): React.ReactElement => {
     </Flex>
   );
 };
-
-export default ParticipantsLoginPage;

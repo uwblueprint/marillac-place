@@ -10,30 +10,26 @@ import { ChakraProvider } from "@chakra-ui/react";
 import getApolloClient from "./utils/getApolloClient";
 import getChakraTheme from "./utils/getChakraTheme";
 
-import "./styles/index.css";
-import "./styles/svg.css";
-
-import AdminLoginPage from "./pages/admin/login/index";
-// import AdminHomePage from "./pages/admin/home/index";
+import AdminLoginPage from "./pages/admin/login/Main";
+import AdminHomePage from "./pages/admin/home/Main";
 // import AdminSchedulePage from "./pages/admin/schedule/index";
 // import AdminAnnouncementsPage from "./pages/admin/announcements/index";
-// import AdminParticipantsPage from "./pages/admin/participants/index";
+import AdminParticipantsPage from "./pages/admin/participants/Main";
 // import AdminTasksPage from "./pages/admin/tasks/index";
 // import AdminBadgesPage from "./pages/admin/badges/index";
 
-import ParticipantLoginPage from "./pages/participant/login/index";
+import ParticipantLoginPage from "./pages/participant/login/Main";
 // import ParticipantHomePage from "./pages/participant/home/index";
 // import ParticipantSchedulePage from "./pages/participant/schedule/index";
 // import ParticipantAnnouncementsPage from "./pages/participant/announcements/index";
 // import ParticipantTasksPage from "./pages/participant/tasks/index";
 // import ParticipantProgressPage from "./pages/participant/progress/index";
 
+import NotFound from "./pages/NotFound";
+
 import * as ROUTES from "./constants/routes";
 import AdminRoute from "./components/admin/AdminRoute";
 import ParticipantRoute from "./components/participant/ParticipantRoute";
-
-import NotFound from "./components/NotFound";
-import Loading from "./components/Loading";
 
 const App = (): React.ReactElement => {
   const theme =  getChakraTheme();
@@ -47,16 +43,16 @@ const App = (): React.ReactElement => {
             <Route path={ROUTES.ADMIN_LOGIN_PAGE} element={<AdminLoginPage />} />
             <Route path={ROUTES.ADMIN_HOME_PAGE} element={
               <AdminRoute>
-                <NotFound />
+                <AdminHomePage />
+              </AdminRoute>
+            }/>
+            <Route path={ROUTES.ADMIN_PARTICIPANTS_PAGE} element={
+              <AdminRoute>
+                <AdminParticipantsPage />
               </AdminRoute>
             }/>
 
             <Route path={ROUTES.PARTICIPANTS_LOGIN_PAGE} element={<ParticipantLoginPage />} />
-            <Route path={ROUTES.PARTICIPANTS_HOME_PAGE} element={
-              <ParticipantRoute>
-                <Loading />
-              </ParticipantRoute>
-            }/>
 
             <Route path="*" element={<NotFound />} />
           </Switch>

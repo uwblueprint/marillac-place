@@ -34,7 +34,9 @@ module.exports = {
     "no-nested-ternary": "off",
     "import/prefer-default-export": "off",
     'prefer-template': 'off',
-    '@typescript-eslint/no-extra-semi': 'off'
+    '@typescript-eslint/no-extra-semi': 'off',
+    'react/jsx-no-bind': 'off',
+    'no-lonely-if': 'off',
   },
   ignorePatterns: ["build/*"],
 };

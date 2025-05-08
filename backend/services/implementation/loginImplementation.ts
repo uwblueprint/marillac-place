@@ -45,45 +45,47 @@ class LoginService implements ILoginService {
     id: number,
     password: string,
   ): Promise<{ token: string }> {
+    var participant: Participant | null = null;
     try {
-      const participant: Participant | null = await prisma.participant.findUnique({
+      participant = await prisma.participant.findUnique({
         where: {
           participant_id: id,
+          account_removal_date: null
         },
       });
-
-      if (!participant) {
-        throw new Error('ID # does not exist');
-      }
-
-      const isPasswordValid = password === participant.password;
-
-      if (!isPasswordValid) {
-        throw new Error('Password is incorrect');
-      }
-
-      const jwtSecretKey = process.env.JWT_SECRET ?? "";
-
-      if (!jwtSecretKey) {
-        console.error("JWT secret key not setup");
-        throw new Error('Something went wrong');
-      }
-
-      const token = jwt.sign(
-        {
-          role: "participant",
-          id
-        },
-        jwtSecretKey,
-        {
-          expiresIn: "12h",
-        },
-      );
-
-      return { token };
     } catch (err) {
       throw new Error('Something went wrong');
     }
+
+    if (!participant) {
+      throw new Error('ID # does not exist');
+    }
+
+    const isPasswordValid = password === participant.password;
+
+    if (!isPasswordValid) {
+      throw new Error('Password is incorrect');
+    }
+
+    const jwtSecretKey = process.env.JWT_SECRET ?? "";
+
+    if (!jwtSecretKey) {
+      console.error("JWT secret key not setup");
+      throw new Error('Something went wrong');
+    }
+
+    const token = jwt.sign(
+      {
+        role: "participant",
+        id
+      },
+      jwtSecretKey,
+      {
+        expiresIn: "12h",
+      },
+    );
+
+      return { token };
   }
 }
 

@@ -9,7 +9,14 @@ export default function getApolloClient() {
   });
 
   const header = setContext(async (_, { headers }) => {
-    const token = localStorage.getItem("token");
+    const path = window.location.pathname.split("/");
+    let token = null;
+    if (path.length >= 2 && path[1] === "admin") {
+      token = localStorage.getItem("admin_token");
+    } else {
+      token = localStorage.getItem("participant_token");
+    }
+
     return {
       headers: {
         ...headers,

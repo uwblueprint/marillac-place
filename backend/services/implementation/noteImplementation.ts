@@ -1,53 +1,48 @@
-// import { Note } from "@prisma/client";
-// import prisma from "../../prisma";
-// import INoteService from "../interface/noteInterface";
-//
-// class NoteService implements INoteService {
-//   async getNotes(): Promise<Note[]> {
-//     try {
-//       const notes = await prisma.note.findMany({
-//         orderBy: [{ noteId: "desc" }],
-//       });
-//       return notes;
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   }
-//
-//   async createNote(
-//     message: string,
-//     date: string,
-//     formattedDate: string,
-//   ): Promise<boolean> {
-//     try {
-//       await prisma.note.create({
-//         data: {
-//           message,
-//           date,
-//           formattedDate,
-//         },
-//       });
-//       return true;
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   }
-//
-//   async deleteNote(noteId: number): Promise<boolean> {
-//     try {
-//       await prisma.note.delete({
-//         where: {
-//           noteId,
-//         },
-//       });
-//       return true;
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   }
-// }
-//
-// export default NoteService;
+import { Note } from "@prisma/client";
+import prisma from "../../prisma";
+import INoteService from "../interface/noteInterface";
+
+class NoteService implements INoteService {
+  async getNotes(): Promise<Note[]> {
+    try {
+      const notes = await prisma.note.findMany({
+        orderBy: [{ creation_date: "desc" }],
+      });
+      return notes;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
+  async createNote(
+    message: string,
+    creation_date: string,
+  ): Promise<boolean> {
+    try {
+      await prisma.note.create({
+        data: {
+          message,
+          creation_date,
+        },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong.");
+    }
+  }
+
+  async deleteNote(note_id: number): Promise<boolean> {
+    try {
+      await prisma.note.delete({
+        where: {
+          note_id,
+        },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong.");
+    }
+  }
+}
+
+export default NoteService;

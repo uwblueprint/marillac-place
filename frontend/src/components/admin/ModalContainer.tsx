@@ -18,11 +18,11 @@ type Props = {
 };
 
 const ModalContainer = ({
-  title,
-  onDelete,
-  close,
-  children,
-}: Props): React.ReactElement => {
+                          title,
+                          onDelete,
+                          close,
+                          children,
+                        }: Props): React.ReactElement => {
   return (
     <Modal closeOnOverlayClick={false} isOpen onClose={() => {}} isCentered>
       <ModalOverlay />

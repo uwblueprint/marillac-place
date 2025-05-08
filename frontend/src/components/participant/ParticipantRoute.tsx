@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import * as ROUTES from "../../constants/routes";
-import hasRole from "../../utils/hasRole";
-import Loading from "../Loading";
+import { isParticipant } from "../../utils/checkRole";
+import Loading from "../../pages/Loading";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
@@ -15,8 +15,8 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
 
   useEffect(() => {
     const checkRole = async () => {
-      const isParticipant = await hasRole("participant");
-      if (isParticipant) {
+      const participantUser = await isParticipant();
+      if (participantUser) {
         setAuthorized(true);
       }
       setLoading(false);

@@ -4,8 +4,8 @@ import { Flex } from "@chakra-ui/react";
 import SideBar from "./SideBar";
 import Notification from "./Notification";
 import * as ROUTES from "../../constants/routes";
-import hasRole from "../../utils/hasRole";
-import Loading from "../Loading";
+import { isAdmin, isRelief } from "../../utils/checkRole";
+import Loading from "../../pages/Loading";
 
 type AdminRouteProps = {
   children: React.ReactElement;
@@ -20,9 +20,9 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
   useEffect(() => {
     const checkRole = async () => {
-      const isAdmin = await hasRole("admin");
-      const isRelief = await hasRole("relief");
-      if (isAdmin || isRelief) {
+      const adminUser = await isAdmin();
+      const reliefUser = await isRelief();
+      if (adminUser || reliefUser) {
         setAuthorized(true);
       }
       setLoading(false);
@@ -58,8 +58,22 @@ export default function AdminRoute({ children }: AdminRouteProps) {
         { notification && <Notification message={notification} /> }
         <SideBar />
         <Flex
+          position="absolute"
+          top="0px"
+          left="250px"
+          width="1150px"
+          height="50px"
+          bg="primary.100"
+          borderBottom="1px"
+          borderColor="neutral.300"
+        />
+        <Flex
           width="100%"
+          height="calc(100vh - 50px)"
           ml="250px"
+          mt="50px"
+          padding="15px 25px"
+          overflow="scroll"
         >
           { children }
         </Flex>

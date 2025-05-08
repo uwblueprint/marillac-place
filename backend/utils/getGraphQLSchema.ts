@@ -12,8 +12,8 @@ import enums from "../types/enums";
 import resolvers from "../types/resolvers";
 import responses from "../types/responses";
 
-// import participantResolvers from "./resolvers/participantResolver";
-// import noteResolvers from "./resolvers/noteResolver";
+import participantResolver from "../resolvers/participantResolver";
+import noteResolver from "../resolvers/noteResolver";
 // import announcementResolvers from "./resolvers/announcementResolver";
 import loginResolver from "../resolvers/loginResolver";
 // import taskResolvers from "./resolvers/taskResolver";
@@ -27,6 +27,8 @@ export default function getGraphQLSchema() {
     resolvers: merge(
       scalarResolvers,
       loginResolver,
+      noteResolver,
+      participantResolver
     ),
   });
 

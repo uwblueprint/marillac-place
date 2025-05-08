@@ -1,15 +1,26 @@
-// import { Participant } from "@prisma/client";
-//
-// interface IParticipantService {
-//     getPastParticipants(): Promise<Participant[]>;
-//     getCurrentParticipants(): Promise<Participant[]>;
+import { Participant } from "@prisma/client";
+
+interface IParticipantService {
+  getPastParticipants(): Promise<Participant[]>;
+  getCurrentParticipants(): Promise<Participant[]>;
 //     getParticipantById(participantId: string): Promise<Participant | null>;
-//     createParticipant(
-//         participantId: string,
-//         roomNumber: number,
-//         arrival: string,
-//         password: string,
-//     ): Promise<boolean>;
+  createParticipant(
+      participant_id: number,
+      room_number: number,
+      arrival_date: string,
+      password: string,
+  ): Promise<boolean>;
+  updateParticipant(
+    participant_id: number,
+    room_number?: number,
+    arrival_date?: string,
+    departure_date?: string,
+    account_creation_date?: string,
+    account_removal_date?: string,
+    marillac_bucks?: number,
+    marillac_bucks_goal?: number,
+    password?: string,
+  ): Promise<boolean>;
 //     updateParticipantById(
 //         participantId: string,
 //         roomNumber?: number,
@@ -22,6 +33,6 @@
 //         participantId: string,
 //         credit: number,
 //     ): Promise<boolean>;
-// }
-//
-// export default IParticipantService;
+}
+
+export default IParticipantService;

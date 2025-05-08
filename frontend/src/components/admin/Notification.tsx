@@ -1,6 +1,6 @@
 import React from "react";
 import { Flex, Text} from "@chakra-ui/react";
-import CheckmarkSvg from "../../svg/CheckmarkSvg";
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 
 type NotificationProps = {
   message: string
@@ -22,10 +22,15 @@ export default function Notification({ message }: NotificationProps) {
       justifyContent="center"
       alignItems="center"
       gap="10px"
-      boxShadow="lg"
+      boxShadow="xl"
       bg="success.100"
     >
-      <CheckmarkSvg />
+      <Flex color="success.900">
+        <TaskAltIcon
+          fontSize="medium"
+          color="inherit"
+        />
+      </Flex>
       <Text color="success.900" textStyle="web.b1" fontWeight="700">
         { message }
       </Text>

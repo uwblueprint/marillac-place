@@ -4,7 +4,7 @@ import React from "react";
 export default function Loading() {
   return (
     <Flex
-      w="100%"
+      w="100vw"
       h="100vh"
       alignItems="center"
       justifyContent="center"

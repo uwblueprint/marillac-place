@@ -80,10 +80,10 @@ model Participant {
   participant_id          Int                   @id
   password                String
   room_number             Int
-  arrival_date            DateTime
-  departure_date          DateTime?
-  account_creation_date   DateTime              @default(now())
-  account_removal_date    DateTime?
+  arrival_date            String
+  departure_date          String?
+  account_creation_date   String
+  account_removal_date    String?
   marillac_bucks          Int                   @default(0)
   marillac_bucks_goal     Int?
 
@@ -122,8 +122,8 @@ model AssignedTask {
   goal_name                  String?
   goal_description           String?
   repeats                    Boolean
-  start_date                 DateTime
-  end_date                   DateTime
+  start_date                 String
+  end_date                   String
   marillac_bucks_addition    Int
   marillac_bucks_deduction   Int
   comment                    String?
@@ -136,7 +136,7 @@ model AssignedTask {
 model Note {
   note_id         Int        @id @default(autoincrement())
   message         String
-  creation_date   DateTime   @default(now())
+  creation_date   String
 
   @@map("note")
 }
@@ -144,7 +144,7 @@ model Note {
 model Announcement {
   announcement_id      Int                  @id @default(autoincrement())
   priority             Priority             @default(NORMAL)
-  creation_date        DateTime             @default(now())
+  creation_date        String
   message              String
 
   user_announcements   UserAnnouncement[]
@@ -167,7 +167,7 @@ model UserAnnouncement {
 
 model Login {
   participant_id   Int
-  login_date       DateTime      @default(now())
+  login_date       String
 
   participant      Participant   @relation(fields: [participant_id], references: [participant_id])
 
@@ -178,7 +178,7 @@ model Login {
 model Transaction {
   transaction_id     Int               @id @default(autoincrement())
   participant_id     Int
-  transaction_date   DateTime          @default(now())
+  transaction_date   String
   transaction_type   TransactionType
   marillac_bucks     Int
 
@@ -216,7 +216,7 @@ model BadgeLevel {
 model EarnedBadge {
   earned_badge_id   Int           @id @default(autoincrement())
   participant_id    Int
-  date_received     DateTime      @default(now())
+  date_received     String
   name              String
   description       String
   badge_icon        Icon
