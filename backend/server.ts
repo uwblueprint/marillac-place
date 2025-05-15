@@ -1,7 +1,7 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import getGraphQLSchema from "./utils/getGraphQLSchema";
-// require("./crons/index.ts");
+require("./crons/index.ts");
 
 const app = express();
 

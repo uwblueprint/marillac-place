@@ -3,12 +3,16 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PAST_PARTICIPANTS } from "../../../../gql/queries";
 import EditPastParticipantCard from "./EditPastParticipantCard";
 
-function SortIcon() {
+type SortIconProps = {
+  state: number;
+}
+
+function SortIcon({ state }: SortIconProps) {
   return (
     <Flex
       flexDir="column"
@@ -19,13 +23,13 @@ function SortIcon() {
       <ExpandLessIcon style={{
         width: "0.5em",
         height: "0.5em",
-        color: "#6C707A",
+        color: state === 0 || state === 2 ? "#6C707A" : "#000000",
         transform: "translateY(3.5px)"
       }} />
       <ExpandMoreIcon style={{
         width: "0.5em",
         height: "0.5em",
-        color: "#6C707A",
+        color: state === 0 || state === 1 ? "#6C707A" : "#000000",
         transform: "translateY(-1.5px)"
       }} />
     </Flex>
@@ -33,11 +37,71 @@ function SortIcon() {
 }
 
 const PastParticipantTable = () => {
+  const [pastParticipants, setPastParticipants] = useState([]);
   const { loading, error, data } = useQuery(GET_PAST_PARTICIPANTS);
+
+  useEffect(() => {
+    if (!loading && !error && data) {
+      setPastParticipants(data.getPastParticipants);
+    }
+  }, [loading, error, data]);
+
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState(-1);
   const [selectedArrival, setSelectedArrival] = useState("");
   const [selectedDeparture, setSelectedDeparture] = useState("");
+
+  const [idState, setIdState] = useState(0);
+  const [arrivalState, setArrivalState] = useState(0);
+  const [departureState, setDepartureState] = useState(0);
+
+  function handleIdStateChange() {
+    setArrivalState(0);
+    setDepartureState(0);
+
+    const newState = (idState + 1) % 3;
+    let sorted: any;
+    if (newState === 1) {
+      sorted = [...pastParticipants].sort((a: any, b: any) => a.participant_id - b.participant_id);
+    } else {
+      sorted = [...pastParticipants].sort((a: any, b: any) => b.participant_id - a.participant_id);
+    }
+
+    setPastParticipants(sorted);
+    setIdState(newState);
+  }
+
+  function handleArrivalStateChange() {
+    setIdState(0);
+    setDepartureState(0);
+
+    const newState = (arrivalState + 1) % 3;
+    let sorted: any;
+    if (newState === 1) {
+      sorted = [...pastParticipants].sort((a: any, b: any) => a.arrival_date.localeCompare(b.arrival_date));
+    } else {
+      sorted = [...pastParticipants].sort((a: any, b: any) => b.arrival_date.localeCompare(a.arrival_date));
+    }
+
+    setPastParticipants(sorted);
+    setArrivalState(newState);
+  }
+
+  function handleDepartureStateChange() {
+    setIdState(0);
+    setArrivalState(0);
+
+    const newState = (departureState + 1) % 3;
+    let sorted: any;
+    if (newState === 1) {
+      sorted = [...pastParticipants].sort((a: any, b: any) => a.departure_date.localeCompare(b.departure_date));
+    } else {
+      sorted = [...pastParticipants].sort((a: any, b: any) => b.departure_date.localeCompare(a.departure_date));
+    }
+
+    setPastParticipants(sorted);
+    setDepartureState(newState);
+  }
 
   return (
     <>
@@ -53,19 +117,19 @@ const PastParticipantTable = () => {
               <Th width="30%">
                 <Flex alignItems="center" gap="8px">
                   <Text textStyle="web.s1" color="#000000" textTransform="none">ID Number</Text>
-                  <SortIcon />
+                  <div onClick={() => handleIdStateChange()}><SortIcon state={idState} /></div>
                 </Flex>
               </Th>
               <Th width="30%">
                 <Flex alignItems="center" gap="8px">
                   <Text textStyle="web.s1" color="#000000" textTransform="none">Arrival Date</Text>
-                  <SortIcon />
+                  <div onClick={() => handleArrivalStateChange()}><SortIcon state={arrivalState} /></div>
                 </Flex>
               </Th>
               <Th width="30%">
                 <Flex alignItems="center" gap="8px">
                   <Text textStyle="web.s1" color="#000000" textTransform="none">Departure Date</Text>
-                  <SortIcon />
+                  <div onClick={() => handleDepartureStateChange()}><SortIcon state={departureState} /></div>
                 </Flex>
               </Th>
               <Th width="10%">&nbsp;</Th>
@@ -85,7 +149,7 @@ const PastParticipantTable = () => {
                 </Td>
               </Tr>
             ) : (
-              data.getPastParticipants.map((participant: any, index: number) => (
+              pastParticipants.map((participant: any, index: number) => (
                 <Tr
                   key={participant.participant_id}
                   outline={index % 2 ? "0px solid" : "1px solid"}

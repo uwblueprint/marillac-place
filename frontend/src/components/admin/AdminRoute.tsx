@@ -52,7 +52,8 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     >
       <Flex
         position="relative"
-        width="1400px"
+        width="100vw"
+        maxWidth="1400px"
         height="fit-content"
       >
         { notification && <Notification message={notification} /> }
@@ -61,7 +62,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
           position="absolute"
           top="0px"
           left="250px"
-          width="1150px"
+          width="calc(100% - 250px)"
           height="50px"
           bg="primary.100"
           borderBottom="1px"

@@ -13,7 +13,7 @@ import getChakraTheme from "./utils/getChakraTheme";
 import AdminLoginPage from "./pages/admin/login/Main";
 import AdminHomePage from "./pages/admin/home/Main";
 // import AdminSchedulePage from "./pages/admin/schedule/index";
-// import AdminAnnouncementsPage from "./pages/admin/announcements/index";
+import AdminAnnouncementsPage from "./pages/admin/announcements/Main";
 import AdminParticipantsPage from "./pages/admin/participants/Main";
 // import AdminTasksPage from "./pages/admin/tasks/index";
 // import AdminBadgesPage from "./pages/admin/badges/index";
@@ -44,6 +44,11 @@ const App = (): React.ReactElement => {
             <Route path={ROUTES.ADMIN_HOME_PAGE} element={
               <AdminRoute>
                 <AdminHomePage />
+              </AdminRoute>
+            }/>
+            <Route path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE} element={
+              <AdminRoute>
+                <AdminAnnouncementsPage />
               </AdminRoute>
             }/>
             <Route path={ROUTES.ADMIN_PARTICIPANTS_PAGE} element={
