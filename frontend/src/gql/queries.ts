@@ -28,16 +28,13 @@ export const GET_CURRENT_PARTICIPANTS = gql`
 `;
 
 export const GET_PARTICIPANT_BY_ROOM = gql`
-    query getParticipantByRoom($roomNumber: Int) {
-        getParticipantByRoom(roomNumber: $roomNumber) {
-            participantId
-            roomNumber
-            arrival
-            departure
-            password
-            credit
-        }
+  query getParticipantByRoom($room_number: Int!) {
+    getParticipantByRoom(room_number: $room_number) {
+        participant_id
+        marillac_bucks
+        room_number
     }
+  }
 `;
 
 export const GET_PARTICIPANT_BY_ID = gql`

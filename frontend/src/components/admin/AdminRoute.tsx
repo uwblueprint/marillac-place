@@ -54,29 +54,30 @@ export default function AdminRoute({ children }: AdminRouteProps) {
         position="relative"
         width="100vw"
         maxWidth="1400px"
-        height="fit-content"
+        height="100vh"
       >
         { notification && <Notification message={notification} /> }
         <SideBar />
         <Flex
-          position="absolute"
-          top="0px"
-          left="250px"
-          width="calc(100% - 250px)"
-          height="50px"
-          bg="primary.100"
-          borderBottom="1px"
-          borderColor="neutral.300"
-        />
-        <Flex
           width="100%"
-          height="calc(100vh - 50px)"
+          height="100%"
           ml="250px"
-          mt="50px"
-          padding="15px 25px"
-          overflow="scroll"
+          position="relative"
         >
-          { children }
+          <Flex
+            position="absolute"
+            top="0px"
+            left="0px"
+            width="100%"
+            height="55px"
+            bg="primary.100"
+            borderBottom="1px"
+            borderColor="neutral.300"
+            zIndex={5}
+          />
+          <Flex width="100%" padding="20px" mt="55px" overflow="scroll">
+            { children }
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

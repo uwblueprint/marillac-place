@@ -3,6 +3,7 @@ import { Participant } from "@prisma/client";
 interface IParticipantService {
   getPastParticipants(): Promise<Participant[]>;
   getCurrentParticipants(): Promise<Participant[]>;
+  getParticipantByRoom(room_number: number): Promise<Participant | null>;
 //     getParticipantById(participantId: string): Promise<Participant | null>;
   createParticipant(
       participant_id: number,
@@ -20,6 +21,11 @@ interface IParticipantService {
     marillac_bucks?: number,
     marillac_bucks_goal?: number,
     password?: string,
+  ): Promise<boolean>;
+  updateMarillacBucks(
+    participant_id: number,
+    marillac_bucks: number,
+    reason: string,
   ): Promise<boolean>;
 //     updateParticipantById(
 //         participantId: string,

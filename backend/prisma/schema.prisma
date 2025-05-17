@@ -180,6 +180,7 @@ model Transaction {
   participant_id     Int
   transaction_date   String
   transaction_type   TransactionType
+  description        String?
   marillac_bucks     Int
 
   participant        Participant       @relation(fields: [participant_id], references: [participant_id])

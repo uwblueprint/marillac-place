@@ -38,6 +38,28 @@ class ParticipantService implements IParticipantService {
       throw new Error("Something went wrong");
     }
   }
+
+  async getParticipantByRoom(room_number: number): Promise<Participant | null> {
+    const today = new Date().toLocaleDateString("en-ca");
+    try {
+      const participant = await prisma.participant.findFirst({
+        where: {
+          AND: [
+            { room_number },
+            {
+              OR: [
+                { departure_date: null },
+                { departure_date: { gt: today } }
+              ]
+            }
+          ]
+        },
+      });
+      return participant;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
 //
 //     async getParticipantById(participantId: string): Promise<Participant | null> {
 //         try {
@@ -140,6 +162,22 @@ class ParticipantService implements IParticipantService {
       throw new Error("Something went wrong");
     }
   }
+
+  async updateMarillacBucks(
+    participant_id: number,
+    marillac_bucks: number,
+    reason: string,
+  ): Promise<boolean> {
+    try {
+      await prisma.participant.update({
+        where: { participant_id },
+        data: { marillac_bucks },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  };
 //
 //     async getParticipantByRoom(roomNumber: number): Promise<Participant | null> {
 //         try {

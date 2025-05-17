@@ -11,6 +11,12 @@ const participantResolver = {
     getPastParticipants: async (): Promise<Participant[]> => {
       return participantService.getPastParticipants();
     },
+    getParticipantByRoom: async(
+      _parent: undefined,
+      { room_number }: { room_number: number }
+    ): Promise<Participant | null> => {
+      return participantService.getParticipantByRoom(room_number);
+    }
   },
   Mutation: {
     createParticipant: async (
@@ -68,6 +74,24 @@ const participantResolver = {
         marillac_bucks,
         marillac_bucks_goal,
         password,
+      );
+    },
+    updateMarillacBucks: async (
+      _parent: undefined,
+      {
+        participant_id,
+        marillac_bucks,
+        reason
+      }: {
+        participant_id: number;
+        marillac_bucks: number;
+        reason: string;
+      },
+    ): Promise<boolean> => {
+      return participantService.updateMarillacBucks(
+        participant_id,
+        marillac_bucks,
+        reason
       );
     },
   }

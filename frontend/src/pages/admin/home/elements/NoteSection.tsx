@@ -59,8 +59,7 @@ const NoteSection = () => {
       position="absolute"
       right={0}
       top={0}
-      height="calc(100% - 15px)"
-      margin="10px"
+      height="100%"
       paddingY="15px"
       paddingX="20px"
       w="300px"
@@ -134,8 +133,8 @@ const NoteSection = () => {
                     border="1px solid"
                     borderColor="neutral.300"
                     rounded="8px"
-                    paddingX="10px"
-                    paddingY="5px"
+                    paddingX="12px"
+                    paddingY="7px"
                     gap="5px"
                   >
                     <Flex

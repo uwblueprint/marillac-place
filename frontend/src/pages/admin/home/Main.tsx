@@ -13,10 +13,33 @@ const AdminHomePage = (): React.ReactElement => {
   };
 
   return (
-    <Flex w="100%" h="100%" flexDir="column" minHeight="fit-content" position="relative">
-
-      <NoteSection />
-    </Flex>
+    <>
+      <Text
+        textStyle="web.h2"
+        color="#000000"
+        zIndex="10"
+        position="absolute"
+        px="20px"
+        top="10px"
+        left="0px"
+      >
+        Marillac Place Overview
+      </Text>
+      <Text
+        textStyle="web.h3"
+        color="#000000"
+        zIndex="10"
+        position="absolute"
+        px="20px"
+        top="14px"
+        right="0px"
+      >
+        {getDate()}
+      </Text>
+      <Flex w="100%" h="100%" flexDir="column" minHeight="fit-content" position="relative">
+        <NoteSection />
+      </Flex>
+    </>
   );
 };
 

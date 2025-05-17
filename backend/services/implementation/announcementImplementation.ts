@@ -23,7 +23,7 @@ class AnnouncementService implements IAnnouncementService {
     message: string,
   ): Promise<boolean> {
     try {
-      const today = new Date().toLocaleString("en-US");
+      const today = new Date().toLocaleString("en-ca");
       const newAnnouncement = await prisma.announcement.create({
         data: {
           priority,

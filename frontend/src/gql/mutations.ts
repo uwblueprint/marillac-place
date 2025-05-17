@@ -58,6 +58,20 @@ export const UPDATE_PARTICIPANT = gql`
   }
 `;
 
+export const UPDATE_MARILLAC_BUCKS = gql`
+  mutation updateMarillacBucks(
+    $participant_id: Int!,
+    $marillac_bucks: Int!,
+    $reason: String!,
+  ) {
+    updateMarillacBucks(
+      participant_id: $participant_id,
+      marillac_bucks: $marillac_bucks,
+      reason: $reason,
+    )
+  }
+`;
+
 
 export const CREATE_ANNOUNCEMENT = gql`
   mutation createAnnouncement($announcementId: number,

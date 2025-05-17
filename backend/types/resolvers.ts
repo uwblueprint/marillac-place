@@ -4,6 +4,7 @@ const resolvers = gql`
   type Query {
     getPastParticipants: [Participant]
     getCurrentParticipants: [Participant]
+    getParticipantByRoom(room_number: Int!): Participant
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
   }
@@ -27,6 +28,11 @@ const resolvers = gql`
       account_removal_date: String,
       marillac_bucks: Int,
       marillac_bucks_goal: Int,
+    ): Boolean
+    updateMarillacBucks(
+      participant_id: Int!,
+      marillac_bucks: Int!,
+      reason: String!
     ): Boolean
     createNote(
       message: String!,
