@@ -5,6 +5,7 @@ const resolvers = gql`
     getPastParticipants: [Participant]
     getCurrentParticipants: [Participant]
     getNotes: [Note]
+    getAllAnnouncements: [Announcement]
   }
 
   type Mutation {
@@ -32,6 +33,17 @@ const resolvers = gql`
       creation_date: String!
     ): Boolean
     deleteNote(note_id: Int!): Boolean
+    createAnnouncement(
+      priority: Priority!,
+      participants: [Int!]!,
+      message: String!,
+    ): Boolean
+    editAnnouncement(
+      announcement_id: Int!,
+      priority: Priority,
+      message: String,
+    ): Boolean
+    deleteAnnouncement(announcement_id: Int!): Boolean
   }
 `;
 

@@ -54,6 +54,7 @@ const models = gql`
     priority: Priority!
     creation_date: String!
     message: String!
+    user_announcements: [UserAnnouncement!]!
   }
 
   type UserAnnouncement {

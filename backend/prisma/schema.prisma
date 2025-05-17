@@ -158,7 +158,7 @@ model UserAnnouncement {
   announcement_id   Int
   participant_id    Int
 
-  announcement      Announcement   @relation(fields: [announcement_id], references: [announcement_id])
+  announcement      Announcement   @relation(fields: [announcement_id], references: [announcement_id], onDelete: Cascade)
   participant       Participant    @relation(fields: [participant_id], references: [participant_id])
 
   @@id([announcement_id, participant_id])

@@ -14,7 +14,7 @@ import responses from "../types/responses";
 
 import participantResolver from "../resolvers/participantResolver";
 import noteResolver from "../resolvers/noteResolver";
-// import announcementResolvers from "./resolvers/announcementResolver";
+import announcementResolver from "../resolvers/announcementResolver";
 import loginResolver from "../resolvers/loginResolver";
 // import taskResolvers from "./resolvers/taskResolver";
 
@@ -28,7 +28,8 @@ export default function getGraphQLSchema() {
       scalarResolvers,
       loginResolver,
       noteResolver,
-      participantResolver
+      announcementResolver,
+      participantResolver,
     ),
   });
 

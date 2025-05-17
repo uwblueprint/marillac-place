@@ -1,107 +1,85 @@
-// import { Announcement, StaffType, PriorityType } from "@prisma/client";
-// import prisma from "../../prisma";
-// import IAnnouncementService from "../interface/announcementInterface";
-//
-// class AnnouncementService implements IAnnouncementService {
-//   async getAllAnnouncements(): Promise<Announcement[] | null> {
-//     try {
-//       const announcements = await prisma.announcement.findMany({
-//         orderBy: [{ createdAt: "asc" }],
-//       });
-//       return announcements;
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   }
-//
-//   async getAnnouncementByRooms(
-//     rooms: number[],
-//   ): Promise<Announcement[] | null> {
-//     try {
-//       const annoucements = await prisma.announcement.findMany({
-//         where: {
-//           to: {
-//             hasSome: rooms,
-//           },
-//         },
-//         orderBy: [{ createdAt: "asc" }],
-//       });
-//       return annoucements;
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   }
-//
-//   async createAnnouncement(
-//     announcementId: number,
-//     from: StaffType,
-//     to: number[],
-//     priority: PriorityType,
-//     createdAt: Date,
-//     message: string,
-//   ): Promise<boolean> {
-//     try {
-//       await prisma.announcement.create({
-//         data: {
-//           announcementId,
-//           from,
-//           to,
-//           priority,
-//           createdAt,
-//           message,
-//         },
-//       });
-//       return true;
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   }
-//
-//   async editAnnouncement(
-//     announcementId: number,
-//     from: StaffType,
-//     to: number[],
-//     priority: PriorityType,
-//     createdAt: Date,
-//     message: string,
-//   ): Promise<boolean> {
-//     try {
-//       await prisma.announcement.update({
-//         where: {
-//           announcementId,
-//         },
-//         data: {
-//           from,
-//           to,
-//           priority,
-//           createdAt,
-//           message,
-//         },
-//       });
-//       return true;
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   }
-//
-//   async deleteAnnouncement(announcementId: number): Promise<boolean> {
-//     try {
-//       await prisma.announcement.delete({
-//         where: {
-//           announcementId,
-//         },
-//       });
-//       return true;
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   }
-// }
-//
-// export default AnnouncementService;
+import { Announcement, Priority } from "@prisma/client";
+import prisma from "../../prisma";
+import IAnnouncementService from "../interface/announcementInterface";
+
+class AnnouncementService implements IAnnouncementService {
+  async getAllAnnouncements(): Promise<Announcement[]> {
+    try {
+      const announcements = await prisma.announcement.findMany({
+        include: {
+          user_announcements: true
+        },
+      });
+
+      return announcements;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
+  async createAnnouncement(
+    priority: Priority,
+    participants: number[],
+    message: string,
+  ): Promise<boolean> {
+    try {
+      const today = new Date().toLocaleString("en-US");
+      const newAnnouncement = await prisma.announcement.create({
+        data: {
+          priority,
+          creation_date: today,
+          message,
+        },
+      });
+
+      for (const participant of participants) {
+        await prisma.userAnnouncement.create({
+          data: {
+            participant_id: participant,
+            announcement_id: newAnnouncement.announcement_id,
+          },
+        });
+      }
+
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
+  async editAnnouncement(
+    announcement_id: number,
+    priority?: Priority,
+    message?: string,
+  ): Promise<boolean> {
+    const updatedData: Record<string, any> = {};
+    if (priority) updatedData.priority = priority;
+    if (message) updatedData.message = message;
+
+    try {
+      await prisma.announcement.update({
+        where: { announcement_id },
+        data: updatedData,
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
+  async deleteAnnouncement(announcement_id: number): Promise<boolean> {
+    try {
+      await prisma.announcement.delete({
+        where: {
+          announcement_id,
+        },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+}
+
+export default AnnouncementService;
 

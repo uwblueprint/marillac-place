@@ -30,12 +30,16 @@ export default function getGraphQLMiddleware() {
       getPastParticipants: verifyRole(["admin", "relief"]),
       getCurrentParticipants: verifyRole(["admin", "relief"]),
       getNotes: verifyRole(["admin", "relief"]),
+      getAllAnnouncements: verifyRole(["admin", "relief"])
     },
     Mutation: {
       createParticipant: verifyRole(["admin", "relief"]),
       updateParticipant: verifyRole(["admin", "relief"]),
       createNote: verifyRole(["admin", "relief"]),
       deleteNote: verifyRole(["admin", "relief"]),
+      createAnnouncement: verifyRole(["admin", "relief"]),
+      editAnnouncement: verifyRole(["admin", "relief"]),
+      deleteAnnouncement: verifyRole(["admin", "relief"])
     },
   }
 
