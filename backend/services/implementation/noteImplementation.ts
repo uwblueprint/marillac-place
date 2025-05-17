@@ -6,46 +6,41 @@ class NoteService implements INoteService {
   async getNotes(): Promise<Note[]> {
     try {
       const notes = await prisma.note.findMany({
-        orderBy: [{ noteId: "desc" }],
+        orderBy: [{ creation_date: "desc" }],
       });
       return notes;
     } catch (err) {
-      console.log(err);
-      throw err;
+      throw new Error("Something went wrong");
     }
   }
 
   async createNote(
     message: string,
-    date: string,
-    formattedDate: string,
+    creation_date: string,
   ): Promise<boolean> {
     try {
       await prisma.note.create({
         data: {
           message,
-          date,
-          formattedDate,
+          creation_date,
         },
       });
       return true;
     } catch (err) {
-      console.log(err);
-      throw err;
+      throw new Error("Something went wrong.");
     }
   }
 
-  async deleteNote(noteId: number): Promise<boolean> {
+  async deleteNote(note_id: number): Promise<boolean> {
     try {
       await prisma.note.delete({
         where: {
-          noteId,
+          note_id,
         },
       });
       return true;
     } catch (err) {
-      console.log(err);
-      throw err;
+      throw new Error("Something went wrong.");
     }
   }
 }

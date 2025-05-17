@@ -5,11 +5,10 @@ interface INoteService {
 
   createNote(
     message: string,
-    date: string,
-    formattedDate: string,
+    creation_date: string,
   ): Promise<boolean>;
 
-  deleteNote(noteId: number): Promise<boolean>;
+  deleteNote(note_id: number): Promise<boolean>;
 }
 
 export default INoteService;

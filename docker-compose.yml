@@ -29,7 +29,6 @@ services:
       db:
         condition: service_healthy
     env_file:
-      - ./.env
       - ./backend/.env
   db:
     container_name: mp_db
@@ -38,11 +37,8 @@ services:
       - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      - ./db-init:/docker-entrypoint-initdb.d
     env_file:
       - ./.env
-    environment:
-      - POSTGRES_MULTIPLE_DATABASES=${POSTGRES_DB_DEV},${POSTGRES_DB_TEST}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
