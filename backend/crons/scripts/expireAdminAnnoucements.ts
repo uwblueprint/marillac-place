@@ -17,4 +17,4 @@ async function expireAdminAnnouncements(): Promise<boolean> {
   }
 }
 
-export default expireAdminNotes;
+export default expireAdminAnnouncements;
