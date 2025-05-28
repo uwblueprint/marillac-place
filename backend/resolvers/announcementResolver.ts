@@ -8,6 +8,10 @@ const announcementResolver = {
     getAllAnnouncements: async (): Promise<Announcement[]> => {
       return announcementService.getAllAnnouncements();
     },
+    getAnnouncementsInDateRange: async ( _parent: undefined,
+      { start, end }: { start: Date, end: Date }): Promise<Announcement[]> => {
+      return announcementService.getAnnouncementsInDateRange(start, end);
+    },
   },
   Mutation: {
     createAnnouncement: async (

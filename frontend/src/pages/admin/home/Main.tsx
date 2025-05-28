@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Flex, Box, Text } from "@chakra-ui/react";
 import NoteSection from "./elements/NoteSection";
+import AnnouncementSection from "./elements/AnnouncementSection";
 
 const AdminHomePage = (): React.ReactElement => {
   const getDate = () => {
@@ -37,6 +38,7 @@ const AdminHomePage = (): React.ReactElement => {
         {getDate()}
       </Text>
       <Flex w="100%" h="100%" flexDir="column" minHeight="fit-content" position="relative">
+        <AnnouncementSection />
         <NoteSection />
       </Flex>
     </>

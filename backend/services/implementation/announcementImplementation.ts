@@ -17,6 +17,26 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
+  async getAnnouncementsInDateRange(start: Date, end: Date): Promise<Announcement[]> {
+    try {
+      const announcements = await prisma.announcement.findMany({
+        where: {
+          date: {
+            lte: start,
+            gte: end,
+          },
+        },
+        include: {
+          user_announcements: true
+        }
+      });
+
+      return announcements;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
   async createAnnouncement(
     priority: Priority,
     participants: number[],
