@@ -17,7 +17,6 @@ export default function AdminSchedulePage() {
   const [getParticipantByRoom, { loading, data, error }] = useLazyQuery(GET_PARTICIPANT_BY_ROOM);
 
   useEffect(() => {
-    console.log(selectedRoom);
     localStorage.setItem("scheduleSelectedRoom", selectedRoom.toString());
     getParticipantByRoom({ variables: { room_number: selectedRoom } });
   }, [selectedRoom]);

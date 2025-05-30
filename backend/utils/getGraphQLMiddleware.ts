@@ -41,7 +41,8 @@ export default function getGraphQLMiddleware() {
       deleteNote: verifyRole(["admin", "relief"]),
       createAnnouncement: verifyRole(["admin", "relief"]),
       editAnnouncement: verifyRole(["admin", "relief"]),
-      deleteAnnouncement: verifyRole(["admin", "relief"])
+      deleteAnnouncement: verifyRole(["admin", "relief"]),
+      createTask: verifyRole(["admin", "relief"]),
     },
   }
 

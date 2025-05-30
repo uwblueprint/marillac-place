@@ -41,7 +41,6 @@ export default function AdminAnnouncementsPage() {
           <AddIcon style={{
             width: "15px",
             height: "15px",
-            paddingBottom: "2px"
           }} />
           Create Announcement
         </Button>

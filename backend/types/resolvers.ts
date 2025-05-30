@@ -50,6 +50,18 @@ const resolvers = gql`
       message: String,
     ): Boolean
     deleteAnnouncement(announcement_id: Int!): Boolean
+    createTask(
+      type: TaskType!,
+      name: String!,
+      recurrencePreference: RecurrenceFrequency!,
+      repeatDays: [DayOfWeek!]!,
+      timePreference: TimeOption!,
+      marillacBucks: Int!,
+      deduction: Int!,
+      startTime: String,
+      endTime: String,
+      comment: String,
+    ): Boolean
   }
 `;
 
