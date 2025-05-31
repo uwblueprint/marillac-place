@@ -18,12 +18,12 @@ const taskResolver = {
     // ): Promise<Task> => {
     //   return taskService.getTaskById(taskId);
     // },
-    // getTasksByType: async (
-    //   _parent: undefined,
-    //   { type }: { type: TaskType },
-    // ): Promise<Array<Task>> => {
-    //   return taskService.getTasksByType(type);
-    // },
+    getTasksByType: async (
+      _parent: undefined,
+      { type }: { type: TaskType },
+    ): Promise<Array<Task>> => {
+      return taskService.getTasksByType(type);
+    },
     // getTasksByRecurrenceFrequency: async (
     //   _parent: undefined,
     //   { recurrencePreference }: { recurrencePreference: RecurrenceFrequency },

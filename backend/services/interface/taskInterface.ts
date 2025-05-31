@@ -8,7 +8,7 @@ import {
 
 interface ITaskService {
   // getTaskById(taskId: number): Promise<Task>;
-  // getTasksByType(type: TaskType): Promise<Task[]>;
+  getTasksByType(type: TaskType): Promise<Task[]>;
   // getTasksByRecurrenceFrequency(recurrencePreference: RecurrenceFrequency): Promise<Task[]>;
 
   createTask(

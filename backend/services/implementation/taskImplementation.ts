@@ -23,19 +23,16 @@ class TaskService implements ITaskService {
   //   }
   // }
   //
-  // async getTasksByType(type: TaskType): Promise<Task[]> {
-  //   try {
-  //     const tasks = await prisma.task.findMany({
-  //       where: { type },
-  //     });
-  //     if (!tasks) throw new Error(`task type ${type} not found`);
-  //
-  //     return tasks;
-  //   } catch (error: unknown) {
-  //     console.log(error);
-  //     throw error;
-  //   }
-  // }
+  async getTasksByType(type: TaskType): Promise<Task[]> {
+    try {
+      const tasks = await prisma.task.findMany({
+        where: { task_type: type },
+      });
+      return tasks;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
   //
   // async getTasksByRecurrenceFrequency(
   //   recurrencePreference: RecurrenceFrequency,
