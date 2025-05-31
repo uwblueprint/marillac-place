@@ -63,6 +63,7 @@ const resolvers = gql`
       endTime: String,
       comment: String,
     ): Boolean
+    deleteTaskById(taskId: Int!): Boolean
   }
 `;
 

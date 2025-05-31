@@ -114,13 +114,12 @@ const taskResolver = {
     //   );
     //   return updatedTask;
     // },
-    // deleteTask: async (
-    //   _parent: undefined,
-    //   { taskId }: { taskId: number },
-    // ): Promise<Task> => {
-    //   const deletedTask = await taskService.deleteTaskById(taskId);
-    //   return deletedTask;
-    // },
+    deleteTaskById: async (
+      _parent: undefined,
+      { taskId }: { taskId: number },
+    ): Promise<boolean> => {
+      return taskService.deleteTaskById(taskId);
+    },
   },
 };
 

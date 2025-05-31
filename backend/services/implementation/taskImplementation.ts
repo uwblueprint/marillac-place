@@ -120,19 +120,16 @@ class TaskService implements ITaskService {
   //   }
   // }
   //
-  // async deleteTaskById(taskId: number): Promise<Task> {
-  //   try {
-  //     const deletedTask = await prisma.task.delete({
-  //       where: {
-  //         taskId,
-  //       },
-  //     });
-  //     return deletedTask;
-  //   } catch (error: unknown) {
-  //     console.log(error);
-  //     throw error;
-  //   }
-  // }
+  async deleteTaskById(taskId: number): Promise<boolean> {
+    try {
+      await prisma.task.delete({
+        where: { task_id: taskId },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
 }
 
 export default TaskService;
