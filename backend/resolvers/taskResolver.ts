@@ -71,49 +71,48 @@ const taskResolver = {
         comment,
       );
     },
-    // updateTask: async (
-    //   _parent: undefined,
-    //   {
-    //     taskId,
-    //     type,
-    //     name,
-    //     recurrencePreference,
-    //     repeatDays,
-    //     timePreference,
-    //     credit,
-    //     deduction,
-    //     start,
-    //     end,
-    //     comment,
-    //   }: {
-    //     taskId: number;
-    //     type: TaskType;
-    //     name: string;
-    //     recurrencePreference: RecurrenceFrequency;
-    //     repeatDays: DaysOfWeek[];
-    //     timePreference: TimeOption;
-    //     credit: number;
-    //     deduction: number;
-    //     start: string;
-    //     end: string;
-    //     comment: string;
-    //   },
-    // ): Promise<Task> => {
-    //   const updatedTask = await taskService.updateTaskById(
-    //     taskId,
-    //     type,
-    //     name,
-    //     recurrencePreference,
-    //     repeatDays,
-    //     timePreference,
-    //     credit,
-    //     deduction,
-    //     start,
-    //     end,
-    //     comment,
-    //   );
-    //   return updatedTask;
-    // },
+    updateTask: async (
+      _parent: undefined,
+      {
+        id,
+        type,
+        name,
+        recurrencePreference,
+        repeatDays,
+        timePreference,
+        marillacBucks,
+        deduction,
+        startTime,
+        endTime,
+        comment,
+      }: {
+        id: number;
+        type?: TaskType;
+        name?: string;
+        recurrencePreference?: RecurrenceFrequency;
+        repeatDays?: DayOfWeek[];
+        timePreference?: TimeOption;
+        marillacBucks?: number;
+        deduction?: number;
+        startTime?: string;
+        endTime?: string;
+        comment?: string;
+      },
+    ): Promise<boolean> => {
+      return taskService.updateTask(
+        id,
+        type,
+        name,
+        recurrencePreference,
+        repeatDays,
+        timePreference,
+        marillacBucks,
+        deduction,
+        startTime,
+        endTime,
+        comment,
+      );
+    },
     deleteTaskById: async (
       _parent: undefined,
       { taskId }: { taskId: number },

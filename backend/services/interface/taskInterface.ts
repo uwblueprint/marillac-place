@@ -23,19 +23,19 @@ interface ITaskService {
     endTime?: string,
     comment?: string,
   ): Promise<boolean>;
-  // updateTaskById(
-  //   taskId: number,
-  //   type: TaskType,
-  //   name: string,
-  //   recurrencePreference: RecurrenceFrequency,
-  //   repeatDays: DaysOfWeek[],
-  //   timePreference: TimeOption,
-  //   credit: number,
-  //   deduction: number,
-  //   start?: string,
-  //   end?: string,
-  //   comment?: string,
-  // ): Promise<Task>;
+  updateTask(
+    id: number,
+    type?: TaskType,
+    name?: string,
+    recurrencePreference?: RecurrenceFrequency,
+    repeatDays?: DayOfWeek[],
+    timePreference?: TimeOption,
+    marillacBucks?: number,
+    deduction?: number,
+    startTime?: string,
+    endTime?: string,
+    comment?: string,
+  ): Promise<boolean>;
   deleteTaskById(taskId: number): Promise<boolean>;
 }
 

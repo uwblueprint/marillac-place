@@ -63,6 +63,19 @@ const resolvers = gql`
       endTime: String,
       comment: String,
     ): Boolean
+    updateTask(
+      id: Int!,
+      type: TaskType,
+      name: String,
+      recurrencePreference: RecurrenceFrequency,
+      repeatDays: [DayOfWeek!],
+      timePreference: TimeOption,
+      marillacBucks: Int,
+      deduction: Int,
+      startTime: String,
+      endTime: String,
+      comment: String,
+    ): Boolean
     deleteTaskById(taskId: Int!): Boolean
   }
 `;

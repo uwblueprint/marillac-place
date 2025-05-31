@@ -81,45 +81,42 @@ class TaskService implements ITaskService {
     }
   }
 
-  // async updateTaskById(
-  //   taskId: number,
-  //   type: TaskType,
-  //   name: string,
-  //   recurrencePreference: RecurrenceFrequency,
-  //   repeatDays: DaysOfWeek[],
-  //   timePreference: TimeOption,
-  //   credit: number,
-  //   deduction: number,
-  //   start: string,
-  //   end: string,
-  //   comment: string,
-  // ): Promise<Task> {
-  //   try {
-  //     const updatedTask = await prisma.task.update({
-  //       where: {
-  //         taskId,
-  //       },
-  //       data: {
-  //         type,
-  //         name,
-  //         recurrencePreference,
-  //         repeatDays,
-  //         timePreference,
-  //         credit,
-  //         deduction,
-  //         start,
-  //         end,
-  //         comment,
-  //       },
-  //     });
-  //
-  //     return updatedTask;
-  //   } catch (error: unknown) {
-  //     console.log(error);
-  //     throw error;
-  //   }
-  // }
-  //
+  async updateTask(
+    id: number,
+    type?: TaskType,
+    name?: string,
+    recurrencePreference?: RecurrenceFrequency,
+    repeatDays?: DayOfWeek[],
+    timePreference?: TimeOption,
+    marillacBucks?: number,
+    deduction?: number,
+    startTime?: string,
+    endTime?: string,
+    comment?: string,
+  ): Promise<boolean> {
+    const updatedData: Record<string, any> = {};
+    if (type) updatedData.task_type = type;
+    if (name) updatedData.task_name = name;
+    if (recurrencePreference) updatedData.recurrence_preference = recurrencePreference;
+    if (repeatDays) updatedData.repeat_days = repeatDays;
+    if (timePreference) updatedData.time_preference = timePreference;
+    if (marillacBucks) updatedData.marillac_bucks_addition = marillacBucks;
+    if (deduction) updatedData.marillac_bucks_deduction = deduction;
+    if (startTime) updatedData.start_time = startTime;
+    if (endTime) updatedData.end_time = endTime;
+    if (comment) updatedData.comment = comment;
+
+    try {
+      await prisma.task.update({
+        where: { task_id: id },
+        data: updatedData,
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
   async deleteTaskById(taskId: number): Promise<boolean> {
     try {
       await prisma.task.delete({

@@ -217,43 +217,31 @@ export const CREATE_ASSIGNED_TASK = gql`
 
 export const UPDATE_TASK = gql`
   mutation updateTask(
-    $taskId: Int!
-    $type: TaskType
-    $name: String
-    $recurrencePreference: RecurrenceFrequency
-    $repeatDays: [DaysOfWeek]
-    $timePreference: TimeOption
-    $start: String
-    $end: String
-    $credit: Int
-    $deduction: Int
-    $comment: String
+      $id: Int!
+      $type: TaskType
+      $name: String
+      $recurrencePreference: RecurrenceFrequency
+      $repeatDays: [DayOfWeek!]
+      $timePreference: TimeOption
+      $marillacBucks: Int
+      $deduction: Int
+      $startTime: String
+      $endTime: String
+      $comment: String
   ) {
     updateTask(
-      taskId: $taskId
+      id: $id
       type: $type
       name: $name
       recurrencePreference: $recurrencePreference
       repeatDays: $repeatDays
       timePreference: $timePreference
-      start: $start
-      end: $end
-      credit: $credit
+      marillacBucks: $marillacBucks
       deduction: $deduction
+      startTime: $startTime
+      endTime: $endTime
       comment: $comment
-    ) {
-      taskId
-      type
-      name
-      recurrencePreference
-      repeatDays
-      timePreference
-      start
-      end
-      credit
-      deduction
-      comment
-    }
+    )
   }
 `;
 

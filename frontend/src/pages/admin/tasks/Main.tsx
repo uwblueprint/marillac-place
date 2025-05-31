@@ -30,7 +30,7 @@ export default function AdminTasksPage() {
             task.task_name.toLowerCase().includes(taskFilter.toLowerCase())
         )
       );
-    }
+    };
   }, [taskFilter, loading, error, data]);
 
 

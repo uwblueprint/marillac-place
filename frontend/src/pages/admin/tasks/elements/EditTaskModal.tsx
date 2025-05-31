@@ -2,35 +2,36 @@ import { RadioGroup, Stack, Radio, Modal, ModalOverlay, ModalContent, ModalBody,
 import React, { useEffect, useState } from "react";
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { useMutation } from "@apollo/client";
-import { CREATE_TASK } from "../../../../gql/mutations";
+import { UPDATE_TASK } from "../../../../gql/mutations";
 
-type AddTaskModalProps = {
-  type: string;
+type EditTaskModalProps = {
+  selected: any;
   close: () => void;
 }
 
-export default function AddTaskModal({
-  type,
+export default function EditTaskModal({
+  selected,
   close
-}: AddTaskModalProps) {
+}: EditTaskModalProps) {
   const weekdays = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
-  const formattedType = type.charAt(0).toUpperCase() + type.slice(1);
 
-  const [taskName, setTaskName] = useState("");
-  const [participantPreference, setParticipantPreference] = useState(false);
-  const [recurrence, setRecurrence] = useState("");
-  const [days, setDays] = useState<string[]>([]);
-  const [time, setTime] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [addition, setAddition] = useState(""); // marillac bucks
-  const [deduction, setDeduction] = useState("");
-  const [comments, setComments] = useState("");
+  const formattedType = selected.task_type.charAt(0) + selected.task_type.slice(1).toLowerCase();
+
+  const [taskName, setTaskName] = useState(selected.task_name);
+  const [participantPreference, setParticipantPreference] = useState(selected.recurrence_preference === "PARTICIPANT_PREFERENCE");
+  const [recurrence, setRecurrence] = useState(selected.recurrence_preference);
+  const [days, setDays] = useState<string[]>(selected.repeat_days);
+  const [time, setTime] = useState(selected.time_preference);
+  const [startTime, setStartTime] = useState(selected.start_time ?? "");
+  const [endTime, setEndTime] = useState(selected.end_time ?? "");
+  const [addition, setAddition] = useState(selected.marillac_bucks_addition);
+  const [deduction, setDeduction] = useState(selected.marillac_bucks_deduction);
+  const [comments, setComments] = useState(selected.comment ?? "");
   const [error, setError] = useState("");
 
-  const [createTask, { loading }] = useMutation(CREATE_TASK, {
+  const [updateTask, { loading }] = useMutation(UPDATE_TASK, {
     onCompleted: () => {
-      localStorage.setItem("notification", "Success: " + formattedType + " Task \"" + taskName + "\" added.");
+      localStorage.setItem("notification", "Success: " + formattedType + " Task \"" + taskName + "\" updated.");
       window.location.reload();
     },
     onError: (err) => {
@@ -39,7 +40,7 @@ export default function AddTaskModal({
   });
 
   useEffect(() => {
-    setDays([]);
+    setDays(selected.repeat_days);
     if (recurrence === "DAILY") {
       setDays(weekdays);
     }
@@ -94,8 +95,9 @@ export default function AddTaskModal({
     } else if (recurrence === "ANY_SELECTED_DAYS" && days.length <= 1) {
       setError("If the task can only be completed on a specific day, please choose 'Every selected day'");
     } else {
-      createTask({ variables: {
-        type: type.toUpperCase(),
+      updateTask({ variables: {
+        id: selected.task_id,
+        type: selected.task_type,
         name: taskName,
         recurrencePreference: recurrence,
         repeatDays: days,
@@ -120,7 +122,7 @@ export default function AddTaskModal({
         padding="20px"
       >
         <ModalBody>
-          <Text textStyle="web.h3" mb="15px">Add Task</Text>
+          <Text textStyle="web.h3" mb="15px">Edit Task</Text>
           <Flex
             flexDir="column"
             gap="10px"
@@ -142,7 +144,7 @@ export default function AddTaskModal({
               />
             </FormControl>
 
-            { type !== "required" &&  (
+            { selected.task_type !== "REQUIRED" &&  (
               <Checkbox
                 isChecked={participantPreference}
                 onChange={(e: any) => {
@@ -239,30 +241,30 @@ export default function AddTaskModal({
                 </FormControl>
 
                 { time === "SPECIFIC" &&
-                <Flex gap="10px">
-                  <FormControl>
-                    <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                      <Text textStyle="web.s1" color="text.light.secondary">Start Time</Text>
-                    </FormLabel>
-                    <Input
-                      variant="primary"
-                      type="time"
-                      value={startTime}
-                      onChange={(e: any) => setStartTime(e.target.value)}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                      <Text textStyle="web.s1" color="text.light.secondary">End Time</Text>
-                    </FormLabel>
-                    <Input
-                      variant="primary"
-                      type="time"
-                      value={endTime}
-                      onChange={(e: any) => setEndTime(e.target.value)}
-                    />
-                  </FormControl>
-                </Flex>
+                  <Flex gap="10px">
+                    <FormControl>
+                      <FormLabel mb="5px" color="text.secondary" fontWeight="500">
+                        <Text textStyle="web.s1" color="text.light.secondary">Start Time</Text>
+                      </FormLabel>
+                      <Input
+                        variant="primary"
+                        type="time"
+                        value={startTime}
+                        onChange={(e: any) => setStartTime(e.target.value)}
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <FormLabel mb="5px" color="text.secondary" fontWeight="500">
+                        <Text textStyle="web.s1" color="text.light.secondary">End Time</Text>
+                      </FormLabel>
+                      <Input
+                        variant="primary"
+                        type="time"
+                        value={endTime}
+                        onChange={(e: any) => setEndTime(e.target.value)}
+                      />
+                    </FormControl>
+                  </Flex>
                 }
               </>
             )}
