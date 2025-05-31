@@ -1,7 +1,11 @@
-import {Button, Flex, Text } from "@chakra-ui/react";
+import {Button, Flex, Input, InputGroup, InputLeftElement, Text } from "@chakra-ui/react";
 import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import AddTaskModal from "./elements/AddTaskModal";
+import TasksTable from "./elements/TasksTable";
+import { GET_TASKS_BY_TYPE } from "../../../gql/queries";
 
 export default function AdminTasksPage() {
   const [addTask, setAddTask] = useState(false);
@@ -10,10 +14,28 @@ export default function AdminTasksPage() {
     if (!type) return "required";
     return type;
   });
+  const [taskFilter, setTaskFilter] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+  const { loading, error, data } = useQuery(GET_TASKS_BY_TYPE, {
+    variables: { type: selectedTaskType.toUpperCase() },
+  });
+
+  useEffect(() => {
+    if (!loading && !error && data) {
+      setTasks(
+        data.getTasksByType.filter(
+          (task: any) =>
+            typeof task.task_name === "string" &&
+            task.task_name.toLowerCase().includes(taskFilter.toLowerCase())
+        )
+      );
+    }
+  }, [taskFilter, loading, error, data]);
+
 
   useEffect(() => {
     localStorage.setItem("tasksSelectedType", selectedTaskType);
-    // get required v. optional tasks
   }, [selectedTaskType]);
 
   return (
@@ -56,20 +78,35 @@ export default function AdminTasksPage() {
           Optional
         </Text>
       </Flex>
-      <Flex>
-        <Button
-          variant="primaryFilled"
-          fontWeight={700}
-          fontSize="12px"
-          gap="7px"
-          onClick={() => setAddTask(true)}
-        >
-          <AddIcon style={{
-            width: "15px",
-            height: "15px",
-          }} />
-          Add Task
-        </Button>
+      <Flex flexDir="column" w="100%" gap="15px">
+        <Flex w="100%" justifyContent="space-between">
+          <InputGroup w="25%">
+            <InputLeftElement>
+              <SearchIcon style={{ color: 'inherit', fontSize: 16, transform: 'translateY(-2px)' }} />
+            </InputLeftElement>
+            <Input
+              pl="35px"
+              height="fit-content"
+              variant="primary"
+              placeholder="Search"
+              onChange={(e: any) => setTaskFilter(e.target.value)}
+            />
+          </InputGroup>
+          <Button
+            variant="primaryFilled"
+            fontWeight={700}
+            fontSize="12px"
+            gap="7px"
+            onClick={() => setAddTask(true)}
+          >
+            <AddIcon style={{
+              width: "15px",
+              height: "15px",
+            }} />
+            Add Task
+          </Button>
+        </Flex>
+        <TasksTable loading={loading} error={error} tasks={tasks} />
       </Flex>
       { addTask && <AddTaskModal type={selectedTaskType} close={() => setAddTask(false)} /> }
     </>

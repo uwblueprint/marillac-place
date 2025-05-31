@@ -144,18 +144,17 @@ export const DELETE_NOTE = gql`
   }
 `;
 
-// Task Mutations
 export const CREATE_TASK = gql`
-  mutation createTask(
-    $type: TaskType
-    $name: String
-    $recurrencePreference: RecurrenceFrequency
-    $repeatDays: [DaysOfWeek]
-    $timePreference: TimeOption 
-    $start: String
-    $end: String
-    $credit: Int
-    $deduction: Int
+  mutation CreateTask(
+    $type: TaskType!
+    $name: String!
+    $recurrencePreference: RecurrenceFrequency!
+    $repeatDays: [DayOfWeek!]!
+    $timePreference: TimeOption!
+    $marillacBucks: Int!
+    $deduction: Int!
+    $startTime: String
+    $endTime: String
     $comment: String
   ) {
     createTask(
@@ -163,25 +162,13 @@ export const CREATE_TASK = gql`
       name: $name
       recurrencePreference: $recurrencePreference
       repeatDays: $repeatDays
-      timePreference: $timePreference 
-      start: $start
-      end: $end
-      credit: $credit
+      timePreference: $timePreference
+      marillacBucks: $marillacBucks
       deduction: $deduction
+      startTime: $startTime
+      endTime: $endTime
       comment: $comment
-    ) {
-      taskId
-      type
-      name
-      recurrencePreference
-      repeatDays
-      timePreference
-      start
-      end
-      credit
-      deduction
-      comment
-    }
+    )
   }
 `;
 
@@ -271,19 +258,7 @@ export const UPDATE_TASK = gql`
 `;
 
 export const DELETE_TASK = gql`
-  mutation deleteTask($taskId: Int!) {
-    deleteTask(taskId: $taskId) {
-      taskId
-      type
-      name
-      recurrencePreference
-      repeatDays
-      timePreference
-      start
-      end
-      credit
-      deduction
-      comment
-    }
+  mutation deleteTaskById($taskId: Int!) {
+    deleteTaskById(taskId: $taskId)
   }
 `;

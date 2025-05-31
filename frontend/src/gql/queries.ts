@@ -101,23 +101,25 @@ export const GET_TASK_BY_ID = gql`
         }
     }
 `;
+
 export const GET_TASKS_BY_TYPE = gql`
-    query GetTasksByType($type: TaskType!) {
-        getTasksByType(type: $type) {
-            taskId
-            type
-            name
-            recurrencePreference
-            repeatDays
-            timePreference
-            start
-            end
-            credit
-            deduction
-            comment
-        }
+  query getTasksByType($type: TaskType!) {
+    getTasksByType(type: $type) {
+      task_id
+      task_name
+      task_type
+      recurrence_preference
+      repeat_days
+      time_preference
+      start_time
+      end_time
+      marillac_bucks_addition
+      marillac_bucks_deduction
+      comment
     }
+  }
 `;
+
 export const GET_TASKS_BY_RECURRENCE_FREQUENCY = gql`
     query GetTasksByRecurrenceFrequency($recurrencePreference: RecurrenceFrequency!) {
         getTasksByRecurrenceFrequency(recurrencePreference: $recurrencePreference) {
