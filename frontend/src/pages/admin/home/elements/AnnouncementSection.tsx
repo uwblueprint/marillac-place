@@ -8,14 +8,23 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
+import { GET_ALL_ANNOUNCEMENTS } from "../../../../gql/queries";
 import { Announcement } from "../../../../types/AnnouncementTypes";
 
 const getRoomString = (rooms: number[]) => {
     return rooms.map(room => `Room ${room}`).join(", ");
 }
 
-const AnnouncementCard = ({announcement}: {announcement: Announcement}) => {
+const AnnouncementCard: React.FC<{announcement: Announcement}> = ({announcement}) => {
+    // Format the date to match the "posted at 1:00 pm" format
+    const formatDate = (date: Date) => {
+        return date.toLocaleString("en-ca", {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        }).toLowerCase();
+    };
+
     return (
         <Flex
         flexDir="column"
@@ -30,27 +39,17 @@ const AnnouncementCard = ({announcement}: {announcement: Announcement}) => {
         >
         <Flex
             width="100%"
-            flexWrap="wrap"
-            overflow="hidden"
+            justifyContent="space-between"
+            alignItems="center"
         >
             <Text textStyle="web.b3" color="text.light.secondary">
-            {getRoomString(announcement.rooms)}
+                {getRoomString(announcement.rooms)}
             </Text>
             <Text textStyle="web.b3" color="text.light.secondary">
-            {announcement.creation_date.toLocaleString("en-ca", {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-                month: 'short',
-                day: 'numeric',
-            })}
+                posted at {formatDate(announcement.creation_date)}
             </Text>
         </Flex>
-        <Flex
-            width="100%"
-            justifyContent="space-between"
-            alignItems="flex-end"
-        >
+        <Flex width="100%">
             <Text textStyle="web.b2" color="#000000">{announcement.message}</Text>
         </Flex>
         </Flex>
@@ -58,7 +57,7 @@ const AnnouncementCard = ({announcement}: {announcement: Announcement}) => {
 };
 
 const AnnouncementSection = () => {
-  const {
+  /* const {
     loading: getAnnouncementsLoading,
     error: getAnnouncementsError,
     data: getAnnouncementsData,
@@ -68,7 +67,10 @@ const AnnouncementSection = () => {
     end: new Date("2025-06-01T12:00:00.000Z").toISOString(),
   },
   }) 
-  console.log(getAnnouncementsData)
+  */
+
+  const error = null as {message: string} | null;
+  const loading = false;
 
   const testAnnouncements: Announcement[] = [
     {
@@ -83,10 +85,10 @@ const AnnouncementSection = () => {
     },
   ];
 
+  const data = testAnnouncements;
+
   return (
     <Flex
-      right={0}
-      top={0}
       height="100%"
       paddingY="15px"
       paddingX="20px"
@@ -95,9 +97,9 @@ const AnnouncementSection = () => {
       borderRadius="8px"
       flexDir="column"
       justifyContent="space-between"
+      marginRight="10px"
     >
-      <>
-      {{/* Title Row */}}
+      {/* Title Row */}
       <Flex
         w="100%"
         flexDir="row"
@@ -123,16 +125,16 @@ const AnnouncementSection = () => {
           },
         }}
       >
-        { getAnnouncementsLoading ? (
+        { loading ? (
           <Text textStyle="web.b2" color="text.light.secondary">
             Loading...
           </Text>
-        ) : getAnnouncementsError ? (
+        ) : error ? (
           <Text textStyle="web.b2" color="text.light.secondary">
-            {getAnnouncementsError.message}
+            {error?.message || "An error occurred"}
           </Text>
         ) : (
-          getAnnouncementsData.getAnnouncements.length === 0 ? (
+          data.length === 0 ? (
             <Text textStyle="web.b2" color="text.light.secondary">
               No Announcements Yet
             </Text>
@@ -144,14 +146,22 @@ const AnnouncementSection = () => {
               justifyContent="flex-start"
               gap="15px"
             >
-              {getAnnouncementsData.getAnnouncements.map((announcement: any) => {
-                return <AnnouncementCard key={announcement.announcement_id} announcement={announcement} />
+              {data.map((announcement: Announcement, index: number) => {
+                // For now, we'll use a placeholder for rooms since the backend doesn't provide room mapping
+                // You'll need to either modify the backend to include room info or create a separate query
+                const announcementWithRoomsAndDate = {
+                  ...announcement,
+                  rooms: [1, 2], // Placeholder - needs to be derived from user_announcements -> participants -> rooms
+                  creation_date: announcement.creation_date instanceof Date 
+                    ? announcement.creation_date 
+                    : new Date(announcement.creation_date)
+                };
+                return <AnnouncementCard key={`${announcement.message}-${index}`} announcement={announcementWithRoomsAndDate} />
               })}
             </Flex>
           )
         )}
       </Flex>
-      </>
     </Flex>
   );
 }
