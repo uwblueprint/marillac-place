@@ -11,12 +11,13 @@ cron.schedule("0 0 * * * *", async () => {
   }
 });
 
-cron.schedule("0 0 * * * *", async () => {
+cron.schedule("0 0 0 * * *", async () => {
   const res = await expireAdminAnnouncements();
   if (res) {
-    console.log("Expires admin announcements");
+    console.log("Expired admin announcements");
   } else {
     console.log("Could not expire admin announcements");
   }
 });
+
 
