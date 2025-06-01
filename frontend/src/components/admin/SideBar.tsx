@@ -11,14 +11,14 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
-  Text
+  Text,
 } from "@chakra-ui/react";
-import * as ROUTES from "../../constants/routes";
+import * as ROUTES from "../../constants/Routes";
 
 type SideBarTabProps = {
-  label: string,
-  handleClick: () => void
-}
+  label: string;
+  handleClick: () => void;
+};
 
 function SideBarTab({ label, handleClick }: SideBarTabProps) {
   return (
@@ -36,13 +36,13 @@ function SideBarTab({ label, handleClick }: SideBarTabProps) {
       _selected={{
         fontWeight: 700,
         color: "neutral.0",
-        bg: "secondary.700"
+        bg: "secondary.700",
       }}
     >
       {label}
     </Tab>
   );
-};
+}
 
 type SignOutPopUpProps = {
   cancel: () => void;
@@ -57,39 +57,31 @@ function SignOutPopUp({ cancel }: SignOutPopUpProps) {
 
   return (
     <Modal closeOnOverlayClick={false} isOpen onClose={cancel} isCentered>
-      <ModalOverlay/>
-      <ModalContent
-        boxShadow="xl"
-        borderRadius="16px"
-        width="388px"
-      >
-        <ModalBody
-          padding="30px"
-        >
-          <Text textStyle="web.h2" mb="20px">Sign Out</Text>
-          <Text textStyle="web.b1" mb="20px">Are you sure you want to sign out?</Text>
-          <Flex
-            alignItems="center"
-            justifyContent="flex-end"
-            gap="15px"
-          >
-            <Button
-              variant="white"
-              onClick={cancel}
-            >
-              <Text fontWeight={700} fontSize="14px">Cancel</Text>
+      <ModalOverlay />
+      <ModalContent boxShadow="xl" borderRadius="16px" width="388px">
+        <ModalBody padding="30px">
+          <Text textStyle="web.h2" mb="20px">
+            Sign Out
+          </Text>
+          <Text textStyle="web.b1" mb="20px">
+            Are you sure you want to sign out?
+          </Text>
+          <Flex alignItems="center" justifyContent="flex-end" gap="15px">
+            <Button variant="white" onClick={cancel}>
+              <Text fontWeight={700} fontSize="14px">
+                Cancel
+              </Text>
             </Button>
-            <Button
-              variant="primaryFilled"
-              onClick={ handleSignOut }
-            >
-              <Text fontWeight={700} fontSize="14px" color="white">Sign Out</Text>
+            <Button variant="primaryFilled" onClick={handleSignOut}>
+              <Text fontWeight={700} fontSize="14px" color="white">
+                Sign Out
+              </Text>
             </Button>
           </Flex>
         </ModalBody>
       </ModalContent>
     </Modal>
-  )
+  );
 }
 
 export default function SideBar() {
@@ -97,16 +89,16 @@ export default function SideBar() {
   const [signOut, setSignOut] = useState(false);
 
   const pages = [
-    {label: "Home", route: ROUTES.ADMIN_HOME_PAGE},
-    {label: "Schedule", route: ROUTES.ADMIN_SCHEDULE_PAGE},
-    {label: "Announcements", route: ROUTES.ADMIN_ANNOUNCEMENTS_PAGE},
-    {label: "Participants", route: ROUTES.ADMIN_PARTICIPANTS_PAGE},
-    {label: "Task Library", route: ROUTES.ADMIN_TASKS_PAGE},
-    {label: "Badge Library", route: ROUTES.ADMIN_BADGES_PAGE},
+    { label: "Home", route: ROUTES.ADMIN_HOME_PAGE },
+    { label: "Schedule", route: ROUTES.ADMIN_SCHEDULE_PAGE },
+    { label: "Announcements", route: ROUTES.ADMIN_ANNOUNCEMENTS_PAGE },
+    { label: "Participants", route: ROUTES.ADMIN_PARTICIPANTS_PAGE },
+    { label: "Task Library", route: ROUTES.ADMIN_TASKS_PAGE },
+    { label: "Badge Library", route: ROUTES.ADMIN_BADGES_PAGE },
   ];
 
   const currentPage = pages.findIndex(
-    (page) => page.route === window.location.pathname,
+    (page) => page.route === window.location.pathname
   );
 
   return (
@@ -126,7 +118,11 @@ export default function SideBar() {
       alignItems="left"
     >
       <Flex width="100%" flexDir="column" gap="40px" alignItems="left">
-        <img src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"} alt="Marillac Place Logo" width="85%"/>
+        <img
+          src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"}
+          alt="Marillac Place Logo"
+          width="85%"
+        />
 
         <Tabs
           defaultIndex={currentPage}
@@ -156,8 +152,7 @@ export default function SideBar() {
         Sign out
       </Button>
 
-      {signOut && <SignOutPopUp cancel={() => setSignOut(false)}/>}
+      {signOut && <SignOutPopUp cancel={() => setSignOut(false)} />}
     </Box>
   );
-};
-
+}
