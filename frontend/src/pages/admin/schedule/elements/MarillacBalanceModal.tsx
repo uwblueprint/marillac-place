@@ -96,12 +96,12 @@ export default function MarillacBalanceModal({
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement>
-                    <AttachMoneyIcon fontSize="small" />
+                    <AttachMoneyIcon style={{ color: 'inherit', fontSize: 15 }} />
                   </InputLeftElement>
                   <Input
+                    variant="primary"
+                    pl="30px"
                     type="number"
-                    textStyle="web.b1"
-                    color="#000000"
                     value={amount}
                     onChange={(e: any) => setAmount(e.target.value)}
                   />
@@ -125,8 +125,7 @@ export default function MarillacBalanceModal({
                 <Text textStyle="web.s1" color="text.light.secondary">Reason</Text>
               </FormLabel>
               <Textarea
-                textStyle="web.b1"
-                color="#000000"
+                variant="primary"
                 value={reason}
                 onChange={(e: any) => setReason(e.target.value)}
               />

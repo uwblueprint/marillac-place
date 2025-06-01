@@ -31,7 +31,8 @@ export default function getGraphQLMiddleware() {
       getCurrentParticipants: verifyRole(["admin", "relief"]),
       getParticipantByRoom: verifyRole(["admin", "relief"]),
       getNotes: verifyRole(["admin", "relief"]),
-      getAllAnnouncements: verifyRole(["admin", "relief"])
+      getAllAnnouncements: verifyRole(["admin", "relief"]),
+      getTasksByType: verifyRole(["admin", "relief"]),
     },
     Mutation: {
       createParticipant: verifyRole(["admin", "relief"]),
@@ -41,7 +42,10 @@ export default function getGraphQLMiddleware() {
       deleteNote: verifyRole(["admin", "relief"]),
       createAnnouncement: verifyRole(["admin", "relief"]),
       editAnnouncement: verifyRole(["admin", "relief"]),
-      deleteAnnouncement: verifyRole(["admin", "relief"])
+      deleteAnnouncement: verifyRole(["admin", "relief"]),
+      createTask: verifyRole(["admin", "relief"]),
+      updateTask: verifyRole(["admin", "relief"]),
+      deleteTaskById: verifyRole(["admin", "relief"]),
     },
   }
 
