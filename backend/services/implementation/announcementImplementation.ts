@@ -17,13 +17,13 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
-  async getAnnouncementsInDateRange(start: Date, end: Date): Promise<Announcement[]> {
+  async getAnnouncementsInDateRange(start: string, end: string): Promise<Announcement[]> {
     try {
       const announcements = await prisma.announcement.findMany({
         where: {
           creation_date: {
-            lte: start.toISOString(),
-            gte: end.toISOString(),
+            lte: start,
+            gte: end,
           },
         },
         include: {

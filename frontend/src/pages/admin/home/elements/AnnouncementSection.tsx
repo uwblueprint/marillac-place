@@ -62,9 +62,13 @@ const AnnouncementSection = () => {
     loading: getAnnouncementsLoading,
     error: getAnnouncementsError,
     data: getAnnouncementsData,
-  } = useQuery(GET_ANNOUNCEMENTS_IN_DATE_RANGE) 
-
-  console.log(getAnnouncementsData);
+  } = useQuery(GET_ANNOUNCEMENTS_IN_DATE_RANGE, {
+    variables: {
+    start: new Date("2025-06-01T12:00:00.000Z").toISOString(),
+    end: new Date("2025-06-01T12:00:00.000Z").toISOString(),
+  },
+  }) 
+  console.log(getAnnouncementsData)
 
   const testAnnouncements: Announcement[] = [
     {

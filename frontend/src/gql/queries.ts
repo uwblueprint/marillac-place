@@ -63,12 +63,12 @@ export const GET_ALL_ANNOUNCEMENTS = gql`
 `;
 
 export const GET_ANNOUNCEMENTS_IN_DATE_RANGE = gql`
-    query getAnnouncementsInDateRange {
-        getAnnouncementsInDateRange {
-            announcement_id
-            creation_date
-            message
-        }
+    query getAnnouncementsInDateRange($start: String!, $end: String!) {
+      getAnnouncementsInDateRange(start: $start, end: $end) {
+        announcement_id
+        creation_date
+        message
+      }
     }
 `;
 

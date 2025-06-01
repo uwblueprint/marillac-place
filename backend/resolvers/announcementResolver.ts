@@ -9,7 +9,7 @@ const announcementResolver = {
       return announcementService.getAllAnnouncements();
     },
     getAnnouncementsInDateRange: async ( _parent: undefined,
-      { start, end }: { start: Date, end: Date }): Promise<Announcement[]> => {
+      { start, end }: { start: string, end: string }): Promise<Announcement[]> => {
       return announcementService.getAnnouncementsInDateRange(start, end);
     },
   },
