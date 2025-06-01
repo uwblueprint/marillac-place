@@ -63,10 +63,10 @@ export const GET_ALL_ANNOUNCEMENTS = gql`
 `;
 
 export const GET_ANNOUNCEMENTS_IN_DATE_RANGE = gql`
-    query getAllAnnouncements {
-        getAllAnnouncements {
-            announcementId
-            createdAt
+    query getAnnouncementsInDateRange {
+        getAnnouncementsInDateRange {
+            announcement_id
+            creation_date
             message
         }
     }

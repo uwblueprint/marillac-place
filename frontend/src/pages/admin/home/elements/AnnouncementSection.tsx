@@ -58,11 +58,13 @@ const AnnouncementCard = ({announcement}: {announcement: Announcement}) => {
 };
 
 const AnnouncementSection = () => {
-  /* const {
+  const {
     loading: getAnnouncementsLoading,
     error: getAnnouncementsError,
-    announcements: getAnnouncementsData,
-  } = useQuery(GET_ANNOUNCEMENTS_IN_DATE_RANGE) */
+    data: getAnnouncementsData,
+  } = useQuery(GET_ANNOUNCEMENTS_IN_DATE_RANGE) 
+
+  console.log(getAnnouncementsData);
 
   const testAnnouncements: Announcement[] = [
     {
@@ -90,7 +92,8 @@ const AnnouncementSection = () => {
       flexDir="column"
       justifyContent="space-between"
     >
-        {{/* Title Row */}}
+      <>
+      {{/* Title Row */}}
       <Flex
         w="100%"
         flexDir="row"
@@ -144,6 +147,7 @@ const AnnouncementSection = () => {
           )
         )}
       </Flex>
+      </>
     </Flex>
   );
 }
