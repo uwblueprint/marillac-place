@@ -65,7 +65,7 @@ const AnnouncementSection = () => {
   } = useQuery(GET_ANNOUNCEMENTS_IN_DATE_RANGE, {
     variables: {
     start: new Date("2025-06-01T12:00:00.000Z").toISOString(),
-    end: new Date("2025-06-01T12:00:00.000Z").toISOString(),
+    end: new Date("2025-06-03T12:00:00.000Z").toISOString(),
   },
   }) 
 

@@ -25,8 +25,8 @@ class AnnouncementService implements IAnnouncementService {
       const announcements = await prisma.announcement.findMany({
         where: {
           creation_date: {
-            lte: start,
-            gte: end,
+            lte: end,
+            gte: start,
           },
         },
         include: {
