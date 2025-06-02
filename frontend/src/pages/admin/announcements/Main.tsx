@@ -173,8 +173,6 @@ export default function AdminAnnouncementsPage() {
             message={item.message}
             timestamp={item.timestamp}
             importance={item.importance}
-            onEdit={() => console.log("Edit clicked")}
-            onDelete={() => console.log("Delete clicked")}
           />
         ))}
       </VStack>

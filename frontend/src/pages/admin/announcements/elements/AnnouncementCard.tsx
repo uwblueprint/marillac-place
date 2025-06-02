@@ -9,8 +9,6 @@ type AnnouncementCardProps = {
   message: string;
   timestamp: string;
   importance?: 0 | 1 | 2;
-  onEdit?: () => void;
-  onDelete?: () => void;
 };
 
 export default function AnnouncementCard({
@@ -18,8 +16,6 @@ export default function AnnouncementCard({
   message,
   timestamp,
   importance = 0,
-  onEdit,
-  onDelete,
 }: AnnouncementCardProps) {
   return (
     <Box
@@ -64,24 +60,20 @@ export default function AnnouncementCard({
         </Flex>
 
         <Flex align="center" gap={2} ml={4}>
-          {onEdit && (
-            <IconButton
-              aria-label="Edit"
-              icon={<EditIcon sx={{ fontSize: "18px", color: "#808080" }} />}
-              size="sm"
-              variant="ghost"
-              onClick={onEdit}
-            />
-          )}
-          {onDelete && (
-            <IconButton
-              aria-label="Delete"
-              icon={<DeleteIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />}
-              size="sm"
-              variant="ghost"
-              onClick={onDelete}
-            />
-          )}
+          <IconButton
+            aria-label="Edit"
+            icon={<EditIcon sx={{ fontSize: "18px", color: "#808080" }} />}
+            size="sm"
+            variant="ghost"
+            onClick={() => console.log("Edit clicked")}
+          />
+          <IconButton
+            aria-label="Delete"
+            icon={<DeleteIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />}
+            size="sm"
+            variant="ghost"
+            onClick={() => console.log("Delete clicked")}
+          />
         </Flex>
       </Flex>
     </Box>
