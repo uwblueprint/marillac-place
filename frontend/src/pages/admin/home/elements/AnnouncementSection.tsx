@@ -5,18 +5,19 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Link,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_ALL_ANNOUNCEMENTS, GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
-import { Announcement } from "../../../../types/AnnouncementTypes";
+import { useQuery } from "@apollo/client";
+import { Link as RouterLink } from "react-router-dom";
+import { GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
+import { AnnouncementDisplayInfo, AnnouncementData } from "../../../../types/AnnouncementTypes";
 
 const getRoomString = (rooms: number[]) => {
     return rooms.map(room => `Room ${room}`).join(", ");
 }
 
-const AnnouncementCard: React.FC<{announcement: Announcement}> = ({announcement}) => {
-    // Format the date to match the "posted at 1:00 pm" format
+const AnnouncementCard: React.FC<{announcement: AnnouncementDisplayInfo}> = ({announcement}) => {
     const formatDate = (date: Date) => {
         return date.toLocaleString("en-ca", {
             hour: 'numeric',
@@ -69,25 +70,14 @@ const AnnouncementSection = () => {
   }) 
 
   console.log(getAnnouncementsData)
-  
 
-  const error = null as {message: string} | null;
-  const loading = false;
-
-  const testAnnouncements: Announcement[] = [
-    {
-      rooms: [1, 2, 3],
-      creation_date: new Date(),
-      message: "Test Announcement",
-    },
-    {
-      rooms: [4, 5, 6],
-      creation_date: new Date(),
-      message: "Test Announcement 2",
-    },
-  ];
-
-  const data = testAnnouncements;
+  // Get the display info for the announcements
+  const data: AnnouncementDisplayInfo[] = getAnnouncementsData?.getAnnouncementsInDateRange?.map((announcement: AnnouncementData) => ({
+    announcement_id: announcement.announcement_id,
+    rooms: announcement.user_announcements.map(ua => ua.participant.room_number).sort((a, b) => a - b),
+    creation_date: new Date(announcement.creation_date),
+    message: announcement.message,
+  })) || [];
 
   return (
     <Flex
@@ -109,12 +99,24 @@ const AnnouncementSection = () => {
         alignItems="center"
         px="2px"
       >
-        <Text textStyle="web.h3" color="primary.700">
+        <Flex flexDir="row" gap="20px" alignItems="baseline">
+          <Text textStyle="web.h3" color="primary.700">
             Announcements
-        </Text>
-        <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
-          Expires in 48h
-        </Text>
+          </Text>
+          <Text textStyle="web.b3" color="text.light.secondary">
+            {data.length} new posts today
+          </Text>
+        </Flex>
+        <Link 
+          as={RouterLink} 
+          to="/admin/announcements"
+          textStyle="web.b2" 
+          fontFamily="Nunito"
+          color="black"
+          textDecoration="underline"
+        >
+          View All
+        </Link>
       </Flex>
       <Flex
         alignItems="center"
@@ -127,13 +129,13 @@ const AnnouncementSection = () => {
           },
         }}
       >
-        { loading ? (
+        { getAnnouncementsLoading ? (
           <Text textStyle="web.b2" color="text.light.secondary">
             Loading...
           </Text>
-        ) : error ? (
+        ) : getAnnouncementsError ? (
           <Text textStyle="web.b2" color="text.light.secondary">
-            {error?.message || "An error occurred"}
+            {getAnnouncementsError?.message || "An error occurred"}
           </Text>
         ) : (
           data.length === 0 ? (
@@ -148,17 +150,8 @@ const AnnouncementSection = () => {
               justifyContent="flex-start"
               gap="15px"
             >
-              {data.map((announcement: Announcement, index: number) => {
-                // For now, we'll use a placeholder for rooms since the backend doesn't provide room mapping
-                // You'll need to either modify the backend to include room info or create a separate query
-                const announcementWithRoomsAndDate = {
-                  ...announcement,
-                  rooms: [1, 2], // Placeholder - needs to be derived from user_announcements -> participants -> rooms
-                  creation_date: announcement.creation_date instanceof Date 
-                    ? announcement.creation_date 
-                    : new Date(announcement.creation_date)
-                };
-                return <AnnouncementCard key={`${announcement.message}-${index}`} announcement={announcementWithRoomsAndDate} />
+              {data.map((announcement: AnnouncementDisplayInfo) => {
+                return <AnnouncementCard key={announcement.announcement_id} announcement={announcement} />
               })}
             </Flex>
           )
