@@ -7,6 +7,7 @@ const resolvers = gql`
     getParticipantByRoom(room_number: Int!): Participant
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
+    getTasksByType(type: TaskType!): [Task]
   }
 
   type Mutation {
@@ -50,6 +51,32 @@ const resolvers = gql`
       message: String,
     ): Boolean
     deleteAnnouncement(announcement_id: Int!): Boolean
+    createTask(
+      type: TaskType!,
+      name: String!,
+      recurrencePreference: RecurrenceFrequency!,
+      repeatDays: [DayOfWeek!]!,
+      timePreference: TimeOption!,
+      marillacBucks: Int!,
+      deduction: Int!,
+      startTime: String,
+      endTime: String,
+      comment: String,
+    ): Boolean
+    updateTask(
+      id: Int!,
+      type: TaskType,
+      name: String,
+      recurrencePreference: RecurrenceFrequency,
+      repeatDays: [DayOfWeek!],
+      timePreference: TimeOption,
+      marillacBucks: Int,
+      deduction: Int,
+      startTime: String,
+      endTime: String,
+      comment: String,
+    ): Boolean
+    deleteTaskById(taskId: Int!): Boolean
   }
 `;
 

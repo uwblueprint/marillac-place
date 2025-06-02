@@ -108,7 +108,6 @@ class ParticipantService implements IParticipantService {
         }
       });
     } catch (err) {
-      throw err;
       throw new Error("Something went wrong");
     }
     if (occupiedRoom) {

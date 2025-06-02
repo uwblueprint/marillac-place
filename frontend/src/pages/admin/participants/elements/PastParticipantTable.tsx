@@ -1,7 +1,7 @@
 import { TableContainer, Table, Thead, Tbody, Tr, Th, Td, Text, Flex, Spinner } from "@chakra-ui/react";
+import EditIcon from '@mui/icons-material/Edit';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import EditIcon from '@mui/icons-material/Edit';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import React, {useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
