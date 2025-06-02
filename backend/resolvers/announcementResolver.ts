@@ -1,6 +1,7 @@
 import { Announcement, Priority } from "@prisma/client";
 import AnnouncementService from "../services/implementation/announcementImplementation";
 import IAnnouncementService from "../services/interface/announcementInterface";
+import prisma from "../prisma";
 
 const announcementService: IAnnouncementService = new AnnouncementService();
 const announcementResolver = {
@@ -56,6 +57,15 @@ const announcementResolver = {
     ): Promise<boolean> => {
       return announcementService.deleteAnnouncement(announcement_id);
     },
+  },
+  UserAnnouncement: {
+    participant: async (parent: any) => {
+      return await prisma.participant.findUnique({
+        where: {
+          participant_id: parent.participant_id
+        }
+      });
+    }
   },
 };
 

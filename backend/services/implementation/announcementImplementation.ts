@@ -7,7 +7,7 @@ class AnnouncementService implements IAnnouncementService {
     try {
       const announcements = await prisma.announcement.findMany({
         include: {
-          user_announcements: true
+          user_announcements: true,
         },
       });
 
@@ -17,7 +17,10 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
-  async getAnnouncementsInDateRange(start: string, end: string): Promise<Announcement[]> {
+  async getAnnouncementsInDateRange(
+    start: string,
+    end: string
+  ): Promise<Announcement[]> {
     try {
       const announcements = await prisma.announcement.findMany({
         where: {
@@ -27,8 +30,16 @@ class AnnouncementService implements IAnnouncementService {
           },
         },
         include: {
-          user_announcements: true
-        }
+          user_announcements: {
+            include: {
+              participant: {
+                select: {
+                  room_number: true,
+                },
+              },
+            },
+          },
+        },
       });
 
       return announcements;
@@ -40,7 +51,7 @@ class AnnouncementService implements IAnnouncementService {
   async createAnnouncement(
     priority: Priority,
     participants: number[],
-    message: string,
+    message: string
   ): Promise<boolean> {
     try {
       const today = new Date().toLocaleString("en-ca");
@@ -70,7 +81,7 @@ class AnnouncementService implements IAnnouncementService {
   async editAnnouncement(
     announcement_id: number,
     priority?: Priority,
-    message?: string,
+    message?: string
   ): Promise<boolean> {
     const updatedData: Record<string, any> = {};
     if (priority) updatedData.priority = priority;
@@ -102,4 +113,3 @@ class AnnouncementService implements IAnnouncementService {
 }
 
 export default AnnouncementService;
-

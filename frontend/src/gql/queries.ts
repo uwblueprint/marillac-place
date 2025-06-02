@@ -68,6 +68,11 @@ export const GET_ANNOUNCEMENTS_IN_DATE_RANGE = gql`
         announcement_id
         creation_date
         message
+        user_announcements {
+          participant {
+            room_number
+          }
+        }
       }
     }
 `;

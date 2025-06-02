@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_ALL_ANNOUNCEMENTS } from "../../../../gql/queries";
+import { GET_ALL_ANNOUNCEMENTS, GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
 import { Announcement } from "../../../../types/AnnouncementTypes";
 
 const getRoomString = (rooms: number[]) => {
@@ -57,7 +57,7 @@ const AnnouncementCard: React.FC<{announcement: Announcement}> = ({announcement}
 };
 
 const AnnouncementSection = () => {
-  /* const {
+  const {
     loading: getAnnouncementsLoading,
     error: getAnnouncementsError,
     data: getAnnouncementsData,
@@ -67,7 +67,9 @@ const AnnouncementSection = () => {
     end: new Date("2025-06-01T12:00:00.000Z").toISOString(),
   },
   }) 
-  */
+
+  console.log(getAnnouncementsData)
+  
 
   const error = null as {message: string} | null;
   const loading = false;
