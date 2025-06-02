@@ -9,8 +9,10 @@ const announcementResolver = {
     getAllAnnouncements: async (): Promise<Announcement[]> => {
       return announcementService.getAllAnnouncements();
     },
-    getAnnouncementsInDateRange: async ( _parent: undefined,
-      { start, end }: { start: string, end: string }): Promise<Announcement[]> => {
+    getAnnouncementsInDateRange: async (
+      _parent: undefined,
+      { start, end }: { start: string; end: string }
+    ): Promise<Announcement[]> => {
       return announcementService.getAnnouncementsInDateRange(start, end);
     },
   },
@@ -25,12 +27,12 @@ const announcementResolver = {
         priority: Priority;
         participants: number[];
         message: string;
-      },
+      }
     ): Promise<boolean> => {
       return announcementService.createAnnouncement(
         priority,
         participants,
-        message,
+        message
       );
     },
     editAnnouncement: async (
@@ -43,29 +45,29 @@ const announcementResolver = {
         announcement_id: number;
         priority?: Priority;
         message?: string;
-      },
+      }
     ): Promise<boolean> => {
       return announcementService.editAnnouncement(
         announcement_id,
         priority,
-        message,
+        message
       );
     },
     deleteAnnouncement: async (
       _parent: undefined,
-      { announcement_id }: { announcement_id: number },
+      { announcement_id }: { announcement_id: number }
     ): Promise<boolean> => {
       return announcementService.deleteAnnouncement(announcement_id);
     },
   },
   UserAnnouncement: {
     participant: async (parent: any) => {
-      return await prisma.participant.findUnique({
+      return prisma.participant.findUnique({
         where: {
-          participant_id: parent.participant_id
-        }
+          participant_id: parent.participant_id,
+        },
       });
-    }
+    },
   },
 };
 
