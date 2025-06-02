@@ -40,18 +40,17 @@ const AnnouncementCard: React.FC<{announcement: AnnouncementDisplayInfo}> = ({an
         >
         <Flex
             width="100%"
-            justifyContent="space-between"
-            alignItems="center"
+            alignItems="baseline"
         >
-            <Text textStyle="web.b3" color="text.light.secondary">
+            <Text textStyle="web.b1" color="black">
                 {getRoomString(announcement.rooms)}
             </Text>
-            <Text textStyle="web.b3" color="text.light.secondary">
+            <Text textStyle="web.b3" color="text.light.secondary" marginLeft="20px">
                 posted at {formatDate(announcement.creation_date)}
             </Text>
         </Flex>
         <Flex width="100%">
-            <Text textStyle="web.b2" color="#000000">{announcement.message}</Text>
+            <Text textStyle="web.b2" color="black">{announcement.message}</Text>
         </Flex>
         </Flex>
     );
@@ -104,7 +103,7 @@ const AnnouncementSection = () => {
             Announcements
           </Text>
           <Text textStyle="web.b3" color="text.light.secondary">
-            {data.length} new posts today
+            {data.length} new post{data.length === 1 ? "" : "s"} today
           </Text>
         </Flex>
         <Link 
