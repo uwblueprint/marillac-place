@@ -129,7 +129,7 @@ export default function SideBar() {
         <img src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"} alt="Marillac Place Logo" width="85%"/>
 
         <Tabs
-          defaultIndex={currentPage}
+          index={currentPage}
           orientation="vertical"
           variant="unstyled"
           width="100%"

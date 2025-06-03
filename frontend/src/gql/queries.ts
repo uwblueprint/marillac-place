@@ -62,6 +62,21 @@ export const GET_ALL_ANNOUNCEMENTS = gql`
     }
 `;
 
+export const GET_ANNOUNCEMENTS_IN_DATE_RANGE = gql`
+    query getAnnouncementsInDateRange($start: String!, $end: String!) {
+      getAnnouncementsInDateRange(start: $start, end: $end) {
+        announcement_id
+        creation_date
+        message
+        user_announcements {
+          participant {
+            room_number
+          }
+        }
+      }
+    }
+`;
+
 export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
     query getAnnouncementByRooms($rooms: [Int]) {
         getAnnouncementByRooms(rooms: $rooms) {

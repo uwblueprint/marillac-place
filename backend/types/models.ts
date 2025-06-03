@@ -62,6 +62,7 @@ const models = gql`
     pinned: Boolean!
     announcement_id: Int!
     participant_id: Int!
+    participant: Participant!
   }
 
   type Login {
