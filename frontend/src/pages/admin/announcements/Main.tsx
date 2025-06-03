@@ -165,7 +165,7 @@ export default function AdminAnnouncementsPage() {
       <Text textStyle="web.b3" color="text.light.secondary">
         Most Recent
       </Text>
-      <VStack spacing={4} align="stretch">
+      <VStack spacing={4} align="stretch" paddingBottom="20px">
         {sampleAnnouncementCardData.map((item, index) => (
           <AnnouncementCard
             key={index}

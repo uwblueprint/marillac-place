@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Text, IconButton, Flex } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteForeverOutlined";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 type AnnouncementCardProps = {
   room: string;
@@ -26,7 +26,7 @@ export default function AnnouncementCard({
       borderColor="#c5c8d8"
       boxShadow="sm"
     >
-      <Flex direction="row" justify="space-between" align="center">
+      <Flex direction="row" justify="space-between" align="center" gap="10px">
         <Flex direction="column" flex="1">
           <Flex align="center" gap={1}>
             <Text textStyle="web.c1" fontWeight={700}>
@@ -36,7 +36,7 @@ export default function AnnouncementCard({
               <PriorityHighOutlinedIcon
                 key={i}
                 sx={{
-                  fontSize: "18px",
+                  fontSize: "16px",
                   color: "#d34c5c",
                   mr: i < importance - 1 ? "-12px" : 0,
                 }}
@@ -59,7 +59,7 @@ export default function AnnouncementCard({
           </Text>
         </Flex>
 
-        <Flex align="center" gap={2} ml={4}>
+        <Flex align="center" gap={1} ml={4}>
           <IconButton
             aria-label="Edit"
             icon={<EditIcon sx={{ fontSize: "18px", color: "#808080" }} />}
@@ -69,7 +69,7 @@ export default function AnnouncementCard({
           />
           <IconButton
             aria-label="Delete"
-            icon={<DeleteIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />}
+            icon={<DeleteOutlineIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />}
             size="sm"
             variant="ghost"
             onClick={() => console.log("Delete clicked")}
