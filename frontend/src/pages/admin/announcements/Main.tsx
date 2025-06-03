@@ -1,9 +1,12 @@
-import { Flex, Text, Button } from '@chakra-ui/react';
-import AddIcon from '@mui/icons-material/Add';
-import React, { useState } from 'react';
+import { Flex, Text, Button, VStack } from "@chakra-ui/react";
+import AddIcon from "@mui/icons-material/Add";
+import React, { useState } from "react";
+import AnnouncementCard from "./elements/AnnouncementCard";
 
 export default function AdminAnnouncementsPage() {
-  const [selectedButtons, setSelectedButtons] = useState<boolean[]>(new Array(10).fill(false)); // Keeping track of buttons on and off
+  const [selectedButtons, setSelectedButtons] = useState<boolean[]>(
+    new Array(10).fill(false)
+  ); // Keeping track of buttons on and off
 
   const handleButtonClick = (id: number) => {
     setSelectedButtons((prevSelected) => {
@@ -21,9 +24,59 @@ export default function AdminAnnouncementsPage() {
     setSelectedButtons(new Array(10).fill(false));
   };
 
+  const sampleAnnouncementCardData = [
+    {
+      room: "Room 3",
+      message:
+        "Reminding you about your meeting this Saturday! Please be on time, we will be beginning promptly at 10:30am. If you are unable to attend, please let us know as soon as possible. Have a great rest of the week everyone!",
+      timestamp: "1:00 PM, Jan. 7",
+      importance: 1 as const,
+    },
+    {
+      room: "Room 2",
+      message:
+        "Reminding you about your meeting this Saturday! Please be on time, we will be beginning promptly at 10:30am. If you are unable to attend, please let us know as soon as possible. Have a great rest of the week everyone!",
+      timestamp: "1:00 PM, Jan. 7",
+      importance: 1 as const,
+    },
+    {
+      room: "All Rooms",
+      message:
+        "Reminding you about your meeting this Saturday. Please be on time, we will be beginning promptly at 9:00 am next to the meeting room.",
+      timestamp: "1:00 PM, Jan. 7",
+      importance: 2 as const,
+    },
+    {
+      room: "Room 7, Room 8, Room 9",
+      message:
+        "Reminding you about your meeting this Saturday! Please be on time, we will be beginning promptly at 10:30am. If you are unable to attend, please let us know as soon as possible. Have a great rest of the week everyone!",
+      timestamp: "1:00 PM, Jan. 7",
+      importance: 0 as const,
+    },
+    {
+      room: "All Rooms",
+      message:
+        "Reminding you about your meeting this Saturday. Please be on time, we will be beginning promptly at 9:00 am next to the meeting room.",
+      timestamp: "1:00 PM, Jan. 7",
+      importance: 0 as const,
+    },
+    {
+      room: "All Rooms",
+      message:
+        "Reminding you about your meeting this Saturday. Please be on time, we will be beginning promptly at 9:00 am next to the meeting room.",
+      timestamp: "1:00 PM, Jan. 7",
+      importance: 0 as const,
+    },
+  ];
+
   return (
     <Flex width="100%" flexDir="column" gap="15px">
-      <Flex width="100%" height="fit-content" alignItems="center" justifyContent="space-between">
+      <Flex
+        width="100%"
+        height="fit-content"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <Flex alignItems="center" gap="15px">
           <Text textStyle="web.h2" color="primary.700">
             Announcements
@@ -38,16 +91,25 @@ export default function AdminAnnouncementsPage() {
           fontSize="12px"
           gap="7px"
         >
-          <AddIcon style={{
-            width: "15px",
-            height: "15px",
-          }} />
+          <AddIcon
+            style={{
+              width: "15px",
+              height: "15px",
+            }}
+          />
           Create Announcement
         </Button>
       </Flex>
 
       <Flex alignItems="center" gap="10px">
-        <Text textStyle="web.s1" color="#000000" marginRight='5px' fontWeight={600}>Filters:</Text>
+        <Text
+          textStyle="web.s1"
+          color="#000000"
+          marginRight="5px"
+          fontWeight={600}
+        >
+          Filters:
+        </Text>
         {selectedButtons.map((isSelected, index) => (
           <Button
             key={index}
@@ -71,13 +133,15 @@ export default function AdminAnnouncementsPage() {
               bg: "#0C727E",
             }}
           >
-            <Text textStyle="web.s1" color="inherit">Room {index + 1}</Text>
+            <Text textStyle="web.s1" color="inherit">
+              Room {index + 1}
+            </Text>
           </Button>
         ))}
         <Text
           textStyle="web.s1"
           color="#000000"
-          marginLeft='5px'
+          marginLeft="5px"
           fontWeight={600}
           cursor="pointer"
           textDecoration="underline"
@@ -98,7 +162,20 @@ export default function AdminAnnouncementsPage() {
           Deselect All
         </Text>
       </Flex>
-
+      <Text textStyle="web.b3" color="text.light.secondary">
+        Most Recent
+      </Text>
+      <VStack spacing={4} align="stretch" paddingBottom="20px">
+        {sampleAnnouncementCardData.map((item, index) => (
+          <AnnouncementCard
+            key={index}
+            room={item.room}
+            message={item.message}
+            timestamp={item.timestamp}
+            importance={item.importance}
+          />
+        ))}
+      </VStack>
     </Flex>
-  )
+  );
 }

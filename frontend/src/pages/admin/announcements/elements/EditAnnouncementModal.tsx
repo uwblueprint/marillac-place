@@ -17,7 +17,7 @@ import {
   Textarea,
   Box,
 } from "@chakra-ui/react";
-import { PriorityHighOutlined } from "@mui/icons-material";
+import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 
 type EditAnnouncementModalProps = {
   isOpen: boolean;
@@ -28,11 +28,9 @@ const EditAnnouncementModal = ({
   isOpen,
   setIsOpen,
 }: EditAnnouncementModalProps): React.ReactElement => {
-  const [priority, setPriority] = useState("normal");
-  const [sendTo] = useState("Room 3");
-  const [message, setMessage] = useState(
-    "Reminding you about your meeting this Saturday! Please be on time, we will be beginning promptly at 10:30am. If you are unable to attend, please let us know as soon as possible. Have a great rest of the week everyone!"
-  );
+  const [priority, setPriority] = useState("");
+  const [sendTo] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSave = () => {
     console.log("Saving announcement:", { sendTo, priority, message });
@@ -50,7 +48,7 @@ const EditAnnouncementModal = ({
         borderRadius="8px"
         px={5}
         py={5}
-        maxW="650px"
+        maxW="550px"
         w="100%"
       >
         <ModalHeader>
@@ -58,11 +56,12 @@ const EditAnnouncementModal = ({
         </ModalHeader>
         <ModalBody>
           <Box mb={4}>
-            <Text textStyle="web.s1" color="text.light.secondary" fontSize="16px">
+            <Text textStyle="web.s1" color="text.light.secondary">
               Sent To:{" "}
               <Text
                 as="span"
                 textStyle="web.b1"
+                fontSize="12px"
               >
                 {sendTo}
               </Text>
@@ -71,7 +70,7 @@ const EditAnnouncementModal = ({
 
           <FormControl mb={4}>
             <FormLabel>
-              <Text textStyle="web.s1" color="text.light.secondary" fontSize="16px">Priority Level:</Text>
+              <Text textStyle="web.s1" color="text.light.secondary">Priority Level:</Text>
             </FormLabel>
             <RadioGroup
               onChange={setPriority}
@@ -82,40 +81,36 @@ const EditAnnouncementModal = ({
             >
               <Stack direction="column" spacing={3}>
                 <Radio value="NORMAL">
-                  <Text textStyle="web.b1">Normal</Text>
+                  <Text textStyle="web.b1" fontSize="12px">Normal</Text>
                 </Radio>
 
                 <Radio value="HIGH">
-                  <Flex align="center" fontFamily="body">
-                    <Text textStyle="web.b1">
-                      High{" "}
-                      <Text
-                        as="span"
-                        ml={2}
-                        color="#D34C5C"
-                        fontWeight="bold"
-                        fontSize="1rem"
-                      >
-                        !
-                      </Text>
-                    </Text>
+                  <Flex align="center" fontFamily="body" gap="5px">
+                    <Text textStyle="web.b1" fontSize="12px">High</Text>
+                    <PriorityHighOutlinedIcon
+                      sx={{
+                        fontSize: "12px",
+                        color: "#d34c5c",
+                      }}
+                    />
                   </Flex>
                 </Radio>
 
                 <Radio value="CRITICAL">
-                  <Flex align="center" fontFamily="body">
-                    <Text textStyle="web.b1">
-                    Critical{" "}
-                      <Text
-                        as="span"
-                        ml={2}
-                        color="#D34C5C"
-                        fontWeight="bold"
-                        fontSize="1rem"
-                      >
-                        !&nbsp;!
-                      </Text>
-                    </Text>
+                  <Flex align="center" fontFamily="body" gap="5px">
+                    <Text textStyle="web.b1" fontSize="12px">Critical</Text>
+                    <PriorityHighOutlinedIcon
+                      sx={{
+                        fontSize: "12px",
+                        color: "#d34c5c",
+                      }}
+                    />
+                    <PriorityHighOutlinedIcon
+                      sx={{
+                        fontSize: "12px",
+                        color: "#d34c5c",
+                      }}
+                    />
                   </Flex>
                 </Radio>
               </Stack>
@@ -124,14 +119,14 @@ const EditAnnouncementModal = ({
 
           <FormControl>
             <FormLabel>
-              <Text textStyle="web.s1" color="text.light.secondary" fontSize="16px">Message</Text>
+              <Text textStyle="web.s1" color="text.light.secondary">Message</Text>
             </FormLabel>
             <Textarea
               value={message}
               variant="primary"
               onChange={(e) => setMessage(e.target.value)}
-              minHeight="150px"
-              fontSize="16px"
+              minHeight="120px"
+              fontSize="12px"
             />
           </FormControl>
         </ModalBody>
@@ -146,13 +141,13 @@ const EditAnnouncementModal = ({
               variant="white"
               onClick={handleCancel}
             >
-              Cancel
+              <Text textStyle="web.s1">Cancel</Text>
             </Button>
             <Button
               variant="primaryFilled"
               onClick={handleSave}
             >
-              Save Changes
+              <Text textStyle="web.s1" color="white">Save Changes</Text>
             </Button>
           </Flex>
         </ModalFooter>
