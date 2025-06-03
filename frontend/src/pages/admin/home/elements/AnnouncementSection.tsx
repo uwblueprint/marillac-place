@@ -42,7 +42,7 @@ const AnnouncementCard: React.FC<{announcement: AnnouncementDisplayInfo}> = ({an
             width="100%"
             alignItems="baseline"
         >
-            <Text textStyle="web.b1" color="black">
+            <Text textStyle="web.b2" fontWeight={600} color="black">
                 {getRoomString(announcement.rooms)}
             </Text>
             <Text textStyle="web.b3" color="text.light.secondary" marginLeft="20px">
@@ -66,9 +66,7 @@ const AnnouncementSection = () => {
       start: new Date(new Date().setHours(0,0,0,0)).toISOString(),
       end: new Date(new Date().setHours(23,59,59,999)).toISOString(),
   },
-  }) 
-
-  console.log(getAnnouncementsData)
+  })
 
   // Get the display info for the announcements
   const data: AnnouncementDisplayInfo[] = getAnnouncementsData?.getAnnouncementsInDateRange?.map((announcement: AnnouncementData) => ({
@@ -80,14 +78,14 @@ const AnnouncementSection = () => {
 
   return (
     <Flex
-      height="100%"
+      height="45%"
       paddingY="15px"
       paddingX="20px"
       border="1px solid"
       borderColor="neutral.300"
       borderRadius="8px"
       flexDir="column"
-      justifyContent="space-between"
+      gap="15px"
       marginRight="10px"
     >
       {/* Title Row */}
@@ -109,10 +107,14 @@ const AnnouncementSection = () => {
         <Link 
           as={RouterLink} 
           to="/admin/announcements"
-          textStyle="web.b2" 
+          textStyle="web.b3"
           fontFamily="Nunito"
+          fontWeight={600}
           color="black"
           textDecoration="underline"
+          _hover={{
+            textDecoration: "none"
+          }}
         >
           View All
         </Link>
