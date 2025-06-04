@@ -32,6 +32,7 @@ export default function getGraphQLMiddleware() {
       getParticipantByRoom: verifyRole(["admin", "relief"]),
       getNotes: verifyRole(["admin", "relief"]),
       getAllAnnouncements: verifyRole(["admin", "relief"]),
+      getAnnouncementsInDateRange: verifyRole(["admin", "relief"]),
       getTasksByType: verifyRole(["admin", "relief"]),
     },
     Mutation: {
