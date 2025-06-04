@@ -26,10 +26,7 @@ class ParticipantService implements IParticipantService {
     try {
       const participants = await prisma.participant.findMany({
         where: {
-          OR: [
-            { departure_date: null },
-            { departure_date: { gt: today } }
-          ]
+          OR: [{ departure_date: null }, { departure_date: { gt: today } }],
         },
         orderBy: [{ room_number: "asc" }],
       });
@@ -47,12 +44,9 @@ class ParticipantService implements IParticipantService {
           AND: [
             { room_number },
             {
-              OR: [
-                { departure_date: null },
-                { departure_date: { gt: today } }
-              ]
-            }
-          ]
+              OR: [{ departure_date: null }, { departure_date: { gt: today } }],
+            },
+          ],
         },
       });
       return participant;
@@ -60,58 +54,91 @@ class ParticipantService implements IParticipantService {
       throw new Error("Something went wrong");
     }
   }
-//
-//     async getParticipantById(participantId: string): Promise<Participant | null> {
-//         try {
-//             const participant: Participant | null = await prisma.participant.findUnique(
-//                 {
-//                     where: {
-//                         participantId,
-//                     },
-//                 },
-//             );
-//             return participant;
-//         } catch (err) {
-//             console.log(err);
-//             throw err;
-//         }
-//     }
-//
+
+  async getParticipantsByRooms(
+    room_numbers: number[]
+  ): Promise<Record<number, number | null>> {
+    const today = new Date().toLocaleDateString("en-ca");
+    try {
+      const participants = await prisma.participant.findMany({
+        where: {
+          AND: [
+            { room_number: { in: room_numbers } },
+            {
+              OR: [{ departure_date: null }, { departure_date: { gt: today } }],
+            },
+          ],
+        },
+      });
+
+      // Convert array to object with room numbers as keys and participant IDs as values
+      const result: Record<number, number | null> = {};
+      for (const participant of participants) {
+        result[participant.room_number] = participant.participant_id;
+      }
+
+      // Account for rooms with no participants
+      for (const room_number of room_numbers) {
+        if (!(room_number in result)) {
+          result[room_number] = null;
+        }
+      }
+
+      return result;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
+  //
+  //     async getParticipantById(participantId: string): Promise<Participant | null> {
+  //         try {
+  //             const participant: Participant | null = await prisma.participant.findUnique(
+  //                 {
+  //                     where: {
+  //                         participantId,
+  //                     },
+  //                 },
+  //             );
+  //             return participant;
+  //         } catch (err) {
+  //             console.log(err);
+  //             throw err;
+  //         }
+  //     }
+  //
   async createParticipant(
     participant_id: number,
     room_number: number,
     arrival_date: string,
-    password: string,
+    password: string
   ): Promise<boolean> {
     let existingParticipant: Participant | null = null;
     try {
       existingParticipant = await prisma.participant.findUnique({
-        where: { participant_id }
+        where: { participant_id },
       });
     } catch (err) {
       throw new Error("Something went wrong");
     }
     if (existingParticipant) {
-      throw new Error("Participant already exists")
+      throw new Error("Participant already exists");
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
     let occupiedRoom: Participant | null = null;
     try {
       occupiedRoom = await prisma.participant.findFirst({
         where: {
           room_number,
-          OR: [
-            { departure_date: null },
-            { departure_date: { gte: today } }
-          ]
-        }
+          OR: [{ departure_date: null }, { departure_date: { gte: today } }],
+        },
       });
     } catch (err) {
       throw new Error("Something went wrong");
     }
     if (occupiedRoom) {
-      throw new Error("Room is occupied")
+      throw new Error("Room is occupied");
     }
 
     try {
@@ -139,16 +166,19 @@ class ParticipantService implements IParticipantService {
     account_removal_date?: string,
     marillac_bucks?: number,
     marillac_bucks_goal?: number,
-    password?: string,
+    password?: string
   ): Promise<boolean> {
     const updatedData: Record<string, any> = {};
     if (room_number) updatedData.room_number = room_number;
     if (arrival_date) updatedData.arrival_date = arrival_date;
     if (departure_date) updatedData.departure_date = departure_date;
-    if (account_creation_date) updatedData.account_creation_date = account_creation_date;
-    if (account_removal_date) updatedData.account_removal_date = account_removal_date;
+    if (account_creation_date)
+      updatedData.account_creation_date = account_creation_date;
+    if (account_removal_date)
+      updatedData.account_removal_date = account_removal_date;
     if (marillac_bucks) updatedData.marillac_bucks = marillac_bucks;
-    if (marillac_bucks_goal) updatedData.marillac_bucks_goal = marillac_bucks_goal;
+    if (marillac_bucks_goal)
+      updatedData.marillac_bucks_goal = marillac_bucks_goal;
     if (password) updatedData.password = password;
 
     try {
@@ -165,7 +195,7 @@ class ParticipantService implements IParticipantService {
   async updateMarillacBucks(
     participant_id: number,
     marillac_bucks: number,
-    reason: string,
+    reason: string
   ): Promise<boolean> {
     try {
       await prisma.participant.update({
@@ -176,42 +206,42 @@ class ParticipantService implements IParticipantService {
     } catch (err) {
       throw new Error("Something went wrong");
     }
-  };
-//
-//     async getParticipantByRoom(roomNumber: number): Promise<Participant | null> {
-//         try {
-//             const participant: Participant | null = await prisma.participant.findFirst(
-//                 {
-//                     where: {
-//                         roomNumber,
-//                     },
-//                 },
-//             );
-//             return participant;
-//         } catch (err) {
-//             console.log(err);
-//             throw err
-//         }
-//     }
-//
-//     async updateParticipantCredit(
-//         participantId: string,
-//         credit: number,
-//     ): Promise<boolean> {
-//         const updatedData: Record<string, any> = {};
-//         if (credit !== undefined) updatedData.credit = credit;
-//         if (!participantId) throw new Error("participantId is required");
-//         try {
-//             await prisma.participant.update({
-//                 where: { participantId },
-//                 data: updatedData,
-//             });
-//             return true;
-//         } catch (err) {
-//             console.log(err);
-//             throw err;
-//         }
-//     }
+  }
+  //
+  //     async getParticipantByRoom(roomNumber: number): Promise<Participant | null> {
+  //         try {
+  //             const participant: Participant | null = await prisma.participant.findFirst(
+  //                 {
+  //                     where: {
+  //                         roomNumber,
+  //                     },
+  //                 },
+  //             );
+  //             return participant;
+  //         } catch (err) {
+  //             console.log(err);
+  //             throw err
+  //         }
+  //     }
+  //
+  //     async updateParticipantCredit(
+  //         participantId: string,
+  //         credit: number,
+  //     ): Promise<boolean> {
+  //         const updatedData: Record<string, any> = {};
+  //         if (credit !== undefined) updatedData.credit = credit;
+  //         if (!participantId) throw new Error("participantId is required");
+  //         try {
+  //             await prisma.participant.update({
+  //                 where: { participantId },
+  //                 data: updatedData,
+  //             });
+  //             return true;
+  //         } catch (err) {
+  //             console.log(err);
+  //             throw err;
+  //         }
+  //     }
 }
 
 export default ParticipantService;
