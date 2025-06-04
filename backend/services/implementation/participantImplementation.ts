@@ -73,16 +73,16 @@ class ParticipantService implements IParticipantService {
 
       // Convert array to object with room numbers as keys and participant IDs as values
       const result: Record<number, number | null> = {};
-      for (const participant of participants) {
+      participants.forEach((participant) => {
         result[participant.room_number] = participant.participant_id;
-      }
+      });
 
-      // Account for rooms with no participants
-      for (const room_number of room_numbers) {
-        if (!(room_number in result)) {
-          result[room_number] = null;
+      // Account for rooms with no participants setting value to null
+      room_numbers.forEach((roomNumber) => {
+        if (!(roomNumber in result)) {
+          result[roomNumber] = null;
         }
-      }
+      });
 
       return result;
     } catch (err) {
