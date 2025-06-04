@@ -93,19 +93,14 @@ export const CREATE_ANNOUNCEMENT = gql`
 `;
 
 export const EDIT_ANNOUNCEMENT = gql`
-  mutation editAnnouncement($announcementId: number,
-    $from: StaffType,     
-    $to: [Int],          
-    $priority: PriorityType,   
-    $createdAt: Date,
-    $message: String,
-    ) {
+  mutation editAnnouncement(
+    $announcement_id: Int!,
+    $priority: Priority,
+    $message: String
+  ) {
     editAnnouncement(
-      announcementId: $announcementId
-      from: $from
-      to: $to
-      priority: $priority
-      createdAt: $createdAt
+      announcement_id: $announcement_id,
+      priority: $priority,
       message: $message
     )
   }

@@ -2,12 +2,25 @@ import { Flex, Text, Button, VStack } from "@chakra-ui/react";
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import AnnouncementCard from "./elements/AnnouncementCard";
+import EditAnnouncementModal from "./elements/EditAnnouncementModal"; // adjust path
 
 export default function AdminAnnouncementsPage() {
   const [selectedButtons, setSelectedButtons] = useState<boolean[]>(
     new Array(10).fill(false)
   ); // Keeping track of buttons on and off
 
+  const [currentAnnouncement, setCurrentAnnouncement] = useState({
+  id: 1,
+  priority: "NORMAL",
+  message: "",
+  });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const onEdit = (announcement: { id: number; priority: string; message: string }) => {
+    setCurrentAnnouncement(announcement);
+    setIsModalOpen(true);
+  };
   const handleButtonClick = (id: number) => {
     setSelectedButtons((prevSelected) => {
       const newSelected = [...prevSelected];
@@ -173,9 +186,18 @@ export default function AdminAnnouncementsPage() {
             message={item.message}
             timestamp={item.timestamp}
             importance={item.importance}
+            onEdit={() => onEdit(currentAnnouncement)}
+
           />
         ))}
       </VStack>
+        <EditAnnouncementModal
+    isOpen={isModalOpen}
+    setIsOpen={setIsModalOpen}
+    announcementId={currentAnnouncement.id}
+    initialMessage={currentAnnouncement.message}
+    initialPriority={currentAnnouncement.priority}
+  />
     </Flex>
   );
 }

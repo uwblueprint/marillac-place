@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Box, Text, IconButton, Flex } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import EditIcon from "@mui/icons-material/Edit";
@@ -9,6 +9,7 @@ type AnnouncementCardProps = {
   message: string;
   timestamp: string;
   importance?: 0 | 1 | 2;
+  onEdit?: () => void;
 };
 
 export default function AnnouncementCard({
@@ -16,6 +17,7 @@ export default function AnnouncementCard({
   message,
   timestamp,
   importance = 0,
+  onEdit,
 }: AnnouncementCardProps) {
   return (
     <Box
@@ -65,7 +67,7 @@ export default function AnnouncementCard({
             icon={<EditIcon sx={{ fontSize: "18px", color: "#808080" }} />}
             size="sm"
             variant="ghost"
-            onClick={() => console.log("Edit clicked")}
+            onClick={onEdit}
           />
           <IconButton
             aria-label="Delete"

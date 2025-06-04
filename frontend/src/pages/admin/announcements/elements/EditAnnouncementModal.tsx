@@ -16,25 +16,81 @@ import {
   Stack,
   Textarea,
   Box,
+  useToast
 } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
+import { useMutation } from "@apollo/client";
+import { EDIT_ANNOUNCEMENT } from "../../../../gql/mutations";
+
 
 type EditAnnouncementModalProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  announcementId: number;
+  initialMessage: string;
+  initialPriority: string;
 };
 
 const EditAnnouncementModal = ({
   isOpen,
   setIsOpen,
+  announcementId,
+  initialMessage,
+  initialPriority,
 }: EditAnnouncementModalProps): React.ReactElement => {
-  const [priority, setPriority] = useState("");
+  const [priority, setPriority] = useState(initialPriority);
   const [sendTo] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(initialMessage);
 
-  const handleSave = () => {
-    console.log("Saving announcement:", { sendTo, priority, message });
-    setIsOpen(false);
+  const [editAnnouncement] = useMutation(EDIT_ANNOUNCEMENT);
+  const toast = useToast();
+
+  const handleSave = async () => {
+
+    if (!announcementId || !priority || !message.trim()) {
+      toast({
+        title: "Missing Fields",
+        description: "All fields must be filled in.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      await editAnnouncement({
+        variables: {
+          announcement_id: announcementId,
+          priority,
+          message,
+        },
+      });
+
+      toast({
+        title: "Success",
+        description: "Announcement updated.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setIsOpen(false);
+      window.location.reload();
+  } catch (error: any) {
+    console.error("Edit error:", error);
+    console.error("GraphQL error details:", error.graphQLErrors);
+    console.error("Network error details:", error.networkError);
+
+    toast({
+      title: "Error",
+      description: "Failed to update announcement.",
+      status: "error",
+      duration: 4000,
+      isClosable: true,
+    });
+}
+
   };
 
   const handleCancel = () => {
