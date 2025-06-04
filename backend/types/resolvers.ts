@@ -8,6 +8,7 @@ const resolvers = gql`
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
+    getAnnouncementsByParticipants(participant_ids: [Int]!): [Announcement]
     getTasksByType(type: TaskType!): [Task]
   }
 
