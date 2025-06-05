@@ -19,8 +19,7 @@ import {
   Grid,
   Box,
 } from "@chakra-ui/react";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import ReportIcon from '@mui/icons-material/PriorityHigh';
+import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 
 const ROOMS = Array.from({ length: 10 }, (_, i) => `Room ${i + 1}`);
 
@@ -60,14 +59,13 @@ const CreateAnnouncementModal = ({ isOpen, onClose }: { isOpen: boolean, onClose
     <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered size="xl">
       <ModalOverlay />
       <ModalContent boxShadow="xl" borderRadius="16px" width="600px" padding="20px">
-        <ModalHeader>Create Announcement</ModalHeader>
+        <ModalHeader><Text textStyle="web.h3">Create Announcement</Text></ModalHeader>
         <ModalBody>
-        <Flex gap="5px" mb={10} wrap="wrap" alignItems="center">
-            <Text fontWeight="semibold" mr={2}>
-                Send To:
-            </Text>
-
-            {[["All Rooms"], ...ROOMS.slice(0, 4)].flat().map((room) => {
+        <Flex gap="5px" mb={4} wrap="wrap" alignItems="center">
+          <Text textStyle="web.s1" color="text.light.secondary" mr={1}>
+            Send To:
+          </Text>
+            {[["All Rooms"], ...ROOMS.slice(0, 5)].flat().map((room) => {
                 const isSelected =
                 room === "All Rooms"
                     ? selectedRooms.length === ROOMS.length
@@ -75,103 +73,138 @@ const CreateAnnouncementModal = ({ isOpen, onClose }: { isOpen: boolean, onClose
 
                 return (
                 <WrapItem key={room}>
-                    <Button
+                  <Button
+                    key={room}
                     onClick={() => toggleRoom(room)}
+                    isActive={isSelected}
+                    borderRadius="8px"
                     border="1px"
                     borderColor="#0C727E"
-                    borderRadius="8px"
+                    bg="#FFFFFF"
+                    color="#0C727E"
+                    cursor="pointer"
                     height="fit-content"
-                    paddingX="8px"
-                    paddingY="4px"
-                    bg={isSelected ? "#0C727E" : "white"}
-                    color={isSelected ? "white" : "#0C727E"}
+                    paddingX="10px"
+                    paddingY="6px"
                     _hover={{
-                        bg: "#0C727E",
-                        color: "white",
+                      color: "#FFFFFF",
+                      bg: "#0C727E",
                     }}
                     _active={{
-                        bg: "#0C727E",
-                        color: "white",
+                      color: "#FFFFFF",
+                      bg: "#0C727E",
                     }}
-                    >
-                    {room}
-                    </Button>
+                  >
+                    <Text textStyle="web.s1" color="inherit">
+                      {room}
+                    </Text>
+                  </Button>
                 </WrapItem>
                 );
             })}
 
             <Box w="100%" />
 
-            {ROOMS.slice(4).map((room) => {
+            {ROOMS.slice(5).map((room) => {
                 const isSelected = selectedRooms.includes(room);
                 return (
                 <WrapItem key={room}>
-                    <Button
+                  <Button
+                    key={room}
                     onClick={() => toggleRoom(room)}
+                    isActive={isSelected}
+                    borderRadius="8px"
                     border="1px"
                     borderColor="#0C727E"
-                    borderRadius="8px"
+                    bg="#FFFFFF"
+                    color="#0C727E"
+                    cursor="pointer"
                     height="fit-content"
-                    paddingX="8px"
-                    paddingY="4px"
-                    bg={isSelected ? "#0C727E" : "white"}
-                    color={isSelected ? "white" : "#0C727E"}
+                    paddingX="10px"
+                    paddingY="6px"
                     _hover={{
-                        bg: "#0C727E",
-                        color: "white",
+                      color: "#FFFFFF",
+                      bg: "#0C727E",
                     }}
                     _active={{
-                        bg: "#0C727E",
-                        color: "white",
+                      color: "#FFFFFF",
+                      bg: "#0C727E",
                     }}
-                    >
-                    {room}
-                    </Button>
+                  >
+                    <Text textStyle="web.s1" color="inherit">
+                      {room}
+                    </Text>
+                  </Button>
                 </WrapItem>
                 );
             })}
             </Flex>
 
-          <FormControl mb={5}>
-            <FormLabel>Priority Level:</FormLabel>
-            <RadioGroup value={priority} onChange={setPriority}>
-            <Stack direction="column" spacing={2}>
-                <Radio sx={{
-                    borderColor: "#0C727E",
-                    _checked: { bg: "#0C727E" },
-                }} value="Normal"
-                >
-                    Normal
+          <FormControl mb={4}>
+            <FormLabel>
+              <Text textStyle="web.s1" color="text.light.secondary">Priority Level:</Text>
+            </FormLabel>
+            <RadioGroup
+              onChange={setPriority}
+              value={priority}
+              fontSize="md"
+              color="gray.700"
+              fontFamily="body"
+            >
+              <Stack direction="column" spacing={3}>
+                <Radio value="NORMAL">
+                  <Text textStyle="web.b1" fontSize="12px">Normal</Text>
                 </Radio>
-                <Radio sx={{
-                    borderColor: "#0C727E",
-                    _checked: { bg: "#0C727E" },
-                }} value="High">
-                  High <ReportIcon htmlColor="#EC3131" fontSize="small" style={{ marginLeft: 4 }} />
+
+                <Radio value="HIGH">
+                  <Flex align="center" fontFamily="body" gap="5px">
+                    <Text textStyle="web.b1" fontSize="12px">High</Text>
+                    <PriorityHighOutlinedIcon
+                      sx={{
+                        fontSize: "12px",
+                        color: "#d34c5c",
+                      }}
+                    />
+                  </Flex>
                 </Radio>
-                <Radio sx={{
-                    borderColor: "#0C727E",
-                    _checked: { bg: "#0C727E" },
-                }} value="Critical">
-                  Critical <ReportIcon htmlColor="#EC3131" fontSize="small" style={{ marginLeft: 4 }} /> <ReportIcon htmlColor="#EC3131" fontSize="small" style={{ marginLeft: 2 }} />
+
+                <Radio value="CRITICAL">
+                  <Flex align="center" fontFamily="body" gap="5px">
+                    <Text textStyle="web.b1" fontSize="12px">Critical</Text>
+                    <PriorityHighOutlinedIcon
+                      sx={{
+                        fontSize: "12px",
+                        color: "#d34c5c",
+                      }}
+                    />
+                    <PriorityHighOutlinedIcon
+                      sx={{
+                        fontSize: "12px",
+                        color: "#d34c5c",
+                      }}
+                    />
+                  </Flex>
                 </Radio>
               </Stack>
             </RadioGroup>
           </FormControl>
 
           <FormControl>
-            <FormLabel>Message</FormLabel>
+            <FormLabel>
+              <Text textStyle="web.s1" color="text.light.secondary">Message</Text>
+            </FormLabel>
             <Textarea
-              placeholder="Enter announcement here..."
               value={message}
+              variant="primary"
               onChange={(e) => setMessage(e.target.value)}
-              minH="150px"
+              minHeight="120px"
+              fontSize="12px"
             />
           </FormControl>
 
-          <Flex justify="flex-end" gap={3} mt={6}>
-            <Button  size="sm" px="25px" py="5px" variant="outline" onClick={onClose}>Cancel</Button>
-            <Button  size="sm" px="30px" py="5px" colorScheme="orange" onClick={handleSend}>Send</Button>
+          <Flex alignItems="center" justify="flex-end" gap={3} mt={4}>
+            <Button variant="white" onClick={onClose}><Text textStyle="web.s1">Cancel</Text></Button>
+            <Button variant="primaryFilled" onClick={handleSend}><Text textStyle="web.s1" color="white">Send</Text></Button>
           </Flex>
         </ModalBody>
       </ModalContent>

@@ -2,8 +2,10 @@ import { Flex, Text, Button, VStack } from "@chakra-ui/react";
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import AnnouncementCard from "./elements/AnnouncementCard";
+import CreateAnnouncementModal from "./elements/CreateAnnouncementModal";
 
 export default function AdminAnnouncementsPage() {
+  const [create, setCreate] = useState(false);
   const [selectedButtons, setSelectedButtons] = useState<boolean[]>(
     new Array(10).fill(false)
   ); // Keeping track of buttons on and off
@@ -90,6 +92,7 @@ export default function AdminAnnouncementsPage() {
           fontWeight={700}
           fontSize="12px"
           gap="7px"
+          onClick={() => setCreate(true)}
         >
           <AddIcon
             style={{
@@ -176,6 +179,7 @@ export default function AdminAnnouncementsPage() {
           />
         ))}
       </VStack>
+      { create && <CreateAnnouncementModal isOpen={create} onClose={() => setCreate(false)} /> }
     </Flex>
   );
 }
