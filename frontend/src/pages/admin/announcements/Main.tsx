@@ -1,8 +1,9 @@
 import { Flex, Text, Button, VStack } from "@chakra-ui/react";
 import AddIcon from "@mui/icons-material/Add";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import AnnouncementCard from "./elements/AnnouncementCard";
 import CreateAnnouncementModal from "./elements/CreateAnnouncementModal";
+import EditAnnouncementModal from "./elements/EditAnnouncementModal"; // adjust path
 
 export default function AdminAnnouncementsPage() {
   const [create, setCreate] = useState(false);
@@ -10,6 +11,18 @@ export default function AdminAnnouncementsPage() {
     new Array(10).fill(false)
   ); // Keeping track of buttons on and off
 
+  const [currentAnnouncement, setCurrentAnnouncement] = useState({
+    id: 3,
+    priority: "NORMAL",
+    message: "another test successful",
+  });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const onEdit = (announcement: { id: number; priority: string; message: string }) => {
+    setCurrentAnnouncement(announcement);
+    setIsModalOpen(true);
+  };
   const handleButtonClick = (id: number) => {
     setSelectedButtons((prevSelected) => {
       const newSelected = [...prevSelected];
@@ -148,7 +161,7 @@ export default function AdminAnnouncementsPage() {
           fontWeight={600}
           cursor="pointer"
           textDecoration="underline"
-          _hover={{ textDecoration: "none" }}
+          _hover={{textDecoration: "none"}}
           onClick={() => handleSelectAll()}
         >
           Select All
@@ -159,7 +172,7 @@ export default function AdminAnnouncementsPage() {
           fontWeight={600}
           cursor="pointer"
           textDecoration="underline"
-          _hover={{ textDecoration: "none" }}
+          _hover={{textDecoration: "none"}}
           onClick={() => handleDeselectAll()}
         >
           Deselect All
@@ -176,10 +189,18 @@ export default function AdminAnnouncementsPage() {
             message={item.message}
             timestamp={item.timestamp}
             importance={item.importance}
+            onEdit={() => onEdit(currentAnnouncement)}
           />
         ))}
       </VStack>
-      { create && <CreateAnnouncementModal isOpen={create} onClose={() => setCreate(false)} /> }
+      {create && <CreateAnnouncementModal isOpen={create} onClose={() => setCreate(false)}/>}
+      <EditAnnouncementModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        announcementId={currentAnnouncement.id}
+        initialMessage={currentAnnouncement.message}
+        initialPriority={currentAnnouncement.priority}
+      />
     </Flex>
   );
 }

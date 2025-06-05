@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import SideBar from "./SideBar";
 import Notification from "./Notification";
-import * as ROUTES from "../../constants/routes";
+import * as ROUTES from "../../constants/Routes";
 import { isAdmin, isRelief } from "../../utils/checkRole";
 import Loading from "../../pages/Loading";
 

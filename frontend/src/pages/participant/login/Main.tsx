@@ -10,7 +10,7 @@ import {
 import { useMutation } from "@apollo/client";
 import { isParticipant } from "../../../utils/checkRole";
 import { PARTICIPANT_LOGIN } from "../../../gql/mutations";
-import * as ROUTES from "../../../constants/routes";
+import * as ROUTES from "../../../constants/Routes";
 import Loading from "../../Loading";
 
 export default function ParticipantsLoginPage() {

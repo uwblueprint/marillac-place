@@ -27,7 +27,7 @@ import ParticipantLoginPage from "./pages/participant/login/Main";
 
 import NotFound from "./pages/NotFound";
 
-import * as ROUTES from "./constants/routes";
+import * as ROUTES from "./constants/Routes";
 import AdminRoute from "./components/admin/AdminRoute";
 import ParticipantRoute from "./components/participant/ParticipantRoute";
 
