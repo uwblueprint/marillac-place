@@ -16,7 +16,8 @@ const useDeleteAnnouncement = () => {
   const [deleteAnnouncementMutation] = useMutation(DELETE_ANNOUNCEMENT);
 
   const handleDeleteAnnouncement = async (announcement_id: number) => {
-    if (typeof announcement_id !== 'number' || isNaN(announcement_id)) {
+    console.log("handling delete announcmeent", announcement_id);
+    if (typeof announcement_id !== 'number' || Number.isNaN(announcement_id)) {
       toast({
         title: 'Invalid ID',
         description: 'The announcement ID is not valid.',
@@ -60,6 +61,7 @@ const useDeleteAnnouncement = () => {
 };
 
 type AnnouncementCardProps = {
+  key: number;
   room: string;
   message: string;
   timestamp: string;
@@ -67,11 +69,14 @@ type AnnouncementCardProps = {
 };
 
 export default function AnnouncementCard({
+  key,
   room,
   message,
   timestamp,
   importance = 0,
 }: AnnouncementCardProps) {
+  const { handleDeleteAnnouncement } = useDeleteAnnouncement();
+  
   return (
     <Box
       borderWidth="1px"
@@ -127,7 +132,12 @@ export default function AnnouncementCard({
             icon={<DeleteOutlineIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />}
             size="sm"
             variant="ghost"
-            onClick={() => console.log("Delete clicked")}
+            onClick={() => {
+              const confirmed = window.confirm("Are you sure you want to delete this announcement?");
+              if (confirmed) {
+                handleDeleteAnnouncement(key);
+              }
+            }}
           />
         </Flex>
       </Flex>
