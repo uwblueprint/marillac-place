@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Box, Text, IconButton, Flex } from "@chakra-ui/react";
+import {Box, Text, IconButton, Flex} from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -34,7 +34,7 @@ export default function AnnouncementCard({
             <Text textStyle="web.c1" fontWeight={700}>
               {room}
             </Text>
-            {Array.from({ length: importance }).map((_, i) => (
+            {Array.from({length: importance}).map((_, i) => (
               <PriorityHighOutlinedIcon
                 key={i}
                 sx={{
@@ -64,14 +64,14 @@ export default function AnnouncementCard({
         <Flex align="center" gap={1} ml={4}>
           <IconButton
             aria-label="Edit"
-            icon={<EditIcon sx={{ fontSize: "18px", color: "#808080" }} />}
+            icon={<EditIcon sx={{fontSize: "18px", color: "#808080"}}/>}
             size="sm"
             variant="ghost"
             onClick={onEdit}
           />
           <IconButton
             aria-label="Delete"
-            icon={<DeleteOutlineIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />}
+            icon={<DeleteOutlineIcon sx={{fontSize: "18px", color: "#d34c5c"}}/>}
             size="sm"
             variant="ghost"
             onClick={() => console.log("Delete clicked")}
