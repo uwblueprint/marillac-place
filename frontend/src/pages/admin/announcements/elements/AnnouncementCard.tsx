@@ -1,10 +1,69 @@
 import React, {useState} from "react";
 import {Box, Text, IconButton, Flex} from "@chakra-ui/react";
+import React from "react";
+import { useMutation, gql } from '@apollo/client';
+import { useToast, Box, Text, IconButton, Flex } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
+const DELETE_ANNOUNCEMENT = gql`
+  mutation DeleteAnnouncement($announcement_id: Int!) {
+    deleteAnnouncement(announcement_id: $announcement_id)
+  }
+`;
+
+const useDeleteAnnouncement = () => {
+  const toast = useToast();
+  const [deleteAnnouncementMutation] = useMutation(DELETE_ANNOUNCEMENT);
+
+  const handleDeleteAnnouncement = async (announcement_id: number) => {
+    console.log("handling delete announcmeent", announcement_id);
+    if (typeof announcement_id !== 'number' || Number.isNaN(announcement_id)) {
+      toast({
+        title: 'Invalid ID',
+        description: 'The announcement ID is not valid.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      const { data } = await deleteAnnouncementMutation({
+        variables: { announcement_id },
+      });
+
+      if (data?.deleteAnnouncement) {
+        toast({
+          title: 'Deleted',
+          description: 'Announcement deleted successfully.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+        window.location.reload();
+      } else {
+        throw new Error('Announcement deletion failed.');
+      }
+    } catch (error: any) {
+      console.error('ERROR: Error in deleting announcement. ', error);
+      toast({
+        title: 'Error',
+        description: error.message || 'Something went wrong.',
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+  };
+
+  return { handleDeleteAnnouncement };
+};
+
 type AnnouncementCardProps = {
+  key: number;
   room: string;
   message: string;
   timestamp: string;
@@ -13,12 +72,15 @@ type AnnouncementCardProps = {
 };
 
 export default function AnnouncementCard({
+  key,
   room,
   message,
   timestamp,
   importance = 0,
   onEdit,
 }: AnnouncementCardProps) {
+  const { handleDeleteAnnouncement } = useDeleteAnnouncement();
+  
   return (
     <Box
       borderWidth="1px"
@@ -74,7 +136,12 @@ export default function AnnouncementCard({
             icon={<DeleteOutlineIcon sx={{fontSize: "18px", color: "#d34c5c"}}/>}
             size="sm"
             variant="ghost"
-            onClick={() => console.log("Delete clicked")}
+            onClick={() => {
+              const confirmed = window.confirm("Are you sure you want to delete this announcement?");
+              if (confirmed) {
+                handleDeleteAnnouncement(key);
+              }
+            }}
           />
         </Flex>
       </Flex>
