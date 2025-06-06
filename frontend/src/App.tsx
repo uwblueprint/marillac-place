@@ -32,7 +32,7 @@ import AdminRoute from "./components/admin/AdminRoute";
 import ParticipantRoute from "./components/participant/ParticipantRoute";
 
 const App = (): React.ReactElement => {
-  const theme =  getChakraTheme();
+  const theme = getChakraTheme();
   const apolloClient = getApolloClient();
 
   return (
@@ -67,7 +67,10 @@ const App = (): React.ReactElement => {
               </AdminRoute>
             }/>
 
-            <Route path={ROUTES.PARTICIPANTS_LOGIN_PAGE} element={<ParticipantLoginPage />} />
+            <Route
+              path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
+              element={<ParticipantLoginPage />}
+            />
 
             <Route path="*" element={<NotFound />} />
           </Switch>
