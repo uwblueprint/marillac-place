@@ -1,6 +1,4 @@
 import React, {useState} from "react";
-import {Box, Text, IconButton, Flex} from "@chakra-ui/react";
-import React from "react";
 import { useMutation, gql } from '@apollo/client';
 import { useToast, Box, Text, IconButton, Flex } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
@@ -63,7 +61,7 @@ const useDeleteAnnouncement = () => {
 };
 
 type AnnouncementCardProps = {
-  key: number;
+  announcement_id: any;
   room: string;
   message: string;
   timestamp: string;
@@ -72,7 +70,7 @@ type AnnouncementCardProps = {
 };
 
 export default function AnnouncementCard({
-  key,
+  announcement_id,
   room,
   message,
   timestamp,
@@ -139,7 +137,7 @@ export default function AnnouncementCard({
             onClick={() => {
               const confirmed = window.confirm("Are you sure you want to delete this announcement?");
               if (confirmed) {
-                handleDeleteAnnouncement(key);
+                handleDeleteAnnouncement(announcement_id);
               }
             }}
           />

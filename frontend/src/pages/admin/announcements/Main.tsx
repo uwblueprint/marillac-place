@@ -165,6 +165,7 @@ export default function AdminAnnouncementsPage() {
         )}
         {announcements.map((announcement: any) => (
           <AnnouncementCard
+            key={announcement.announcement_id}
             announcement_id={announcement.announcement_id}
             room="Room 1"
             message={announcement.message}
