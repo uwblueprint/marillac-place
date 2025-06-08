@@ -223,6 +223,7 @@ model EarnedBadge {
   badge_icon      Icon
   level           Int
 
+  badge       Badge       @relation(fields: [badge_id], references: [badge_id])
   participant Participant @relation(fields: [participant_id], references: [participant_id])
 
   @@map("earned_badge")

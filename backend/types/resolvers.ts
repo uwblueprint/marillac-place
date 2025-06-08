@@ -76,6 +76,7 @@ const resolvers = gql`
       comment: String
     ): Boolean
     deleteTaskById(taskId: Int!): Boolean
+    assignCustomBadge(badge_id: Int!, participant_id: Int!): EarnedBadge
   }
 `;
 
