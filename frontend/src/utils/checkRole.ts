@@ -1,4 +1,4 @@
-import { jwtVerify } from 'jose';
+import { jwtVerify } from "jose";
 
 export async function isAdmin() {
   const token = localStorage.getItem("admin_token") ?? "";
