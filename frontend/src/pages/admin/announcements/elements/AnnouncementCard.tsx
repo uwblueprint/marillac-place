@@ -4,12 +4,7 @@ import { useToast, Box, Text, IconButton, Flex } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
-const DELETE_ANNOUNCEMENT = gql`
-  mutation DeleteAnnouncement($announcement_id: Int!) {
-    deleteAnnouncement(announcement_id: $announcement_id)
-  }
-`;
+import { DELETE_ANNOUNCEMENT } from '../../../../gql/mutations';
 
 const useDeleteAnnouncement = () => {
   const toast = useToast();
@@ -132,12 +127,7 @@ export default function AnnouncementCard({
             icon={<DeleteOutlineIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />}
             size="sm"
             variant="ghost"
-            onClick={() => {
-              const confirmed = window.confirm("Are you sure you want to delete this announcement?");
-              if (confirmed) {
-                handleDeleteAnnouncement(announcement_id);
-              }
-            }}
+            onClick={() => handleDeleteAnnouncement(announcement_id)}
           />
         </Flex>
       </Flex>

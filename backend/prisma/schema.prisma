@@ -121,7 +121,7 @@ model AssignedTask {
   task_type                  TaskType
   goal_name                  String?
   goal_description           String?
-  repeats                    Boolean
+  repeats                    Boolean // remove dis
   start_date                 String
   end_date                   String
   marillac_bucks_addition    Int
