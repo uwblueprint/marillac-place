@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
-import * as ROUTES from "../../constants/routes";
+import * as ROUTES from "../../constants/Routes";
 import { isParticipant } from "../../utils/checkRole";
 import Loading from "../../pages/Loading";
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Modal,
   ModalOverlay,
@@ -18,32 +18,69 @@ import {
   Box,
 } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
+import {useMutation} from "@apollo/client";
+import {EDIT_ANNOUNCEMENT} from "../../../../gql/mutations";
 
 type EditAnnouncementModalProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  announcementId: number;
+  initialMessage: string;
+  initialPriority: string;
 };
 
 const EditAnnouncementModal = ({
   isOpen,
   setIsOpen,
+  announcementId,
+  initialMessage,
+  initialPriority,
 }: EditAnnouncementModalProps): React.ReactElement => {
-  const [priority, setPriority] = useState("");
+  const [priority, setPriority] = useState(initialPriority);
   const [sendTo] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(initialMessage);
 
-  const handleSave = () => {
-    console.log("Saving announcement:", { sendTo, priority, message });
-    setIsOpen(false);
+  const [error, setError] = useState("");
+
+  const [editAnnouncement] = useMutation(EDIT_ANNOUNCEMENT);
+
+  const handleSave = async () => {
+    setError("");
+    if (!announcementId || !priority || !message.trim()) {
+      setError("Missing fields");
+      return;
+    }
+
+    try {
+      await editAnnouncement({
+        variables: {
+          announcement_id: announcementId,
+          priority,
+          message,
+        },
+      });
+
+      localStorage.setItem("notification", "Announcement updated!");
+
+      setIsOpen(false);
+      window.location.reload();
+    } catch (err: any) {
+      console.error("Edit error:", err);
+      console.error("GraphQL error details:", err.graphQLErrors);
+      console.error("Network error details:", err.networkError);
+      setError("Unable to update announcement");
+    }
+
   };
 
   const handleCancel = () => {
+    setError("");
     setIsOpen(false);
   };
 
   return (
     <Modal isOpen={isOpen} onClose={handleCancel} size="md" isCentered>
-      <ModalOverlay />
+      <ModalOverlay/>
       <ModalContent
         borderRadius="8px"
         px={5}
@@ -129,6 +166,7 @@ const EditAnnouncementModal = ({
               fontSize="12px"
             />
           </FormControl>
+          {error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text>}
         </ModalBody>
 
         <ModalFooter>

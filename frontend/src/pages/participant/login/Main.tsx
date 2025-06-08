@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {Navigate, useNavigate } from "react-router-dom";
-import {
-  Button,
-  Flex,
-  Text,
-  Input,
-  FormControl,
-} from "@chakra-ui/react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { Button, Flex, Text, Input, FormControl } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { isParticipant } from "../../../utils/checkRole";
 import { PARTICIPANT_LOGIN } from "../../../gql/mutations";
-import * as ROUTES from "../../../constants/routes";
+import * as ROUTES from "../../../constants/Routes";
 import Loading from "../../Loading";
 
 export default function ParticipantsLoginPage() {
@@ -56,7 +50,7 @@ export default function ParticipantsLoginPage() {
   };
 
   if (!checkLoggedIn || loading) {
-    return <Loading />
+    return <Loading />;
   }
 
   if (loggedIn) {
@@ -82,7 +76,7 @@ export default function ParticipantsLoginPage() {
         <Flex width="75%">
           <img
             width="100%"
-            src={ process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png" }
+            src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"}
             alt="Marillac Place Logo"
           />
         </Flex>
@@ -97,9 +91,7 @@ export default function ParticipantsLoginPage() {
           borderColor="neutral.300"
         >
           <Flex flexDir="column">
-            <Text textStyle="mobile.h1">
-              Sign in
-            </Text>
+            <Text textStyle="mobile.h1">Sign in</Text>
 
             <Text textStyle="mobile.b1">
               Please enter your login information.
@@ -126,7 +118,11 @@ export default function ParticipantsLoginPage() {
             />
           </FormControl>
 
-          { error && <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">{error}</Text> }
+          {error && (
+            <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">
+              {error}
+            </Text>
+          )}
 
           <Button
             width="full"
@@ -143,4 +139,4 @@ export default function ParticipantsLoginPage() {
       </Flex>
     </Flex>
   );
-};
+}

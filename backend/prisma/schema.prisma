@@ -121,7 +121,6 @@ model AssignedTask {
   task_type                TaskType
   goal_name                String?
   goal_description         String?
-  repeats                  Boolean
   start_date               String
   end_date                 String
   marillac_bucks_addition  Int
@@ -244,3 +243,10 @@ model ParticipantProgress {
 
   @@map("participant_progress")
 }
+
+
+
+
+
+
+
