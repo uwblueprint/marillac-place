@@ -76,6 +76,11 @@ const resolvers = gql`
       comment: String
     ): Boolean
     deleteTaskById(taskId: Int!): Boolean
+    editCustomBadge(
+      custom_badge_id: Int!
+      new_custom_badge_name: String
+      new_custom_badge_description: String
+    ): Boolean
   }
 `;
 

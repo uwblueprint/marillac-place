@@ -54,6 +54,7 @@ export default function getGraphQLMiddleware() {
       createTask: verifyRole(["admin", "relief"]),
       updateTask: verifyRole(["admin", "relief"]),
       deleteTaskById: verifyRole(["admin", "relief"]),
+      editCustomBadge: verifyRole(["admin", "relief"]),
     },
   };
 
