@@ -26,7 +26,7 @@ const main = async () => {
 
   const numParticipants = 15;
   const numTasks = 15;
-  const numAnnouncements = 10;
+  const numAnnouncements = 50;
 
   // Seed participants
   await seed.participant((createMany) =>
@@ -112,7 +112,7 @@ const main = async () => {
   await seed.announcement((createMany) =>
     createMany(numAnnouncements, () => ({
       priority: faker.helpers.arrayElement(Object.values(Priority)),
-      creation_date: faker.date.past({ days: 30 }).toISOString().split('T')[0],
+      creation_date: faker.date.future({ days: 30 }).toISOString().split('T')[0],
       message: faker.lorem.paragraph(),
     }))
   );
