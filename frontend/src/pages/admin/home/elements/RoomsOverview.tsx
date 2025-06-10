@@ -1,8 +1,11 @@
 import { Flex, Text, Grid, Button, Link } from "@chakra-ui/react";
 import React from "react";
+import { useQuery } from "@apollo/client";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 
 export default function RoomsOverview() {
+  // const {loading, error, data} = useQuery
+
   return (
     <Flex
       paddingY="15px"
@@ -22,32 +25,45 @@ export default function RoomsOverview() {
         {ROOM_NUMBERS.map((num) => (
           <Flex
             key={num}
-            height="130px"
+            minHeight="150px"
             border="1px solid"
             borderColor="neutral.300"
             borderRadius="8px"
             flexDir="column"
             justifyContent="space-between"
             alignItems="center"
-            padding="10px"
+            // gap="4px"
+            // padding="10px"
           >
             <Text
               textStyle="web.s1"
               bg="primary.100"
               width="100%"
               textAlign="center"
-              padding="5px"
+              padding="8px"
+              borderBottom="1px solid"
+              borderColor="neutral.300"
             >
               Room #{num}
             </Text>
-            <Text
-            textStyle="web.b3">
-              ID Number: 
+
+            <Text textStyle="web.b3" textAlign="center">
+              ID Number:{" "}
+              <Text as="span" textStyle="web.s1">
+                #123
+              </Text>
             </Text>
-            <Text textStyle="web.b3">
+            <Text textStyle="web.b3" textAlign="center">
               # Assigned Tasks
             </Text>
-            <Link variant="underline" textStyle="web.b3" href="/admin/schedule">View Schedule</Link>
+            <Link
+              textDecoration="underline"
+              textAlign="center"
+              textStyle="web.b3"
+              href="/admin/schedule"
+            >
+              View Schedule
+            </Link>
             {/* <Text textStyle="web.b3" textAlign="center">
               Room is available.
             </Text> */}
