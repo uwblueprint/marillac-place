@@ -6,6 +6,10 @@ import { ROOM_NUMBERS } from "../../../../constants/rooms";
 export default function RoomsOverview() {
   // const {loading, error, data} = useQuery
 
+  const handleViewSchedule = (roomNumber: number) => {
+    localStorage.setItem("scheduleSelectedRoom", roomNumber.toString());
+  };
+
   return (
     <Flex
       paddingY="15px"
@@ -66,6 +70,7 @@ export default function RoomsOverview() {
                 # Assigned Tasks
               </Text>
               <Link
+                onClick={() => handleViewSchedule(num)}
                 href="/admin/schedule"
                 textDecoration="underline"
                 textAlign="center"
