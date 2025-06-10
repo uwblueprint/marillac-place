@@ -3,6 +3,7 @@ import { Announcement, Priority } from "@prisma/client";
 interface IAnnouncementService {
   getAllAnnouncements(): Promise<Announcement[]>;
   getAnnouncementsInDateRange(start: string, end: string): Promise<Announcement[]>;
+  getAnnouncementsByParticipants(participant_ids: number[]): Promise<Announcement[]>;
   createAnnouncement(
     priority: Priority,
     participants: number[],
