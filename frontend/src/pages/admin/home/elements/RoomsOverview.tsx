@@ -114,16 +114,16 @@ export default function RoomsOverview() {
                 {isAvailable ? (
                   <>
                     <Text textStyle="web.b3" textAlign="center">
-                      ID Number:{" "}
+                      ID Number: {room.participantId}
                       <Text as="span" textStyle="web.s1">
                         #123
                       </Text>
                     </Text>
                     <Text textStyle="web.b3" textAlign="center">
-                      # Assigned Tasks
+                      {room.taskAssigned} Assigned Tasks
                     </Text>
                     <Link
-                      onClick={() => handleViewSchedule(num)}
+                      onClick={() => handleViewSchedule(room.roomNumber)}
                       href="/admin/schedule"
                       textDecoration="underline"
                       textAlign="center"
