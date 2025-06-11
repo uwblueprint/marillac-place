@@ -13,6 +13,7 @@ type RoomData = {
 
 export default function RoomsOverview() {
   const client = useApolloClient();
+  const isAvailable = true;
 
   const [roomData, setRoomData] = useState<RoomData[]>();
   const handleViewSchedule = (roomNumber: number) => {
@@ -82,9 +83,9 @@ export default function RoomsOverview() {
           },
         }}
       >
-        <Grid w="100%" templateColumns="repeat(5, 1fr)" gap="15px">
-          {roomData &&
-            roomData.map((room: RoomData) => (
+        {roomData && (
+          <Grid w="100%" templateColumns="repeat(5, 1fr)" gap="15px">
+            {roomData.map((room: RoomData) => (
               <Flex
                 key={room.roomNumber}
                 minWidth="100px"
@@ -96,6 +97,7 @@ export default function RoomsOverview() {
                 justifyContent="space-between"
                 alignItems="center"
                 paddingBottom="10px"
+                gap="10px"
               >
                 <Text
                   textStyle="web.s1"
@@ -109,37 +111,58 @@ export default function RoomsOverview() {
                   Room #{room.roomNumber}
                 </Text>
 
-                <Text textStyle="web.b3" textAlign="center">
-                  ID Number: {room.participantId}
-                  <Text as="span" textStyle="web.s1">
-                    #123
-                  </Text>
-                </Text>
-                <Text textStyle="web.b3" textAlign="center">
-                  {room.taskAssigned} Assigned Tasks
-                </Text>
-                <Link
-                  onClick={() => handleViewSchedule(room.roomNumber)}
-                  href="/admin/schedule"
-                  textDecoration="underline"
-                  textAlign="center"
-                  textStyle="web.b3"
-                  fontFamily="Nunito"
-                  fontWeight={600}
-                  color="black"
-                  _hover={{
-                    textDecoration: "none",
-                  }}
-                >
-                  View Schedule
-                </Link>
-
-                {/* <Text textStyle="web.b3" textAlign="center">
-              Room is available.
-            </Text> */}
+                {isAvailable ? (
+                  <>
+                    <Text textStyle="web.b3" textAlign="center">
+                      ID Number:{" "}
+                      <Text as="span" textStyle="web.s1">
+                        #123
+                      </Text>
+                    </Text>
+                    <Text textStyle="web.b3" textAlign="center">
+                      # Assigned Tasks
+                    </Text>
+                    <Link
+                      onClick={() => handleViewSchedule(num)}
+                      href="/admin/schedule"
+                      textDecoration="underline"
+                      textAlign="center"
+                      textStyle="web.b3"
+                      fontFamily="Nunito"
+                      fontWeight={600}
+                      color="black"
+                      _hover={{
+                        textDecoration: "none",
+                      }}
+                    >
+                      View Schedule
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Text textStyle="web.b3" textAlign="center">
+                      Room is available.
+                    </Text>
+                    <Link
+                      href="/admin/participants"
+                      textDecoration="underline"
+                      textAlign="center"
+                      textStyle="web.b3"
+                      fontFamily="Nunito"
+                      fontWeight={600}
+                      color="black"
+                      _hover={{
+                        textDecoration: "none",
+                      }}
+                    >
+                      View Participants
+                    </Link>
+                  </>
+                )}
               </Flex>
             ))}
-        </Grid>
+          </Grid>
+        )}
       </Flex>
     </Flex>
   );
