@@ -196,7 +196,8 @@ model Badge {
   is_consecutive Boolean
   icon           Icon
 
-  badge_level BadgeLevel[]
+  badge_level   BadgeLevel[]
+  earned_badges EarnedBadge[]
 
   @@map("badge")
 }
