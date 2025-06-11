@@ -3,11 +3,13 @@ import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import AnnouncementCard from "./elements/AnnouncementCard";
 import EditAnnouncementModal from "./elements/EditAnnouncementModal"; // adjust path
+import EditCustomBadgeModal from "./elements/EditCustomBadgeModal";
 
 export default function AdminAnnouncementsPage() {
   const [selectedButtons, setSelectedButtons] = useState<boolean[]>(
     new Array(10).fill(false)
   ); // Keeping track of buttons on and off
+      const [editBadgeModalOpen, setEditBadgeModalOpen] = useState(false);
 
   const [currentAnnouncement, setCurrentAnnouncement] = useState({
   id: 1,
@@ -19,7 +21,7 @@ export default function AdminAnnouncementsPage() {
 
   const onEdit = (announcement: { id: number; priority: string; message: string }) => {
     setCurrentAnnouncement(announcement);
-    setIsModalOpen(true);
+    setEditBadgeModalOpen(true);
   };
   const handleButtonClick = (id: number) => {
     setSelectedButtons((prevSelected) => {
@@ -191,12 +193,16 @@ export default function AdminAnnouncementsPage() {
           />
         ))}
       </VStack>
-        <EditAnnouncementModal
+        {/* <EditAnnouncementModal
     isOpen={isModalOpen}
     setIsOpen={setIsModalOpen}
     announcementId={currentAnnouncement.id}
     initialMessage={currentAnnouncement.message}
     initialPriority={currentAnnouncement.priority}
+  /> */}
+  <EditCustomBadgeModal
+  isOpen = {editBadgeModalOpen}
+  onClose={()=>setEditBadgeModalOpen(false)}
   />
     </Flex>
   );
