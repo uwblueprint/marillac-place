@@ -48,6 +48,9 @@ class ParticipantService implements IParticipantService {
             },
           ],
         },
+        include: {
+          assigned_tasks: true,
+        },
       });
       return participant;
     } catch (err) {

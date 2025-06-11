@@ -12,9 +12,10 @@ type RoomData = {
 };
 
 export default function RoomsOverview() {
-  const isAvailable = true;
   const [roomData, setRoomData] = useState<RoomData[]>([]);
-  const [fetchRoomData] = useLazyQuery(GET_PARTICIPANT_BY_ROOM);
+  const [getRoomData, { loading, error }] = useLazyQuery(
+    GET_PARTICIPANT_BY_ROOM
+  );
 
   const handleViewSchedule = (roomNumber: number) => {
     localStorage.setItem("scheduleSelectedRoom", roomNumber.toString());
@@ -24,14 +25,14 @@ export default function RoomsOverview() {
     const fetchAllRooms = async () => {
       const results: RoomData[] = await Promise.all(
         ROOM_NUMBERS.map(async (roomNumber) => {
-          const { data } = await fetchRoomData({
+          const { data } = await getRoomData({
             variables: { room_number: roomNumber },
           });
           console.log(data);
 
           return {
             roomNumber,
-            participantId: data?.getParticipantByRoom?.participant_id || 0,
+            participantId: data?.getParticipantByRoom?.participant_id || null,
             taskAssigned:
               data?.getParticipantByRoom?.assigned_tasks?.filter(
                 (task: any) =>
@@ -46,7 +47,7 @@ export default function RoomsOverview() {
     };
 
     fetchAllRooms();
-  }, [fetchRoomData]);
+  }, [getRoomData]);
 
   return (
     <Flex
@@ -72,7 +73,15 @@ export default function RoomsOverview() {
           },
         }}
       >
-        {roomData && (
+        {loading ? (
+          <Text textStyle="web.b2" color="text.light.secondary">
+            Loading...
+          </Text>
+        ) : error ? (
+          <Text textStyle="web.b2" color="text.light.secondary">
+            {error?.message || "An error occured."}
+          </Text>
+        ) : (
           <Grid w="100%" templateColumns="repeat(5, 1fr)" gap="15px">
             {roomData.map((room: RoomData) => (
               <Flex
@@ -100,7 +109,7 @@ export default function RoomsOverview() {
                   Room #{room.roomNumber}
                 </Text>
 
-                {isAvailable ? (
+                {room.participantId ? (
                   <>
                     <Text textStyle="web.b3" textAlign="center">
                       ID Number:{" "}
