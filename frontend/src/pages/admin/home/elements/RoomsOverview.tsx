@@ -1,5 +1,5 @@
 import { Flex, Text, Grid, Button, Link } from "@chakra-ui/react";
-import { useApolloClient } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/queries";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
@@ -12,53 +12,42 @@ type RoomData = {
 };
 
 export default function RoomsOverview() {
-  const client = useApolloClient();
   const isAvailable = true;
+  const [roomData, setRoomData] = useState<RoomData[]>([]);
+  const [fetchRoomData] = useLazyQuery(GET_PARTICIPANT_BY_ROOM);
 
-  const [roomData, setRoomData] = useState<RoomData[]>();
   const handleViewSchedule = (roomNumber: number) => {
     localStorage.setItem("scheduleSelectedRoom", roomNumber.toString());
   };
 
   useEffect(() => {
-    console.log(roomData);
-  }, [roomData]);
-
-  useEffect(() => {
-    const fetchRoomData = async () => {
+    const fetchAllRooms = async () => {
       const results: RoomData[] = await Promise.all(
-        ROOM_NUMBERS.map((room) => {
-          const response = client.query({
-            query: GET_PARTICIPANT_BY_ROOM,
-            variables: { room_id: room },
+        ROOM_NUMBERS.map(async (roomNumber) => {
+          const { data } = await fetchRoomData({
+            variables: { room_number: roomNumber },
           });
-          let data = {
-            roomNumber: room,
-            participantId: 0,
-            taskAssigned: 0,
+          console.log(data);
+
+          return {
+            roomNumber,
+            participantId: data?.getParticipantByRoom?.participant_id || 0,
+            taskAssigned:
+              data?.getParticipantByRoom?.assigned_tasks?.filter(
+                (task: any) =>
+                  task.status === Status.ASSIGNED ||
+                  task.status === Status.INCOMPLETE
+              ).length || 0,
           };
-          response.then((response) => {
-            return {
-              roomNumber: room,
-              participantId: response.data.participant_id || 0,
-              taskAssigned:
-                response.data.assigned_tasks
-                  .filter(
-                    (task: any) =>
-                      task === Status.ASSIGNED || task === Status.INCOMPLETE
-                  )
-                  .length() || 0,
-            };
-          });
-          return data;
         })
       );
 
       setRoomData(results);
     };
 
-    fetchRoomData();
-  }, []);
+    fetchAllRooms();
+  }, [fetchRoomData]);
+
   return (
     <Flex
       paddingY="15px"
@@ -114,9 +103,9 @@ export default function RoomsOverview() {
                 {isAvailable ? (
                   <>
                     <Text textStyle="web.b3" textAlign="center">
-                      ID Number: {room.participantId}
+                      ID Number:{" "}
                       <Text as="span" textStyle="web.s1">
-                        #123
+                        {room.participantId}
                       </Text>
                     </Text>
                     <Text textStyle="web.b3" textAlign="center">
