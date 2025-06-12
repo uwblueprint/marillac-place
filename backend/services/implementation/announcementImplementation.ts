@@ -62,6 +62,9 @@ class AnnouncementService implements IAnnouncementService {
             },
           },
         },
+        include: {
+          user_announcements: true
+        }
       });
 
       return announcements;
