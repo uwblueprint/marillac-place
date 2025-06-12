@@ -55,15 +55,12 @@ class AnnouncementService implements IAnnouncementService {
       const announcements = await prisma.announcement.findMany({
         where: {
           user_announcements: {
-            some: {
+            every: {
               participant_id: {
                 in: participant_ids,
               },
             },
           },
-        },
-        include: {
-          user_announcements: true,
         },
       });
 
