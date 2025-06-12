@@ -78,7 +78,7 @@ export const GET_ANNOUNCEMENTS_IN_DATE_RANGE = gql`
 `;
 
 export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
-  query getAnnouncementsByParticipants($participant_ids: [Int]!) {
+  query getAnnouncementsByParticipants($participant_ids: [Int!]!) {
     getAnnouncementsByParticipants(participant_ids: $participant_ids) {
       announcement_id
       creation_date
