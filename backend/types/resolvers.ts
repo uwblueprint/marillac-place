@@ -12,6 +12,11 @@ const resolvers = gql`
   type Mutation {
     adminLogin(role: String!, password: String!): LoginResponse
     participantLogin(id: Int!, password: String!): LoginResponse
+    createBadge( 
+      name: String!, 
+      description: String!,
+      icon: Icon!
+    ): Boolean 
     createParticipant(
       participant_id: Int!, 
       room_number: Int!, 
