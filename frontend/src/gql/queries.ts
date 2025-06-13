@@ -4,6 +4,9 @@ export const GET_AVAILABLE_ROOMS = gql`
   query getAvailableRooms {
     getAvailableRooms
   }
+  query getAvailableRooms {
+    getAvailableRooms
+  }
 `;
 
 export const GET_PAST_PARTICIPANTS = gql`
@@ -53,9 +56,28 @@ export const GET_PARTICIPANT_BY_ID = gql`
       credit
     }
   }
+  query getParticipantById($participantId: String!) {
+    getParticipantById(participantId: $participantId) {
+      participantId
+      roomNumber
+      arrival
+      departure
+      password
+      credit
+    }
+  }
 `;
 
 export const GET_ALL_ANNOUNCEMENTS = gql`
+  query getAllAnnouncements {
+    getAllAnnouncements {
+      announcementId
+      from
+      to
+      createdAt
+      message
+    }
+  }
   query getAllAnnouncements {
     getAllAnnouncements {
       announcementId
@@ -80,9 +102,43 @@ export const GET_ANNOUNCEMENTS_IN_DATE_RANGE = gql`
       }
     }
   }
+  query getAnnouncementsInDateRange($start: String!, $end: String!) {
+    getAnnouncementsInDateRange(start: $start, end: $end) {
+      announcement_id
+      creation_date
+      message
+      user_announcements {
+        participant {
+          room_number
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
+  query getAnnouncementsByParticipants($participant_ids: [Int!]!) {
+    getAnnouncementsByParticipants(participant_ids: $participant_ids) {
+      announcement_id
+      creation_date
+      message
+      user_announcements {
+        participant_id
+      }
+    }
+  }
 `;
 
 export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
+  query getAnnouncementByRooms($rooms: [Int]) {
+    getAnnouncementByRooms(rooms: $rooms) {
+      announcementId
+      from
+      to
+      createdAt
+      message
+    }
+  }
   query getAnnouncementByRooms($rooms: [Int]) {
     getAnnouncementByRooms(rooms: $rooms) {
       announcementId
@@ -102,9 +158,25 @@ export const GET_NOTES = gql`
       creation_date
     }
   }
+  }
 `;
 
 export const GET_TASK_BY_ID = gql`
+  query getTaskById($taskId: Int!) {
+    getTaskById(taskId: $taskId) {
+      taskId
+      type
+      name
+      recurrencePreference
+      repeatDays
+      timePreference
+      start
+      end
+      credit
+      deduction
+      comment
+    }
+  }
   query getTaskById($taskId: Int!) {
     getTaskById(taskId: $taskId) {
       taskId
@@ -158,4 +230,22 @@ export const GET_TASKS_BY_RECURRENCE_FREQUENCY = gql`
       comment
     }
   }
+  query GetTasksByRecurrenceFrequency(
+    $recurrencePreference: RecurrenceFrequency!
+  ) {
+    getTasksByRecurrenceFrequency(recurrencePreference: $recurrencePreference) {
+      taskId
+      type
+      name
+      recurrencePreference
+      repeatDays
+      timePreference
+      start
+      end
+      credit
+      deduction
+      comment
+    }
+  }
 `;
+
