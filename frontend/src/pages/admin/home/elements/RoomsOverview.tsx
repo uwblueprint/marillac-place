@@ -28,7 +28,6 @@ export default function RoomsOverview() {
           const { data } = await getRoomData({
             variables: { room_number: roomNumber },
           });
-          console.log(data);
 
           return {
             roomNumber,
@@ -36,8 +35,8 @@ export default function RoomsOverview() {
             taskAssigned:
               data?.getParticipantByRoom?.assigned_tasks?.filter(
                 (task: any) =>
-                  task.status === Status.ASSIGNED ||
-                  task.status === Status.INCOMPLETE
+                  task.task_status === Status.ASSIGNED ||
+                  task.task_status === Status.INCOMPLETE
               ).length || 0,
           };
         })
