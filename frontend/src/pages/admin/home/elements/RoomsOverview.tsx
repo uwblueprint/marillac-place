@@ -55,15 +55,30 @@ export default function RoomsOverview() {
       border="1px solid"
       borderColor="neutral.300"
       borderRadius="8px"
-      height="55%"
+      height="350px"
       marginRight="10px"
       marginBottom="10px"
       flexDir="column"
+      gap="10px"
+      justifyContent="flex-start"
     >
-      <Text textStyle="web.h3" color="primary.700" marginBottom="15px">
-        Rooms
-      </Text>
       <Flex
+        w="100%"
+        flexDir="row"
+        justifyContent="flex-start"
+        alignItems="center"
+        px="2px"
+        gap="20px"
+      >
+        <Text textStyle="web.h3" color="primary.700">
+          Rooms
+        </Text>
+        <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
+          Showing pending tasks for today
+        </Text>
+      </Flex>
+      <Flex
+        h="100%"
         overflow="scroll"
         justifyContent="center"
         sx={{
@@ -81,12 +96,10 @@ export default function RoomsOverview() {
             {error?.message || "An error occured."}
           </Text>
         ) : (
-          <Grid w="100%" templateColumns="repeat(5, 1fr)" gap="15px">
+          <Grid w="100%" h="100%" templateColumns="repeat(5, 1fr)" gap="10px">
             {roomData.map((room: RoomData) => (
               <Flex
                 key={room.roomNumber}
-                minWidth="100px"
-                minHeight="120px"
                 border="1px solid"
                 borderColor="neutral.300"
                 borderRadius="8px"
@@ -104,8 +117,10 @@ export default function RoomsOverview() {
                   padding="8px"
                   borderBottom="1px solid"
                   borderColor="neutral.300"
+                  borderTopRightRadius="8px"
+                  borderTopLeftRadius="8px"
                 >
-                  Room #{room.roomNumber}
+                  Room {room.roomNumber}
                 </Text>
 
                 {room.participantId ? (
@@ -113,7 +128,7 @@ export default function RoomsOverview() {
                     <Text textStyle="web.b3" textAlign="center">
                       ID Number:{" "}
                       <Text as="span" textStyle="web.s1">
-                        {room.participantId}
+                        #{room.participantId}
                       </Text>
                     </Text>
                     <Text textStyle="web.b3" textAlign="center">
@@ -138,7 +153,7 @@ export default function RoomsOverview() {
                 ) : (
                   <>
                     <Text textStyle="web.b3" textAlign="center">
-                      Room is available.
+                      Room Available.
                     </Text>
                     <Link
                       href="/admin/participants"
