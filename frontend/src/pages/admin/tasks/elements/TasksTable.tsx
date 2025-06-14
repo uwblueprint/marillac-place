@@ -29,8 +29,9 @@ const TasksTable = ({ loading, error, tasks }: TasksTableProps) => {
   const [deleteTask] = useMutation(DELETE_TASK);
 
   function formatTime(t: string) {
-    const [h, m] = t.split(":").map(Number);
-    return `${(h % 12 || 12)}:${m.toString().padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+    // const [h, m] = t.split(":").map(Number);
+    // return `${(h % 12 || 12)}:${m.toString().padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+    return t;
   };
 
   async function handleDeleteTask(id: number) {

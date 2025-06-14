@@ -6,7 +6,7 @@ interface IParticipantService {
   getParticipantByRoom(room_number: number): Promise<Participant | null>;
   getParticipantsByRooms(
     room_numbers: number[]
-  ): Promise<Record<number, number | null>>;
+  ): Promise<Participant[]>;
   // getParticipantById(participantId: string): Promise<Participant | null>;
   createParticipant(
     participant_id: number,

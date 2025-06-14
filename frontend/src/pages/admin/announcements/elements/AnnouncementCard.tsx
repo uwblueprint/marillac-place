@@ -5,21 +5,14 @@ import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { DELETE_ANNOUNCEMENT } from '../../../../gql/mutations';
+import EditAnnouncementModal from "./EditAnnouncementModal";
 
 const useDeleteAnnouncement = () => {
-  const toast = useToast();
   const [deleteAnnouncementMutation] = useMutation(DELETE_ANNOUNCEMENT);
 
   const handleDeleteAnnouncement = async (announcement_id: number) => {
-    console.log("handling delete announcmeent", announcement_id);
     if (typeof announcement_id !== 'number' || Number.isNaN(announcement_id)) {
-      toast({
-        title: 'Invalid ID',
-        description: 'The announcement ID is not valid.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      console.log("Unable to delete announcement, invalid announcement id.");
       return;
     }
 
@@ -29,26 +22,13 @@ const useDeleteAnnouncement = () => {
       });
 
       if (data?.deleteAnnouncement) {
-        toast({
-          title: 'Deleted',
-          description: 'Announcement deleted successfully.',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
+        localStorage.setItem("notification", "Announcement deleted");
         window.location.reload();
       } else {
         throw new Error('Announcement deletion failed.');
       }
     } catch (error: any) {
       console.error('ERROR: Error in deleting announcement. ', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Something went wrong.',
-        status: 'error',
-        duration: 4000,
-        isClosable: true,
-      });
     }
   };
 
@@ -71,6 +51,7 @@ export default function AnnouncementCard({
   importance = 0,
 }: AnnouncementCardProps) {
   const { handleDeleteAnnouncement } = useDeleteAnnouncement();
+  const [edit, setEdit] = useState(false);
   
   return (
     <Box
@@ -120,7 +101,7 @@ export default function AnnouncementCard({
             icon={<EditIcon sx={{ fontSize: "18px", color: "#808080" }} />}
             size="sm"
             variant="ghost"
-            onClick={() => console.log("Edit clicked")}
+            onClick={() => setEdit(true)}
           />
           <IconButton
             aria-label="Delete"
@@ -131,6 +112,16 @@ export default function AnnouncementCard({
           />
         </Flex>
       </Flex>
+      { edit &&
+        <EditAnnouncementModal
+          isOpen={edit}
+          setIsOpen={() => setEdit(false)}
+          announcementId={announcement_id}
+          sendTo={room}
+          initialMessage={message}
+          initialPriority={importance === 2 ? "CRITICAL" : importance === 1 ? "HIGH" : "NORMAL"}
+        />
+      }
     </Box>
   );
 }
