@@ -33,6 +33,11 @@ export const GET_PARTICIPANT_BY_ROOM = gql`
       participant_id
       marillac_bucks
       room_number
+      assigned_tasks {
+        task_name
+        task_status
+        task_type
+      }
     }
   }
 `;
