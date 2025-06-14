@@ -42,6 +42,15 @@ export const GET_PARTICIPANT_BY_ROOM = gql`
   }
 `;
 
+export const GET_PARTICIPANTS_BY_ROOMS = gql`
+    query getParticipantsByRooms($room_number: [Int!]!) {
+        getParticipantsByRooms(room_number: $room_number) {
+            participant_id
+            room_number
+        }
+    }
+`;
+
 export const GET_PARTICIPANT_BY_ID = gql`
   query getParticipantById($participantId: String!) {
     getParticipantById(participantId: $participantId) {
@@ -56,15 +65,19 @@ export const GET_PARTICIPANT_BY_ID = gql`
 `;
 
 export const GET_ALL_ANNOUNCEMENTS = gql`
-  query getAllAnnouncements {
-    getAllAnnouncements {
-      announcementId
-      from
-      to
-      createdAt
-      message
+    query getAllAnnouncements {
+        getAllAnnouncements {
+            announcement_id
+            priority
+            creation_date
+            message
+            user_announcements {
+                participant_id
+                read
+                pinned
+            }
+        }
     }
-  }
 `;
 
 export const GET_ANNOUNCEMENTS_IN_DATE_RANGE = gql`
@@ -86,6 +99,7 @@ export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
   query getAnnouncementsByParticipants($participant_ids: [Int!]!) {
     getAnnouncementsByParticipants(participant_ids: $participant_ids) {
       announcement_id
+      priority
       creation_date
       message
       user_announcements {

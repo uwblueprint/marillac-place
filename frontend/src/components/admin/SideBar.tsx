@@ -13,7 +13,7 @@ import {
   ModalBody,
   Text,
 } from "@chakra-ui/react";
-import * as ROUTES from "../../constants/Routes";
+import * as ROUTES from "../../constants/routes";
 
 type SideBarTabProps = {
   label: string;

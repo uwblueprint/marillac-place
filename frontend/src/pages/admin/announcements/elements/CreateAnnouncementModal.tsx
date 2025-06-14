@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Button,
   Flex,
@@ -20,58 +20,109 @@ import {
   Box,
 } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
+import {useLazyQuery, useMutation } from "@apollo/client";
+import { CREATE_ANNOUNCEMENT } from "../../../../gql/mutations";
+import { GET_CURRENT_PARTICIPANTS } from "../../../../gql/queries";
+import { ROOM_NUMBERS } from "../../../../constants/rooms";
 
-const ROOMS = Array.from({ length: 10 }, (_, i) => `Room ${i + 1}`);
-
-const CreateAnnouncementModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
-  const [selectedRooms, setSelectedRooms] = useState<string[]>([]);
-  const [priority, setPriority] = useState("Normal");
+const CreateAnnouncementModal = ({isOpen, onClose}: { isOpen: boolean, onClose: () => void }) => {
+  const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
+  const [priority, setPriority] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-  const toggleRoom = (room: string) => {
-    if (room === "All Rooms") {
-        if (selectedRooms.length === ROOMS.length) {
-            setSelectedRooms([]);
-        } else {
-            setSelectedRooms([...ROOMS]);
-        }
-        return;
-    }
-  
-    setSelectedRooms(prev => {
-      const isAll = prev.includes("All Rooms");
-      const filtered = isAll ? [] : [...prev];
-      if (filtered.includes(room)) {
-        return filtered.filter(r => r !== room);
+  const [createAnnouncement] = useMutation(CREATE_ANNOUNCEMENT, {
+    onCompleted: () => {
+      let listOfRooms = "";
+      if (selectedRooms.length === 1) {
+        listOfRooms = `Room ${selectedRooms[0]}`;
+      } else if (selectedRooms.length === ROOM_NUMBERS.length) {
+        listOfRooms = "All Rooms";
+      } else {
+        listOfRooms = `Rooms ${selectedRooms.join(', ')}`;
       }
-      return [...filtered, room];
-    });
-  };
-  
+      localStorage.setItem("notification", "Announcement sent to " + listOfRooms);
+      onClose();
+      window.location.reload();
+    },
+    onError: (err) => {
+      setError(err.message);
+    },
+  });
 
-  const handleSend = () => {
-    // Hook up to backend here
-    console.log({ selectedRooms, priority, message });
-    onClose();
+  const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS);
+
+  const handleSend = async () => {
+    if (selectedRooms.length === 0 || priority === "" || message === "") {
+      setError("Missing fields.");
+      return;
+    }
+
+    try {
+      const { data, error: dataError } = await getCurrentParticipants();
+
+      if (dataError || !data || !data.getCurrentParticipants) {
+        setError("Failed to fetch participants.");
+        return;
+      }
+
+      const roomToParticipantMap: any = {};
+      for (const participant of data.getCurrentParticipants) {
+        roomToParticipantMap[participant.room_number] = participant.participant_id
+      }
+
+      const participantIds: number[] = [];
+      for (const room of selectedRooms) {
+        const participantId = roomToParticipantMap[room];
+        if (!participantId) {
+          setError(`Room ${room} is empty.`);
+          return;
+        }
+        participantIds.push(participantId);
+      }
+
+      createAnnouncement({ variables: {
+        priority,
+        participants: participantIds,
+        message,
+      }});
+    } catch(err: any) {
+      console.log(err)
+      setError("Unable to create announcement");
+    }
+  };
+
+  const toggleRoom = (room: number) => {
+    if (room === 0) {
+      if (selectedRooms.length === ROOM_NUMBERS.length) {
+        setSelectedRooms([]);
+      } else {
+        setSelectedRooms(ROOM_NUMBERS);
+      }
+    } else {
+      setSelectedRooms(prev => {
+        const next = [...prev]
+        if (next.includes(room)) {
+          return next.filter(r => r !== room);
+        }
+        return [...next, room];
+      });
+    }
   };
 
   return (
     <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered size="xl">
-      <ModalOverlay />
+      <ModalOverlay/>
       <ModalContent boxShadow="xl" borderRadius="16px" width="600px" padding="20px">
         <ModalHeader><Text textStyle="web.h3">Create Announcement</Text></ModalHeader>
         <ModalBody>
-        <Flex gap="5px" mb={4} wrap="wrap" alignItems="center">
-          <Text textStyle="web.s1" color="text.light.secondary" mr={1}>
-            Send To:
-          </Text>
-            {[["All Rooms"], ...ROOMS.slice(0, 5)].flat().map((room) => {
-                const isSelected =
-                room === "All Rooms"
-                    ? selectedRooms.length === ROOMS.length
-                    : selectedRooms.includes(room);
-
-                return (
+          <Flex gap="5px" mb={4} wrap="wrap" alignItems="center">
+            <Text textStyle="web.s1" color="text.light.secondary" mr={1}>
+              Send To:
+            </Text>
+            {[[0], ...ROOM_NUMBERS.slice(0, 5)].flat().map((room: number) => {
+              const isSelected = selectedRooms.length === ROOM_NUMBERS.length || selectedRooms.includes(room);
+              return (
                 <WrapItem key={room}>
                   <Button
                     key={room}
@@ -96,18 +147,18 @@ const CreateAnnouncementModal = ({ isOpen, onClose }: { isOpen: boolean, onClose
                     }}
                   >
                     <Text textStyle="web.s1" color="inherit">
-                      {room}
+                      {room === 0 ? "All Rooms" : `Room ${room}`}
                     </Text>
                   </Button>
                 </WrapItem>
-                );
+              );
             })}
 
-            <Box w="100%" />
+            <Box w="100%"/>
 
-            {ROOMS.slice(5).map((room) => {
-                const isSelected = selectedRooms.includes(room);
-                return (
+            {ROOM_NUMBERS.slice(5).map((room) => {
+              const isSelected = selectedRooms.includes(room);
+              return (
                 <WrapItem key={room}>
                   <Button
                     key={room}
@@ -132,13 +183,13 @@ const CreateAnnouncementModal = ({ isOpen, onClose }: { isOpen: boolean, onClose
                     }}
                   >
                     <Text textStyle="web.s1" color="inherit">
-                      {room}
+                      Room {room}
                     </Text>
                   </Button>
                 </WrapItem>
-                );
+              );
             })}
-            </Flex>
+          </Flex>
 
           <FormControl mb={4}>
             <FormLabel>
@@ -202,9 +253,16 @@ const CreateAnnouncementModal = ({ isOpen, onClose }: { isOpen: boolean, onClose
             />
           </FormControl>
 
+          { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000" pt={2}>{error}</Text> }
+
           <Flex alignItems="center" justify="flex-end" gap={3} mt={4}>
             <Button variant="white" onClick={onClose}><Text textStyle="web.s1">Cancel</Text></Button>
-            <Button variant="primaryFilled" onClick={handleSend}><Text textStyle="web.s1" color="white">Send</Text></Button>
+            <Button
+              variant="primaryFilled"
+              onClick={handleSend}
+            >
+              <Text textStyle="web.s1" color="white">Send</Text>
+            </Button>
           </Flex>
         </ModalBody>
       </ModalContent>
