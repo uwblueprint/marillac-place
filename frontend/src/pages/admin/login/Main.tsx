@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { ADMIN_LOGIN } from "../../../gql/mutations";
 import { isAdmin, isRelief } from "../../../utils/checkRole";
-import * as ROUTES from "../../../constants/Routes";
+import * as ROUTES from "../../../constants/routes";
 import Loading from "../../Loading";
 
 export default function AdminLoginPage() {
