@@ -5,9 +5,11 @@ const resolvers = gql`
     getPastParticipants: [Participant]
     getCurrentParticipants: [Participant]
     getParticipantByRoom(room_number: Int!): Participant
+    getParticipantsByRooms(room_numbers: [Int!]!): JSON
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
+    getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
     getTasksByType(type: TaskType!): [Task]
   }
 

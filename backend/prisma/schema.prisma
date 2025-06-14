@@ -77,181 +77,169 @@ enum Icon {
 }
 
 model Participant {
-  participant_id          Int                   @id
-  password                String
-  room_number             Int
-  arrival_date            String
-  departure_date          String?
-  account_creation_date   String
-  account_removal_date    String?
-  marillac_bucks          Int                   @default(0)
-  marillac_bucks_goal     Int?
+  participant_id        Int     @id
+  password              String
+  room_number           Int
+  arrival_date          String
+  departure_date        String?
+  account_creation_date String
+  account_removal_date  String?
+  marillac_bucks        Int     @default(0)
+  marillac_bucks_goal   Int?
 
-  assigned_tasks          AssignedTask[]
-  user_announcements      UserAnnouncement[]
-  logins                  Login[]
-  transactions            Transaction[]
-  earned_badges           EarnedBadge[]
-  participant_progress    ParticipantProgress?
+  assigned_tasks       AssignedTask[]
+  user_announcements   UserAnnouncement[]
+  logins               Login[]
+  transactions         Transaction[]
+  earned_badges        EarnedBadge[]
+  participant_progress ParticipantProgress?
 
   @@map("participant")
 }
 
 model Task {
-  task_id                    Int                   @id @default(autoincrement())
-  task_name                  String                @unique
-  task_type                  TaskType
-  recurrence_preference      RecurrenceFrequency
-  repeat_days                DayOfWeek[]
-  time_preference            TimeOption
-  start_time                 String?
-  end_time                   String?
-  marillac_bucks_addition    Int
-  marillac_bucks_deduction   Int
-  comment                    String?
+  task_id                  Int                 @id @default(autoincrement())
+  task_name                String              @unique
+  task_type                TaskType
+  recurrence_preference    RecurrenceFrequency
+  repeat_days              DayOfWeek[]
+  time_preference          TimeOption
+  start_time               String?
+  end_time                 String?
+  marillac_bucks_addition  Int
+  marillac_bucks_deduction Int
+  comment                  String?
 
   @@map("task")
 }
 
 model AssignedTask {
-  assigned_task_id           Int           @id @default(autoincrement())
-  participant_id             Int
-  task_name                  String
-  task_status                Status        @default(ASSIGNED)
-  task_type                  TaskType
-  goal_name                  String?
-  goal_description           String?
-  repeats                    Boolean
-  start_date                 String
-  end_date                   String
-  marillac_bucks_addition    Int
-  marillac_bucks_deduction   Int
-  comment                    String?
+  assigned_task_id         Int      @id @default(autoincrement())
+  participant_id           Int
+  task_name                String
+  task_status              Status   @default(ASSIGNED)
+  task_type                TaskType
+  goal_name                String?
+  goal_description         String?
+  start_date               String
+  end_date                 String
+  marillac_bucks_addition  Int
+  marillac_bucks_deduction Int
+  comment                  String?
 
-  participant                Participant   @relation(fields: [participant_id], references: [participant_id])
+  participant Participant @relation(fields: [participant_id], references: [participant_id])
 
   @@map("assigned_task")
 }
 
 model Note {
-  note_id         Int        @id @default(autoincrement())
-  message         String
-  creation_date   String
+  note_id       Int    @id @default(autoincrement())
+  message       String
+  creation_date String
 
   @@map("note")
 }
 
 model Announcement {
-  announcement_id      Int                  @id @default(autoincrement())
-  priority             Priority             @default(NORMAL)
-  creation_date        String
-  message              String
+  announcement_id Int      @id @default(autoincrement())
+  priority        Priority @default(NORMAL)
+  creation_date   String
+  message         String
 
-  user_announcements   UserAnnouncement[]
+  user_announcements UserAnnouncement[]
 
   @@map("announcement")
 }
 
 model UserAnnouncement {
-  read              Boolean        @default(false)
-  pinned            Boolean        @default(false)
-  announcement_id   Int
-  participant_id    Int
+  read            Boolean @default(false)
+  pinned          Boolean @default(false)
+  announcement_id Int
+  participant_id  Int
 
-  announcement      Announcement   @relation(fields: [announcement_id], references: [announcement_id], onDelete: Cascade)
-  participant       Participant    @relation(fields: [participant_id], references: [participant_id])
+  announcement Announcement @relation(fields: [announcement_id], references: [announcement_id], onDelete: Cascade)
+  participant  Participant  @relation(fields: [participant_id], references: [participant_id])
 
   @@id([announcement_id, participant_id])
   @@map("user_announcement")
 }
 
 model Login {
-  participant_id   Int
-  login_date       String
+  participant_id Int
+  login_date     String
 
-  participant      Participant   @relation(fields: [participant_id], references: [participant_id])
+  participant Participant @relation(fields: [participant_id], references: [participant_id])
 
   @@id([participant_id, login_date])
   @@map("login")
 }
 
 model Transaction {
-  transaction_id     Int               @id @default(autoincrement())
-  participant_id     Int
-  transaction_date   String
-  transaction_type   TransactionType
-  description        String?
-  marillac_bucks     Int
+  transaction_id   Int             @id @default(autoincrement())
+  participant_id   Int
+  transaction_date String
+  transaction_type TransactionType
+  description      String?
+  marillac_bucks   Int
 
-  participant        Participant       @relation(fields: [participant_id], references: [participant_id])
+  participant Participant @relation(fields: [participant_id], references: [participant_id])
 
   @@map("transaction")
 }
 
 model Badge {
-  badge_id         Int            @id @default(autoincrement())
-  badge_type       BadgeType
-  name             String         @unique
-  description      String
-  is_active        Boolean        @default(true)
-  is_consecutive   Boolean
-  icon             Icon
+  badge_id       Int       @id @default(autoincrement())
+  badge_type     BadgeType
+  name           String    @unique
+  description    String
+  is_active      Boolean   @default(true)
+  is_consecutive Boolean
+  icon           Icon
 
-  badge_level      BadgeLevel[]
+  badge_level BadgeLevel[]
 
   @@map("badge")
 }
 
 model BadgeLevel {
-  badge_id         Int
-  level            Int
-  benchmark        Int
-  marillac_bucks   Int
+  badge_id       Int
+  level          Int
+  benchmark      Int
+  marillac_bucks Int
 
-  badge            Badge   @relation(fields: [badge_id], references: [badge_id])
+  badge Badge @relation(fields: [badge_id], references: [badge_id])
 
   @@id([badge_id, level])
   @@map("badge_level")
 }
 
 model EarnedBadge {
-  earned_badge_id   Int           @id @default(autoincrement())
-  participant_id    Int
-  date_received     String
-  name              String
-  description       String
-  badge_icon        Icon
-  level             Int
+  earned_badge_id Int    @id @default(autoincrement())
+  badge_id        Int
+  participant_id  Int
+  date_received   String
+  name            String
+  description     String
+  badge_icon      Icon
+  level           Int
 
-  participant       Participant   @relation(fields: [participant_id], references: [participant_id])
+  participant Participant @relation(fields: [participant_id], references: [participant_id])
 
   @@map("earned_badge")
 }
 
 model ParticipantProgress {
-  participant_id                           Int           @id
-  optional_tasks_completed                 Int           @default(0)
-  first_goals_set_badge_level              Int           @default(0)
-  weeks_optional_tasks_complete            Int           @default(0)
-  perfect_score_optional_badge_level       Int           @default(0)
-  weeks_mandatory_tasks_complete           Int           @default(0)
-  perfect_score_mandatory_badge_level      Int           @default(0)
-  weeks_individual_goal_complete           Int           @default(0)
-  individual_goals_completed_badge_level   Int           @default(0)
-  days_logged_in                           Int           @default(0)
-  login_badge_level                        Int           @default(0)
-  total_earnings                           Int           @default(0)
-  money_earned_badge_level                 Int           @default(0)
-  beginner_badges_achieved                 Int           @default(0)
-  bronze_badges_achieved                   Int           @default(0)
-  silver_badges_achieved                   Int           @default(0)
-  gold_badges_achieved                     Int           @default(0)
-  diamond_badges_achieved                  Int           @default(0)
-  pr_leader_badge_level                    Int           @default(0)
-  task_types_tried                         String[]      @default([])
-  jack_of_all_trades_badge_level           Int           @default(0)
+  participant_id                 Int      @id
+  optional_tasks_completed       Int      @default(0)
+  weeks_optional_tasks_complete  Int      @default(0)
+  weeks_mandatory_tasks_complete Int      @default(0)
+  weeks_individual_goal_complete Int      @default(0)
+  days_logged_in                 Int      @default(0)
+  total_earnings                 Int      @default(0)
+  badges_achieved                Int[]    @default([])
+  task_types_tried               String[] @default([])
 
-  participant                              Participant   @relation(fields: [participant_id], references: [participant_id])
+  participant Participant @relation(fields: [participant_id], references: [participant_id])
 
   @@map("participant_progress")
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Modal,
   ModalOverlay,
@@ -16,12 +16,10 @@ import {
   Stack,
   Textarea,
   Box,
-  useToast
 } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
-import { useMutation } from "@apollo/client";
-import { EDIT_ANNOUNCEMENT } from "../../../../gql/mutations";
-
+import {useMutation} from "@apollo/client";
+import {EDIT_ANNOUNCEMENT} from "../../../../gql/mutations";
 
 type EditAnnouncementModalProps = {
   isOpen: boolean;
@@ -42,19 +40,14 @@ const EditAnnouncementModal = ({
   const [sendTo] = useState("");
   const [message, setMessage] = useState(initialMessage);
 
+  const [error, setError] = useState("");
+
   const [editAnnouncement] = useMutation(EDIT_ANNOUNCEMENT);
-  const toast = useToast();
 
   const handleSave = async () => {
-
+    setError("");
     if (!announcementId || !priority || !message.trim()) {
-      toast({
-        title: "Missing Fields",
-        description: "All fields must be filled in.",
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-      });
+      setError("Missing fields");
       return;
     }
 
@@ -67,39 +60,27 @@ const EditAnnouncementModal = ({
         },
       });
 
-      toast({
-        title: "Success",
-        description: "Announcement updated.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      localStorage.setItem("notification", "Announcement updated!");
 
       setIsOpen(false);
       window.location.reload();
-  } catch (error: any) {
-    console.error("Edit error:", error);
-    console.error("GraphQL error details:", error.graphQLErrors);
-    console.error("Network error details:", error.networkError);
-
-    toast({
-      title: "Error",
-      description: "Failed to update announcement.",
-      status: "error",
-      duration: 4000,
-      isClosable: true,
-    });
-}
+    } catch (err: any) {
+      console.error("Edit error:", err);
+      console.error("GraphQL error details:", err.graphQLErrors);
+      console.error("Network error details:", err.networkError);
+      setError("Unable to update announcement");
+    }
 
   };
 
   const handleCancel = () => {
+    setError("");
     setIsOpen(false);
   };
 
   return (
     <Modal isOpen={isOpen} onClose={handleCancel} size="md" isCentered>
-      <ModalOverlay />
+      <ModalOverlay/>
       <ModalContent
         borderRadius="8px"
         px={5}
@@ -185,6 +166,7 @@ const EditAnnouncementModal = ({
               fontSize="12px"
             />
           </FormControl>
+          {error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text>}
         </ModalBody>
 
         <ModalFooter>

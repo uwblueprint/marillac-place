@@ -107,9 +107,9 @@ export const EDIT_ANNOUNCEMENT = gql`
 `;
 
 export const DELETE_ANNOUNCEMENT = gql`
-  mutation deleteAnnouncement($announcementId: Int) {
-    deleteAnnouncement(announcementId: $announcementId)
-  }
+    mutation DeleteAnnouncement($announcement_id: Int!) {
+        deleteAnnouncement(announcement_id: $announcement_id)
+    }
 `;
 
 export const EDIT_MARILLAC_BUCKS = gql`
