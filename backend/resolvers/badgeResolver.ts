@@ -18,13 +18,11 @@ const badgeResolver = {
         icon: Icon;
       },
     ): Promise<boolean> => {
-      return badgeService.createBadge({
+      return badgeService.createCustomBadge(
         name,
         description,
-        icon,
-        is_consecutive: false,
-        badge_type: BadgeType.SYSTEM,
-      });
+        icon
+      );
     },
   },
 };

@@ -16,6 +16,7 @@ import participantResolver from "../resolvers/participantResolver";
 import noteResolver from "../resolvers/noteResolver";
 import announcementResolver from "../resolvers/announcementResolver";
 import loginResolver from "../resolvers/loginResolver";
+import badgeResolver from "../resolvers/badgeResolver";
 // import taskResolvers from "./resolvers/taskResolver";
 
 import getGraphQLMiddleware from "./getGraphQLMiddleware";
@@ -30,12 +31,10 @@ export default function getGraphQLSchema() {
       noteResolver,
       announcementResolver,
       participantResolver,
+      badgeResolver,
     ),
   });
 
   const schemaWithMiddleware = applyMiddleware(schema, middleware);
   return schemaWithMiddleware;
 };
-
-
-

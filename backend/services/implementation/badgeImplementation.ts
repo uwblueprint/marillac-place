@@ -1,26 +1,18 @@
-import { $Enums } from "@prisma/client";
+import { Icon, BadgeType } from "@prisma/client";
 import prisma from "../../prisma";
 import IBadgeService from "../interface/badgeInterface";
 
 
 class BadgeService implements IBadgeService {
-  async createBadge({
-    name,
-    description,
-    icon,
-    is_consecutive,
-    badge_type,
-    is_active = true,
-  }): Promise<boolean> {
+  async createCustomBadge(
+    name: string,
+    description: string,
+    icon: Icon,
+    is_consecutive: boolean = false,
+    badge_type: BadgeType = "CUSTOM",
+    is_active: boolean = true
+  ): Promise<boolean> {
     try {
-      console.log("Creating badge with:", {
-        name,
-        description,
-        icon,
-        is_consecutive,
-        badge_type,
-        is_active,
-      });
 
       await prisma.badge.create({
         data: {
@@ -32,10 +24,8 @@ class BadgeService implements IBadgeService {
           is_active,
         },
       });
-      console.log("Badge created");
       return true;
     } catch (err) {
-      console.error("Error creating badge:", err); 
       throw new Error("Something went wrong");
     }
   }

@@ -1,12 +1,12 @@
-import { $Enums, Badge } from "@prisma/client";
+import { Icon, BadgeType, Badge } from "@prisma/client";
 
 export default interface IBadgeService {
-  createBadge(params: {
-    name: string;
-    description: string;
-    icon: $Enums.Icon;
-    is_consecutive: boolean;
-    badge_type: $Enums.BadgeType;
-    is_active?: boolean;  
-  }): Promise<boolean>;    
+  createCustomBadge(
+    name: string,
+    description: string,
+    icon: Icon,
+    is_consecutive?: boolean,
+    badge_type?: BadgeType,
+    is_active?: boolean  
+  ): Promise<boolean>    
 }
