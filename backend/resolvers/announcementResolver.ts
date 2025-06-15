@@ -15,6 +15,12 @@ const announcementResolver = {
     ): Promise<Announcement[]> => {
       return announcementService.getAnnouncementsInDateRange(start, end);
     },
+    getAnnouncementsByParticipants: async (
+      _parent: undefined,
+      { participant_ids }: { participant_ids: number[] }
+    ): Promise<Announcement[]> => {
+      return announcementService.getAnnouncementsByParticipants(participant_ids);
+    },
   },
   Mutation: {
     createAnnouncement: async (

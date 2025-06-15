@@ -74,19 +74,14 @@ export const UPDATE_MARILLAC_BUCKS = gql`
 
 
 export const CREATE_ANNOUNCEMENT = gql`
-  mutation createAnnouncement($announcementId: number,
-    $from: StaffType,     
-    $to: [Int],   
-    $priority: PriorityType,       
-    $createdAt: Date,
-    $message: String,
-    ) {
+  mutation createAnnouncement(
+    $priority: Priority!, 
+    $participants: [Int!]!,
+    $message: String!,
+  ) {
     createAnnouncement(
-      announcementId: $announcementId
-      from: $from
-      to: $to
       priority: $priority
-      createdAt: $createdAt
+      participants: $participants
       message: $message
     )
   }

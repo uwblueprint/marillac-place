@@ -5,10 +5,11 @@ const resolvers = gql`
     getPastParticipants: [Participant]
     getCurrentParticipants: [Participant]
     getParticipantByRoom(room_number: Int!): Participant
-    getParticipantsByRooms(room_numbers: [Int!]!): JSON
+    getParticipantsByRooms(room_numbers: [Int!]!): [Participant]
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
+    getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
     getTasksByType(type: TaskType!): [Task]
   }
 
@@ -76,6 +77,7 @@ const resolvers = gql`
       comment: String
     ): Boolean
     deleteTaskById(taskId: Int!): Boolean
+    assignCustomBadge(badge_id: Int!, participant_id: Int!): EarnedBadge
     editCustomBadge(
       custom_badge_id: Int!
       new_custom_badge_name: String

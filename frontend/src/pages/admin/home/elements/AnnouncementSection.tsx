@@ -12,9 +12,16 @@ import { useQuery } from "@apollo/client";
 import { Link as RouterLink } from "react-router-dom";
 import { GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
 import { AnnouncementDisplayInfo, AnnouncementData } from "../../../../types/AnnouncementTypes";
+import { ROOM_NUMBERS } from "../../../../constants/rooms";
 
 const getRoomString = (rooms: number[]) => {
-    return rooms.map(room => `Room ${room}`).join(", ");
+  if (rooms.length === 1) {
+    return `Room ${rooms[0]}`;
+  }
+  if (rooms.length === ROOM_NUMBERS.length) {
+    return "All Rooms";
+  }
+  return `Rooms ${rooms.join(', ')}`;
 }
 
 const AnnouncementCard: React.FC<{announcement: AnnouncementDisplayInfo}> = ({announcement}) => {
@@ -28,15 +35,15 @@ const AnnouncementCard: React.FC<{announcement: AnnouncementDisplayInfo}> = ({an
 
     return (
         <Flex
-        flexDir="column"
-        width="100%"
-        bg="neutral.100"
-        border="1px solid"
-        borderColor="neutral.300"
-        rounded="8px"
-        paddingX="12px"
-        paddingY="7px"
-        gap="5px"
+          flexDir="column"
+          width="100%"
+          bg="neutral.100"
+          border="1px solid"
+          borderColor="neutral.300"
+          rounded="8px"
+          paddingX="16px"
+          paddingY="12px"
+          gap="5px"
         >
         <Flex
             width="100%"
@@ -78,14 +85,16 @@ const AnnouncementSection = () => {
 
   return (
     <Flex
-      height="45%"
+      flexGrow={1}
+      height="calc(100% - 360px)"
       paddingY="15px"
       paddingX="20px"
       border="1px solid"
       borderColor="neutral.300"
       borderRadius="8px"
       flexDir="column"
-      gap="15px"
+      gap="10px"
+      justifyContent="flex-start"
       marginRight="10px"
     >
       {/* Title Row */}
@@ -122,7 +131,7 @@ const AnnouncementSection = () => {
       <Flex
         alignItems="center"
         overflow="scroll"
-        height="82.5%"
+        height="fit-content"
         justifyContent="center"
         sx={{
           "&::-webkit-scrollbar": {
@@ -149,7 +158,7 @@ const AnnouncementSection = () => {
               height="100%"
               flexDir="column"
               justifyContent="flex-start"
-              gap="15px"
+              gap="10px"
             >
               {data.map((announcement: AnnouncementDisplayInfo) => {
                 return <AnnouncementCard key={announcement.announcement_id} announcement={announcement} />
