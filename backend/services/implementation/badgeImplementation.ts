@@ -25,7 +25,6 @@ class BadgeService implements IBadgeService {
     // Create new earned badge entry
     const earnedBadge = await prisma.earnedBadge.create({
       data: {
-        badge_id,
         participant_id,
         date_received: new Date().toISOString(),
         name: badge.name,

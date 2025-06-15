@@ -197,7 +197,6 @@ model Badge {
   icon           Icon
 
   badge_level   BadgeLevel[]
-  earned_badges EarnedBadge[]
 
   @@map("badge")
 }
@@ -216,7 +215,6 @@ model BadgeLevel {
 
 model EarnedBadge {
   earned_badge_id Int    @id @default(autoincrement())
-  badge_id        Int
   participant_id  Int
   date_received   String
   name            String
@@ -224,7 +222,6 @@ model EarnedBadge {
   badge_icon      Icon
   level           Int
 
-  badge       Badge       @relation(fields: [badge_id], references: [badge_id])
   participant Participant @relation(fields: [participant_id], references: [participant_id])
 
   @@map("earned_badge")
