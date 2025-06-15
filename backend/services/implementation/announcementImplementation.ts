@@ -48,13 +48,38 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
+  async getAnnouncementsByParticipants(
+    participant_ids: number[]
+  ): Promise<Announcement[]> {
+    try {
+      const announcements = await prisma.announcement.findMany({
+        where: {
+          user_announcements: {
+            every: {
+              participant_id: {
+                in: participant_ids,
+              },
+            },
+          },
+        },
+        include: {
+          user_announcements: true
+        }
+      });
+
+      return announcements;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
   async createAnnouncement(
     priority: Priority,
     participants: number[],
     message: string
   ): Promise<boolean> {
     try {
-      const today = new Date().toLocaleString("en-ca");
+      const today = new Date().toISOString();
       const newAnnouncement = await prisma.announcement.create({
         data: {
           priority,

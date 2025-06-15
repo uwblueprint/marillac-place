@@ -11,6 +11,7 @@ const models = gql`
     account_removal_date: String
     marillac_bucks: Int!
     marillac_bucks_goal: Int
+    assigned_tasks: [AssignedTask]
   }
 
   type Task {
@@ -105,29 +106,29 @@ const models = gql`
     badge_icon: Icon!
     level: Int!
   }
-    
+
   type ParticipantProgress {
-      participant_id: Int!
-      optional_tasks_completed: Int!
-      first_goals_set_badge_level: Int!
-      weeks_optional_tasks_complete: Int!
-      perfect_score_optional_badge_level: Int!
-      weeks_mandatory_tasks_complete: Int!
-      perfect_score_mandatory_badge_level: Int!
-      weeks_individual_goal_complete: Int!
-      individual_goals_completed_badge_level: Int!
-      days_logged_in: Int!
-      login_badge_level: Int!
-      total_earnings: Int!
-      money_earned_badge_level: Int!
-      beginner_badges_achieved: Int!
-      bronze_badges_achieved: Int!
-      silver_badges_achieved: Int!
-      gold_badges_achieved: Int!
-      diamond_badges_achieved: Int!
-      pr_leader_badge_level: Int!
-      task_types_tried: [String!]!
-      jack_of_all_trades_badge_level: Int!
+    participant_id: Int!
+    optional_tasks_completed: Int!
+    first_goals_set_badge_level: Int!
+    weeks_optional_tasks_complete: Int!
+    perfect_score_optional_badge_level: Int!
+    weeks_mandatory_tasks_complete: Int!
+    perfect_score_mandatory_badge_level: Int!
+    weeks_individual_goal_complete: Int!
+    individual_goals_completed_badge_level: Int!
+    days_logged_in: Int!
+    login_badge_level: Int!
+    total_earnings: Int!
+    money_earned_badge_level: Int!
+    beginner_badges_achieved: Int!
+    bronze_badges_achieved: Int!
+    silver_badges_achieved: Int!
+    gold_badges_achieved: Int!
+    diamond_badges_achieved: Int!
+    pr_leader_badge_level: Int!
+    task_types_tried: [String!]!
+    jack_of_all_trades_badge_level: Int!
   }
 `;
 

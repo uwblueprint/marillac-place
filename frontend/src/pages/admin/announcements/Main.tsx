@@ -1,46 +1,66 @@
 import { Flex, Text, Button, VStack } from "@chakra-ui/react";
 import AddIcon from "@mui/icons-material/Add";
-import React, { useState } from "react";
-import { useQuery, gql } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import AnnouncementCard from "./elements/AnnouncementCard";
 import CreateAnnouncementModal from "./elements/CreateAnnouncementModal";
-import EditAnnouncementModal from "./elements/EditAnnouncementModal";
-
-const GET_ALL_ANNOUNCEMENTS = gql`
-  query GetAllAnnouncements {
-    getAllAnnouncements {
-      announcement_id
-      priority
-      creation_date
-      message
-      user_announcements {
-        participant_id
-        read
-        pinned
-      }
-    }
-  }
-`;
+import { ROOM_NUMBERS } from "../../../constants/rooms";
+import {
+  GET_ALL_ANNOUNCEMENTS,
+  GET_ANNOUNCEMENTS_BY_PARTICIPANTS,
+  GET_CURRENT_PARTICIPANTS
+} from "../../../gql/queries";
 
 export default function AdminAnnouncementsPage() {
   const [create, setCreate] = useState(false);
   const [selectedButtons, setSelectedButtons] = useState<boolean[]>(
     new Array(10).fill(false)
   );
+  const [filter, setFilter] = useState(false);
 
-  const [currentAnnouncement, setCurrentAnnouncement] = useState({
-    id: 3,
-    priority: "NORMAL",
-    message: "another test successful",
-  });
+  const {
+    data: participantData,
+    loading: participantLoading,
+    error: participantError
+  } = useQuery(GET_CURRENT_PARTICIPANTS);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, loading, error } = useQuery(GET_ALL_ANNOUNCEMENTS);
+  const [getAnnouncementsByParticipants, announcementsByParticipantsResult] =
+    useLazyQuery(GET_ANNOUNCEMENTS_BY_PARTICIPANTS);
 
-  const onEdit = (announcement: { id: number; priority: string; message: string }) => {
-    setCurrentAnnouncement(announcement);
-    setIsModalOpen(true);
-  };
+  const [getAllAnnouncements, allAnnouncementsResult] =
+    useLazyQuery(GET_ALL_ANNOUNCEMENTS);
+
+  const participantToRoomMap: Record<number, number> = {};
+  const roomToParticipantMap: Record<number, number> = {};
+  if (participantData?.getCurrentParticipants) {
+    for (const participant of participantData.getCurrentParticipants) {
+      roomToParticipantMap[participant.room_number] = participant.participant_id;
+      participantToRoomMap[participant.participant_id] = participant.room_number;
+    }
+  }
+
+  useEffect(() => {
+    const trueCount = selectedButtons.filter(Boolean).length;
+    if (participantLoading || trueCount === 0 || trueCount === 10) {
+      setFilter(false);
+      getAllAnnouncements();
+      return;
+    }
+
+    setFilter(true);
+    const selectedRoomNumbers = selectedButtons
+      .map((selected, index) => (selected ? index + 1 : null))
+      .filter(Boolean) as number[];
+    const selectedParticipantIds = selectedRoomNumbers
+      .map((roomNumber) => roomToParticipantMap[roomNumber])
+      .filter(Boolean);
+
+    console.log(selectedParticipantIds)
+
+    getAnnouncementsByParticipants({
+      variables: { participant_ids: selectedParticipantIds },
+    });
+  }, [selectedButtons, participantLoading]);
 
   const handleButtonClick = (id: number) => {
     setSelectedButtons((prevSelected: any) => {
@@ -58,12 +78,18 @@ export default function AdminAnnouncementsPage() {
     setSelectedButtons(new Array(10).fill(false));
   };
 
-  if (loading) return <Text>Loading announcements...</Text>;
-  if (error) return <Text color="red.500">Error loading announcements</Text>;
+  const announcementLoading =
+    (!filter && allAnnouncementsResult.loading) ||
+    (filter && announcementsByParticipantsResult.loading);
+  const announcementError =
+    (!filter && allAnnouncementsResult.error) ||
+    (filter && announcementsByParticipantsResult.error);
+  const announcementData =
+    filter ? announcementsByParticipantsResult.data?.getAnnouncementsByParticipants
+      : allAnnouncementsResult.data?.getAllAnnouncements ?? []
 
-  // Map announcements to your UI data shape
-  // Here I’m guessing the room as "All Rooms" for simplicity; adapt as needed
-  const announcements = data?.getAllAnnouncements ?? [];
+  if (announcementLoading || participantLoading) return <Text>Loading announcements...</Text>;
+  if (announcementError || participantError) return <Text color="red.500">Error loading announcements</Text>;
 
   return (
     <Flex width="100%" flexDir="column" gap="15px">
@@ -160,32 +186,30 @@ export default function AdminAnnouncementsPage() {
       </Text>
 
       <VStack spacing={4} align="stretch" paddingBottom="20px">
-        {announcements.length === 0 && (
+        {announcementData.length === 0 && (
           <Text>No announcements found.</Text>
         )}
-        {announcements.map((announcement: any) => (
+        {announcementData.map((announcement: any) => (
           <AnnouncementCard
             key={announcement.announcement_id}
             announcement_id={announcement.announcement_id}
-            room="Room 1"
-            message={announcement.message}
-            timestamp={new Date(announcement.creation_date).toLocaleString()}
-            importance={
-              announcement.priority === "HIGH" ? 2 : announcement.priority === "NORMAL" ? 1 : 0
+            room={
+              announcement.user_announcements.length === 1
+                ? `Room ${participantToRoomMap[announcement.user_announcements[0].participant_id]}`
+                : announcement.user_announcements.length === ROOM_NUMBERS.length
+                  ? "All Rooms"
+                  : `Rooms ${announcement.user_announcements.map((ua: any) => participantToRoomMap[ua.participant_id]).join(', ')}`
             }
-            // onEdit={() => onEdit(announcement)}
+            message={announcement.message}
+            timestamp={announcement.creation_date}
+            importance={
+              announcement.priority === "CRITICAL" ? 2 : announcement.priority === "HIGH" ? 1 : 0
+            }
           />
         ))}
       </VStack>
 
       {create && <CreateAnnouncementModal isOpen={create} onClose={() => setCreate(false)} />}
-      <EditAnnouncementModal
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        announcementId={currentAnnouncement.id}
-        initialMessage={currentAnnouncement.message}
-        initialPriority={currentAnnouncement.priority}
-      />
     </Flex>
   );
 }
