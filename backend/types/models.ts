@@ -98,6 +98,7 @@ const models = gql`
 
   type EarnedBadge {
     earned_badge_id: Int!
+    badge_id: Int!
     participant_id: Int!
     date_received: String!
     name: String!
