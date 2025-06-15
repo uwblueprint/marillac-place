@@ -78,6 +78,11 @@ const resolvers = gql`
     ): Boolean
     deleteTaskById(taskId: Int!): Boolean
     assignCustomBadge(badge_id: Int!, participant_id: Int!): EarnedBadge
+    editCustomBadge(
+      custom_badge_id: Int!
+      new_custom_badge_name: String
+      new_custom_badge_description: String
+    ): Boolean
   }
 `;
 

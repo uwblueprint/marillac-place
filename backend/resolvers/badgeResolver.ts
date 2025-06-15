@@ -18,7 +18,21 @@ const badgeResolver = {
     ): Promise<EarnedBadge> => {
       return badgeService.assignCustomBadge(badge_id, participant_id);
     },
+    editCustomBadge: async (
+      _parent: undefined,
+      {
+        custom_badge_id,
+        new_custom_badge_name,
+        new_custom_badge_description
+      }: {
+        custom_badge_id: number;
+        new_custom_badge_name?: string;
+        new_custom_badge_description?: string;
+      }
+    ): Promise<boolean> => {
+      return badgeService.editCustomBadge(custom_badge_id, new_custom_badge_name, new_custom_badge_description);
+    },
   },
 };
 
-export default badgeResolver; 
+export default badgeResolver;
