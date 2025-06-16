@@ -32,6 +32,16 @@ const badgeResolver = {
     ): Promise<boolean> => {
       return badgeService.editCustomBadge(custom_badge_id, new_custom_badge_name, new_custom_badge_description);
     },
+    deleteCustomBadge: async (
+      _parent: undefined,
+      {
+        badge_id,
+      }: {
+        badge_id: number;
+      }
+    ): Promise<boolean> => {
+      return badgeService.deleteCustomBadge(badge_id);
+    },
   },
 };
 

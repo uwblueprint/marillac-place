@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import DeleteBadgeButton from "./elements/DeleteBadgeButton"
 
 export default function AdminBadgesPage() {
   return (
-    <div>badges page</div>
+    <div>
+      <DeleteBadgeButton badgeId={123} onSuccess={() => console.log("Deleted!")}/>
+    </div>
   )
 }

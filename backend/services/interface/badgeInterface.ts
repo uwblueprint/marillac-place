@@ -7,6 +7,7 @@ interface IBadgeService {
     new_custom_badge_description?: string
   ): Promise<boolean>;
   assignCustomBadge(badge_id: number, participant_id: number): Promise<EarnedBadge>;
+  deleteCustomBadge(badge_id: number): Promise<boolean>;
 }
 
 export default IBadgeService;
