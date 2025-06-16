@@ -15,7 +15,7 @@ const loginResolver = {
         password: string;
       },
     ) => {
-      return await loginService.adminLogin(role, password);
+      return loginService.adminLogin(role, password);
     },
     participantLogin: async (
       _parent: undefined,
@@ -27,7 +27,7 @@ const loginResolver = {
         password: string;
       },
     ) => {
-      return await loginService.participantLogin(id, password);
+      return loginService.participantLogin(id, password);
     },
   },
 };
