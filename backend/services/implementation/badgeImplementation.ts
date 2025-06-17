@@ -83,7 +83,7 @@ class BadgeService implements IBadgeService {
         await prisma.earnedBadge.create({
           data: {
             badge_id: badge.badge_id,
-            participant_id,
+            participant_id: participant_id,
             date_received: new Date().toISOString(),
             name: badge.name,
             description: badge.description,

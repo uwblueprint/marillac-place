@@ -23,7 +23,7 @@ class LoginService implements ILoginService {
     if (mostRecentLogin?.login_date) {
       const lastLoginDate = new Date(mostRecentLogin.login_date);
       const diffMs = now.getTime() - lastLoginDate.getTime();
-      const diffDays = diffMs / (1000 * 60 * 60 * 24);
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
       if (diffDays >= 1 && diffDays < 2) {
         const updated = await prisma.participantProgress.update({
           where: { participant_id },
@@ -32,7 +32,7 @@ class LoginService implements ILoginService {
           },
         });
         daysLoggedIn = updated.days_logged_in;
-      } else {
+      } else if (diffDays >= 2) {
         await prisma.participantProgress.update({
           where: { participant_id },
           data: { days_logged_in: 1 },
