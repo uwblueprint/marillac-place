@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import AssignCustomBadgeModal from "./elements/AssignCustomBadgeModal";
+import CreateCustomBadgeModal from "./elements/CreateCustomBadgeModal";
 
 export default function AdminBadgesPage() {
-  const [edit, setEdit] = useState(true);
+  const [show, setShow] = useState(true);
   return (
-    <AssignCustomBadgeModal isOpen={edit} onClose={() => setEdit(false)} />
+    <CreateCustomBadgeModal isOpen={show} onClose={() => setShow(false)} />
   )
 }

@@ -14,50 +14,21 @@ import {
   Grid,
   Image as ChakraImage,
 } from "@chakra-ui/react";
-
-// Enum for badge icon options
-export enum Icon {
-  FIVE_STAR = "five_star",
-  FOUR_STAR = "four_star",
-  GROUP = "group",
-  HEART = "heart",
-  HOME = "home",
-  BABY = "baby",
-  WINGS = "wings",
-  FLOWER = "flower",
-  MONEY = "money",
-  GEMSTONE = "gemstone",
-  DIAMOND = "diamond",
-  PENCIL = "pencil",
-  TOOL = "tool",
-}
-
-const iconList = [
-  Icon.FIVE_STAR,
-  Icon.GROUP,
-  Icon.HEART,
-  Icon.HOME,
-  Icon.BABY,
-  Icon.WINGS,
-];
+import { Icon, iconList } from '../../../../constants/icons';
 
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: { name: string; criteria: string; icon: Icon }) => void;
 }
 
-const CreateCustomBadgeModal = ({ isOpen, onClose, onSave }: Props) => {
+const CreateCustomBadgeModal = ({ isOpen, onClose }: Props) => {
   const [name, setName] = useState("");
   const [criteria, setCriteria] = useState("");
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
 
   const handleSave = () => {
-    if (name && criteria && selectedIcon) {
-      onSave({ name, criteria, icon: selectedIcon });
-      onClose();
-    }
+    console.log("save logic")
   };
 
   return (
@@ -122,34 +93,14 @@ const CreateCustomBadgeModal = ({ isOpen, onClose, onSave }: Props) => {
     ))}
   </Grid>
 </FormControl>
-
-
-          <Flex alignItems="center" justify="flex-end" gap={3} mt={4}>
-            <Button
-                variant="white"
-                onClick={onClose}
-                borderRadius="8px"
-                paddingX="10px"
-                paddingY="6px"
-                minH="30px"
-                minW="100px"
-            >
-                <Text fontSize="sm" textStyle="web.s1">Cancel</Text>
+          <Flex alignItems="center" justifyContent="flex-end" gap={3} mt={4}>
+            <Button variant="white" onClick={onClose}>
+              <Text textStyle="web.s1" fontSize="sm">Cancel</Text>
             </Button>
-
-            <Button
-                variant="primaryFilled"
-                onClick={handleSave}
-                isDisabled={!name || !criteria || !selectedIcon}
-                borderRadius="8px"
-                paddingX="10px"
-                paddingY="6px"
-                minH="30px"
-                minW="100px"
-            >
-                <Text fontSize="sm" textStyle="web.s1" color="white">Save</Text>
+            <Button variant="primaryFilled" onClick={handleSave}>
+              <Text textStyle="web.s1" fontSize="sm" color="white">Save</Text>
             </Button>
-            </Flex>
+          </Flex>
         </ModalBody>
       </ModalContent>
     </Modal>
