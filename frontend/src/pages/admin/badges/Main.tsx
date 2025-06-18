@@ -2,10 +2,12 @@ import {Button, Flex, Input, InputGroup, InputLeftElement, Text } from "@chakra-
 import AddIcon from '@mui/icons-material/Add';
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
+import CreateCustomBadgeModal from "./elements/CreateCustomBadgeModal";
 import CustomBadgeTable from "./elements/CustomBadgeTable";
 import { GET_CUSTOM_BADGES } from "../../../gql/queries";
 
 export default function AdminBadgesPage() {
+  const [show, setShow] = useState(true);
   const [badges, setBadges] = useState([]);
   
   const { loading, error, data } = useQuery(GET_CUSTOM_BADGES);
@@ -74,5 +76,6 @@ export default function AdminBadgesPage() {
         </Flex>
       </Flex>
     </>
+    <CreateCustomBadgeModal isOpen={show} onClose={() => setShow(false)} />
   )
 }
