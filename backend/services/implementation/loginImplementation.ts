@@ -10,7 +10,24 @@ const jwt = require("jsonwebtoken");
 const badgeService: IBadgeService = new BadgeService();
 
 class LoginService implements ILoginService {
-  private async calculateLoginStreak(
+  private async addLogin(
+      participant_id: number,
+  ): Promise<boolean> {
+    try {
+      await prisma.login.create({
+        data: {
+          participant_id: participant_id,
+          login_date:  new Date(new Date().setUTCHours(0, 0, 0, 0)).toISOString().replace(".000", "")
+        },
+      });
+      return true;
+    } catch(err) {
+      return false;
+    }
+  }
+
+
+  private async updateLoginStreak(
       participant_id: number,
   ): Promise<number> {
     const mostRecentLogin = await prisma.login.findFirst({
@@ -18,33 +35,22 @@ class LoginService implements ILoginService {
       orderBy: { login_date: 'desc' },
       select: { login_date: true },
     });
-    const now = new Date();
-    let daysLoggedIn = 1;
     if (mostRecentLogin?.login_date) {
+      const today = new Date(`${new Date().toISOString().split("T")[0]}T00:00:00Z`);
       const lastLoginDate = new Date(mostRecentLogin.login_date);
-      const diffMs = now.getTime() - lastLoginDate.getTime();
-      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      if (diffDays >= 1 && diffDays < 2) {
-        const updated = await prisma.participantProgress.update({
-          where: { participant_id },
-          data: {
-            days_logged_in: { increment: 1 },
-          },
-        });
-        daysLoggedIn = updated.days_logged_in;
-      } else if (diffDays >= 2) {
-        await prisma.participantProgress.update({
-          where: { participant_id },
-          data: { days_logged_in: 1 },
-        });
+      if (today.getTime() === lastLoginDate.getTime()) {
+        const progress = await prisma.participantProgress.findUnique({where: {participant_id}});
+        return progress!.days_logged_in;
       }
-    } else {
-      await prisma.participantProgress.update({
-        where: { participant_id },
-        data: { days_logged_in: 1 },
-      });
     }
-    return daysLoggedIn;
+    const updated = await prisma.participantProgress.update({
+      where: {participant_id},
+      data: {
+        days_logged_in: {increment: 1},
+      },
+    });
+    await this.addLogin(participant_id);
+    return updated!.days_logged_in;
   }
 
   async adminLogin(
@@ -129,14 +135,8 @@ class LoginService implements ILoginService {
     );
 
     try {
-      const days = await this.calculateLoginStreak(participant.participant_id);
+      const days = await this.updateLoginStreak(participant.participant_id);
       await badgeService.evaluateBadge(days, id, 'login');
-      await prisma.login.create({
-        data: {
-          participant_id: id,
-          login_date: new Date().toISOString(),
-        },
-      });
     } catch (err) {
       console.error("Failed to record login:", err);
     }
