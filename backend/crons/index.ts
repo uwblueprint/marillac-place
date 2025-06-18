@@ -21,7 +21,7 @@ cron.schedule("0 0 0 * * *", async () => {
   }
 });
 
-cron.schedule("* * * * * *", async () => {
+cron.schedule("0 0 0 * * *", async () => {
   const res = await expireLoginStreak();
   if (res) {
     console.log("Expired login streaks");
