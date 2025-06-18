@@ -73,7 +73,7 @@ class BadgeService implements IBadgeService {
       });
       if (!badge) throw new Error(`Badge "${badge_name}" not found.`);
       const earned = await prisma.earnedBadge.findFirst({
-        where: {participant_id: participant_id, badge_id: badge.badge_id},
+        where: {participant_id: participant_id, name: badge.name},
         orderBy: {level: 'asc'},
       });
       const nextLevel = earned ? earned.level + 1 : 1;
@@ -82,7 +82,6 @@ class BadgeService implements IBadgeService {
       if (current_benchmark >= nextLevelEntry.benchmark) {
         await prisma.earnedBadge.create({
           data: {
-            badge_id: badge.badge_id,
             participant_id: participant_id,
             date_received: new Date().toISOString(),
             name: badge.name,
