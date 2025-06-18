@@ -87,6 +87,7 @@ const models = gql`
     is_active: Boolean!
     is_consecutive: Boolean!
     icon: Icon!
+    offered_levels: [String!]!
   }
 
   type BadgeLevel {
