@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import {
+  Modal,
+  ModalContent,
+  ModalBody,
+  ModalOverlay,
+  Flex,
+  FormControl,
+  FormLabel,
   Box,
   Button,
   Grid,
@@ -11,6 +18,7 @@ import {
   extendTheme,
   ChakraProvider,
 } from '@chakra-ui/react';
+import { ROOM_NUMBERS } from '../../../../constants/rooms';
 
 
 interface CustomBadgeModalProps {
@@ -22,17 +30,16 @@ interface CustomBadgeModalProps {
 const CustomBadgeModal: React.FC<CustomBadgeModalProps> = ({ isOpen, onClose }) => {
   const [badgeName, setBadgeName] = useState('');
   const [badgeValue, setBadgeValue] = useState('');
-  const [selectedRooms, setSelectedRooms] = useState<string[]>([]);
+  const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
 
 
-  const toggleRoomSelection = (room: string) => {
+  const toggleRoomSelection = (room: number) => {
     setSelectedRooms((prev) =>
       prev.includes(room)
         ? prev.filter((r) => r !== room)
         : [...prev, room]
     );
   };
-
 
   const assignBadge = () => {
     console.log('Badge Assigned:', {
@@ -43,107 +50,90 @@ const CustomBadgeModal: React.FC<CustomBadgeModalProps> = ({ isOpen, onClose }) 
     onClose();
   };
 
-
-  const cancel = () => {
-    setBadgeName('');
-    setBadgeValue('');
-    setSelectedRooms([]);
-    onClose(); // Close the modal on cancel
-  };
-
-
-  if (!isOpen) return null;
-
-
   return (
-    <Box
-      width="448px"
-      bg="white"
-      borderRadius="xl"
-      boxShadow="lg"
-      p={6}
-      fontFamily="body"
-    >
-      <Heading as="h2" fontSize="20px" fontWeight="semibold" mb={4}>
-        Assign Custom Badge
-      </Heading>
+    <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered>
+      <ModalOverlay />
+      <ModalContent boxShadow="xl" borderRadius="16px" width="450px" padding="20px">
+        <ModalBody>
+          <Text textStyle="web.h3" mb="15px">Assign Custom Badge</Text>
+          <Flex flexDir="column" gap="10px">
+            <FormControl>
+              <FormLabel mb="5px">
+                <Text textStyle="web.s1" color="text.light.secondary">Badge Name</Text>
+              </FormLabel>
+              <Input
+                variant="primary"
+                value={badgeName}
+                onChange={(e) => setBadgeName(e.target.value)}
+              />
+            </FormControl>
 
+            <FormControl>
+              <FormLabel mb="5px">
+                <Text textStyle="web.s1" color="text.light.secondary">Badge Value</Text>
+              </FormLabel>
+              <Input
+                variant="primary"
+                value={badgeValue}
+                onChange={(e) => setBadgeValue(e.target.value)}
+              />
+            </FormControl>
 
-      <VStack align="stretch" spacing={4}>
-        <Box>
-          <Text fontSize="sm" mb={1} fontWeight="medium">
-            Badge Name
-          </Text>
-          <Input
-            placeholder="Enter badge name"
-            value={badgeName}
-            onChange={(e) => setBadgeName(e.target.value)}
-            size="md"
-            borderRadius="md"
-          />
-        </Box>
+            <Flex
+              w="100%"
+              h="1px"
+              bg="neutral.300"
+              mt="10px"
+            />
 
+            <Grid w="100%" templateColumns='repeat(4, 1fr)' gap="5px" mt="10px">
+              { ROOM_NUMBERS.map((num: number) => (
+                <Button
+                  key={num}
+                  onClick={() => toggleRoomSelection(num)}
+                  isActive={selectedRooms.includes(num)}
+                  borderRadius="8px"
+                  border="1px"
+                  borderColor="#0C727E"
+                  bg="#FFFFFF"
+                  color="#0C727E"
+                  cursor="pointer"
+                  height="fit-content"
+                  paddingY="8px"
+                  _hover={{
+                    color: "#FFFFFF",
+                    bg: "#0C727E",
+                  }}
+                  _active={{
+                    color: "#FFFFFF",
+                    bg: "#0C727E",
+                  }}
+                  _disabled={{
+                    opacity: 0.5,
+                    border: "0px",
+                    color: "#FFFFFF",
+                    bg: "#0C727E",
+                    cursor: "not-allowed",
+                    pointerEvents: "none",
+                  }}
+                >
+                  <Text textStyle="web.s1" color="inherit">Room {num}</Text>
+                </Button>
+              ))}
+            </Grid>
 
-        <Box>
-          <Text fontSize="sm" mb={1} fontWeight="medium">
-            Badge Value
-          </Text>
-          <Input
-            placeholder="$0.00"
-            value={badgeValue}
-            onChange={(e) => setBadgeValue(e.target.value)}
-            size="md"
-            borderRadius="md"
-            color="gray.600"
-            bg="white"
-          />
-        </Box>
-      </VStack>
-
-
-      <Box borderTop="1px solid" borderColor="gray.200" my={5} />
-
-
-      <Text mb={2} fontSize="sm" fontWeight="medium">
-        Choose Room(s)
-      </Text>
-      <Grid templateColumns="repeat(4, 1fr)" gap={3} mb={8}>
-        {Array.from({ length: 10 }, (_, i) => `Room ${i + 1}`).map((room) => (
-          <Button
-            key={room}
-            size="sm"
-            borderRadius="lg"
-            colorScheme="teal"
-            variant={selectedRooms.includes(room) ? 'solid' : 'outline'}
-            fontWeight="medium"
-            onClick={() => toggleRoomSelection(room)}
-          >
-            {room}
-          </Button>
-        ))}
-      </Grid>
-
-
-      <HStack spacing={4} justify="flex-end">
-        <Button
-          variant="outline"
-          colorScheme="gray"
-          size="md"
-          px={6}
-          onClick={cancel}
-        >
-          Cancel
-        </Button>
-        <Button
-          colorScheme="orange"
-          size="md"
-          px={6}
-          onClick={assignBadge}
-        >
-          Assign Badge
-        </Button>
-      </HStack>
-    </Box>
+            <Flex alignItems="center" justifyContent="flex-end" gap="5px" mt="15px">
+              <Button variant="white" onClick={onClose}>
+                <Text textStyle="web.s1">Cancel</Text>
+              </Button>
+              <Button variant="primaryFilled" onClick={assignBadge}>
+                <Text textStyle="web.s1" color="white">Save</Text>
+              </Button>
+            </Flex>
+          </Flex>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 
