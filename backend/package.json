@@ -92,10 +92,10 @@
     "graphql-upload": "^11.0.0"
   },
   "@snaplet/seed": {
-    "config": "seed.config.ts"
+    "config": "prisma/seed/seed.config.ts"
   },
   "prisma": {
-    "seed": "npx tsx seed-snaplet.ts",
+    "seed": "npx tsx prisma/seed/seed-snaplet.ts",
     "schema": "./prisma/schema.prisma"
   }
 }
