@@ -30,23 +30,6 @@ const CustomBadgeTable = ({
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  // tried to use enum from constants but didnt work
-  const iconToSvg = new Map<string, string>([
-    ["FIVE_STAR", "five_star.svg"],
-    ["FOUR_STAR", "four_star.svg"],
-    ["GROUP", "group.svg"],
-    ["HEART", "heart.svg"],
-    ["HOME", "home.svg"],
-    ["BABY", "baby.svg"],
-    ["WINGS", "wings.svg"],
-    ["FLOWER", "flower.svg"],
-    ["MONEY", "money.svg"],
-    ["GEMSTONE", "gemstone.svg"],
-    ["DIAMOND", "diamond.svg"],
-    ["PENCIL", "pencil.svg"],
-    ["TOOL", "tool.svg"],
-  ]);
-
   return (
     <>
       <TableContainer
@@ -113,7 +96,7 @@ const CustomBadgeTable = ({
                 >
                   <Td>
                     <img
-                      src={`/badges/${iconToSvg.get(badge.icon)}`}
+                      src={`/badges/${badge.icon.toLowerCase()}.svg`}
                       alt={badge.name}
                       style={{ width: "1.5rem", height: "1.5rem" }}
                     />
