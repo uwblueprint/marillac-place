@@ -20,7 +20,7 @@ const participantResolver = {
     getParticipantsByRooms: async (
       _parent: undefined,
       { room_numbers }: { room_numbers: number[] }
-    ): Promise<Record<number, number | null>> => {
+    ): Promise<Participant[]> => {
       return participantService.getParticipantsByRooms(room_numbers);
     },
   },

@@ -196,7 +196,7 @@ model Badge {
   is_consecutive Boolean
   icon           Icon
 
-  badge_level BadgeLevel[]
+  badge_level   BadgeLevel[]
 
   @@map("badge")
 }
@@ -215,7 +215,6 @@ model BadgeLevel {
 
 model EarnedBadge {
   earned_badge_id Int    @id @default(autoincrement())
-  badge_id        Int
   participant_id  Int
   date_received   String
   name            String

@@ -16,7 +16,7 @@ import AdminSchedulePage from "./pages/admin/schedule/Main";
 import AdminAnnouncementsPage from "./pages/admin/announcements/Main";
 import AdminParticipantsPage from "./pages/admin/participants/Main";
 import AdminTasksPage from "./pages/admin/tasks/Main";
-// import AdminBadgesPage from "./pages/admin/badges/index";
+import AdminBadgesPage from "./pages/admin/badges/Main";
 
 import ParticipantLoginPage from "./pages/participant/login/Main";
 // import ParticipantHomePage from "./pages/participant/home/index";
@@ -64,6 +64,11 @@ const App = (): React.ReactElement => {
             <Route path={ROUTES.ADMIN_TASKS_PAGE} element={
               <AdminRoute>
                 <AdminTasksPage />
+              </AdminRoute>
+            }/>
+            <Route path={ROUTES.ADMIN_BADGES_PAGE} element={
+              <AdminRoute>
+                <AdminBadgesPage />
               </AdminRoute>
             }/>
 

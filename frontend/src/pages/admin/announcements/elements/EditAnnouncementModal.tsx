@@ -25,6 +25,7 @@ type EditAnnouncementModalProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   announcementId: number;
+  sendTo: string;
   initialMessage: string;
   initialPriority: string;
 };
@@ -33,11 +34,11 @@ const EditAnnouncementModal = ({
   isOpen,
   setIsOpen,
   announcementId,
+  sendTo,
   initialMessage,
   initialPriority,
 }: EditAnnouncementModalProps): React.ReactElement => {
   const [priority, setPriority] = useState(initialPriority);
-  const [sendTo] = useState("");
   const [message, setMessage] = useState(initialMessage);
 
   const [error, setError] = useState("");
