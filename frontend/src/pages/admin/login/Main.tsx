@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
   };
 
   if (!checkLoggedIn || loading) {
-    return <Loading />
+    return <Loading />;
   }
 
   if (loggedIn) {
@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
         <Flex width="30%" marginLeft="3vw">
           <img
             width="100%"
-            src={ process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png" }
+            src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"}
             alt="Marillac Place Logo"
           />
         </Flex>
@@ -104,13 +104,9 @@ export default function AdminLoginPage() {
           gap="20px"
         >
           <Flex flexDir="column">
-            <Text textStyle="web.h1">
-              Sign in
-            </Text>
+            <Text textStyle="web.h1">Sign in</Text>
 
-            <Text textStyle="web.b1">
-              Please enter your login information.
-            </Text>
+            <Text textStyle="web.b1">Please enter your login information.</Text>
           </Flex>
 
           <Flex flexDir="column" gap="10px">
@@ -136,7 +132,11 @@ export default function AdminLoginPage() {
               />
             </FormControl>
 
-            { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text> }
+            {error && (
+              <Text textStyle="web.b2" fontWeight="600" color="#E30000">
+                {error}
+              </Text>
+            )}
           </Flex>
 
           <Button
@@ -154,4 +154,4 @@ export default function AdminLoginPage() {
       </Flex>
     </Flex>
   );
-};
+}

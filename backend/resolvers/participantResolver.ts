@@ -11,12 +11,18 @@ const participantResolver = {
     getPastParticipants: async (): Promise<Participant[]> => {
       return participantService.getPastParticipants();
     },
-    getParticipantByRoom: async(
+    getParticipantByRoom: async (
       _parent: undefined,
       { room_number }: { room_number: number }
     ): Promise<Participant | null> => {
       return participantService.getParticipantByRoom(room_number);
-    }
+    },
+    getParticipantsByRooms: async (
+      _parent: undefined,
+      { room_numbers }: { room_numbers: number[] }
+    ): Promise<Participant[]> => {
+      return participantService.getParticipantsByRooms(room_numbers);
+    },
   },
   Mutation: {
     createParticipant: async (
@@ -31,13 +37,13 @@ const participantResolver = {
         room_number: number;
         arrival_date: string;
         password: string;
-      },
+      }
     ): Promise<boolean> => {
       return participantService.createParticipant(
         participant_id,
         room_number,
         arrival_date,
-        password,
+        password
       );
     },
     updateParticipant: async (
@@ -62,7 +68,7 @@ const participantResolver = {
         marillac_bucks?: number;
         marillac_bucks_goal?: number;
         password?: string;
-      },
+      }
     ): Promise<boolean> => {
       return participantService.updateParticipant(
         participant_id,
@@ -73,7 +79,7 @@ const participantResolver = {
         account_removal_date,
         marillac_bucks,
         marillac_bucks_goal,
-        password,
+        password
       );
     },
     updateMarillacBucks: async (
@@ -81,12 +87,12 @@ const participantResolver = {
       {
         participant_id,
         marillac_bucks,
-        reason
+        reason,
       }: {
         participant_id: number;
         marillac_bucks: number;
         reason: string;
-      },
+      }
     ): Promise<boolean> => {
       return participantService.updateMarillacBucks(
         participant_id,
@@ -94,7 +100,7 @@ const participantResolver = {
         reason
       );
     },
-  }
-}
+  },
+};
 
 export default participantResolver;
