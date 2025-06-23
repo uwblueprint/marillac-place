@@ -9,12 +9,15 @@ import {
   Text,
   Flex,
   Spinner,
+  Image as ChakraImage,
 } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
 import EditCustomBadgeModal from "./EditCustomBadgeModal";
 import { Icon } from "../../../../constants/icons";
+import { DELETE_CUSTOM_BADGE } from "../../../../gql/mutations";
 
 type CustomBadgeTableProps = {
   loading: boolean;
@@ -29,6 +32,21 @@ const CustomBadgeTable = ({
 }: CustomBadgeTableProps) => {
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  const [deleteCustomBadge] = useMutation(DELETE_CUSTOM_BADGE);
+
+  async function handleDelete(id: number) {
+    try {
+      await deleteCustomBadge({
+        variables: {
+          badge_id: id
+        }
+      });
+    } catch (err: any) {
+      console.log(err);
+    }
+    window.location.reload();
+  }
 
   return (
     <>
@@ -95,10 +113,11 @@ const CustomBadgeTable = ({
                   outlineColor="neutral.300"
                 >
                   <Td>
-                    <img
+                    <ChakraImage
                       src={`/badges/${badge.icon.toLowerCase()}.svg`}
                       alt={badge.name}
                       style={{ width: "1.5rem", height: "1.5rem" }}
+                      opacity={0.5}
                     />
                   </Td>
                   <Td>
@@ -133,7 +152,7 @@ const CustomBadgeTable = ({
                           }}
                         />
                       </Flex>
-                      <Flex cursor="pointer" onClick={() => {}}>
+                      <Flex cursor="pointer" onClick={() => handleDelete(badge.badge_id)}>
                         <DeleteOutlineIcon
                           style={{
                             width: "1.3rem",
@@ -151,7 +170,7 @@ const CustomBadgeTable = ({
         </Table>
       </TableContainer>
       {edit && selected && (
-        <EditCustomBadgeModal isOpen={edit} onClose={() => setEdit(false)} />
+        <EditCustomBadgeModal isOpen={edit} onClose={() => setEdit(false)} selected={selected} />
       )}
     </>
   );

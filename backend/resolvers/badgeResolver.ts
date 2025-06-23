@@ -1,4 +1,4 @@
-import { Badge, EarnedBadge } from "@prisma/client";
+import { EarnedBadge, BadgeType, Icon, Badge } from "@prisma/client";
 import BadgeService from "../services/implementation/badgeImplementation";
 import IBadgeService from "../services/interface/badgeInterface";
 
@@ -40,6 +40,34 @@ const badgeResolver = {
         new_custom_badge_name,
         new_custom_badge_description
       );
+    },
+    createCustomBadge: async (
+      _parent: undefined,
+      {
+        name,
+        description,
+        icon,
+      }: {
+        name: string;
+        description: string;
+        icon: Icon;
+      },
+    ): Promise<boolean> => {
+      return badgeService.createCustomBadge(
+        name,
+        description,
+        icon
+      );
+    },
+    deleteCustomBadge: async (
+      _parent: undefined,
+      {
+        badge_id,
+      }: {
+        badge_id: number;
+      }
+    ): Promise<boolean> => {
+      return badgeService.deleteCustomBadge(badge_id);
     },
   },
 };

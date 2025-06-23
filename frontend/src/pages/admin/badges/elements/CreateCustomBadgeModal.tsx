@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Modal,
   ModalOverlay,
@@ -14,33 +14,56 @@ import {
   Grid,
   Image as ChakraImage,
 } from "@chakra-ui/react";
-import { Icon, iconList } from '../../../../constants/icons';
-
+import {useMutation} from "@apollo/client";
+import {Icon, iconList} from '../../../../constants/icons';
+import {CREATE_CUSTOM_BADGE} from "../../../../gql/mutations";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const CreateCustomBadgeModal = ({ isOpen, onClose }: Props) => {
+const CreateCustomBadgeModal = ({isOpen, onClose}: Props) => {
   const [name, setName] = useState("");
   const [criteria, setCriteria] = useState("");
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
+  const [error, setError] = useState("");
+
+  const [createCustomBadge, {loading}] = useMutation(CREATE_CUSTOM_BADGE, {
+    onCompleted: () => {
+      localStorage.setItem("notification", "Created Custom Badge: " + name);
+      window.location.reload();
+    },
+    onError: (err) => {
+      setError(err.message);
+    },
+  });
 
   const handleSave = () => {
-    console.log("save logic")
+    setError("");
+    if (!name || !criteria || !selectedIcon) {
+      setError("Missing fields");
+    } else {
+      createCustomBadge({
+        variables: {
+          name,
+          description: criteria,
+          icon: selectedIcon.toUpperCase()
+        }
+      });
+    }
   };
 
   return (
     <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered size="lg">
-      <ModalOverlay />
+      <ModalOverlay/>
       <ModalContent borderRadius="16px" p={6} maxW="600px">
         <ModalHeader>
           <Text textStyle="web.h3">Create New Custom Badge</Text>
         </ModalHeader>
 
         <ModalBody>
-          <FormControl mb={8}>
+          <FormControl mb={4}>
             <FormLabel>
               <Text textStyle="web.s1" fontSize="l" color="text.light.secondary">Badge Name</Text>
             </FormLabel>
@@ -63,38 +86,42 @@ const CreateCustomBadgeModal = ({ isOpen, onClose }: Props) => {
           </FormControl>
 
           <FormControl mb={4}>
-  <FormLabel>
-    <Text textStyle="web.s1" fontSize="l" color="text.light.secondary">Choose Badge Icon</Text>
-  </FormLabel>
-  <Grid templateColumns="repeat(6, 1fr)" gap={3}>
-    {iconList.map((icon) => (
-      <Flex
-        key={icon}
-        as="button"
-        align="center"
-        justify="center"
-        width="72px"
-        height="72px"
-        p={2}
-        borderRadius="8px"
-        border="2px solid"
-        borderColor={selectedIcon === icon ? "#3182CE" : "gray.200"}
-        bg="white"
-        onClick={() => setSelectedIcon(icon)}
-        _hover={{ borderColor: "#3182CE" }}
-      >
-        <ChakraImage
-          src={`/badges/${icon}.svg`}
-          alt={icon}
-          boxSize={icon === Icon.WINGS ? "55px" : "32px"}
-          opacity={selectedIcon === icon ? 1 : 0.5}
-        />
-      </Flex>
-    ))}
-  </Grid>
-</FormControl>
+            <FormLabel>
+              <Text textStyle="web.s1" fontSize="l" color="text.light.secondary">Choose Badge Icon</Text>
+            </FormLabel>
+            <Grid templateColumns="repeat(6, 1fr)" gap={3}>
+              {iconList.map((icon) => (
+                <Flex
+                  key={icon}
+                  as="button"
+                  align="center"
+                  justify="center"
+                  width="72px"
+                  height="72px"
+                  p={2}
+                  borderRadius="8px"
+                  border="2px solid"
+                  borderColor={selectedIcon === icon ? "#3182CE" : "gray.200"}
+                  bg="white"
+                  onClick={() => setSelectedIcon(icon)}
+                  _hover={{borderColor: "#3182CE"}}
+                >
+                  <ChakraImage
+                    src={`/badges/${icon}.svg`}
+                    alt={icon}
+                    boxSize={icon === Icon.WINGS ? "55px" : "32px"}
+                    opacity={selectedIcon === icon ? 1 : 0.5}
+                  />
+                </Flex>
+              ))}
+            </Grid>
+            { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000" mt={4}>{error}</Text> }
+          </FormControl>
           <Flex alignItems="center" justifyContent="flex-end" gap={3} mt={4}>
-            <Button variant="white" onClick={onClose}>
+            <Button variant="white" onClick={() => {
+              setError("");
+              onClose()
+            }}>
               <Text textStyle="web.s1" fontSize="sm">Cancel</Text>
             </Button>
             <Button variant="primaryFilled" onClick={handleSave}>

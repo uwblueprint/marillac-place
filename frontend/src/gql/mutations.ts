@@ -240,3 +240,29 @@ export const DELETE_TASK = gql`
     deleteTaskById(taskId: $taskId)
   }
 `;
+
+export const DELETE_CUSTOM_BADGE = gql`
+  mutation deleteCustomBadge($badge_id: Int!) {
+    deleteCustomBadge(badge_id: $badge_id)
+  }
+`;
+
+export const CREATE_CUSTOM_BADGE = gql`
+  mutation createCustomBadge($name: String!, $description: String!, $icon: Icon!) {
+    createCustomBadge(name: $name, description: $description, icon: $icon)
+  }
+`;
+
+export const EDIT_CUSTOM_BADGE = gql`
+  mutation editCustomBadge(
+    $custom_badge_id: Int!,
+    $new_custom_badge_name: String,
+    $new_custom_badge_description: String,
+  ) {
+    editCustomBadge(
+      custom_badge_id: $custom_badge_id,
+      new_custom_badge_name: $new_custom_badge_name,
+      new_custom_badge_description: $new_custom_badge_description
+    )
+  }
+`;

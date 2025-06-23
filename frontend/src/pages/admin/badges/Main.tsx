@@ -12,9 +12,11 @@ import React, { useEffect, useState } from "react";
 import CreateCustomBadgeModal from "./elements/CreateCustomBadgeModal";
 import CustomBadgeTable from "./elements/CustomBadgeTable";
 import { GET_CUSTOM_BADGES } from "../../../gql/queries";
+import AssignCustomBadgeModal from "./elements/AssignCustomBadgeModal";
 
 export default function AdminBadgesPage() {
-  const [show, setShow] = useState(false);
+  const [create, setCreate] = useState(false);
+  const [assign, setAssign] = useState(false);
   const [badges, setBadges] = useState([]);
 
   const { loading, error, data } = useQuery(GET_CUSTOM_BADGES);
@@ -59,6 +61,7 @@ export default function AdminBadgesPage() {
           </Flex>
           <Flex alignItems="center" gap="15px">
             <Button
+              onClick={() => setAssign(true)}
               variant="secondaryOutline"
               fontWeight={700}
               fontSize="12px"
@@ -67,7 +70,7 @@ export default function AdminBadgesPage() {
               Assign Custom Badge
             </Button>
             <Button
-              onClick={() => setShow(true)}
+              onClick={() => setCreate(true)}
               variant="primaryFilled"
               fontWeight={700}
               fontSize="12px"
@@ -87,7 +90,8 @@ export default function AdminBadgesPage() {
           <CustomBadgeTable loading={loading} error={error} badges={badges} />
         </Flex>
       </Flex>
-      <CreateCustomBadgeModal isOpen={show} onClose={() => setShow(false)} />
+      <CreateCustomBadgeModal isOpen={create} onClose={() => setCreate(false)} />
+      <AssignCustomBadgeModal isOpen={assign} onClose={() => setAssign(false)} />
     </>
   );
 }
