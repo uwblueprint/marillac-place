@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import CreateCustomBadgeModal from "./elements/CreateCustomBadgeModal";
+import DeleteBadgeButton from "./elements/DeleteBadgeButton"
 
 export default function AdminBadgesPage() {
-  const [show, setShow] = useState(true);
   return (
-    <CreateCustomBadgeModal isOpen={show} onClose={() => setShow(false)} />
+    <div>
+      <DeleteBadgeButton badgeId={123} onSuccess={() => console.log("Deleted!")}/>
+    </div>
   )
 }

@@ -88,6 +88,7 @@ const resolvers = gql`
       new_custom_badge_name: String
       new_custom_badge_description: String
     ): Boolean
+    deleteCustomBadge(badge_id: Int!): Boolean!
   }
 `;
 

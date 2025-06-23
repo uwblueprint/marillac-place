@@ -50,6 +50,16 @@ const badgeResolver = {
         icon
       );
     },
+    deleteCustomBadge: async (
+      _parent: undefined,
+      {
+        badge_id,
+      }: {
+        badge_id: number;
+      }
+    ): Promise<boolean> => {
+      return badgeService.deleteCustomBadge(badge_id);
+    },
   },
 };
 

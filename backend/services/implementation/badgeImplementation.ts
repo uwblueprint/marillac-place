@@ -79,6 +79,34 @@ class BadgeService implements IBadgeService {
       throw new Error("Something went wrong");
     }
   }
+
+  async deleteCustomBadge(badge_id: number): Promise<boolean> {
+    try {
+      const badge = await prisma.badge.findUnique({
+        where: { badge_id },
+      });
+
+      if (!badge) {
+        throw new Error(`Badge with ID ${badge_id} does not exist`);
+      }
+
+      if (badge.badge_type !== BadgeType.CUSTOM) {
+        throw new Error(
+          `Badge with ID ${badge_id} is not a custom badge and cannot be deleted`
+        );
+      }
+
+      await prisma.badge.delete({
+        where: { badge_id },
+      });
+
+      return true;
+    } catch (err) {
+      console.error(`Failed to delete badge ${badge_id}:`, err);
+      return false;
+    }
+  }
+
 }
 
 export default BadgeService;

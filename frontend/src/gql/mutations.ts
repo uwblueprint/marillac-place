@@ -240,3 +240,9 @@ export const DELETE_TASK = gql`
     deleteTaskById(taskId: $taskId)
   }
 `;
+
+export const DELETE_CUSTOM_BADGE = gql`
+  mutation deleteCustomBadge($badge_id: Int!) {
+    deleteCustomBadge(badge_id: $badge_id)
+  }
+`;
