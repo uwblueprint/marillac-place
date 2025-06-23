@@ -21,17 +21,16 @@ import {
 import { ROOM_NUMBERS } from '../../../../constants/rooms';
 
 
-interface CustomBadgeModalProps {
+interface AssignCustomBadgeModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 
-const CustomBadgeModal: React.FC<CustomBadgeModalProps> = ({ isOpen, onClose }) => {
+const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({ isOpen, onClose }) => {
   const [badgeName, setBadgeName] = useState('');
   const [badgeValue, setBadgeValue] = useState('');
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
-
 
   const toggleRoomSelection = (room: number) => {
     setSelectedRooms((prev) =>
@@ -138,4 +137,4 @@ const CustomBadgeModal: React.FC<CustomBadgeModalProps> = ({ isOpen, onClose }) 
 };
 
 
-export default CustomBadgeModal
+export default AssignCustomBadgeModal;

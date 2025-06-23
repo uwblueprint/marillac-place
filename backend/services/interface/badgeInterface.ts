@@ -1,6 +1,7 @@
 import { Badge, EarnedBadge, BadgeType, Icon } from "@prisma/client";
 
 export default interface IBadgeService {
+  getCustomBadges(): Promise<Badge[]>;
   createCustomBadge(
     name: string,
     description: string,

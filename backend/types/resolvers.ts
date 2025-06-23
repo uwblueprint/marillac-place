@@ -11,6 +11,7 @@ const resolvers = gql`
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
     getTasksByType(type: TaskType!): [Task]
+    getCustomBadges: [Badge]
   }
 
   type Mutation {
