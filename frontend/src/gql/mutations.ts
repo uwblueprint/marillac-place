@@ -242,7 +242,7 @@ export const DELETE_TASK = gql`
 `;
 
 export const DELETE_CUSTOM_BADGE = gql`
-  mutation DeleteCustomBadge($badge_id: Int!) {
+  mutation deleteCustomBadge($badge_id: Int!) {
     deleteCustomBadge(badge_id: $badge_id)
   }
 `;

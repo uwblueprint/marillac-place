@@ -1,6 +1,6 @@
-import { EarnedBadge, BadgeType } from "@prisma/client";
-import IBadgeService from "../interface/badgeInterface";
+import { EarnedBadge, BadgeType, Icon } from "@prisma/client";
 import prisma from "../../prisma";
+import IBadgeService from "../interface/badgeInterface";
 
 class BadgeService implements IBadgeService {
   async editCustomBadge (
@@ -56,6 +56,28 @@ class BadgeService implements IBadgeService {
     });
 
     return earnedBadge;
+  }
+
+  async createCustomBadge(
+    name: string,
+    description: string,
+    icon: Icon
+  ): Promise<boolean> {
+    try {
+
+      await prisma.badge.create({
+        data: {
+          name,
+          description,
+          icon,
+          is_consecutive: false,
+          badge_type: "CUSTOM",
+        },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
   }
 
   async deleteCustomBadge(badge_id: number): Promise<boolean> {
