@@ -16,7 +16,7 @@ const resolvers = gql`
   type Mutation {
     adminLogin(role: String!, password: String!): LoginResponse
     participantLogin(id: Int!, password: String!): LoginResponse
-    createBadge( 
+    createCustomBadge( 
       name: String!, 
       description: String!,
       icon: Icon!

@@ -32,7 +32,7 @@ const badgeResolver = {
     ): Promise<boolean> => {
       return badgeService.editCustomBadge(custom_badge_id, new_custom_badge_name, new_custom_badge_description);
     },
-    createBadge: async (
+    createCustomBadge: async (
       _parent: undefined,
       {
         name,
