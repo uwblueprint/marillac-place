@@ -131,7 +131,7 @@ const AnnouncementSection = () => {
       <Flex
         alignItems="center"
         overflow="scroll"
-        height="fit-content"
+        height="100%"
         justifyContent="center"
         sx={{
           "&::-webkit-scrollbar": {
