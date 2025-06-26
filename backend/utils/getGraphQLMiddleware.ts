@@ -41,6 +41,7 @@ export default function getGraphQLMiddleware() {
       getAllAnnouncements: verifyRole(["admin", "relief"]),
       getAnnouncementsInDateRange: verifyRole(["admin", "relief"]),
       getTasksByType: verifyRole(["admin", "relief"]),
+      getCustomBadges: verifyRole(["admin", "relief"]),
     },
     Mutation: {
       createParticipant: verifyRole(["admin", "relief"]),
@@ -56,6 +57,8 @@ export default function getGraphQLMiddleware() {
       deleteTaskById: verifyRole(["admin", "relief"]),
       editCustomBadge: verifyRole(["admin", "relief"]),
       assignCustomBadge: verifyRole(["admin", "relief"]),
+      createCustomBadge: verifyRole(["admin", "relief"]),
+      deleteCustomBadge: verifyRole(["admin", "relief"])
     },
   };
 
