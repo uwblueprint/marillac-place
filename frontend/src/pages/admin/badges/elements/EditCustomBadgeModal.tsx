@@ -11,25 +11,42 @@ import {
   ModalBody,
   ModalOverlay
 } from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
+import { EDIT_CUSTOM_BADGE } from "../../../../gql/mutations";
 
 interface EditCustomBadgeModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selected: any
 }
 
-const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({ isOpen, onClose }) => {
-  const [badgeName, setBadgeName] = useState("");
-  const [badgeCriteria, setBadgeCriteria] = useState("");
+const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({ isOpen, onClose, selected }) => {
+  const [badgeName, setBadgeName] = useState(selected.name);
+  const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
   const [error, setError] = useState("");
 
-  const handleSave = () => {
+  const [editCustomBadge] = useMutation(EDIT_CUSTOM_BADGE);
+
+  const handleSave = async () => {
     setError("");
     if (!badgeName || !badgeCriteria) {
       setError("All fields are required.");
       return;
     }
 
-    onClose();
+    try {
+      await editCustomBadge({
+        variables: {
+          custom_badge_id: selected.badge_id,
+          new_custom_badge_name: badgeName,
+          new_custom_badge_description: badgeCriteria
+        }
+      });
+      localStorage.setItem("notification", "Custom badge updated");
+      window.location.reload();
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   return (

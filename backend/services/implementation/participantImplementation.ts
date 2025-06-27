@@ -141,6 +141,9 @@ class ParticipantService implements IParticipantService {
           account_creation_date: today,
         },
       });
+      await prisma.participantProgress.create({
+        data: { participant_id }
+      })
       return true;
     } catch (err) {
       throw new Error("Something went wrong");

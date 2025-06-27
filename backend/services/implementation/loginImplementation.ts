@@ -36,9 +36,9 @@ class LoginService implements ILoginService {
       select: { login_date: true },
     });
     if (mostRecentLogin?.login_date) {
-      const today = new Date(`${new Date().toISOString().split("T")[0]}T00:00:00Z`);
-      const lastLoginDate = new Date(mostRecentLogin.login_date);
-      if (today.getTime() === lastLoginDate.getTime()) {
+      const today = new Date().toISOString().split("T")[0];
+      const lastLoginDate = new Date(mostRecentLogin.login_date).toISOString().split("T")[0];
+      if (today === lastLoginDate) {
         const progress = await prisma.participantProgress.findUnique({where: {participant_id}});
         return progress!.days_logged_in;
       }
