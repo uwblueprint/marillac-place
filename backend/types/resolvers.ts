@@ -11,11 +11,17 @@ const resolvers = gql`
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
     getTasksByType(type: TaskType!): [Task]
+    getCustomBadges: [Badge]
   }
 
   type Mutation {
     adminLogin(role: String!, password: String!): LoginResponse
     participantLogin(id: Int!, password: String!): LoginResponse
+    createCustomBadge( 
+      name: String!, 
+      description: String!,
+      icon: Icon!
+    ): Boolean 
     createParticipant(
       participant_id: Int!
       room_number: Int!
@@ -83,6 +89,7 @@ const resolvers = gql`
       new_custom_badge_name: String
       new_custom_badge_description: String
     ): Boolean
+    deleteCustomBadge(badge_id: Int!): Boolean!
   }
 `;
 
