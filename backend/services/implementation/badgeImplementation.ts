@@ -73,7 +73,7 @@ class BadgeService implements IBadgeService {
     const existingBadges = await prisma.earnedBadge.findMany({
       where: {
         participant_id: { in: participant_ids },
-        name: badge.name, // Assuming `name` uniquely identifies the badge
+        name: badge.name,
       },
       select: { participant_id: true },
     });
