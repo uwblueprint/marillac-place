@@ -266,3 +266,15 @@ export const EDIT_CUSTOM_BADGE = gql`
     )
   }
 `;
+
+export const ASSIGN_CUSTOM_BADGE = gql`
+    mutation assignCustomBadge(
+        $badge_id: Int!,
+        $participant_ids: [Int!]!
+    ) {
+        assignCustomBadge(
+            badge_id: $badge_id,
+            participant_ids: $participant_ids
+        )
+    }
+`;

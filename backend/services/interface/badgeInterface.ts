@@ -6,13 +6,15 @@ export default interface IBadgeService {
     name: string,
     description: string,
     icon: Icon
-  ): Promise<boolean>
+  ): Promise<boolean>;
   editCustomBadge(
     custom_badge_id: number,
     new_custom_badge_name?: string,
     new_custom_badge_description?: string
   ): Promise<boolean>;
-  assignCustomBadge(badge_id: number, participant_id: number): Promise<EarnedBadge>;
+  assignCustomBadge(
+    badge_id: number,
+    participant_ids: number[]
+  ): Promise<number[]>;
   deleteCustomBadge(badge_id: number): Promise<boolean>;
 }
-

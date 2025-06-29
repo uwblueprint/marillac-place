@@ -29,15 +29,19 @@ class BadgeService implements IBadgeService {
   ): Promise<boolean> {
     try {
       if (
-        new_custom_badge_name == undefined &&
-        new_custom_badge_description == undefined
+        new_custom_badge_name === undefined &&
+        new_custom_badge_description === undefined
       )
         throw new Error("No edits provided");
       await prisma.badge.update({
         where: { badge_id: custom_badge_id, badge_type: "CUSTOM" },
         data: {
-          ...(new_custom_badge_name !== undefined && { name: new_custom_badge_name }),
-          ...(new_custom_badge_description !== undefined && { description: new_custom_badge_description })
+          ...(new_custom_badge_name !== undefined && {
+            name: new_custom_badge_name,
+          }),
+          ...(new_custom_badge_description !== undefined && {
+            description: new_custom_badge_description,
+          }),
         },
       });
       return true;
@@ -49,52 +53,53 @@ class BadgeService implements IBadgeService {
 
   async assignCustomBadge(
     badge_id: number,
-    participant_id: number
-  ): Promise<EarnedBadge> {
-    // First get the badge details to copy information
+    participant_ids: number[]
+  ): Promise<number[]> {
     const badge = await prisma.badge.findUnique({
       where: { badge_id },
     });
+    if (!badge) throw new Error(`Badge with ID ${badge_id} not found`);
 
-    if (!badge) {
-      throw new Error(`Badge with ID ${badge_id} not found`);
-    }
-
-    // Check if participant exists
-    const participant = await prisma.participant.findUnique({
-      where: { participant_id },
-    });
-
-    if (!participant) {
-      throw new Error(`Participant with ID ${participant_id} not found`);
-    }
-
-    // Check if the badge has already been earned by the participant
-    const existingEarnedBadge = await prisma.earnedBadge.findFirst({
+    const participants = await prisma.participant.findMany({
       where: {
-        participant_id,
-        badge_id,
+        participant_id: {
+          in: participant_ids,
+        },
       },
     });
+    if (participants.length !== participant_ids.length)
+      throw new Error(`Some IDs were invalid!`);
 
-    if (existingEarnedBadge) {
-      throw new Error(`Participant ${participant_id} has already earned badge ${badge_id}`);
-    }
-
-    // Create new earned badge entry
-    const earnedBadge = await prisma.earnedBadge.create({
-      data: {
-        participant_id,
-        badge_id,
-        date_received: new Date().toISOString(),
-        name: badge.name,
-        description: badge.description,
-        badge_icon: badge.icon,
-        level: 1, // Level doesn't matter for custom badges, so default to 1
+    const existingBadges = await prisma.earnedBadge.findMany({
+      where: {
+        participant_id: { in: participant_ids },
+        name: badge.name, // Assuming `name` uniquely identifies the badge
       },
+      select: { participant_id: true },
     });
+    const alreadyEarnedIds = new Set(
+      existingBadges.map((b) => b.participant_id)
+    );
+    const eligibleParticipantIds = participant_ids.filter(
+      (id) => !alreadyEarnedIds.has(id)
+    );
 
-    return earnedBadge;
+    await prisma.$transaction(
+      eligibleParticipantIds.map((id) =>
+        prisma.earnedBadge.create({
+          data: {
+            badge_id: badge.badge_id,
+            participant_id: id,
+            date_received: new Date().toISOString(),
+            name: badge.name,
+            description: badge.description,
+            badge_icon: badge.icon,
+            level: 1,
+          },
+        })
+      )
+    );
+    return eligibleParticipantIds;
   }
 
   async createCustomBadge(
@@ -103,7 +108,6 @@ class BadgeService implements IBadgeService {
     icon: Icon
   ): Promise<boolean> {
     try {
-
       await prisma.badge.create({
         data: {
           name,
