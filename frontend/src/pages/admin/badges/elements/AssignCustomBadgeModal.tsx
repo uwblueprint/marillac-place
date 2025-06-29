@@ -46,7 +46,6 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
     []
   );
   const { data: badgeData } = useQuery(GET_CUSTOM_BADGES);
-  console.log("badgeData", badgeData);
 
   useEffect(() => {
     if (badgeData?.getCustomBadges) {
@@ -81,20 +80,15 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       return;
     }
     try {
-      const { data } = await getParticipantsByRooms({
-        variables: { roomNumbers: selectedRooms },
+      const res = await getParticipantsByRooms({
+        variables: { room_numbers: selectedRooms },
       });
-      if (
-        !data ||
-        !data.participantsByRooms ||
-        data.participantsByRooms.length === 0
-      ) {
-        setError("No participants found for selected rooms");
+      const participants = res?.data?.getParticipantsByRooms;
+      if (!participants || participants.length !== selectedRooms.length) {
+        setError("No participants found for some selected rooms");
         return;
       }
-      const participantIds = data.participantsByRooms.map(
-        (p: any) => p.participant_id
-      );
+      const participantIds = participants.map((p: any) => p.participant_id);
       const selectedBadge = badges.find((badge) => badge.name === badgeName);
       const badgeId = selectedBadge?.badge_id;
       await assignCustomBadge({

@@ -73,7 +73,6 @@ class ParticipantService implements IParticipantService {
           ],
         },
       });
-
       return participants;
     } catch (err) {
       throw new Error("Something went wrong");
