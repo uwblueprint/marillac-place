@@ -1,4 +1,10 @@
-import { EarnedBadge, BadgeType, Icon, Badge } from "@prisma/client";
+import {
+  EarnedBadge,
+  BadgeType,
+  Icon,
+  Badge,
+  BadgeLevel,
+} from "@prisma/client";
 import IBadgeService from "../interface/badgeInterface";
 import prisma from "../../prisma";
 
@@ -25,19 +31,20 @@ class BadgeService implements IBadgeService {
   async editCustomBadge(
     custom_badge_id: number,
     new_custom_badge_name?: string,
-    new_custom_badge_description?: string
+    badge_description?: string
   ): Promise<boolean> {
     try {
-      if (
-        new_custom_badge_name == undefined &&
-        new_custom_badge_description == undefined
-      )
+      if (new_custom_badge_name == undefined && badge_description == undefined)
         throw new Error("No edits provided");
       await prisma.badge.update({
         where: { badge_id: custom_badge_id, badge_type: "CUSTOM" },
         data: {
-          ...(new_custom_badge_name !== undefined && { name: new_custom_badge_name }),
-          ...(new_custom_badge_description !== undefined && { description: new_custom_badge_description })
+          ...(new_custom_badge_name !== undefined && {
+            name: new_custom_badge_name,
+          }),
+          ...(badge_description !== undefined && {
+            description: badge_description,
+          }),
         },
       });
       return true;
@@ -90,7 +97,6 @@ class BadgeService implements IBadgeService {
     icon: Icon
   ): Promise<boolean> {
     try {
-
       await prisma.badge.create({
         data: {
           name,
@@ -130,6 +136,32 @@ class BadgeService implements IBadgeService {
     } catch (err) {
       console.error(`Failed to delete badge ${badge_id}:`, err);
       return false;
+    }
+  }
+
+  async editBadgeLevel(
+    badge_id: number,
+    badge_level: number,
+    benchmark: number,
+    marillac_bucks: number
+  ): Promise<boolean> {
+    try {
+      await prisma.badgeLevel.update({
+        where: {
+          badge_id_level: {
+            badge_id,
+            level: badge_level,
+          },
+        },
+        data: {
+          benchmark,
+          marillac_bucks,
+        },
+      });
+      return true;
+    } catch (err) {
+      // @ts-ignore
+      throw new Error(err.message || "Something went wrong");
     }
   }
 }

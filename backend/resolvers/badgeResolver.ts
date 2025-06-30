@@ -1,4 +1,10 @@
-import { EarnedBadge, BadgeType, Icon, Badge } from "@prisma/client";
+import {
+  EarnedBadge,
+  BadgeType,
+  Icon,
+  Badge,
+  BadgeLevel,
+} from "@prisma/client";
 import BadgeService from "../services/implementation/badgeImplementation";
 import IBadgeService from "../services/interface/badgeInterface";
 
@@ -51,13 +57,9 @@ const badgeResolver = {
         name: string;
         description: string;
         icon: Icon;
-      },
+      }
     ): Promise<boolean> => {
-      return badgeService.createCustomBadge(
-        name,
-        description,
-        icon
-      );
+      return badgeService.createCustomBadge(name, description, icon);
     },
     deleteCustomBadge: async (
       _parent: undefined,
@@ -68,6 +70,27 @@ const badgeResolver = {
       }
     ): Promise<boolean> => {
       return badgeService.deleteCustomBadge(badge_id);
+    },
+    editBadgeLevel: async (
+      _parent: undefined,
+      {
+        badge_id,
+        badge_level,
+        benchmark,
+        marillac_bucks,
+      }: {
+        badge_id: number;
+        badge_level: number;
+        benchmark: number;
+        marillac_bucks: number;
+      }
+    ): Promise<boolean> => {
+      return badgeService.editBadgeLevel(
+        badge_id,
+        badge_level,
+        benchmark,
+        marillac_bucks
+      );
     },
   },
 };
