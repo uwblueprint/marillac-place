@@ -276,3 +276,17 @@ export const EDIT_BADGE_LEVEL = gql`
     )
   }
 `;
+
+export const EDIT_SYSTEM_BADGE = gql`
+  mutation editSystemBadge(
+    $system_badge_id: Int!
+    $system_badge_name: String!
+    $system_badge_criteria: String
+  ) {
+    editSystemBadge(
+      system_badge_id: $system_badge_id
+      system_badge_name: $system_badge_name
+      system_badge_criteria: $system_badge_criteria
+    )
+  }
+`;

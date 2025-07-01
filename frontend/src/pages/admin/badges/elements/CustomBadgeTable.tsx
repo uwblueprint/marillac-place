@@ -15,7 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import EditCustomBadgeModal from "./EditCustomBadgeModal";
+// import EditCustomBadgeModal from "./EditCustomBadgeModal";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
 import { Icon } from "../../../../constants/icons";
 import { DELETE_CUSTOM_BADGE } from "../../../../gql/mutations";

@@ -164,6 +164,32 @@ class BadgeService implements IBadgeService {
       throw new Error(err.message || "Something went wrong");
     }
   }
+  async editSystemBadge(
+  system_badge_id: number,
+  system_badge_name: string,
+  system_badge_criteria?: string,
+): Promise<boolean> {
+  const badge = await prisma.badge.findUnique({
+    where: {badge_id:system_badge_id},
+  });
+  if (!badge || badge.badge_type !== "SYSTEM"){
+    throw new Error("BAdge not found or not a system badge");
+  }
+  try {
+    await prisma.badge.update({
+      where: { badge_id: system_badge_id},
+      data: {
+        name: system_badge_name,
+        ...(system_badge_criteria !== undefined && { description: system_badge_criteria }),
+      },
+    });
+    return true;
+  } catch (err) {
+    // @ts-ignore
+    throw new Error(err.message || "Failed to update system badge");
+  }
+}
+
 }
 
 export default BadgeService;

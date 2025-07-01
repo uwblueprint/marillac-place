@@ -47,6 +47,24 @@ const badgeResolver = {
         new_custom_badge_description
       );
     },
+    editSystemBadge: async (
+      _parent: undefined,
+      {
+        system_badge_id,
+        system_badge_name,
+        system_badge_criteria,
+      }: {
+        system_badge_id: number;
+        system_badge_name: string;
+        system_badge_criteria?: string;
+      }
+    ): Promise<boolean> => {
+      return badgeService.editSystemBadge(
+        system_badge_id,
+        system_badge_name,
+        system_badge_criteria
+      );
+    },
     createCustomBadge: async (
       _parent: undefined,
       {

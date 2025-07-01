@@ -13,7 +13,7 @@ import {
   NumberInput,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
-import { EDIT_BADGE_LEVEL } from "../../../../gql/mutations";
+import { EDIT_BADGE_LEVEL, EDIT_SYSTEM_BADGE } from "../../../../gql/mutations";
 import { Badge } from "../../../../types/BadgeTypes";
 
 interface EditSystemBadgeModalProps {
@@ -29,6 +29,7 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
   onClose,
   selected,
 }) => {
+  const [badgeName, setBadgeName] = useState("new badge");
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
   const [badgeData, setBadgeData] = useState({
     Novice: { time: 0, marillacBucks: 0 },
@@ -40,23 +41,25 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
   const [error, setError] = useState("");
 
   const [editBadgeLevel] = useMutation(EDIT_BADGE_LEVEL);
+  const [editSystemBadge] = useMutation(EDIT_SYSTEM_BADGE);
 
   const handleSave = async () => {
     setError("");
     // TODO: Add error checking?
-
+    const badgeId = 1;
     try {
-      // await editCustomBadge({
-      //   variables: {
-      //     custom_badge_id: selected.badge_id,
-      //     new_custom_badge_name: badgeName,
-      //     new_custom_badge_description: badgeCriteria
-      //   }
-      // });
-      // localStorage.setItem("notification", "Custom badge updated");
-      // window.location.reload();
+      console.log(badgeId, badgeName, badgeCriteria);
+      await editSystemBadge({
+        variables: {
+          system_badge_id: badgeId,
+          system_badge_name: badgeName,
+          system_badge_criteria: badgeCriteria
+        }
+      });
+      localStorage.setItem("notification", "System badge updated");
+      window.location.reload();
     } catch (err: any) {
-      setError(err.message);
+      setError("Failed to edit system badge");
     }
   };
 

@@ -22,6 +22,11 @@ export default interface IBadgeService {
     badge_id: number,
     participant_id: number
   ): Promise<EarnedBadge>;
+  editSystemBadge(
+    system_badge_id:number,
+    system_badge_name: string,
+    system_badge_criteria?: string,
+  ): Promise<boolean>;
   deleteCustomBadge(badge_id: number): Promise<boolean>;
   editBadgeLevel(
     badge_id: number,
