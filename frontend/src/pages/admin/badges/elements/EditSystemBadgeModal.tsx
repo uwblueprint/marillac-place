@@ -56,6 +56,8 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
   };
 
   const handleSave = async () => {
+    console.log("getting to save");
+
     setError("");
     const badgeId = 1;
     try {
@@ -67,7 +69,6 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
         }
       });
       localStorage.setItem("notification", "System badge updated");
-      window.location.reload();
     } catch (err: any) {
       setError("Failed to edit system badge");
     }
@@ -77,11 +78,13 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
   for (const level in badgeData) {
     // fix for some linting error
     if (Object.prototype.hasOwnProperty.call(badgeData, level)) {
+    console.log("getting to level");
+
     const current = badgeData[level as BadgeLevel];
     const original = originalBadgeData[level as BadgeLevel];
-    const badgeLevel = level as BadgeLevel;
     const hasChanged = current.time !== original.time || current.marillacBucks !== original.marillacBucks;
     if (hasChanged){
+      const badgeLevel = badgeLevelMap[level as BadgeLevel];
       mutationPromises.push(
         editBadgeLevel({
           variables:{
@@ -94,8 +97,10 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
       )
    }
   }}
+  // batched update
   try {
     await Promise.all(mutationPromises);
+    window.location.reload();
   } catch (err: any) {
     console.error(`Failed to update badge levels`, err);
     setError("one or more badge levels failed to update");
@@ -167,7 +172,7 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
                     justify="space-between"
                     alignItems="center"
                     mb="10px"
-                    w="100%" // ensure full width for each row
+                    w="100%"
                   >
                     <Flex alignItems="center" gap="10px">
                       <Text fontSize="sm" minW="70px" color="gray.700">
@@ -206,7 +211,6 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
                       </Text>
                     </Flex>
 
-                    {/* Right side: Marillac Bucks input */}
                     <NumberInput
                       value={badgeData[badgeLevel].marillacBucks}
                       onChange={(valueString) =>
