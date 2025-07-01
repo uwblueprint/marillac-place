@@ -11,6 +11,7 @@ import {
   ModalBody,
   ModalOverlay,
   NumberInput,
+  NumberInputField
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { EDIT_BADGE_LEVEL, EDIT_SYSTEM_BADGE } from "../../../../gql/mutations";
@@ -38,17 +39,26 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
     Gold: { time: 0, marillacBucks: 0 },
     Diamond: { time: 0, marillacBucks: 0 },
   });
+  const [originalBadgeData, setOriginalBadgeData] = useState(badgeData);
+
+  // to do: implement the usage of actual values on initial render
+
   const [error, setError] = useState("");
 
   const [editBadgeLevel] = useMutation(EDIT_BADGE_LEVEL);
   const [editSystemBadge] = useMutation(EDIT_SYSTEM_BADGE);
+  const badgeLevelMap: Record<BadgeLevel, number> = {
+    Novice: 1,
+    Bronze: 2,
+    Silver: 3,
+    Gold: 4,
+    Diamond: 5,
+  };
 
   const handleSave = async () => {
     setError("");
-    // TODO: Add error checking?
     const badgeId = 1;
     try {
-      console.log(badgeId, badgeName, badgeCriteria);
       await editSystemBadge({
         variables: {
           system_badge_id: badgeId,
@@ -61,6 +71,35 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
     } catch (err: any) {
       setError("Failed to edit system badge");
     }
+  // list of promises for batch update
+  const mutationPromises: Promise<any>[] = [];
+
+  for (const level in badgeData) {
+    // fix for some linting error
+    if (Object.prototype.hasOwnProperty.call(badgeData, level)) {
+    const current = badgeData[level as BadgeLevel];
+    const original = originalBadgeData[level as BadgeLevel];
+    const badgeLevel = level as BadgeLevel;
+    const hasChanged = current.time !== original.time || current.marillacBucks !== original.marillacBucks;
+    if (hasChanged){
+      mutationPromises.push(
+        editBadgeLevel({
+          variables:{
+            badge_id: badgeId,
+            badge_level: badgeLevel,
+            benchmark: current.time,
+            marillac_bucks: current.marillacBucks,
+          }
+        })
+      )
+   }
+  }}
+  try {
+    await Promise.all(mutationPromises);
+  } catch (err: any) {
+    console.error(`Failed to update badge levels`, err);
+    setError("one or more badge levels failed to update");
+  }
   };
 
   return (
@@ -74,7 +113,7 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
       <ModalContent
         boxShadow="xl"
         borderRadius="16px"
-        width="450px"
+        width="500px"
         padding="20px"
       >
         <ModalBody>
@@ -105,22 +144,45 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
               />
             </FormControl>
 
-            <Flex flexDir="row">
-              <Flex flexDir="column">
-                <FormControl>
-                  <FormLabel mb="5px">
-                    <Text textStyle="web.s1" color="text.light.secondary">
-                      Set Badge Level
+            <Flex flexDir="column">
+              <FormControl>
+                <Flex justify="space-between" mb="2">
+                  <FormLabel mb="0">
+                    <Text fontSize="sm" fontWeight="semibold" color="gray.600">
+                      Set Badge Levels
                     </Text>
                   </FormLabel>
-                  {Object.entries(badgeData).map(([level, data]) => {
-                    const badgeLevel = level as BadgeLevel;
+                  <FormLabel mb="0">
+                    <Text fontSize="sm" fontWeight="semibold" color="gray.600">
+                      Set Marillac Bucks
+                    </Text>
+                  </FormLabel>
+                </Flex>
 
-                    return (
-                      <Flex flexDir="row" key={badgeLevel}>
-                        <Text textStyle="web.s2" color="text.light.secondary">
-                          {badgeLevel}:
-                        </Text>
+             {Object.entries(badgeData).map(([level, data]) => {
+                const badgeLevel = level as BadgeLevel;
+                return (
+                  <Flex
+                    key={badgeLevel}
+                    justify="space-between"
+                    alignItems="center"
+                    mb="10px"
+                    w="100%" // ensure full width for each row
+                  >
+                    <Flex alignItems="center" gap="10px">
+                      <Text fontSize="sm" minW="70px" color="gray.700">
+                        {badgeLevel}:
+                      </Text>
+
+                      {badgeLevel === "Novice" ? (
+                        <Input
+                          value="First Login"
+                          isReadOnly
+                          variant="filled"
+                          w="110px"
+                          fontSize="sm"
+                        />
+                      ) : (
                         <Input
                           variant="primary"
                           value={badgeData[badgeLevel].time}
@@ -133,27 +195,45 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
                               },
                             }))
                           }
+                          placeholder="Days"
+                          w="60px"
+                          fontSize="sm"
                         />
-                        <Text textStyle="web.s2" color="text.light.secondary">
-                          days
-                        </Text>
-                      </Flex>
-                    );
-                  })}
-                </FormControl>
-              </Flex>
-              <Flex flexDir="column">
-                <FormControl>
-                  <FormLabel mb="5px">
-                    <Text textStyle="web.s1" color="text.light.secondary">
-                      Set Marillac Bucks
-                    </Text>
-                  </FormLabel>
-                  <NumberInput />
-                </FormControl>
-              </Flex>
-            </Flex>
+                      )}
 
+                      <Text fontSize="xs" color="gray.500">
+                        days
+                      </Text>
+                    </Flex>
+
+                    {/* Right side: Marillac Bucks input */}
+                    <NumberInput
+                      value={badgeData[badgeLevel].marillacBucks}
+                      onChange={(valueString) =>
+                        setBadgeData((prev) => ({
+                          ...prev,
+                          [badgeLevel]: {
+                            ...prev[badgeLevel],
+                            marillacBucks: Number(valueString),
+                          },
+                        }))
+                      }
+                      min={0}
+                      clampValueOnBlur
+                      precision={2}
+                    >
+                      <NumberInputField
+                        placeholder="$"
+                        fontSize="sm"
+                        w="100px"
+                      />
+                    </NumberInput>
+                  </Flex>
+                );
+              })}
+
+              </FormControl>
+            </Flex>
             {error && (
               <Text textStyle="web.b2" fontWeight="600" color="#E30000">
                 {error}
