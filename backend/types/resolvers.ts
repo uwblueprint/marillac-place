@@ -90,6 +90,7 @@ const resolvers = gql`
       new_custom_badge_description: String
     ): Boolean
     deleteCustomBadge(badge_id: Int!): Boolean!
+    deleteAssignedTask(assigned_task_id: Int!): Boolean!
   }
 `;
 
