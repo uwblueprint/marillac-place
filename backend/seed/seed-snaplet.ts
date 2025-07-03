@@ -102,6 +102,9 @@ const main = async () => {
 
   const environment = process.env.NODE_ENV || "development";
   console.log(`🌍 Running in ${environment} environment`);
+
+  await seed.$resetDatabase();
+  await seedProdData();
   
   if (environment === "development") {
     await seed.$resetDatabase();
