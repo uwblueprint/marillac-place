@@ -40,7 +40,6 @@ export const Select = selectHelpers.defineMultiStyleConfig({
           fontFamily: "Nunito",
           fontWeight: "400",
           fontSize: "12px",
-          color: "red",
         }
       },
     },
