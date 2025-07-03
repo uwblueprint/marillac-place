@@ -122,9 +122,8 @@ export const EDIT_MARILLAC_BUCKS = gql`
 export const CREATE_NOTE = gql`
   mutation createNote(
     $message: String!
-    $creation_date: String!
   ) {
-    createNote(message: $message, creation_date: $creation_date)
+    createNote(message: $message)
   }
 `;
 

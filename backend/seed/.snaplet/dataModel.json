@@ -544,6 +544,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "earned_badge",
+          "type": "earned_badge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "earned_badgeTobadge",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -678,9 +692,9 @@
           "maxLength": null
         },
         {
-          "id": "public.earned_badge.badge_id",
-          "name": "badge_id",
-          "columnName": "badge_id",
+          "id": "public.earned_badge.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -692,9 +706,9 @@
           "maxLength": null
         },
         {
-          "id": "public.earned_badge.participant_id",
-          "name": "participant_id",
-          "columnName": "participant_id",
+          "id": "public.earned_badge.badge_id",
+          "name": "badge_id",
+          "columnName": "badge_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -774,6 +788,24 @@
           "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "name": "badge",
+          "type": "badge",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "earned_badgeTobadge",
+          "relationFromFields": [
+            "badge_id"
+          ],
+          "relationToFields": [
+            "badge_id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         },
         {
           "name": "participant",
