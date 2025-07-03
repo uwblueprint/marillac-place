@@ -5,7 +5,6 @@ interface INoteService {
 
   createNote(
     message: string,
-    creation_date: string,
   ): Promise<boolean>;
 
   deleteNote(note_id: number): Promise<boolean>;

@@ -1,6 +1,7 @@
 import { Announcement, Priority } from "@prisma/client";
 import prisma from "../../prisma";
 import IAnnouncementService from "../interface/announcementInterface";
+import { getNow } from "../../utils/formatDateTime";
 
 class AnnouncementService implements IAnnouncementService {
   async getAllAnnouncements(): Promise<Announcement[]> {
@@ -88,11 +89,10 @@ class AnnouncementService implements IAnnouncementService {
     message: string
   ): Promise<boolean> {
     try {
-      const today = new Date().toISOString();
       const newAnnouncement = await prisma.announcement.create({
         data: {
           priority,
-          creation_date: today,
+          creation_date: getNow(),
           message,
         },
       });

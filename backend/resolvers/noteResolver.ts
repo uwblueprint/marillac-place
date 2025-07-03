@@ -15,13 +15,11 @@ const noteResolver = {
       _parent: undefined,
       {
         message,
-        creation_date
       }: {
         message: string;
-        creation_date: string;
       },
     ): Promise<boolean> => {
-      return noteService.createNote(message, creation_date);
+      return noteService.createNote(message);
     },
     deleteNote: async (
       _parent: undefined,

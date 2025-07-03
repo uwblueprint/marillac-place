@@ -27,12 +27,10 @@ const NoteSection = () => {
     if (newNote === "") {
       return;
     }
-    const now = new Date().toLocaleString("en-ca");
     try {
       await createNote({
         variables: {
           message: newNote,
-          creation_date: now,
         },
       });
       window.location.reload();

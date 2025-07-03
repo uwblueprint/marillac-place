@@ -1,6 +1,6 @@
-//@ts-nocheck
-
-// Seed script for Marillac Place: generates system badges and mock data for development/testing environments.
+// @ts-nocheck
+// Seed script for Marillac Place:
+// Generates system badges and mock data for development/testing environments.
 
 import { createSeedClient } from "@snaplet/seed";
 import { PrismaClient } from "@prisma/client";
@@ -15,7 +15,7 @@ import {
   Status,
   Icon,
 } from "@prisma/client";
-import { systemBadges } from "./systemBadgeData";
+import { systemBadges } from "./prodData";
 import {
   participants,
   tasks,
@@ -26,37 +26,23 @@ import {
   customBadges,
 } from "./mockData";
 
-// Helper: returns an ISO string for noon UTC on the given date
-// (for consistent date seeding, it will show up as the same date in North America)
-function toNoonUTCISOString(date: Date): string {
-  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 12, 0, 0, 0)).toISOString();
-}
-
-// Seed system badges if not already present
-async function seedSystemBadges() {
-  console.log("🏆 Seeding system badges...");
+async function seedProdData() {
   const prisma = new PrismaClient();
   try {
-    // Avoid duplicates by checking for existing badges with the same name
     for (const badge of systemBadges) {
-      const existingBadge = await prisma.badge.findFirst({
-        where: { name: badge.name },
-      });
-      if (!existingBadge) {
-        await prisma.badge.create({
-          data: {
-            name: badge.name,
-            description: badge.description,
-            badge_type: badge.type,
-            is_active: true,
-            is_consecutive: badge.is_consecutive,
-            icon: badge.icon,
-            badge_level: {
-              create: badge.levels,
-            },
+      await prisma.badge.create({
+        data: {
+          name: badge.name,
+          description: badge.description,
+          badge_type: badge.type,
+          is_active: true,
+          is_consecutive: badge.is_consecutive,
+          icon: badge.icon,
+          badge_level: {
+            create: badge.levels,
           },
-        });
-      }
+        },
+      });
     }
     console.log("✅ System badges seeded");
   } finally {
@@ -64,63 +50,43 @@ async function seedSystemBadges() {
   }
 }
 
-// Seed custom badges if not already present
-async function seedCustomBadges() {
-  console.log("🏅 Seeding custom badges...");
+async function seedMockData(seed: any) {
+  await seed.participant((createMany) => createMany(participants.length, (cur) => participants[cur.index]));
+  console.log("✅ Participants seeded");
+  
+  await seed.task((createMany) => createMany(tasks.length, (cur) => tasks[cur.index]));
+  console.log("✅ Tasks seeded");
+  
+  await seed.assignedTask((createMany) => createMany(assignedTasks.length, (cur) => assignedTasks[cur.index]));
+  console.log("✅ Assigned tasks seeded");
+  
+  await seed.announcement((createMany) => createMany(announcements.length, (cur) => announcements[cur.index]));
+  console.log("✅ Announcements seeded");
+  
+  await seed.userAnnouncement((createMany) => createMany(userAnnouncements.length, (cur) => userAnnouncements[cur.index]));
+  console.log("✅ User announcements seeded");
+
+  await seed.note((createMany) => createMany(notes.length, (cur) => notes[cur.index]));
+  console.log("✅ Notes seeded");
+  
   const prisma = new PrismaClient();
   try {
     for (const badge of customBadges) {
-      const existingBadge = await prisma.badge.findFirst({
-        where: { name: badge.name },
+      await prisma.badge.create({
+        data: {
+          name: badge.name,
+          description: badge.description,
+          badge_type: badge.type,
+          is_active: true,
+          is_consecutive: badge.is_consecutive,
+          icon: badge.icon,
+        },
       });
-      if (!existingBadge) {
-        await prisma.badge.create({
-          data: {
-            name: badge.name,
-            description: badge.description,
-            badge_type: badge.type,
-            is_active: true,
-            is_consecutive: badge.is_consecutive,
-            icon: badge.icon,
-          },
-        });
-      }
     }
-    console.log("✅ Custom badges seeded");
   } finally {
+    console.log("✅ Custom badges seeded");
     await prisma.$disconnect();
   }
-}
-
-// Main mock data seeding function for development
-async function seedMockData(seed: any) {
-  console.log("🌱 Starting mock data seeding...");
-
-  // --- Participants ---
-  await seed.participant((createMany) => createMany(participants.length, (cur) => participants[cur.index]));
-  console.log(`👥 Created ${participants.length} participants`);
-
-  // --- Tasks ---
-  await seed.task((createMany) => createMany(tasks.length, (cur) => tasks[cur.index]));
-  console.log(`📋 Created ${tasks.length} tasks`);
-
-  // --- Announcements ---
-  await seed.announcement((createMany) => createMany(announcements.length, (cur) => announcements[cur.index]));
-  console.log(`📢 Created ${announcements.length} announcements`);
-
-  // --- Notes ---
-  await seed.note((createMany) => createMany(notes.length, (cur) => notes[cur.index]));
-  console.log(`📝 Created ${notes.length} notes`);
-
-  // --- Assigned Tasks ---
-  await seed.assignedTask((createMany) => createMany(assignedTasks.length, (cur) => assignedTasks[cur.index]));
-  console.log("✅ Created assigned tasks");
-
-  // --- User Announcements ---
-  await seed.userAnnouncement((createMany) => createMany(userAnnouncements.length, (cur) => userAnnouncements[cur.index]));
-  console.log("📬 Created UserAnnouncements with valid IDs");
-
-  console.log("🎉 Mock data seeded successfully!");
 }
 
 const main = async () => {
@@ -130,28 +96,17 @@ const main = async () => {
 
   const environment = process.env.NODE_ENV || "development";
   console.log(`🌍 Running in ${environment} environment`);
-  console.log(`🔍 NODE_ENV value: "${process.env.NODE_ENV}"`);
-  console.log(`🔍 Environment check: ${environment === "development"}`);
 
-  // Reset database for a clean slate
   await seed.$resetDatabase();
-
-  // Always seed system badges (required for all environments)
-  await seedSystemBadges();
-
-  // Only seed mock data and custom badges in development
+  await seedProdData();
   if (environment === "development") {
-    console.log(`✅ Environment is development, seeding mock data...`);
     await seedMockData(seed);
-    await seedCustomBadges();
-  } else {
-    console.log(`❌ Environment is ${environment}, skipping mock data seeding`);
   }
 
   console.log("✨ Seeding completed successfully");
 };
 
 main().catch((e) => {
-  console.error("Error during seeding:", e);
+  console.error("⚠️ Error during seeding: ", e);
   process.exit(1);
 });
