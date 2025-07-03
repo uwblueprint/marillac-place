@@ -1,6 +1,7 @@
 import { Note } from "@prisma/client";
 import prisma from "../../prisma";
 import INoteService from "../interface/noteInterface";
+import { getNow } from "../../utils/formatDateTime";
 
 class NoteService implements INoteService {
   async getNotes(): Promise<Note[]> {
@@ -16,13 +17,12 @@ class NoteService implements INoteService {
 
   async createNote(
     message: string,
-    creation_date: string,
   ): Promise<boolean> {
     try {
       await prisma.note.create({
         data: {
           message,
-          creation_date,
+          creation_date: getNow(),
         },
       });
       return true;

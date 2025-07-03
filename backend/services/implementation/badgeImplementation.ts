@@ -1,6 +1,7 @@
 import { EarnedBadge, BadgeType, Icon, Badge } from "@prisma/client";
 import IBadgeService from "../interface/badgeInterface";
 import prisma from "../../prisma";
+import { getToday } from "../../utils/formatDateTime";
 
 class BadgeService implements IBadgeService {
   async getCustomBadges(): Promise<Badge[]> {
@@ -69,11 +70,24 @@ class BadgeService implements IBadgeService {
       throw new Error(`Participant with ID ${participant_id} not found`);
     }
 
+    // Check if the badge has already been earned by the participant
+    const existingEarnedBadge = await prisma.earnedBadge.findFirst({
+      where: {
+        participant_id,
+        badge_id,
+      },
+    });
+
+    if (existingEarnedBadge) {
+      throw new Error(`Participant ${participant_id} has already earned badge ${badge_id}`);
+    }
+
     // Create new earned badge entry
     const earnedBadge = await prisma.earnedBadge.create({
       data: {
         participant_id,
-        date_received: new Date().toISOString(),
+        badge_id,
+        date_received: getToday(),
         name: badge.name,
         description: badge.description,
         badge_icon: badge.icon,

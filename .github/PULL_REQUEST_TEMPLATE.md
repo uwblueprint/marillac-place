@@ -1,25 +1,22 @@
-## Notion ticket link
-<!-- Please replace with your ticket's URL -->
-[Ticket Name](https://www.notion.so/uwblueprintexecs/Task-Board-db95cd7b93f245f78ee85e3a8a6a316d)
+## Notion Ticket
+<!-- Replace with your ticket's URL -->
+[Ticket Name](URL)
 
 
-<!-- Give a quick summary of the implementation details, provide design justifications if necessary -->
-## Implementation description
-* 
+<!-- A quick summary of the implementation details -->
+## Summary
+...
 
+<!-- A quick summary of how you tested your changes -->
+## Testing Details
+...
 
-<!-- What should the reviewer do to verify your changes? Describe expected results and include screenshots when appropriate -->
-## Steps to test
-1.
-
-
-<!-- Draw attention to the substantial parts of your PR or anything you'd like a second opinion on -->
-## What should reviewers focus on?
-* 
-
+<!-- Draw attention to anything you'd like a second opinion on or something extra you've included that is not apart of your assigned ticket -->
+## Additional Information
+...
 
 ## Checklist
-- [ ] My PR name is descriptive and in imperative tense
-- [ ] My commit messages are descriptive and in imperative tense. My commits are atomic and trivial commits are squashed or fixup'd into non-trivial commits
-- [ ] I have run the appropriate linter(s)
-- [ ] I have requested a review from the PL, as well as other devs who have background knowledge on this PR or who will be building on top of this PR
+- [ ] I have requested a review from the PL(s)
+- [ ] I have marked my ticket as "Ready for Review" in the Notion task board
+- [ ] I have completed everything in the checklist under my ticket
+- [ ] All of my containers are healthy and not producing any error messages

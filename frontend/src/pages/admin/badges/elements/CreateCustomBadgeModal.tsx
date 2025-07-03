@@ -3,7 +3,6 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalBody,
   FormControl,
   FormLabel,
@@ -57,17 +56,15 @@ const CreateCustomBadgeModal = ({isOpen, onClose}: Props) => {
   return (
     <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered size="lg">
       <ModalOverlay/>
-      <ModalContent borderRadius="16px" p={6} maxW="600px">
-        <ModalHeader>
-          <Text textStyle="web.h3">Create New Custom Badge</Text>
-        </ModalHeader>
-
+      <ModalContent borderRadius="16px" p={6} maxW="550px">
         <ModalBody>
+          <Text textStyle="web.h3" mb="15px">Create Custom Badge</Text>
           <FormControl mb={4}>
-            <FormLabel>
-              <Text textStyle="web.s1" fontSize="l" color="text.light.secondary">Badge Name</Text>
+            <FormLabel mb="5px">
+              <Text textStyle="web.s1" color="text.light.secondary">Badge Name</Text>
             </FormLabel>
             <Input
+              variant="primary"
               placeholder="Enter Badge Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -75,10 +72,11 @@ const CreateCustomBadgeModal = ({isOpen, onClose}: Props) => {
           </FormControl>
 
           <FormControl mb={4}>
-            <FormLabel>
-              <Text textStyle="web.s1" fontSize="l" color="text.light.secondary">Badge Criteria</Text>
+            <FormLabel mb="5px">
+              <Text textStyle="web.s1" color="text.light.secondary">Badge Criteria</Text>
             </FormLabel>
             <Input
+              variant="primary"
               placeholder="Enter Badge Criteria"
               value={criteria}
               onChange={(e) => setCriteria(e.target.value)}
@@ -86,8 +84,8 @@ const CreateCustomBadgeModal = ({isOpen, onClose}: Props) => {
           </FormControl>
 
           <FormControl mb={4}>
-            <FormLabel>
-              <Text textStyle="web.s1" fontSize="l" color="text.light.secondary">Choose Badge Icon</Text>
+            <FormLabel mb="5px">
+              <Text textStyle="web.s1" color="text.light.secondary">Choose Badge Icon</Text>
             </FormLabel>
             <Grid templateColumns="repeat(6, 1fr)" gap={3}>
               {iconList.map((icon) => (
@@ -96,12 +94,12 @@ const CreateCustomBadgeModal = ({isOpen, onClose}: Props) => {
                   as="button"
                   align="center"
                   justify="center"
-                  width="72px"
-                  height="72px"
+                  width="64px"
+                  height="64px"
                   p={2}
                   borderRadius="8px"
-                  border="2px solid"
-                  borderColor={selectedIcon === icon ? "#3182CE" : "gray.200"}
+                  border="1px solid"
+                  borderColor={selectedIcon === icon ? "#3182CE" : "neutral.300"}
                   bg="white"
                   onClick={() => setSelectedIcon(icon)}
                   _hover={{borderColor: "#3182CE"}}
@@ -117,15 +115,15 @@ const CreateCustomBadgeModal = ({isOpen, onClose}: Props) => {
             </Grid>
             { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000" mt={4}>{error}</Text> }
           </FormControl>
-          <Flex alignItems="center" justifyContent="flex-end" gap={3} mt={4}>
+          <Flex alignItems="center" justifyContent="flex-end" gap="5px" mt={4}>
             <Button variant="white" onClick={() => {
               setError("");
               onClose()
             }}>
-              <Text textStyle="web.s1" fontSize="sm">Cancel</Text>
+              <Text textStyle="web.s1">Cancel</Text>
             </Button>
             <Button variant="primaryFilled" onClick={handleSave}>
-              <Text textStyle="web.s1" fontSize="sm" color="white">Save</Text>
+              <Text textStyle="web.s1" color="white">Save</Text>
             </Button>
           </Flex>
         </ModalBody>
