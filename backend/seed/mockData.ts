@@ -8,23 +8,7 @@ import {
   Status,
   Icon,
 } from "@prisma/client";
-import { formatDateTime } from "../utils/formatDateTime";
-
-// Helper to get Date object for today and previous days
-function getRecentDate(daysAgo: number, includeTime: boolean, time?: string): string {
-  const date = new Date();
-  date.setDate(date.getDate() - daysAgo);
-  
-  if (includeTime) {
-    if (time) {
-      const [hours, minutes] = time.split(":").map(Number);
-      date.setHours(hours, minutes, 0, 0);
-    } else {
-      date.setHours(0, 0, 0, 0);
-    }
-  }
-  return formatDateTime(date, includeTime);
-}
+import { getRecentDate } from "../utils/formatDateTime";
 
 export const participants = [
   {

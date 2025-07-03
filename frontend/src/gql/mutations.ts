@@ -265,3 +265,17 @@ export const EDIT_CUSTOM_BADGE = gql`
     )
   }
 `;
+
+export const ASSIGN_CUSTOM_BADGE = gql`
+    mutation assignCustomBadge(
+        $badge_id: Int!,
+        $marillac_bucks: Int!,
+        $participant_ids: [Int!]!
+    ) {
+        assignCustomBadge(
+            badge_id: $badge_id,
+            marillac_bucks: $marillac_bucks,
+            participant_ids: $participant_ids
+        )
+    }
+`;
