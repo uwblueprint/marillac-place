@@ -44,7 +44,7 @@ const resolvers = gql`
       marillac_bucks: Int!
       reason: String!
     ): Boolean
-    createNote(message: String!, creation_date: String!): Boolean
+    createNote(message: String!): Boolean
     deleteNote(note_id: Int!): Boolean
     createAnnouncement(
       priority: Priority!

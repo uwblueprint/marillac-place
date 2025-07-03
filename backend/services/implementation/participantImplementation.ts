@@ -1,16 +1,16 @@
 import { Participant } from "@prisma/client";
 import prisma from "../../prisma";
 import IParticipantService from "../interface/participantInterface";
+import { getToday } from "../../utils/formatDateTime";
 
 class ParticipantService implements IParticipantService {
   async getPastParticipants(): Promise<Participant[]> {
     try {
-      const today = new Date().toLocaleDateString("en-ca");
       const participants = await prisma.participant.findMany({
         where: {
           departure_date: {
             not: null,
-            lte: today,
+            lte: getToday(),
           },
         },
         orderBy: [{ departure_date: "desc" }],
@@ -22,11 +22,10 @@ class ParticipantService implements IParticipantService {
   }
 
   async getCurrentParticipants(): Promise<Participant[]> {
-    const today = new Date().toLocaleDateString("en-ca");
     try {
       const participants = await prisma.participant.findMany({
         where: {
-          OR: [{ departure_date: null }, { departure_date: { gt: today } }],
+          OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
         },
         orderBy: [{ room_number: "asc" }],
       });
@@ -37,14 +36,13 @@ class ParticipantService implements IParticipantService {
   }
 
   async getParticipantByRoom(room_number: number): Promise<Participant | null> {
-    const today = new Date().toLocaleDateString("en-ca");
     try {
       const participant = await prisma.participant.findFirst({
         where: {
           AND: [
             { room_number },
             {
-              OR: [{ departure_date: null }, { departure_date: { gt: today } }],
+              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
             },
           ],
         },
@@ -61,14 +59,13 @@ class ParticipantService implements IParticipantService {
   async getParticipantsByRooms(
     room_numbers: number[]
   ): Promise<Participant[]> {
-    const today = new Date().toLocaleDateString("en-ca");
     try {
       const participants = await prisma.participant.findMany({
         where: {
           AND: [
             { room_number: { in: room_numbers } },
             {
-              OR: [{ departure_date: null }, { departure_date: { gt: today } }],
+              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
             },
           ],
         },
@@ -115,13 +112,12 @@ class ParticipantService implements IParticipantService {
       throw new Error("Participant already exists");
     }
 
-    const today = new Date().toISOString().split("T")[0];
     let occupiedRoom: Participant | null = null;
     try {
       occupiedRoom = await prisma.participant.findFirst({
         where: {
           room_number,
-          OR: [{ departure_date: null }, { departure_date: { gte: today } }],
+          OR: [{ departure_date: null }, { departure_date: { gte: getToday() } }],
         },
       });
     } catch (err) {
@@ -138,7 +134,7 @@ class ParticipantService implements IParticipantService {
           room_number,
           arrival_date,
           password,
-          account_creation_date: today,
+          account_creation_date: getToday(),
         },
       });
       return true;

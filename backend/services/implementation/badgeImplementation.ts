@@ -1,6 +1,7 @@
 import { EarnedBadge, BadgeType, Icon, Badge } from "@prisma/client";
 import IBadgeService from "../interface/badgeInterface";
 import prisma from "../../prisma";
+import { getToday } from "../../utils/formatDateTime";
 
 class BadgeService implements IBadgeService {
   async getCustomBadges(): Promise<Badge[]> {
@@ -86,7 +87,7 @@ class BadgeService implements IBadgeService {
       data: {
         participant_id,
         badge_id,
-        date_received: new Date().toISOString(),
+        date_received: getToday(),
         name: badge.name,
         description: badge.description,
         badge_icon: badge.icon,
