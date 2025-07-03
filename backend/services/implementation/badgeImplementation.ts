@@ -1,6 +1,7 @@
 import { EarnedBadge, BadgeType, Icon, Badge } from "@prisma/client";
 import IBadgeService from "../interface/badgeInterface";
 import prisma from "../../prisma";
+import { getToday } from "../../utils/formatDateTime";
 
 class BadgeService implements IBadgeService {
   async getCustomBadges(): Promise<Badge[]> {
@@ -53,6 +54,7 @@ class BadgeService implements IBadgeService {
 
   async assignCustomBadge(
     badge_id: number,
+    marillac_bucks: number,
     participant_ids: number[]
   ): Promise<number[]> {
     const badge = await prisma.badge.findUnique({
@@ -83,6 +85,10 @@ class BadgeService implements IBadgeService {
     const eligibleParticipantIds = participant_ids.filter(
       (id) => !alreadyEarnedIds.has(id)
     );
+    
+    if (eligibleParticipantIds.length === 0) {
+      throw new Error("Participants have already received this badge");
+    }
 
     await prisma.$transaction(
       eligibleParticipantIds.map((id) =>
@@ -96,9 +102,24 @@ class BadgeService implements IBadgeService {
             badge_icon: badge.icon,
             level: 1,
           },
-        })
+        }),
       )
     );
+    
+    // also add marillac bucks for the earned badge
+    await prisma.$transaction(
+      eligibleParticipantIds.map((id) =>
+        prisma.participant.update({
+          where: { participant_id: id },
+          data: {
+            marillac_bucks: {
+              increment: marillac_bucks,
+            },
+          },
+        }),
+      )
+    );
+    
     return eligibleParticipantIds;
   }
 

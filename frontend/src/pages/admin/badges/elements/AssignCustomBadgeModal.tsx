@@ -22,6 +22,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import {
   GET_PARTICIPANTS_BY_ROOMS,
@@ -60,6 +61,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
         "notification",
         `Assigned Custom Badge: ${badgeName}`
       );
+      onClose();
       window.location.reload();
     },
     onError: (err) => {
@@ -94,10 +96,10 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       await assignCustomBadge({
         variables: {
           badge_id: badgeId,
+          marillac_bucks: Number(badgeValue),
           participant_ids: participantIds,
         },
       });
-      onClose();
     } catch (err: any) {
       setError(err.message);
     }
@@ -129,6 +131,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
                 </Text>
               </FormLabel>
               <Select
+                variant="primary"
                 textStyle="web.b3"
                 fontSize="14px"
                 value={badgeName}
@@ -150,11 +153,8 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
                 </Text>
               </FormLabel>
               <InputGroup>
-                <InputLeftElement
-                  pointerEvents="none"
-                  color="text.light.secondary"
-                >
-                  $
+                <InputLeftElement>
+                  <AttachMoneyIcon style={{ color: 'inherit', fontSize: 15 }} />
                 </InputLeftElement>
                 <Input
                   type="number"
@@ -184,7 +184,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
             <Text textStyle="web.s1" color="text.light.secondary">
               Choose Room(s)
             </Text>
-            <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px" mt="10px">
+            <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">
               {ROOM_NUMBERS.map((num: number) => (
                 <Button
                   key={num}
@@ -228,7 +228,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
                 color="#E30000"
                 mt="10px"
                 mb="-5px"
-                textAlign="right"
+                textAlign="left"
               >
                 {error}
               </Text>
@@ -238,9 +238,16 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
               alignItems="center"
               justifyContent="flex-end"
               gap="5px"
-              mt="15px"
+              mt="12px"
             >
-              <Button variant="white" onClick={onClose}>
+              <Button variant="white" onClick={() => {
+                setBadgeName("");
+                setBadgeValue("");
+                setSelectedRooms([]);
+                setError("");
+                setBadges([]);
+                onClose()
+              }}>
                 <Text textStyle="web.s1">Cancel</Text>
               </Button>
               <Button variant="primaryFilled" onClick={assignBadge}>

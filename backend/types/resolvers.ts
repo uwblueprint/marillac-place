@@ -44,7 +44,7 @@ const resolvers = gql`
       marillac_bucks: Int!
       reason: String!
     ): Boolean
-    createNote(message: String!, creation_date: String!): Boolean
+    createNote(message: String!): Boolean
     deleteNote(note_id: Int!): Boolean
     createAnnouncement(
       priority: Priority!
@@ -83,13 +83,18 @@ const resolvers = gql`
       comment: String
     ): Boolean
     deleteTaskById(taskId: Int!): Boolean
-    assignCustomBadge(badge_id: Int!, participant_ids: [Int!]!): [Int!]!
+    assignCustomBadge(
+        badge_id: Int!,
+        marillac_bucks: Int!,
+        participant_ids: [Int!]!
+    ): [Int!]!
     editCustomBadge(
       custom_badge_id: Int!
       new_custom_badge_name: String
       new_custom_badge_description: String
     ): Boolean
     deleteCustomBadge(badge_id: Int!): Boolean!
+    deleteAssignedTask(assigned_task_id: Int!): Boolean!
   }
 `;
 

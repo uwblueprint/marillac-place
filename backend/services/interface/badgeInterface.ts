@@ -14,6 +14,7 @@ export default interface IBadgeService {
   ): Promise<boolean>;
   assignCustomBadge(
     badge_id: number,
+    marillac_bucks: number,
     participant_ids: number[]
   ): Promise<number[]>;
   deleteCustomBadge(badge_id: number): Promise<boolean>;

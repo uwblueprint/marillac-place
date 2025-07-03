@@ -15,13 +15,15 @@ const badgeResolver = {
       _parent: undefined,
       {
         badge_id,
+        marillac_bucks,
         participant_ids,
       }: {
         badge_id: number;
+        marillac_bucks: number;
         participant_ids: number[];
       }
     ): Promise<number[]> => {
-      return badgeService.assignCustomBadge(badge_id, participant_ids);
+      return badgeService.assignCustomBadge(badge_id, marillac_bucks, participant_ids);
     },
     editCustomBadge: async (
       _parent: undefined,
