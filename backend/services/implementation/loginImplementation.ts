@@ -50,7 +50,7 @@ class LoginService implements ILoginService {
       participant = await prisma.participant.findUnique({
         where: {
           participant_id: id,
-          account_removal_date: null
+          account_removal_date: null,
         },
       });
     } catch (err) {

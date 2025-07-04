@@ -38,12 +38,12 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       h="100vh"
       alignItems="flex-start"
       justifyContent="center"
-      bg="primary.100"
+      bg="neutral.100"
     >
       <Flex
-        width="350px"
+        maxWidth="500px"
+        width="100%"
         height="fit-content"
-        padding="10px"
       >
         { children }
       </Flex>
