@@ -3,6 +3,7 @@ import {
   RecurrenceFrequency,
   Task,
   TaskType,
+  TaskStatus,
   TimeOption,
 } from "@prisma/client";
 import TaskService from "../services/implementation/taskImplementation";
@@ -12,24 +13,12 @@ const taskService: ITaskService = new TaskService();
 
 const taskResolver = {
   Query: {
-    // getTaskById: async (
-    //   _parent: undefined,
-    //   { taskId }: { taskId: number },
-    // ): Promise<Task> => {
-    //   return taskService.getTaskById(taskId);
-    // },
     getTasksByType: async (
       _parent: undefined,
-      { type }: { type: TaskType },
+      { type }: { type: TaskType }
     ): Promise<Array<Task>> => {
       return taskService.getTasksByType(type);
     },
-    // getTasksByRecurrenceFrequency: async (
-    //   _parent: undefined,
-    //   { recurrencePreference }: { recurrencePreference: RecurrenceFrequency },
-    // ): Promise<Task[]> => {
-    //   return taskService.getTasksByRecurrenceFrequency(recurrencePreference);
-    // },
   },
   Mutation: {
     createTask: async (
@@ -56,7 +45,7 @@ const taskResolver = {
         startTime?: string;
         endTime?: string;
         comment?: string;
-      },
+      }
     ): Promise<boolean> => {
       return taskService.createTask(
         type,
@@ -68,7 +57,7 @@ const taskResolver = {
         deduction,
         startTime,
         endTime,
-        comment,
+        comment
       );
     },
     updateTask: async (
@@ -97,7 +86,7 @@ const taskResolver = {
         startTime?: string;
         endTime?: string;
         comment?: string;
-      },
+      }
     ): Promise<boolean> => {
       return taskService.updateTask(
         id,
@@ -110,20 +99,56 @@ const taskResolver = {
         deduction,
         startTime,
         endTime,
-        comment,
+        comment
       );
     },
     deleteTaskById: async (
       _parent: undefined,
-      { taskId }: { taskId: number },
+      { taskId }: { taskId: number }
     ): Promise<boolean> => {
       return taskService.deleteTaskById(taskId);
     },
     deleteAssignedTask: async (
       _parent: undefined,
-      { assigned_task_id }: { assigned_task_id: number },
+      { assigned_task_id }: { assigned_task_id: number }
     ): Promise<boolean> => {
       return taskService.deleteAssignedTask(assigned_task_id);
+    },
+    editAssignedTask: async (
+      _parent: undefined,
+      {
+        assignedTaskId,
+        goalName,
+        goalDescription,
+        startDate,
+        taskStatus,
+        endDate,
+        marillacBucksAddition,
+        marillacBucksDeduction,
+        comment,
+      }: {
+        assignedTaskId: number;
+        goalName?: string;
+        goalDescription?: string;
+        startDate?: string;
+        endDate?: string;
+        taskStatus?: TaskStatus;
+        marillacBucksAddition?: number;
+        marillacBucksDeduction?: number;
+        comment?: string;
+      }
+    ): Promise<boolean> => {
+      return taskService.editAssignedTask(
+        assignedTaskId,
+        goalName,
+        goalDescription,
+        startDate,
+        endDate,
+        taskStatus,
+        marillacBucksAddition,
+        marillacBucksDeduction,
+        comment
+      );
     },
   },
 };

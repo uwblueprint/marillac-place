@@ -4,6 +4,7 @@ import {
   RecurrenceFrequency,
   Task,
   TaskType,
+  TaskStatus,
   TimeOption,
 } from "@prisma/client";
 import ITaskService from "../interface/taskInterface";
@@ -58,7 +59,7 @@ class TaskService implements ITaskService {
     deduction: number,
     startTime?: string,
     endTime?: string,
-    comment?: string,
+    comment?: string
   ): Promise<boolean> {
     try {
       await prisma.task.create({
@@ -92,12 +93,13 @@ class TaskService implements ITaskService {
     deduction?: number,
     startTime?: string,
     endTime?: string,
-    comment?: string,
+    comment?: string
   ): Promise<boolean> {
     const updatedData: Record<string, any> = {};
     if (type) updatedData.task_type = type;
     if (name) updatedData.task_name = name;
-    if (recurrencePreference) updatedData.recurrence_preference = recurrencePreference;
+    if (recurrencePreference)
+      updatedData.recurrence_preference = recurrencePreference;
     if (repeatDays) updatedData.repeat_days = repeatDays;
     if (timePreference) updatedData.time_preference = timePreference;
     if (marillacBucks) updatedData.marillac_bucks_addition = marillacBucks;
@@ -137,6 +139,20 @@ class TaskService implements ITaskService {
     } catch (err) {
       throw new Error("Something went wrong: " + JSON.stringify(err));
     }
+  }
+
+  async editAssignedTask(
+    assignedTaskId: number,
+    goalName?: string,
+    goalDescription?: string,
+    startDate?: string,
+    endDate?: string,
+    taskStatus?: TaskStatus,
+    marillacBucksAddition?: number,
+    marillacBucksDeduction?: number,
+    comment?: string
+  ): Promise<boolean> {
+    return true;
   }
 }
 

@@ -1,5 +1,6 @@
 import {
   TaskType,
+  TaskStatus,
   DayOfWeek,
   Task,
   RecurrenceFrequency,
@@ -21,7 +22,7 @@ interface ITaskService {
     deduction: number,
     startTime?: string,
     endTime?: string,
-    comment?: string,
+    comment?: string
   ): Promise<boolean>;
   updateTask(
     id: number,
@@ -34,10 +35,21 @@ interface ITaskService {
     deduction?: number,
     startTime?: string,
     endTime?: string,
-    comment?: string,
+    comment?: string
   ): Promise<boolean>;
   deleteTaskById(taskId: number): Promise<boolean>;
   deleteAssignedTask(assignedTaskId: number): Promise<boolean>;
+  editAssignedTask(
+    assignedTaskId: number,
+    goalName?: string,
+    goalDescription?: string,
+    startDate?: string,
+    endDate?: string,
+    taskStatus?: TaskStatus,
+    marillacBucksAddition?: number,
+    marillacBucksDeduction?: number,
+    comment?: string
+  ): Promise<boolean>;
 }
 
 export default ITaskService;
