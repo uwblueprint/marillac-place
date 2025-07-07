@@ -19,7 +19,23 @@ const announcementResolver = {
       _parent: undefined,
       { participant_ids }: { participant_ids: number[] }
     ): Promise<Announcement[]> => {
-      return announcementService.getAnnouncementsByParticipants(participant_ids);
+      return announcementService.getAnnouncementsByParticipants(
+        participant_ids
+      );
+    },
+    getAnnouncementsByParticipantIdAndDate: async (
+      _parent: undefined,
+      {
+        participant_id,
+        start_date,
+        end_date,
+      }: { participant_id: number; start_date: string; end_date: string }
+    ): Promise<Announcement[]> => {
+      return announcementService.getAnnouncementsByParticipantIdAndDate(
+        participant_id,
+        start_date,
+        end_date
+      );
     },
   },
   Mutation: {
