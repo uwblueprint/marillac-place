@@ -27,7 +27,7 @@ import ParticipantLoginPage from "./pages/participant/login/Main";
 
 import NotFound from "./pages/NotFound";
 
-import * as ROUTES from "./constants/Routes";
+import * as ROUTES from "./constants/routes";
 import AdminRoute from "./components/admin/AdminRoute";
 import ParticipantRoute from "./components/participant/ParticipantRoute";
 
@@ -40,32 +40,50 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Switch>
-            <Route path={ROUTES.ADMIN_LOGIN_PAGE} element={<AdminLoginPage />} />
-            <Route path={ROUTES.ADMIN_HOME_PAGE} element={
-              <AdminRoute>
-                <AdminHomePage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_SCHEDULE_PAGE} element={
-              <AdminRoute>
-                <AdminSchedulePage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE} element={
-              <AdminRoute>
-                <AdminAnnouncementsPage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_PARTICIPANTS_PAGE} element={
-              <AdminRoute>
-                <AdminParticipantsPage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_TASKS_PAGE} element={
-              <AdminRoute>
-                <AdminTasksPage />
-              </AdminRoute>
-            }/>
+            <Route
+              path={ROUTES.ADMIN_LOGIN_PAGE}
+              element={<AdminLoginPage />}
+            />
+            <Route
+              path={ROUTES.ADMIN_HOME_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminHomePage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_SCHEDULE_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminSchedulePage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminAnnouncementsPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminParticipantsPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_TASKS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminTasksPage />
+                </AdminRoute>
+              }
+            />
 
             <Route
               path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
