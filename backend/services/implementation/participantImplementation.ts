@@ -75,24 +75,23 @@ class ParticipantService implements IParticipantService {
       throw new Error("Something went wrong");
     }
   }
-
-  //
-  //     async getParticipantById(participantId: string): Promise<Participant | null> {
-  //         try {
-  //             const participant: Participant | null = await prisma.participant.findUnique(
-  //                 {
-  //                     where: {
-  //                         participantId,
-  //                     },
-  //                 },
-  //             );
-  //             return participant;
-  //         } catch (err) {
-  //             console.log(err);
-  //             throw err;
-  //         }
-  //     }
-  //
+  
+  async getParticipantById(participantId: number): Promise<Participant | null> {
+      try {
+          const participant: Participant | null = await prisma.participant.findUnique(
+              {
+                  where: {
+                      participant_id: participantId,
+                  },
+              },
+          );
+          return participant;
+      } catch (err) {
+          console.log(err);
+          throw err;
+      }
+  }
+  
   async createParticipant(
     participant_id: number,
     room_number: number,
