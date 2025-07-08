@@ -64,7 +64,9 @@ export default function AssignTaskModal({
     if (selectedTaskId === "individual_goal") {
       setIsIndividualGoal(true);
       setFields({
-        taskName: "",
+        taskName: "Individual Goal",
+        goalName: "",
+        goalDescription: "",
         comments: "",
         recurrence: "DAILY",
         days: [],
@@ -167,14 +169,9 @@ export default function AssignTaskModal({
                     </Text>
                   </FormLabel>
                   {isIndividualGoal ? (
-                    <Input
-                      variant="primary"
-                      value={fields?.taskName}
-                      onChange={(e) =>
-                        handleFieldChange("taskName", e.target.value)
-                      }
-                      placeholder="Enter task name"
-                    />
+                    <Text textStyle="web.b2" color="#626262" mb="5px">
+                      Individual Goal
+                    </Text>
                   ) : (
                     <Text textStyle="web.b2" color="#626262" mb="5px">
                       {fields?.taskName}
@@ -182,140 +179,8 @@ export default function AssignTaskModal({
                   )}
                 </FormControl>
                 <Divider my={2} />
-                <FormControl>
-                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                    <Text textStyle="web.s1" color="text.light.secondary">
-                      Comments
-                    </Text>
-                  </FormLabel>
-                  {isIndividualGoal ? (
-                    <Textarea
-                      variant="primary"
-                      value={fields?.comments}
-                      onChange={(e) =>
-                        handleFieldChange("comments", e.target.value)
-                      }
-                      placeholder="Enter task comments"
-                    />
-                  ) : (
-                    <Text color="#626262" fontSize="sm" mb={1}>
-                      {fields?.comments || "No comment"}
-                    </Text>
-                  )}
-                </FormControl>
-                <Divider my={2} />
-              </>
-            )}
-
-            {fields && !showDropdown && (
-              <>
-                <FormControl>
-                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                    <Text textStyle="web.s1" color="text.light.secondary">
-                      Select Days
-                    </Text>
-                  </FormLabel>
-                  <RadioGroup
-                    value={fields.recurrence}
-                    onChange={(val) => handleFieldChange("recurrence", val)}
-                  >
-                    <Stack direction="column">
-                      <Radio value="DAILY" size="sm">
-                        <Text textStyle="web.b3" color="#000000">
-                          Daily
-                        </Text>
-                      </Radio>
-                      <Radio value="EVERY_SELECTED_DAYS" size="sm">
-                        <Text textStyle="web.b3" color="#000000">
-                          Every selected day
-                        </Text>
-                      </Radio>
-                      <Radio value="ANY_SELECTED_DAYS" size="sm">
-                        <Text textStyle="web.b3" color="#000000">
-                          Any selected day{" "}
-                          <span
-                            style={{
-                              fontWeight: 400,
-                              color: "#888",
-                              fontSize: "12px",
-                            }}
-                          >
-                            Days must be consecutive
-                          </span>
-                        </Text>
-                      </Radio>
-                    </Stack>
-                  </RadioGroup>
-                </FormControl>
-                <Flex gap="5px">
-                  {weekdays.map((day: string) => (
-                    <Button
-                      key={day}
-                      onClick={() => {
-                        const newDays = fields.days.includes(day)
-                          ? fields.days.filter((d: string) => d !== day)
-                          : [...fields.days, day];
-                        handleFieldChange("days", newDays);
-                      }}
-                      isActive={fields.days.includes(day)}
-                      borderRadius="8px"
-                      border="1px"
-                      borderColor="#0C727E"
-                      bg={fields.days.includes(day) ? "#0C727E" : "#FFFFFF"}
-                      color={fields.days.includes(day) ? "#FFFFFF" : "#0C727E"}
-                      cursor="pointer"
-                      width="fit-content"
-                      height="fit-content"
-                      paddingY="5px"
-                      _hover={{
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                      }}
-                      _active={{
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                      }}
-                      _disabled={{
-                        opacity: 0.5,
-                        border: "0px",
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                        cursor: "not-allowed",
-                        pointerEvents: "none",
-                      }}
-                    >
-                      <Text textStyle="web.s1" color="inherit">
-                        {day.charAt(0) + day.slice(1, 3).toLowerCase()}
-                      </Text>
-                    </Button>
-                  ))}
-                </Flex>
-                <FormControl>
-                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                    <Text textStyle="web.s1" color="text.light.secondary">
-                      Select Time
-                    </Text>
-                  </FormLabel>
-                  <RadioGroup
-                    value={fields.time}
-                    onChange={(val) => handleFieldChange("time", val)}
-                  >
-                    <Stack direction="column">
-                      <Radio value="ANYTIME" size="sm">
-                        <Text textStyle="web.b3" color="#000000">
-                          Anytime
-                        </Text>
-                      </Radio>
-                      <Radio value="SPECIFIC" size="sm">
-                        <Text textStyle="web.b3" color="#000000">
-                          Select time
-                        </Text>
-                      </Radio>
-                    </Stack>
-                  </RadioGroup>
-                </FormControl>
-                {fields.time === "SPECIFIC" && (
-                  <Flex gap="10px" mt={2}>
+                {isIndividualGoal && (
+                  <>
                     <FormControl>
                       <FormLabel
                         mb="5px"
@@ -323,16 +188,16 @@ export default function AssignTaskModal({
                         fontWeight="500"
                       >
                         <Text textStyle="web.s1" color="text.light.secondary">
-                          Start Time
+                          Goal Name
                         </Text>
                       </FormLabel>
                       <Input
                         variant="primary"
-                        type="time"
-                        value={fields.startTime}
+                        value={fields?.goalName}
                         onChange={(e) =>
-                          handleFieldChange("startTime", e.target.value)
+                          handleFieldChange("goalName", e.target.value)
                         }
+                        placeholder="Name..."
                       />
                     </FormControl>
                     <FormControl>
@@ -342,95 +207,294 @@ export default function AssignTaskModal({
                         fontWeight="500"
                       >
                         <Text textStyle="web.s1" color="text.light.secondary">
-                          End Time
+                          Goal Description
                         </Text>
                       </FormLabel>
-                      <Input
+                      <Textarea
                         variant="primary"
-                        type="time"
-                        value={fields.endTime}
+                        value={fields?.goalDescription}
                         onChange={(e) =>
-                          handleFieldChange("endTime", e.target.value)
+                          handleFieldChange("goalDescription", e.target.value)
                         }
+                        placeholder="Participant has to..."
                       />
                     </FormControl>
-                  </Flex>
+                  </>
                 )}
-                <Flex
-                  width="100%"
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <FormControl>
-                    <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                      <Text textStyle="web.s1" color="text.light.secondary">
-                        Marillac Bucks
+                {!isIndividualGoal && (
+                  <>
+                    <FormControl>
+                      <FormLabel
+                        mb="5px"
+                        color="text.secondary"
+                        fontWeight="500"
+                      >
+                        <Text textStyle="web.s1" color="text.light.secondary">
+                          Comments
+                        </Text>
+                      </FormLabel>
+                      <Text color="#626262" fontSize="sm" mb={1}>
+                        {fields?.comments || "No comment"}
                       </Text>
-                    </FormLabel>
-                    <InputGroup>
-                      <InputLeftElement>
-                        <AttachMoneyIcon
-                          style={{ color: "inherit", fontSize: 15 }}
-                        />
-                      </InputLeftElement>
-                      <Input
+                    </FormControl>
+                    <Divider my={2} />
+                  </>
+                )}
+
+                {fields && !showDropdown && (
+                  <>
+                    <FormControl>
+                      <FormLabel
+                        mb="5px"
+                        color="text.secondary"
+                        fontWeight="500"
+                      >
+                        <Text textStyle="web.s1" color="text.light.secondary">
+                          Select Days
+                        </Text>
+                      </FormLabel>
+                      <RadioGroup
+                        value={fields.recurrence}
+                        onChange={(val) => handleFieldChange("recurrence", val)}
+                      >
+                        <Stack direction="column">
+                          <Radio value="DAILY" size="sm">
+                            <Text textStyle="web.b3" color="#000000">
+                              Daily
+                            </Text>
+                          </Radio>
+                          <Radio value="EVERY_SELECTED_DAYS" size="sm">
+                            <Text textStyle="web.b3" color="#000000">
+                              Every selected day
+                            </Text>
+                          </Radio>
+                          <Radio value="ANY_SELECTED_DAYS" size="sm">
+                            <Text textStyle="web.b3" color="#000000">
+                              Any selected day{" "}
+                              <span
+                                style={{
+                                  fontWeight: 400,
+                                  color: "#888",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                Days must be consecutive
+                              </span>
+                            </Text>
+                          </Radio>
+                        </Stack>
+                      </RadioGroup>
+                    </FormControl>
+                    <Flex gap="5px">
+                      {weekdays.map((day: string) => (
+                        <Button
+                          key={day}
+                          onClick={() => {
+                            const newDays = fields.days.includes(day)
+                              ? fields.days.filter((d: string) => d !== day)
+                              : [...fields.days, day];
+                            handleFieldChange("days", newDays);
+                          }}
+                          isActive={fields.days.includes(day)}
+                          borderRadius="8px"
+                          border="1px"
+                          borderColor="#0C727E"
+                          bg={fields.days.includes(day) ? "#0C727E" : "#FFFFFF"}
+                          color={
+                            fields.days.includes(day) ? "#FFFFFF" : "#0C727E"
+                          }
+                          cursor="pointer"
+                          width="fit-content"
+                          height="fit-content"
+                          paddingY="5px"
+                          _hover={{
+                            color: "#FFFFFF",
+                            bg: "#0C727E",
+                          }}
+                          _active={{
+                            color: "#FFFFFF",
+                            bg: "#0C727E",
+                          }}
+                          _disabled={{
+                            opacity: 0.5,
+                            border: "0px",
+                            color: "#FFFFFF",
+                            bg: "#0C727E",
+                            cursor: "not-allowed",
+                            pointerEvents: "none",
+                          }}
+                        >
+                          <Text textStyle="web.s1" color="inherit">
+                            {day.charAt(0) + day.slice(1, 3).toLowerCase()}
+                          </Text>
+                        </Button>
+                      ))}
+                    </Flex>
+                    <FormControl>
+                      <FormLabel
+                        mb="5px"
+                        color="text.secondary"
+                        fontWeight="500"
+                      >
+                        <Text textStyle="web.s1" color="text.light.secondary">
+                          Select Time
+                        </Text>
+                      </FormLabel>
+                      <RadioGroup
+                        value={fields.time}
+                        onChange={(val) => handleFieldChange("time", val)}
+                      >
+                        <Stack direction="column">
+                          <Radio value="ANYTIME" size="sm">
+                            <Text textStyle="web.b3" color="#000000">
+                              Anytime
+                            </Text>
+                          </Radio>
+                          <Radio value="SPECIFIC" size="sm">
+                            <Text textStyle="web.b3" color="#000000">
+                              Select time
+                            </Text>
+                          </Radio>
+                        </Stack>
+                      </RadioGroup>
+                    </FormControl>
+                    {fields.time === "SPECIFIC" && (
+                      <Flex gap="10px" mt={2}>
+                        <FormControl>
+                          <FormLabel
+                            mb="5px"
+                            color="text.secondary"
+                            fontWeight="500"
+                          >
+                            <Text
+                              textStyle="web.s1"
+                              color="text.light.secondary"
+                            >
+                              Start Time
+                            </Text>
+                          </FormLabel>
+                          <Input
+                            variant="primary"
+                            type="time"
+                            value={fields.startTime}
+                            onChange={(e) =>
+                              handleFieldChange("startTime", e.target.value)
+                            }
+                          />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel
+                            mb="5px"
+                            color="text.secondary"
+                            fontWeight="500"
+                          >
+                            <Text
+                              textStyle="web.s1"
+                              color="text.light.secondary"
+                            >
+                              End Time
+                            </Text>
+                          </FormLabel>
+                          <Input
+                            variant="primary"
+                            type="time"
+                            value={fields.endTime}
+                            onChange={(e) =>
+                              handleFieldChange("endTime", e.target.value)
+                            }
+                          />
+                        </FormControl>
+                      </Flex>
+                    )}
+                    <Flex
+                      width="100%"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <FormControl>
+                        <FormLabel
+                          mb="5px"
+                          color="text.secondary"
+                          fontWeight="500"
+                        >
+                          <Text textStyle="web.s1" color="text.light.secondary">
+                            Marillac Bucks
+                          </Text>
+                        </FormLabel>
+                        <InputGroup>
+                          <InputLeftElement>
+                            <AttachMoneyIcon
+                              style={{ color: "inherit", fontSize: 15 }}
+                            />
+                          </InputLeftElement>
+                          <Input
+                            variant="primary"
+                            type="number"
+                            value={fields.addition}
+                            onChange={(e) =>
+                              handleFieldChange("addition", e.target.value)
+                            }
+                            width="80%"
+                            pl="30px"
+                          />
+                        </InputGroup>
+                      </FormControl>
+                      <FormControl>
+                        <FormLabel
+                          mb="5px"
+                          color="text.secondary"
+                          fontWeight="500"
+                        >
+                          <Text textStyle="web.s1" color="text.light.secondary">
+                            Marillac Bucks Deductions
+                          </Text>
+                        </FormLabel>
+                        <InputGroup>
+                          <InputLeftElement>
+                            <AttachMoneyIcon
+                              style={{ color: "inherit", fontSize: 15 }}
+                            />
+                          </InputLeftElement>
+                          <Input
+                            variant="primary"
+                            type="number"
+                            value={fields.deduction}
+                            onChange={(e) =>
+                              handleFieldChange("deduction", e.target.value)
+                            }
+                            width="80%"
+                            pl="30px"
+                          />
+                        </InputGroup>
+                      </FormControl>
+                    </Flex>
+                    <FormControl>
+                      <FormLabel
+                        mb="5px"
+                        color="text.secondary"
+                        fontWeight="500"
+                      >
+                        <Text textStyle="web.s1" color="text.light.secondary">
+                          Comments
+                        </Text>
+                      </FormLabel>
+                      <Textarea
                         variant="primary"
-                        type="number"
-                        value={fields.addition}
+                        value={fields.assignComment}
                         onChange={(e) =>
-                          handleFieldChange("addition", e.target.value)
+                          handleFieldChange("assignComment", e.target.value)
                         }
-                        width="80%"
-                        pl="30px"
+                        placeholder="Add comment here..."
                       />
-                    </InputGroup>
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                      <Text textStyle="web.s1" color="text.light.secondary">
-                        Marillac Bucks Deductions
-                      </Text>
-                    </FormLabel>
-                    <InputGroup>
-                      <InputLeftElement>
-                        <AttachMoneyIcon
-                          style={{ color: "inherit", fontSize: 15 }}
-                        />
-                      </InputLeftElement>
-                      <Input
-                        variant="primary"
-                        type="number"
-                        value={fields.deduction}
-                        onChange={(e) =>
-                          handleFieldChange("deduction", e.target.value)
-                        }
-                        width="80%"
-                        pl="30px"
-                      />
-                    </InputGroup>
-                  </FormControl>
-                </Flex>
-                <FormControl>
-                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                    <Text textStyle="web.s1" color="text.light.secondary">
-                      Comments
-                    </Text>
-                  </FormLabel>
-                  <Textarea
-                    variant="primary"
-                    value={fields.assignComment}
-                    onChange={(e) =>
-                      handleFieldChange("assignComment", e.target.value)
-                    }
-                    placeholder="Add comment here..."
-                  />
-                </FormControl>
+                    </FormControl>
+                  </>
+                )}
+                {error && (
+                  <Text textStyle="web.b2" fontWeight={600} color="#E30000">
+                    {error}
+                  </Text>
+                )}
               </>
-            )}
-            {error && (
-              <Text textStyle="web.b2" fontWeight={600} color="#E30000">
-                {error}
-              </Text>
             )}
           </Flex>
         </ModalBody>
