@@ -5,9 +5,11 @@ import React, { useEffect, useState } from "react";
 import MarillacBalanceModal from "./elements/MarillacBalanceModal";
 import { ROOM_NUMBERS } from "../../../constants/rooms";
 import { GET_PARTICIPANT_BY_ROOM } from "../../../gql/queries";
+import AssignTaskModal from "./elements/AssignTaskModal";
 
 export default function AdminSchedulePage() {
   const [editMarillacBucks, setEditMarillacBucks] = useState(false);
+  const [showAssignTaskModal, setShowAssignTaskModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(() => {
     const room = localStorage.getItem("scheduleSelectedRoom");
     if (!room) return 1;
@@ -33,7 +35,7 @@ export default function AdminSchedulePage() {
         zIndex={10}
         paddingX="20px"
       >
-        { ROOM_NUMBERS.map((num: number) => (
+        {ROOM_NUMBERS.map((num: number) => (
           <Text
             key={num}
             textStyle="web.b1"
@@ -50,7 +52,7 @@ export default function AdminSchedulePage() {
           </Text>
         ))}
       </Flex>
-      { loading ? (
+      {loading ? (
         <Spinner />
       ) : error ? (
         <Flex>{error.message}</Flex>
@@ -71,20 +73,48 @@ export default function AdminSchedulePage() {
             }}
             onClick={() => setEditMarillacBucks(true)}
           >
-            <Text textStyle="web.b1" fontWeight={700} color="inherit">{data.getParticipantByRoom.marillac_bucks} M-Bucks</Text>
+            <Text textStyle="web.b1" fontWeight={700} color="inherit">
+              {data.getParticipantByRoom.marillac_bucks} M-Bucks
+            </Text>
             <EditIcon fontSize="small" />
           </Button>
 
-          { editMarillacBucks &&
+          {editMarillacBucks && (
             <MarillacBalanceModal
               close={() => setEditMarillacBucks(false)}
               participantId={data.getParticipantByRoom.participant_id}
               currentBalance={data.getParticipantByRoom.marillac_bucks}
               roomNumber={data.getParticipantByRoom.room_number}
             />
-          }
+          )}
+
+          <Button
+            ml={4}
+            padding="0px 15px"
+            color="#0C727E"
+            border="1px solid"
+            borderColor="#0C727E"
+            borderRadius="8px"
+            bg="#E6F7FA"
+            gap="5px"
+            _hover={{
+              background: "#C9DEC9",
+            }}
+            onClick={() => setShowAssignTaskModal(true)}
+          >
+            <Text textStyle="web.b1" fontWeight={700} color="inherit">
+              Assign Task
+            </Text>
+          </Button>
+
+          {showAssignTaskModal && (
+            <AssignTaskModal
+              isOpen={showAssignTaskModal}
+              onClose={() => setShowAssignTaskModal(false)}
+            />
+          )}
         </Flex>
       )}
     </>
-  )
+  );
 }
