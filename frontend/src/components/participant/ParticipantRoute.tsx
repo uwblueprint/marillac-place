@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import * as ROUTES from "../../constants/routes";
-import { isParticipant } from "../../utils/checkRole";
+import { isParticipant, getParticipantId } from "../../utils/checkRole";
 import Loading from "../../pages/Loading";
+import { ParticipantContext } from "./ParticipantContext";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
@@ -11,14 +12,17 @@ type ParticipantRouteProps = {
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   const [authorized, setAuthorized] = useState(false);
+  const [participantId, setParticipantId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkRole = async () => {
-      const participantUser = await isParticipant();
-      if (participantUser) {
+      const user = await isParticipant();
+      if (user) {
         setAuthorized(true);
       }
+      const id = await getParticipantId();
+      setParticipantId(id);
       setLoading(false);
     };
     checkRole();
@@ -30,6 +34,10 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
 
   if (!authorized) {
     return <Navigate to={ROUTES.PARTICIPANTS_LOGIN_PAGE} replace />
+  }
+  
+  if (!participantId) {
+    return <Flex>Something went wrong. ID # is missing.</Flex>
   }
 
   return (
@@ -44,8 +52,11 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
         maxWidth="500px"
         width="100%"
         height="fit-content"
+        flexDir="column"
       >
-        { children }
+        <ParticipantContext.Provider value={{ id: participantId }}>
+          { children }
+        </ParticipantContext.Provider>
       </Flex>
     </Flex>
   );

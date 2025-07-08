@@ -57,11 +57,11 @@ export const textStyles = {
     },
     h2: {
       fontWeight: "600",
-      fontSize: "18px",
+      fontSize: "16px",
     },
     h3: {
       fontWeight: "600",
-      fontSize: "16px",
+      fontSize: "14px",
     },
     s1: {
       color: "#808080",

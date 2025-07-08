@@ -1,6 +1,7 @@
 import { Participant } from "@prisma/client";
 import prisma from "../../prisma";
 import ILoginService from "../interface/loginInterface";
+import { getToday } from "../../utils/formatDateTime";
 const jwt = require("jsonwebtoken");
 
 class LoginService implements ILoginService {
@@ -50,7 +51,7 @@ class LoginService implements ILoginService {
       participant = await prisma.participant.findUnique({
         where: {
           participant_id: id,
-          account_removal_date: null,
+          OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
         },
       });
     } catch (err) {

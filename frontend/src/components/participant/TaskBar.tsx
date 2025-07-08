@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as ROUTES from "../../constants/routes";
 
 type TaskBarProps = {
-  participantId: number;
+  participantId: number | undefined;
 }
 
 export default function TaskBar({ participantId }: TaskBarProps) {
@@ -41,6 +41,7 @@ export default function TaskBar({ participantId }: TaskBarProps) {
       borderBottom="1px solid"
       borderColor="neutral.300"
       flexDir="column"
+      zIndex={100}
     >
       <Text textStyle="mobile.h2" color="primary.700">ID #{participantId}</Text>
       <Tabs
