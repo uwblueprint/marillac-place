@@ -18,11 +18,7 @@ const resolvers = gql`
   type Mutation {
     adminLogin(role: String!, password: String!): LoginResponse
     participantLogin(id: Int!, password: String!): LoginResponse
-    createCustomBadge( 
-      name: String!, 
-      description: String!,
-      icon: Icon!
-    ): Boolean 
+    createCustomBadge(name: String!, description: String!, icon: Icon!): Boolean
     createParticipant(
       participant_id: Int!
       room_number: Int!
@@ -85,9 +81,9 @@ const resolvers = gql`
     ): Boolean
     deleteTaskById(taskId: Int!): Boolean
     assignCustomBadge(
-        badge_id: Int!,
-        marillac_bucks: Int!,
-        participant_ids: [Int!]!
+      badge_id: Int!
+      marillac_bucks: Int!
+      participant_ids: [Int!]!
     ): [Int!]!
     editCustomBadge(
       custom_badge_id: Int!
@@ -96,6 +92,18 @@ const resolvers = gql`
     ): Boolean
     deleteCustomBadge(badge_id: Int!): Boolean!
     deleteAssignedTask(assigned_task_id: Int!): Boolean!
+    createAssignedTask(
+      participantId: Int!
+      taskName: String!
+      startDate: String!
+      endDate: String!
+      marillacBucksAddition: Int!
+      marillacBucksDeduction: Int!
+      taskType: String
+      goalName: String
+      goalDescription: String
+      comment: String
+    ): Boolean
   }
 `;
 
