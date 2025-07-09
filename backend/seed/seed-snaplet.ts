@@ -29,12 +29,12 @@ import {
 async function seedProdData() {
   const prisma = new PrismaClient();
   try {
-    for (const badge of systemBadges) {
-      const existing = await prisma.badge.findUnique({
-        where: { name: badge.name },
-      });
-      
-      if (!existing) {
+    // Check if there are any badges in the database
+    const badgeCount = await prisma.badge.count();
+    
+    if (badgeCount === 0) {
+      // No badges exist, seed all system badges
+      for (const badge of systemBadges) {
         await prisma.badge.create({
           data: {
             name: badge.name,
@@ -49,8 +49,10 @@ async function seedProdData() {
           },
         });
       }
+      console.log("✅ System badges seeded");
+    } else {
+      console.log("✅ Badges already exist, skipping seeding");
     }
-    console.log("✅ System badges seeded");
   } finally {
     await prisma.$disconnect();
   }
