@@ -1,6 +1,6 @@
 import {
   TaskType,
-  TaskStatus,
+  Status,
   DayOfWeek,
   Task,
   RecurrenceFrequency,
@@ -45,7 +45,7 @@ interface ITaskService {
     goalDescription?: string,
     startDate?: string,
     endDate?: string,
-    taskStatus?: TaskStatus,
+    taskStatus?: Status,
     marillacBucksAddition?: number,
     marillacBucksDeduction?: number,
     comment?: string

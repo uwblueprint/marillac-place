@@ -3,7 +3,7 @@ import {
   RecurrenceFrequency,
   Task,
   TaskType,
-  TaskStatus,
+  Status,
   TimeOption,
 } from "@prisma/client";
 import TaskService from "../services/implementation/taskImplementation";
@@ -132,7 +132,7 @@ const taskResolver = {
         goalDescription?: string;
         startDate?: string;
         endDate?: string;
-        taskStatus?: TaskStatus;
+        taskStatus?: Status;
         marillacBucksAddition?: number;
         marillacBucksDeduction?: number;
         comment?: string;

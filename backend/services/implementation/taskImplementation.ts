@@ -4,7 +4,7 @@ import {
   RecurrenceFrequency,
   Task,
   TaskType,
-  TaskStatus,
+  Status,
   TimeOption,
 } from "@prisma/client";
 import ITaskService from "../interface/taskInterface";
@@ -147,7 +147,7 @@ class TaskService implements ITaskService {
     goalDescription?: string,
     startDate?: string,
     endDate?: string,
-    taskStatus?: TaskStatus,
+    taskStatus?: Status,
     marillacBucksAddition?: number,
     marillacBucksDeduction?: number,
     comment?: string
