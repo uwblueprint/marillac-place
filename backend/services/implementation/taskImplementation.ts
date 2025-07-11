@@ -152,7 +152,24 @@ class TaskService implements ITaskService {
     marillacBucksDeduction?: number,
     comment?: string
   ): Promise<boolean> {
-    return true;
+    try {
+      await prisma.assignedTask.update({
+        where: { assigned_task_id: assignedTaskId },
+        data: {
+          goal_name: goalName,
+          goal_description: goalDescription,
+          start_date: startDate,
+          end_date: endDate,
+          task_status: taskStatus,
+          marillac_bucks_addition: marillacBucksAddition,
+          marillac_bucks_deduction: marillacBucksDeduction,
+          comment: comment,
+        },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong: " + err);
+    }
   }
 }
 
