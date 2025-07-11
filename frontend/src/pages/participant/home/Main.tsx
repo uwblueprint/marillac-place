@@ -4,7 +4,7 @@ import ParticipantPageHeader from '../../../components/participant/PageHeader';
 export default function ParticipantsHomePage() {
   return (
     <>
-      <ParticipantPageHeader marillacBucks={10} participantId={1} currentPage="Home" />
+      <ParticipantPageHeader currentPage="Home" />
     </>
   )
 }

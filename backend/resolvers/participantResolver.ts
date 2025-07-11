@@ -23,6 +23,12 @@ const participantResolver = {
     ): Promise<Participant[]> => {
       return participantService.getParticipantsByRooms(room_numbers);
     },
+    getParticipantById: async (
+      _parent: undefined,
+      { participantId }: { participantId: number }
+    ): Promise<Participant | null> => {
+      return participantService.getParticipantById(participantId);
+    }
   },
   Mutation: {
     createParticipant: async (
