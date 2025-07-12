@@ -1,15 +1,30 @@
 import { EarnedBadge, BadgeType, Icon, Badge } from "@prisma/client";
+import prisma from "../prisma";
 import BadgeService from "../services/implementation/badgeImplementation";
 import IBadgeService from "../services/interface/badgeInterface";
 
 const badgeService: IBadgeService = new BadgeService();
+
+const levelMap: Record<number, string> = {
+  1: "N",
+  2: "B",
+  3: "S",
+  4: "G",
+  5: "D",
+};
 
 const badgeResolver = {
   Query: {
     getCustomBadges: async (): Promise<Badge[]> => {
       return badgeService.getCustomBadges();
     },
+    getSystemBadges: async (): Promise<Badge[]> => {
+      return prisma.badge.findMany({
+        where: { badge_type: "SYSTEM" },
+      });
+    },
   },
+
   Mutation: {
     assignCustomBadge: async (
       _parent: undefined,
@@ -23,8 +38,13 @@ const badgeResolver = {
         participant_ids: number[];
       }
     ): Promise<number[]> => {
-      return badgeService.assignCustomBadge(badge_id, marillac_bucks, participant_ids);
+      return badgeService.assignCustomBadge(
+        badge_id,
+        marillac_bucks,
+        participant_ids
+      );
     },
+
     editCustomBadge: async (
       _parent: undefined,
       {
@@ -43,6 +63,7 @@ const badgeResolver = {
         new_custom_badge_description
       );
     },
+
     createCustomBadge: async (
       _parent: undefined,
       {
@@ -53,14 +74,11 @@ const badgeResolver = {
         name: string;
         description: string;
         icon: Icon;
-      },
+      }
     ): Promise<boolean> => {
-      return badgeService.createCustomBadge(
-        name,
-        description,
-        icon
-      );
+      return badgeService.createCustomBadge(name, description, icon);
     },
+
     deleteCustomBadge: async (
       _parent: undefined,
       {
@@ -70,6 +88,20 @@ const badgeResolver = {
       }
     ): Promise<boolean> => {
       return badgeService.deleteCustomBadge(badge_id);
+    },
+  },
+
+  Badge: {
+    offered_levels: async (parent: Badge): Promise<string[]> => {
+      const levels = await prisma.badgeLevel.findMany({
+        where: { badge_id: parent.badge_id },
+        select: { level: true },
+        orderBy: { level: "asc" },
+      });
+
+      return levels
+        .map((lvl) => levelMap[lvl.level])
+        .filter(Boolean);
     },
   },
 };

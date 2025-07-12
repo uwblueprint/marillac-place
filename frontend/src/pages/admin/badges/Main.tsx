@@ -1,97 +1,61 @@
-import {
-  Button,
-  Flex,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Text,
-} from "@chakra-ui/react";
-import AddIcon from "@mui/icons-material/Add";
-import { useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
-import CreateCustomBadgeModal from "./elements/CreateCustomBadgeModal";
-import CustomBadgeTable from "./elements/CustomBadgeTable";
-import { GET_CUSTOM_BADGES } from "../../../gql/queries";
-import AssignCustomBadgeModal from "./elements/AssignCustomBadgeModal";
 
-export default function AdminBadgesPage() {
-  const [create, setCreate] = useState(false);
-  const [assign, setAssign] = useState(false);
-  const [badges, setBadges] = useState([]);
+import React from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import CommonTable, {TableData, ColumnInfoTypes} from "../../../components/admin/CommonTable";
+import { GET_ALL_BADGES } from "../../../gql/queries";
 
-  const { loading, error, data } = useQuery(GET_CUSTOM_BADGES);
+const SystemBadgesPage: React.FC = () => {
+    const {
+        loading: getSystemBadgesLoading,
+        error: getSystemBadgesError,
+        data: getSystemBadgesData,
+      } = useQuery(GET_ALL_BADGES);
 
-  useEffect(() => {
-    if (!loading && !error && data) {
-      setBadges(data.getCustomBadges);
-    }
-  }, [loading, error, data]);
+  if (getSystemBadgesLoading) return <p>Loading…</p>;
+  if (getSystemBadgesError)  return <p>Error: {getSystemBadgesError.message}</p>;
+
+  const data: TableData[] = getSystemBadgesData.getSystemBadges.map((badge: any) => ({
+    id:        badge.badge_id,
+    icon:      badge.icon,
+    name:      badge.name,
+    description: badge.description,
+    levels:    badge.offered_levels.join(", "),
+    active:    badge.is_active,        
+   
+    __raw:     badge,
+  }));
+
+  const columnInfo: ColumnInfoTypes[] = [
+    { header: "Icon", key: "icon" },
+    { header: "Badge Name", key: "name" },
+    { header: "Description", key: "description" },
+    { header: "Offered Levels", key: "levels" },
+    { header: "Status", key: "active" },
+  ];
+
+const handleEdit = (row: unknown): unknown => {
+  console.log("Edit row:", row);
+  return row;
+};
 
   return (
-    <>
-      <Flex
-        w="100%"
-        justifyContent="flex-start"
-        alignItems="center"
-        position="absolute"
-        top="17px"
-        left="0px"
-        zIndex={10}
-        paddingX="20px"
-        gap="10px"
+    <div>
+      <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px" }}>
+        System Badges
+      </h1>
+      <p style={{ color: "gray", marginBottom: "16px" }}>
+        System badges will be granted to participants automatically.
+      </p>
+      <CommonTable
+        columnInfo={columnInfo}
+        data={data}
+        onEdit={handleEdit}
+        maxResults={10}
+        isSelectable={false}
+        previewModal={false}
       />
-      <Flex width="100%" flexDir="column" gap="15px">
-        <Flex
-          width="100%"
-          height="fit-content"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Flex alignItems="center" gap="15px">
-            <Text textStyle="web.h2" color="primary.700">
-              Custom Badges
-            </Text>
-            <Text
-              textStyle="web.b3"
-              color="text.light.secondary"
-              marginTop="7px"
-            >
-              You can create new and reward participants custom badges.
-            </Text>
-          </Flex>
-          <Flex alignItems="center" gap="15px">
-            <Button
-              onClick={() => setAssign(true)}
-              variant="secondaryOutline"
-              fontWeight={700}
-              fontSize="12px"
-              gap="7px"
-            >
-              Assign Custom Badge
-            </Button>
-            <Button
-              onClick={() => setCreate(true)}
-              variant="primaryFilled"
-              fontWeight={700}
-              fontSize="12px"
-              gap="7px"
-            >
-              <AddIcon
-                style={{
-                  width: "15px",
-                  height: "15px",
-                }}
-              />
-              Create New
-            </Button>
-          </Flex>
-        </Flex>
-        <Flex flexDir="column" w="100%" gap="15px">
-          <CustomBadgeTable loading={loading} error={error} badges={badges} />
-        </Flex>
-      </Flex>
-      <CreateCustomBadgeModal isOpen={create} onClose={() => setCreate(false)} />
-      <AssignCustomBadgeModal isOpen={assign} onClose={() => setAssign(false)} />
-    </>
+    </div>
   );
-}
+};
+
+export default SystemBadgesPage;
