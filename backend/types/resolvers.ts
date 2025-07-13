@@ -6,6 +6,7 @@ const resolvers = gql`
     getCurrentParticipants: [Participant]
     getParticipantByRoom(room_number: Int!): Participant
     getParticipantsByRooms(room_numbers: [Int!]!): [Participant]
+    getParticipantById(participantId: Int!): Participant
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]

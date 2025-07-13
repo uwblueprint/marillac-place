@@ -26,6 +26,13 @@ export const GET_CURRENT_PARTICIPANTS = gql`
     }
   }
 `;
+export const GET_MARILLAC_BUCKS = gql`
+  query getMarillacBucks($participantId: Int!) {
+      getParticipantById(participantId: $participantId) {
+          marillac_bucks
+      }
+  }
+`
 
 export const GET_PARTICIPANT_BY_ROOM = gql`
   query getParticipantByRoom($room_number: Int!) {
