@@ -204,6 +204,32 @@ export const CREATE_ASSIGNED_TASK = gql`
     }
 `;
 
+export const EDIT_ASSIGNED_TASK = gql`
+  mutation editAssignedTask(
+    $assignedTaskId: Int!
+    $goalName: String
+    $goalDescription: String
+    $startDate: String
+    $endDate: String
+    $taskStatus: Status
+    $marillacBucksAddition: Int
+    $marillacBucksDeduction: Int
+    $comment: String
+  ) {
+    editAssignedTask(
+      assignedTaskId: $id
+      goalName: $goalName
+      goalDescription: $goalDescription
+      startDate: $startDate
+      endDate: $endDate
+      taskStatus: $taskStatus
+      marillacBucksAddition: $marillacBucksAddition
+      marillacBucksDeduction: $marillacBucksDeduction
+      comment: $comment
+    )
+  }
+`
+
 export const UPDATE_TASK = gql`
   mutation updateTask(
       $id: Int!
