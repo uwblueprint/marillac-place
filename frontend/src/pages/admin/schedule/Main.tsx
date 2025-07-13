@@ -5,9 +5,11 @@ import React, { useEffect, useState } from "react";
 import MarillacBalanceModal from "./elements/MarillacBalanceModal";
 import { ROOM_NUMBERS } from "../../../constants/rooms";
 import { GET_PARTICIPANT_BY_ROOM } from "../../../gql/queries";
+import EditAssignedTaskModal from "./elements/EditAssignedTaskModal";
 
 export default function AdminSchedulePage() {
   const [editMarillacBucks, setEditMarillacBucks] = useState(false);
+  const [editAssignedTask, setEditAssignedTask] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(() => {
     const room = localStorage.getItem("scheduleSelectedRoom");
     if (!room) return 1;
@@ -83,6 +85,12 @@ export default function AdminSchedulePage() {
               roomNumber={data.getParticipantByRoom.room_number}
             />
           }
+          {/* temp button for edit assigned task modal */}
+          <Button onClick={()=>setEditAssignedTask(true)}>
+            Edit assigned task
+          </Button>
+          
+          {editAssignedTask && <EditAssignedTaskModal selected={null} close={()=> setEditAssignedTask(false)}/>}
         </Flex>
       )}
     </>
