@@ -65,7 +65,7 @@ class AnnouncementService implements IAnnouncementService {
         },
         where: {
           user_announcements: {
-            every: {
+            some: {
               participant_id: {
                 in: participant_ids,
               },
@@ -103,7 +103,7 @@ class AnnouncementService implements IAnnouncementService {
             },
             {
               user_announcements: {
-                every: {
+                some: {
                   participant_id,
                 },
               },
