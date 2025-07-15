@@ -39,7 +39,11 @@ class BadgeService implements IBadgeService {
           badge_type: "SYSTEM",
         },
         include: {
-          badge_level: true,
+          badge_level: {
+            orderBy: {
+              level: 'asc',
+            },
+          },
         },
         orderBy: {
           name: 'asc'
@@ -224,6 +228,7 @@ class BadgeService implements IBadgeService {
       throw new Error(err.message || "Something went wrong");
     }
   }
+  
   async editSystemBadge(
     system_badge_id: number,
     system_badge_name: string,
