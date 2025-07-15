@@ -19,8 +19,33 @@ class BadgeService implements IBadgeService {
         include: {
           badge_level: true,
         },
+        orderBy: {
+          name: 'asc'
+        },
       });
       return customBadges;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message || "Failed to get custom badges.");
+      }
+      throw new Error("Failed to get custom badges.");
+    }
+  }
+  
+  async getSystemBadges(): Promise<Badge[]> {
+    try {
+      const systemBadges = await prisma.badge.findMany({
+        where: {
+          badge_type: "SYSTEM",
+        },
+        include: {
+          badge_level: true,
+        },
+        orderBy: {
+          name: 'asc'
+        },
+      });
+      return systemBadges;
     } catch (err) {
       if (err instanceof Error) {
         throw new Error(err.message || "Failed to get custom badges.");
@@ -200,31 +225,54 @@ class BadgeService implements IBadgeService {
     }
   }
   async editSystemBadge(
-  system_badge_id: number,
-  system_badge_name: string,
-  system_badge_criteria?: string,
-): Promise<boolean> {
-  const badge = await prisma.badge.findUnique({
-    where: {badge_id:system_badge_id},
-  });
-  if (!badge || badge.badge_type !== "SYSTEM"){
-    throw new Error("BAdge not found or not a system badge");
-  }
-  try {
-    await prisma.badge.update({
-      where: { badge_id: system_badge_id},
-      data: {
-        name: system_badge_name,
-        ...(system_badge_criteria !== undefined && { description: system_badge_criteria }),
-      },
+    system_badge_id: number,
+    system_badge_name: string,
+    system_badge_criteria?: string,
+  ): Promise<boolean> {
+    const badge = await prisma.badge.findUnique({
+      where: {badge_id:system_badge_id},
     });
-    return true;
-  } catch (err) {
-    // @ts-ignore
-    throw new Error(err.message || "Failed to update system badge");
+    if (!badge || badge.badge_type !== "SYSTEM"){
+      throw new Error("BAdge not found or not a system badge");
+    }
+    try {
+      await prisma.badge.update({
+        where: { badge_id: system_badge_id},
+        data: {
+          name: system_badge_name,
+          ...(system_badge_criteria !== undefined && { description: system_badge_criteria }),
+        },
+      });
+      return true;
+    } catch (err) {
+      // @ts-ignore
+      throw new Error(err.message || "Failed to update system badge");
+    }
   }
-}
-
+  
+  async updateBadgeStatus(
+    badge_id: number,
+    is_active: boolean,
+  ): Promise<boolean> {
+    const badge = await prisma.badge.findUnique({
+      where: { badge_id },
+    });
+    if (!badge){
+      throw new Error("Badge not found");
+    }
+    try {
+      await prisma.badge.update({
+        where: { badge_id },
+        data: {
+          is_active
+        },
+      });
+      return true;
+    } catch (err) {
+      // @ts-ignore
+      throw new Error(err.message || "Failed to update badge");
+    }
+  }
 }
 
 export default BadgeService;

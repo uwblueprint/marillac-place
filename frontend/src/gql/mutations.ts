@@ -1,5 +1,11 @@
 import { gql } from "@apollo/client";
 
+export const UPDATE_BADGE_STATUS = gql`
+    mutation updateBadgeStatus($badge_id: Int!, $is_active: Boolean!) {
+        updateBadgeStatus(badge_id: $badge_id, is_active: $is_active)
+    }
+`;
+
 export const ADMIN_LOGIN = gql`
   mutation adminLogin($role: String!, $password: String!) {
     adminLogin(role: $role, password: $password) {

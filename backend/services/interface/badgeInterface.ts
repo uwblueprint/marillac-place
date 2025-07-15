@@ -8,6 +8,7 @@ import {
 
 export default interface IBadgeService {
   getCustomBadges(): Promise<Badge[]>;
+  getSystemBadges(): Promise<Badge[]>;
   createCustomBadge(
     name: string,
     description: string,
@@ -34,5 +35,9 @@ export default interface IBadgeService {
     badge_level: number,
     benchmark: number,
     marillac_bucks: number
+  ): Promise<boolean>;
+  updateBadgeStatus(
+    badge_id: number,
+    is_active: boolean
   ): Promise<boolean>;
 }

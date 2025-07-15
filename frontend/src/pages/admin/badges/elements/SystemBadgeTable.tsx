@@ -10,44 +10,54 @@ import {
   Flex,
   Spinner,
   Image as ChakraImage,
+  Switch
 } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-// import EditCustomBadgeModal from "./EditCustomBadgeModal";
-import EditSystemBadgeModal from "./EditSystemBadgeModal";
+import { UPDATE_BADGE_STATUS } from "../../../../gql/mutations"
 import { Icon } from "../../../../constants/icons";
-import { DELETE_CUSTOM_BADGE } from "../../../../gql/mutations";
-import EditCustomBadgeModal from "./EditCustomBadgeModal";
 
-type CustomBadgeTableProps = {
+type SystemBadgeTableProps = {
   loading: boolean;
   error: any;
   badges: any[];
 };
 
-const CustomBadgeTable = ({
+const SystemBadgeTable = ({
   loading,
   error,
   badges,
-}: CustomBadgeTableProps) => {
+}: SystemBadgeTableProps) => {
+  const levels = ["N", "B", "S", "G", "D"];
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState(null);
-
-  const [deleteCustomBadge] = useMutation(DELETE_CUSTOM_BADGE);
-
-  async function handleDelete(id: number) {
+  
+  const [statuses, setStatuses] = useState(null);
+  const [updateBadgeStatus] = useMutation(UPDATE_BADGE_STATUS);
+  
+  useEffect(() => {
+    setStatuses(badges.reduce((acc, badge) => {
+      acc[badge.badge_id] = badge.is_active;
+      return acc;
+    }, {}))
+  }, [badges]);
+  
+  async function changeActivityStatus(badge_id: number, is_active: boolean) {
     try {
-      await deleteCustomBadge({
+      await updateBadgeStatus({
         variables: {
-          badge_id: id,
-        },
+          badge_id,
+          is_active
+        }
       });
+      setStatuses((prev: any) => ({
+        ...prev,
+        [badge_id]: is_active,
+      }));
     } catch (err: any) {
-      console.log(err);
+      console.log(err.message);
     }
-    window.location.reload();
   }
 
   return (
@@ -56,6 +66,7 @@ const CustomBadgeTable = ({
         border="1px solid"
         borderColor="neutral.300"
         borderRadius="8px"
+        mb="15px"
         w="100%"
       >
         <Table>
@@ -68,17 +79,31 @@ const CustomBadgeTable = ({
                   </Text>
                 </Flex>
               </Th>
-              <Th width="25%">
+              <Th width="35%">
                 <Flex alignItems="center" gap="8px">
                   <Text textStyle="web.s1" color="#000000" textTransform="none">
                     Badge Name
                   </Text>
                 </Flex>
               </Th>
-              <Th width="65%">
+              <Th width="40%">
                 <Flex alignItems="center" gap="8px">
                   <Text textStyle="web.s1" color="#000000" textTransform="none">
                     Description
+                  </Text>
+                </Flex>
+              </Th>
+              <Th width="10%">
+                <Flex alignItems="center" gap="8px">
+                  <Text textStyle="web.s1" color="#000000" textTransform="none">
+                    Offered Levels
+                  </Text>
+                </Flex>
+              </Th>
+              <Th width="5%">
+                <Flex alignItems="center" gap="8px">
+                  <Text textStyle="web.s1" color="#000000" textTransform="none">
+                    Status
                   </Text>
                 </Flex>
               </Th>
@@ -94,13 +119,13 @@ const CustomBadgeTable = ({
           <Tbody>
             {loading ? (
               <Tr outline="1px solid" outlineColor="neutral.300">
-                <Td colSpan={4} textAlign="center">
+                <Td colSpan={6} textAlign="center">
                   <Spinner />
                 </Td>
               </Tr>
             ) : error ? (
               <Tr outline="1px solid" outlineColor="neutral.300">
-                <Td colSpan={4}>
+                <Td colSpan={6}>
                   <Text textStyle="web.b3" color="#000000" textAlign="center">
                     {error.message}
                   </Text>
@@ -132,10 +157,24 @@ const CustomBadgeTable = ({
                     </Text>
                   </Td>
                   <Td>
+                    <Text textStyle="web.b3" color="#000000">
+                      {levels.slice(0, badge.badge_level.length).join(", ")}
+                    </Text>
+                  </Td>
+                  <Td alignItems="center">
                     <Flex
                       alignItems="center"
                       justifyContent="center"
-                      gap="15px"
+                    >
+                      <Text textStyle="web.b3" color="#000000">
+                        <Switch isChecked={statuses ? statuses[badge.badge_id] : true} onChange={() => changeActivityStatus(badge.badge_id, !badge.is_active)} />
+                      </Text>
+                    </Flex>
+                  </Td>
+                  <Td>
+                    <Flex
+                      alignItems="center"
+                      justifyContent="center"
                     >
                       <Flex
                         cursor="pointer"
@@ -153,18 +192,6 @@ const CustomBadgeTable = ({
                           }}
                         />
                       </Flex>
-                      <Flex
-                        cursor="pointer"
-                        onClick={() => handleDelete(badge.badge_id)}
-                      >
-                        <DeleteOutlineIcon
-                          style={{
-                            width: "1.3rem",
-                            height: "1.3rem",
-                            color: "#D34C5C",
-                          }}
-                        />
-                      </Flex>
                     </Flex>
                   </Td>
                 </Tr>
@@ -173,11 +200,8 @@ const CustomBadgeTable = ({
           </Tbody>
         </Table>
       </TableContainer>
-      {edit && selected && (
-        <EditCustomBadgeModal isOpen={edit} onClose={() => setEdit(false)} selected={selected} />
-      )}
     </>
   );
 };
 
-export default CustomBadgeTable;
+export default SystemBadgeTable;

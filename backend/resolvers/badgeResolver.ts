@@ -10,13 +10,36 @@ import IBadgeService from "../services/interface/badgeInterface";
 
 const badgeService: IBadgeService = new BadgeService();
 
+const levelMap: Record<number, string> = {
+  1: "N",
+  2: "B",
+  3: "S",
+  4: "G",
+  5: "D",
+};
+
 const badgeResolver = {
   Query: {
     getCustomBadges: async (): Promise<Badge[]> => {
       return badgeService.getCustomBadges();
     },
+    getSystemBadges: async (): Promise<Badge[]> => {
+      return badgeService.getSystemBadges();
+    },
   },
   Mutation: {
+    updateBadgeStatus: async (
+      _parent: undefined,
+      {
+        badge_id,
+        is_active
+      }: {
+        badge_id: number,
+        is_active: boolean,
+      }
+    ): Promise<boolean> => {
+      return badgeService.updateBadgeStatus(badge_id, is_active)
+    },
     assignCustomBadge: async (
       _parent: undefined,
       {
@@ -29,7 +52,11 @@ const badgeResolver = {
         participant_ids: number[];
       }
     ): Promise<number[]> => {
-      return badgeService.assignCustomBadge(badge_id, marillac_bucks, participant_ids);
+      return badgeService.assignCustomBadge(
+        badge_id,
+        marillac_bucks,
+        participant_ids
+      );
     },
     editCustomBadge: async (
       _parent: undefined,
@@ -79,7 +106,11 @@ const badgeResolver = {
         icon: Icon;
       }
     ): Promise<boolean> => {
-      return badgeService.createCustomBadge(name, description, icon);
+      return badgeService.createCustomBadge(
+        name,
+        description,
+        icon
+      );
     },
     deleteCustomBadge: async (
       _parent: undefined,

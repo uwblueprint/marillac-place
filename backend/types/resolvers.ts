@@ -13,6 +13,7 @@ const resolvers = gql`
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
     getTasksByType(type: TaskType!): [Task]
     getCustomBadges: [Badge]
+    getSystemBadges: [Badge]
   }
 
   type Mutation {
@@ -106,6 +107,10 @@ const resolvers = gql`
       system_badge_id: Int!
       system_badge_name: String!
       system_badge_criteria: String
+    ): Boolean
+    updateBadgeStatus(
+      badge_id: Int!
+      is_active: Boolean!
     ): Boolean
   }
 `;

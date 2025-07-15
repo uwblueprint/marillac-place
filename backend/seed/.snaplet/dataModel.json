@@ -706,20 +706,6 @@
           "maxLength": null
         },
         {
-          "id": "public.earned_badge.badge_id",
-          "name": "badge_id",
-          "columnName": "badge_id",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.earned_badge.date_received",
           "name": "date_received",
           "columnName": "date_received",
@@ -779,6 +765,20 @@
           "id": "public.earned_badge.level",
           "name": "level",
           "columnName": "level",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.earned_badge.badge_id",
+          "name": "badge_id",
+          "columnName": "badge_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -1291,10 +1291,10 @@
           "maxLength": null
         },
         {
-          "id": "public.participant_progress.badges_achieved",
-          "name": "badges_achieved",
-          "columnName": "badges_achieved",
-          "type": "int4[]",
+          "id": "public.participant_progress.task_types_tried",
+          "name": "task_types_tried",
+          "columnName": "task_types_tried",
+          "type": "text[]",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,
@@ -1305,10 +1305,10 @@
           "maxLength": null
         },
         {
-          "id": "public.participant_progress.task_types_tried",
-          "name": "task_types_tried",
-          "columnName": "task_types_tried",
-          "type": "text[]",
+          "id": "public.participant_progress.badges_achieved",
+          "name": "badges_achieved",
+          "columnName": "badges_achieved",
+          "type": "int4[]",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,
