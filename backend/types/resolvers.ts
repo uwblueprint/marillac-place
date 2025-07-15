@@ -97,6 +97,21 @@ const resolvers = gql`
     ): Boolean
     deleteCustomBadge(badge_id: Int!): Boolean!
     deleteAssignedTask(assigned_task_id: Int!): Boolean!
+    editBadgeLevel(
+      badge_id: Int!
+      badge_level: Int!
+      benchmark: Int!
+      marillac_bucks: Int!
+    ): Boolean
+    editSystemBadge(
+      system_badge_id: Int!
+      system_badge_name: String!
+      system_badge_criteria: String
+    ): Boolean
+    updateBadgeStatus(
+      badge_id: Int!
+      is_active: Boolean!
+    ): Boolean
   }
 `;
 

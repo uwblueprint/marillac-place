@@ -1,115 +1,123 @@
+import {
+  Button,
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Text,
+  Switch,
+} from "@chakra-ui/react";
+import AddIcon from "@mui/icons-material/Add";
+import { useQuery, useMutation } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import CreateCustomBadgeModal from "./elements/CreateCustomBadgeModal";
+import CustomBadgeTable from "./elements/CustomBadgeTable";
+import SystemBadgeTable from "./elements/SystemBadgeTable";
+import { GET_CUSTOM_BADGES, GET_SYSTEM_BADGES } from "../../../gql/queries";
+import AssignCustomBadgeModal from "./elements/AssignCustomBadgeModal";
 
-import React from "react";
-import { Switch } from "@chakra-ui/react";
-import { useQuery, useMutation, gql } from "@apollo/client";
-import CommonTable, { TableData, ColumnInfoTypes } from "../../../components/admin/CommonTable";
-import { GET_ALL_BADGES } from "../../../gql/queries";
-
-const UPDATE_BADGE_STATUS = gql`
-  mutation UpdateBadgeStatus($badgeId: ID!, $isActive: Boolean!) {
-    updateBadgeStatus(badgeId: $badgeId, isActive: $isActive) {
-      badge_id
-      is_active
-    }
-  }
-`;
-
-const SystemBadgesPage: React.FC = () => {
-  const { loading, error, data: rawData } = useQuery(GET_ALL_BADGES);
-
-  const [updateBadgeStatus] = useMutation(UPDATE_BADGE_STATUS, {
-    refetchQueries: [{ query: GET_ALL_BADGES }],
-  });
-
-  if (loading) return <p>Loading…</p>;
-  if (error)   return <p>Error: {error.message}</p>;
-
-  const data: TableData[] = rawData.getSystemBadges.map((badge: any) => {
-    // compute opacity: 1 for active, .5 for inactive
-    const cellStyle = { opacity: badge.is_active ? 1 : 0.5 };
+export default function AdminBadgesPage() {
+  const [create, setCreate] = useState(false);
+  const [assign, setAssign] = useState(false);
   
-    return {
-      id: badge.badge_id,
-      icon: (
-        <div style={cellStyle}>
-          <img
-            src={`/badges/${badge.icon.toLowerCase()}.svg`}
-            alt={badge.name}
-            style={{ width: 24, height: 24 }}
-          />
-        </div>
-      ),
-      name: (
-        <span style={cellStyle}>
-          {badge.name}
-        </span>
-      ),
-      description: (
-        <span style={cellStyle}>
-          {badge.description}
-        </span>
-      ),
-      levels: (
-        <span style={cellStyle}>
-          {badge.offered_levels.join(", ")}
-        </span>
-      ),
-      active: (
-        <div style={cellStyle}>
-          <Switch
-            isChecked={badge.is_active}
-            onChange={() =>
-              updateBadgeStatus({
-                variables: {
-                  badgeId: badge.badge_id,
-                  isActive: !badge.is_active,
-                },
-                optimisticResponse: {
-                  updateBadgeStatus: {
-                    __typename: "Badge",
-                    badge_id: badge.badge_id,
-                    is_active: !badge.is_active,
-                  },
-                },
-              })
-            }
-          />
-        </div>
-      ),
-    };
-  });
+  const [customBadges, setCustomBadges] = useState([]);
+  const [systemBadges, setSystemBadges] = useState([]);
 
-  const columnInfo: ColumnInfoTypes[] = [
-    { header: "Icon",           key: "icon" },
-    { header: "Badge Name",     key: "name" },
-    { header: "Description",    key: "description" },
-    { header: "Offered Levels", key: "levels" },
-    { header: "Status",         key: "active" },
-  ];
+  const {
+    loading: customBadgesLoading,
+    error: customBadgesError,
+    data: customBadgesData
+  } = useQuery(GET_CUSTOM_BADGES);
+  
+  const {
+    loading: systemBadgesLoading,
+    error: systemBadgesError,
+    data: systemBadgesData
+  } = useQuery(GET_SYSTEM_BADGES);
 
-  const handleEdit = (row: unknown): unknown => {
-    console.log("Edit row:", row);
-    return row;
-  };
+  useEffect(() => {
+    if (!systemBadgesLoading && !systemBadgesError && systemBadgesData) {
+      setSystemBadges(systemBadgesData.getSystemBadges);
+    }
+  }, [systemBadgesLoading, systemBadgesError, systemBadgesData]);
+  
+  useEffect(() => {
+    if (!customBadgesLoading && !customBadgesError && customBadgesData) {
+      setCustomBadges(customBadgesData.getCustomBadges);
+    }
+  }, [customBadgesLoading, customBadgesError, customBadgesData]);
 
   return (
-    <div>
-      <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px" }}>
-        System Badges
-      </h1>
-      <p style={{ color: "gray", marginBottom: "16px" }}>
-        System badges will be granted to participants automatically.
-      </p>
-      <CommonTable
-        columnInfo={columnInfo}
-        data={data}
-        onEdit={handleEdit}
-        maxResults={10}
-        isSelectable={false}
-        previewModal={false}
-      />
-    </div>
+    <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
+      <Flex
+        width="100%"
+        height="fit-content"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Flex alignItems="center" gap="15px">
+          <Text textStyle="web.h2" color="primary.700">
+            System Badges
+          </Text>
+          <Text
+            textStyle="web.b3"
+            color="text.light.secondary"
+            marginTop="7px"
+          >
+            System badges will be granted to participants automatically.
+          </Text>
+        </Flex>
+      </Flex>
+      <SystemBadgeTable loading={systemBadgesLoading} error={systemBadgesError} badges={systemBadges} />
+      <Flex
+        width="100%"
+        height="fit-content"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Flex alignItems="center" gap="15px">
+          <Text textStyle="web.h2" color="primary.700">
+            Custom Badges
+          </Text>
+          <Text
+            textStyle="web.b3"
+            color="text.light.secondary"
+            marginTop="7px"
+          >
+            You can create new and reward participants custom badges.
+          </Text>
+        </Flex>
+        <Flex alignItems="center" gap="15px">
+          <Button
+            onClick={() => setAssign(true)}
+            variant="secondaryOutline"
+            fontWeight={700}
+            fontSize="12px"
+            gap="7px"
+          >
+            Assign Custom Badge
+          </Button>
+          <Button
+            onClick={() => setCreate(true)}
+            variant="primaryFilled"
+            fontWeight={700}
+            fontSize="12px"
+            gap="7px"
+          >
+            <AddIcon
+              style={{
+                width: "15px",
+                height: "15px",
+              }}
+            />
+            Create New
+          </Button>
+        </Flex>
+      </Flex>
+      <CustomBadgeTable loading={customBadgesLoading} error={customBadgesError} badges={customBadges} />
+      
+      <CreateCustomBadgeModal isOpen={create} onClose={() => setCreate(false)} />
+      <AssignCustomBadgeModal isOpen={assign} onClose={() => setAssign(false)} />
+    </Flex>
   );
-};
-
-export default SystemBadgesPage;
+}
