@@ -17,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_BADGE_STATUS } from "../../../../gql/mutations"
 import { Icon } from "../../../../constants/icons";
+import EditSystemBadgeModal from "./EditSystemBadgeModal";
 
 type SystemBadgeTableProps = {
   loading: boolean;
@@ -69,6 +70,9 @@ const SystemBadgeTable = ({
         mb="15px"
         w="100%"
       >
+        {edit && selected && (
+          <EditSystemBadgeModal isOpen={edit} onClose={() => setEdit(false)} selected={selected} />
+        )}
         <Table>
           <Thead>
             <Tr backgroundColor="neutral.200" w="100%">

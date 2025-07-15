@@ -10,14 +10,6 @@ import IBadgeService from "../services/interface/badgeInterface";
 
 const badgeService: IBadgeService = new BadgeService();
 
-const levelMap: Record<number, string> = {
-  1: "N",
-  2: "B",
-  3: "S",
-  4: "G",
-  5: "D",
-};
-
 const badgeResolver = {
   Query: {
     getCustomBadges: async (): Promise<Badge[]> => {
