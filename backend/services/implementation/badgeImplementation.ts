@@ -1,4 +1,10 @@
-import { EarnedBadge, BadgeType, Icon, Badge } from "@prisma/client";
+import {
+  EarnedBadge,
+  BadgeType,
+  Icon,
+  Badge,
+  BadgeLevel,
+} from "@prisma/client";
 import IBadgeService from "../interface/badgeInterface";
 import prisma from "../../prisma";
 import { getToday } from "../../utils/formatDateTime";
@@ -26,13 +32,10 @@ class BadgeService implements IBadgeService {
   async editCustomBadge(
     custom_badge_id: number,
     new_custom_badge_name?: string,
-    new_custom_badge_description?: string
+    badge_description?: string
   ): Promise<boolean> {
     try {
-      if (
-        new_custom_badge_name === undefined &&
-        new_custom_badge_description === undefined
-      )
+      if (new_custom_badge_name == undefined && badge_description == undefined)
         throw new Error("No edits provided");
       await prisma.badge.update({
         where: { badge_id: custom_badge_id, badge_type: "CUSTOM" },
@@ -40,8 +43,8 @@ class BadgeService implements IBadgeService {
           ...(new_custom_badge_name !== undefined && {
             name: new_custom_badge_name,
           }),
-          ...(new_custom_badge_description !== undefined && {
-            description: new_custom_badge_description,
+          ...(badge_description !== undefined && {
+            description: badge_description,
           }),
         },
       });
@@ -170,6 +173,58 @@ class BadgeService implements IBadgeService {
       return false;
     }
   }
+
+  async editBadgeLevel(
+    badge_id: number,
+    badge_level: number,
+    benchmark: number,
+    marillac_bucks: number
+  ): Promise<boolean> {
+    try {
+      await prisma.badgeLevel.update({
+        where: {
+          badge_id_level: {
+            badge_id,
+            level: badge_level,
+          },
+        },
+        data: {
+          benchmark,
+          marillac_bucks,
+        },
+      });
+      return true;
+    } catch (err) {
+      // @ts-ignore
+      throw new Error(err.message || "Something went wrong");
+    }
+  }
+  async editSystemBadge(
+  system_badge_id: number,
+  system_badge_name: string,
+  system_badge_criteria?: string,
+): Promise<boolean> {
+  const badge = await prisma.badge.findUnique({
+    where: {badge_id:system_badge_id},
+  });
+  if (!badge || badge.badge_type !== "SYSTEM"){
+    throw new Error("BAdge not found or not a system badge");
+  }
+  try {
+    await prisma.badge.update({
+      where: { badge_id: system_badge_id},
+      data: {
+        name: system_badge_name,
+        ...(system_badge_criteria !== undefined && { description: system_badge_criteria }),
+      },
+    });
+    return true;
+  } catch (err) {
+    // @ts-ignore
+    throw new Error(err.message || "Failed to update system badge");
+  }
+}
+
 }
 
 export default BadgeService;

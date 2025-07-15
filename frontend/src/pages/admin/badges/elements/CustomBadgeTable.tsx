@@ -15,9 +15,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import EditCustomBadgeModal from "./EditCustomBadgeModal";
+// import EditCustomBadgeModal from "./EditCustomBadgeModal";
+import EditSystemBadgeModal from "./EditSystemBadgeModal";
 import { Icon } from "../../../../constants/icons";
 import { DELETE_CUSTOM_BADGE } from "../../../../gql/mutations";
+import EditCustomBadgeModal from "./EditCustomBadgeModal";
 
 type CustomBadgeTableProps = {
   loading: boolean;
@@ -39,8 +41,8 @@ const CustomBadgeTable = ({
     try {
       await deleteCustomBadge({
         variables: {
-          badge_id: id
-        }
+          badge_id: id,
+        },
       });
     } catch (err: any) {
       console.log(err);
@@ -152,7 +154,10 @@ const CustomBadgeTable = ({
                           }}
                         />
                       </Flex>
-                      <Flex cursor="pointer" onClick={() => handleDelete(badge.badge_id)}>
+                      <Flex
+                        cursor="pointer"
+                        onClick={() => handleDelete(badge.badge_id)}
+                      >
                         <DeleteOutlineIcon
                           style={{
                             width: "1.3rem",

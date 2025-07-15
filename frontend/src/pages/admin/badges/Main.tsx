@@ -13,11 +13,15 @@ import CreateCustomBadgeModal from "./elements/CreateCustomBadgeModal";
 import CustomBadgeTable from "./elements/CustomBadgeTable";
 import { GET_CUSTOM_BADGES } from "../../../gql/queries";
 import AssignCustomBadgeModal from "./elements/AssignCustomBadgeModal";
+import EditSystemBadgeModal from "./elements/EditSystemBadgeModal";
+import { Badge, BadgeType, BadgeLevel } from "../../../types/BadgeTypes";
 
 export default function AdminBadgesPage() {
   const [create, setCreate] = useState(false);
   const [assign, setAssign] = useState(false);
   const [badges, setBadges] = useState([]);
+  
+  const [tmp, setTmp] = useState(true);
 
   const { loading, error, data } = useQuery(GET_CUSTOM_BADGES);
 
@@ -26,9 +30,27 @@ export default function AdminBadgesPage() {
       setBadges(data.getCustomBadges);
     }
   }, [loading, error, data]);
+  
+  const mockBadgeLevel: BadgeLevel = {
+    badgeId: 1,
+    level: 0,
+    benchmark: 100,
+    marillacBucks: 5,
+  }
+  
+  const mockBadge: Badge = {
+    badgeId: 1,
+    badgeType: BadgeType.SYSTEM,
+    name: "test",
+    description: "test",
+    isActive: true,
+    isConsecutive: true,
+    badgeLevel: [mockBadgeLevel],
+  }
 
   return (
     <>
+      <EditSystemBadgeModal isOpen={tmp} onClose={() => setTmp(false)} selected={mockBadge} />
       <Flex
         w="100%"
         justifyContent="flex-start"
