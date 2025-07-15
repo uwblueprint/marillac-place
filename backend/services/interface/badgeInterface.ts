@@ -20,8 +20,9 @@ export default interface IBadgeService {
   ): Promise<boolean>;
   assignCustomBadge(
     badge_id: number,
-    participant_id: number
-  ): Promise<EarnedBadge>;
+    marillac_bucks: number,
+    participant_ids: number[]
+  ): Promise<number[]>;
   editSystemBadge(
     system_badge_id:number,
     system_badge_name: string,

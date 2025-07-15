@@ -18,65 +18,65 @@ export const PARTICIPANT_LOGIN = gql`
 
 export const CREATE_PARTICIPANT = gql`
   mutation createParticipant(
-    $participant_id: Int!
-    $room_number: Int!
-    $arrival_date: String!
-    $password: String!
+    $participant_id: Int!,
+    $room_number: Int!,
+    $arrival_date: String!,
+    $password: String!,
   ) {
     createParticipant(
-      participant_id: $participant_id
-      room_number: $room_number
-      arrival_date: $arrival_date
-      password: $password
+      participant_id: $participant_id,
+      room_number: $room_number,
+      arrival_date: $arrival_date,
+      password: $password,
     )
   }
 `;
 
 export const UPDATE_PARTICIPANT = gql`
   mutation updateParticipant(
-    $participant_id: Int!
-    $room_number: Int
-    $arrival_date: String
-    $departure_date: String
-    $account_creation_date: String
-    $account_removal_date: String
-    $marillac_bucks: Int
-    $marillac_bucks_goal: Int
-    $password: String
+    $participant_id: Int!,
+    $room_number: Int,
+    $arrival_date: String,
+    $departure_date: String,
+    $account_creation_date: String,
+    $account_removal_date: String,
+    $marillac_bucks: Int,
+    $marillac_bucks_goal: Int,
+    $password: String,
   ) {
     updateParticipant(
-      participant_id: $participant_id
-      room_number: $room_number
-      arrival_date: $arrival_date
-      departure_date: $departure_date
-      account_creation_date: $account_creation_date
-      account_removal_date: $account_removal_date
-      marillac_bucks: $marillac_bucks
-      marillac_bucks_goal: $marillac_bucks_goal
-      password: $password
+      participant_id: $participant_id,
+      room_number: $room_number,
+      arrival_date: $arrival_date,
+      departure_date: $departure_date,
+      account_creation_date: $account_creation_date,
+      account_removal_date: $account_removal_date,
+      marillac_bucks: $marillac_bucks,
+      marillac_bucks_goal: $marillac_bucks_goal,
+      password: $password,
     )
   }
 `;
 
 export const UPDATE_MARILLAC_BUCKS = gql`
   mutation updateMarillacBucks(
-    $participant_id: Int!
-    $marillac_bucks: Int!
-    $reason: String!
+    $participant_id: Int!,
+    $marillac_bucks: Int!,
+    $reason: String!,
   ) {
     updateMarillacBucks(
-      participant_id: $participant_id
-      marillac_bucks: $marillac_bucks
-      reason: $reason
+      participant_id: $participant_id,
+      marillac_bucks: $marillac_bucks,
+      reason: $reason,
     )
   }
 `;
 
 export const CREATE_ANNOUNCEMENT = gql`
   mutation createAnnouncement(
-    $priority: Priority!
-    $participants: [Int!]!
-    $message: String!
+    $priority: Priority!, 
+    $participants: [Int!]!,
+    $message: String!,
   ) {
     createAnnouncement(
       priority: $priority
@@ -88,33 +88,41 @@ export const CREATE_ANNOUNCEMENT = gql`
 
 export const EDIT_ANNOUNCEMENT = gql`
   mutation editAnnouncement(
-    $announcement_id: Int!
-    $priority: Priority
+    $announcement_id: Int!,
+    $priority: Priority,
     $message: String
   ) {
     editAnnouncement(
-      announcement_id: $announcement_id
-      priority: $priority
+      announcement_id: $announcement_id,
+      priority: $priority,
       message: $message
     )
   }
 `;
 
 export const DELETE_ANNOUNCEMENT = gql`
-  mutation DeleteAnnouncement($announcement_id: Int!) {
-    deleteAnnouncement(announcement_id: $announcement_id)
-  }
+    mutation DeleteAnnouncement($announcement_id: Int!) {
+        deleteAnnouncement(announcement_id: $announcement_id)
+    }
 `;
 
 export const EDIT_MARILLAC_BUCKS = gql`
-  mutation EditMarillacBucks($participantId: String, $credit: Int) {
-    editMarillacBucks(participantId: $participantId, credit: $credit)
-  }
+    mutation EditMarillacBucks(
+        $participantId: String
+        $credit : Int
+    ) {
+        editMarillacBucks(
+            participantId: $participantId
+            credit: $credit
+        )
+    }
 `;
 
 export const CREATE_NOTE = gql`
-  mutation createNote($message: String!, $creation_date: String!) {
-    createNote(message: $message, creation_date: $creation_date)
+  mutation createNote(
+    $message: String!
+  ) {
+    createNote(message: $message)
   }
 `;
 
@@ -153,61 +161,61 @@ export const CREATE_TASK = gql`
 `;
 
 export const CREATE_ASSIGNED_TASK = gql`
-  mutation createAssignedTask(
-    $userID: Int
-    $type: TaskType!
-    $name: String!
-    $recurrencePreference: RecurrenceFrequency
-    $repeatDays: [String]
-    $timePreference: TimeOption!
-    $start: String
-    $end: String
-    $credit: Int!
-    $deduction: Int
-    $comment: String
-  ) {
-    createAssignedTask(
-      userID: $userID
-      type: $type
-      name: $name
-      recurrencePreference: $recurrencePreference
-      repeatDays: $repeatDays
-      timePreference: $timePreference
-      start: $start
-      end: $end
-      credit: $credit
-      deduction: $deduction
-      comment: $comment
+    mutation createAssignedTask(
+        $userID: Int
+        $type: TaskType!
+        $name: String!
+        $recurrencePreference: RecurrenceFrequency
+        $repeatDays: [String]
+        $timePreference: TimeOption!
+        $start: String
+        $end: String
+        $credit: Int!
+        $deduction: Int
+        $comment: String
     ) {
-      assignedTaskId
-      userID
-      type
-      name
-      recurrencePreference
-      repeatDays
-      timePreference
-      start
-      end
-      credit
-      deduction
-      comment
+        createAssignedTask(
+            userID: $userID
+            type: $type
+            name: $name
+            recurrencePreference: $recurrencePreference
+            repeatDays: $repeatDays
+            timePreference: $timePreference
+            start: $start
+            end: $end
+            credit: $credit
+            deduction: $deduction
+            comment: $comment
+        ) {
+            assignedTaskId
+            userID
+            type
+            name
+            recurrencePreference
+            repeatDays
+            timePreference
+            start
+            end
+            credit
+            deduction
+            comment
+        }
     }
-  }
 `;
 
 export const UPDATE_TASK = gql`
   mutation updateTask(
-    $id: Int!
-    $type: TaskType
-    $name: String
-    $recurrencePreference: RecurrenceFrequency
-    $repeatDays: [DayOfWeek!]
-    $timePreference: TimeOption
-    $marillacBucks: Int
-    $deduction: Int
-    $startTime: String
-    $endTime: String
-    $comment: String
+      $id: Int!
+      $type: TaskType
+      $name: String
+      $recurrencePreference: RecurrenceFrequency
+      $repeatDays: [DayOfWeek!]
+      $timePreference: TimeOption
+      $marillacBucks: Int
+      $deduction: Int
+      $startTime: String
+      $endTime: String
+      $comment: String
   ) {
     updateTask(
       id: $id
@@ -238,24 +246,20 @@ export const DELETE_CUSTOM_BADGE = gql`
 `;
 
 export const CREATE_CUSTOM_BADGE = gql`
-  mutation createCustomBadge(
-    $name: String!
-    $description: String!
-    $icon: Icon!
-  ) {
+  mutation createCustomBadge($name: String!, $description: String!, $icon: Icon!) {
     createCustomBadge(name: $name, description: $description, icon: $icon)
   }
 `;
 
 export const EDIT_CUSTOM_BADGE = gql`
   mutation editCustomBadge(
-    $custom_badge_id: Int!
-    $new_custom_badge_name: String
-    $new_custom_badge_description: String
+    $custom_badge_id: Int!,
+    $new_custom_badge_name: String,
+    $new_custom_badge_description: String,
   ) {
     editCustomBadge(
-      custom_badge_id: $custom_badge_id
-      new_custom_badge_name: $new_custom_badge_name
+      custom_badge_id: $custom_badge_id,
+      new_custom_badge_name: $new_custom_badge_name,
       new_custom_badge_description: $new_custom_badge_description
     )
   }
@@ -289,4 +293,18 @@ export const EDIT_SYSTEM_BADGE = gql`
       system_badge_criteria: $system_badge_criteria
     )
   }
+`;
+
+export const ASSIGN_CUSTOM_BADGE = gql`
+    mutation assignCustomBadge(
+        $badge_id: Int!,
+        $marillac_bucks: Int!,
+        $participant_ids: [Int!]!
+    ) {
+        assignCustomBadge(
+            badge_id: $badge_id,
+            marillac_bucks: $marillac_bucks,
+            participant_ids: $participant_ids
+        )
+    }
 `;

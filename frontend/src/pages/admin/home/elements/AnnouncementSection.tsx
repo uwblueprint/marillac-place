@@ -13,6 +13,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
 import { AnnouncementDisplayInfo, AnnouncementData } from "../../../../types/AnnouncementTypes";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
+import { getRecentDate } from "../../../../utils/formatDateTime";
 
 const getRoomString = (rooms: number[]) => {
   if (rooms.length === 1) {
@@ -70,8 +71,8 @@ const AnnouncementSection = () => {
     data: getAnnouncementsData,
   } = useQuery(GET_ANNOUNCEMENTS_IN_DATE_RANGE, {
     variables: {
-      start: new Date(new Date().setHours(0,0,0,0)).toISOString(),
-      end: new Date(new Date().setHours(23,59,59,999)).toISOString(),
+      start: getRecentDate(0, true),
+      end: getRecentDate(-1, true),
   },
   })
 
@@ -131,7 +132,7 @@ const AnnouncementSection = () => {
       <Flex
         alignItems="center"
         overflow="scroll"
-        height="fit-content"
+        height="100%"
         justifyContent="center"
         sx={{
           "&::-webkit-scrollbar": {

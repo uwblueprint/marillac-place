@@ -19,6 +19,7 @@ import { useMutation } from "@apollo/client";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
 import { Icon } from "../../../../constants/icons";
 import { DELETE_CUSTOM_BADGE } from "../../../../gql/mutations";
+import EditCustomBadgeModal from "./EditCustomBadgeModal";
 
 type CustomBadgeTableProps = {
   loading: boolean;
@@ -174,12 +175,7 @@ const CustomBadgeTable = ({
         </Table>
       </TableContainer>
       {edit && selected && (
-        // <EditCustomBadgeModal isOpen={edit} onClose={() => setEdit(false)} selected={selected} />
-        <EditSystemBadgeModal
-          isOpen={edit}
-          onClose={() => setEdit(false)}
-          selected={selected}
-        />
+        <EditCustomBadgeModal isOpen={edit} onClose={() => setEdit(false)} selected={selected} />
       )}
     </>
   );

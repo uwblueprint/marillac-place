@@ -37,6 +37,7 @@ interface ITaskService {
     comment?: string,
   ): Promise<boolean>;
   deleteTaskById(taskId: number): Promise<boolean>;
+  deleteAssignedTask(assignedTaskId: number): Promise<boolean>;
 }
 
 export default ITaskService;

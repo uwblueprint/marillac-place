@@ -127,6 +127,17 @@ class TaskService implements ITaskService {
       throw new Error("Something went wrong");
     }
   }
+
+  async deleteAssignedTask(assigned_task_id: number): Promise<boolean> {
+    try {
+      await prisma.assignedTask.delete({
+        where: { assigned_task_id: assigned_task_id },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong: " + JSON.stringify(err));
+    }
+  }
 }
 
 export default TaskService;

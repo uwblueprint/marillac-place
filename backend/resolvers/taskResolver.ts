@@ -119,6 +119,12 @@ const taskResolver = {
     ): Promise<boolean> => {
       return taskService.deleteTaskById(taskId);
     },
+    deleteAssignedTask: async (
+      _parent: undefined,
+      { assigned_task_id }: { assigned_task_id: number },
+    ): Promise<boolean> => {
+      return taskService.deleteAssignedTask(assigned_task_id);
+    },
   },
 };
 

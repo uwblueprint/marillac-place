@@ -26,6 +26,13 @@ export const GET_CURRENT_PARTICIPANTS = gql`
     }
   }
 `;
+export const GET_MARILLAC_BUCKS = gql`
+  query getMarillacBucks($participantId: Int!) {
+      getParticipantById(participantId: $participantId) {
+          marillac_bucks
+      }
+  }
+`
 
 export const GET_PARTICIPANT_BY_ROOM = gql`
   query getParticipantByRoom($room_number: Int!) {
@@ -43,8 +50,8 @@ export const GET_PARTICIPANT_BY_ROOM = gql`
 `;
 
 export const GET_PARTICIPANTS_BY_ROOMS = gql`
-  query getParticipantsByRooms($room_number: [Int!]!) {
-    getParticipantsByRooms(room_number: $room_number) {
+  query getParticipantsByRooms($room_numbers: [Int!]!) {
+    getParticipantsByRooms(room_numbers: $room_numbers) {
       participant_id
       room_number
     }

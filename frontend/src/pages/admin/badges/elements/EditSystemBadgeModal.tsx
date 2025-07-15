@@ -131,7 +131,7 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
               <Text textStyle="web.s1" color="text.light.secondary">
                 Badge Name
               </Text>
-              <Text textStyle="web.b3" color="text.light.secondary">
+              <Text textStyle="web.b3">
                 {selected.name}
               </Text>
             </Flex>
@@ -151,14 +151,14 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
 
             <Flex flexDir="column">
               <FormControl>
-                <Flex justify="space-between" mb="2">
-                  <FormLabel mb="0">
-                    <Text fontSize="sm" fontWeight="semibold" color="gray.600">
+                <Flex justifyContent="space-between" mb="2">
+                  <FormLabel m="0">
+                    <Text textStyle="web.s1" color="text.light.secondary">
                       Set Badge Levels
                     </Text>
                   </FormLabel>
-                  <FormLabel mb="0">
-                    <Text fontSize="sm" fontWeight="semibold" color="gray.600">
+                  <FormLabel m="0">
+                    <Text textStyle="web.s1" color="text.light.secondary" textAlign="right">
                       Set Marillac Bucks
                     </Text>
                   </FormLabel>
@@ -175,63 +175,68 @@ const EditSystemBadgeModal: React.FC<EditSystemBadgeModalProps> = ({
                     w="100%"
                   >
                     <Flex alignItems="center" gap="10px">
-                      <Text fontSize="sm" minW="70px" color="gray.700">
+                      <Text textStyle="web.b3">
                         {badgeLevel}:
                       </Text>
 
                       {badgeLevel === "Novice" ? (
                         <Input
-                          value="First Login"
-                          isReadOnly
-                          variant="filled"
-                          w="110px"
-                          fontSize="sm"
+                          value="First Time"
+                          variant="primary"
+                          width="100px"
+                          textAlign="center"
+                          isDisabled
                         />
                       ) : (
-                        <Input
-                          variant="primary"
-                          value={badgeData[badgeLevel].time}
-                          onChange={(e) =>
-                            setBadgeData((prev) => ({
-                              ...prev,
-                              [badgeLevel]: {
-                                ...prev[badgeLevel],
-                                time: Number(e.target.value),
-                              },
-                            }))
-                          }
-                          placeholder="Days"
-                          w="60px"
-                          fontSize="sm"
-                        />
+                        <>
+                          <Input
+                            variant="primary"
+                            textAlign="center"
+                            value={badgeData[badgeLevel].time}
+                            onChange={(e) =>
+                              setBadgeData((prev) => {
+                                const newTime = Number(e.target.value)
+                                if (Number.isNaN(newTime)) return prev
+                                return ({
+                                  ...prev,
+                                  [badgeLevel]: {
+                                    ...prev[badgeLevel],
+                                    time: newTime,
+                                  },
+                                })
+                              })
+                            }
+                            placeholder="Days"
+                            w="75px"
+                            min={0}
+                          />
+                          <Text textStyle="web.b3">
+                          days
+                          </Text>
+                        </>
                       )}
-
-                      <Text fontSize="xs" color="gray.500">
-                        days
-                      </Text>
                     </Flex>
 
-                    <NumberInput
+                    <Input
+                      variant="primary"
+                      textAlign="center"
+                      width="75px"
                       value={badgeData[badgeLevel].marillacBucks}
-                      onChange={(valueString) =>
-                        setBadgeData((prev) => ({
-                          ...prev,
-                          [badgeLevel]: {
-                            ...prev[badgeLevel],
-                            marillacBucks: Number(valueString),
-                          },
-                        }))
+                      onChange={(e) =>
+                        setBadgeData((prev) => {
+                          const newBucks = Number(e.target.value)
+                          if (Number.isNaN(newBucks)) return prev
+                          return ({
+                            ...prev,
+                            [badgeLevel]: {
+                              ...prev[badgeLevel],
+                              marillacBucks: newBucks,
+                            },
+                          })
+                        })
                       }
                       min={0}
-                      clampValueOnBlur
-                      precision={2}
-                    >
-                      <NumberInputField
-                        placeholder="$"
-                        fontSize="sm"
-                        w="100px"
-                      />
-                    </NumberInput>
+                    />
                   </Flex>
                 );
               })}

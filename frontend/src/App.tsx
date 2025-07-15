@@ -19,11 +19,10 @@ import AdminTasksPage from "./pages/admin/tasks/Main";
 import AdminBadgesPage from "./pages/admin/badges/Main";
 
 import ParticipantLoginPage from "./pages/participant/login/Main";
-// import ParticipantHomePage from "./pages/participant/home/index";
-// import ParticipantSchedulePage from "./pages/participant/schedule/index";
-// import ParticipantAnnouncementsPage from "./pages/participant/announcements/index";
-// import ParticipantTasksPage from "./pages/participant/tasks/index";
-// import ParticipantProgressPage from "./pages/participant/progress/index";
+import ParticipantHomePage from "./pages/participant/home/Main";
+import ParticipantSchedulePage from "./pages/participant/schedule/Main";
+import ParticipantAnnouncementsPage from "./pages/participant/announcements/Main";
+import ParticipantProgressPage from "./pages/participant/progress/Main";
 
 import NotFound from "./pages/NotFound";
 
@@ -72,10 +71,27 @@ const App = (): React.ReactElement => {
               </AdminRoute>
             }/>
 
-            <Route
-              path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
-              element={<ParticipantLoginPage />}
-            />
+            <Route path={ROUTES.PARTICIPANTS_LOGIN_PAGE} element={<ParticipantLoginPage />} />
+            <Route path={ROUTES.PARTICIPANTS_HOME_PAGE} element={
+              <ParticipantRoute>
+                <ParticipantHomePage />
+              </ParticipantRoute>
+            }/>
+            <Route path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE} element={
+              <ParticipantRoute>
+                <ParticipantSchedulePage />
+              </ParticipantRoute>
+            }/>
+            <Route path={ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE} element={
+              <ParticipantRoute>
+                <ParticipantAnnouncementsPage />
+              </ParticipantRoute>
+            }/>
+            <Route path={ROUTES.PARTICIPANTS_PROGRESS_PAGE} element={
+              <ParticipantRoute>
+                <ParticipantProgressPage />
+              </ParticipantRoute>
+            }/>
 
             <Route path="*" element={<NotFound />} />
           </Switch>

@@ -60,22 +60,14 @@ function SignOutPopUp({ cancel }: SignOutPopUpProps) {
       <ModalOverlay />
       <ModalContent boxShadow="xl" borderRadius="16px" width="388px">
         <ModalBody padding="30px">
-          <Text textStyle="web.h2" mb="20px">
-            Sign Out
-          </Text>
-          <Text textStyle="web.b1" mb="20px">
-            Are you sure you want to sign out?
-          </Text>
-          <Flex alignItems="center" justifyContent="flex-end" gap="15px">
+          <Text textStyle="web.h3" mb="15px">Sign Out</Text>
+          <Text textStyle="web.b2" color="text.light.secondary">Are you sure you want to sign out?</Text>
+          <Flex alignItems="center" justifyContent="flex-end" gap="5px" mt={4}>
             <Button variant="white" onClick={cancel}>
-              <Text fontWeight={700} fontSize="14px">
-                Cancel
-              </Text>
+              <Text textStyle="web.s1">Cancel</Text>
             </Button>
             <Button variant="primaryFilled" onClick={handleSignOut}>
-              <Text fontWeight={700} fontSize="14px" color="white">
-                Sign Out
-              </Text>
+              <Text textStyle="web.s1" color="white">Sign Out</Text>
             </Button>
           </Flex>
         </ModalBody>
