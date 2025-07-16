@@ -1,17 +1,9 @@
 import {
   AssignedTask,
 } from "@prisma/client";
-import AssignedTaskService from "../services/implementation/assignedTaskImplementation";
-import IAssignedTaskService from "../services/interface/assignedTaskInterface";
 
-const assignedTaskService: IAssignedTaskService = new AssignedTaskService();
-
-const assignedTaskResolver = {
-  Query: {
-    getAssignedTasks: async (
-      _parent: undefined,
-      { participant_id }: { participant_id: number },
-    ): Promise<{
+interface IAssignedTaskService {
+  getAssignedTasks(participant_id: number): Promise<{
   MONDAY?: {
     SPECIFIC: AssignedTask[];
     ANYTIME: AssignedTask[];
@@ -41,10 +33,7 @@ const assignedTaskResolver = {
     ANYTIME: AssignedTask[];
   };
   ANYDAY: AssignedTask[];
-}> => {
-      return assignedTaskService.getAssignedTasks(participant_id);
-    },
-  },
-};
+}>;
+}
 
-export default assignedTaskResolver;
+export default IAssignedTaskService;

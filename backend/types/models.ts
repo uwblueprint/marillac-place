@@ -34,22 +34,37 @@ const models = gql`
         comment: String
     }
 
-    type AssignedTask {
-        assigned_task_id: Int!
-        participant_id: Int!
-        task_name: String!
-        task_status: Status!
-        task_type: TaskType!
-        goal_name: String
-        goal_description: String
-        start_date: String!
-        end_date: String!
-        marillac_bucks_addition: Int!
-        marillac_bucks_deduction: Int!
-        comment: String
+  type AssignedTask {
+    assigned_task_id: Int!
+    participant_id: Int!
+    task_name: String!
+    task_status: Status!
+    task_type: TaskType!
+    goal_name: String
+    goal_description: String
+    repeats: Boolean!
+    start_date: String!
+    end_date: String!
+    marillac_bucks_addition: Int!
+    marillac_bucks_deduction: Int!
+    comment: String
+  }
 
-        participant: Participant!
-    }
+  type AssignedTaskGroup {
+    SPECIFIC: [AssignedTask!]!
+    ANYTIME: [AssignedTask!]!
+  }
+
+  type AssignedTasksByDay {
+    MONDAY: AssignedTaskGroup
+    TUESDAY: AssignedTaskGroup
+    WEDNESDAY: AssignedTaskGroup
+    THURSDAY: AssignedTaskGroup
+    FRIDAY: AssignedTaskGroup
+    SATURDAY: AssignedTaskGroup
+    SUNDAY: AssignedTaskGroup
+    ANYDAY: [AssignedTask!]!
+  }
 
     type Note {
         note_id: Int!
