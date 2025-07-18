@@ -288,7 +288,7 @@
           "name": "task_type",
           "columnName": "task_type",
           "type": "TaskType",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
