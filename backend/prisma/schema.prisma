@@ -118,7 +118,7 @@ model AssignedTask {
   participant_id           Int
   task_name                String
   task_status              Status    @default(ASSIGNED)
-  task_type                TaskType?
+  task_type                TaskType
   goal_name                String?
   goal_description         String?
   start_date               String

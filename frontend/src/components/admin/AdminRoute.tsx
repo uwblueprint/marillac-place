@@ -71,7 +71,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
             width="100%"
             height="55px"
             bg="primary.100"
-            borderBottom="1px"
+            borderBottom="1px solid"
             borderColor="neutral.300"
             zIndex={5}
           />

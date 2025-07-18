@@ -10,7 +10,7 @@ class AssignedTaskService implements IAssignedTaskService {
     endDate: string,
     marillacBucksAddition: number,
     marillacBucksDeduction: number,
-    taskType?: TaskType,
+    taskType: TaskType,
     goalName?: string,
     goalDescription?: string,
     comment?: string

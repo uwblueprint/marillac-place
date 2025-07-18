@@ -246,7 +246,7 @@ const CommonTable = ({
                   </Flex>
                 </Th>
               ))}
-              <Th />
+              <Th textAlign="center">Action</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -270,16 +270,24 @@ const CommonTable = ({
                         />
                       </Td>
                     ) : null}
-                    {columnInfo.map((column, i) => (
-                      <Td
+                    {columnInfo.map((column, i) => {
+                    const cell = row[column.key];
+                    return (
+                        <Td
                         onClick={() => {
-                          handleRowClick(row);
+                            handleRowClick(row);
                         }}
                         key={i}
-                      >
-                        {String(row[column.key])}
-                      </Td>
-                    ))}
+                        >
+                        {React.isValidElement(cell)
+                            ? cell   
+                            : cell != null
+                            ? String(cell)   
+                            : null}
+                        </Td>
+                    );
+                    })}
+
                     <Td
                       onClick={(e) => {
                         e.stopPropagation();

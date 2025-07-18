@@ -16,6 +16,24 @@ export const GET_PAST_PARTICIPANTS = gql`
   }
 `;
 
+export const GET_SYSTEM_BADGES = gql`
+  query {
+    getSystemBadges {
+      badge_id
+      name
+      description
+      icon
+      is_active
+      badge_level {
+        level
+        benchmark
+        marillac_bucks
+      }
+    }
+  }
+`;
+
+
 export const GET_CURRENT_PARTICIPANTS = gql`
   query getCurrentParticipants {
     getCurrentParticipants {
