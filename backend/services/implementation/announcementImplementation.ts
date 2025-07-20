@@ -156,7 +156,7 @@ class AnnouncementService implements IAnnouncementService {
     } else if (filter === "PINNED") {
       where.pinned = true;
     } else if (filter === "IMPORTANT") {
-      where.announcement = { priority: "HIGH" };
+      where.announcement = { priority: "CRITICAL" };
     }
 
     return prisma.userAnnouncement.findMany({
