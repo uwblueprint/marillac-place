@@ -1,4 +1,6 @@
-import { Announcement, Priority } from "@prisma/client";
+import { Announcement, Priority, UserAnnouncement } from "@prisma/client";
+
+export type AnnouncementFilter = "ALL" | "UNREAD" | "PINNED" | "IMPORTANT";
 
 interface IAnnouncementService {
   getAllAnnouncements(): Promise<Announcement[]>;
@@ -15,6 +17,12 @@ interface IAnnouncementService {
     message?: string,
   ): Promise<boolean>;
   deleteAnnouncement(announcementId: number): Promise<boolean>;
+
+ /** New: per‐user filtered announcements */
+ getParticipantAnnouncements(
+   participantId: number,
+   filter: AnnouncementFilter
+ ): Promise<(UserAnnouncement & { announcement: Announcement })[]>;
 }
 
 export default IAnnouncementService;

@@ -1,9 +1,10 @@
-import { Announcement, Priority } from "@prisma/client";
+import { Announcement, Priority, UserAnnouncement } from "@prisma/client";
 import prisma from "../../prisma";
-import IAnnouncementService from "../interface/announcementInterface";
+import IAnnouncementService, { AnnouncementFilter }from "../interface/announcementInterface";
 import { getNow } from "../../utils/formatDateTime";
 
 class AnnouncementService implements IAnnouncementService {
+    
   async getAllAnnouncements(): Promise<Announcement[]> {
     try {
       const announcements = await prisma.announcement.findMany({
@@ -144,6 +145,27 @@ class AnnouncementService implements IAnnouncementService {
       throw new Error("Something went wrong");
     }
   }
+  async getParticipantAnnouncements(
+    participantId: number,
+    filter: AnnouncementFilter
+  ): Promise<(UserAnnouncement & { announcement: Announcement })[]> {
+    const where: any = { participant_id: participantId };
+
+    if (filter === "UNREAD") {
+      where.read = false;
+    } else if (filter === "PINNED") {
+      where.pinned = true;
+    } else if (filter === "IMPORTANT") {
+      where.announcement = { priority: "HIGH" };
+    }
+
+    return prisma.userAnnouncement.findMany({
+      where,
+      include: { announcement: true },
+      orderBy: { announcement: { creation_date: "desc" } },
+    });
+  }
+
 }
 
 export default AnnouncementService;

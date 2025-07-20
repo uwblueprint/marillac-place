@@ -1,6 +1,6 @@
 import { Announcement, Priority } from "@prisma/client";
 import AnnouncementService from "../services/implementation/announcementImplementation";
-import IAnnouncementService from "../services/interface/announcementInterface";
+import IAnnouncementService, { AnnouncementFilter } from "../services/interface/announcementInterface";
 import prisma from "../prisma";
 
 const announcementService: IAnnouncementService = new AnnouncementService();
@@ -20,6 +20,12 @@ const announcementResolver = {
       { participant_ids }: { participant_ids: number[] }
     ): Promise<Announcement[]> => {
       return announcementService.getAnnouncementsByParticipants(participant_ids);
+    },
+    getParticipantAnnouncements: async (
+        _parent: undefined,
+        { participantId, filter }: { participantId: number; filter: AnnouncementFilter }
+    ) => {
+        return announcementService.getParticipantAnnouncements(participantId, filter);
     },
   },
   Mutation: {
