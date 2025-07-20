@@ -13,6 +13,7 @@ const resolvers = gql`
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
     getTasksByType(type: TaskType!): [Task]
     getCustomBadges: [Badge]
+    getSystemBadges: [Badge]
   }
 
   type Mutation {
@@ -92,6 +93,33 @@ const resolvers = gql`
     ): Boolean
     deleteCustomBadge(badge_id: Int!): Boolean!
     deleteAssignedTask(assigned_task_id: Int!): Boolean!
+    createAssignedTask(
+      participantId: Int!
+      taskName: String!
+      startDate: String!
+      endDate: String!
+      marillacBucksAddition: Int!
+      marillacBucksDeduction: Int!
+      taskType: String!
+      goalName: String
+      goalDescription: String
+      comment: String
+    ): Boolean
+    editBadgeLevel(
+      badge_id: Int!
+      badge_level: Int!
+      benchmark: Int!
+      marillac_bucks: Int!
+    ): Boolean
+    editSystemBadge(
+      system_badge_id: Int!
+      system_badge_name: String!
+      system_badge_criteria: String
+    ): Boolean
+    updateBadgeStatus(
+      badge_id: Int!
+      is_active: Boolean!
+    ): Boolean
     editAssignedTask(
       assignedTaskId: Int!
       goalName: String

@@ -1,5 +1,11 @@
 import { gql } from "@apollo/client";
 
+export const UPDATE_BADGE_STATUS = gql`
+    mutation updateBadgeStatus($badge_id: Int!, $is_active: Boolean!) {
+        updateBadgeStatus(badge_id: $badge_id, is_active: $is_active)
+    }
+`;
+
 export const ADMIN_LOGIN = gql`
   mutation adminLogin($role: String!, $password: String!) {
     adminLogin(role: $role, password: $password) {
@@ -71,7 +77,6 @@ export const UPDATE_MARILLAC_BUCKS = gql`
     )
   }
 `;
-
 
 export const CREATE_ANNOUNCEMENT = gql`
   mutation createAnnouncement(
@@ -288,6 +293,36 @@ export const EDIT_CUSTOM_BADGE = gql`
       custom_badge_id: $custom_badge_id,
       new_custom_badge_name: $new_custom_badge_name,
       new_custom_badge_description: $new_custom_badge_description
+    )
+  }
+`;
+
+export const EDIT_BADGE_LEVEL = gql`
+  mutation editBadgeLevel(
+    $badge_id: Int!
+    $badge_level: Int!
+    $benchmark: Int!
+    $marillac_bucks: Int!
+  ) {
+    editBadgeLevel(
+      badge_id: $badge_id
+      badge_level: $badge_level
+      benchmark: $benchmark
+      marillac_bucks: $marillac_bucks
+    )
+  }
+`;
+
+export const EDIT_SYSTEM_BADGE = gql`
+  mutation editSystemBadge(
+    $system_badge_id: Int!
+    $system_badge_name: String!
+    $system_badge_criteria: String
+  ) {
+    editSystemBadge(
+      system_badge_id: $system_badge_id
+      system_badge_name: $system_badge_name
+      system_badge_criteria: $system_badge_criteria
     )
   }
 `;
