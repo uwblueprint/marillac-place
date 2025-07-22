@@ -38,18 +38,6 @@ interface ITaskService {
     comment?: string
   ): Promise<boolean>;
   deleteTaskById(taskId: number): Promise<boolean>;
-  deleteAssignedTask(assignedTaskId: number): Promise<boolean>;
-  editAssignedTask(
-    assignedTaskId: number,
-    goalName?: string,
-    goalDescription?: string,
-    startDate?: string,
-    endDate?: string,
-    taskStatus?: Status,
-    marillacBucksAddition?: number,
-    marillacBucksDeduction?: number,
-    comment?: string
-  ): Promise<boolean>;
 }
 
 export default ITaskService;

@@ -1,4 +1,4 @@
-import { TaskType } from "@prisma/client";
+import { Status, TaskType } from "@prisma/client";
 import IAssignedTaskService from "../services/interface/assignedTaskInterface";
 import AssignedTaskService from "../services/implementation/assignedTaskImplementation";
 
@@ -42,6 +42,48 @@ const assignedTaskResolver = {
         taskType,
         goalName,
         goalDescription,
+        comment
+      );
+    },
+    deleteAssignedTask: async (
+      _parent: undefined,
+      { assigned_task_id }: { assigned_task_id: number }
+    ): Promise<boolean> => {
+      return assignedTaskService.deleteAssignedTask(assigned_task_id);
+    },
+    editAssignedTask: async (
+      _parent: undefined,
+      {
+        assignedTaskId,
+        goalName,
+        goalDescription,
+        startDate,
+        taskStatus,
+        endDate,
+        marillacBucksAddition,
+        marillacBucksDeduction,
+        comment,
+      }: {
+        assignedTaskId: number;
+        goalName?: string;
+        goalDescription?: string;
+        startDate?: string;
+        endDate?: string;
+        taskStatus?: Status;
+        marillacBucksAddition?: number;
+        marillacBucksDeduction?: number;
+        comment?: string;
+      }
+    ): Promise<boolean> => {
+      return assignedTaskService.editAssignedTask(
+        assignedTaskId,
+        goalName,
+        goalDescription,
+        startDate,
+        endDate,
+        taskStatus,
+        marillacBucksAddition,
+        marillacBucksDeduction,
         comment
       );
     },

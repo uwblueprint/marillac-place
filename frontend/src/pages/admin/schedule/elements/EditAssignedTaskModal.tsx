@@ -158,7 +158,7 @@ const EditAssignedTaskModal = ({selected, close}: EditAssignedTaskModalType) => 
                       />
                     </FormControl>
         
-                    { taskData.task_type !== "REQUIRED" &&  (
+                    {/* { taskData.task_type !== "REQUIRED" &&  (
                       <Checkbox
                         isChecked={participantPreference}
                         onChange={(e: any) => {
@@ -172,11 +172,11 @@ const EditAssignedTaskModal = ({selected, close}: EditAssignedTaskModalType) => 
                       >
                         <Text textStyle="web.b3" color="#000000">Participant Preference?</Text>
                       </Checkbox>
-                    )}
+                    )} */}
         
                     { !participantPreference && (
                       <>
-                        <FormControl>
+                        {/* <FormControl>
                           <FormLabel mb="5px" color="text.secondary" fontWeight="500">
                             <Text textStyle="web.s1" color="text.light.secondary">Select Days</Text>
                           </FormLabel>
@@ -193,7 +193,9 @@ const EditAssignedTaskModal = ({selected, close}: EditAssignedTaskModalType) => 
                               </Radio>
                             </Stack>
                           </RadioGroup>
-                        </FormControl>
+                        </FormControl> */}
+
+                        <Text textStyle="web.s1" color="text.light.secondary">Select Days</Text>
         
                         <Flex gap="5px">
                           { weekdays.map((day: string) => (
