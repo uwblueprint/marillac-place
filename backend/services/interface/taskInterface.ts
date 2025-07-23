@@ -38,6 +38,7 @@ interface ITaskService {
   ): Promise<boolean>;
   deleteTaskById(taskId: number): Promise<boolean>;
   deleteAssignedTask(assignedTaskId: number): Promise<boolean>;
+  getAssignedTasksByParticipantIdAndDate(participantId: number, date: string): Promise<any[]>;
 }
 
 export default ITaskService;

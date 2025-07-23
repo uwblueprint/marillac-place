@@ -30,6 +30,12 @@ const taskResolver = {
     // ): Promise<Task[]> => {
     //   return taskService.getTasksByRecurrenceFrequency(recurrencePreference);
     // },
+    getAssignedTasksByParticipantIdAndDate: async (
+      _parent: undefined,
+      { participantId, date }: { participantId: number; date: string }
+    ) => {
+      return taskService.getAssignedTasksByParticipantIdAndDate(participantId, date);
+    },
   },
   Mutation: {
     createTask: async (

@@ -5,6 +5,7 @@ import {
   Task,
   TaskType,
   TimeOption,
+  AssignedTask
 } from "@prisma/client";
 import ITaskService from "../interface/taskInterface";
 
@@ -136,6 +137,23 @@ class TaskService implements ITaskService {
       return true;
     } catch (err) {
       throw new Error("Something went wrong: " + JSON.stringify(err));
+    }
+  }
+
+  async getAssignedTasksByParticipantIdAndDate(participantId: number, date: string): Promise<AssignedTask[]> {
+    try {
+      const dateStart = `${date}, 00:00`;
+      const dateEnd = `${date}, 23:59`;
+      const assignedTasks = await prisma.assignedTask.findMany({
+        where: {
+          participant_id: participantId,
+          start_date: { lte: dateEnd },
+          end_date: { gte: dateStart }
+        },
+      });
+      return assignedTasks;
+    } catch (err) {
+      throw new Error("Something went wrong");
     }
   }
 }
