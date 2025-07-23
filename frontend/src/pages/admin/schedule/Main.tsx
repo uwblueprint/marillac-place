@@ -123,13 +123,10 @@ export default function AdminSchedulePage() {
                   <IconButton
                     aria-label="Previous week"
                     icon={
-                      <Text
-                        fontSize="14px"
-                        fontWeight="800"
-                        color="primary.700"
-                      >
-                        ‹
-                      </Text>
+                      <ChevronLeftIcon
+                        fontSize="small"
+                        sx={{ color: "var(--chakra-colors-primary-700)" }}
+                      />
                     }
                     variant="ghost"
                     size="xs"
@@ -152,13 +149,10 @@ export default function AdminSchedulePage() {
                   <IconButton
                     aria-label="Next week"
                     icon={
-                      <Text
-                        fontSize="14px"
-                        fontWeight="800"
-                        color="primary.700"
-                      >
-                        ›
-                      </Text>
+                      <ChevronRightIcon
+                        fontSize="small"
+                        sx={{ color: "var(--chakra-colors-primary-700)" }}
+                      />
                     }
                     variant="ghost"
                     size="xs"
@@ -297,9 +291,9 @@ export default function AdminSchedulePage() {
                 />
               )}
             </Box>
-          </>
+          </Flex>
         )}
-      </Flex>
+      </Box>
 
       {/* Modals */}
       {editMarillacBucks && participantData && (
