@@ -67,7 +67,7 @@ const App = (): React.ReactElement => {
             }/>
             <Route path={ROUTES.ADMIN_BADGES_PAGE} element={
               <AdminRoute>
-                <AdminBadgesPage />
+                <AdminBadgesPage/>
               </AdminRoute>
             }/>
 
