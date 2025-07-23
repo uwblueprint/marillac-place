@@ -13,6 +13,8 @@ interface IAssignedTaskService {
     goalDescription?: string,
     comment?: string
   ): Promise<boolean>;
+
+  hasCompletedAllRequiredTasks(participantId: number): Promise<boolean>;
 }
 
 export default IAssignedTaskService;

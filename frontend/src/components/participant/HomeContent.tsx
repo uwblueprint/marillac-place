@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Flex, Text } from "@chakra-ui/react";
+import { useQuery } from "@apollo/client";
+import { ParticipantContext } from "./ParticipantContext";
 import TasksCompletedWidget from "./TasksCompletedWidget";
+import { HAS_COMPLETED_ALL_REQUIRED_TASKS } from "../../gql/queries";
 
 export default function HomeContent() {
+  const participant = useContext(ParticipantContext);
+  const participantId = participant?.id;
+
   // Get current date
   const currentDate = new Date();
   const dayNames = [
@@ -36,6 +42,17 @@ export default function HomeContent() {
 
   const formattedDate = `${dayName} - ${monthName} ${date}, ${year}`;
 
+  // Query to check if participant has completed all required tasks
+  const { data: tasksData, loading: tasksLoading } = useQuery(
+    HAS_COMPLETED_ALL_REQUIRED_TASKS,
+    {
+      variables: { participantId },
+      skip: !participantId,
+    }
+  );
+
+  const hasCompletedAllTasks = tasksData?.hasCompletedAllRequiredTasks || false;
+
   return (
     <Flex w="100%" flexDir="column" gap="16px" padding="20px">
       {/* Welcome Section */}
@@ -58,8 +75,8 @@ export default function HomeContent() {
         </Text>
       </Flex>
 
-      {/* Tasks Completed Widget */}
-      <TasksCompletedWidget />
+      {/* Tasks Completed Widget - Only show if all required tasks are completed */}
+      {!tasksLoading && hasCompletedAllTasks && <TasksCompletedWidget />}
     </Flex>
   );
 }

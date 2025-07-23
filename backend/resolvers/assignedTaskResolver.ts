@@ -5,6 +5,14 @@ import AssignedTaskService from "../services/implementation/assignedTaskImplemen
 const assignedTaskService: IAssignedTaskService = new AssignedTaskService();
 
 const assignedTaskResolver = {
+  Query: {
+    hasCompletedAllRequiredTasks: async (
+      _parent: undefined,
+      { participantId }: { participantId: number }
+    ): Promise<boolean> => {
+      return assignedTaskService.hasCompletedAllRequiredTasks(participantId);
+    },
+  },
   Mutation: {
     createAssignedTask: async (
       _parent: undefined,
