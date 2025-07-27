@@ -186,7 +186,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -201,7 +200,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -218,7 +216,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -233,7 +230,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -250,7 +246,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -265,7 +260,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -282,7 +276,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -297,7 +290,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -314,7 +306,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -329,7 +320,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -346,7 +336,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -361,7 +350,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -378,7 +366,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -393,7 +380,6 @@ export const GET_ASSIGNED_TASKS = gql`
           task_type
           goal_name
           goal_description
-          repeats
           start_date
           end_date
           marillac_bucks_addition
@@ -409,7 +395,6 @@ export const GET_ASSIGNED_TASKS = gql`
         task_type
         goal_name
         goal_description
-        repeats
         start_date
         end_date
         marillac_bucks_addition

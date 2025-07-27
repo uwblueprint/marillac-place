@@ -42,12 +42,12 @@ const models = gql`
     task_type: TaskType!
     goal_name: String
     goal_description: String
-    repeats: Boolean!
     start_date: String!
     end_date: String!
     marillac_bucks_addition: Int!
     marillac_bucks_deduction: Int!
     comment: String
+    participant: Participant!
   }
 
   type AssignedTaskGroup {
