@@ -99,6 +99,9 @@ const EditAssignedTaskModal = ({
     startDate.toLocaleTimeString()
   );
   const [endTime, setEndTime] = useState<string>(endDate.toLocaleTimeString());
+  const [timeSelection, setTimeSelection] = useState<string>(
+    repeats ? "ANYTIME" : "SPECIFIC"
+  );
 
   // gql mutation
   const [editAssignedTask, { loading }] = useMutation(EDIT_ASSIGNED_TASK, {
@@ -126,6 +129,28 @@ const EditAssignedTaskModal = ({
       }
     }
   }, []);
+
+  useEffect(() => {
+    console.log("Days selected:", days);
+    if (days.length > 1) {
+      setRepeats(true);
+    } else {
+      setRepeats(false);
+    }
+  }, [days]);
+
+  useEffect(() => {
+    if (repeats) {
+      setTimeSelection("ANYTIME");
+    }
+  }, [repeats]);
+
+  useEffect(() => {
+    if (timeSelection === "ANYTIME") {
+      setStartTime("00:00");
+      setEndTime("23:59");
+    }
+  }, [timeSelection]);
 
   function handleSelectDay(day: string) {
     const dayIndex = weekdays.indexOf(day); // Get the index of the selected day
@@ -155,6 +180,7 @@ const EditAssignedTaskModal = ({
       setDays(updatedDays);
     }
   }
+
   // function handleSubmit() {
   //   if (!taskName || !marillacBucksAddition || !marillacBucksDeduction) {
   //     setError("Missing fields");
@@ -287,14 +313,9 @@ const EditAssignedTaskModal = ({
                   </Text>
                 </FormLabel>
                 <RadioGroup
-                  value={repeats ? "ANYTIME" : "SPECIFIC"}
-                  // onChange={(opt: string) => {
-                  //   if (opt === "ANYTIME") {
-                  //     setStartTime("");
-                  //     setEndTime("");
-                  //   }
-                  //   setTimePreference(opt);
-                  // }}
+                  value={timeSelection}
+                  onChange={(value) => setTimeSelection(value)}
+                  isDisabled={repeats}
                 >
                   <Stack direction="column">
                     <Radio value="ANYTIME" size="sm">
@@ -311,36 +332,38 @@ const EditAssignedTaskModal = ({
                 </RadioGroup>
               </FormControl>
 
-              {!repeats && (
-                <Flex gap="10px">
-                  <FormControl>
-                    <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                      <Text textStyle="web.s1" color="text.light.secondary">
-                        Start Time
-                      </Text>
-                    </FormLabel>
-                    <Input
-                      variant="primary"
-                      type="time"
-                      value={startTime}
-                      onChange={(e: any) => setStartTime(e.target.value)}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                      <Text textStyle="web.s1" color="text.light.secondary">
-                        End Time
-                      </Text>
-                    </FormLabel>
-                    <Input
-                      variant="primary"
-                      type="time"
-                      value={endTime}
-                      onChange={(e: any) => setEndTime(e.target.value)}
-                    />
-                  </FormControl>
-                </Flex>
-              )}
+              {/* {!repeats && ( */}
+              <Flex gap="10px">
+                <FormControl>
+                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
+                    <Text textStyle="web.s1" color="text.light.secondary">
+                      Start Time
+                    </Text>
+                  </FormLabel>
+                  <Input
+                    variant="primary"
+                    type="time"
+                    value={startTime}
+                    onChange={(e: any) => setStartTime(e.target.value)}
+                    disabled={timeSelection === "ANYTIME"}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
+                    <Text textStyle="web.s1" color="text.light.secondary">
+                      End Time
+                    </Text>
+                  </FormLabel>
+                  <Input
+                    variant="primary"
+                    type="time"
+                    value={endTime}
+                    onChange={(e: any) => setEndTime(e.target.value)}
+                    disabled={timeSelection === "ANYTIME"}
+                  />
+                </FormControl>
+              </Flex>
+              {/* )} */}
             </>
 
             <Flex
