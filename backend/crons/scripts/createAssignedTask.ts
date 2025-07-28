@@ -22,19 +22,14 @@ async function createAssignedTasks(): Promise<boolean> {
       SUNDAY: 6,
     };
 
-    const now = new Date();
-    const currentDay = now.getDay(); 
-    const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay; 
-    const mondayOfCurrentWeek = new Date(now);
-    mondayOfCurrentWeek.setDate(now.getDate() + mondayOffset);
-    mondayOfCurrentWeek.setHours(0, 0, 0, 0);
+    const mondayOfCurrentWeek = new Date(); 
 
     for (const participant of participants) {
       for (const task of requiredTasks) {
         if (task.recurrence_preference === RecurrenceFrequency.EVERY_SELECTED_DAYS || 
             task.recurrence_preference === RecurrenceFrequency.DAILY) {
           for (const repeatDay of task.repeat_days) {
-            const offset = weekdayOffsets[repeatDay];
+            const offset = weekdayOffsets[repeatDay]; 
             const taskDate = new Date(mondayOfCurrentWeek);
             taskDate.setDate(mondayOfCurrentWeek.getDate() + offset);
             let startDate: Date;
