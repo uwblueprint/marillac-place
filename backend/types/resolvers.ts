@@ -14,6 +14,7 @@ const resolvers = gql`
     getTasksByType(type: TaskType!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
+    getEarnedBadgesByParticipant(participantId: Int!): [EarnedBadge!]!
   }
 
   type Mutation {

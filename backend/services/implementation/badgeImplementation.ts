@@ -10,6 +10,14 @@ import prisma from "../../prisma";
 import { getToday } from "../../utils/formatDateTime";
 
 class BadgeService implements IBadgeService {
+    async getEarnedBadgesByParticipant(
+        participantId: number
+      ): Promise<EarnedBadge[]> {
+        return prisma.earnedBadge.findMany({
+          where: { participant_id: participantId },
+          orderBy: { date_received: 'desc' },
+        });
+      }
   async getCustomBadges(): Promise<Badge[]> {
     try {
       const customBadges = await prisma.badge.findMany({
