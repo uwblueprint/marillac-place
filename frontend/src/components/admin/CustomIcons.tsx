@@ -6,7 +6,7 @@ interface IconProps {
 }
 
 export const CalendarIcon: React.FC<IconProps> = ({
-  size = 19,
+  size = 14,
   color = "white",
 }) => (
   <svg
@@ -26,7 +26,7 @@ export const CalendarIcon: React.FC<IconProps> = ({
 );
 
 export const ListIcon: React.FC<IconProps> = ({
-  size = 16,
+  size = 10,
   color = "#E67D4F",
 }) => (
   <svg

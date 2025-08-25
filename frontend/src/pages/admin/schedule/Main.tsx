@@ -72,7 +72,7 @@ export default function AdminSchedulePage() {
       />
 
       {/* Main Content */}
-      <Box p={4} w="100%" flex={1} display="flex" flexDirection="column">
+      <Box w="100%" flex={1} display="flex" flexDirection="column">
         {loading ? (
           <Flex justify="center" align="center" h="400px">
             <Spinner size="xl" />
@@ -83,17 +83,20 @@ export default function AdminSchedulePage() {
           </Flex>
         ) : !participantData ? (
           <Flex
+            w="100%"
+            h="80%"
             justify="center"
             align="center"
-            h="400px"
             direction="column"
             gap={4}
           >
-            <Text fontSize="xl" color="gray.500">
+            <Text textStyle="web.h2" color="text.light.disabled">
               This room is empty
             </Text>
             <Button
-              colorScheme="blue"
+              variant="primaryFilled"
+              fontWeight={700}
+              fontSize="14px"
               onClick={() => {
                 window.location.href = "/admin/participants";
               }}
@@ -104,9 +107,9 @@ export default function AdminSchedulePage() {
         ) : (
           <Flex direction="column" flex={1} minH={0}>
             {/* Top Header: Month, Week Navigation, M-Bucks */}
-            <Flex justify="space-between" align="center" mb={6}>
+            <Flex justify="space-between" align="center" mb="15px">
               <Flex align="center" gap={4}>
-                <Text fontSize="3xl" fontWeight="bold" color="primary.700">
+                <Text textStyle="web.h2" color="primary.700">
                   {moment(currentDate).format("MMMM YYYY").toUpperCase()}
                 </Text>
 
@@ -120,48 +123,15 @@ export default function AdminSchedulePage() {
                   px={1}
                   py={0.5}
                 >
-                  <IconButton
-                    aria-label="Previous week"
-                    icon={
-                      <ChevronLeftIcon
-                        fontSize="small"
-                        sx={{ color: "var(--chakra-colors-primary-700)" }}
-                      />
-                    }
-                    variant="ghost"
-                    size="xs"
-                    minW="24px"
-                    h="24px"
-                    borderRadius="full"
-                    _hover={{ bg: "gray.100" }}
-                    onClick={() => navigateWeek("prev")}
-                  />
                   <Text
-                    fontSize="sm"
-                    color="primary.700"
-                    minW="80px"
+                    textStyle="web.s1"
+                    color="#0C727E"
                     textAlign="center"
-                    fontWeight="800"
+                    py={1}
                     px={2}
                   >
                     {getCurrentWeekRange(currentDate)}
                   </Text>
-                  <IconButton
-                    aria-label="Next week"
-                    icon={
-                      <ChevronRightIcon
-                        fontSize="small"
-                        sx={{ color: "var(--chakra-colors-primary-700)" }}
-                      />
-                    }
-                    variant="ghost"
-                    size="xs"
-                    minW="24px"
-                    h="24px"
-                    borderRadius="full"
-                    _hover={{ bg: "gray.100" }}
-                    onClick={() => navigateWeek("next")}
-                  />
                 </Flex>
               </Flex>
 
@@ -176,31 +146,26 @@ export default function AdminSchedulePage() {
                 _hover={{ background: "#C9DEC9" }}
                 onClick={() => setEditMarillacBucks(true)}
               >
-                <Text textStyle="web.b1" fontWeight={700} color="inherit">
-                  {participantData.marillac_bucks} M-Bucks
+                <Text textStyle="web.b2" fontWeight={700} color="inherit">
+                  {participantData.marillac_bucks} M-Bucks 
                 </Text>
-                <EditIcon fontSize="small" />
+                <EditIcon style={{
+                  width: "17px",
+                  height: "17px"
+                }} />
               </Button>
             </Flex>
 
             {/* Second Header: View Toggle and Assign Task Button */}
-            <Flex justify="space-between" align="center" mb={6}>
+            <Flex justify="space-between" align="center" mb={5}>
               <HStack spacing={0}>
                 <Button
+                  fontWeight={700}
+                  fontSize="12px"
                   variant={
-                    currentView === ScheduleView.LIST ? "solid" : "outline"
-                  }
-                  colorScheme="orange"
-                  bg={
-                    currentView === ScheduleView.LIST
-                      ? "orange.500"
-                      : "transparent"
-                  }
-                  color={
-                    currentView === ScheduleView.LIST ? "white" : "orange.500"
+                    currentView === ScheduleView.LIST ? "primaryFilled" : "primaryOutline"
                   }
                   borderRightRadius="0"
-                  borderRight="0"
                   onClick={() => setCurrentView(ScheduleView.LIST)}
                   leftIcon={
                     <ListIcon
@@ -209,57 +174,41 @@ export default function AdminSchedulePage() {
                       }
                     />
                   }
-                  _hover={{
-                    bg:
-                      currentView === ScheduleView.LIST
-                        ? "orange.600"
-                        : "orange.50",
-                  }}
                 >
                   List
                 </Button>
                 <Button
+                  fontWeight={700}
+                  fontSize="12px"
                   variant={
-                    currentView === ScheduleView.CALENDAR ? "solid" : "outline"
-                  }
-                  colorScheme="orange"
-                  bg={
-                    currentView === ScheduleView.CALENDAR
-                      ? "orange.500"
-                      : "transparent"
-                  }
-                  color={
-                    currentView === ScheduleView.CALENDAR
-                      ? "white"
-                      : "orange.500"
+                    currentView === ScheduleView.CALENDAR ? "primaryFilled" : "primaryOutline"
                   }
                   borderLeftRadius="0"
                   onClick={() => setCurrentView(ScheduleView.CALENDAR)}
                   leftIcon={
                     <CalendarIcon
                       color={
-                        currentView === ScheduleView.CALENDAR
-                          ? "white"
-                          : "#E67D4F"
+                        currentView === ScheduleView.CALENDAR ? "white" : "#E67D4F"
                       }
                     />
                   }
-                  _hover={{
-                    bg:
-                      currentView === ScheduleView.CALENDAR
-                        ? "orange.600"
-                        : "orange.50",
-                  }}
                 >
                   Calendar
                 </Button>
               </HStack>
 
               <Button
-                leftIcon={<AddIcon />}
-                colorScheme="orange"
-                variant="solid"
+                variant="primaryFilled"
+                fontWeight={700}
+                fontSize="12px"
+                gap="7px"
               >
+                <AddIcon
+                  style={{
+                    width: "15px",
+                    height: "15px",
+                  }}
+                />
                 Assign Task
               </Button>
             </Flex>

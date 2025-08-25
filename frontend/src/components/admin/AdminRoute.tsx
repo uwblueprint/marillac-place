@@ -47,7 +47,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
   return (
     <Flex alignItems="center" justifyContent="center">
-      <Flex position="relative" width="100vw" height="100vh">
+      <Flex position="relative" width="100vw" maxWidth="1400px" height="100vh">
         {notification && <Notification message={notification} />}
         <SideBar />
         <Flex width="100%" height="100%" ml="250px" position="relative">
@@ -62,7 +62,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
             borderColor="neutral.300"
             zIndex={5}
           />
-          <Flex width="100%" padding="10px" mt="55px">
+          <Flex width="100%" padding="20px" mt="55px" overflow="scroll">
             {children}
           </Flex>
         </Flex>

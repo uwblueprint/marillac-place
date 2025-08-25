@@ -11,6 +11,7 @@ import {
   Td,
   TableContainer,
   IconButton,
+  Flex,
 } from "@chakra-ui/react";
 import CommentIcon from "@mui/icons-material/ModeCommentOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -33,88 +34,37 @@ export default function TaskTableBottom({
 }: TaskTableProps) {
   return (
     <Box overflow="hidden">
-      <TableContainer>
-        <Table
-          variant="simple"
-          size="md"
-          sx={{ tableLayout: "fixed", width: "100%", borderCollapse: "separate",
-            borderSpacing: "0 0",
-            borderRadius: "lg",
-            overflow: "hidden"}}
-        >
-          <Thead bg="gray.50" >
-            <Tr>
-              <Th
-                fontSize="md"
-                fontWeight="600"
-                color="black"
-                textTransform="none"
-                width="23%"
-                py={4}
-                borderTopLeftRadius="lg"
-                border="2px solid"
-                borderColor="gray.200"
-                borderRight="none"
-                borderBottomLeftRadius="lg"
-              >
-                Name
+      <TableContainer
+        border="1px solid"
+        borderColor="neutral.300"
+        borderRadius="8px"
+        mb="15px"
+        w="100%"
+      >
+        <Table>
+          <Thead>
+            <Tr backgroundColor="neutral.200" w="100%">
+              <Th width="30%">
+                <Text textStyle="web.s1" color="#000000" textTransform="none">Name</Text>
               </Th>
-              <Th
-                fontSize="md"
-                fontWeight="600"
-                color="black"
-                textTransform="none"
-                width="23%"
-                py={4}
-                borderTop="2px solid"
-                borderBottom="2px solid"
-                borderColor="gray.200"
-              >
-                Status
+              <Th width="20%">
+                <Text textStyle="web.s1" color="#000000" textTransform="none">Status</Text>
               </Th>
-              <Th
-                fontSize="md"
-                fontWeight="600"
-                color="black"
-                textTransform="none"
-                width="23%"
-                py={4}
-                borderTop="2px solid"
-                borderBottom="2px solid"
-                borderColor="gray.200"
-              >
-                Time
+              <Th width="10%">
+                <Text textStyle="web.s1" color="#000000" textTransform="none">Marillac Bucks</Text>
               </Th>
-              <Th
-                fontSize="md"
-                fontWeight="600"
-                color="black"
-                textTransform="none"
-                width="31%"
-                py={4}
-                border="2px solid"
-                borderColor="gray.200"
-                borderLeft="none"
-                borderTopRightRadius="lg"
-                borderBottomRightRadius="lg"
-              >
-                Marillac Bucks
-              </Th>
+              <Th width="40%" />
             </Tr>
           </Thead>
           <Tbody>
-            {tasks.map((event) => (
+            {tasks.map((event: any, index: number) => (
               <Tr
                 key={event.id}
-                _hover={{ bg: "gray.50" }}
-                cursor="pointer"
-                borderBottom="2px solid"
-                borderColor="gray.200"
+                outline={index % 2 ? "0px solid" : "1px solid"}
+                outlineColor="neutral.300"
               >
                 <Td position="relative">
-                  <Text fontSize="md" fontWeight="600" pr={6}>
-                    {event.title}
-                  </Text>
+                  <Text textStyle="web.b3" color="#000000">{event.title}</Text>
                   {event.comment && (
                     <Box
                       position="absolute"
@@ -123,50 +73,40 @@ export default function TaskTableBottom({
                       transform="translateY(-50%)"
                       color={getTaskStatusColor(event.task_status)}
                     >
-                      <CommentIcon fontSize="small" color="action" />
+                      <CommentIcon sx={{ width: "15px", height: "15px" }} color="action" />
                     </Box>
                   )}
                 </Td>
                 <Td>
                   <Text
-                    fontSize="md"
-                    px={8}
-                    py={3}
+                    py={1}
                     borderRadius="md"
                     bg={getTaskStatusBgColor(event.task_status)}
                     color={getTaskStatusColor(event.task_status)}
+                    textStyle="web.b3"
                     fontWeight="700"
-                    minW="200px"
-                    maxW="200px"
+                    width="150px"
                     textAlign="center"
-                    display="inline-block"
                   >
                     {getTaskStatusText(event.task_status)}
                   </Text>
                 </Td>
                 <Td>
-                  <Text fontSize="md" fontWeight="600">
-                    {event.allDay
-                      ? "Anytime"
-                      : formatEventTime(event.start, event.end)}
+                  <Text textStyle="web.b3" color="#000000">
+                    ${event.marillacBucksAddition.toFixed(2)}
                   </Text>
                 </Td>
                 <Td>
-                  <HStack justify="space-between" align="center">
-                    <Text fontSize="md" fontWeight="600">
-                      ${event.marillacBucksAddition.toFixed(2)}
-                    </Text>
-                    <IconButton
-                      aria-label="More options"
-                      icon={<MoreHorizIcon fontSize="large" />}
-                      size="md"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent row click
-                        onTaskSelect(event); // Only open modal from here
-                      }}
-                    />
-                  </HStack>
+                  <Flex
+                    justifyContent="flex-end"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent row click
+                      onTaskSelect(event); // Only open modal from here
+                    }}
+                    cursor="pointer"
+                  >
+                    <MoreHorizIcon fontSize="small" />
+                  </Flex>
                 </Td>
               </Tr>
             ))}

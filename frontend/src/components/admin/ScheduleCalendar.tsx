@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Flex } from "@chakra-ui/react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -43,7 +43,7 @@ const CustomHeader: React.FC<{ date: Date }> = ({ date }) => {
       flexDirection="column"
       justifyContent="center"
     >
-      <Text textStyle="mobile.h2" color="black" mb={2} letterSpacing="0.5px">
+      <Text textStyle="web.b2" mb={1} letterSpacing="0.3px">
         {dayName}
       </Text>
       <Box
@@ -53,20 +53,15 @@ const CustomHeader: React.FC<{ date: Date }> = ({ date }) => {
         w="27px"
         h="27px"
         borderRadius="full"
-        bg={isToday ? "orange.500" : "transparent"}
+        bg={isToday ? "secondary.700" : "transparent"}
         cursor="default"
         margin="0"
         padding="0"
       >
         <Text
-          fontWeight="400"
-          fontSize="20px"
-          fontFamily="Nunito"
-          lineHeight="1"
-          margin="0"
-          padding="0"
+          textStyle="web.b1"
           textAlign="center"
-          color={isToday ? "white" : "gray.800"}
+          color={isToday ? "white" : "black"}
         >
           {dayNumber}
         </Text>
@@ -83,7 +78,7 @@ const EventComponent: React.FC<{
   // For all-day events, use simpler styling
   if (event.allDay) {
     return (
-      <Text color="inherit" fontWeight="600" fontSize="xs">
+      <Text color="inherit" textStyle="web.s1" pt="1px">
         {event.title}
       </Text>
     );
@@ -91,26 +86,21 @@ const EventComponent: React.FC<{
 
   // For timed events, show name on top and time underneath
   return (
-    <div
-      style={{
-        padding: "4px",
-        fontSize: "12px",
-        cursor: "pointer",
-      }}
+    <Flex
+      padding="4px"
+      cursor="pointer"
       onClick={() => onSelectEvent?.(event)}
+      direction="column"
+      gap="2px"
     >
-      <div style={{ fontWeight: "600", marginBottom: "2px" }}>
-        {event.title}
-      </div>
-      <div style={{ fontSize: "10px", opacity: "0.8" }}>
-        {formatEventTime(event.start, event.end)}
-      </div>
+      <Text color="inherit" textStyle="web.s1">{event.title}</Text>
+      <Text color="inherit" fontSize="10px">{formatEventTime(event.start, event.end)}</Text>
       {event.comment && (
-        <div style={{ marginTop: "2px" }}>
+        <div style={{ margin: "2px" }}>
           <CommentIcon size={12} color="currentColor" />
         </div>
       )}
-    </div>
+    </Flex>
   );
 };
 
@@ -172,11 +162,11 @@ export default function ScheduleCalendar({
           fontWeight: "400 !important",
           color: "black !important",
         },
-        ".rbc-time-gutter.rbc-time-column": {
+        ".rbc-time-gutter .rbc-time-column": {
           backgroundColor: "transparent !important",
         },
         ".rbc-events-container": {
-          marginRight: "3px !important",
+          marginRight: "0px !important",
         },
       }}
     >
@@ -190,6 +180,7 @@ export default function ScheduleCalendar({
         onNavigate={onNavigate}
         toolbar={false}
         scrollToTime={scrollToTime}
+        min={scrollToTime}
         onSelectEvent={(event) => onSelectEvent?.(event)}
         formats={{
           eventTimeRangeFormat: () => "",

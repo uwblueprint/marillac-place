@@ -73,9 +73,9 @@ export default function ScheduleListView({
   };
 
   return (
-    <VStack align="stretch" spacing={6}>
-      <Box position="relative" mt="6" width="100%">
-        <Text fontSize="3xl" fontWeight="bold" color="primary.700" mb={4}>
+    <VStack align="stretch" spacing={4}>
+      <Box position="relative" width="100%">
+        <Text textStyle="web.h3" color="primary.700" mb={2}>
           Daily
         </Text>
         <HStack
@@ -90,26 +90,15 @@ export default function ScheduleListView({
           {daysOfWeek.map((day) => (
             <Button
               key={day.name}
-              variant="unstyled"
+              variant={ selectedDay === day.name ? "primaryFilled" : "white" }
+              borderBottomRadius={0}
               flex={1}
-              bg={selectedDay === day.name ? "orange.500" : "white"}
-              color={selectedDay === day.name ? "white" : "gray.600"}
-              border="1px solid"
-              borderColor={selectedDay === day.name ? "orange.500" : "gray.200"}
-              borderBottomRadius="0"
-              borderTopRadius="md"
-              px={4}
               py={2}
-              fontSize="sm"
-              fontWeight="600"
-              h="40px"
-              _hover={{
-                bg: selectedDay === day.name ? "orange.600" : "gray.100",
-                zIndex: 2,
-              }}
               onClick={() => onDayChange(day.name)}
             >
-              {day.name}
+              <Text color="inherit" textStyle="web.s1">
+                {day.name}
+              </Text>
             </Button>
           ))}
         </HStack>
@@ -131,7 +120,7 @@ export default function ScheduleListView({
 
       {/* Any Day Section */}
       <Box>
-        <Text fontSize="3xl" fontWeight="bold" color="primary.700" mb={3}>
+        <Text textStyle="web.h3" color="primary.700" mb={2}>
           Any Day
         </Text>
 

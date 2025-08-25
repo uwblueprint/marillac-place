@@ -46,12 +46,6 @@ export default function EditTaskModal({
     }
   }, [recurrence]);
 
-  useEffect(() => {
-    if (days.length === 7) {
-      setRecurrence("DAILY");
-    }
-  }, [days]);
-
   function handleSelectDay(day: string) {
     if (recurrence === "EVERY_SELECTED_DAYS") {
       if (!days.includes(day)) {

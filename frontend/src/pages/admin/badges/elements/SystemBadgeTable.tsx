@@ -171,7 +171,9 @@ const SystemBadgeTable = ({
                       justifyContent="center"
                     >
                       <Text textStyle="web.b3" color="#000000">
-                        <Switch isChecked={statuses ? statuses[badge.badge_id] : true} onChange={() => changeActivityStatus(badge.badge_id, !badge.is_active)} />
+                        { statuses && 
+                          <Switch isChecked={statuses[badge.badge_id]} onChange={() => changeActivityStatus(badge.badge_id, !statuses[badge.badge_id])} />
+                        }
                       </Text>
                     </Flex>
                   </Td>

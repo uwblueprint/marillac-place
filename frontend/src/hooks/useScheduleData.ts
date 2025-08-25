@@ -220,23 +220,6 @@ export const useScheduleData = (selectedRoom: number, currentDate: Date) => {
       comment: "Rescheduled due to medical appointment",
     });
 
-    events.push({
-      id: 8,
-      title: "Financial Planning",
-      start: moment(currentWeekStart)
-        .add(5, "days")
-        .hour(11)
-        .minute(0)
-        .toDate(),
-      end: moment(currentWeekStart).add(5, "days").hour(12).minute(30).toDate(),
-      allDay: false,
-      task_status: TaskStatus.ASSIGNED,
-      task_type: TaskType.INDIVIDUAL_GOAL,
-      marillacBucksAddition: 20,
-      marillac_bucks_deduction: 0,
-      comment: undefined,
-    });
-
     return events;
   }, [currentDate]);
 
