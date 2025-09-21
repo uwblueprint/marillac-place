@@ -124,7 +124,7 @@ export default function AdminAnnouncementsPage() {
         {selectedButtons.map((isSelected: any, index: number) => (
           <GreenButton 
             key={index} 
-            text={"Room " + index} 
+            text={"Room " + (index + 1)} 
             action={() => handleButtonClick(index)} 
             is_active={selectedButtons[index]} 
           />

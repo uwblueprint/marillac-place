@@ -5,6 +5,9 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_MARILLAC_BUCKS } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import SimpleButton from "../../../common/buttons/SimpleButton";
+import CoreInput from "../../../common/form/CoreInput";
+import SelectionInput from "../../../common/form/SelectionInput";
+import TextInput from "../../../common/form/TextInput";
 
 type MarillacBalanceModalProps = {
   currentBalance: number;
@@ -68,10 +71,6 @@ export default function MarillacBalanceModal({
       submit_action={handleSubmit}
       cancel_action={close}
     >
-      <Flex
-        flexDir="column"
-        gap="10px"
-      >
         <Flex w="100%" alignItems="center" justifyContent="space-between">
           <Text textStyle="web.s1" color="text.light.secondary">Current Balance</Text>
           <SimpleButton
@@ -82,50 +81,34 @@ export default function MarillacBalanceModal({
           />
         </Flex>
 
-        <Flex alignItems="center" justifyContent="space-between">
-          <FormControl w="70%">
-            <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-              <Text textStyle="web.s1" color="text.light.secondary">Enter Amount</Text>
-            </FormLabel>
-            <InputGroup>
-              <InputLeftElement>
-                <AttachMoneyIcon style={{ color: 'inherit', fontSize: 15 }} />
-              </InputLeftElement>
-              <Input
-                variant="primary"
-                pl="30px"
-                type="number"
-                value={amount}
-                onChange={(e: any) => setAmount(e.target.value)}
-              />
-            </InputGroup>
-          </FormControl>
-
-          <RadioGroup w="25%" mt="22px" value={action} onChange={(act: string) => setAction(act)}>
-            <Stack direction='column'>
-              <Radio value='add' size="sm">
-                <Text textStyle="web.s1" color="text.light.secondary">Add</Text>
-              </Radio>
-              <Radio value='remove' size="sm">
-                <Text textStyle="web.s1" color="text.light.secondary">Remove</Text>
-              </Radio>
-            </Stack>
-          </RadioGroup>
+        <Flex w="100%" alignItems="flex-end" justifyContent="center" gap="16px">
+          <CoreInput
+            label="Enter Amount"
+            current_value={amount}
+            action={(e: any) => setAmount(e.target.value)}
+            type="number"
+            width="100%"
+          />
+          <SelectionInput 
+            label=""
+            current_value={action}
+            action={(act: string) => setAction(act)}
+            mode="radio"
+            value_options={{
+              "Add": "add",
+              "Remove": "remove"
+            }}
+          />
         </Flex>
 
-        <FormControl>
-          <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-            <Text textStyle="web.s1" color="text.light.secondary">Reason</Text>
-          </FormLabel>
-          <Textarea
-            variant="primary"
-            value={reason}
-            onChange={(e: any) => setReason(e.target.value)}
-          />
-        </FormControl>
+        <TextInput 
+          label="Reason"
+          current_value={reason}
+          action={(e: any) => setReason(e.target.value)}
+          width="300px"
+        />
 
         { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text> }
-      </Flex>
     </ModalContainer>
   )
 }

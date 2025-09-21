@@ -27,7 +27,7 @@ import ParticipantProgressPage from "./pages/participant/progress/Main";
 import NotFound from "./pages/NotFound";
 
 import * as ROUTES from "./constants/routes";
-import AdminRoute from "./common/admin/AdminRoute";
+import AdminRoute from "./admin/common/AdminRoute";
 import ParticipantRoute from "./common/participant/ParticipantRoute";
 
 const App = (): React.ReactElement => {

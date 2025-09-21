@@ -25,11 +25,13 @@ export default function ModalContainer({ title, submit_text, submit_action, canc
                 paddingY="25px"
             >
                 <Text textStyle="web.h3" mb="10px">{title}</Text>
-                {children}
+                <Flex flexDir="column" gap="8px">
+                    {children}  
+                </Flex>
                 <Flex
                     alignItems="center"
                     justifyContent="flex-end"
-                    gap="15px"
+                    gap="12px"
                     mt="15px"
                 >
                     <SimpleButton 

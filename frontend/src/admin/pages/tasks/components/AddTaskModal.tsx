@@ -4,6 +4,9 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { useMutation } from "@apollo/client";
 import { CREATE_TASK } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
+import CoreInput from "../../../common/form/CoreInput";
+import TextInput from "../../../common/form/TextInput";
+import SelectionInput from "../../../common/form/SelectionInput";
 
 type AddTaskModalProps = {
   type: string;
@@ -117,26 +120,17 @@ export default function AddTaskModal({
       submit_action={handleSubmit}
       cancel_action={close}
     >
-          <Flex
-            flexDir="column"
-            gap="10px"
-          >
             <Flex gap="5px" alignItems="flex-end">
               <Text textStyle="web.s1" color="text.light.secondary">Task Type</Text>
               <Text textStyle="web.b3" color="text.light.secondary">{formattedType}</Text>
             </Flex>
 
-            <FormControl>
-              <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                <Text textStyle="web.s1" color="text.light.secondary">Task Name</Text>
-              </FormLabel>
-              <Input
-                variant="primary"
-                type="text"
-                value={taskName}
-                onChange={(e: any) => setTaskName(e.target.value)}
-              />
-            </FormControl>
+            <CoreInput 
+              label="Task Name"
+              current_value={taskName}
+              action={(e: any) => setTaskName(e.target.value)}
+              type="text"
+            />
 
             { type !== "required" &&  (
               <Checkbox
@@ -212,27 +206,22 @@ export default function AddTaskModal({
                   ))}
                 </Flex>
 
-                <FormControl>
-                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                    <Text textStyle="web.s1" color="text.light.secondary">Select Time</Text>
-                  </FormLabel>
-                  <RadioGroup value={time} onChange={(opt: string) => {
+                <SelectionInput 
+                  label="Time"
+                  current_value={time}
+                  action={(opt: string) => {
                     if (opt === "ANYTIME") {
                       setStartTime("");
                       setEndTime("");
                     };
                     setTime(opt);
-                  }}>
-                    <Stack direction='column'>
-                      <Radio value='ANYTIME' size="sm">
-                        <Text textStyle="web.b3" color="#000000">Anytime</Text>
-                      </Radio>
-                      <Radio value='SPECIFIC' size="sm">
-                        <Text textStyle="web.b3" color="#000000">Select time</Text>
-                      </Radio>
-                    </Stack>
-                  </RadioGroup>
-                </FormControl>
+                  }}
+                  mode="radio"
+                  value_options={{
+                    "Anytime": "ANYTIME",
+                    "Select Time": "SPECIFIC",
+                  }}
+                />
 
                 { time === "SPECIFIC" &&
                 <Flex gap="10px">
@@ -302,20 +291,13 @@ export default function AddTaskModal({
               </FormControl>
             </Flex>
 
-            <FormControl>
-              <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                <Text textStyle="web.s1" color="text.light.secondary">Comments</Text>
-              </FormLabel>
-              <Textarea
-                variant="primary"
-                value={comments}
-                onChange={(e: any) => setComments(e.target.value)}
-                placeholder="Add comment here..."
-              />
-            </FormControl>
+            <TextInput 
+              label="Comments"
+              current_value={comments}
+              action={(e: any) => setComments(e.target.value)}
+            />
 
             { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text> }
-          </Flex>
     </ModalContainer>
   )
 }

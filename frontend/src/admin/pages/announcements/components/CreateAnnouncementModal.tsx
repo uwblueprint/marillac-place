@@ -24,7 +24,6 @@ import {useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_ANNOUNCEMENT } from "../../../../gql/mutations";
 import { GET_CURRENT_PARTICIPANTS } from "../../../../gql/queries";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
-import ModalContainer from "../../../common/form/ModalContainer";
 
 const CreateAnnouncementModal = ({isOpen, onClose}: { isOpen: boolean, onClose: () => void }) => {
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
@@ -112,12 +111,11 @@ const CreateAnnouncementModal = ({isOpen, onClose}: { isOpen: boolean, onClose: 
   };
 
   return (
-    <ModalContainer
-      title="Create Announcement"
-      submit_text="Send"
-      submit_action={handleSend}
-      cancel_action={onClose}
-    >
+    <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered size="xl">
+      <ModalOverlay/>
+      <ModalContent boxShadow="xl" borderRadius="16px" width="600px" padding="20px">
+        <ModalHeader><Text textStyle="web.h3">Create Announcement</Text></ModalHeader>
+        <ModalBody>
           <Flex gap="5px" mb={4} wrap="wrap" alignItems="center">
             <Text textStyle="web.s1" color="text.light.secondary" mr={1}>
               Send To:
@@ -256,7 +254,19 @@ const CreateAnnouncementModal = ({isOpen, onClose}: { isOpen: boolean, onClose: 
           </FormControl>
 
           { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000" pt={2}>{error}</Text> }
-    </ModalContainer>
+
+          <Flex alignItems="center" justify="flex-end" gap={3} mt={4}>
+            <Button variant="white" onClick={onClose}><Text textStyle="web.s1">Cancel</Text></Button>
+            <Button
+              variant="primaryFilled"
+              onClick={handleSend}
+            >
+              <Text textStyle="web.s1" color="white">Send</Text>
+            </Button>
+          </Flex>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 

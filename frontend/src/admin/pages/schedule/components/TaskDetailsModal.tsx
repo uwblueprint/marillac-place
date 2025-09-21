@@ -18,13 +18,17 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
-import { CalendarEvent, TaskStatus } from "../../../../types/ScheduleTypes";
+import { CalendarEvent, TaskStatus, TaskStatuses } from "../../../../types/ScheduleTypes";
+import OrangeButton from "../../../common/buttons/OrangeButton";
+import SimpleButton from "../../../common/buttons/SimpleButton";
+import TextInput from "../../../common/form/TextInput";
+import { toTitleCase } from "../../../../utils/string_helpers";
 
 interface TaskDetailsModalProps {
   task: CalendarEvent;
   onClose: () => void;
-  onEdit?: () => void;
-  onDelete?: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
 export default function TaskDetailsModal({
@@ -92,148 +96,102 @@ export default function TaskDetailsModal({
   );
 
   return (
-    <Modal isOpen onClose={onClose} size="lg">
+    <Modal isOpen isCentered onClose={onClose} closeOnOverlayClick={false}>
       <ModalOverlay />
-      <ModalContent maxW="600px" borderRadius="20px" p={4}>
-        {/* Header */}
-        <ModalHeader p={0} mb={6}>
-          <Flex justify="space-between" align="center">
-            <Text fontSize="2xl" fontWeight="bold" color="gray.900">
-              {task.title}
-            </Text>
-            <HStack spacing={3}>
-              <Button
-                variant="outline"
-                leftIcon={<EditIcon />}
-                colorScheme="blue"
-                size="md"
-                onClick={onEdit}
-              >
-                Edit
-              </Button>
-              <Button
-                variant="outline"
-                leftIcon={<DeleteIcon />}
-                colorScheme="red"
-                size="md"
-                onClick={onDelete}
-              >
-                Delete
-              </Button>
-            </HStack>
+      <ModalContent 
+        width="fit-content"
+        minWidth="350px"
+        maxWidth="550px"
+        height="fit-content"
+        boxShadow="xl" 
+        borderRadius="16px" 
+        paddingX="35px"
+        paddingY="25px"
+      >
+        <Flex justify="space-between" align="center" mb="10px">
+          <Text textStyle="web.h3">{task.title}</Text>
+          <Flex
+            alignItems="center"
+            justifyContent="flex-end"
+            gap="12px"
+          >
+            <SimpleButton 
+                text="Edit"
+                action={onEdit}
+                is_active={false}
+                text_color="#0C727E"
+            />
+            <SimpleButton 
+                text="Delete"
+                action={onDelete}
+                is_active={false}
+                text_color="#D34C5C"
+            />
           </Flex>
-        </ModalHeader>
+        </Flex>
 
-        <ModalBody p={0}>
-          <VStack spacing={6} align="stretch">
-            {/* Task Details */}
-            <VStack spacing={4} align="stretch">
-              <Flex>
-                <Text fontWeight="600" color="gray.600" minW="160px">
-                  Task Type:
-                </Text>
-                <Text color="gray.700">{formatTaskType(task.task_type)}</Text>
-              </Flex>
+        <Flex flexDir="column" gap="8px">
+          <Flex gap="5px" align="flex-end">
+            <Text textStyle="web.s1" color="text.light.secondary">Task Type</Text>
+            <Text textStyle="web.b3" color="text.light.secondary">{formatTaskType(task.task_type)}</Text>
+          </Flex>
+          <Flex gap="5px" align="flex-end">
+            <Text textStyle="web.s1" color="text.light.secondary">Date</Text>
+            <Text textStyle="web.b3" color="text.light.secondary">{task.allDay ? "Anytime" : formatDate(task.start)}</Text>
+          </Flex>
+          <Flex gap="5px" align="flex-end">
+            <Text textStyle="web.s1" color="text.light.secondary">Recurrence</Text>
+            <Text textStyle="web.b3" color="text.light.secondary">{getRecurrenceText()}</Text>
+          </Flex>
+          <Flex gap="5px" align="flex-end">
+            <Text textStyle="web.s1" color="text.light.secondary">Marillac Bucks</Text>
+            <Text textStyle="web.b3" color="text.light.secondary">${task.marillacBucksAddition}</Text>
+          </Flex>
+          <Flex gap="5px" align="flex-end">
+            <Text textStyle="web.s1" color="text.light.secondary">Marillac Bucks Deduction</Text>
+            <Text textStyle="web.b3" color="text.light.secondary">${task.marillac_bucks_deduction}</Text>
+          </Flex>
 
-              <Flex>
-                <Text fontWeight="600" color="gray.600" minW="160px">
-                  Date:
-                </Text>
-                <Text color="gray.700">
-                  {task.allDay ? "Anytime" : formatDate(task.start)}
-                </Text>
-              </Flex>
-
-              <Flex>
-                <Text fontWeight="600" color="gray.600" minW="160px">
-                  Recurrence:
-                </Text>
-                <Text color="gray.700">{getRecurrenceText()}</Text>
-              </Flex>
-
-              <Flex>
-                <Text fontWeight="600" color="gray.600" minW="160px">
-                  Marillac Bucks:
-                </Text>
-                <Text color="gray.700">${task.marillacBucksAddition}</Text>
-              </Flex>
-
-              {task.marillac_bucks_deduction > 0 && (
-                <Flex>
-                  <Text fontWeight="600" color="gray.600" minW="160px">
-                    Marillac Bucks Deductions:
-                  </Text>
-                  <Text color="gray.700">
-                    - ${task.marillac_bucks_deduction}
-                  </Text>
-                </Flex>
-              )}
-            </VStack>
-
-            {/* Status Section */}
-            <VStack spacing={4} align="stretch">
-              <Text fontSize="lg" fontWeight="600" color="gray.900">
-                Status
-              </Text>
-
-              <HStack spacing={3} wrap="wrap">
-                <StatusButton
-                  status={TaskStatus.ASSIGNED}
-                  label="Assigned"
-                  color="#3B82F6"
+          <Flex flexDir="column">
+            <Text textStyle="web.s1" color="text.light.secondary">Status</Text>
+            <Flex flexDir="row" gap="8px">
+              {TaskStatuses.map((taskStatus, index) => (
+                <SimpleButton
+                  key={index}
+                  text={toTitleCase(taskStatus)}
+                  action={() => setSelectedStatus(taskStatus)}
+                  is_active={selectedStatus === taskStatus}
+                  text_color="#000000"
                 />
-                <StatusButton
-                  status={TaskStatus.COMPLETE}
-                  label="Complete"
-                  color="#22C55E"
-                />
-                <StatusButton
-                  status={TaskStatus.INCOMPLETE}
-                  label="Incomplete"
-                  color="#EF4444"
-                />
-                <StatusButton
-                  status={TaskStatus.EXCUSED}
-                  label="Excused"
-                  color="#F59E0B"
-                />
-              </HStack>
-            </VStack>
+              ))}
+            </Flex>
+          </Flex>
 
-            {/* Comments Section */}
-            <VStack spacing={4} align="stretch">
-              <Text fontSize="lg" fontWeight="600" color="gray.900">
-                Comments
-              </Text>
+          <TextInput 
+            label="Comments"
+            current_value={comment}
+            action={(e: any) => setComment(e.target.value)}
+          />
+        </Flex>
 
-              <Textarea
-                placeholder="Add a comment..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                resize="vertical"
-                minH="100px"
-                fontSize="14px"
-                borderRadius="8px"
-                borderColor="gray.300"
-                _focus={{
-                  borderColor: "blue.500",
-                  boxShadow: "0 0 0 1px #3182CE",
-                }}
-              />
-            </VStack>
-          </VStack>
-        </ModalBody>
-
-        <ModalFooter p={0} pt={6}>
-          <HStack spacing={3}>
-            <Button variant="outline" onClick={onClose} px={6} py={3}>
-              Cancel
-            </Button>
-            <Button colorScheme="blue" onClick={handleSave} px={6} py={3}>
-              Save Changes
-            </Button>
-          </HStack>
-        </ModalFooter>
+        <Flex
+          alignItems="center"
+          justifyContent="flex-end"
+          gap="12px"
+          mt="15px"
+        >
+          <SimpleButton 
+              text="Cancel"
+              action={onClose}
+              is_active={false}
+              text_color="#000000"
+          />
+          <OrangeButton 
+              text="Save Changes"
+              action={handleSave}
+              is_active={false}
+          />
+        </Flex>
       </ModalContent>
     </Modal>
   );

@@ -11,3 +11,9 @@ export type ModalProps = {
     cancel_action: () => void;
     children: React.ReactNode;
 }
+
+export type InputProps = {
+    label: string;
+    current_value: string;
+    action: any;
+}
