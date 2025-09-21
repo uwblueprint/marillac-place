@@ -1,5 +1,5 @@
 import React from 'react';
-import ParticipantPageHeader from '../../../components/participant/PageHeader';
+import ParticipantPageHeader from '../../../common/participant/PageHeader';
 
 export default function ParticipantsProgressPage() {
   return (

@@ -10,13 +10,13 @@ import { ChakraProvider } from "@chakra-ui/react";
 import getApolloClient from "./utils/getApolloClient";
 import getChakraTheme from "./utils/getChakraTheme";
 
-import AdminLoginPage from "./pages/admin/login/Main";
-import AdminHomePage from "./pages/admin/home/Main";
-import AdminSchedulePage from "./pages/admin/schedule/Main";
-import AdminAnnouncementsPage from "./pages/admin/announcements/Main";
-import AdminParticipantsPage from "./pages/admin/participants/Main";
-import AdminTasksPage from "./pages/admin/tasks/Main";
-import AdminBadgesPage from "./pages/admin/badges/Main";
+import AdminLoginPage from "./admin/pages/login/Main";
+import AdminHomePage from "./admin/pages/home/Main";
+import AdminSchedulePage from "./admin/pages/schedule/Main";
+import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
+import AdminParticipantsPage from "./admin/pages/participants/Main";
+import AdminTasksPage from "./admin/pages/tasks/Main";
+import AdminBadgesPage from "./admin/pages/badges/Main";
 
 import ParticipantLoginPage from "./pages/participant/login/Main";
 import ParticipantHomePage from "./pages/participant/home/Main";
@@ -27,8 +27,8 @@ import ParticipantProgressPage from "./pages/participant/progress/Main";
 import NotFound from "./pages/NotFound";
 
 import * as ROUTES from "./constants/routes";
-import AdminRoute from "./components/admin/AdminRoute";
-import ParticipantRoute from "./components/participant/ParticipantRoute";
+import AdminRoute from "./common/admin/AdminRoute";
+import ParticipantRoute from "./common/participant/ParticipantRoute";
 
 const App = (): React.ReactElement => {
   const theme = getChakraTheme();
