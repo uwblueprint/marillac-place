@@ -155,15 +155,30 @@ export default function TaskDetailsModal({
           <Flex flexDir="column">
             <Text textStyle="web.s1" color="text.light.secondary">Status</Text>
             <Flex flexDir="row" gap="8px">
-              {TaskStatuses.map((taskStatus, index) => (
-                <SimpleButton
-                  key={index}
-                  text={toTitleCase(taskStatus)}
-                  action={() => setSelectedStatus(taskStatus)}
-                  is_active={selectedStatus === taskStatus}
-                  text_color="#000000"
-                />
-              ))}
+              <SimpleButton
+                text="Assigned"
+                action={() => setSelectedStatus(TaskStatus.ASSIGNED)}
+                is_active={selectedStatus === TaskStatus.ASSIGNED}
+                text_color="#000000"
+              />
+              <SimpleButton
+                text="Completed"
+                action={() => setSelectedStatus(TaskStatus.COMPLETE)}
+                is_active={selectedStatus === TaskStatus.COMPLETE}
+                text_color="#000000"
+              />
+              <SimpleButton
+                text="Excused"
+                action={() => setSelectedStatus(TaskStatus.EXCUSED)}
+                is_active={selectedStatus === TaskStatus.EXCUSED}
+                text_color="#000000"
+              />
+              <SimpleButton
+                text="Incomplete"
+                action={() => setSelectedStatus(TaskStatus.INCOMPLETE)}
+                is_active={selectedStatus === TaskStatus.INCOMPLETE}
+                text_color="#000000"
+              />
             </Flex>
           </Flex>
 

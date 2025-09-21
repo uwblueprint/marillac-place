@@ -5,6 +5,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useMutation } from "@apollo/client";
 import { CREATE_PARTICIPANT } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
+import CoreInput from "../../../common/form/CoreInput";
 
 type AddParticipantCardProps = {
   roomNumber: number;
@@ -59,65 +60,29 @@ const AddParticipantCard = ({
       submit_text="Save Changes"
       submit_action={handleSubmit}
       cancel_action={close}
+      error={error}
     >
-          <Flex
-            flexDir="column"
-            gap="10px"
-          >
-            <FormControl>
-              <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                <Text textStyle="web.s1" color="text.light.secondary">ID Number</Text>
-              </FormLabel>
-              <Input
-                variant="primary"
-                type="id"
-                value={id}
-                onChange={(e: any) => setId(e.target.value)}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                <Text textStyle="web.s1" color="text.light.secondary">Arrival Date</Text>
-              </FormLabel>
-              <Input
-                variant="primary"
-                type="date"
-                value={arrivalDate}
-                onChange={(e: any) => setArrivalDate(e.target.value)}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                <Text textStyle="web.s1" color="text.light.secondary">Password</Text>
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  variant="primary"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e: any) => setPassword(e.target.value)}
-                />
-                <InputRightElement>
-                  <Button
-                    mr="12px"
-                    onClick={() => setShowPassword(!showPassword)}
-                    bg="transparent"
-                    _hover={{ bg: "transparent" }}
-                  >
-                    { showPassword ? (
-                      <VisibilityIcon fontSize="small" />
-                    ) : (
-                      <VisibilityOffIcon fontSize="small" />
-                    )}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-
-            { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text> }
-          </Flex>
+      <CoreInput 
+        label="ID Number"
+        current_value={id}
+        action={(e: any) => setId(e.target.value)}
+        type="number"
+        width="350px"
+      />
+      <CoreInput 
+        label="Arrival Date"
+        current_value={arrivalDate}
+        action={(e: any) => setArrivalDate(e.target.value)}
+        type="date"
+        width="350px"
+      />
+      <CoreInput 
+        label="Password"
+        current_value={password}
+        action={(e: any) => setPassword(e.target.value)}
+        type="password"
+        width="350px"
+      />
     </ModalContainer>
   );
 };

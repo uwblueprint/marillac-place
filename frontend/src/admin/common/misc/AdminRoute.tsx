@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
-import SideBar from "../../common/admin/SideBar";
-import Notification from "../../common/admin/Notification";
-import * as ROUTES from "../../constants/routes";
-import { isAdmin, isRelief } from "../../utils/checkRole";
-import Loading from "../../pages/Loading";
+import SideBar from "../../../common/admin/SideBar";
+import Notification from "../../../common/admin/Notification";
+import * as ROUTES from "../../../constants/routes";
+import { isAdmin, isRelief } from "../../../utils/checkRole";
+import Loading from "../../../pages/Loading";
 
 type AdminRouteProps = {
   children: React.ReactElement;

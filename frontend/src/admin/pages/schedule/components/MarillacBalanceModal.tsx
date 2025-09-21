@@ -70,6 +70,7 @@ export default function MarillacBalanceModal({
       submit_text="Save"
       submit_action={handleSubmit}
       cancel_action={close}
+      error={error}
     >
         <Flex w="100%" alignItems="center" justifyContent="space-between">
           <Text textStyle="web.s1" color="text.light.secondary">Current Balance</Text>
@@ -107,8 +108,6 @@ export default function MarillacBalanceModal({
           action={(e: any) => setReason(e.target.value)}
           width="300px"
         />
-
-        { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text> }
     </ModalContainer>
   )
 }

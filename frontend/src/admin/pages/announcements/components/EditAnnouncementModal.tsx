@@ -21,6 +21,8 @@ import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import {useMutation} from "@apollo/client";
 import {EDIT_ANNOUNCEMENT} from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
+import SelectionInput from "../../../common/form/SelectionInput";
+import TextInput from "../../../common/form/TextInput";
 
 type EditAnnouncementModalProps = {
   isOpen: boolean;
@@ -86,82 +88,31 @@ const EditAnnouncementModal = ({
       submit_text="Save Changes"
       submit_action={handleSave}
       cancel_action={handleCancel}
+      error={error}
     >
-      <Box mb={4}>
-        <Text textStyle="web.s1" color="text.light.secondary">
-          Sent To:{" "}
-          <Text
-            as="span"
-            textStyle="web.b1"
-            fontSize="12px"
-          >
-            {sendTo}
-          </Text>
-        </Text>
-      </Box>
+      <Flex gap="5px" align="flex-end">
+        <Text textStyle="web.s1" color="text.light.secondary">Sent To</Text>
+        <Text textStyle="web.b3" color="text.light.secondary">{sendTo}</Text>
+      </Flex>
 
-      <FormControl mb={4}>
-          <FormLabel>
-            <Text textStyle="web.s1" color="text.light.secondary">Priority Level:</Text>
-          </FormLabel>
-          <RadioGroup
-            onChange={setPriority}
-            value={priority}
-            fontSize="md"
-            color="gray.700"
-            fontFamily="body"
-          >
-            <Stack direction="column" spacing={3}>
-              <Radio value="NORMAL">
-                <Text textStyle="web.b1" fontSize="12px">Normal</Text>
-              </Radio>
+      <SelectionInput
+        label="Priority Level" 
+        current_value={priority}
+        action={(opt: string) => setPriority(opt)}
+        mode="radio"
+        value_options={{
+          "Normal": "NORMAL",
+          "High": "HIGH",
+          "Critical": "CRITICAL",
+        }}
+      />
 
-              <Radio value="HIGH">
-                <Flex align="center" fontFamily="body" gap="5px">
-                  <Text textStyle="web.b1" fontSize="12px">High</Text>
-                  <PriorityHighOutlinedIcon
-                    sx={{
-                      fontSize: "12px",
-                      color: "#d34c5c",
-                    }}
-                  />
-                </Flex>
-              </Radio>
-
-              <Radio value="CRITICAL">
-                <Flex align="center" fontFamily="body" gap="5px">
-                  <Text textStyle="web.b1" fontSize="12px">Critical</Text>
-                  <PriorityHighOutlinedIcon
-                    sx={{
-                      fontSize: "12px",
-                      color: "#d34c5c",
-                    }}
-                  />
-                  <PriorityHighOutlinedIcon
-                    sx={{
-                      fontSize: "12px",
-                      color: "#d34c5c",
-                    }}
-                  />
-                </Flex>
-              </Radio>
-            </Stack>
-          </RadioGroup>
-        </FormControl>
-
-        <FormControl>
-          <FormLabel>
-            <Text textStyle="web.s1" color="text.light.secondary">Message</Text>
-          </FormLabel>
-          <Textarea
-            value={message}
-            variant="primary"
-            onChange={(e) => setMessage(e.target.value)}
-            minHeight="120px"
-            fontSize="12px"
-          />
-        </FormControl>
-        {error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text>}
+      <TextInput 
+        label="Message"
+        current_value={message}
+        action={(e: any) => setMessage(e.target.value)}
+        width="350px"
+      />
     </ModalContainer>
   );
 };

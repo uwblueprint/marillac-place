@@ -10,6 +10,7 @@ export type ModalProps = {
     submit_action: () => void;
     cancel_action: () => void;
     children: React.ReactNode;
+    error?: string;
 }
 
 export type InputProps = {

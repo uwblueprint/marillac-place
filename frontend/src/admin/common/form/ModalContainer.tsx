@@ -10,7 +10,7 @@ import { ModalProps } from "../../../types";
 import SimpleButton from "../buttons/SimpleButton";
 import OrangeButton from "../buttons/OrangeButton";
 
-export default function ModalContainer({ title, submit_text, submit_action, cancel_action, children }: ModalProps) {
+export default function ModalContainer({ title, submit_text, submit_action, cancel_action, children, error = "" }: ModalProps) {
     return (
         <Modal isOpen isCentered onClose={cancel_action} closeOnOverlayClick={false}>
             <ModalOverlay />
@@ -26,7 +26,8 @@ export default function ModalContainer({ title, submit_text, submit_action, canc
             >
                 <Text textStyle="web.h3" mb="10px">{title}</Text>
                 <Flex flexDir="column" gap="8px">
-                    {children}  
+                    {children}
+                    { error && <Text textStyle="web.s1" color="#E30000">{error}</Text> }  
                 </Flex>
                 <Flex
                     alignItems="center"

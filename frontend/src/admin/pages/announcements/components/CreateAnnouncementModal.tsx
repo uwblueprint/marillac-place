@@ -24,6 +24,10 @@ import {useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_ANNOUNCEMENT } from "../../../../gql/mutations";
 import { GET_CURRENT_PARTICIPANTS } from "../../../../gql/queries";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
+import ModalContainer from "../../../common/form/ModalContainer";
+import GreenButton from "../../../common/buttons/GreenButton";
+import SelectionInput from "../../../common/form/SelectionInput";
+import TextInput from "../../../common/form/TextInput";
 
 const CreateAnnouncementModal = ({isOpen, onClose}: { isOpen: boolean, onClose: () => void }) => {
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
@@ -111,162 +115,46 @@ const CreateAnnouncementModal = ({isOpen, onClose}: { isOpen: boolean, onClose: 
   };
 
   return (
-    <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered size="xl">
-      <ModalOverlay/>
-      <ModalContent boxShadow="xl" borderRadius="16px" width="600px" padding="20px">
-        <ModalHeader><Text textStyle="web.h3">Create Announcement</Text></ModalHeader>
-        <ModalBody>
-          <Flex gap="5px" mb={4} wrap="wrap" alignItems="center">
-            <Text textStyle="web.s1" color="text.light.secondary" mr={1}>
-              Send To:
-            </Text>
-            {[[0], ...ROOM_NUMBERS.slice(0, 5)].flat().map((room: number) => {
-              const isSelected = selectedRooms.length === ROOM_NUMBERS.length || selectedRooms.includes(room);
-              return (
-                <WrapItem key={room}>
-                  <Button
-                    key={room}
-                    onClick={() => toggleRoom(room)}
-                    isActive={isSelected}
-                    borderRadius="8px"
-                    border="1px"
-                    borderColor="#0C727E"
-                    bg="#FFFFFF"
-                    color="#0C727E"
-                    cursor="pointer"
-                    height="fit-content"
-                    paddingX="10px"
-                    paddingY="6px"
-                    _hover={{
-                      color: "#FFFFFF",
-                      bg: "#0C727E",
-                    }}
-                    _active={{
-                      color: "#FFFFFF",
-                      bg: "#0C727E",
-                    }}
-                  >
-                    <Text textStyle="web.s1" color="inherit">
-                      {room === 0 ? "All Rooms" : `Room ${room}`}
-                    </Text>
-                  </Button>
-                </WrapItem>
-              );
-            })}
-
-            <Box w="100%"/>
-
-            {ROOM_NUMBERS.slice(5).map((room) => {
-              const isSelected = selectedRooms.includes(room);
-              return (
-                <WrapItem key={room}>
-                  <Button
-                    key={room}
-                    onClick={() => toggleRoom(room)}
-                    isActive={isSelected}
-                    borderRadius="8px"
-                    border="1px"
-                    borderColor="#0C727E"
-                    bg="#FFFFFF"
-                    color="#0C727E"
-                    cursor="pointer"
-                    height="fit-content"
-                    paddingX="10px"
-                    paddingY="6px"
-                    _hover={{
-                      color: "#FFFFFF",
-                      bg: "#0C727E",
-                    }}
-                    _active={{
-                      color: "#FFFFFF",
-                      bg: "#0C727E",
-                    }}
-                  >
-                    <Text textStyle="web.s1" color="inherit">
-                      Room {room}
-                    </Text>
-                  </Button>
-                </WrapItem>
-              );
-            })}
-          </Flex>
-
-          <FormControl mb={4}>
-            <FormLabel>
-              <Text textStyle="web.s1" color="text.light.secondary">Priority Level:</Text>
-            </FormLabel>
-            <RadioGroup
-              onChange={setPriority}
-              value={priority}
-              fontSize="md"
-              color="gray.700"
-              fontFamily="body"
-            >
-              <Stack direction="column" spacing={3}>
-                <Radio value="NORMAL">
-                  <Text textStyle="web.b1" fontSize="12px">Normal</Text>
-                </Radio>
-
-                <Radio value="HIGH">
-                  <Flex align="center" fontFamily="body" gap="5px">
-                    <Text textStyle="web.b1" fontSize="12px">High</Text>
-                    <PriorityHighOutlinedIcon
-                      sx={{
-                        fontSize: "12px",
-                        color: "#d34c5c",
-                      }}
-                    />
-                  </Flex>
-                </Radio>
-
-                <Radio value="CRITICAL">
-                  <Flex align="center" fontFamily="body" gap="5px">
-                    <Text textStyle="web.b1" fontSize="12px">Critical</Text>
-                    <PriorityHighOutlinedIcon
-                      sx={{
-                        fontSize: "12px",
-                        color: "#d34c5c",
-                      }}
-                    />
-                    <PriorityHighOutlinedIcon
-                      sx={{
-                        fontSize: "12px",
-                        color: "#d34c5c",
-                      }}
-                    />
-                  </Flex>
-                </Radio>
-              </Stack>
-            </RadioGroup>
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>
-              <Text textStyle="web.s1" color="text.light.secondary">Message</Text>
-            </FormLabel>
-            <Textarea
-              value={message}
-              variant="primary"
-              onChange={(e) => setMessage(e.target.value)}
-              minHeight="120px"
-              fontSize="12px"
+    <ModalContainer
+      title="Create Announcement"
+      submit_text="Send"
+      submit_action={handleSend}
+      cancel_action={onClose}
+      error={error}
+    >
+      <Flex gap="5px" wrap="wrap" alignItems="center" maxWidth="450px">
+        <Text textStyle="web.s1" color="text.light.secondary">Send To:</Text>
+        {[[0], ...ROOM_NUMBERS].flat().map((room: number) => {
+          const isSelected = selectedRooms.length === ROOM_NUMBERS.length || selectedRooms.includes(room);
+          return (
+            <GreenButton 
+              key={room}
+              text={room === 0 ? "All Rooms" : `Room ${room}`}
+              action={() => toggleRoom(room)}
+              is_active={isSelected}
             />
-          </FormControl>
+          );
+        })}
+      </Flex>
+      
+      <SelectionInput
+        label="Priority Level" 
+        current_value={priority}
+        action={(opt: string) => setPriority(opt)}
+        mode="radio"
+        value_options={{
+          "Normal": "NORMAL",
+          "High": "HIGH",
+          "Critical": "CRITICAL",
+        }}
+      />
 
-          { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000" pt={2}>{error}</Text> }
-
-          <Flex alignItems="center" justify="flex-end" gap={3} mt={4}>
-            <Button variant="white" onClick={onClose}><Text textStyle="web.s1">Cancel</Text></Button>
-            <Button
-              variant="primaryFilled"
-              onClick={handleSend}
-            >
-              <Text textStyle="web.s1" color="white">Send</Text>
-            </Button>
-          </Flex>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+      <TextInput 
+        label="Message"
+        current_value={message}
+        action={(e: any) => setMessage(e.target.value)}
+      />
+    </ModalContainer>
   );
 };
 

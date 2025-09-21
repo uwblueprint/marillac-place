@@ -8,6 +8,8 @@ import React, { useState } from "react";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import { UPDATE_PARTICIPANT } from "../../../../gql/mutations"
 import ModalContainer from "../../../common/form/ModalContainer";
+import CoreInput from "../../../common/form/CoreInput";
+import GreenButton from "../../../common/buttons/GreenButton";
 
 type EditParticipantCardProps = {
   roomNumber: number;
@@ -107,179 +109,128 @@ export default function EditParticipantCard({
       submit_text="Save Changes"
       submit_action={handleSubmit}
       cancel_action={close}
+      error={error}
     >
-          <Flex
-            flexDir="column"
-            gap="10px"
-          >
-            <FormControl>
-              <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                <Text textStyle="web.s1" color="text.light.secondary">ID Number</Text>
-              </FormLabel>
-              <Input
-                variant="primary"
-                type="id"
-                value={id}
-                disabled
+      <FormControl>
+        <Text textStyle="web.s1" color="text.light.secondary">ID Number</Text>
+        <Input
+          disabled
+          type="number"
+          value={id}
+          width="100%"
+          height="fit-content"
+          paddingX="12px"
+          paddingY="6px"
+          border="1px"
+          borderColor="#C5C8D8"
+          borderRadius="8px"
+          fontFamily="Nunito"
+          fontWeight="400"
+          fontSize="12px"
+          color="#000000"
+        />
+      </FormControl>
+
+      <CoreInput 
+        label="Arrival Date"
+        current_value={arrivalDate}
+        action={(e: any) => setArrivalDate(e.target.value)}
+        type="date"
+        width="400px"
+      />
+
+      <CoreInput 
+        label="Password"
+        current_value={password}
+        action={(e: any) => setPassword(e.target.value)}
+        type="password"
+        width="400px"
+      />
+
+      <Flex alignItems="center" justifyContent="flex-start" gap="8px">
+        <GreenButton 
+          text="Swap Participant"
+          action={() => {
+            setEndStay(false)
+            setDepartureDate("")
+            setError("")
+            setSwapParticipant(true)
+          }}
+          is_active={swapParticipant}
+        />
+        <Button
+          onClick={() => {
+            setSwapParticipant(false)
+            setSelectedSwap(-1)
+            setError("")
+            setEndStay(true)
+          }}
+          isActive={endStay}
+          cursor="pointer"
+          borderRadius="8px"
+          border="1px"
+          borderColor="#E30000"
+          width="fit-content"
+          height="fit-content"
+          paddingX="12px"
+          paddingY="6px"
+          bg="#FFFFFF"
+          color="#E30000"
+          _hover={{
+              color: "#FFFFFF",
+              bg: "#E30000",
+          }}
+          _active={{
+              color: "#FFFFFF",
+              bg: "#E30000",
+          }}
+      >
+          <Text textStyle="web.s1" color="inherit">End Stay</Text>
+      </Button>
+      </Flex>
+
+      {(endStay || swapParticipant) && (
+        <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
+      )}
+
+      { swapParticipant && (
+        <Flex flexDir="column">
+          <Text textStyle="web.s1" color="text.light.secondary">Available Rooms</Text>
+          <Flex wrap="wrap" gap="5px" width="400px">
+            {ROOM_NUMBERS.map((num: number) => (
+              <GreenButton 
+                key={num}
+                text={"Room " + num}
+                action={() => setSelectedSwap(num)}
+                is_active={selectedSwap === num}
               />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                <Text textStyle="web.s1" color="text.light.secondary">Arrival Date</Text>
-              </FormLabel>
-              <Input
-                variant="primary"
-                type="date"
-                value={arrivalDate}
-                onChange={(e: any) => setArrivalDate(e.target.value)}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                <Text textStyle="web.s1" color="text.light.secondary">Password</Text>
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  variant="primary"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e: any) => setPassword(e.target.value)}
-                />
-                <InputRightElement>
-                  <Button
-                    mr="12px"
-                    onClick={() => setShowPassword(!showPassword)}
-                    bg="transparent"
-                    _hover={{ bg: "transparent" }}
-                  >
-                    { showPassword ? (
-                      <VisibilityIcon fontSize="small" />
-                    ) : (
-                      <VisibilityOffIcon fontSize="small" />
-                    )}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-
-            <Flex
-              alignItems="center"
-              justifyContent="flex-start"
-              gap="15px"
-              mt="15px"
-            >
-              <Button
-                variant="secondaryOutline"
-                onClick={() => {
-                  setEndStay(false)
-                  setDepartureDate("")
-                  setError("")
-                  setSwapParticipant(true)
-                }}
-                gap="8px"
-                isActive={swapParticipant}
-              >
-                <SwapHorizIcon fontSize="small" />
-                <Text textStyle="web.s1" color="inherit">Swap Participant</Text>
-              </Button>
-
-              <Button
-                variant="red"
-                onClick={() => {
-                  setSwapParticipant(false)
-                  setSelectedSwap(-1)
-                  setError("")
-                  setEndStay(true)
-                }}
-                gap="8px"
-                isActive={endStay}
-              >
-                <LogoutIcon fontSize="small" />
-                <Text textStyle="web.s1" color="inherit">End Stay</Text>
-              </Button>
-            </Flex>
-
-            {(endStay || swapParticipant) && (
-              <Flex
-                w="100%"
-                h="1px"
-                bg="neutral.300"
-                mt="10px"
-              />
-            )}
-
-            { swapParticipant && (
-              <Flex flexDir="column" gap="5px">
-                <Text textStyle="web.s1" color="text.light.secondary">Available Rooms</Text>
-                <Grid w="100%" templateColumns='repeat(4, 1fr)' gap="5px">
-                  { ROOM_NUMBERS.map((num: number) => (
-                    <Button
-                      key={num}
-                      onClick={() => setSelectedSwap(num)}
-                      isActive={selectedSwap === num}
-                      borderRadius="8px"
-                      border="1px"
-                      borderColor="#0C727E"
-                      bg="#FFFFFF"
-                      color="#0C727E"
-                      cursor="pointer"
-                      height="fit-content"
-                      paddingY="8px"
-                      _hover={{
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                      }}
-                      _active={{
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                      }}
-                      _disabled={{
-                        opacity: 0.5,
-                        border: "0px",
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                        cursor: "not-allowed",
-                        pointerEvents: "none",
-                      }}
-                    >
-                      <Text textStyle="web.s1" color="inherit">Room {num}</Text>
-                    </Button>
-                  ))}
-                </Grid>
-              </Flex>
-            )}
-
-            { selectedSwap !== -1 && (
-              selectedSwap === roomNumber ? (
-                <Text textStyle="web.b3">Participant #{participants[roomNumber].participant_id} is already in Room {roomNumber}.</Text>
-              ) : (
-                <Flex flexDir="column" gap="5px">
-                  <Text textStyle="web.b3">Participant #{participants[roomNumber].participant_id} will be moved to Room {selectedSwap}.</Text>
-                  { selectedSwap in participants && (
-                    <Text textStyle="web.b3">Participant #{participants[selectedSwap].participant_id} will be moved to Room {roomNumber}.</Text>
-                  )}
-                </Flex>
-              )
-            )}
-
-            { endStay && (
-              <FormControl mt="10px">
-                <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                  <Text textStyle="web.s1" color="text.light.secondary">Departure Date</Text>
-                </FormLabel>
-                <Input
-                  variant="primary"
-                  type="date"
-                  value={departureDate}
-                  onChange={(e: any) => setDepartureDate(e.target.value)}
-                />
-              </FormControl>
-            )}
-
-            { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text> }
+            ))}
           </Flex>
+        </Flex>
+      )}
+
+      { selectedSwap !== -1 && (
+        selectedSwap === roomNumber ? (
+          <Text textStyle="web.b3">Participant #{participants[roomNumber].participant_id} is already in Room {roomNumber}.</Text>
+        ) : (
+          <Flex flexDir="column" gap="5px">
+            <Text textStyle="web.b3">Participant #{participants[roomNumber].participant_id} will be moved to Room {selectedSwap}.</Text>
+            { selectedSwap in participants && (
+              <Text textStyle="web.b3">Participant #{participants[selectedSwap].participant_id} will be moved to Room {roomNumber}.</Text>
+            )}
+          </Flex>
+        )
+      )}
+
+      { endStay && (
+        <CoreInput 
+          label="Departure Date"
+          current_value={departureDate}
+          action={(e: any) => setDepartureDate(e.target.value)}
+          type="date"
+          width="400px"
+        />
+      )}
     </ModalContainer>
   );
 };

@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { UPDATE_PARTICIPANT } from "../../../../gql/mutations"
 import ModalContainer from "../../../common/form/ModalContainer";
+import CoreInput from "../../../common/form/CoreInput";
 
 type EditPastParticipantCardProps = {
   id: number,
@@ -61,50 +62,43 @@ export default function EditPastParticipantCard({
       submit_text="Save Changes"
       submit_action={handleSubmit}
       cancel_action={close}
+      error={error}
     >
-      <Flex
-        flexDir="column"
-        gap="10px"
-      >
-        <FormControl>
-          <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-            <Text textStyle="web.s1" color="text.light.secondary">ID Number</Text>
-          </FormLabel>
-          <Input
-            variant="primary"
-            type="id"
-            value={id}
-            disabled
-          />
-        </FormControl>
+      <FormControl>
+        <Text textStyle="web.s1" color="text.light.secondary">ID Number</Text>
+        <Input
+          disabled
+          type="number"
+          value={id}
+          width="350px"
+          height="fit-content"
+          paddingX="12px"
+          paddingY="6px"
+          border="1px"
+          borderColor="#C5C8D8"
+          borderRadius="8px"
+          fontFamily="Nunito"
+          fontWeight="400"
+          fontSize="12px"
+          color="#000000"
+        />
+      </FormControl>
 
-        <Flex gap="15px">
-          <FormControl>
-            <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-              <Text textStyle="web.s1" color="text.light.secondary">Arrival Date</Text>
-            </FormLabel>
-            <Input
-              variant="primary"
-              type="date"
-              value={arrivalDate}
-              onChange={(e: any) => setArrivalDate(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-              <Text textStyle="web.s1" color="text.light.secondary">Departure Date</Text>
-            </FormLabel>
-            <Input
-              variant="primary"
-              type="date"
-              value={departureDate}
-              onChange={(e: any) => setDepartureDate(e.target.value)}
-            />
-          </FormControl>
-        </Flex>
-
-        { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text> }
+      <Flex gap="8px">
+        <CoreInput 
+          label="Arrival Date"
+          current_value={arrivalDate}
+          action={(e: any) => setArrivalDate(e.target.value)}
+          type="date"
+          width="100%"
+        />
+        <CoreInput 
+          label="Departure Date"
+          current_value={departureDate}
+          action={(e: any) => setDepartureDate(e.target.value)}
+          type="date"
+          width="100%"
+        />
       </Flex>
     </ModalContainer>
   )
