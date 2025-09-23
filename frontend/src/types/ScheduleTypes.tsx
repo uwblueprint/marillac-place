@@ -26,6 +26,8 @@ export enum TaskStatus {
   EXCUSED = "EXCUSED",
 }
 
+export const TaskStatuses = [TaskStatus.ASSIGNED, TaskStatus.COMPLETE, TaskStatus.INCOMPLETE, TaskStatus.EXCUSED]
+
 export enum TaskType {
   REQUIRED = "REQUIRED",
   OPTIONAL = "OPTIONAL",

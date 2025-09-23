@@ -1,4 +1,10 @@
 const colors = {
+  task_status: {
+    complete: "#0D8312",
+    assigned: "#255B9A",
+    excused: "#B07D18",
+    incomplete: "#B21D2F",
+  },
   neutral: {
     0: "#FFFFFF",
     100: "#FAFAFA",
