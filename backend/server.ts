@@ -26,7 +26,8 @@ server.applyMiddleware({
   },
 });
 
-app.listen({ port: 5000 }, () => {
-  console.info(`Server is listening on port 5000!`);
+const PORT = process.env.PORT || 5001;
+app.listen({ port: PORT }, () => {
+  console.info(`Server is listening on port ${PORT}!`);
 });
 
