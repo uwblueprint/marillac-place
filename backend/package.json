@@ -9,7 +9,7 @@
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "tsc",
     "prismaInitAndRun": "npx prisma migrate deploy && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && nodemon -L",
-    "start": "node build/server.js" //for railway deployment
+    "start": "node build/server.js"
   },
   "keywords": [],
   "author": "",
