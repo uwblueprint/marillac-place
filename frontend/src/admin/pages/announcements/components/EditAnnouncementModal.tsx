@@ -92,7 +92,7 @@ const EditAnnouncementModal = ({
     >
       <Flex gap="5px" align="flex-end">
         <Text textStyle="web.s1" color="text.light.secondary">Sent To</Text>
-        <Text textStyle="web.b3" color="text.light.secondary">{sendTo}</Text>
+        <Text textStyle="web.b3" color="#000000">{sendTo}</Text>
       </Flex>
 
       <SelectionInput

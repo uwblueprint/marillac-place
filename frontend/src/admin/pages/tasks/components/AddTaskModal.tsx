@@ -7,6 +7,8 @@ import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";
 import TextInput from "../../../common/form/TextInput";
 import SelectionInput from "../../../common/form/SelectionInput";
+import GreenButton from "../../../common/buttons/GreenButton";
+import { toTitleCase } from "../../../../utils/string_helpers";
 
 type AddTaskModalProps = {
   type: string;
@@ -119,185 +121,122 @@ export default function AddTaskModal({
       submit_text="Save Task"
       submit_action={handleSubmit}
       cancel_action={close}
+      error={error}
     >
-            <Flex gap="5px" alignItems="flex-end">
-              <Text textStyle="web.s1" color="text.light.secondary">Task Type</Text>
-              <Text textStyle="web.b3" color="text.light.secondary">{formattedType}</Text>
-            </Flex>
+      <Flex gap="5px" alignItems="flex-end">
+        <Text textStyle="web.s1" color="text.light.secondary">Task Type</Text>
+        <Text textStyle="web.b3" color="text.light.secondary">{formattedType}</Text>
+      </Flex>
 
-            <CoreInput 
-              label="Task Name"
-              current_value={taskName}
-              action={(e: any) => setTaskName(e.target.value)}
-              type="text"
-            />
+      <CoreInput 
+        label="Task Name"
+        current_value={taskName}
+        action={(e: any) => setTaskName(e.target.value)}
+        type="text"
+      />
 
-            { type !== "required" &&  (
-              <Checkbox
-                isChecked={participantPreference}
-                onChange={(e: any) => {
-                  setRecurrence("PARTICIPANT_PREFERENCE");
-                  setDays([]);
-                  setTime("PARTICIPANT_PREFERENCE");
-                  setStartTime("");
-                  setEndTime("");
-                  setParticipantPreference(e.target.checked)
-                }}
-              >
-                <Text textStyle="web.b3" color="#000000">Participant Preference?</Text>
-              </Checkbox>
-            )}
+      { type !== "required" &&  (
+        <Checkbox
+          isChecked={participantPreference}
+          onChange={(e: any) => {
+            setRecurrence("PARTICIPANT_PREFERENCE");
+            setDays([]);
+            setTime("PARTICIPANT_PREFERENCE");
+            setStartTime("");
+            setEndTime("");
+            setParticipantPreference(e.target.checked)
+          }}
+        >
+          <Text textStyle="web.b3" color="#000000">Participant Preference?</Text>
+        </Checkbox>
+      )}
 
-            { !participantPreference && (
-              <>
-                <FormControl>
-                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                    <Text textStyle="web.s1" color="text.light.secondary">Select Days</Text>
-                  </FormLabel>
-                  <RadioGroup value={recurrence} onChange={(opt: string) => setRecurrence(opt)}>
-                    <Stack direction='column'>
-                      <Radio value='DAILY' size="sm">
-                        <Text textStyle="web.b3" color="#000000">Daily</Text>
-                      </Radio>
-                      <Radio value='EVERY_SELECTED_DAYS' size="sm">
-                        <Text textStyle="web.b3" color="#000000">Every selected day</Text>
-                      </Radio>
-                      <Radio value='ANY_SELECTED_DAYS' size="sm">
-                        <Text textStyle="web.b3" color="#000000">Any selected day</Text>
-                      </Radio>
-                    </Stack>
-                  </RadioGroup>
-                </FormControl>
+      { !participantPreference && (
+        <>
+          <SelectionInput 
+            label="Select Days"
+            current_value={recurrence}
+            action={(opt: string) => setRecurrence(opt)}
+            mode="radio"
+            value_options={{
+              "Daily": "DAILY",
+              "Every selected day": "EVERY_SELECTED_DAYS",
+              "Any selected day": "ANY_SELECTED_DAYS"
+            }}
+          />
 
-                <Flex gap="5px">
-                  { weekdays.map((day: string) => (
-                    <Button
-                      key={day}
-                      onClick={() => handleSelectDay(day)}
-                      isActive={days.includes(day)}
-                      borderRadius="8px"
-                      border="1px"
-                      borderColor="#0C727E"
-                      bg="#FFFFFF"
-                      color="#0C727E"
-                      cursor="pointer"
-                      width="fit-content"
-                      height="fit-content"
-                      paddingY="5px"
-                      _hover={{
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                      }}
-                      _active={{
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                      }}
-                      _disabled={{
-                        opacity: 0.5,
-                        border: "0px",
-                        color: "#FFFFFF",
-                        bg: "#0C727E",
-                        cursor: "not-allowed",
-                        pointerEvents: "none",
-                      }}
-                    >
-                      <Text textStyle="web.s1" color="inherit">{day.charAt(0) + day.slice(1, 3).toLowerCase()}</Text>
-                    </Button>
-                  ))}
-                </Flex>
+          <Flex gap="5px">
+            { weekdays.map((day: string) => (
+              <GreenButton 
+                key={day}
+                text={toTitleCase(day).slice(0, 3)}
+                action={() => handleSelectDay(day)}
+                is_active={days.includes(day)}
 
-                <SelectionInput 
-                  label="Time"
-                  current_value={time}
-                  action={(opt: string) => {
-                    if (opt === "ANYTIME") {
-                      setStartTime("");
-                      setEndTime("");
-                    };
-                    setTime(opt);
-                  }}
-                  mode="radio"
-                  value_options={{
-                    "Anytime": "ANYTIME",
-                    "Select Time": "SPECIFIC",
-                  }}
-                />
+              />
+            ))}
+          </Flex>
 
-                { time === "SPECIFIC" &&
-                <Flex gap="10px">
-                  <FormControl>
-                    <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                      <Text textStyle="web.s1" color="text.light.secondary">Start Time</Text>
-                    </FormLabel>
-                    <Input
-                      variant="primary"
-                      type="time"
-                      value={startTime}
-                      onChange={(e: any) => setStartTime(e.target.value)}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                      <Text textStyle="web.s1" color="text.light.secondary">End Time</Text>
-                    </FormLabel>
-                    <Input
-                      variant="primary"
-                      type="time"
-                      value={endTime}
-                      onChange={(e: any) => setEndTime(e.target.value)}
-                    />
-                  </FormControl>
-                </Flex>
-                }
-              </>
-            )}
+          <SelectionInput 
+            label="Time"
+            current_value={time}
+            action={(opt: string) => {
+              if (opt === "ANYTIME") {
+                setStartTime("");
+                setEndTime("");
+              };
+              setTime(opt);
+            }}
+            mode="radio"
+            value_options={{
+              "Anytime": "ANYTIME",
+              "Select Time": "SPECIFIC",
+            }}
+          />
 
+          { time === "SPECIFIC" &&
             <Flex width="100%" alignItems="center" justifyContent="space-between">
-              <FormControl>
-                <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                  <Text textStyle="web.s1" color="text.light.secondary">Marillac Bucks</Text>
-                </FormLabel>
-                <InputGroup>
-                  <InputLeftElement>
-                    <AttachMoneyIcon style={{ color: 'inherit', fontSize: 15 }} />
-                  </InputLeftElement>
-                  <Input
-                    variant="primary"
-                    type="number"
-                    value={addition}
-                    onChange={(e: any) => setAddition(e.target.value)}
-                    width="50%"
-                    pl="30px"
-                  />
-                </InputGroup>
-              </FormControl>
-              <FormControl>
-                <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                  <Text textStyle="web.s1" color="text.light.secondary">Marillac Bucks Deduction</Text>
-                </FormLabel>
-                <InputGroup>
-                  <InputLeftElement>
-                    <AttachMoneyIcon style={{ color: 'inherit', fontSize: 15 }} />
-                  </InputLeftElement>
-                  <Input
-                    variant="primary"
-                    type="number"
-                    value={deduction}
-                    onChange={(e: any) => setDeduction(e.target.value)}
-                    width="50%"
-                    pl="30px"
-                  />
-                </InputGroup>
-              </FormControl>
+              <CoreInput 
+                label="Start Time"
+                current_value={startTime}
+                action={(e: any) => setStartTime(e.target.value)}
+                type="time"
+                width="90%"
+              />
+              <CoreInput 
+                label="End Time"
+                current_value={endTime}
+                action={(e: any) => setEndTime(e.target.value)}
+                type="time"
+                width="90%"
+              />
             </Flex>
+          }
+        </>
+      )}
 
-            <TextInput 
-              label="Comments"
-              current_value={comments}
-              action={(e: any) => setComments(e.target.value)}
-            />
+      <Flex width="100%" alignItems="center" justifyContent="space-between">
+        <CoreInput 
+          label="Marillac Bucks"
+          current_value={addition}
+          action={(e: any) => setAddition(e.target.value)}
+          type="number"
+          width="50%"
+        />
+        <CoreInput 
+          label="Marillac Bucks Deduction"
+          current_value={deduction}
+          action={(e: any) => setDeduction(e.target.value)}
+          type="number"
+          width="50%"
+        />
+      </Flex>
 
-            { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000">{error}</Text> }
+      <TextInput 
+        label="Comments"
+        current_value={comments}
+        action={(e: any) => setComments(e.target.value)}
+      />
     </ModalContainer>
   )
 }

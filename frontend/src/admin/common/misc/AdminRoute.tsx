@@ -5,7 +5,7 @@ import SideBar from "../../../common/admin/SideBar";
 import Notification from "../../../common/admin/Notification";
 import * as ROUTES from "../../../constants/routes";
 import { isAdmin, isRelief } from "../../../utils/checkRole";
-import Loading from "../../../pages/Loading";
+import Loading from "../../../Loading";
 
 type AdminRouteProps = {
   children: React.ReactElement;

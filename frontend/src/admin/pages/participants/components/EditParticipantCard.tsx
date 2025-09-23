@@ -195,7 +195,7 @@ export default function EditParticipantCard({
 
       { swapParticipant && (
         <Flex flexDir="column">
-          <Text textStyle="web.s1" color="text.light.secondary">Available Rooms</Text>
+          <Text textStyle="web.s1" color="text.light.secondary" mb="3px">Available Rooms</Text>
           <Flex wrap="wrap" gap="5px" width="400px">
             {ROOM_NUMBERS.map((num: number) => (
               <GreenButton 

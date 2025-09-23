@@ -16,7 +16,6 @@ import {
 import { useMutation } from "@apollo/client";
 import { EDIT_BADGE_LEVEL, EDIT_SYSTEM_BADGE } from "../../../../gql/mutations";
 import { Badge } from "../../../../types/BadgeTypes";
-import ModalContainer from "../../../common/form/ModalContainer";
 
 interface EditSystemBadgeModalProps {
   isOpen: boolean;
@@ -122,12 +121,23 @@ const EditSystemBadgeModal = ({
   };
 
   return (
-    <ModalContainer
-      title="Edit System Badge"
-      submit_text="Save Changes"
-      submit_action={handleSave}
-      cancel_action={onClose}
+    <Modal
+      closeOnOverlayClick={false}
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
     >
+      <ModalOverlay />
+      <ModalContent
+        boxShadow="xl"
+        borderRadius="16px"
+        width="500px"
+        padding="20px"
+      >
+        <ModalBody>
+          <Text textStyle="web.h3" mb="15px">
+            Edit System Badge
+          </Text>
 
           <Flex flexDir="column" gap="10px">
             <Flex gap="5px" alignItems="flex-end">
@@ -249,8 +259,26 @@ const EditSystemBadgeModal = ({
                 {error}
               </Text>
             )}
+
+            <Flex
+              alignItems="center"
+              justifyContent="flex-end"
+              gap="5px"
+              mt="10px"
+            >
+              <Button variant="white" onClick={onClose}>
+                <Text textStyle="web.s1">Cancel</Text>
+              </Button>
+              <Button variant="primaryFilled" onClick={handleSave}>
+                <Text textStyle="web.s1" color="white">
+                  Save
+                </Text>
+              </Button>
+            </Flex>
           </Flex>
-    </ModalContainer>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 

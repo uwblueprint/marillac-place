@@ -133,23 +133,23 @@ export default function TaskDetailsModal({
         <Flex flexDir="column" gap="8px">
           <Flex gap="5px" align="flex-end">
             <Text textStyle="web.s1" color="text.light.secondary">Task Type</Text>
-            <Text textStyle="web.b3" color="text.light.secondary">{formatTaskType(task.task_type)}</Text>
+            <Text textStyle="web.b3" color="#000000">{formatTaskType(task.task_type)}</Text>
           </Flex>
           <Flex gap="5px" align="flex-end">
             <Text textStyle="web.s1" color="text.light.secondary">Date</Text>
-            <Text textStyle="web.b3" color="text.light.secondary">{task.allDay ? "Anytime" : formatDate(task.start)}</Text>
+            <Text textStyle="web.b3" color="#000000">{task.allDay ? "Anytime" : formatDate(task.start)}</Text>
           </Flex>
           <Flex gap="5px" align="flex-end">
             <Text textStyle="web.s1" color="text.light.secondary">Recurrence</Text>
-            <Text textStyle="web.b3" color="text.light.secondary">{getRecurrenceText()}</Text>
+            <Text textStyle="web.b3" color="#000000">{getRecurrenceText()}</Text>
           </Flex>
           <Flex gap="5px" align="flex-end">
             <Text textStyle="web.s1" color="text.light.secondary">Marillac Bucks</Text>
-            <Text textStyle="web.b3" color="text.light.secondary">${task.marillacBucksAddition}</Text>
+            <Text textStyle="web.b3" color="#000000">${task.marillacBucksAddition}</Text>
           </Flex>
           <Flex gap="5px" align="flex-end">
             <Text textStyle="web.s1" color="text.light.secondary">Marillac Bucks Deduction</Text>
-            <Text textStyle="web.b3" color="text.light.secondary">${task.marillac_bucks_deduction}</Text>
+            <Text textStyle="web.b3" color="#000000">${task.marillac_bucks_deduction}</Text>
           </Flex>
 
           <Flex flexDir="column">

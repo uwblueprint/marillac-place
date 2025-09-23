@@ -18,13 +18,13 @@ import AdminParticipantsPage from "./admin/pages/participants/Main";
 import AdminTasksPage from "./admin/pages/tasks/Main";
 import AdminBadgesPage from "./admin/pages/badges/Main";
 
-import ParticipantLoginPage from "./pages/participant/login/Main";
-import ParticipantHomePage from "./pages/participant/home/Main";
-import ParticipantSchedulePage from "./pages/participant/schedule/Main";
-import ParticipantAnnouncementsPage from "./pages/participant/announcements/Main";
-import ParticipantProgressPage from "./pages/participant/progress/Main";
+import ParticipantLoginPage from "./participant/pages/login/Main";
+import ParticipantHomePage from "./participant/pages/home/Main";
+import ParticipantSchedulePage from "./participant/pages/schedule/Main";
+import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
+import ParticipantProgressPage from "./participant/pages/progress/Main";
 
-import NotFound from "./pages/NotFound";
+import NotFound from "./NotFound";
 
 import * as ROUTES from "./constants/routes";
 import AdminRoute from "./admin/common/misc/AdminRoute";

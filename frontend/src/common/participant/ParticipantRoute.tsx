@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import * as ROUTES from "../../constants/routes";
 import { isParticipant, getParticipantId } from "../../utils/checkRole";
-import Loading from "../../pages/Loading";
+import Loading from "../../Loading";
 import { ParticipantContext } from "./ParticipantContext";
 
 type ParticipantRouteProps = {

@@ -5,7 +5,7 @@ import { useMutation } from "@apollo/client";
 import { isParticipant } from "../../../utils/checkRole";
 import { PARTICIPANT_LOGIN } from "../../../gql/mutations";
 import * as ROUTES from "../../../constants/routes";
-import Loading from "../../Loading";
+import Loading from "../../../Loading";
 
 export default function ParticipantsLoginPage() {
   const navigate = useNavigate();
