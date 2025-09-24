@@ -6,6 +6,11 @@ require("./crons/index");
 
 const app = express();
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 const schema = getGraphQLSchema();
 
 const server = new ApolloServer({
