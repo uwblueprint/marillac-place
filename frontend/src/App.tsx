@@ -39,59 +39,95 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Switch>
-            <Route path={ROUTES.ADMIN_LOGIN_PAGE} element={<AdminLoginPage />} />
-            <Route path={ROUTES.ADMIN_HOME_PAGE} element={
-              <AdminRoute>
-                <AdminHomePage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_SCHEDULE_PAGE} element={
-              <AdminRoute>
-                <AdminSchedulePage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE} element={
-              <AdminRoute>
-                <AdminAnnouncementsPage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_PARTICIPANTS_PAGE} element={
-              <AdminRoute>
-                <AdminParticipantsPage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_TASKS_PAGE} element={
-              <AdminRoute>
-                <AdminTasksPage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_BADGES_PAGE} element={
-              <AdminRoute>
-                <AdminBadgesPage/>
-              </AdminRoute>
-            }/>
+            <Route
+              path={ROUTES.ADMIN_LOGIN_PAGE}
+              element={<AdminLoginPage />}
+            />
+            <Route
+              path={ROUTES.ADMIN_HOME_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminHomePage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_SCHEDULE_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminSchedulePage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminAnnouncementsPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminParticipantsPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_TASKS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminTasksPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_BADGES_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminBadgesPage />
+                </AdminRoute>
+              }
+            />
 
-            <Route path={ROUTES.PARTICIPANTS_LOGIN_PAGE} element={<ParticipantLoginPage />} />
-            <Route path={ROUTES.PARTICIPANTS_HOME_PAGE} element={
-              <ParticipantRoute>
-                <ParticipantHomePage />
-              </ParticipantRoute>
-            }/>
-            <Route path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE} element={
-              <ParticipantRoute>
-                <ParticipantSchedulePage />
-              </ParticipantRoute>
-            }/>
-            <Route path={ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE} element={
-              <ParticipantRoute>
-                <ParticipantAnnouncementsPage />
-              </ParticipantRoute>
-            }/>
-            <Route path={ROUTES.PARTICIPANTS_PROGRESS_PAGE} element={
-              <ParticipantRoute>
-                <ParticipantProgressPage />
-              </ParticipantRoute>
-            }/>
+            <Route
+              path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
+              element={<ParticipantLoginPage />}
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_HOME_PAGE}
+              element={
+                <ParticipantRoute>
+                  <ParticipantHomePage />
+                </ParticipantRoute>
+              }
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE}
+              element={
+                <ParticipantRoute>
+                  <ParticipantSchedulePage />
+                </ParticipantRoute>
+              }
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE}
+              element={
+                <ParticipantRoute>
+                  <ParticipantAnnouncementsPage />
+                </ParticipantRoute>
+              }
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_PROGRESS_PAGE}
+              element={
+                <ParticipantRoute>
+                  <ParticipantProgressPage />
+                </ParticipantRoute>
+              }
+            />
 
             <Route path="*" element={<NotFound />} />
           </Switch>

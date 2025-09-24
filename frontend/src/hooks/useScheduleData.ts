@@ -160,10 +160,10 @@ export const useScheduleData = (selectedRoom: number, currentDate: Date) => {
       id: 5,
       title: "Skills Assessment",
       start: moment(currentWeekStart)
-          .add(1, "days")
-          .hour(10)
-          .minute(0)
-          .toDate(),
+        .add(1, "days")
+        .hour(10)
+        .minute(0)
+        .toDate(),
       end: moment(currentWeekStart).add(1, "days").hour(11).minute(30).toDate(),
       allDay: false,
       task_status: TaskStatus.COMPLETE,

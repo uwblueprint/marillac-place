@@ -1,6 +1,7 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import getGraphQLSchema from "./utils/getGraphQLSchema";
+
 require("./crons/index");
 
 const app = express();
@@ -30,4 +31,3 @@ const PORT = process.env.PORT || 5001;
 app.listen({ port: PORT }, () => {
   console.info(`Server is listening on port ${PORT}!`);
 });
-

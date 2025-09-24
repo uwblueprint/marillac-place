@@ -19,7 +19,9 @@ const announcementResolver = {
       _parent: undefined,
       { participant_ids }: { participant_ids: number[] }
     ): Promise<Announcement[]> => {
-      return announcementService.getAnnouncementsByParticipants(participant_ids);
+      return announcementService.getAnnouncementsByParticipants(
+        participant_ids
+      );
     },
   },
   Mutation: {

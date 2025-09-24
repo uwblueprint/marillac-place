@@ -25,7 +25,10 @@ class ParticipantService implements IParticipantService {
     try {
       const participants = await prisma.participant.findMany({
         where: {
-          OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+          OR: [
+            { departure_date: null },
+            { departure_date: { gt: getToday() } },
+          ],
         },
         orderBy: [{ room_number: "asc" }],
       });
@@ -42,7 +45,10 @@ class ParticipantService implements IParticipantService {
           AND: [
             { room_number },
             {
-              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+              OR: [
+                { departure_date: null },
+                { departure_date: { gt: getToday() } },
+              ],
             },
           ],
         },
@@ -56,16 +62,17 @@ class ParticipantService implements IParticipantService {
     }
   }
 
-  async getParticipantsByRooms(
-    room_numbers: number[]
-  ): Promise<Participant[]> {
+  async getParticipantsByRooms(room_numbers: number[]): Promise<Participant[]> {
     try {
       const participants = await prisma.participant.findMany({
         where: {
           AND: [
             { room_number: { in: room_numbers } },
             {
-              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+              OR: [
+                { departure_date: null },
+                { departure_date: { gt: getToday() } },
+              ],
             },
           ],
         },
@@ -75,23 +82,22 @@ class ParticipantService implements IParticipantService {
       throw new Error("Something went wrong");
     }
   }
-  
+
   async getParticipantById(participantId: number): Promise<Participant | null> {
-      try {
-          const participant: Participant | null = await prisma.participant.findUnique(
-              {
-                  where: {
-                      participant_id: participantId,
-                  },
-              },
-          );
-          return participant;
-      } catch (err) {
-          console.log(err);
-          throw err;
-      }
+    try {
+      const participant: Participant | null =
+        await prisma.participant.findUnique({
+          where: {
+            participant_id: participantId,
+          },
+        });
+      return participant;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
-  
+
   async createParticipant(
     participant_id: number,
     room_number: number,
@@ -115,7 +121,10 @@ class ParticipantService implements IParticipantService {
       occupiedRoom = await prisma.participant.findFirst({
         where: {
           room_number,
-          OR: [{ departure_date: null }, { departure_date: { gte: getToday() } }],
+          OR: [
+            { departure_date: null },
+            { departure_date: { gte: getToday() } },
+          ],
         },
       });
     } catch (err) {

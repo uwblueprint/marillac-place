@@ -24,13 +24,13 @@ const badgeResolver = {
       _parent: undefined,
       {
         badge_id,
-        is_active
+        is_active,
       }: {
-        badge_id: number,
-        is_active: boolean,
+        badge_id: number;
+        is_active: boolean;
       }
     ): Promise<boolean> => {
-      return badgeService.updateBadgeStatus(badge_id, is_active)
+      return badgeService.updateBadgeStatus(badge_id, is_active);
     },
     assignCustomBadge: async (
       _parent: undefined,
@@ -98,11 +98,7 @@ const badgeResolver = {
         icon: Icon;
       }
     ): Promise<boolean> => {
-      return badgeService.createCustomBadge(
-        name,
-        description,
-        icon
-      );
+      return badgeService.createCustomBadge(name, description, icon);
     },
     deleteCustomBadge: async (
       _parent: undefined,

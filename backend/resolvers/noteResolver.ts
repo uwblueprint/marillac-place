@@ -17,7 +17,7 @@ const noteResolver = {
         message,
       }: {
         message: string;
-      },
+      }
     ): Promise<boolean> => {
       return noteService.createNote(message);
     },
@@ -27,7 +27,7 @@ const noteResolver = {
         note_id,
       }: {
         note_id: number;
-      },
+      }
     ): Promise<boolean> => {
       return noteService.deleteNote(note_id);
     },

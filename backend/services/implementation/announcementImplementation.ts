@@ -8,7 +8,7 @@ class AnnouncementService implements IAnnouncementService {
     try {
       const announcements = await prisma.announcement.findMany({
         orderBy: {
-          creation_date: 'desc',
+          creation_date: "desc",
         },
         include: {
           user_announcements: true,
@@ -34,7 +34,7 @@ class AnnouncementService implements IAnnouncementService {
           },
         },
         orderBy: {
-          creation_date: 'desc',
+          creation_date: "desc",
         },
         include: {
           user_announcements: {
@@ -61,7 +61,7 @@ class AnnouncementService implements IAnnouncementService {
     try {
       const announcements = await prisma.announcement.findMany({
         orderBy: {
-          creation_date: 'desc',
+          creation_date: "desc",
         },
         where: {
           user_announcements: {
@@ -73,8 +73,8 @@ class AnnouncementService implements IAnnouncementService {
           },
         },
         include: {
-          user_announcements: true
-        }
+          user_announcements: true,
+        },
       });
 
       return announcements;

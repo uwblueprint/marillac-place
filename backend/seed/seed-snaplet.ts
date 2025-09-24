@@ -3,8 +3,8 @@
 // Generates system badges and mock data for development/testing environments.
 
 import { createSeedClient } from "@snaplet/seed";
-import { PrismaClient } from "@prisma/client";
 import {
+  PrismaClient,
   TaskType,
   TransactionType,
   BadgeType,
@@ -31,7 +31,7 @@ async function seedProdData() {
   try {
     // Check if there are any badges in the database
     const badgeCount = await prisma.badge.count();
-    
+
     if (badgeCount === 0) {
       // No badges exist, seed all system badges
       for (const badge of systemBadges) {
@@ -59,24 +59,36 @@ async function seedProdData() {
 }
 
 async function seedMockData(seed: any) {
-  await seed.participant((createMany) => createMany(participants.length, (cur) => participants[cur.index]));
+  await seed.participant((createMany) =>
+    createMany(participants.length, (cur) => participants[cur.index])
+  );
   console.log("✅ Participants seeded");
-  
-  await seed.task((createMany) => createMany(tasks.length, (cur) => tasks[cur.index]));
+
+  await seed.task((createMany) =>
+    createMany(tasks.length, (cur) => tasks[cur.index])
+  );
   console.log("✅ Tasks seeded");
-  
-  await seed.assignedTask((createMany) => createMany(assignedTasks.length, (cur) => assignedTasks[cur.index]));
+
+  await seed.assignedTask((createMany) =>
+    createMany(assignedTasks.length, (cur) => assignedTasks[cur.index])
+  );
   console.log("✅ Assigned tasks seeded");
-  
-  await seed.announcement((createMany) => createMany(announcements.length, (cur) => announcements[cur.index]));
+
+  await seed.announcement((createMany) =>
+    createMany(announcements.length, (cur) => announcements[cur.index])
+  );
   console.log("✅ Announcements seeded");
-  
-  await seed.userAnnouncement((createMany) => createMany(userAnnouncements.length, (cur) => userAnnouncements[cur.index]));
+
+  await seed.userAnnouncement((createMany) =>
+    createMany(userAnnouncements.length, (cur) => userAnnouncements[cur.index])
+  );
   console.log("✅ User announcements seeded");
 
-  await seed.note((createMany) => createMany(notes.length, (cur) => notes[cur.index]));
+  await seed.note((createMany) =>
+    createMany(notes.length, (cur) => notes[cur.index])
+  );
   console.log("✅ Notes seeded");
-  
+
   const prisma = new PrismaClient();
   try {
     for (const badge of customBadges) {
@@ -107,7 +119,7 @@ const main = async () => {
 
   await seed.$resetDatabase();
   await seedProdData();
-  
+
   if (environment === "development") {
     await seed.$resetDatabase();
     await seedProdData();

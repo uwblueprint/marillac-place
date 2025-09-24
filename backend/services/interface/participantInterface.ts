@@ -4,9 +4,7 @@ interface IParticipantService {
   getPastParticipants(): Promise<Participant[]>;
   getCurrentParticipants(): Promise<Participant[]>;
   getParticipantByRoom(room_number: number): Promise<Participant | null>;
-  getParticipantsByRooms(
-    room_numbers: number[]
-  ): Promise<Participant[]>;
+  getParticipantsByRooms(room_numbers: number[]): Promise<Participant[]>;
   getParticipantById(participantId: number): Promise<Participant | null>;
   createParticipant(
     participant_id: number,

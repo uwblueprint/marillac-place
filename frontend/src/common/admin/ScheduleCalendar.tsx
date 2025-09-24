@@ -93,8 +93,12 @@ const EventComponent: React.FC<{
       direction="column"
       gap="2px"
     >
-      <Text color="inherit" textStyle="web.s1">{event.title}</Text>
-      <Text color="inherit" fontSize="10px">{formatEventTime(event.start, event.end)}</Text>
+      <Text color="inherit" textStyle="web.s1">
+        {event.title}
+      </Text>
+      <Text color="inherit" fontSize="10px">
+        {formatEventTime(event.start, event.end)}
+      </Text>
       {event.comment && (
         <div style={{ margin: "2px" }}>
           <CommentIcon size={12} color="currentColor" />

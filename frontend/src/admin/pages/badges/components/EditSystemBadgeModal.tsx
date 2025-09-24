@@ -11,7 +11,7 @@ import {
   ModalBody,
   ModalOverlay,
   NumberInput,
-  NumberInputField
+  NumberInputField,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { EDIT_BADGE_LEVEL, EDIT_SYSTEM_BADGE } from "../../../../gql/mutations";
@@ -29,7 +29,7 @@ const EditSystemBadgeModal = ({
   selected,
 }: EditSystemBadgeModalProps) => {
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
-  const badgeLevels = ['Novice', 'Bronze', 'Silver', 'Gold', 'Diamond'];
+  const badgeLevels = ["Novice", "Bronze", "Silver", "Gold", "Diamond"];
 
   const originalData: Record<string, { benchmark: number; bucks: number }> = {};
   for (const bl of selected.badge_level) {
@@ -53,14 +53,14 @@ const EditSystemBadgeModal = ({
     if (!badgeCriteria) {
       setError("Missing fields");
       return;
-    } 
+    }
 
     let prevBenchmark = 0;
     let prevBucks = 0;
     for (const bl of selected.badge_level) {
       const data = badgeData[badgeLevels[bl.level]];
       const { benchmark, bucks } = data;
- 
+
       if (benchmark <= 0 || bucks <= 0) {
         setError("Missing fields");
         return;
@@ -71,8 +71,8 @@ const EditSystemBadgeModal = ({
         return;
       }
 
-      prevBenchmark = benchmark
-      prevBucks = bucks
+      prevBenchmark = benchmark;
+      prevBucks = bucks;
     }
 
     try {
@@ -80,8 +80,8 @@ const EditSystemBadgeModal = ({
         variables: {
           system_badge_id: selected.badge_id,
           system_badge_name: selected.name,
-          system_badge_criteria: badgeCriteria
-        }
+          system_badge_criteria: badgeCriteria,
+        },
       });
     } catch (err: any) {
       setError("Failed to edit system badge");
@@ -91,21 +91,23 @@ const EditSystemBadgeModal = ({
     const mutationPromises: Promise<any>[] = [];
 
     for (const bl of selected.badge_level) {
-      const { benchmark: originalBenchmark, bucks: originalBucks } = originalData[badgeLevels[bl.level]]; 
+      const { benchmark: originalBenchmark, bucks: originalBucks } =
+        originalData[badgeLevels[bl.level]];
       const { benchmark, bucks } = badgeData[badgeLevels[bl.level]];
 
-      const hasChanged = originalBenchmark !== benchmark || originalBucks !== bucks;
-      if (hasChanged){
+      const hasChanged =
+        originalBenchmark !== benchmark || originalBucks !== bucks;
+      if (hasChanged) {
         mutationPromises.push(
           editBadgeLevel({
-            variables:{
+            variables: {
               badge_id: selected.badge_id,
               badge_level: bl.level,
               benchmark,
               marillac_bucks: bucks,
-            }
+            },
           })
-        )
+        );
       }
     }
 
@@ -144,9 +146,7 @@ const EditSystemBadgeModal = ({
               <Text textStyle="web.s1" color="text.light.secondary">
                 Badge Name
               </Text>
-              <Text textStyle="web.b3">
-                {selected.name}
-              </Text>
+              <Text textStyle="web.b3">{selected.name}</Text>
             </Flex>
 
             <FormControl>
@@ -171,87 +171,86 @@ const EditSystemBadgeModal = ({
                     </Text>
                   </FormLabel>
                   <FormLabel m="0">
-                    <Text textStyle="web.s1" color="text.light.secondary" textAlign="right">
+                    <Text
+                      textStyle="web.s1"
+                      color="text.light.secondary"
+                      textAlign="right"
+                    >
                       Set Marillac Bucks
                     </Text>
                   </FormLabel>
                 </Flex>
 
-             {Object.entries(badgeData).map(([level, data]) => {
-                return (
-                  <Flex
-                    key={level}
-                    justify="space-between"
-                    alignItems="center"
-                    w="100%"
-                    mb="5px"
-                  >
-                    <Flex alignItems="center" gap="10px">
-                      <Text textStyle="web.b3">
-                        {level}:
-                      </Text>
+                {Object.entries(badgeData).map(([level, data]) => {
+                  return (
+                    <Flex
+                      key={level}
+                      justify="space-between"
+                      alignItems="center"
+                      w="100%"
+                      mb="5px"
+                    >
+                      <Flex alignItems="center" gap="10px">
+                        <Text textStyle="web.b3">{level}:</Text>
 
-                      {level === "Novice" ? (
-                        <Input
-                          value="First Time"
-                          variant="primary"
-                          width="100px"
-                          textAlign="center"
-                          isDisabled
-                        />
-                      ) : (
-                        <>
+                        {level === "Novice" ? (
                           <Input
+                            value="First Time"
                             variant="primary"
+                            width="100px"
                             textAlign="center"
-                            value={badgeData[level].benchmark}
-                            onChange={(e) =>
-                              setBadgeData((prev: any) => {
-                                const newBenchmark = Number(e.target.value)
-                                if (Number.isNaN(newBenchmark)) return prev
-                                return ({
-                                  ...prev,
-                                  [level]: {
-                                    ...prev[level],
-                                    benchmark: newBenchmark,
-                                  },
-                                })
-                              })
-                            }
-                            w="75px"
-                            min={0}
+                            isDisabled
                           />
-                          <Text textStyle="web.b3">
-                            days
-                          </Text>
-                        </>
-                      )}
-                    </Flex>
+                        ) : (
+                          <>
+                            <Input
+                              variant="primary"
+                              textAlign="center"
+                              value={badgeData[level].benchmark}
+                              onChange={(e) =>
+                                setBadgeData((prev: any) => {
+                                  const newBenchmark = Number(e.target.value);
+                                  if (Number.isNaN(newBenchmark)) return prev;
+                                  return {
+                                    ...prev,
+                                    [level]: {
+                                      ...prev[level],
+                                      benchmark: newBenchmark,
+                                    },
+                                  };
+                                })
+                              }
+                              w="75px"
+                              min={0}
+                            />
+                            <Text textStyle="web.b3">days</Text>
+                          </>
+                        )}
+                      </Flex>
 
-                    <Input
-                      variant="primary"
-                      textAlign="center"
-                      width="75px"
-                      value={badgeData[level].bucks}
-                      onChange={(e) =>
-                        setBadgeData((prev: any) => {
-                          const newBucks = Number(e.target.value)
-                          if (Number.isNaN(newBucks)) return prev
-                          return ({
-                            ...prev,
-                            [level]: {
-                              ...prev[level],
-                              bucks: newBucks,
-                            },
+                      <Input
+                        variant="primary"
+                        textAlign="center"
+                        width="75px"
+                        value={badgeData[level].bucks}
+                        onChange={(e) =>
+                          setBadgeData((prev: any) => {
+                            const newBucks = Number(e.target.value);
+                            if (Number.isNaN(newBucks)) return prev;
+                            return {
+                              ...prev,
+                              [level]: {
+                                ...prev[level],
+                                bucks: newBucks,
+                              },
+                            };
                           })
-                        })
-                      }
-                      min={0}
-                    />
-                  </Flex>
-                );
-              })}
-
+                        }
+                        min={0}
+                      />
+                    </Flex>
+                  );
+                })}
               </FormControl>
             </Flex>
             {error && (

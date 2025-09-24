@@ -15,9 +15,7 @@ class NoteService implements INoteService {
     }
   }
 
-  async createNote(
-    message: string,
-  ): Promise<boolean> {
+  async createNote(message: string): Promise<boolean> {
     try {
       await prisma.note.create({
         data: {

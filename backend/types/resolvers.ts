@@ -116,10 +116,7 @@ const resolvers = gql`
       system_badge_name: String!
       system_badge_criteria: String
     ): Boolean
-    updateBadgeStatus(
-      badge_id: Int!
-      is_active: Boolean!
-    ): Boolean
+    updateBadgeStatus(badge_id: Int!, is_active: Boolean!): Boolean
   }
 `;
 

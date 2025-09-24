@@ -28,7 +28,7 @@ const participantResolver = {
       { participantId }: { participantId: number }
     ): Promise<Participant | null> => {
       return participantService.getParticipantById(participantId);
-    }
+    },
   },
   Mutation: {
     createParticipant: async (

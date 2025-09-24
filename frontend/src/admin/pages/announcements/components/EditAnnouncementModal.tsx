@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -18,8 +18,8 @@ import {
   Box,
 } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
-import {useMutation} from "@apollo/client";
-import {EDIT_ANNOUNCEMENT} from "../../../../gql/mutations";
+import { useMutation } from "@apollo/client";
+import { EDIT_ANNOUNCEMENT } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import SelectionInput from "../../../common/form/SelectionInput";
 import TextInput from "../../../common/form/TextInput";
@@ -74,7 +74,6 @@ const EditAnnouncementModal = ({
       console.error("Network error details:", err.networkError);
       setError("Unable to update announcement");
     }
-
   };
 
   const handleCancel = () => {
@@ -91,23 +90,27 @@ const EditAnnouncementModal = ({
       error={error}
     >
       <Flex gap="5px" align="flex-end">
-        <Text textStyle="web.s1" color="text.light.secondary">Sent To</Text>
-        <Text textStyle="web.b3" color="#000000">{sendTo}</Text>
+        <Text textStyle="web.s1" color="text.light.secondary">
+          Sent To
+        </Text>
+        <Text textStyle="web.b3" color="#000000">
+          {sendTo}
+        </Text>
       </Flex>
 
       <SelectionInput
-        label="Priority Level" 
+        label="Priority Level"
         current_value={priority}
         action={(opt: string) => setPriority(opt)}
         mode="radio"
         value_options={{
-          "Normal": "NORMAL",
-          "High": "HIGH",
-          "Critical": "CRITICAL",
+          Normal: "NORMAL",
+          High: "HIGH",
+          Critical: "CRITICAL",
         }}
       />
 
-      <TextInput 
+      <TextInput
         label="Message"
         current_value={message}
         action={(e: any) => setMessage(e.target.value)}

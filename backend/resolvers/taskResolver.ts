@@ -20,7 +20,7 @@ const taskResolver = {
     // },
     getTasksByType: async (
       _parent: undefined,
-      { type }: { type: TaskType },
+      { type }: { type: TaskType }
     ): Promise<Array<Task>> => {
       return taskService.getTasksByType(type);
     },
@@ -56,7 +56,7 @@ const taskResolver = {
         startTime?: string;
         endTime?: string;
         comment?: string;
-      },
+      }
     ): Promise<boolean> => {
       return taskService.createTask(
         type,
@@ -68,7 +68,7 @@ const taskResolver = {
         deduction,
         startTime,
         endTime,
-        comment,
+        comment
       );
     },
     updateTask: async (
@@ -97,7 +97,7 @@ const taskResolver = {
         startTime?: string;
         endTime?: string;
         comment?: string;
-      },
+      }
     ): Promise<boolean> => {
       return taskService.updateTask(
         id,
@@ -110,18 +110,18 @@ const taskResolver = {
         deduction,
         startTime,
         endTime,
-        comment,
+        comment
       );
     },
     deleteTaskById: async (
       _parent: undefined,
-      { taskId }: { taskId: number },
+      { taskId }: { taskId: number }
     ): Promise<boolean> => {
       return taskService.deleteTaskById(taskId);
     },
     deleteAssignedTask: async (
       _parent: undefined,
-      { assigned_task_id }: { assigned_task_id: number },
+      { assigned_task_id }: { assigned_task_id: number }
     ): Promise<boolean> => {
       return taskService.deleteAssignedTask(assigned_task_id);
     },

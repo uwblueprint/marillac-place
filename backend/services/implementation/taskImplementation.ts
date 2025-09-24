@@ -1,4 +1,3 @@
-import prisma from "../../prisma";
 import {
   DayOfWeek,
   RecurrenceFrequency,
@@ -6,6 +5,7 @@ import {
   TaskType,
   TimeOption,
 } from "@prisma/client";
+import prisma from "../../prisma";
 import ITaskService from "../interface/taskInterface";
 
 class TaskService implements ITaskService {
@@ -58,7 +58,7 @@ class TaskService implements ITaskService {
     deduction: number,
     startTime?: string,
     endTime?: string,
-    comment?: string,
+    comment?: string
   ): Promise<boolean> {
     try {
       await prisma.task.create({
@@ -92,12 +92,13 @@ class TaskService implements ITaskService {
     deduction?: number,
     startTime?: string,
     endTime?: string,
-    comment?: string,
+    comment?: string
   ): Promise<boolean> {
     const updatedData: Record<string, any> = {};
     if (type) updatedData.task_type = type;
     if (name) updatedData.task_name = name;
-    if (recurrencePreference) updatedData.recurrence_preference = recurrencePreference;
+    if (recurrencePreference)
+      updatedData.recurrence_preference = recurrencePreference;
     if (repeatDays) updatedData.repeat_days = repeatDays;
     if (timePreference) updatedData.time_preference = timePreference;
     if (marillacBucks) updatedData.marillac_bucks_addition = marillacBucks;
@@ -131,11 +132,11 @@ class TaskService implements ITaskService {
   async deleteAssignedTask(assigned_task_id: number): Promise<boolean> {
     try {
       await prisma.assignedTask.delete({
-        where: { assigned_task_id: assigned_task_id },
+        where: { assigned_task_id },
       });
       return true;
     } catch (err) {
-      throw new Error("Something went wrong: " + JSON.stringify(err));
+      throw new Error(`Something went wrong: ${JSON.stringify(err)}`);
     }
   }
 }

@@ -25,9 +25,9 @@ export default interface IBadgeService {
     participant_ids: number[]
   ): Promise<number[]>;
   editSystemBadge(
-    system_badge_id:number,
+    system_badge_id: number,
     system_badge_name: string,
-    system_badge_criteria?: string,
+    system_badge_criteria?: string
   ): Promise<boolean>;
   deleteCustomBadge(badge_id: number): Promise<boolean>;
   editBadgeLevel(
@@ -36,8 +36,5 @@ export default interface IBadgeService {
     benchmark: number,
     marillac_bucks: number
   ): Promise<boolean>;
-  updateBadgeStatus(
-    badge_id: number,
-    is_active: boolean
-  ): Promise<boolean>;
+  updateBadgeStatus(badge_id: number, is_active: boolean): Promise<boolean>;
 }

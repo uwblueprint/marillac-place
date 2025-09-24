@@ -13,9 +13,9 @@ export default function getChakraTheme() {
       Text,
       Input,
       Select,
-      Textarea
+      Textarea,
     },
   });
 
   return theme;
-};
+}
