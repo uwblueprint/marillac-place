@@ -84,6 +84,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/crypto-js": "^4.2.2",
     "@types/humps": "^2.0.0",
     "@types/node": "^22.15.29",
