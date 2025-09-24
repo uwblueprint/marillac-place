@@ -55,6 +55,12 @@ const resolvers = gql`
       message: String
     ): Boolean
     deleteAnnouncement(announcement_id: Int!): Boolean
+    updatePinReadAnnouncement(
+    announcement_id: Int!
+    participant_id: Int!
+    pinned: Boolean
+    read: Boolean
+    ): Boolean
     createTask(
       type: TaskType!
       name: String!

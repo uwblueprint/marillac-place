@@ -15,6 +15,12 @@ interface IAnnouncementService {
     message?: string,
   ): Promise<boolean>;
   deleteAnnouncement(announcementId: number): Promise<boolean>;
+  updatePinReadAnnouncement(
+    announcement_id: number,
+    participant_id: number,
+    pinned?: boolean,
+    read?: boolean,
+  ): Promise<boolean>;
 }
 
 export default IAnnouncementService;

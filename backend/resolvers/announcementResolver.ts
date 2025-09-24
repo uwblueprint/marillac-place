@@ -65,6 +65,22 @@ const announcementResolver = {
     ): Promise<boolean> => {
       return announcementService.deleteAnnouncement(announcement_id);
     },
+    updatePinReadAnnouncement: async (
+      _parent: undefined,
+      {
+        announcement_id,
+        participant_id,
+        read,
+        pinned,
+      }: {
+        announcement_id: number,
+        participant_id: number,
+        pinned?: boolean,
+        read?: boolean,
+      }
+    ): Promise<boolean> => {
+      return announcementService.updatePinReadAnnouncement(announcement_id, participant_id, pinned, read)
+    },
   },
   UserAnnouncement: {
     participant: async (parent: any) => {

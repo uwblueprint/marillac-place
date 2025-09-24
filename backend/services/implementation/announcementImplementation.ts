@@ -144,6 +144,32 @@ class AnnouncementService implements IAnnouncementService {
       throw new Error("Something went wrong");
     }
   }
+
+  async updatePinReadAnnouncement(
+    announcement_id: number,
+    participant_id: number,
+    pinned?: boolean,
+    read?: boolean
+  ): Promise<boolean> {
+    const updatedData: { pinned?: boolean; read?: boolean } = {};
+    if (pinned != undefined) updatedData.pinned = pinned;
+    if (read != undefined ) updatedData.read = read;
+
+    try {
+      await prisma.userAnnouncement.update({
+        where: {
+          announcement_id_participant_id: {
+            announcement_id,
+            participant_id,
+          },
+        },
+        data: updatedData,
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong updating UserAnnouncement")
+    }
+  }
 }
 
 export default AnnouncementService;
