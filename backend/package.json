@@ -5,6 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "nodemon -L",
+    "build": "tsc",
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "tsc",
@@ -99,6 +100,6 @@
     "schema": "./prisma/schema.prisma"
   },
   "engines": {
-    "node": ">=18.18.2"
+    "node": ">=22.11.0"
   }
 }
