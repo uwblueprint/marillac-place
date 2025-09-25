@@ -16,6 +16,8 @@ import {
 import { useMutation } from "@apollo/client";
 import { EDIT_BADGE_LEVEL, EDIT_SYSTEM_BADGE } from "../../../../gql/mutations";
 import { Badge } from "../../../../types/BadgeTypes";
+import ModalContainer from "../../../common/form/ModalContainer";
+import CoreInput from "../../../common/form/CoreInput";
 
 interface EditSystemBadgeModalProps {
   isOpen: boolean;
@@ -121,164 +123,119 @@ const EditSystemBadgeModal = ({
   };
 
   return (
-    <Modal
-      closeOnOverlayClick={false}
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
+    <ModalContainer
+      title="Edit System Badge"
+      submit_text="Save Changes"
+      submit_action={handleSave}
+      cancel_action={onClose}
+      error={error}
     >
-      <ModalOverlay />
-      <ModalContent
-        boxShadow="xl"
-        borderRadius="16px"
-        width="500px"
-        padding="20px"
-      >
-        <ModalBody>
-          <Text textStyle="web.h3" mb="15px">
-            Edit System Badge
-          </Text>
+      <Flex gap="5px" align="flex-end">
+        <Text textStyle="web.s1" color="text.light.secondary">Badge Name</Text>
+        <Text textStyle="web.b3" color="#000000">{selected.name}</Text>
+      </Flex>
 
-          <Flex flexDir="column" gap="10px">
-            <Flex gap="5px" alignItems="flex-end">
+      <CoreInput 
+        label="Badge Criteria"
+        current_value={badgeCriteria}
+        action={(e: any) => setBadgeCriteria(e.target.value)}
+        type="text"
+        width="350px"
+      />
+
+      <Flex flexDir="column">
+        <FormControl>
+          <Flex justifyContent="space-between" mb="5px">
+            <FormLabel m="0">
               <Text textStyle="web.s1" color="text.light.secondary">
-                Badge Name
+                Set Badge Levels
               </Text>
-              <Text textStyle="web.b3">
-                {selected.name}
+            </FormLabel>
+            <FormLabel m="0">
+              <Text textStyle="web.s1" color="text.light.secondary" textAlign="right">
+                Set Marillac Bucks
               </Text>
-            </Flex>
+            </FormLabel>
+          </Flex>
 
-            <FormControl>
-              <FormLabel mb="5px">
-                <Text textStyle="web.s1" color="text.light.secondary">
-                  Badge Criteria
+        {Object.entries(badgeData).map(([level, data]) => {
+          return (
+            <Flex
+              key={level}
+              justify="space-between"
+              alignItems="center"
+              w="100%"
+              mb="5px"
+            >
+              <Flex alignItems="center" gap="10px">
+                <Text textStyle="web.b3">
+                  {level}:
                 </Text>
-              </FormLabel>
-              <Input
-                variant="primary"
-                value={badgeCriteria}
-                onChange={(e) => setBadgeCriteria(e.target.value)}
-              />
-            </FormControl>
 
-            <Flex flexDir="column">
-              <FormControl>
-                <Flex justifyContent="space-between" mb="5px">
-                  <FormLabel m="0">
-                    <Text textStyle="web.s1" color="text.light.secondary">
-                      Set Badge Levels
-                    </Text>
-                  </FormLabel>
-                  <FormLabel m="0">
-                    <Text textStyle="web.s1" color="text.light.secondary" textAlign="right">
-                      Set Marillac Bucks
-                    </Text>
-                  </FormLabel>
-                </Flex>
-
-             {Object.entries(badgeData).map(([level, data]) => {
-                return (
-                  <Flex
-                    key={level}
-                    justify="space-between"
-                    alignItems="center"
-                    w="100%"
-                    mb="5px"
-                  >
-                    <Flex alignItems="center" gap="10px">
-                      <Text textStyle="web.b3">
-                        {level}:
-                      </Text>
-
-                      {level === "Novice" ? (
-                        <Input
-                          value="First Time"
-                          variant="primary"
-                          width="100px"
-                          textAlign="center"
-                          isDisabled
-                        />
-                      ) : (
-                        <>
-                          <Input
-                            variant="primary"
-                            textAlign="center"
-                            value={badgeData[level].benchmark}
-                            onChange={(e) =>
-                              setBadgeData((prev: any) => {
-                                const newBenchmark = Number(e.target.value)
-                                if (Number.isNaN(newBenchmark)) return prev
-                                return ({
-                                  ...prev,
-                                  [level]: {
-                                    ...prev[level],
-                                    benchmark: newBenchmark,
-                                  },
-                                })
-                              })
-                            }
-                            w="75px"
-                            min={0}
-                          />
-                          <Text textStyle="web.b3">
-                            days
-                          </Text>
-                        </>
-                      )}
-                    </Flex>
-
+                {level === "Novice" ? (
+                  <Input
+                    value="First Time"
+                    variant="primary"
+                    width="100px"
+                    textAlign="center"
+                    isDisabled
+                  />
+                ) : (
+                  <>
                     <Input
                       variant="primary"
                       textAlign="center"
-                      width="75px"
-                      value={badgeData[level].bucks}
+                      value={badgeData[level].benchmark}
                       onChange={(e) =>
                         setBadgeData((prev: any) => {
-                          const newBucks = Number(e.target.value)
-                          if (Number.isNaN(newBucks)) return prev
+                          const newBenchmark = Number(e.target.value)
+                          if (Number.isNaN(newBenchmark)) return prev
                           return ({
                             ...prev,
                             [level]: {
                               ...prev[level],
-                              bucks: newBucks,
+                              benchmark: newBenchmark,
                             },
                           })
                         })
                       }
+                      w="75px"
                       min={0}
                     />
-                  </Flex>
-                );
-              })}
+                    <Text textStyle="web.b3">
+                      days
+                    </Text>
+                  </>
+                )}
+              </Flex>
 
-              </FormControl>
+              <Input
+                variant="primary"
+                textAlign="center"
+                width="75px"
+                value={badgeData[level].bucks}
+                onChange={(e) =>
+                  setBadgeData((prev: any) => {
+                    const newBucks = Number(e.target.value)
+                    if (Number.isNaN(newBucks)) return prev
+                    return ({
+                      ...prev,
+                      [level]: {
+                        ...prev[level],
+                        bucks: newBucks,
+                      },
+                    })
+                  })
+                }
+                min={0}
+              />
             </Flex>
-            {error && (
-              <Text textStyle="web.b2" fontWeight="600" color="#E30000">
-                {error}
-              </Text>
-            )}
+          );
+        })}
 
-            <Flex
-              alignItems="center"
-              justifyContent="flex-end"
-              gap="5px"
-              mt="10px"
-            >
-              <Button variant="white" onClick={onClose}>
-                <Text textStyle="web.s1">Cancel</Text>
-              </Button>
-              <Button variant="primaryFilled" onClick={handleSave}>
-                <Text textStyle="web.s1" color="white">
-                  Save
-                </Text>
-              </Button>
-            </Flex>
-          </Flex>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+        </FormControl>
+      </Flex>
+    </ModalContainer>
   );
 };
 

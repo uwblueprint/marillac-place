@@ -17,6 +17,7 @@ import {useMutation} from "@apollo/client";
 import {Icon, iconList} from '../../../../constants/icons';
 import {CREATE_CUSTOM_BADGE} from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
+import CoreInput from "../../../common/form/CoreInput";
 
 interface Props {
   onClose: () => void;
@@ -62,33 +63,23 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
         setError("");
         onClose();
       }}
+      error={error}
     >
-          <FormControl mb={4}>
-            <FormLabel mb="5px">
-              <Text textStyle="web.s1" color="text.light.secondary">Badge Name</Text>
-            </FormLabel>
-            <Input
-              variant="primary"
-              placeholder="Enter Badge Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </FormControl>
+      <CoreInput 
+        label="Badge Name"
+        current_value={name}
+        action={(e: any) => setName(e.target.value)}
+        type="text"
+      />
+      <CoreInput 
+        label="Badge Criteria"
+        current_value={criteria}
+        action={(e: any) => setCriteria(e.target.value)}
+        type="text"
+      />
 
           <FormControl mb={4}>
-            <FormLabel mb="5px">
-              <Text textStyle="web.s1" color="text.light.secondary">Badge Criteria</Text>
-            </FormLabel>
-            <Input
-              variant="primary"
-              placeholder="Enter Badge Criteria"
-              value={criteria}
-              onChange={(e) => setCriteria(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl mb={4}>
-            <FormLabel mb="5px">
+            <FormLabel>
               <Text textStyle="web.s1" color="text.light.secondary">Choose Badge Icon</Text>
             </FormLabel>
             <Grid templateColumns="repeat(6, 1fr)" gap={3}>
@@ -117,7 +108,6 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
                 </Flex>
               ))}
             </Grid>
-            { error && <Text textStyle="web.b2" fontWeight="600" color="#E30000" mt={4}>{error}</Text> }
           </FormControl>
     </ModalContainer>
   );

@@ -17,4 +17,5 @@ export type InputProps = {
     label: string;
     current_value: string;
     action: any;
+    width?: string;
 }

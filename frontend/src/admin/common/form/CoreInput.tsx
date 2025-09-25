@@ -4,7 +4,6 @@ import { InputProps } from "../../../types";
 
 type CoreInputProps = InputProps & {
     type: "text" | "password" | "date" | "time" | "number";
-    width?: string;
 }
 
 export default function CoreInput({ label, current_value, action, type, width = "450px" }: CoreInputProps) {
