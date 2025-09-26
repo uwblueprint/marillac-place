@@ -52,6 +52,15 @@ export const GET_MARILLAC_BUCKS = gql`
   }
 `
 
+export const GET_PARTICIPANT_GOAL = gql`
+  query getParticipantGoal($participantId: Int!) {
+      getParticipantById(participantId: $participantId) {
+          marillac_bucks
+	  marillac_bucks_goal
+      }
+  }
+`
+
 export const GET_PARTICIPANT_BY_ROOM = gql`
   query getParticipantByRoom($room_number: Int!) {
     getParticipantByRoom(room_number: $room_number) {
