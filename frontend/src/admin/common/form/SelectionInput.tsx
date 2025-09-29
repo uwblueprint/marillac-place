@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, RadioGroup, Stack, Radio, Text } from "@chakra-ui/react";
+import { FormControl, RadioGroup, Stack, Radio, Text, Select } from "@chakra-ui/react";
 import { InputProps } from "../../../types";
 
 type SelectionInputProps = InputProps & {
@@ -7,7 +7,7 @@ type SelectionInputProps = InputProps & {
     value_options: Record<string, string>;
 }
 
-export default function SelectionInput({ label, current_value, action, mode, value_options }: SelectionInputProps) {
+export default function SelectionInput({ label, current_value, action, mode, value_options, width = "450px" }: SelectionInputProps) {
     if (mode === "radio") {
         return (
             <FormControl>
@@ -40,6 +40,27 @@ export default function SelectionInput({ label, current_value, action, mode, val
     return (
         <FormControl>
             <Text textStyle="web.s1" color="text.light.secondary">{label}</Text>
+            <Select
+                value={current_value}
+                onChange={action}
+                width={width}
+                height="32px"
+                border="1px"
+                borderColor="#C5C8D8"
+                borderRadius="8px"
+                fontFamily="Nunito"
+                fontWeight="400"
+                fontSize="12px"
+                color="#000000"
+                _focus={{
+                    borderColor: "#C5C8D8",     
+                    boxShadow: "none",      
+                }}
+            >
+                {Object.entries(value_options).map(([key, value], index) => (
+                    <option key={index} value={value}>{key}</option>
+                ))}
+            </Select>
         </FormControl>
     );
 };
