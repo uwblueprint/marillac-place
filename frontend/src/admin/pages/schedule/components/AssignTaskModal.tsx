@@ -25,6 +25,12 @@ import React, { useState, useEffect } from "react";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useQuery } from "@apollo/client";
 import { GET_TASKS_BY_TYPE } from "../../../../gql/queries";
+import ModalContainer from "../../../common/form/ModalContainer";
+import SelectionInput from "../../../common/form/SelectionInput";
+import CoreInput from "../../../common/form/CoreInput";
+import TextInput from "../../../common/form/TextInput";
+import GreenButton from "../../../common/buttons/GreenButton";
+import { toTitleCase } from "../../../../utils/string_helpers";
 
 type AssignTaskModalProps = {
   isOpen: boolean;
@@ -75,7 +81,6 @@ export default function AssignTaskModal({
         endTime: "",
         addition: 0,
         deduction: 0,
-        assignComment: "",
       });
       setShowDropdown(false);
     } else if (selectedTaskId && data) {
@@ -94,7 +99,6 @@ export default function AssignTaskModal({
           endTime: task.end_time || "",
           addition: task.marillac_bucks_addition || 0,
           deduction: task.marillac_bucks_deduction || 0,
-          assignComment: "",
         });
         setShowDropdown(false);
       }
@@ -119,408 +123,140 @@ export default function AssignTaskModal({
     onClose();
   };
 
-  return (
-    <Modal
-      closeOnOverlayClick={false}
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-    >
-      <ModalOverlay />
-      <ModalContent
-        boxShadow="xl"
-        borderRadius="16px"
-        width="550px"
-        maxWidth="550px"
-        padding="20px"
-      >
-        <ModalBody>
-          <Text textStyle="web.h3" mb="15px">
-            Assign Task
-          </Text>
-          <Flex flexDir="column" gap="5px">
+    return (
+        <ModalContainer
+            title="Assign Task"
+            submit_text="Assign Task"
+            submit_action={handleSave}
+            cancel_action={onClose}
+            error={error}
+        >
             {showDropdown ? (
-              <FormControl>
-                <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                  <Text textStyle="web.s1" color="text.light.secondary">
-                    Task Name
-                  </Text>
-                </FormLabel>
-                <Select
-                  placeholder="Select a task"
-                  value={selectedTaskId}
-                  onChange={(e) => setSelectedTaskId(e.target.value)}
-                  isDisabled={loading || !!queryError}
-                >
-                  <option value="individual_goal">Individual Goal</option>
-                  {data?.getTasksByType?.map((task: any) => (
-                    <option key={task.task_id} value={task.task_id}>
-                      {task.task_name}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
+                <SelectionInput 
+                    label="Task Name"
+                    current_value={selectedTaskId}
+                    action={(e: any) => setSelectedTaskId(e.target.value)}
+                    mode="dropdown"
+                    value_options={Object.fromEntries(
+                        data?.getTasksByType?.map((task: any) => [task.task_name, task.task_id]) ?? []
+                    )}
+                />
             ) : (
               <>
-                <FormControl>
-                  <FormLabel mb="5px" color="text.secondary" fontWeight="500">
-                    <Text textStyle="web.s1" color="text.light.secondary">
-                      Task Name
-                    </Text>
-                  </FormLabel>
-                  {isIndividualGoal ? (
-                    <Text textStyle="web.b2" color="#626262" mb="5px">
-                      Individual Goal
-                    </Text>
-                  ) : (
-                    <Text textStyle="web.b2" color="#626262" mb="5px">
-                      {fields?.taskName}
-                    </Text>
-                  )}
-                </FormControl>
-                <Divider my={2} />
+                <Flex gap="5px" align="flex-end">
+                    <Text textStyle="web.s1" color="text.light.secondary">Task Name</Text>
+                    {isIndividualGoal ? (
+                        <Text textStyle="web.b3" color="#000000">Individual Goal</Text>
+                    ): (
+                        <Text textStyle="web.b3" color="#000000">{fields?.taskName}</Text>
+                    )}
+                </Flex>
+
+                <Flex w="100%" h="1px" bg="neutral.300" mt="3px" />
+
                 {isIndividualGoal && (
                   <>
-                    <FormControl>
-                      <FormLabel
-                        mb="5px"
-                        color="text.secondary"
-                        fontWeight="500"
-                      >
-                        <Text textStyle="web.s1" color="text.light.secondary">
-                          Goal Name
-                        </Text>
-                      </FormLabel>
-                      <Input
-                        variant="primary"
-                        value={fields?.goalName}
-                        onChange={(e) =>
-                          handleFieldChange("goalName", e.target.value)
-                        }
-                        placeholder="Name..."
-                      />
-                    </FormControl>
-                    <FormControl>
-                      <FormLabel
-                        mb="5px"
-                        color="text.secondary"
-                        fontWeight="500"
-                      >
-                        <Text textStyle="web.s1" color="text.light.secondary">
-                          Goal Description
-                        </Text>
-                      </FormLabel>
-                      <Textarea
-                        variant="primary"
-                        value={fields?.goalDescription}
-                        onChange={(e) =>
-                          handleFieldChange("goalDescription", e.target.value)
-                        }
-                        placeholder="Participant has to..."
-                      />
-                    </FormControl>
-                  </>
-                )}
-                {!isIndividualGoal && (
-                  <>
-                    <FormControl>
-                      <FormLabel
-                        mb="5px"
-                        color="text.secondary"
-                        fontWeight="500"
-                      >
-                        <Text textStyle="web.s1" color="text.light.secondary">
-                          Comments
-                        </Text>
-                      </FormLabel>
-                      <Text color="#626262" fontSize="sm" mb={1}>
-                        {fields?.comments || "No comment"}
-                      </Text>
-                    </FormControl>
-                    <Divider my={2} />
+                    <CoreInput 
+                        label="Goal Name"
+                        current_value={fields?.goalName}
+                        action={(e: any) => handleFieldChange("goalName", e.target.value)}
+                        type="text"
+                    />
+                    <CoreInput 
+                        label="Goal Description"
+                        current_value={fields?.goalDescription}
+                        action={(e: any) => handleFieldChange("goalDescription", e.target.value)}
+                        type="text"
+                    />
                   </>
                 )}
 
                 {fields && !showDropdown && (
                   <>
-                    <FormControl>
-                      <FormLabel
-                        mb="5px"
-                        color="text.secondary"
-                        fontWeight="500"
-                      >
-                        <Text textStyle="web.s1" color="text.light.secondary">
-                          Select Days
-                        </Text>
-                      </FormLabel>
-                      <RadioGroup
-                        value={fields.recurrence}
-                        onChange={(val) => handleFieldChange("recurrence", val)}
-                      >
-                        <Stack direction="column">
-                          <Radio value="DAILY" size="sm">
-                            <Text textStyle="web.b3" color="#000000">
-                              Daily
-                            </Text>
-                          </Radio>
-                          <Radio value="EVERY_SELECTED_DAYS" size="sm">
-                            <Text textStyle="web.b3" color="#000000">
-                              Every selected day
-                            </Text>
-                          </Radio>
-                          <Radio value="ANY_SELECTED_DAYS" size="sm">
-                            <Text textStyle="web.b3" color="#000000">
-                              Any selected day{" "}
-                              <span
-                                style={{
-                                  fontWeight: 400,
-                                  color: "#888",
-                                  fontSize: "12px",
-                                }}
-                              >
-                                Days must be consecutive
-                              </span>
-                            </Text>
-                          </Radio>
-                        </Stack>
-                      </RadioGroup>
-                    </FormControl>
+                    <SelectionInput 
+                        label="Select Days"
+                        current_value={fields.recurrence}
+                        action={(val: string) => handleFieldChange("recurrence", val)}
+                        mode="radio"
+                        value_options={{
+                            "Daily": "DAILY",
+                            "Every selected day": "EVERY_SELECTED_DAYS",
+                            "Any selected day": "ANY_SELECTED_DAYS"
+                        }}
+                    />
+
                     <Flex gap="5px">
-                      {weekdays.map((day: string) => (
-                        <Button
-                          key={day}
-                          onClick={() => {
-                            const newDays = fields.days.includes(day)
-                              ? fields.days.filter((d: string) => d !== day)
-                              : [...fields.days, day];
-                            handleFieldChange("days", newDays);
-                          }}
-                          isActive={fields.days.includes(day)}
-                          borderRadius="8px"
-                          border="1px"
-                          borderColor="#0C727E"
-                          bg={fields.days.includes(day) ? "#0C727E" : "#FFFFFF"}
-                          color={
-                            fields.days.includes(day) ? "#FFFFFF" : "#0C727E"
-                          }
-                          cursor="pointer"
-                          width="fit-content"
-                          height="fit-content"
-                          paddingY="5px"
-                          _hover={{
-                            color: "#FFFFFF",
-                            bg: "#0C727E",
-                          }}
-                          _active={{
-                            color: "#FFFFFF",
-                            bg: "#0C727E",
-                          }}
-                          _disabled={{
-                            opacity: 0.5,
-                            border: "0px",
-                            color: "#FFFFFF",
-                            bg: "#0C727E",
-                            cursor: "not-allowed",
-                            pointerEvents: "none",
-                          }}
-                        >
-                          <Text textStyle="web.s1" color="inherit">
-                            {day.charAt(0) + day.slice(1, 3).toLowerCase()}
-                          </Text>
-                        </Button>
-                      ))}
+                        { weekdays.map((day: string) => (
+                            <GreenButton 
+                                key={day}
+                                text={toTitleCase(day).slice(0, 3)}
+                                action={() => {
+                                    const newDays = fields.days.includes(day)
+                                    ? fields.days.filter((d: string) => d !== day)
+                                    : [...fields.days, day];
+                                    handleFieldChange("days", newDays);
+                                }}
+                                is_active={fields.days.includes(day)}
+                            />
+                        ))}
                     </Flex>
-                    <FormControl>
-                      <FormLabel
-                        mb="5px"
-                        color="text.secondary"
-                        fontWeight="500"
-                      >
-                        <Text textStyle="web.s1" color="text.light.secondary">
-                          Select Time
-                        </Text>
-                      </FormLabel>
-                      <RadioGroup
-                        value={fields.time}
-                        onChange={(val) => handleFieldChange("time", val)}
-                      >
-                        <Stack direction="column">
-                          <Radio value="ANYTIME" size="sm">
-                            <Text textStyle="web.b3" color="#000000">
-                              Anytime
-                            </Text>
-                          </Radio>
-                          <Radio value="SPECIFIC" size="sm">
-                            <Text textStyle="web.b3" color="#000000">
-                              Select time
-                            </Text>
-                          </Radio>
-                        </Stack>
-                      </RadioGroup>
-                    </FormControl>
+
+                    <SelectionInput 
+                        label="Time"
+                        current_value={fields.time}
+                        action={(val: string) => handleFieldChange("time", val)}
+                        mode="radio"
+                        value_options={{
+                            "Anytime": "ANYTIME",
+                            "Select Time": "SPECIFIC",
+                        }}
+                    />
+
                     {fields.time === "SPECIFIC" && (
-                      <Flex gap="10px" mt={2}>
-                        <FormControl>
-                          <FormLabel
-                            mb="5px"
-                            color="text.secondary"
-                            fontWeight="500"
-                          >
-                            <Text
-                              textStyle="web.s1"
-                              color="text.light.secondary"
-                            >
-                              Start Time
-                            </Text>
-                          </FormLabel>
-                          <Input
-                            variant="primary"
-                            type="time"
-                            value={fields.startTime}
-                            onChange={(e) =>
-                              handleFieldChange("startTime", e.target.value)
-                            }
-                          />
-                        </FormControl>
-                        <FormControl>
-                          <FormLabel
-                            mb="5px"
-                            color="text.secondary"
-                            fontWeight="500"
-                          >
-                            <Text
-                              textStyle="web.s1"
-                              color="text.light.secondary"
-                            >
-                              End Time
-                            </Text>
-                          </FormLabel>
-                          <Input
-                            variant="primary"
-                            type="time"
-                            value={fields.endTime}
-                            onChange={(e) =>
-                              handleFieldChange("endTime", e.target.value)
-                            }
-                          />
-                        </FormControl>
-                      </Flex>
+                        <Flex width="100%" alignItems="center" justifyContent="space-between">
+                            <CoreInput 
+                                label="Start Time"
+                                current_value={fields.startTime}
+                                action={(e: any) => handleFieldChange("startTime", e.target.value)}
+                                type="time"
+                                width="90%"
+                            />
+                            <CoreInput 
+                                label="End Time"
+                                current_value={fields.endTime}
+                                action={(e: any) => handleFieldChange("endTime", e.target.value)}
+                                type="time"
+                                width="90%"
+                            />
+                        </Flex>
                     )}
-                    <Flex
-                      width="100%"
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <FormControl>
-                        <FormLabel
-                          mb="5px"
-                          color="text.secondary"
-                          fontWeight="500"
-                        >
-                          <Text textStyle="web.s1" color="text.light.secondary">
-                            Marillac Bucks
-                          </Text>
-                        </FormLabel>
-                        <InputGroup>
-                          <InputLeftElement>
-                            <AttachMoneyIcon
-                              style={{ color: "inherit", fontSize: 15 }}
-                            />
-                          </InputLeftElement>
-                          <Input
-                            variant="primary"
+
+                    <Flex width="100%" alignItems="center" justifyContent="space-between">
+                        <CoreInput 
+                            label="Marillac Bucks"
+                            current_value={fields.addition}
+                            action={(e: any) => handleFieldChange("addition", e.target.value)}
                             type="number"
-                            value={fields.addition}
-                            onChange={(e) =>
-                              handleFieldChange("addition", e.target.value)
-                            }
-                            width="80%"
-                            pl="30px"
-                          />
-                        </InputGroup>
-                      </FormControl>
-                      <FormControl>
-                        <FormLabel
-                          mb="5px"
-                          color="text.secondary"
-                          fontWeight="500"
-                        >
-                          <Text textStyle="web.s1" color="text.light.secondary">
-                            Marillac Bucks Deductions
-                          </Text>
-                        </FormLabel>
-                        <InputGroup>
-                          <InputLeftElement>
-                            <AttachMoneyIcon
-                              style={{ color: "inherit", fontSize: 15 }}
-                            />
-                          </InputLeftElement>
-                          <Input
-                            variant="primary"
+                            width="50%"
+                        />
+                        <CoreInput 
+                            label="Marillac Bucks Deduction"
+                            current_value={fields.deduction}
+                            action={(e: any) => handleFieldChange("deduction", e.target.value)}
                             type="number"
-                            value={fields.deduction}
-                            onChange={(e) =>
-                              handleFieldChange("deduction", e.target.value)
-                            }
-                            width="80%"
-                            pl="30px"
-                          />
-                        </InputGroup>
-                      </FormControl>
+                            width="50%"
+                        />
                     </Flex>
-                    <FormControl>
-                      <FormLabel
-                        mb="5px"
-                        color="text.secondary"
-                        fontWeight="500"
-                      >
-                        <Text textStyle="web.s1" color="text.light.secondary">
-                          Comments
-                        </Text>
-                      </FormLabel>
-                      <Textarea
-                        variant="primary"
-                        value={fields.assignComment}
-                        onChange={(e) =>
-                          handleFieldChange("assignComment", e.target.value)
-                        }
-                        placeholder="Add comment here..."
-                      />
-                    </FormControl>
+
+                    <TextInput 
+                        label="Comments"
+                        current_value={fields.comments}
+                        action={(e: any) => handleFieldChange("comments", e.target.value)}
+                    />
                   </>
-                )}
-                {error && (
-                  <Text textStyle="web.b2" fontWeight={600} color="#E30000">
-                    {error}
-                  </Text>
                 )}
               </>
             )}
-          </Flex>
-        </ModalBody>
-        <ModalFooter>
-          <Flex
-            alignItems="center"
-            justifyContent="flex-end"
-            gap="15px"
-            mt="15px"
-          >
-            <Button variant="white" onClick={onClose}>
-              <Text textStyle="web.s1">Cancel</Text>
-            </Button>
-            <Button
-              variant="primaryFilled"
-              onClick={handleSave}
-              isDisabled={!fields}
-              isLoading={false}
-            >
-              <Text textStyle="web.s1" color="white">
-                Save
-              </Text>
-            </Button>
-          </Flex>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
+        </ModalContainer>
+    );
 }
