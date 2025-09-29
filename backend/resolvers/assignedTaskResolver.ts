@@ -1,10 +1,52 @@
-import { TaskType } from "@prisma/client";
-import IAssignedTaskService from "../services/interface/assignedTaskInterface";
+import {
+  AssignedTask,
+  TaskType
+} from "@prisma/client";
 import AssignedTaskService from "../services/implementation/assignedTaskImplementation";
+import IAssignedTaskService from "../services/interface/assignedTaskInterface";
 
 const assignedTaskService: IAssignedTaskService = new AssignedTaskService();
 
 const assignedTaskResolver = {
+  Query: {
+    getAssignedTasks: async (
+      _parent: undefined,
+      { participant_id }: { participant_id: number },
+    ): Promise<{
+      MONDAY?: {
+        SPECIFIC: AssignedTask[];
+        ANYTIME: AssignedTask[];
+      };
+      TUESDAY?: {
+        SPECIFIC: AssignedTask[];
+        ANYTIME: AssignedTask[];
+      };
+      WEDNESDAY?: {
+        SPECIFIC: AssignedTask[];
+        ANYTIME: AssignedTask[];
+      };
+      THURSDAY?: {
+        SPECIFIC: AssignedTask[];
+        ANYTIME: AssignedTask[];
+      };
+      FRIDAY?: {
+        SPECIFIC: AssignedTask[];
+        ANYTIME: AssignedTask[];
+      };
+      SATURDAY?: {
+        SPECIFIC: AssignedTask[];
+        ANYTIME: AssignedTask[];
+      };
+      SUNDAY?: {
+        SPECIFIC: AssignedTask[];
+        ANYTIME: AssignedTask[];
+      };
+      ANYDAY: AssignedTask[];
+    }> => {
+      return assignedTaskService.getAssignedTasks(participant_id);
+    },
+  },
+
   Mutation: {
     createAssignedTask: async (
       _parent: undefined,
