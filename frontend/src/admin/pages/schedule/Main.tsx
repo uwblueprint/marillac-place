@@ -25,9 +25,11 @@ import { CalendarEvent, ScheduleView } from "../../../types/ScheduleTypes";
 import "./components/ScheduleCalendar.css";
 import OrangeButton from "../../common/buttons/OrangeButton";
 import SimpleButton from "../../common/buttons/SimpleButton";
+import AssignTaskModal from "./components/AssignTaskModal";
 
 export default function AdminSchedulePage() {
   const [editMarillacBucks, setEditMarillacBucks] = useState(false);
+  const [assignTask, setAssignTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState<CalendarEvent | null>(null);
   const [currentView, setCurrentView] = useState<ScheduleView>(
     ScheduleView.CALENDAR
@@ -184,8 +186,8 @@ export default function AdminSchedulePage() {
 
               <OrangeButton 
                 text="Assign Task"
-                action={() => {}}
-                is_active={false}
+                action={() => setAssignTask(true)}
+                is_active={assignTask}
               />
             </Flex>
 
@@ -228,6 +230,10 @@ export default function AdminSchedulePage() {
           currentBalance={participantData.marillac_bucks}
           roomNumber={participantData.room_number}
         />
+      )}
+
+      {assignTask && (
+        <AssignTaskModal isOpen={assignTask} onClose={() => setAssignTask(false)} />
       )}
 
       {selectedTask && (

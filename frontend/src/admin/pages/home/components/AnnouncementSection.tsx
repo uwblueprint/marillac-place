@@ -87,7 +87,7 @@ const AnnouncementSection = () => {
   return (
     <Flex
       flexGrow={1}
-      height="calc(100% - 360px)"
+      height="calc(100% - 330px)"
       paddingY="15px"
       paddingX="20px"
       border="1px solid"
