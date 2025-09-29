@@ -59,9 +59,17 @@ export const GET_PARTICIPANT_BY_ROOM = gql`
       marillac_bucks
       room_number
       assigned_tasks {
+        assigned_task_id
         task_name
         task_status
         task_type
+        goal_name
+        goal_description
+        start_date
+        end_date
+        marillac_bucks_addition
+        marillac_bucks_deduction
+        comment
       }
     }
   }

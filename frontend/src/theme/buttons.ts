@@ -7,6 +7,8 @@ const Button = defineStyleConfig({
   variants: {
     primaryFilled: {
       borderRadius: "8px",
+      border: "1px",
+      borderColor: "#E67D4F",
       padding: "8px 24px",
       bg: "#E67D4F",
       color: "#FFFFFF",
