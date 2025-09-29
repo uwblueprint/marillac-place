@@ -7,6 +7,8 @@ const Button = defineStyleConfig({
   variants: {
     primaryFilled: {
       borderRadius: "8px",
+      border: "1px",
+      borderColor: "#E67D4F",
       padding: "8px 24px",
       bg: "#E67D4F",
       color: "#FFFFFF",
@@ -76,6 +78,35 @@ const Button = defineStyleConfig({
       cursor: "pointer",
       width: "fit-content",
       height: "fit-content",
+      _hover: {
+        color: "#FFFFFF",
+        bg: "#0C727E",
+      },
+      _active: {
+        color: "#FFFFFF",
+        bg: "#0C727E",
+      },
+      _disabled: {
+        opacity: 0.5,
+        border: "0px",
+        color: "#FFFFFF",
+        bg: "#0C727E",
+        cursor: "not-allowed",
+        pointerEvents: "none",
+      },
+    },
+    secondaryOutlineMobile: {
+      borderRadius: "8px",
+      border: "1px",
+      borderColor: "#0C727E",
+      padding: "8px 16px",
+      bg: "#FFFFFF",
+      color: "#0C727E",
+      cursor: "pointer",
+      width: "fit-content",
+      height: "fit-content",
+      fontWeight: 400,
+      fontSize: "12px",
       _hover: {
         color: "#FFFFFF",
         bg: "#0C727E",

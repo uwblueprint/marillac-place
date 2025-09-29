@@ -1,11 +1,15 @@
 import { Announcement, Priority } from "@prisma/client";
 import prisma from "../../prisma";
 import IAnnouncementService from "../interface/announcementInterface";
+import { getNow } from "../../utils/formatDateTime";
 
 class AnnouncementService implements IAnnouncementService {
   async getAllAnnouncements(): Promise<Announcement[]> {
     try {
       const announcements = await prisma.announcement.findMany({
+        orderBy: {
+          creation_date: 'desc',
+        },
         include: {
           user_announcements: true,
         },
@@ -29,6 +33,9 @@ class AnnouncementService implements IAnnouncementService {
             gte: start,
           },
         },
+        orderBy: {
+          creation_date: 'desc',
+        },
         include: {
           user_announcements: {
             include: {
@@ -48,17 +55,44 @@ class AnnouncementService implements IAnnouncementService {
     }
   }
 
+  async getAnnouncementsByParticipants(
+    participant_ids: number[]
+  ): Promise<Announcement[]> {
+    try {
+      const announcements = await prisma.announcement.findMany({
+        orderBy: {
+          creation_date: 'desc',
+        },
+        where: {
+          user_announcements: {
+            every: {
+              participant_id: {
+                in: participant_ids,
+              },
+            },
+          },
+        },
+        include: {
+          user_announcements: true
+        }
+      });
+
+      return announcements;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
+
   async createAnnouncement(
     priority: Priority,
     participants: number[],
     message: string
   ): Promise<boolean> {
     try {
-      const today = new Date().toLocaleString("en-ca");
       const newAnnouncement = await prisma.announcement.create({
         data: {
           priority,
-          creation_date: today,
+          creation_date: getNow(),
           message,
         },
       });

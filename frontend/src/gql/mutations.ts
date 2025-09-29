@@ -1,5 +1,11 @@
 import { gql } from "@apollo/client";
 
+export const UPDATE_BADGE_STATUS = gql`
+    mutation updateBadgeStatus($badge_id: Int!, $is_active: Boolean!) {
+        updateBadgeStatus(badge_id: $badge_id, is_active: $is_active)
+    }
+`;
+
 export const ADMIN_LOGIN = gql`
   mutation adminLogin($role: String!, $password: String!) {
     adminLogin(role: $role, password: $password) {
@@ -72,21 +78,15 @@ export const UPDATE_MARILLAC_BUCKS = gql`
   }
 `;
 
-
 export const CREATE_ANNOUNCEMENT = gql`
-  mutation createAnnouncement($announcementId: number,
-    $from: StaffType,     
-    $to: [Int],   
-    $priority: PriorityType,       
-    $createdAt: Date,
-    $message: String,
-    ) {
+  mutation createAnnouncement(
+    $priority: Priority!, 
+    $participants: [Int!]!,
+    $message: String!,
+  ) {
     createAnnouncement(
-      announcementId: $announcementId
-      from: $from
-      to: $to
       priority: $priority
-      createdAt: $createdAt
+      participants: $participants
       message: $message
     )
   }
@@ -127,9 +127,8 @@ export const EDIT_MARILLAC_BUCKS = gql`
 export const CREATE_NOTE = gql`
   mutation createNote(
     $message: String!
-    $creation_date: String!
   ) {
-    createNote(message: $message, creation_date: $creation_date)
+    createNote(message: $message)
   }
 `;
 
@@ -244,4 +243,74 @@ export const DELETE_TASK = gql`
   mutation deleteTaskById($taskId: Int!) {
     deleteTaskById(taskId: $taskId)
   }
+`;
+
+export const DELETE_CUSTOM_BADGE = gql`
+  mutation deleteCustomBadge($badge_id: Int!) {
+    deleteCustomBadge(badge_id: $badge_id)
+  }
+`;
+
+export const CREATE_CUSTOM_BADGE = gql`
+  mutation createCustomBadge($name: String!, $description: String!, $icon: Icon!) {
+    createCustomBadge(name: $name, description: $description, icon: $icon)
+  }
+`;
+
+export const EDIT_CUSTOM_BADGE = gql`
+  mutation editCustomBadge(
+    $custom_badge_id: Int!,
+    $new_custom_badge_name: String,
+    $new_custom_badge_description: String,
+  ) {
+    editCustomBadge(
+      custom_badge_id: $custom_badge_id,
+      new_custom_badge_name: $new_custom_badge_name,
+      new_custom_badge_description: $new_custom_badge_description
+    )
+  }
+`;
+
+export const EDIT_BADGE_LEVEL = gql`
+  mutation editBadgeLevel(
+    $badge_id: Int!
+    $badge_level: Int!
+    $benchmark: Int!
+    $marillac_bucks: Int!
+  ) {
+    editBadgeLevel(
+      badge_id: $badge_id
+      badge_level: $badge_level
+      benchmark: $benchmark
+      marillac_bucks: $marillac_bucks
+    )
+  }
+`;
+
+export const EDIT_SYSTEM_BADGE = gql`
+  mutation editSystemBadge(
+    $system_badge_id: Int!
+    $system_badge_name: String!
+    $system_badge_criteria: String
+  ) {
+    editSystemBadge(
+      system_badge_id: $system_badge_id
+      system_badge_name: $system_badge_name
+      system_badge_criteria: $system_badge_criteria
+    )
+  }
+`;
+
+export const ASSIGN_CUSTOM_BADGE = gql`
+    mutation assignCustomBadge(
+        $badge_id: Int!,
+        $marillac_bucks: Int!,
+        $participant_ids: [Int!]!
+    ) {
+        assignCustomBadge(
+            badge_id: $badge_id,
+            marillac_bucks: $marillac_bucks,
+            participant_ids: $participant_ids
+        )
+    }
 `;

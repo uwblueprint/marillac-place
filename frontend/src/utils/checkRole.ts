@@ -53,3 +53,21 @@ export async function isParticipant() {
     return false;
   }
 };
+
+export async function getParticipantId() {
+  const token = localStorage.getItem("participant_token") ?? "";
+  
+  try {
+    const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
+    const { payload } = await jwtVerify(token, secret, {
+      algorithms: ['HS256'],
+    });
+    
+    if (!payload || !payload.id) {
+      return null;
+    }
+    return Number(payload.id);
+  } catch (err) {
+    return null;
+  }
+}

@@ -5,16 +5,21 @@ const resolvers = gql`
     getPastParticipants: [Participant]
     getCurrentParticipants: [Participant]
     getParticipantByRoom(room_number: Int!): Participant
-    getParticipantsByRooms(room_numbers: [Int!]!): JSON
+    getParticipantsByRooms(room_numbers: [Int!]!): [Participant]
+    getParticipantById(participantId: Int!): Participant
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
+    getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
     getTasksByType(type: TaskType!): [Task]
+    getCustomBadges: [Badge]
+    getSystemBadges: [Badge]
   }
 
   type Mutation {
     adminLogin(role: String!, password: String!): LoginResponse
     participantLogin(id: Int!, password: String!): LoginResponse
+    createCustomBadge(name: String!, description: String!, icon: Icon!): Boolean
     createParticipant(
       participant_id: Int!
       room_number: Int!
@@ -37,7 +42,7 @@ const resolvers = gql`
       marillac_bucks: Int!
       reason: String!
     ): Boolean
-    createNote(message: String!, creation_date: String!): Boolean
+    createNote(message: String!): Boolean
     deleteNote(note_id: Int!): Boolean
     createAnnouncement(
       priority: Priority!
@@ -76,6 +81,45 @@ const resolvers = gql`
       comment: String
     ): Boolean
     deleteTaskById(taskId: Int!): Boolean
+    assignCustomBadge(
+      badge_id: Int!
+      marillac_bucks: Int!
+      participant_ids: [Int!]!
+    ): [Int!]!
+    editCustomBadge(
+      custom_badge_id: Int!
+      new_custom_badge_name: String
+      new_custom_badge_description: String
+    ): Boolean
+    deleteCustomBadge(badge_id: Int!): Boolean!
+    deleteAssignedTask(assigned_task_id: Int!): Boolean!
+    createAssignedTask(
+      participantId: Int!
+      taskName: String!
+      startDate: String!
+      endDate: String!
+      marillacBucksAddition: Int!
+      marillacBucksDeduction: Int!
+      taskType: String!
+      goalName: String
+      goalDescription: String
+      comment: String
+    ): Boolean
+    editBadgeLevel(
+      badge_id: Int!
+      badge_level: Int!
+      benchmark: Int!
+      marillac_bucks: Int!
+    ): Boolean
+    editSystemBadge(
+      system_badge_id: Int!
+      system_badge_name: String!
+      system_badge_criteria: String
+    ): Boolean
+    updateBadgeStatus(
+      badge_id: Int!
+      is_active: Boolean!
+    ): Boolean
   }
 `;
 

@@ -5,10 +5,12 @@
   "main": "server.ts",
   "scripts": {
     "dev": "nodemon -L",
+    "build": "tsc",
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "tsc",
-    "prismaInitAndRun": "npx prisma migrate deploy && npx prisma generate && nodemon -L"
+    "prismaInitAndRun": "npx prisma migrate deploy && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && nodemon -L",
+    "start": "node build/server.js"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +26,6 @@
     "@types/yamljs": "^0.2.31",
     "apollo-server": "^2.22.2",
     "apollo-server-express": "^2.22.2",
-    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
@@ -54,6 +55,9 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.8.0",
+    "@snaplet/copycat": "^6.0.0",
+    "@snaplet/seed": "^0.98.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.10",
     "@types/crypto-js": "^4.2.2",
@@ -81,11 +85,19 @@
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "prisma": "^6.9.0",
+    "tsx": "^4.7.0",
     "typescript": "^5.2.2"
   },
   "resolutions": {
     "fs-capacitor": "^6.2.0",
     "graphql-upload": "^11.0.0"
+  },
+  "@snaplet/seed": {
+    "config": "./seed/seed.config.ts"
+  },
+  "prisma": {
+    "seed": "npx tsx ./seed/seed-snaplet.ts",
+    "schema": "./prisma/schema.prisma"
   },
   "engines": {
     "node": "18.18.2"

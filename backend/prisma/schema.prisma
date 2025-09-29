@@ -114,10 +114,10 @@ model Task {
 }
 
 model AssignedTask {
-  assigned_task_id         Int      @id @default(autoincrement())
+  assigned_task_id         Int       @id @default(autoincrement())
   participant_id           Int
   task_name                String
-  task_status              Status   @default(ASSIGNED)
+  task_status              Status    @default(ASSIGNED)
   task_type                TaskType
   goal_name                String?
   goal_description         String?
@@ -196,7 +196,8 @@ model Badge {
   is_consecutive Boolean
   icon           Icon
 
-  badge_level BadgeLevel[]
+  badge_level  BadgeLevel[]
+  earned_badge EarnedBadge[]
 
   @@map("badge")
 }
@@ -215,8 +216,8 @@ model BadgeLevel {
 
 model EarnedBadge {
   earned_badge_id Int    @id @default(autoincrement())
-  badge_id        Int
   participant_id  Int
+  badge_id        Int
   date_received   String
   name            String
   description     String
@@ -224,6 +225,7 @@ model EarnedBadge {
   level           Int
 
   participant Participant @relation(fields: [participant_id], references: [participant_id])
+  badge       Badge       @relation(fields: [badge_id], references: [badge_id])
 
   @@map("earned_badge")
 }
@@ -243,10 +245,3 @@ model ParticipantProgress {
 
   @@map("participant_progress")
 }
-
-
-
-
-
-
-
