@@ -59,10 +59,10 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "NODE_OPTIONS='--max-old-space-size=4096' react-scripts start",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' react-scripts build",
     "serve": "serve -s build -l 3000",
-    "test": "react-scripts test",
+    "test": "NODE_OPTIONS='--max-old-space-size=4096' react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx --cache",
     "fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix --cache"
