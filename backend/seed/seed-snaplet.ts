@@ -115,17 +115,19 @@ const main = async () => {
   });
 
   const environment = process.env.NODE_ENV || "development";
+  const isProduction = environment === "production";
   console.log(`🌍 Running in ${environment} environment`);
 
-  await seed.$resetDatabase();
-  await seedProdData();
-
-  if (environment === "development") {
+  if (isProduction) {
+    // Production: only seed system badges, no database reset
+    console.log("🔒 Production mode: seeding system badges only");
+    await seedProdData();
+  } else {
+    // Development: reset database and seed all data
+    console.log("🔧 Development mode: resetting database and seeding all data");
     await seed.$resetDatabase();
     await seedProdData();
     await seedMockData(seed);
-  } else {
-    await seedProdData();
   }
 
   console.log("✨ Seeding completed successfully");
