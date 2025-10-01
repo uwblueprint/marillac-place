@@ -91,7 +91,7 @@ const badgeResolver = {
         throw new Error(err.message || "Failed to update badge");
       }
     },
-
+    // fix: need to also add marillac bucks for participant here
     assignCustomBadge: async (
       _parent: undefined,
       {
