@@ -25,6 +25,7 @@ import {
   userAnnouncements,
   customBadges,
 } from "./mockData";
+import { testParticipants } from "./testData";
 
 async function seedProdData() {
   const prisma = new PrismaClient();
@@ -56,6 +57,14 @@ async function seedProdData() {
   } finally {
     await prisma.$disconnect();
   }
+}
+
+async function seedTestData(seed: any) {
+  // Seed minimal test participants for production testing
+  await seed.participant((createMany) =>
+    createMany(testParticipants.length, (cur) => testParticipants[cur.index])
+  );
+  console.log("✅ Test participants seeded (for production testing)");
 }
 
 async function seedMockData(seed: any) {
@@ -116,12 +125,20 @@ const main = async () => {
 
   const environment = process.env.NODE_ENV || "development";
   const isProduction = environment === "production";
+  const seedTestAccounts = process.env.SEED_TEST_DATA === "true";
+
   console.log(`🌍 Running in ${environment} environment`);
 
   if (isProduction) {
     // Production: only seed system badges, no database reset
     console.log("🔒 Production mode: seeding system badges only");
     await seedProdData();
+
+    // Optionally seed test participants for production testing
+    if (seedTestAccounts) {
+      console.log("🧪 SEED_TEST_DATA enabled: seeding test participants");
+      await seedTestData(seed);
+    }
   } else {
     // Development: reset database and seed all data
     console.log("🔧 Development mode: resetting database and seeding all data");

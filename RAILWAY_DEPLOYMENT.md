@@ -17,6 +17,17 @@ ADMIN_STAFF_PASSWORD=<secure password>
 RELIEF_STAFF_PASSWORD=<secure password>
 ```
 
+### Optional Testing Variables
+
+```
+SEED_TEST_DATA=true
+```
+
+Set `SEED_TEST_DATA=true` to seed test participant accounts in production for testing purposes.
+- **Test Participant IDs**: 100, 101
+- **Test Password**: `test123`
+- This creates minimal test accounts without the full mock data
+
 **Important Notes:**
 - `FRONTEND_URL` should include the protocol (`https://`) for proper CORS configuration
   - ✅ Correct: `https://mp-frontend-production.up.railway.app`
@@ -68,6 +79,14 @@ If you need to manually seed the database on Railway:
 ```bash
 yarn seed:prod
 ```
+
+### Seed Test Accounts for Production Testing
+```bash
+SEED_TEST_DATA=true yarn seed:prod
+```
+This will seed:
+- System badges (if not already present)
+- 2 test participant accounts (IDs: 100, 101, password: `test123`)
 
 ### Seed Development Data (⚠️ WARNING: This resets the database)
 ```bash
