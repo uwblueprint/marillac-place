@@ -11,13 +11,18 @@ Railway must have the following environment variables configured:
 ```
 NODE_ENV=production
 DATABASE_URL=<Railway-provided PostgreSQL URL>
-FRONTEND_URL=<production frontend URL>
+FRONTEND_URL=https://mp-frontend-production.up.railway.app
 JWT_SECRET=<secure secret>
 ADMIN_STAFF_PASSWORD=<secure password>
 RELIEF_STAFF_PASSWORD=<secure password>
 ```
 
-**Important:** Setting `NODE_ENV=production` is critical. This ensures:
+**Important Notes:**
+- `FRONTEND_URL` should include the protocol (`https://`) for proper CORS configuration
+  - ✅ Correct: `https://mp-frontend-production.up.railway.app`
+  - ❌ Incorrect: `mp-frontend-production.up.railway.app`
+  - The backend code will auto-add `https://` if missing, but it's best practice to include it
+- Setting `NODE_ENV=production` is critical. This ensures:
 - Only system badges are seeded (no mock data)
 - Database is not reset on deployment
 - Production-appropriate behavior throughout the application

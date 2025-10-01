@@ -24,11 +24,25 @@ const server = new ApolloServer({
   },
 });
 
+// Helper function to ensure URL has protocol
+const getFrontendOrigin = () => {
+  const url = process.env.FRONTEND_URL || "";
+  if (!url) return "";
+
+  // If URL already has protocol, return as-is
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+
+  // Otherwise, add https:// (production default)
+  return `https://${url}`;
+};
+
 server.applyMiddleware({
   app,
   path: "/graphql",
   cors: {
-    origin: process.env.FRONTEND_URL || "",
+    origin: getFrontendOrigin(),
     credentials: true,
   },
 });
