@@ -4,6 +4,7 @@ import {
   Icon,
   Badge,
   BadgeLevel,
+  PrismaClient,
 } from "@prisma/client";
 
 import { getNow } from "../utils/formatDateTime";
