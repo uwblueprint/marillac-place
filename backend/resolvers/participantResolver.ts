@@ -1,9 +1,7 @@
 import { Participant, Prisma } from "@prisma/client";
-import IParticipantService from "../services/interface/participantInterface";
 import { getToday } from "../utils/formatDateTime";
 import prisma from "../prisma";
 
-const participantService: IParticipantService = new ParticipantService();
 const participantResolver = {
   Query: {
     getCurrentParticipants: async (): Promise<Participant[]> => {
