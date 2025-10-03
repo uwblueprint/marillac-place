@@ -31,6 +31,8 @@ import {
 import { ASSIGN_CUSTOM_BADGE } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import GreenButton from "../../../common/buttons/GreenButton";
+import CoreInput from "../../../common/form/CoreInput";
+import SelectionInput from "../../../common/form/SelectionInput";
 
 interface AssignCustomBadgeModalProps {
   onClose: () => void;
@@ -118,7 +120,9 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
         setBadges([]);
         onClose();
       }}
+      error={error}
     >
+<<<<<<< HEAD
       <Flex flexDir="column" gap="10px">
         <FormControl>
           <FormLabel mb="5px">
@@ -203,6 +207,50 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
           </Text>
         )}
       </Flex>
+=======
+      <SelectionInput
+        label="Badge Name"
+        current_value={badgeName}
+        action={(e: any) => setBadgeName(e.target.value)} 
+        mode="dropdown"
+        value_options={Object.fromEntries(
+          badgeData?.getCustomBadges?.map((badge: any) => [badge.name, badge.name]) ?? []
+        )}
+        width="100%"
+      />
+            
+      <CoreInput
+        label="Badge Value"
+        current_value={badgeValue}
+        action={(e: any) => {
+          const val = e.target.value;
+          if (val === "") {
+            setBadgeValue("");
+          } else {
+            const num = parseFloat(val);
+            if (!Number.isNaN(num)) {
+              setBadgeValue(val);
+            }
+          }
+        }}
+        type="number"
+        width="100%"
+      />
+
+      <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
+
+      <Text textStyle="web.s1" color="text.light.secondary">Choose Room(s)</Text>
+      <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">
+        {ROOM_NUMBERS.map((num: number) => (
+          <GreenButton 
+            key={num}
+            text={"Room " + num}
+            action={() => toggleRoomSelection(num)}
+            is_active={selectedRooms.includes(num)}
+          />
+        ))}
+      </Grid>
+>>>>>>> dev
     </ModalContainer>
   );
 };

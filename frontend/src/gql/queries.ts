@@ -181,6 +181,237 @@ export const GET_TASK_BY_ID = gql`
   }
 `;
 
+export const GET_ASSIGNED_TASKS = gql`
+  query getAssignedTasks($participant_id: Int!) {
+    getAssignedTasks(participant_id: $participant_id) {
+      MONDAY {
+        SPECIFIC {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+        ANYTIME {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+      }
+      TUESDAY {
+        SPECIFIC {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+        ANYTIME {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+      }
+      WEDNESDAY {
+        SPECIFIC {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+        ANYTIME {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+      }
+      THURSDAY {
+        SPECIFIC {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+        ANYTIME {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+      }
+      FRIDAY {
+        SPECIFIC {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+        ANYTIME {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+      }
+      SATURDAY {
+        SPECIFIC {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+        ANYTIME {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+      }
+      SUNDAY {
+        SPECIFIC {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+        ANYTIME {
+          assigned_task_id
+          participant_id
+          task_name
+          task_status
+          task_type
+          goal_name
+          goal_description
+          start_date
+          end_date
+          marillac_bucks_addition
+          marillac_bucks_deduction
+          comment
+        }
+      }
+      ANYDAY {
+        assigned_task_id
+        participant_id
+        task_name
+        task_status
+        task_type
+        goal_name
+        goal_description
+        start_date
+        end_date
+        marillac_bucks_addition
+        marillac_bucks_deduction
+        comment
+      }
+    }
+  }
+`;
+
 export const GET_TASKS_BY_TYPE = gql`
   query getTasksByType($type: TaskType!) {
     getTasksByType(type: $type) {

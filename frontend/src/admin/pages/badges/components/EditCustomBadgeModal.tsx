@@ -14,6 +14,7 @@ import {
 import { useMutation } from "@apollo/client";
 import { EDIT_CUSTOM_BADGE } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
+import CoreInput from "../../../common/form/CoreInput";
 
 interface EditCustomBadgeModalProps {
   onClose: () => void;
@@ -58,7 +59,9 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
       submit_text="Save Changes"
       submit_action={handleSave}
       cancel_action={onClose}
+      error={error}
     >
+<<<<<<< HEAD
       <Flex flexDir="column" gap="10px">
         <FormControl>
           <FormLabel mb="5px">
@@ -92,6 +95,22 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
           </Text>
         )}
       </Flex>
+=======
+      <CoreInput 
+        label="Badge Name"
+        current_value={badgeName}
+        action={(e: any) => setBadgeName(e.target.value)}
+        type="text"
+        width="350px"
+      />
+      <CoreInput 
+        label="Badge Criteria"
+        current_value={badgeCriteria}
+        action={(e: any) => setBadgeCriteria(e.target.value)}
+        type="text"
+        width="350px"
+      />
+>>>>>>> dev
     </ModalContainer>
   );
 };

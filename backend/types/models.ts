@@ -47,8 +47,23 @@ const models = gql`
     marillac_bucks_addition: Int!
     marillac_bucks_deduction: Int!
     comment: String
-
     participant: Participant!
+  }
+
+  type AssignedTaskGroup {
+    SPECIFIC: [AssignedTask!]!
+    ANYTIME: [AssignedTask!]!
+  }
+
+  type AssignedTasksByDay {
+    MONDAY: AssignedTaskGroup
+    TUESDAY: AssignedTaskGroup
+    WEDNESDAY: AssignedTaskGroup
+    THURSDAY: AssignedTaskGroup
+    FRIDAY: AssignedTaskGroup
+    SATURDAY: AssignedTaskGroup
+    SUNDAY: AssignedTaskGroup
+    ANYDAY: [AssignedTask!]!
   }
 
   type Note {
