@@ -1,3 +1,4 @@
+import React from "react";
 import {
   BarChart,
   Bar,
@@ -5,6 +6,8 @@ import {
   YAxis,
   ResponsiveContainer,
   Cell,
+  CartesianGrid,
+  LabelList,
 } from "recharts";
 
 const colors = {
@@ -26,10 +29,6 @@ interface ChartDataItem {
 const WeeklyEarningsChart = ({
   weeklyEarnings = [],
 }: WeeklyEarningsChartProps) => {
-  if (weeklyEarnings.length !== 7) {
-    console.warn("WeeklyEarningsChart expects exactly 7 days of earnings data");
-  }
-
   const chartData: ChartDataItem[] = weeklyEarnings.map(
     (earnings = 0, index) => ({
       amount: earnings,
@@ -47,23 +46,40 @@ const WeeklyEarningsChart = ({
   );
 
   return (
-    <>
+    <div
+      style={{
+        backgroundColor: "white",
+        borderRadius: 12,
+        padding: 20,
+        margin: "16px 0",
+        border: "2px solid #f0f0f0",
+      }}
+    >
       <h2
         style={{
           color: colors.text.light.primary,
-          fontSize: 20,
-          marginBottom: 12,
+          fontSize: 18,
+          fontWeight: "600",
+          marginBottom: 16,
+          margin: "0 0 16px 0",
+          textAlign: "left",
         }}
       >
         Weekly Earnings
       </h2>
 
-      <div style={{ height: 192, width: "100%" }}>
+      <div style={{ height: 200, width: "100%", marginBottom: 16 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            margin={{ top: 20, right: 30, left: 5, bottom: 5 }}
           >
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="#f0f0f0"
+              horizontal
+              vertical={false}
+            />
             <XAxis
               dataKey="amount"
               axisLine={false}
@@ -75,6 +91,8 @@ const WeeklyEarningsChart = ({
               axisLine={false}
               tickLine={false}
               tick={{ fill: colors.text.light.secondary, fontSize: 12 }}
+              tickFormatter={(value) => `$${value}`}
+              width={30}
             />
             <Bar dataKey="amount" radius={[2, 2, 0, 0]}>
               {chartData.map((entry, index) => (
@@ -85,25 +103,56 @@ const WeeklyEarningsChart = ({
                   }
                 />
               ))}
+              <LabelList
+                dataKey="amount"
+                content={(props: any) => {
+                  const { x, y, value, index } = props;
+                  if (
+                    index === chartData.length - 1 &&
+                    x !== undefined &&
+                    y !== undefined &&
+                    value !== undefined
+                  ) {
+                    return (
+                      <text
+                        x={Number(x) + 15}
+                        y={Number(y) - 10}
+                        fill={colors.text.light.primary}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        style={{ fontWeight: "bold", fontSize: 14 }}
+                      >
+                        ${value}
+                      </text>
+                    );
+                  }
+                  return null;
+                }}
+              />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <span
+      <div
         style={{
-          color: colors.text.light.primary,
-          fontWeight: "bold",
-          fontSize: 24,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
         }}
       >
-        ${chartData[chartData.length - 1]?.amount || 0}
-      </span>
-
-      <span style={{ color: colors.success[900], marginLeft: 8 }}>
-        ▲ {percentageChange}% Compared to Last Week
-      </span>
-    </>
+        <span
+          style={{
+            color: colors.success[900],
+            fontSize: 18,
+            fontWeight: "bold",
+          }}
+        >
+          ▲ {percentageChange}% Compared to Last Week
+        </span>
+      </div>
+    </div>
   );
 };
 
