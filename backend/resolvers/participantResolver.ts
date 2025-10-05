@@ -1,6 +1,7 @@
-import { Participant, Prisma } from "@prisma/client";
+import { Participant, Prisma, PrismaClient } from "@prisma/client";
 import { getToday } from "../utils/formatDateTime";
-import prisma from "../prisma";
+
+const prisma = new PrismaClient();
 
 const participantResolver = {
   Query: {
