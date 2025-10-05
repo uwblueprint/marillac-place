@@ -93,7 +93,7 @@ const assignedTaskResolver = {
       ANYDAY: AssignedTask[];
     }> => {
       const assignedTasks = await prisma.assignedTask.findMany({
-	where: { participant_id: participant_id },
+	      where: { participant_id: participant_id },
       });
       return groupTasks(assignedTasks);
     },
@@ -126,26 +126,22 @@ const assignedTaskResolver = {
         comment?: string;
       }
     ): Promise<boolean> => {
-      try {
-	await prisma.assignedTask.create({
-	  data: {
-	    participant_id: participantId,
-	    task_name: taskName,
-	    start_date: startDate,
-	    end_date: endDate,
-	    marillac_bucks_addition: marillacBucksAddition,
-	    marillac_bucks_deduction: marillacBucksDeduction,
-	    task_type: taskType,
-	    goal_name: goalName,
-	    goal_description: goalDescription,
-	    comment,
-	  },
-	});
-	return true;
-      } catch (err) {
-	throw new Error("Something went wrong");
-      }
-    },
+      await prisma.assignedTask.create({
+        data: {
+          participant_id: participantId,
+          task_name: taskName,
+          start_date: startDate,
+          end_date: endDate,
+          marillac_bucks_addition: marillacBucksAddition,
+          marillac_bucks_deduction: marillacBucksDeduction,
+          task_type: taskType,
+          goal_name: goalName,
+          goal_description: goalDescription,
+          comment,
+        },
+      });
+      return true;
+    }
   },
 };
 
