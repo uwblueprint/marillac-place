@@ -1,13 +1,14 @@
-import { Note } from "@prisma/client";
-import NoteService from "../services/implementation/noteImplementation";
-import INoteService from "../services/interface/noteInterface";
+import { Note, PrismaClient } from "@prisma/client";
+import { getNow } from "../utils/formatDateTime";
 
-const noteService: INoteService = new NoteService();
+const prisma = new PrismaClient();
 
 const noteResolver = {
   Query: {
     getNotes: async (): Promise<Note[]> => {
-      return noteService.getNotes();
+      return await prisma.note.findMany({
+        orderBy: [{ creation_date: "desc" }],
+      });
     },
   },
   Mutation: {
@@ -19,7 +20,13 @@ const noteResolver = {
         message: string;
       },
     ): Promise<boolean> => {
-      return noteService.createNote(message);
+      await prisma.note.create({
+        data: {
+          message,
+          creation_date: getNow(),
+        },
+      });
+      return true;
     },
     deleteNote: async (
       _parent: undefined,
@@ -29,7 +36,12 @@ const noteResolver = {
         note_id: number;
       },
     ): Promise<boolean> => {
-      return noteService.deleteNote(note_id);
+      await prisma.note.delete({
+        where: {
+          note_id,
+        },
+      });
+      return true;
     },
   },
 };
