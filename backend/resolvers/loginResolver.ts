@@ -1,5 +1,3 @@
-import ILoginService from "../services/interface/loginInterface";
-import LoginService from "../services/implementation/loginImplementation";
 import { Participant, PrismaClient } from "@prisma/client";
 import { getToday } from "../utils/formatDateTime";
 

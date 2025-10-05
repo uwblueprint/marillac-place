@@ -1,11 +1,60 @@
+import prisma from "../prisma";
 import {
   AssignedTask,
   TaskType
 } from "@prisma/client";
-import AssignedTaskService from "../services/implementation/assignedTaskImplementation";
-import IAssignedTaskService from "../services/interface/assignedTaskInterface";
+import { getWeekBounds } from "../utils/formatDateTime";
 
-const assignedTaskService: IAssignedTaskService = new AssignedTaskService();
+type AssignedTaskGroup = {
+  SPECIFIC: AssignedTask[];
+  ANYTIME: AssignedTask[];
+};
+
+function groupTasks(tasks: AssignedTask[]) {
+  const dayMap: Record<string, AssignedTaskGroup> = {
+    MONDAY: { SPECIFIC: [], ANYTIME: [] },
+    TUESDAY: { SPECIFIC: [], ANYTIME: [] },
+    WEDNESDAY: { SPECIFIC: [], ANYTIME: [] },
+    THURSDAY: { SPECIFIC: [], ANYTIME: [] },
+    FRIDAY: { SPECIFIC: [], ANYTIME: [] },
+    SATURDAY: { SPECIFIC: [], ANYTIME: [] },
+    SUNDAY: { SPECIFIC: [], ANYTIME: [] },
+  };
+
+  const ANYDAY: AssignedTask[] = [];
+  const { weekStart, weekEnd } = getWeekBounds();
+
+  for (const task of tasks) {
+    if (task.start_date < weekStart || task.start_date > weekEnd) {
+      continue;
+    }
+
+    const start = new Date(task.start_date);
+    const end = new Date(task.end_date);
+
+    const isSameDay = start.toDateString() === end.toDateString();
+    const isDayStart = start.getHours() === 0 && start.getMinutes() === 0;
+    const isDayEnd = end.getHours() === 23 && end.getMinutes() === 59;
+
+    if (!isSameDay) {
+      ANYDAY.push(task);
+      continue;
+    }
+
+    const weekday = start.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+
+    if (isDayStart && isDayEnd) {
+      dayMap[weekday].ANYTIME.push(task);
+    } else {
+      dayMap[weekday].SPECIFIC.push(task);
+    }
+  }
+
+  return {
+    ...dayMap,
+    ANYDAY,
+  };
+}
 
 const assignedTaskResolver = {
   Query: {
@@ -43,7 +92,10 @@ const assignedTaskResolver = {
       };
       ANYDAY: AssignedTask[];
     }> => {
-      return assignedTaskService.getAssignedTasks(participant_id);
+      const assignedTasks = await prisma.assignedTask.findMany({
+	      where: { participant_id: participant_id },
+      });
+      return groupTasks(assignedTasks);
     },
   },
 
@@ -74,19 +126,22 @@ const assignedTaskResolver = {
         comment?: string;
       }
     ): Promise<boolean> => {
-      return assignedTaskService.createAssignedTask(
-        participantId,
-        taskName,
-        startDate,
-        endDate,
-        marillacBucksAddition,
-        marillacBucksDeduction,
-        taskType,
-        goalName,
-        goalDescription,
-        comment
-      );
-    },
+      await prisma.assignedTask.create({
+        data: {
+          participant_id: participantId,
+          task_name: taskName,
+          start_date: startDate,
+          end_date: endDate,
+          marillac_bucks_addition: marillacBucksAddition,
+          marillac_bucks_deduction: marillacBucksDeduction,
+          task_type: taskType,
+          goal_name: goalName,
+          goal_description: goalDescription,
+          comment,
+        },
+      });
+      return true;
+    }
   },
 };
 
