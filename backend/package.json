@@ -9,8 +9,10 @@
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "tsc",
-    "prismaInitAndRun": "npx prisma migrate deploy && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && nodemon -L",
-    "start": "node build/server.js"
+    "seed:dev": "NODE_ENV=development npx prisma db seed",
+    "seed:prod": "NODE_ENV=production npx prisma db seed",
+    "prismaInitAndRun": "if [ \"$NODE_ENV\" = \"production\" ]; then npx prisma db push; else npx prisma migrate deploy; fi && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && nodemon -L",
+    "start": "npx prisma generate && node build/server.js"
   },
   "keywords": [],
   "author": "",
@@ -43,6 +45,7 @@
     "multer": "^1.4.2",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.5.0",
+    "@snaplet/seed": "^0.98.0",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.5.0",
@@ -57,7 +60,6 @@
   "devDependencies": {
     "@faker-js/faker": "^9.8.0",
     "@snaplet/copycat": "^6.0.0",
-    "@snaplet/seed": "^0.98.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.10",
     "@types/crypto-js": "^4.2.2",

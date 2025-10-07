@@ -64,7 +64,9 @@ function SignOutPopUp({ cancel }: SignOutPopUpProps) {
       submit_action={handleSignOut}
       cancel_action={cancel}
     >
-      <Text textStyle="web.b2" color="text.light.secondary">Are you sure you want to sign out?</Text>
+      <Text textStyle="web.b2" color="text.light.secondary">
+        Are you sure you want to sign out?
+      </Text>
     </ModalContainer>
   );
 }
@@ -127,7 +129,7 @@ export default function SideBar() {
         </Tabs>
       </Flex>
 
-      <SimpleButton 
+      <SimpleButton
         text="Sign Out"
         action={() => setSignOut(true)}
         is_active={signOut}

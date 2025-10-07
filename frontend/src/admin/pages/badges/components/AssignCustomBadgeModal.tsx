@@ -22,7 +22,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import {
   GET_PARTICIPANTS_BY_ROOMS,

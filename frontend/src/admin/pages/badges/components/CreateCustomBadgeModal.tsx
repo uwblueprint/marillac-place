@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -13,9 +13,9 @@ import {
   Grid,
   Image as ChakraImage,
 } from "@chakra-ui/react";
-import {useMutation} from "@apollo/client";
-import {Icon, iconList} from '../../../../constants/icons';
-import {CREATE_CUSTOM_BADGE} from "../../../../gql/mutations";
+import { useMutation } from "@apollo/client";
+import { Icon, iconList } from "../../../../constants/icons";
+import { CREATE_CUSTOM_BADGE } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";
 
@@ -29,7 +29,7 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [error, setError] = useState("");
 
-  const [createCustomBadge, {loading}] = useMutation(CREATE_CUSTOM_BADGE, {
+  const [createCustomBadge, { loading }] = useMutation(CREATE_CUSTOM_BADGE, {
     onCompleted: () => {
       localStorage.setItem("notification", "Created Custom Badge: " + name);
       window.location.reload();
@@ -48,8 +48,8 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
         variables: {
           name,
           description: criteria,
-          icon: selectedIcon.toUpperCase()
-        }
+          icon: selectedIcon.toUpperCase(),
+        },
       });
     }
   };

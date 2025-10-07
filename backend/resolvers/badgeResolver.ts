@@ -50,10 +50,10 @@ const badgeResolver = {
       _parent: undefined,
       {
         badge_id,
-        is_active
+        is_active,
       }: {
-        badge_id: number,
-        is_active: boolean,
+        badge_id: number;
+        is_active: boolean;
       }
     ): Promise<boolean> => {
       const badge = await prisma.badge.findUnique({

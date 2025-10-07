@@ -9,7 +9,7 @@ import {
   Modal,
   ModalContent,
   ModalBody,
-  ModalOverlay
+  ModalOverlay,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { EDIT_CUSTOM_BADGE } from "../../../../gql/mutations";
@@ -18,10 +18,13 @@ import CoreInput from "../../../common/form/CoreInput";
 
 interface EditCustomBadgeModalProps {
   onClose: () => void;
-  selected: any
+  selected: any;
 }
 
-const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({ onClose, selected }) => {
+const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
+  onClose,
+  selected,
+}) => {
   const [badgeName, setBadgeName] = useState(selected.name);
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
   const [error, setError] = useState("");
@@ -40,8 +43,8 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({ onClose, se
         variables: {
           custom_badge_id: selected.badge_id,
           new_custom_badge_name: badgeName,
-          new_custom_badge_description: badgeCriteria
-        }
+          new_custom_badge_description: badgeCriteria,
+        },
       });
       localStorage.setItem("notification", "Custom badge updated");
       window.location.reload();

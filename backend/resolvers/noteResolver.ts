@@ -18,7 +18,7 @@ const noteResolver = {
         message,
       }: {
         message: string;
-      },
+      }
     ): Promise<boolean> => {
       await prisma.note.create({
         data: {
@@ -34,7 +34,7 @@ const noteResolver = {
         note_id,
       }: {
         note_id: number;
-      },
+      }
     ): Promise<boolean> => {
       await prisma.note.delete({
         where: {

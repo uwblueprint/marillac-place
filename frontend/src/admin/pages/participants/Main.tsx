@@ -19,17 +19,23 @@ export default function AdminParticipantsPage() {
 
   return (
     <Flex w="100%" flexDir="column" minHeight="fit-content">
-      <Text textStyle="web.h2" color="primary.700" mb="10px">Current Participants</Text>
+      <Text textStyle="web.h2" color="primary.700" mb="10px">
+        Current Participants
+      </Text>
 
-      { loading ? (
+      {loading ? (
         <Spinner />
       ) : error ? (
         <Flex>{error.message}</Flex>
       ) : (
-        <Grid w="100%" templateColumns='repeat(5, 1fr)' gap="15px">
-          { ROOM_NUMBERS.map((num) =>
+        <Grid w="100%" templateColumns="repeat(5, 1fr)" gap="15px">
+          {ROOM_NUMBERS.map((num) =>
             num in currentParticipants ? (
-              <OccupiedRoomCard key={num} roomNumber={num} participants={currentParticipants} />
+              <OccupiedRoomCard
+                key={num}
+                roomNumber={num}
+                participants={currentParticipants}
+              />
             ) : (
               <EmptyRoomCard key={num} roomNumber={num} />
             )
@@ -37,8 +43,10 @@ export default function AdminParticipantsPage() {
         </Grid>
       )}
 
-      <Text textStyle="web.h2" color="primary.700" mt="20px" mb="10px">Past Participants</Text>
+      <Text textStyle="web.h2" color="primary.700" mt="20px" mb="10px">
+        Past Participants
+      </Text>
       <PastParticipantTable />
     </Flex>
-  )
+  );
 }

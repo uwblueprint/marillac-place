@@ -69,4 +69,4 @@ export default function AdminRoute({ children }: AdminRouteProps) {
       </Flex>
     </Flex>
   );
-};
+}
