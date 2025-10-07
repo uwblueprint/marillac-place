@@ -3,8 +3,7 @@ import ParticipantPageHeader from "../../../common/participant/PageHeader";
 import WeeklyEarningsChart from "./elements/EarningsWidget";
 
 export default function ParticipantsProgressPage() {
-  // TODO: change to actual data
-  const sampleWeeklyEarnings = [10, 15, 8, 20, 12, 18, 25];
+  const sampleWeeklyEarnings = [10, 15, 8, 20, 12, 18, 35];
 
   return (
     <>
