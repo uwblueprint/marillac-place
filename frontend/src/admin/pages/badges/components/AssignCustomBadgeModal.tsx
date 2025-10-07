@@ -122,92 +122,6 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       }}
       error={error}
     >
-<<<<<<< HEAD
-      <Flex flexDir="column" gap="10px">
-        <FormControl>
-          <FormLabel mb="5px">
-            <Text textStyle="web.s1" color="text.light.secondary">
-              Badge Name
-            </Text>
-          </FormLabel>
-          <Select
-            variant="primary"
-            textStyle="web.b3"
-            fontSize="14px"
-            value={badgeName}
-            onChange={(e) => setBadgeName(e.target.value)}
-            placeholder="Select a Badge"
-          >
-            {badgeData?.getCustomBadges?.map((badge: any) => (
-              <option key={badge.name} value={badge.name}>
-                {badge.name}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl>
-          <FormLabel mb="5px">
-            <Text textStyle="web.s1" color="text.light.secondary">
-              Badge Value
-            </Text>
-          </FormLabel>
-          <InputGroup>
-            <InputLeftElement>
-              <AttachMoneyIcon style={{ color: "inherit", fontSize: 15 }} />
-            </InputLeftElement>
-            <Input
-              type="number"
-              variant="primary"
-              value={badgeValue}
-              onChange={(e) => {
-                const val = e.target.value;
-                if (val === "") {
-                  setBadgeValue("");
-                } else {
-                  const num = parseFloat(val);
-                  if (!Number.isNaN(num)) {
-                    setBadgeValue(val);
-                  }
-                }
-              }}
-              placeholder="0.00"
-              min={0}
-              step={0.01}
-              pl="7"
-            />
-          </InputGroup>
-        </FormControl>
-
-        <Flex w="100%" h="1px" bg="neutral.300" mt="10px" />
-
-        <Text textStyle="web.s1" color="text.light.secondary">
-          Choose Room(s)
-        </Text>
-        <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">
-          {ROOM_NUMBERS.map((num: number) => (
-            <GreenButton
-              key={num}
-              text={"Room " + num}
-              action={() => toggleRoomSelection(num)}
-              is_active={selectedRooms.includes(num)}
-            />
-          ))}
-        </Grid>
-        {error && (
-          <Text
-            textStyle="web.b2"
-            fontWeight="600"
-            color="#E30000"
-            mt="10px"
-            mb="-5px"
-            textAlign="left"
-          >
-            {error}
-          </Text>
-        )}
-      </Flex>
-=======
       <SelectionInput
         label="Badge Name"
         current_value={badgeName}
@@ -250,7 +164,6 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
           />
         ))}
       </Grid>
->>>>>>> dev
     </ModalContainer>
   );
 };

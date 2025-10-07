@@ -1,12 +1,13 @@
 import {
   DayOfWeek,
+  PrismaClient,
   RecurrenceFrequency,
   Task,
   TaskType,
   TimeOption,
 } from "@prisma/client";
-import prisma from "../prisma";
 
+const prisma = new PrismaClient();
 
 const taskResolver = {
   Query: {

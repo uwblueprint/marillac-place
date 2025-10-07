@@ -61,41 +61,6 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
       cancel_action={onClose}
       error={error}
     >
-<<<<<<< HEAD
-      <Flex flexDir="column" gap="10px">
-        <FormControl>
-          <FormLabel mb="5px">
-            <Text textStyle="web.s1" color="text.light.secondary">
-              Badge Name
-            </Text>
-          </FormLabel>
-          <Input
-            variant="primary"
-            value={badgeName}
-            onChange={(e) => setBadgeName(e.target.value)}
-          />
-        </FormControl>
-
-        <FormControl>
-          <FormLabel mb="5px">
-            <Text textStyle="web.s1" color="text.light.secondary">
-              Badge Criteria
-            </Text>
-          </FormLabel>
-          <Input
-            variant="primary"
-            value={badgeCriteria}
-            onChange={(e) => setBadgeCriteria(e.target.value)}
-          />
-        </FormControl>
-
-        {error && (
-          <Text textStyle="web.b2" fontWeight="600" color="#E30000">
-            {error}
-          </Text>
-        )}
-      </Flex>
-=======
       <CoreInput 
         label="Badge Name"
         current_value={badgeName}
@@ -110,7 +75,6 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
         type="text"
         width="350px"
       />
->>>>>>> dev
     </ModalContainer>
   );
 };

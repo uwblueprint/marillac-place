@@ -14,15 +14,8 @@ export type ModalProps = {
 };
 
 export type InputProps = {
-<<<<<<< HEAD
-  label: string;
-  current_value: string;
-  action: any;
-};
-=======
     label: string;
     current_value: string;
     action: any;
     width?: string;
 }
->>>>>>> dev
