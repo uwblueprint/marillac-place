@@ -76,7 +76,7 @@ export default function ParticipantsLoginPage() {
         <Flex width="75%">
           <img
             width="100%"
-            src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"}
+            src="/assets/logo.png"
             alt="Marillac Place Logo"
           />
         </Flex>

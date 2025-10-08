@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
         <Flex width="30%" marginLeft="3vw">
           <img
             width="100%"
-            src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"}
+            src="/assets/logo.png"
             alt="Marillac Place Logo"
           />
         </Flex>
