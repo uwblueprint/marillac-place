@@ -4,6 +4,8 @@ import { useQuery } from "@apollo/client";
 import { ParticipantContext } from "../../../../common/participant/ParticipantContext";
 import TasksCompletedWidget from "./TasksCompletedWidget";
 import { HAS_COMPLETED_ALL_REQUIRED_TASKS } from "../../../../gql/queries";
+import BadgeRow from "./BadgeRow";
+import { BadgeRarity } from "../../../../common/components/Badge";
 
 export default function HomeContent() {
   const participant = useContext(ParticipantContext);
@@ -53,6 +55,12 @@ export default function HomeContent() {
 
   const hasCompletedAllTasks = tasksData?.hasCompletedAllRequiredTasks || false;
 
+  const badge = {
+    icon: "heart",
+    rarity: "silver" as BadgeRarity,
+    percentComplete: 20
+  }
+
   return (
     <Flex w="100%" flexDir="column" gap="16px" padding="20px">
       {/* Welcome Section */}
@@ -77,6 +85,23 @@ export default function HomeContent() {
 
       {/* Tasks Completed Widget - Only show if all required tasks are completed */}
       {!tasksLoading && hasCompletedAllTasks && <TasksCompletedWidget />}
+      <Flex
+        w="100%"
+        bg="white"
+        border="1px solid"
+        borderColor="neutral.300"
+        borderRadius="8px"
+        padding="16px"
+        flexDir="column"
+        gap="12px"
+      >
+        <BadgeRow 
+          messageText="this is message text" 
+          subtitle="this is subtitle" 
+          title="this is title" 
+          badge={badge}
+        />
+      </Flex>
     </Flex>
   );
 }
