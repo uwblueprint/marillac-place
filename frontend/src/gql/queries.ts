@@ -74,6 +74,12 @@ export const GET_PARTICIPANT_BY_ROOM = gql`
   }
 `;
 
+export const HAS_COMPLETED_ALL_REQUIRED_TASKS = gql`
+  query hasCompletedAllRequiredTasks($participantId: Int!) {
+    hasCompletedAllRequiredTasks(participantId: $participantId)
+  }
+`;
+
 export const GET_PARTICIPANTS_BY_ROOMS = gql`
   query getParticipantsByRooms($room_numbers: [Int!]!) {
     getParticipantsByRooms(room_numbers: $room_numbers) {

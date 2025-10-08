@@ -44,6 +44,7 @@ export default function getGraphQLMiddleware() {
       getTasksByType: verifyRole(["admin", "relief"]),
       getCustomBadges: verifyRole(["admin", "relief"]),
       getSystemBadges: verifyRole(["admin", "relief"]),
+      hasCompletedAllRequiredTasks: verifyRole(["participant"]),
     },
     Mutation: {
       createParticipant: verifyRole(["admin", "relief"]),
