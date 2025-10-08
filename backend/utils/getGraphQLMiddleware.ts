@@ -40,6 +40,7 @@ export default function getGraphQLMiddleware() {
       getNotes: verifyRole(["admin", "relief"]),
       getAllAnnouncements: verifyRole(["admin", "relief"]),
       getAnnouncementsInDateRange: verifyRole(["admin", "relief"]),
+      getAssignedTasks: verifyRole(["admin", "relief"]),
       getTasksByType: verifyRole(["admin", "relief"]),
       getCustomBadges: verifyRole(["admin", "relief"]),
       getSystemBadges: verifyRole(["admin", "relief"]),

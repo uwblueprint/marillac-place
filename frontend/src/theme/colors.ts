@@ -1,4 +1,10 @@
 const colors = {
+  task_status: {
+    complete: "#0D8312",
+    assigned: "#255B9A",
+    excused: "#B07D18",
+    incomplete: "#B21D2F",
+  },
   neutral: {
     0: "#FFFFFF",
     100: "#FAFAFA",
@@ -30,6 +36,18 @@ const colors = {
     700: "#A2E3A4",
     800: "#1BB421",
     900: "#0D8312",
+  },
+  actionsDark: {
+    blue: "#255B9A",
+    red: "#B21D2F",
+    yellow: "#B07D18",
+    green: "#0D8312",
+  },
+  actionsLight: {
+    blue: "#C5DCF8",
+    yellow: "#FFE5B2",
+    green: "#CDEECE",
+    red: "#F8D7DB",
   },
   text: {
     light: {

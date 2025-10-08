@@ -1,12 +1,19 @@
 import express from "express";
+import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import getGraphQLSchema from "./utils/getGraphQLSchema";
-require("./crons/index.ts");
+
+require("./crons/index");
 
 const app = express();
 
-const schema = getGraphQLSchema();
+// Health check
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
 
+// GraphQL
+const schema = getGraphQLSchema();
 const server = new ApolloServer({
   schema,
   context: ({ req, res }) => ({ req, res }),
@@ -17,16 +24,44 @@ const server = new ApolloServer({
   },
 });
 
+// Helper function to ensure URL has protocol
+const getFrontendOrigin = () => {
+  const url = process.env.FRONTEND_URL || "";
+  if (!url) return "";
+
+  // If URL already has protocol, return as-is
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+
+  // Otherwise, add https:// (production default)
+  return `https://${url}`;
+};
+
 server.applyMiddleware({
   app,
   path: "/graphql",
   cors: {
-    origin: process.env.FRONTEND_URL || "",
+    origin: getFrontendOrigin(),
     credentials: true,
   },
 });
 
-app.listen({ port: 5000 }, () => {
-  console.info(`Server is listening on port 5000!`);
+// 👉 Serve frontend build (adjust "build" if your React output dir is "dist")
+const frontendPath = path.join(__dirname, "../frontend/build");
+app.use(express.static(frontendPath));
+
+// 👉 Catch-all: send index.html for non-API routes
+app.get("*", (req, res) => {
+  // Don’t intercept API routes
+  if (req.path.startsWith("/graphql") || req.path.startsWith("/health")) {
+    return res.status(404).json({ error: "Not found" });
+  }
+
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
+const PORT = process.env.PORT || 5001;
+app.listen({ port: PORT }, () => {
+  console.info(`Server is listening on port ${PORT}!`);
+});
