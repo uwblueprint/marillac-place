@@ -61,10 +61,26 @@ async function seedProdData() {
 
 async function seedTestData(seed: any) {
   // Seed minimal test participants for production testing
-  await seed.participant((createMany) =>
-    createMany(testParticipants.length, (cur) => testParticipants[cur.index])
-  );
-  console.log("✅ Test participants seeded (for production testing)");
+  const prisma = new PrismaClient();
+  try {
+    for (const participant of testParticipants) {
+      // Check if participant already exists
+      const existing = await prisma.participant.findUnique({
+        where: { participant_id: participant.participant_id },
+      });
+
+      if (!existing) {
+        await prisma.participant.create({ data: participant });
+        console.log(`✅ Test participant ${participant.participant_id} created`);
+      } else {
+        console.log(`ℹ️  Test participant ${participant.participant_id} already exists, skipping`);
+      }
+    }
+  } catch (error) {
+    console.error("⚠️ Error seeding test participants:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 async function seedMockData(seed: any) {

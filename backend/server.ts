@@ -27,7 +27,10 @@ const server = new ApolloServer({
 // Helper function to ensure URL has protocol
 const getFrontendOrigin = () => {
   const url = process.env.FRONTEND_URL || "";
-  if (!url) return "";
+  if (!url) {
+    console.warn("⚠️  WARNING: FRONTEND_URL environment variable is not set. CORS may not work correctly!");
+    return "";
+  }
 
   // If URL already has protocol, return as-is
   if (url.startsWith('http://') || url.startsWith('https://')) {
@@ -64,4 +67,5 @@ app.get("*", (req, res) => {
 const PORT = process.env.PORT || 5001;
 app.listen({ port: PORT }, () => {
   console.info(`Server is listening on port ${PORT}!`);
+  console.info(`CORS enabled for origin: ${getFrontendOrigin() || 'NOT SET'}`);
 });

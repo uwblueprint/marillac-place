@@ -24,7 +24,15 @@ export default function ParticipantsLoginPage() {
       navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
     },
     onError: (err: Error) => {
-      setError(err.message);
+      // Check if it's a network error (CORS, connection refused, etc.)
+      if (err.message.includes("Failed to fetch") ||
+          err.message.includes("NetworkError") ||
+          err.message.includes("Network request failed")) {
+        setError("Unable to connect to server. Please check your internet connection and try again.");
+      } else {
+        // Show the actual error message from the backend
+        setError(err.message);
+      }
     },
   });
 
