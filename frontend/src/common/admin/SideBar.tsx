@@ -106,7 +106,7 @@ export default function SideBar() {
     >
       <Flex width="100%" flexDir="column" gap="40px" alignItems="left">
         <img
-          src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"}
+          src="/assets/logo.png"
           alt="Marillac Place Logo"
           width="85%"
         />
