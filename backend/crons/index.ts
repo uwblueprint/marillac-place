@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import expireAdminNotes from "./scripts/expireAdminNotes";
-import expireAdminAnnouncements from "./scripts/expireAdminAnnouncements"
+import expireAdminAnnouncements from "./scripts/expireAdminAnnouncements";
 
 cron.schedule("0 0 * * * *", async () => {
   const res = await expireAdminNotes();
@@ -19,5 +19,3 @@ cron.schedule("0 0 0 * * *", async () => {
     console.log("Could not expire admin announcements");
   }
 });
-
-

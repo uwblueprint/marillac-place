@@ -1,10 +1,10 @@
 import React from "react";
-import { Flex, Text} from "@chakra-ui/react";
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import { Flex, Text } from "@chakra-ui/react";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 type NotificationProps = {
-  message: string
-}
+  message: string;
+};
 
 export default function Notification({ message }: NotificationProps) {
   return (
@@ -26,14 +26,11 @@ export default function Notification({ message }: NotificationProps) {
       bg="success.100"
     >
       <Flex color="success.900">
-        <TaskAltIcon
-          fontSize="medium"
-          color="inherit"
-        />
+        <TaskAltIcon fontSize="medium" color="inherit" />
       </Flex>
       <Text color="success.900" textStyle="web.b1" fontWeight="700">
-        { message }
+        {message}
       </Text>
     </Flex>
-  )
-};
+  );
+}

@@ -10,12 +10,12 @@ import {
   Flex,
   Spinner,
   Image as ChakraImage,
-  Switch
+  Switch,
 } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { UPDATE_BADGE_STATUS } from "../../../../gql/mutations"
+import { UPDATE_BADGE_STATUS } from "../../../../gql/mutations";
 import { Icon } from "../../../../constants/icons";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
 
@@ -33,24 +33,26 @@ const SystemBadgeTable = ({
   const levels = ["N", "B", "S", "G", "D"];
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState(null);
-  
+
   const [statuses, setStatuses] = useState(null);
   const [updateBadgeStatus] = useMutation(UPDATE_BADGE_STATUS);
-  
+
   useEffect(() => {
-    setStatuses(badges.reduce((acc, badge) => {
-      acc[badge.badge_id] = badge.is_active;
-      return acc;
-    }, {}))
+    setStatuses(
+      badges.reduce((acc, badge) => {
+        acc[badge.badge_id] = badge.is_active;
+        return acc;
+      }, {})
+    );
   }, [badges]);
-  
+
   async function changeActivityStatus(badge_id: number, is_active: boolean) {
     try {
       await updateBadgeStatus({
         variables: {
           badge_id,
-          is_active
-        }
+          is_active,
+        },
       });
       setStatuses((prev: any) => ({
         ...prev,
@@ -71,7 +73,11 @@ const SystemBadgeTable = ({
         w="100%"
       >
         {edit && selected && (
-          <EditSystemBadgeModal isOpen={edit} onClose={() => setEdit(false)} selected={selected} />
+          <EditSystemBadgeModal
+            isOpen={edit}
+            onClose={() => setEdit(false)}
+            selected={selected}
+          />
         )}
         <Table>
           <Thead>
@@ -151,12 +157,20 @@ const SystemBadgeTable = ({
                     />
                   </Td>
                   <Td>
-                    <Text textStyle="web.b3" color="#000000" whiteSpace="normal">
+                    <Text
+                      textStyle="web.b3"
+                      color="#000000"
+                      whiteSpace="normal"
+                    >
                       {badge.name}
                     </Text>
                   </Td>
                   <Td>
-                    <Text textStyle="web.b3" color="#000000" whiteSpace="normal">
+                    <Text
+                      textStyle="web.b3"
+                      color="#000000"
+                      whiteSpace="normal"
+                    >
                       {badge.description}
                     </Text>
                   </Td>
@@ -166,22 +180,24 @@ const SystemBadgeTable = ({
                     </Text>
                   </Td>
                   <Td alignItems="center">
-                    <Flex
-                      alignItems="center"
-                      justifyContent="center"
-                    >
+                    <Flex alignItems="center" justifyContent="center">
                       <Text textStyle="web.b3" color="#000000">
-                        { statuses && 
-                          <Switch isChecked={statuses[badge.badge_id]} onChange={() => changeActivityStatus(badge.badge_id, !statuses[badge.badge_id])} />
-                        }
+                        {statuses && (
+                          <Switch
+                            isChecked={statuses[badge.badge_id]}
+                            onChange={() =>
+                              changeActivityStatus(
+                                badge.badge_id,
+                                !statuses[badge.badge_id]
+                              )
+                            }
+                          />
+                        )}
                       </Text>
                     </Flex>
                   </Td>
                   <Td>
-                    <Flex
-                      alignItems="center"
-                      justifyContent="center"
-                    >
+                    <Flex alignItems="center" justifyContent="center">
                       <Flex
                         cursor="pointer"
                         onClick={() => {

@@ -8,7 +8,7 @@ import { ParticipantContext } from "./ParticipantContext";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
-}
+};
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   const [authorized, setAuthorized] = useState(false);
@@ -29,15 +29,15 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   }, []);
 
   if (loading) {
-    return <Loading />
+    return <Loading />;
   }
 
   if (!authorized) {
-    return <Navigate to={ROUTES.PARTICIPANTS_LOGIN_PAGE} replace />
+    return <Navigate to={ROUTES.PARTICIPANTS_LOGIN_PAGE} replace />;
   }
-  
+
   if (!participantId) {
-    return <Flex>Something went wrong. ID # is missing.</Flex>
+    return <Flex>Something went wrong. ID # is missing.</Flex>;
   }
 
   return (
@@ -48,14 +48,9 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       justifyContent="center"
       bg="neutral.100"
     >
-      <Flex
-        maxWidth="500px"
-        width="100%"
-        height="fit-content"
-        flexDir="column"
-      >
+      <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column">
         <ParticipantContext.Provider value={{ id: participantId }}>
-          { children }
+          {children}
         </ParticipantContext.Provider>
       </Flex>
     </Flex>

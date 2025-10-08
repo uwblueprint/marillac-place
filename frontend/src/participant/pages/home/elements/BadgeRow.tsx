@@ -75,9 +75,6 @@ const BadgeRow: React.FC<BadgeRowProps> = ({
           </Text>
         </Box>
       </Flex>
-
-      {/* Divider between rows */}
-      {!isLast && <Divider borderColor="neutral.400" mb="16px" />}
     </Box>
   );
 };
