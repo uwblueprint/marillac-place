@@ -1,10 +1,15 @@
-import React from 'react';
-import ParticipantPageHeader from '../../../common/participant/PageHeader';
+import React from "react";
+import { Flex } from "@chakra-ui/react";
+import HomeContent from "./elements/HomeContent";
+import ParticipantPageHeader from "../../../common/participant/PageHeader";
+import BadgeRow from "./elements/BadgeRow";
+import { BadgeRarity } from "../../../common/components/Badge";
 
 export default function ParticipantsHomePage() {
   return (
     <>
       <ParticipantPageHeader currentPage="Home" />
+      <HomeContent />
     </>
-  )
+  );
 }

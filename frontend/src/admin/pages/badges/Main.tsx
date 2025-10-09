@@ -21,20 +21,20 @@ import OrangeButton from "../../common/buttons/OrangeButton";
 export default function AdminBadgesPage() {
   const [create, setCreate] = useState(false);
   const [assign, setAssign] = useState(false);
-  
+
   const [customBadges, setCustomBadges] = useState([]);
   const [systemBadges, setSystemBadges] = useState([]);
 
   const {
     loading: customBadgesLoading,
     error: customBadgesError,
-    data: customBadgesData
+    data: customBadgesData,
   } = useQuery(GET_CUSTOM_BADGES);
-  
+
   const {
     loading: systemBadgesLoading,
     error: systemBadgesError,
-    data: systemBadgesData
+    data: systemBadgesData,
   } = useQuery(GET_SYSTEM_BADGES);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function AdminBadgesPage() {
       setSystemBadges(systemBadgesData.getSystemBadges);
     }
   }, [systemBadgesLoading, systemBadgesError, systemBadgesData]);
-  
+
   useEffect(() => {
     if (!customBadgesLoading && !customBadgesError && customBadgesData) {
       setCustomBadges(customBadgesData.getCustomBadges);
@@ -61,16 +61,16 @@ export default function AdminBadgesPage() {
           <Text textStyle="web.h2" color="primary.700">
             System Badges
           </Text>
-          <Text
-            textStyle="web.b3"
-            color="text.light.secondary"
-            marginTop="7px"
-          >
+          <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
             System badges will be granted to participants automatically.
           </Text>
         </Flex>
       </Flex>
-      <SystemBadgeTable loading={systemBadgesLoading} error={systemBadgesError} badges={systemBadges} />
+      <SystemBadgeTable
+        loading={systemBadgesLoading}
+        error={systemBadgesError}
+        badges={systemBadges}
+      />
       <Flex
         width="100%"
         height="fit-content"
@@ -81,31 +81,31 @@ export default function AdminBadgesPage() {
           <Text textStyle="web.h2" color="primary.700">
             Custom Badges
           </Text>
-          <Text
-            textStyle="web.b3"
-            color="text.light.secondary"
-            marginTop="7px"
-          >
+          <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
             You can create new and reward participants custom badges.
           </Text>
         </Flex>
         <Flex alignItems="center" gap="15px">
-          <GreenButton 
+          <GreenButton
             text="Assign Custom Badge"
             action={() => setAssign(true)}
             is_active={assign}
           />
-          <OrangeButton 
+          <OrangeButton
             text="Create New"
             action={() => setCreate(true)}
             is_active={create}
           />
         </Flex>
       </Flex>
-      <CustomBadgeTable loading={customBadgesLoading} error={customBadgesError} badges={customBadges} />
-      
-      { create && <CreateCustomBadgeModal onClose={() => setCreate(false)} /> }
-      { assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} /> }
+      <CustomBadgeTable
+        loading={customBadgesLoading}
+        error={customBadgesError}
+        badges={customBadges}
+      />
+
+      {create && <CreateCustomBadgeModal onClose={() => setCreate(false)} />}
+      {assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} />}
     </Flex>
   );
 }

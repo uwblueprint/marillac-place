@@ -1,16 +1,14 @@
 [phases.setup]
-nixPkgs = ["nodejs-18_x", "yarn"]
+nixPkgs = ["nodejs_22", "yarn"]
 
 [phases.install]
 cmds = [
-  "cd backend && yarn install",
-  "cd frontend && yarn install"
+  "cd backend && yarn install"
 ]
 
 [phases.build]
 cmds = [
-  "cd backend && yarn build",
-  "cd frontend && yarn build"
+  "cd backend && yarn build"
 ]
 
 [start]

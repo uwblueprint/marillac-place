@@ -122,12 +122,20 @@ const CustomBadgeTable = ({
                     />
                   </Td>
                   <Td>
-                    <Text textStyle="web.b3" color="#000000" whiteSpace="normal">
+                    <Text
+                      textStyle="web.b3"
+                      color="#000000"
+                      whiteSpace="normal"
+                    >
                       {badge.name}
                     </Text>
                   </Td>
                   <Td>
-                    <Text textStyle="web.b3" color="#000000" whiteSpace="normal">
+                    <Text
+                      textStyle="web.b3"
+                      color="#000000"
+                      whiteSpace="normal"
+                    >
                       {badge.description}
                     </Text>
                   </Td>
@@ -174,7 +182,10 @@ const CustomBadgeTable = ({
         </Table>
       </TableContainer>
       {edit && selected && (
-        <EditCustomBadgeModal onClose={() => setEdit(false)} selected={selected} />
+        <EditCustomBadgeModal
+          onClose={() => setEdit(false)}
+          selected={selected}
+        />
       )}
     </>
   );

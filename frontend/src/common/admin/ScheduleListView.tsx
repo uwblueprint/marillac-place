@@ -90,7 +90,7 @@ export default function ScheduleListView({
           {daysOfWeek.map((day) => (
             <Button
               key={day.name}
-              variant={ selectedDay === day.name ? "primaryFilled" : "white" }
+              variant={selectedDay === day.name ? "primaryFilled" : "white"}
               borderBottomRadius={0}
               flex={1}
               py={2}
