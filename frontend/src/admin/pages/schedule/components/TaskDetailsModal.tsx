@@ -18,7 +18,11 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
-import { CalendarEvent, TaskStatus, TaskStatuses } from "../../../../types/ScheduleTypes";
+import {
+  CalendarEvent,
+  TaskStatus,
+  TaskStatuses,
+} from "../../../../types/ScheduleTypes";
 import OrangeButton from "../../../common/buttons/OrangeButton";
 import SimpleButton from "../../../common/buttons/SimpleButton";
 import TextInput from "../../../common/form/TextInput";
@@ -98,62 +102,80 @@ export default function TaskDetailsModal({
   return (
     <Modal isOpen isCentered onClose={onClose} closeOnOverlayClick={false}>
       <ModalOverlay />
-      <ModalContent 
+      <ModalContent
         width="fit-content"
         minWidth="350px"
         maxWidth="550px"
         height="fit-content"
-        boxShadow="xl" 
-        borderRadius="16px" 
+        boxShadow="xl"
+        borderRadius="16px"
         paddingX="35px"
         paddingY="25px"
       >
         <Flex justify="space-between" align="center" mb="10px">
           <Text textStyle="web.h3">{task.title}</Text>
-          <Flex
-            alignItems="center"
-            justifyContent="flex-end"
-            gap="12px"
-          >
-            <SimpleButton 
-                text="Edit"
-                action={onEdit}
-                is_active={false}
-                text_color="#0C727E"
+          <Flex alignItems="center" justifyContent="flex-end" gap="12px">
+            <SimpleButton
+              text="Edit"
+              action={onEdit}
+              is_active={false}
+              text_color="#0C727E"
             />
-            <SimpleButton 
-                text="Delete"
-                action={onDelete}
-                is_active={false}
-                text_color="#D34C5C"
+            <SimpleButton
+              text="Delete"
+              action={onDelete}
+              is_active={false}
+              text_color="#D34C5C"
             />
           </Flex>
         </Flex>
 
         <Flex flexDir="column" gap="8px">
           <Flex gap="5px" align="flex-end">
-            <Text textStyle="web.s1" color="text.light.secondary">Task Type</Text>
-            <Text textStyle="web.b3" color="#000000">{formatTaskType(task.task_type)}</Text>
+            <Text textStyle="web.s1" color="text.light.secondary">
+              Task Type
+            </Text>
+            <Text textStyle="web.b3" color="#000000">
+              {formatTaskType(task.task_type)}
+            </Text>
           </Flex>
           <Flex gap="5px" align="flex-end">
-            <Text textStyle="web.s1" color="text.light.secondary">Date</Text>
-            <Text textStyle="web.b3" color="#000000">{task.allDay ? "Anytime" : formatDate(task.start)}</Text>
+            <Text textStyle="web.s1" color="text.light.secondary">
+              Date
+            </Text>
+            <Text textStyle="web.b3" color="#000000">
+              {task.allDay ? "Anytime" : formatDate(task.start)}
+            </Text>
           </Flex>
           <Flex gap="5px" align="flex-end">
-            <Text textStyle="web.s1" color="text.light.secondary">Recurrence</Text>
-            <Text textStyle="web.b3" color="#000000">{getRecurrenceText()}</Text>
+            <Text textStyle="web.s1" color="text.light.secondary">
+              Recurrence
+            </Text>
+            <Text textStyle="web.b3" color="#000000">
+              {getRecurrenceText()}
+            </Text>
           </Flex>
           <Flex gap="5px" align="flex-end">
-            <Text textStyle="web.s1" color="text.light.secondary">Marillac Bucks</Text>
-            <Text textStyle="web.b3" color="#000000">${task.marillacBucksAddition}</Text>
+            <Text textStyle="web.s1" color="text.light.secondary">
+              Marillac Bucks
+            </Text>
+            <Text textStyle="web.b3" color="#000000">
+              ${task.marillacBucksAddition}
+            </Text>
           </Flex>
           <Flex gap="5px" align="flex-end">
-            <Text textStyle="web.s1" color="text.light.secondary">Marillac Bucks Deduction</Text>
-            <Text textStyle="web.b3" color="#000000">${task.marillac_bucks_deduction}</Text>
+            <Text textStyle="web.s1" color="text.light.secondary">
+              Marillac Bucks Deduction
+            </Text>
+            <Text textStyle="web.b3" color="#000000">
+              ${task.marillac_bucks_deduction}
+            </Text>
           </Flex>
 
           <Flex flexDir="column">
-            <Text textStyle="web.s1" color="text.light.secondary">Status</Text>
+            <Text textStyle="web.s1" color="text.light.secondary">
+              Status
+            </Text>
             <Flex flexDir="row" gap="8px">
               <SimpleButton
                 text="Assigned"
@@ -182,7 +204,7 @@ export default function TaskDetailsModal({
             </Flex>
           </Flex>
 
-          <TextInput 
+          <TextInput
             label="Comments"
             current_value={comment}
             action={(e: any) => setComment(e.target.value)}
@@ -195,16 +217,16 @@ export default function TaskDetailsModal({
           gap="12px"
           mt="15px"
         >
-          <SimpleButton 
-              text="Cancel"
-              action={onClose}
-              is_active={false}
-              text_color="#000000"
+          <SimpleButton
+            text="Cancel"
+            action={onClose}
+            is_active={false}
+            text_color="#000000"
           />
-          <OrangeButton 
-              text="Save Changes"
-              action={handleSave}
-              is_active={false}
+          <OrangeButton
+            text="Save Changes"
+            action={handleSave}
+            is_active={false}
           />
         </Flex>
       </ModalContent>

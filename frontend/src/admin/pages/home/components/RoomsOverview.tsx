@@ -55,7 +55,7 @@ export default function RoomsOverview() {
       border="1px solid"
       borderColor="neutral.300"
       borderRadius="8px"
-      height="350px"
+      height="320px"
       marginRight="10px"
       marginBottom="10px"
       flexDir="column"
@@ -107,7 +107,7 @@ export default function RoomsOverview() {
                 justifyContent="space-between"
                 alignItems="center"
                 paddingBottom="10px"
-                gap="10px"
+                gap="5px"
               >
                 <Text
                   textStyle="web.s1"

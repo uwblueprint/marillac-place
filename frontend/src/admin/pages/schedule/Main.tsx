@@ -25,9 +25,11 @@ import { CalendarEvent, ScheduleView } from "../../../types/ScheduleTypes";
 import "./components/ScheduleCalendar.css";
 import OrangeButton from "../../common/buttons/OrangeButton";
 import SimpleButton from "../../common/buttons/SimpleButton";
+import AssignTaskModal from "./components/AssignTaskModal";
 
 export default function AdminSchedulePage() {
   const [editMarillacBucks, setEditMarillacBucks] = useState(false);
+  const [assignTask, setAssignTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState<CalendarEvent | null>(null);
   const [currentView, setCurrentView] = useState<ScheduleView>(
     ScheduleView.CALENDAR
@@ -95,7 +97,7 @@ export default function AdminSchedulePage() {
             <Text textStyle="web.h2" color="text.light.disabled">
               This room is empty
             </Text>
-            <OrangeButton 
+            <OrangeButton
               text="Add Participant"
               action={() => {
                 window.location.href = "/admin/participants";
@@ -112,7 +114,7 @@ export default function AdminSchedulePage() {
                   {moment(currentDate).format("MMMM YYYY").toUpperCase()}
                 </Text>
 
-                <SimpleButton 
+                <SimpleButton
                   text={getCurrentWeekRange(currentDate)}
                   action={() => {}}
                   is_active
@@ -132,12 +134,14 @@ export default function AdminSchedulePage() {
                 onClick={() => setEditMarillacBucks(true)}
               >
                 <Text textStyle="web.b2" fontWeight={700} color="inherit">
-                  {participantData.marillac_bucks} M-Bucks 
+                  {participantData.marillac_bucks} M-Bucks
                 </Text>
-                <EditIcon style={{
-                  width: "17px",
-                  height: "17px"
-                }} />
+                <EditIcon
+                  style={{
+                    width: "17px",
+                    height: "17px",
+                  }}
+                />
               </Button>
             </Flex>
 
@@ -148,7 +152,9 @@ export default function AdminSchedulePage() {
                   fontWeight={700}
                   fontSize="12px"
                   variant={
-                    currentView === ScheduleView.LIST ? "primaryFilled" : "primaryOutline"
+                    currentView === ScheduleView.LIST
+                      ? "primaryFilled"
+                      : "primaryOutline"
                   }
                   borderRightRadius="0"
                   onClick={() => setCurrentView(ScheduleView.LIST)}
@@ -166,14 +172,18 @@ export default function AdminSchedulePage() {
                   fontWeight={700}
                   fontSize="12px"
                   variant={
-                    currentView === ScheduleView.CALENDAR ? "primaryFilled" : "primaryOutline"
+                    currentView === ScheduleView.CALENDAR
+                      ? "primaryFilled"
+                      : "primaryOutline"
                   }
                   borderLeftRadius="0"
                   onClick={() => setCurrentView(ScheduleView.CALENDAR)}
                   leftIcon={
                     <CalendarIcon
                       color={
-                        currentView === ScheduleView.CALENDAR ? "white" : "#E67D4F"
+                        currentView === ScheduleView.CALENDAR
+                          ? "white"
+                          : "#E67D4F"
                       }
                     />
                   }
@@ -182,10 +192,10 @@ export default function AdminSchedulePage() {
                 </Button>
               </HStack>
 
-              <OrangeButton 
+              <OrangeButton
                 text="Assign Task"
-                action={() => {}}
-                is_active={false}
+                action={() => setAssignTask(true)}
+                is_active={assignTask}
               />
             </Flex>
 
@@ -228,6 +238,10 @@ export default function AdminSchedulePage() {
           currentBalance={participantData.marillac_bucks}
           roomNumber={participantData.room_number}
         />
+      )}
+
+      {assignTask && (
+        <AssignTaskModal isOpen={assignTask} onClose={() => setAssignTask(false)} />
       )}
 
       {selectedTask && (

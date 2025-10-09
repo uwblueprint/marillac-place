@@ -1,32 +1,32 @@
-import { Flex, Tab, TabList, Tabs, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Flex, Tab, TabList, Tabs, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 
 type TaskBarProps = {
   participantId: number | undefined;
-}
+};
 
 export default function TaskBar({ participantId }: TaskBarProps) {
   const navigate = useNavigate();
   const [signOut, setSignOut] = useState(false);
-  
+
   const pages = [
     { label: "Home", route: ROUTES.PARTICIPANTS_HOME_PAGE },
     { label: "Schedule", route: ROUTES.PARTICIPANTS_SCHEDULE_PAGE },
     { label: "Announcements", route: ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE },
     { label: "Progress", route: ROUTES.PARTICIPANTS_PROGRESS_PAGE },
   ];
-  
+
   const currentPage = pages.findIndex(
     (page) => page.route === window.location.pathname
   );
-  
+
   const handleSignOut = () => {
     localStorage.removeItem("participant_token");
     return navigate(ROUTES.PARTICIPANTS_LOGIN_PAGE);
   };
-  
+
   return (
     <Flex
       position="absolute"
@@ -43,7 +43,9 @@ export default function TaskBar({ participantId }: TaskBarProps) {
       flexDir="column"
       zIndex={100}
     >
-      <Text textStyle="mobile.h2" color="primary.700">ID #{participantId}</Text>
+      <Text textStyle="mobile.h2" color="primary.700">
+        ID #{participantId}
+      </Text>
       <Tabs
         index={currentPage}
         orientation="vertical"
@@ -84,5 +86,5 @@ export default function TaskBar({ participantId }: TaskBarProps) {
         Sign Out
       </Text>
     </Flex>
-  )
+  );
 }

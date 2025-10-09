@@ -28,10 +28,7 @@ interface TaskTableProps {
   onTaskSelect: (event: CalendarEvent) => void;
 }
 
-export default function TaskTableTop({
-  tasks,
-  onTaskSelect
-}: TaskTableProps) {
+export default function TaskTableTop({ tasks, onTaskSelect }: TaskTableProps) {
   return (
     <Box overflow="hidden">
       <TableContainer
@@ -44,16 +41,24 @@ export default function TaskTableTop({
           <Thead>
             <Tr backgroundColor="neutral.200" w="100%">
               <Th width="30%">
-                <Text textStyle="web.s1" color="#000000" textTransform="none">Name</Text>
+                <Text textStyle="web.s1" color="#000000" textTransform="none">
+                  Name
+                </Text>
               </Th>
               <Th width="20%">
-                <Text textStyle="web.s1" color="#000000" textTransform="none">Status</Text>
+                <Text textStyle="web.s1" color="#000000" textTransform="none">
+                  Status
+                </Text>
               </Th>
               <Th width="15%">
-                <Text textStyle="web.s1" color="#000000" textTransform="none">Time</Text>
+                <Text textStyle="web.s1" color="#000000" textTransform="none">
+                  Time
+                </Text>
               </Th>
               <Th width="10%">
-                <Text textStyle="web.s1" color="#000000" textTransform="none">Marillac Bucks</Text>
+                <Text textStyle="web.s1" color="#000000" textTransform="none">
+                  Marillac Bucks
+                </Text>
               </Th>
               <Th width="25%" />
             </Tr>
@@ -66,7 +71,9 @@ export default function TaskTableTop({
                 outlineColor="neutral.300"
               >
                 <Td position="relative">
-                  <Text textStyle="web.b3" color="#000000">{event.title}</Text>
+                  <Text textStyle="web.b3" color="#000000">
+                    {event.title}
+                  </Text>
                   {event.comment && (
                     <Box
                       position="absolute"
@@ -75,7 +82,10 @@ export default function TaskTableTop({
                       transform="translateY(-50%)"
                       color={getTaskStatusColor(event.task_status)}
                     >
-                      <CommentIcon sx={{ width: "15px", height: "15px" }} color="action" />
+                      <CommentIcon
+                        sx={{ width: "15px", height: "15px" }}
+                        color="action"
+                      />
                     </Box>
                   )}
                 </Td>

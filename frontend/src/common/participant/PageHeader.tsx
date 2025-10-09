@@ -1,19 +1,17 @@
-import { Flex, Text, Image, Spinner } from '@chakra-ui/react';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import React, { useContext, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import TaskBar from './TaskBar';
-import { ParticipantContext } from './ParticipantContext';
-import { GET_MARILLAC_BUCKS } from '../../gql/queries';
+import { Flex, Text, Image, Spinner } from "@chakra-ui/react";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import React, { useContext, useState } from "react";
+import { useQuery } from "@apollo/client";
+import TaskBar from "./TaskBar";
+import { ParticipantContext } from "./ParticipantContext";
+import { GET_MARILLAC_BUCKS } from "../../gql/queries";
 
 type PageHeaderProps = {
   currentPage: string;
-}
+};
 
-function ParticipantPageHeader({
-  currentPage
-}: PageHeaderProps) {
+function ParticipantPageHeader({ currentPage }: PageHeaderProps) {
   const participant = useContext(ParticipantContext);
   const [showTaskBar, setShowTaskBar] = useState(false);
 
@@ -25,9 +23,9 @@ function ParticipantPageHeader({
   });
 
   if (error) {
-    return <Flex>Something went wrong.</Flex>
+    return <Flex>Something went wrong.</Flex>;
   }
-  
+
   if (!participant || loading) {
     return <Spinner />;
   }
@@ -42,19 +40,19 @@ function ParticipantPageHeader({
       justifyContent="space-between"
       position="relative"
     >
-      { !showTaskBar &&
+      {!showTaskBar && (
         <Flex onClick={() => setShowTaskBar(true)} cursor="pointer">
           <MenuIcon fontSize="medium" />
         </Flex>
-      }
-      { showTaskBar &&
+      )}
+      {showTaskBar && (
         <>
           <Flex onClick={() => setShowTaskBar(false)} cursor="pointer">
             <CloseIcon fontSize="medium" />
           </Flex>
           <TaskBar participantId={participant?.id} />
         </>
-      }
+      )}
       <Text textStyle="mobile.h1">{currentPage}</Text>
       <Flex gap="7px" alignItems="center" justifyContent="center">
         <Image
@@ -65,10 +63,12 @@ function ParticipantPageHeader({
           objectFit="cover"
           borderRadius="100%"
         />
-        <Text textStyle="mobile.h2">{data.getParticipantById.marillac_bucks}</Text>
+        <Text textStyle="mobile.h2">
+          {data.getParticipantById.marillac_bucks}
+        </Text>
       </Flex>
     </Flex>
-  )
+  );
 }
 
 export default ParticipantPageHeader;

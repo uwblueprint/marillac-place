@@ -1,6 +1,13 @@
-import {Button, Flex, Input, InputGroup, InputLeftElement, Text } from "@chakra-ui/react";
-import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
+import {
+  Button,
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Text,
+} from "@chakra-ui/react";
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import AddTaskModal from "./components/AddTaskModal";
@@ -31,9 +38,8 @@ export default function AdminTasksPage() {
             task.task_name.toLowerCase().includes(taskFilter.toLowerCase())
         )
       );
-    };
+    }
   }, [taskFilter, loading, error, data]);
-
 
   useEffect(() => {
     localStorage.setItem("tasksSelectedType", selectedTaskType);
@@ -83,7 +89,13 @@ export default function AdminTasksPage() {
         <Flex w="100%" justifyContent="space-between">
           <InputGroup w="25%">
             <InputLeftElement>
-              <SearchIcon style={{ color: 'inherit', fontSize: 16, transform: 'translateY(-2px)' }} />
+              <SearchIcon
+                style={{
+                  color: "inherit",
+                  fontSize: 16,
+                  transform: "translateY(-2px)",
+                }}
+              />
             </InputLeftElement>
             <Input
               pl="35px"
@@ -94,7 +106,7 @@ export default function AdminTasksPage() {
             />
           </InputGroup>
 
-          <OrangeButton 
+          <OrangeButton
             text="Add Task"
             action={() => setAddTask(true)}
             is_active={addTask}
@@ -102,7 +114,9 @@ export default function AdminTasksPage() {
         </Flex>
         <TasksTable loading={loading} error={error} tasks={tasks} />
       </Flex>
-      { addTask && <AddTaskModal type={selectedTaskType} close={() => setAddTask(false)} /> }
+      {addTask && (
+        <AddTaskModal type={selectedTaskType} close={() => setAddTask(false)} />
+      )}
     </>
-  )
+  );
 }
