@@ -40,6 +40,7 @@ const WeeklyEarningsChart = ({
   const upperBound = Math.ceil(maxEarnings * 1.2);
 
   const thisWeekTotal = weeklyEarnings.reduce((sum, val = 0) => sum + val, 0);
+  // will need to turn this into a parameter:
   const lastWeekTotal = thisWeekTotal * 0.77;
   const percentageChange = Math.round(
     ((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100
