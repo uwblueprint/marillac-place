@@ -9,8 +9,6 @@
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "tsc",
-    "seed:dev": "NODE_ENV=development npx prisma db seed",
-    "seed:prod": "NODE_ENV=production npx prisma db seed",
     "prismaInitAndRun": "if [ \"$NODE_ENV\" = \"production\" ]; then npx prisma db push; else npx prisma migrate deploy; fi && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && nodemon -L",
     "start": "npx prisma generate && node build/server.js"
   },
