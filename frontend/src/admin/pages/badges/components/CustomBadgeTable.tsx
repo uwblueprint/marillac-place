@@ -15,12 +15,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-// import EditCustomBadgeModal from "./EditCustomBadgeModal";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
 import { Icon } from "../../../../constants/icons";
 import { DELETE_CUSTOM_BADGE } from "../../../../gql/mutations";
 import EditCustomBadgeModal from "./EditCustomBadgeModal";
-import AdminTable from "../../../common/misc/AdminTable";
+import DataTable from "../../../common/misc/DataTable";
 
 type CustomBadgeTableProps = {
   loading: boolean;
@@ -126,8 +125,7 @@ const CustomBadgeTable = ({
   );
 
   return (
-    <>
-      <AdminTable
+      <DataTable
         loading={loading}
         error={error}
         columns={columns}
@@ -136,7 +134,6 @@ const CustomBadgeTable = ({
         selected={selected}
         edit={edit}
       />
-    </>
   );
 };
 

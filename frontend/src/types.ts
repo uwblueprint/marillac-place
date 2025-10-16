@@ -19,3 +19,13 @@ export type InputProps = {
     action: any;
     width?: string;
 }
+ 
+export type TableProps = {
+  loading: boolean;
+  edit: boolean;
+  selected: any;
+  error: any;
+  columns: { header: string; width: string; sort?: JSX.Element }[];
+  rows: JSX.Element[][];
+  editModal: JSX.Element;
+};

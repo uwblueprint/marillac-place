@@ -16,7 +16,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { DELETE_TASK } from "../../../../gql/mutations";
 import EditTaskModal from "./EditTaskModal";
-import AdminTable from "../../../common/misc/AdminTable";
+import DataTable from "../../../common/misc/DataTable";
 
 type TasksTableProps = {
   loading: boolean;
@@ -158,7 +158,7 @@ const TasksTable = ({ loading, error, tasks }: TasksTableProps) => {
 
   return (
     <>
-      <AdminTable
+      <DataTable
         columns={columns}
         rows={rows}
         loading={loading}

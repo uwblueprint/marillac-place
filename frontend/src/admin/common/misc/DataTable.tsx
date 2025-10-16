@@ -11,18 +11,9 @@ import {
   Flex,
   Spinner,
 } from "@chakra-ui/react";
+import { TableProps } from "../../../types";
 
-type AdminTableProps = {
-  loading: boolean;
-  edit: boolean;
-  selected: any;
-  error: any;
-  columns: { header: string; width: string; sort?: JSX.Element }[];
-  rows: JSX.Element[][];
-  editModal: JSX.Element;
-};
-
-const AdminTable = ({
+const DataTable = ({
   loading,
   edit,
   selected,
@@ -30,7 +21,7 @@ const AdminTable = ({
   columns,
   rows,
   editModal,
-}: AdminTableProps) => {
+}: TableProps) => {
   return (
     <>
       <TableContainer
@@ -95,4 +86,4 @@ const AdminTable = ({
   );
 };
 
-export default AdminTable;
+export default DataTable;

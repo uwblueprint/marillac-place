@@ -18,7 +18,7 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_BADGE_STATUS } from "../../../../gql/mutations";
 import { Icon } from "../../../../constants/icons";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
-import AdminTable from "../../../common/misc/AdminTable";
+import DataTable from "../../../common/misc/DataTable";
 
 type SystemBadgeTableProps = {
   loading: boolean;
@@ -154,7 +154,7 @@ const SystemBadgeTable = ({
   );
 
   return (
-    <AdminTable
+    <DataTable
       loading={loading}
       edit={edit}
       selected={selected}

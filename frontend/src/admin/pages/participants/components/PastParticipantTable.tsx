@@ -18,7 +18,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PAST_PARTICIPANTS } from "../../../../gql/queries";
 import EditPastParticipantCard from "./EditPastParticipantCard";
-import AdminTable from "../../../common/misc/AdminTable";
+import DataTable from "../../../common/misc/DataTable";
 
 type SortIconProps = {
   state: number;
@@ -233,7 +233,7 @@ const PastParticipantTable = () => {
 
   return (
     <>
-      <AdminTable
+      <DataTable
         columns={columns}
         rows={rows}
         loading={loading}
