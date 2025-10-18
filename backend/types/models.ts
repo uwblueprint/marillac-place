@@ -50,22 +50,6 @@ const models = gql`
     participant: Participant!
   }
 
-  type AssignedTaskGroup {
-    SPECIFIC: [AssignedTask!]!
-    ANYTIME: [AssignedTask!]!
-  }
-
-  type AssignedTasksByDay {
-    MONDAY: AssignedTaskGroup
-    TUESDAY: AssignedTaskGroup
-    WEDNESDAY: AssignedTaskGroup
-    THURSDAY: AssignedTaskGroup
-    FRIDAY: AssignedTaskGroup
-    SATURDAY: AssignedTaskGroup
-    SUNDAY: AssignedTaskGroup
-    ANYDAY: [AssignedTask!]!
-  }
-
   type Note {
     note_id: Int!
     message: String!

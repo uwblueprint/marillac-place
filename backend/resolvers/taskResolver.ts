@@ -19,10 +19,10 @@ const taskResolver = {
     // },
     getTasksByType: async (
       _parent: undefined,
-      { type }: { type: TaskType }
+      { type }: { type: TaskType[] }
     ): Promise<Array<Task>> => {
       return await prisma.task.findMany({
-          where: { task_type: type },
+          where: { task_type: { in: type } },
       })
     },
     // getTasksByRecurrenceFrequency: async (
@@ -128,15 +128,6 @@ const taskResolver = {
     ): Promise<boolean> => {
       await prisma.task.delete({
         where: { task_id: taskId },
-      });
-      return true;
-    },
-    deleteAssignedTask: async (
-      _parent: undefined,
-      { assigned_task_id }: { assigned_task_id: number }
-    ): Promise<boolean> => {
-      await prisma.assignedTask.delete({
-        where: { assigned_task_id: assigned_task_id },
       });
       return true;
     },

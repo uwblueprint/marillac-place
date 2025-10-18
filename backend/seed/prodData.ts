@@ -1,4 +1,4 @@
-import { BadgeType, Icon } from "@prisma/client";
+import { BadgeType, Icon, RecurrenceFrequency, TaskType } from "@prisma/client";
 
 export const systemBadges = [
   {

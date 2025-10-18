@@ -1,5 +1,5 @@
 import React from "react";
-import ParticipantPageHeader from "../../../common/participant/PageHeader";
+import ParticipantPageHeader from "../../common/PageHeader";
 import WeeklyEarningsChart from "./elements/EarningsWidget";
 
 export default function ParticipantsProgressPage() {

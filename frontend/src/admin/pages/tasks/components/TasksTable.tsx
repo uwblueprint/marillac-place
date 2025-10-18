@@ -152,7 +152,7 @@ const TasksTable = ({ loading, error, tasks }: TasksTableProps) => {
       })
     : [];
 
-  const editModal = (
+  const editModal = selected && (
     <EditTaskModal selected={selected} close={() => setEdit(false)} />
   );
 

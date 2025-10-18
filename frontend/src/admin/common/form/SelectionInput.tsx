@@ -1,6 +1,6 @@
 import React from "react";
 import { FormControl, RadioGroup, Stack, Radio, Text, Select } from "@chakra-ui/react";
-import { InputProps } from "../../../types";
+import { InputProps } from "../../../types/component";
 
 type SelectionInputProps = InputProps & {
   mode: "radio" | "dropdown";
@@ -54,7 +54,7 @@ export default function SelectionInput({
         {label}
       </Text>
       <Select
-        value={current_value}
+        value={current_value ?? ""}
         onChange={action}
         width={width}
         height="32px"
@@ -70,6 +70,7 @@ export default function SelectionInput({
           boxShadow: "none",
         }}
       >
+        <option value="">Please Select</option>
         {Object.entries(value_options).map(([key, value], index) => (
           <option key={index} value={value}>
             {key}

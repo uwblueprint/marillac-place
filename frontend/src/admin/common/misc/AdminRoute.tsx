@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
-import SideBar from "../../../common/admin/SideBar";
-import Notification from "../../../common/admin/Notification";
+import SideBar from "./SideBar";
+import Notification from "./Notification";
 import * as ROUTES from "../../../constants/routes";
 import { isAdmin, isRelief } from "../../../utils/checkRole";
 import Loading from "../../../Loading";

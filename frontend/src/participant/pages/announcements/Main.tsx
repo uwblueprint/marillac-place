@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Flex, Grid, Text } from "@chakra-ui/react";
-import ParticipantPageHeader from "../../../common/participant/PageHeader";
+import ParticipantPageHeader from "../../common/PageHeader";
 import ParticipantAnnouncementCard from "./elements/ParticipantAnnouncementCard";
 
 export default function ParticipantsAnnouncementsPage() {

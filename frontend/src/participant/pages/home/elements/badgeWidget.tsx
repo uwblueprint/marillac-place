@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { PARTICIPANTS_PROGRESS_PAGE } from "../../../../constants/routes";
-import { BadgeRarity } from "../../../../common/components/Badge";
+import { BadgeRarity } from "../../../common/Badge";
 import BadgeRow from "./BadgeRow";
 
 export type BadgeRowType = "congratulations" | "lostStreak" | "progress";

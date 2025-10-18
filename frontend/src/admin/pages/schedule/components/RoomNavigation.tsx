@@ -1,6 +1,6 @@
 import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
-import { ROOM_NUMBERS } from "../../constants/rooms";
+import { ROOM_NUMBERS } from "../../../../constants/misc";
 
 interface RoomNavigationProps {
   selectedRoom: number;

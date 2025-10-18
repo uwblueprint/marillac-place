@@ -15,13 +15,14 @@ import {
 } from "@chakra-ui/react";
 import CommentIcon from "@mui/icons-material/ModeCommentOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { CalendarEvent } from "../../types/ScheduleTypes";
+import { CalendarEvent } from "./ScheduleTypes";
 import {
   getTaskStatusColor,
   getTaskStatusBgColor,
   getTaskStatusText,
   formatEventTime,
-} from "../../utils/scheduleUtils";
+} from "../../../../utils/scheduleUtils";
+import { TaskType } from "../../../../types/task";
 
 interface TaskTableProps {
   tasks: CalendarEvent[];
@@ -71,7 +72,7 @@ export default function TaskTableBottom({
               >
                 <Td position="relative">
                   <Text textStyle="web.b3" color="#000000">
-                    {event.title}
+                    {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
                   </Text>
                   {event.comment && (
                     <Box

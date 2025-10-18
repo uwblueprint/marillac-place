@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import AnnouncementCard from "./components/AnnouncementCard";
 import CreateAnnouncementModal from "./components/CreateAnnouncementModal";
-import { ROOM_NUMBERS } from "../../../constants/rooms";
+import { ROOM_NUMBERS } from "../../../constants/misc";
 import {
   GET_ALL_ANNOUNCEMENTS,
   GET_ANNOUNCEMENTS_BY_PARTICIPANTS,

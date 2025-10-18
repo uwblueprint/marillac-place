@@ -15,7 +15,7 @@ import {
   Status,
   Icon,
 } from "@prisma/client";
-import { systemBadges } from "./prodData";
+import { individual_goal, systemBadges } from "./prodData";
 import {
   participants,
   tasks,

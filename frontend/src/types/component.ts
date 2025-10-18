@@ -15,7 +15,7 @@ export type ModalProps = {
 
 export type InputProps = {
     label: string;
-    current_value: string;
+    current_value: any;
     action: any;
     width?: string;
 }
@@ -27,5 +27,6 @@ export type TableProps = {
   error: any;
   columns: { header: string; width: string; sort?: JSX.Element }[];
   rows: JSX.Element[][];
-  editModal: JSX.Element;
+  editModal: JSX.Element | null;
 };
+
