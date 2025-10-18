@@ -419,7 +419,7 @@ export const GET_ASSIGNED_TASKS = gql`
 `;
 
 export const GET_TASKS_BY_TYPE = gql`
-  query getTasksByType($type: TaskType!) {
+  query getTasksByType($type: [TaskType!]!) {
     getTasksByType(type: $type) {
       task_id
       task_name

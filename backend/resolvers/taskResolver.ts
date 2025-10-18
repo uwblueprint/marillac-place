@@ -19,10 +19,10 @@ const taskResolver = {
     // },
     getTasksByType: async (
       _parent: undefined,
-      { type }: { type: TaskType }
+      { type }: { type: TaskType[] }
     ): Promise<Array<Task>> => {
       return await prisma.task.findMany({
-          where: { task_type: type },
+          where: { task_type: { in: type } },
       })
     },
     // getTasksByRecurrenceFrequency: async (

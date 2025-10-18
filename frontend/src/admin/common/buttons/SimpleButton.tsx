@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Text } from "@chakra-ui/react";
-import { ButtonProps } from "../../../types";
+import { ButtonProps } from "../../../types/component";
 
 type SimpleButtonProps = ButtonProps & {
   text_color: string;

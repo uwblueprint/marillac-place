@@ -12,7 +12,7 @@ const resolvers = gql`
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
     getAssignedTasks(participant_id: Int!): AssignedTasksByDay!
-    getTasksByType(type: TaskType!): [Task]
+    getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
     hasCompletedAllRequiredTasks(participantId: Int!): Boolean
@@ -102,7 +102,7 @@ const resolvers = gql`
       endDate: String!
       marillacBucksAddition: Int!
       marillacBucksDeduction: Int!
-      taskType: String!
+      taskType: TaskType!
       goalName: String
       goalDescription: String
       comment: String

@@ -11,7 +11,7 @@ import {
   Flex,
   Spinner,
 } from "@chakra-ui/react";
-import { TableProps } from "../../../types";
+import { TableProps } from "../../../types/component";
 
 const DataTable = ({
   loading,

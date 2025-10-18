@@ -240,8 +240,8 @@ export default function AdminSchedulePage() {
         />
       )}
 
-      {assignTask && (
-        <AssignTaskModal isOpen={assignTask} onClose={() => setAssignTask(false)} />
+      {assignTask && participantData && (
+        <AssignTaskModal participantId={participantData.participant_id} isOpen={assignTask} onClose={() => setAssignTask(false)} />
       )}
 
       {selectedTask && (
