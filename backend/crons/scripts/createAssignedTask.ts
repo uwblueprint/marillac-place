@@ -1,16 +1,18 @@
 import prisma from "../../prisma";
 import { TaskType, RecurrenceFrequency, TimeOption, DayOfWeek } from "@prisma/client";
-import ParticipantService from "../../services/implementation/participantImplementation"; 
-import TaskService from "../../services/implementation/taskImplementation";
-import { formatDateTime } from "../../utils/formatDateTime";
+import { formatDateTime, getToday } from "../../utils/formatDateTime";
 
 async function createAssignedTasks(): Promise<boolean> {
   try {
-    const participantService = new ParticipantService();
-    const taskService = new TaskService();
+    const participants = await prisma.participant.findMany({
+      where: {
+        OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+      }
+    });
 
-    const participants = await participantService.getCurrentParticipants();
-    const requiredTasks = await taskService.getTasksByType(TaskType.REQUIRED);
+    const requiredTasks = await prisma.task.findMany({
+      where: { task_type: TaskType.REQUIRED },
+    })
 
     const weekdayOffsets: { [key in DayOfWeek]: number } = {
       MONDAY: 0,
