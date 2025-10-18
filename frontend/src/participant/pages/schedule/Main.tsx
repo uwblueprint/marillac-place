@@ -1,5 +1,5 @@
 import React from "react";
-import ParticipantPageHeader from "../../../common/participant/PageHeader";
+import ParticipantPageHeader from "../../common/PageHeader";
 
 export default function ParticipantsSchedulePage() {
   return (

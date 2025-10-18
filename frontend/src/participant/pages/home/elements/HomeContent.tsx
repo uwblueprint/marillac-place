@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import { ParticipantContext } from "../../../../common/participant/ParticipantContext";
+import { ParticipantContext } from "../../../common/ParticipantContext";
 import TasksCompletedWidget from "./TasksCompletedWidget";
 import { HAS_COMPLETED_ALL_REQUIRED_TASKS } from "../../../../gql/queries";
 import BadgeRow from "./BadgeRow";
-import { BadgeRarity } from "../../../../common/components/Badge";
+import { BadgeRarity } from "../../../common/Badge";
 
 export default function HomeContent() {
   const participant = useContext(ParticipantContext);

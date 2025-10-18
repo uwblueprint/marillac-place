@@ -22,7 +22,7 @@ import {
   CalendarEvent,
   TaskStatus,
   TaskStatuses,
-} from "../../../../types/ScheduleTypes";
+} from "./ScheduleTypes";
 import OrangeButton from "../../../common/buttons/OrangeButton";
 import SimpleButton from "../../../common/buttons/SimpleButton";
 import TextInput from "../../../common/form/TextInput";

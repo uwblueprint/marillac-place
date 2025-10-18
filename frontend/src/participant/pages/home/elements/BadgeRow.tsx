@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Flex, Text, Divider, Button } from "@chakra-ui/react";
-import Badge, { BadgeRarity } from "../../../../common/components/Badge";
+import Badge, { BadgeRarity } from "../../../common/Badge";
 
 interface BadgeRowProps {
   messageText: string;

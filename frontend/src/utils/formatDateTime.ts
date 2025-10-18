@@ -49,6 +49,25 @@ export function getRecentDate(
   return formatDateTime(date, includeTime);
 }
 
+export function getWeekBounds(): { weekStart: string; weekEnd: string } {
+  const now = new Date();
+  const day = now.getDay();
+
+  // Start of week (Sunday)
+  const sunday = new Date(now);
+  sunday.setDate(now.getDate() - day);
+  sunday.setHours(0, 0, 0, 0);
+  const weekStart = formatDateTime(sunday, true);
+
+  // End of week (Saturday)
+  const saturday = new Date(sunday);
+  saturday.setDate(sunday.getDate() + 6);
+  saturday.setHours(23, 59, 0, 0);
+  const weekEnd = formatDateTime(saturday, true);
+
+  return { weekStart, weekEnd };
+}
+
 const fmt = new Intl.DateTimeFormat("en-CA", {
   timeZone: "America/New_York",
   year: "numeric",
@@ -59,17 +78,17 @@ const fmt = new Intl.DateTimeFormat("en-CA", {
   hour12: false,
 });
 
-export function formatDateFromString(day: DayOfWeek, time?: string, is_end?: boolean): string {
-  const dayMap: Record<DayOfWeek, number> = {
-    MONDAY: 0,
-    TUESDAY: 1,
-    WEDNESDAY: 2,
-    THURSDAY: 3,
-    FRIDAY: 4,
-    SATURDAY: 5,
-    SUNDAY: 6,
-  };
+const dayMap: Record<DayOfWeek, number> = {
+  MONDAY: 0,
+  TUESDAY: 1,
+  WEDNESDAY: 2,
+  THURSDAY: 3,
+  FRIDAY: 4,
+  SATURDAY: 5,
+  SUNDAY: 6,
+};
 
+export function formatDateFromString(day: DayOfWeek, time?: string, is_end?: boolean): string {
   const currentDate = new Date();
   const whichDay = currentDate.getDay();
   const diffToMonday = whichDay === 0 ? -6 : 1 - whichDay
@@ -89,3 +108,28 @@ export function formatDateFromString(day: DayOfWeek, time?: string, is_end?: boo
   return fmt.format(targetDay);
 }
 
+// takes in "YY-MM-DD, HH:mm" and convert to Date object
+export function formatDateFromDateString(dateString: string) {
+  const formatted = dateString.replace(", ", "T") + ":00";
+  const date = new Date(formatted);
+  return date
+}
+
+// format date string from string
+// format date string from date
+// format date from date string
+
+export function isSameDay(day: DayOfWeek, date: Date) {
+  const currentDate = new Date();
+  const whichDay = currentDate.getDay();
+  const diffToMonday = whichDay === 0 ? -6 : 1 - whichDay
+
+  const targetDay = new Date();
+  targetDay.setDate(currentDate.getDate() + diffToMonday + dayMap[day])
+
+  return (
+    date.getFullYear() === targetDay.getFullYear() &&
+    date.getMonth() === targetDay.getMonth() &&
+    date.getDate() === targetDay.getDate()
+  );
+}

@@ -15,13 +15,13 @@ import {
 } from "@chakra-ui/react";
 import CommentIcon from "@mui/icons-material/ModeCommentOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { CalendarEvent } from "../../types/ScheduleTypes";
+import { CalendarEvent } from "./ScheduleTypes";
 import {
   getTaskStatusColor,
   getTaskStatusBgColor,
   getTaskStatusText,
   formatEventTime,
-} from "../../utils/scheduleUtils";
+} from "../../../../utils/scheduleUtils";
 
 interface TaskTableProps {
   tasks: CalendarEvent[];

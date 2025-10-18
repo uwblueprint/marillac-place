@@ -28,7 +28,7 @@ import NotFound from "./NotFound";
 
 import * as ROUTES from "./constants/routes";
 import AdminRoute from "./admin/common/misc/AdminRoute";
-import ParticipantRoute from "./common/participant/ParticipantRoute";
+import ParticipantRoute from "./participant/common/ParticipantRoute";
 
 const App = (): React.ReactElement => {
   const theme = getChakraTheme();

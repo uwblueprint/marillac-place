@@ -58,3 +58,10 @@ export function getWeekBounds(): { weekStart: string; weekEnd: string } {
 
   return { weekStart, weekEnd };
 }
+
+// takes in "YY-MM-DD, HH:mm" and convert to Date object
+export function formatDateFromDateString(dateString: string) {
+  const formatted = dateString.replace(", ", "T") + ":00";
+  const date = new Date(formatted);
+  return date
+}

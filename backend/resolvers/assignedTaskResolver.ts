@@ -1,27 +1,44 @@
 import prisma from "../prisma";
 import {
   AssignedTask,
-  TaskType
+  TaskType,
+  Status
 } from "@prisma/client";
-import { formatDateTime, getWeekBounds } from "../utils/formatDateTime";
+import { formatDateFromDateString, formatDateTime, getWeekBounds } from "../utils/formatDateTime";
 
-type AssignedTaskGroup = {
-  SPECIFIC: AssignedTask[];
-  ANYTIME: AssignedTask[];
-};
+type CalendarEvent = {
+  id: number;
+  title: string;
+  start: string;
+  end: string;
+  allDay: boolean;
+  task_status: Status;
+  task_type: TaskType;
+  marillacBucksAddition: number;
+  marillac_bucks_deduction: number;
+  comment: string | null;
+}
+
+function convertAssignedTaskToCalendarEvent(task: AssignedTask, is_specific: boolean): CalendarEvent {
+  const event: CalendarEvent = {
+    id: task.assigned_task_id,
+    title: task.task_name,
+    start: task.start_date,
+    end: task.end_date,
+    allDay: !is_specific,
+    task_status: task.task_status,
+    task_type: task.task_type,
+    marillacBucksAddition: task.marillac_bucks_addition,
+    marillac_bucks_deduction: task.marillac_bucks_deduction,
+    comment: task.comment,
+  }
+  return event
+}
 
 function groupTasks(tasks: AssignedTask[]) {
-  const dayMap: Record<string, AssignedTaskGroup> = {
-    MONDAY: { SPECIFIC: [], ANYTIME: [] },
-    TUESDAY: { SPECIFIC: [], ANYTIME: [] },
-    WEDNESDAY: { SPECIFIC: [], ANYTIME: [] },
-    THURSDAY: { SPECIFIC: [], ANYTIME: [] },
-    FRIDAY: { SPECIFIC: [], ANYTIME: [] },
-    SATURDAY: { SPECIFIC: [], ANYTIME: [] },
-    SUNDAY: { SPECIFIC: [], ANYTIME: [] },
-  };
-
-  const ANYDAY: AssignedTask[] = [];
+  const specific: CalendarEvent[] = [];
+  const anytime: CalendarEvent[] = [];
+  const anyday: CalendarEvent[] = [];
   const { weekStart, weekEnd } = getWeekBounds();
 
   for (const task of tasks) {
@@ -29,30 +46,29 @@ function groupTasks(tasks: AssignedTask[]) {
       continue;
     }
 
-    const start = new Date(task.start_date);
-    const end = new Date(task.end_date);
+    const start = formatDateFromDateString(task.start_date);
+    const end = formatDateFromDateString(task.end_date);
 
     const isSameDay = start.toDateString() === end.toDateString();
     const isDayStart = start.getHours() === 0 && start.getMinutes() === 0;
     const isDayEnd = end.getHours() === 23 && end.getMinutes() === 59;
 
     if (!isSameDay) {
-      ANYDAY.push(task);
+      anyday.push(convertAssignedTaskToCalendarEvent(task, false));
       continue;
     }
 
-    const weekday = start.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-
     if (isDayStart && isDayEnd) {
-      dayMap[weekday].ANYTIME.push(task);
+      anytime.push(convertAssignedTaskToCalendarEvent(task, false));
     } else {
-      dayMap[weekday].SPECIFIC.push(task);
+      specific.push(convertAssignedTaskToCalendarEvent(task, true));
     }
   }
 
   return {
-    ...dayMap,
-    ANYDAY,
+    SPECIFIC: specific,
+    ANYTIME: anytime,
+    ANYDAY: anyday,
   };
 }
 
@@ -107,35 +123,9 @@ const assignedTaskResolver = {
       _parent: undefined,
       { participant_id }: { participant_id: number },
     ): Promise<{
-      MONDAY?: {
-        SPECIFIC: AssignedTask[];
-        ANYTIME: AssignedTask[];
-      };
-      TUESDAY?: {
-        SPECIFIC: AssignedTask[];
-        ANYTIME: AssignedTask[];
-      };
-      WEDNESDAY?: {
-        SPECIFIC: AssignedTask[];
-        ANYTIME: AssignedTask[];
-      };
-      THURSDAY?: {
-        SPECIFIC: AssignedTask[];
-        ANYTIME: AssignedTask[];
-      };
-      FRIDAY?: {
-        SPECIFIC: AssignedTask[];
-        ANYTIME: AssignedTask[];
-      };
-      SATURDAY?: {
-        SPECIFIC: AssignedTask[];
-        ANYTIME: AssignedTask[];
-      };
-      SUNDAY?: {
-        SPECIFIC: AssignedTask[];
-        ANYTIME: AssignedTask[];
-      };
-      ANYDAY: AssignedTask[];
+      SPECIFIC: CalendarEvent[]
+      ANYTIME: CalendarEvent[];
+      ANYDAY: CalendarEvent[];
     }> => {
       const assignedTasks = await prisma.assignedTask.findMany({
 	      where: { participant_id: participant_id },
