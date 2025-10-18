@@ -6,7 +6,7 @@ export async function isAdmin() {
   try {
     const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
     const { payload } = await jwtVerify(token, secret, {
-      algorithms: ['HS256'],
+      algorithms: ["HS256"],
     });
 
     if (payload?.role !== "admin") {
@@ -16,7 +16,7 @@ export async function isAdmin() {
   } catch (err) {
     return false;
   }
-};
+}
 
 export async function isRelief() {
   const token = localStorage.getItem("admin_token") ?? "";
@@ -24,7 +24,7 @@ export async function isRelief() {
   try {
     const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
     const { payload } = await jwtVerify(token, secret, {
-      algorithms: ['HS256'],
+      algorithms: ["HS256"],
     });
 
     if (payload?.role !== "relief") {
@@ -34,7 +34,7 @@ export async function isRelief() {
   } catch (err) {
     return false;
   }
-};
+}
 
 export async function isParticipant() {
   const token = localStorage.getItem("participant_token") ?? "";
@@ -42,7 +42,7 @@ export async function isParticipant() {
   try {
     const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
     const { payload } = await jwtVerify(token, secret, {
-      algorithms: ['HS256'],
+      algorithms: ["HS256"],
     });
 
     if (payload?.role !== "participant") {
@@ -52,4 +52,22 @@ export async function isParticipant() {
   } catch (err) {
     return false;
   }
-};
+}
+
+export async function getParticipantId() {
+  const token = localStorage.getItem("participant_token") ?? "";
+
+  try {
+    const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
+    const { payload } = await jwtVerify(token, secret, {
+      algorithms: ["HS256"],
+    });
+
+    if (!payload || !payload.id) {
+      return null;
+    }
+    return Number(payload.id);
+  } catch (err) {
+    return null;
+  }
+}

@@ -1,206 +1,114 @@
 # Marillac Place
 
-## Stack
-
-**Backend Language:** TypeScript (Express.js on Node.js)
-**Backend API:** GraphQL
-**Database:** PostgreSQL
-
-The provided frontend is a React application written in TypeScript.
-
 ## Table of Contents
+⚙️  [Tech Stack](#tech-stack)  
+🚀  [Development Setup](#development-setup)  
+▶️  [Application Execution](#application-execution)  
+📊  [Database Interactions](#database-interactions)  
+🐞  [FAQ & Debugging](#faq--debugging)  
+✨  [Linting](#linting)  
+🌐  [Other Links](#other-links)  
 
-- 🔧[Setup](#setup)
-- 🧰 [Useful Commands](#useful-commands)
-  - ℹ️ [Get Names & Statuses of Running Containers](#get-names--statuses-of-running-containers)
-  - 💽 [Accessing PostgreSQL Database](#accessing-postgresql-database)
-  - ✨ [Linting & Formatting](#linting--formatting)
-  - 🧪 [Running Tests](#running-tests)
-- 🌳 [Version Control Guide](#version-control-guide)
-  - 🌿 [Branching](#branching)
-  - 🔒 [Commits](#commits)
+## Tech Stack
+**Frontend:** React, Chakra UI, Material UI  
+**Backend:** TypeScript, GraphQL, Express.js on Node.js  
+**Database:** PostgreSQL  
 
-### Prerequisites
-
-- Install Docker Desktop ([MacOS](https://docs.docker.com/docker-for-mac/install/) | [Windows (Home)](https://docs.docker.com/docker-for-windows/install-windows-home/) | [Windows (Pro, Enterprise, Education)](https://docs.docker.com/docker-for-windows/install/) | [Linux](https://docs.docker.com/engine/install/#server)) and ensure that it is running
-
-### Setup
-
-1. Git clone this repository
-
+## Development Setup
+1. Download & open [Docker Desktop](https://docs.docker.com/get-started/get-docker/)
+2. Clone this repository
 ```bash
 git clone https://github.com/uwblueprint/marillac-place.git
 cd marillac-place
 ```
-
-2. Go into ./backend and create a .env file
-3. In the .env file add the DATABASE_URL
-
-   - If on (Only if running manual prisma setup) MacOS replace username with your user which can be found in Finder (Finder -> Go -> Home)
-   - If on Windows replace '<USERNAME>' with 'postgres'
-
-```
-DATABASE_URL=postgresql://postgres:postgres@mp_db:5432/mp
-```
-
-4. Create a .env file at the root with this information
-
-```
- POSTGRES_DB_DEV=mp
- POSTGRES_DB_TEST=mp_test
- POSTGRES_USER=postgres
- POSTGRES_PASSWORD=postgres
- DB_HOST=mp_db
-```
-
-5. Create a .env file in ./frontend with
-
+3. Install [NVM](https://www.freecodecamp.org/news/node-version-manager-nvm-install-guide/) and run the following commands:
 ```bash
-REACT_APP_BACKEND_URL=http://localhost:5000
-```
-
-6. Run docker compose
-
-```bash
-docker-compose up --build
-```
-
-The backend runs at http://localhost:5000 and the frontend runs at http://localhost:3000. By default, we use GraphQL (with TypeScript backend), REST (with Python backend), MongoDB, with user auth.
-
-### Note: Manual Database Setup
-
-If for some reason docker container is not syncing with your prisma models in backend/prisma/schema
-
-Update .env file in /backend to be
-(Use different username for Mac)
-
-```bash
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mp
-```
-
-Try running (when the docker container is up):
-
-```
-npx prisma migrate dev
-```
-
-This may require you to upgrade your node version locally so try (only if it tells you the node version is insufficient)
-(https://www.freecodecamp.org/news/node-version-manager-nvm-install-guide/) If you don't have nvm
-
-```
 nvm install 18.18.2
 nvm use 18.18.2
 ```
+4. Optional, you might recieve a few errors about missing packages on your local computer. To resolve them, run *yarn install* in both the frontend and backend folders
+5. Populate .env files in the root, frontend and backend folders
+6. Apply prisma schema onto database following [these instructions](#database-interactions)
 
-## Creating Prisma Migration
-
-Go to `/backend` and run
-
+## Application Execution
 ```bash
-npx prisma migrate dev
+docker-compose up --build
 ```
+Frontend: http://localhost:3000  
+Backend: http://localhost:5000/graphql
 
-## Useful Commands
+## Database Interactions
+Apply / migrate changes in prisma.schema to the database:
+1. Change the DATABASE_URL in the backend .env file to: postgresql://postgres:postgres@**localhost**:5432/mp
+2. In your terminal, run `npx prisma migrate dev` in the backend folder and follow the prompts
+3. Don’t forget to reset DATABASE_URL back to postgresql://postgres:postgres@**mp_db**:5432/mp
 
-### Get Names & Statuses of Running Containers
-
+Common database commands:
 ```bash
-docker ps
-```
-
-### Accessing PostgreSQL Database
-
-```bash
-# run a bash shell in the container
+# access your database container (ensure it is running)
 docker exec -it mp_db /bin/bash
 
-# in container now
+# enter the postgres shell 
 psql -U postgres -d mp
 
-# in postgres shell, some common commands:
-# display all table names
+# run any psql queries and commands
+SELECT * FROM participant;
+DELETE FROM task WHERE task_id = 1;
 \dt
-# quit
 \q
-# you can run any SQL query, don't forget the semicolon!
-SELECT * FROM <table-name>;
 ```
 
-### Linting & Formatting
-
-Backend:
-
+## FAQ & Debugging  
+<details>
+<summary>How do I test my GraphQL endpoint?</summary>
+  
+- Ensure your backend container is running without error 
+- Go to http://localhost:5000/graphql and you should see a UI for testing 
+- In the bottom panel, select “HTTP HEADERS” and paste the following testing token: 
 ```bash
-# linting & formatting warnings only
-docker exec -it mp_backend /bin/bash -c "yarn lint"
+{
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDc3MTc5NDF9.8Z7MEw0o7fgIpFTnw82kv0yTW8tG2i7TrcuXPY-i0l4"
+}
+```  
+- Run your query/mutation in the left panel and view the output on the right
+</details>
 
-# linting with fix & formatting
-docker exec -it mp_backend /bin/bash -c "yarn fix"
-```
+<details>
+<summary>What are the test credentials to login as admin?</summary>
+  
+- Administrative Staff Password: abc123  
+- Relief Staff Password: test123
+</details>
 
-Frontend:
-
+<details>
+<summary>"ENOSPC: no space left on device” when trying to re-build docker container</summary>
+  
+Run the following in your terminal:
 ```bash
-# linting & formatting warnings only
-docker exec -it mp_frontend /bin/bash -c "yarn lint"
-
-# linting with fix & formatting
-docker exec -it mp_frontend /bin/bash -c "yarn fix"
+docker system prune -a
+docker-compose up --build
 ```
+</details>
 
-### Running Tests
-
-Backend:
-
+<details>
+<summary>error ESOCKETTIMEOUT: "There appears to be a trouble with your network connection. Retrying…"</summary>
+  
+Sometimes Material UI takes a long time to install initially so we'll want to increase the timeout limit:
 ```bash
-docker exec -it mp_backend /bin/bash -c "yarn test"
+# in each docker file replace any "yarn install" line with:
+RUN yarn config set network-timeout 600000 && yarn install
 ```
+</details>
 
-Frontend:
-
+## Linting
 ```bash
-docker exec -it mp_frontend /bin/bash -c "yarn test"
+# linting with warnings only
+docker exec -it mp_[frontend/backend] /bin/bash -c "yarn lint"
+
+# linting with automatic fixes
+docker exec -it mp_[frontend/backend] /bin/bash -c "yarn fix"
 ```
 
-## Version Control Guide
-
-### Branching
-
-- Branch off of `main` for all feature work and bug fixes, creating a "feature branch". Prefix the feature branch name with your name. The branch name should be in kebab case and it should be short and descriptive. E.g. `sherry/readme-update`
-- To integrate changes on `main` into your feature branch, **use rebase instead of merge**
-
-```bash
-# currently working on feature branch, there are new commits on main
-git pull origin main --rebase
-
-# if there are conflicts, resolve them and then:
-git add .
-git rebase --continue
-
-# force push to remote feature branch
-git push -f
-```
-
-### Commits
-
-- Commits should be atomic (guideline: the commit is self-contained; a reviewer could make sense of it even if they viewed the commit diff in isolation)
-- Trivial commits (e.g. fixing a typo in the previous commit, formatting changes) should be squashed or fixup'd into the last non-trivial commit
-
-```bash
-# last commit contained a typo, fixed now
-git add .
-git commit -m "Fix typo"
-
-# fixup into previous commit through interactive rebase
-# x in HEAD~x refers to the last x commits you want to view
-git rebase -i HEAD~2
-# text editor opens, follow instructions in there to fixup
-
-# force push to remote feature branch
-git push -f
-```
-
-- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) naming scheme for commits and PRs
-- Commit messages and PR names are descriptive and written in **imperative tense**<sup>1</sup>
-- E.g. "feat: create user REST endpoints" or "fix: set bgcolor to blue"
-- PRs can contain multiple commits, they do not need to be squashed together before merging as long as each commit is atomic. Our repo is configured to only allow squash commits to `main` so the entire PR will appear as 1 commit on `main`, but the individual commits are preserved when viewing the PR.
+## Other Links
+📝  [Notion](https://www.notion.so/uwblueprintexecs/Marillac-Place-4c0b622383244a8a8a51f2487ca080c6?source=copy_link)  
+🎨  [Figma](https://www.figma.com/design/Ts9QxCIXFe4l9h6GKOLOIq/Admin-Application?node-id=5320-29338&p=f&t=bZ4sCMzgpiYIHwiP-0)  
