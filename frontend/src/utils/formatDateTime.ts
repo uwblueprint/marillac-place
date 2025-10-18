@@ -133,3 +133,52 @@ export function isSameDay(day: DayOfWeek, date: Date) {
     date.getDate() === targetDay.getDate()
   );
 }
+
+export function convertToDaysListGivenRange(start: Date, end: Date): DayOfWeek[] {
+  const map: Record<number, DayOfWeek> = {
+    0: DayOfWeek.SUNDAY,
+    1: DayOfWeek.MONDAY,
+    2: DayOfWeek.TUESDAY,
+    3: DayOfWeek.WEDNESDAY,
+    4: DayOfWeek.THURSDAY,
+    5: DayOfWeek.FRIDAY,
+    6: DayOfWeek.SATURDAY,
+  };
+
+  const result: DayOfWeek[] = [];
+  const current = new Date(start);
+
+  while (current <= end) {
+    result.push(map[current.getDay()]);
+    current.setDate(current.getDate() + 1); 
+  }
+
+  return result;
+}
+
+export function isAnytime(start: Date, end: Date): boolean {
+  return (
+    start.getHours() === 0 &&
+    start.getMinutes() === 0 &&
+    end.getHours() === 23 &&
+    end.getMinutes() === 59
+  )
+}
+
+export function displayDate(date: Date) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+};
+
+export function formatTimeString(date: Date): string {
+  const timeString = new Intl.DateTimeFormat('en-CA', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }).format(date);
+  return timeString;
+}

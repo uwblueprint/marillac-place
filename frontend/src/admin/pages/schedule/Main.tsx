@@ -233,14 +233,6 @@ export default function AdminSchedulePage() {
         <TaskDetailsModal
           task={selectedTask}
           onClose={() => setSelectedTask(null)}
-          onEdit={() => {
-            // TODO: Implement task editing functionality
-            setSelectedTask(null);
-          }}
-          onDelete={() => {
-            // TODO: Implement task deletion functionality
-            setSelectedTask(null);
-          }}
         />
       )}
     </Flex>

@@ -187,6 +187,12 @@ export const CREATE_TASK = gql`
   }
 `;
 
+export const DELETE_ASSIGNED_TASK = gql`
+  mutation DeleteAssignedTask($assigned_task_id: Int!) {
+    deleteAssignedTask(assigned_task_id: $assigned_task_id)
+  }
+`;
+
 export const UPDATE_TASK = gql`
   mutation updateTask(
     $id: Int!
@@ -293,6 +299,35 @@ export const ASSIGN_CUSTOM_BADGE = gql`
       badge_id: $badge_id
       marillac_bucks: $marillac_bucks
       participant_ids: $participant_ids
+    )
+  }
+`;
+export const UPDATE_ASSIGNED_TASK = gql`
+  mutation UpdateAssignedTask(
+    $id: Int!
+    $taskName: String
+    $taskStatus: Status
+    $taskType: TaskType
+    $goalName: String
+    $goalDescription: String
+    $startDate: String
+    $endDate: String
+    $marillacBucksAddition: Int
+    $marillacBucksDeduction: Int
+    $comment: String
+  ) {
+    updateAssignedTask(
+      id: $id
+      taskName: $taskName
+      taskStatus: $taskStatus
+      taskType: $taskType
+      goalName: $goalName
+      goalDescription: $goalDescription
+      startDate: $startDate
+      endDate: $endDate
+      marillacBucksAddition: $marillacBucksAddition
+      marillacBucksDeduction: $marillacBucksDeduction
+      comment: $comment
     )
   }
 `;

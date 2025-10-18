@@ -43,7 +43,7 @@ export default function AssignTaskModal({
   const [error, setError] = useState("");
 
   const {loading, error: queryError, data} = useQuery(GET_TASKS_BY_TYPE, {
-    variables: { type: "OPTIONAL" },
+    variables: { type: [TaskType.OPTIONAL, TaskType.INDIVIDUAL_GOAL] },
   });
 
   const [createAssignedTask] = useMutation(CREATE_ASSIGNED_TASK, {

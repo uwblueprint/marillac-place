@@ -131,15 +131,6 @@ const taskResolver = {
       });
       return true;
     },
-    deleteAssignedTask: async (
-      _parent: undefined,
-      { assigned_task_id }: { assigned_task_id: number }
-    ): Promise<boolean> => {
-      await prisma.assignedTask.delete({
-        where: { assigned_task_id: assigned_task_id },
-      });
-      return true;
-    },
   },
 };
 

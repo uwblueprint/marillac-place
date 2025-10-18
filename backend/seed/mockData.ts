@@ -69,6 +69,15 @@ export const participants = [
 ];
 
 export const tasks = [
+  {
+    task_name: "Individual Goal",
+    task_type: TaskType.INDIVIDUAL_GOAL,
+    recurrence_preference: RecurrenceFrequency.PARTICIPANT_PREFERENCE,
+    repeat_days: [],
+    time_preference: RecurrenceFrequency.PARTICIPANT_PREFERENCE,
+    marillac_bucks_addition: 0,
+    marillac_bucks_deduction: 0,
+  },
   // Required tasks
   {
     task_name: "Weekly Review",

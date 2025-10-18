@@ -43,6 +43,8 @@ export const useScheduleData = (selectedRoom: number) => {
           allDay: !isSameDay || (isDayStart && isDayEnd),
           task_status: task.task_status,
           task_type: task.task_type,
+          goalName: task.goal_name ?? "",
+          goalDescription: task.goal_description ?? "",
           marillacBucksAddition: task.marillac_bucks_addition,
           marillac_bucks_deduction: task.marillac_bucks_deduction,
           comment: task.comment,

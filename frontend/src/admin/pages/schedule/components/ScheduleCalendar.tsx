@@ -12,6 +12,7 @@ import {
 } from "../../../../utils/scheduleUtils";
 import { CommentIcon } from "./CustomIcons";
 import colors from "../../../../theme/colors";
+import { TaskType } from "../../../../types/task";
 
 const localizer = momentLocalizer(moment);
 
@@ -79,7 +80,7 @@ const EventComponent: React.FC<{
   if (event.allDay) {
     return (
       <Text color="inherit" textStyle="web.s1" pt="1px">
-        {event.title}
+        {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
       </Text>
     );
   }

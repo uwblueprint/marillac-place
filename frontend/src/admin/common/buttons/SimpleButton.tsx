@@ -1,9 +1,10 @@
 import React from "react";
-import { Button, Text } from "@chakra-ui/react";
+import { Button, Flex, Text } from "@chakra-ui/react";
 import { ButtonProps } from "../../../types/component";
 
 type SimpleButtonProps = ButtonProps & {
   text_color: string;
+  icon?: JSX.Element;
 };
 
 export default function SimpleButton({
@@ -11,6 +12,7 @@ export default function SimpleButton({
   action,
   is_active,
   text_color,
+  icon
 }: SimpleButtonProps) {
   return (
     <Button
@@ -32,9 +34,16 @@ export default function SimpleButton({
         bg: "#F5F6F8",
       }}
     >
-      <Text textStyle="web.s1" color={text_color}>
-        {text}
-      </Text>
+      <Flex alignItems="center" gap="5px">
+        {icon && (
+          <Flex width="12px" height="12px" alignItems="center" justifyContent="center">
+            {icon}
+          </Flex>
+        )}
+        <Text textStyle="web.s1" color={text_color}>
+          {text}
+        </Text>
+      </Flex>
     </Button>
   );
 }

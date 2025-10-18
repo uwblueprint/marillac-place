@@ -22,6 +22,7 @@ import {
   getTaskStatusText,
   formatEventTime,
 } from "../../../../utils/scheduleUtils";
+import { TaskType } from "../../../../types/task";
 
 interface TaskTableProps {
   tasks: CalendarEvent[];
@@ -71,7 +72,7 @@ export default function TaskTableBottom({
               >
                 <Td position="relative">
                   <Text textStyle="web.b3" color="#000000">
-                    {event.title}
+                    {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
                   </Text>
                   {event.comment && (
                     <Box

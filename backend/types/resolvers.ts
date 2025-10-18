@@ -88,6 +88,19 @@ const resolvers = gql`
       marillac_bucks: Int!
       participant_ids: [Int!]!
     ): [Int!]!
+    updateAssignedTask(
+      id: Int!
+      taskName: String
+      taskStatus: Status
+      taskType: TaskType
+      goalName: String
+      goalDescription: String
+      startDate: String
+      endDate: String
+      marillacBucksAddition: Int
+      marillacBucksDeduction: Int
+      comment: String
+    ): Boolean
     editCustomBadge(
       custom_badge_id: Int!
       new_custom_badge_name: String

@@ -134,6 +134,63 @@ const assignedTaskResolver = {
     },
   },
   Mutation: {
+    deleteAssignedTask: async (
+      _parent: undefined,
+      { assigned_task_id }: { assigned_task_id: number }
+    ): Promise<boolean> => {
+      await prisma.assignedTask.delete({
+        where: { assigned_task_id: assigned_task_id },
+      });
+      return true;
+    },
+    updateAssignedTask: async (
+      _parent: undefined,
+      {
+        id,
+        taskName,
+        taskStatus,
+        taskType,
+        goalName,
+        goalDescription,
+        startDate,
+        endDate,
+        marillacBucksAddition,
+        marillacBucksDeduction,
+        comment,
+      }: {
+        id: number;
+        taskName?: string;
+        taskStatus?: Status;
+        taskType?: TaskType;
+        goalName?: string;
+        goalDescription?: string;
+        startDate?: string;
+        endDate?: string;
+        marillacBucksAddition?: number;
+        marillacBucksDeduction?: number;
+        comment?: string;
+      }
+    ): Promise<boolean> => {
+      const updatedData: Record<string, any> = {};
+
+      if (taskName) updatedData.task_name = taskName;
+      if (taskType) updatedData.task_type = taskType;
+      if (taskStatus) updatedData.task_status = taskStatus;
+      if (goalName) updatedData.goal_name = goalName;
+      if (goalDescription) updatedData.goal_description = goalDescription;
+      if (startDate) updatedData.start_date = startDate;
+      if (endDate) updatedData.end_date = endDate;
+      if (marillacBucksAddition) updatedData.marillac_bucks_addition = marillacBucksAddition;
+      if (marillacBucksDeduction) updatedData.marillac_bucks_deduction = marillacBucksDeduction;
+      if (comment) updatedData.comment = comment;
+
+      await prisma.assignedTask.update({
+        where: { assigned_task_id: id },
+        data: updatedData,
+      });
+
+      return true;
+    },
     createAssignedTask: async (
       _parent: undefined,
       {
