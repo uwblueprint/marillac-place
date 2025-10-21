@@ -70,6 +70,17 @@ const participantResolver = {
                   },
               },
           );
+    },
+    getMarillacBucksGoalByParticipantId: async (
+      _parent: undefined,
+      { participantId } : { participantId: number }
+    ): Promise<number> => {
+      const participant = await prisma.participant.findUnique({
+        where: { participant_id: participantId },
+        select: { marillac_bucks_goal: true },
+      });
+      
+      return participant?.marillac_bucks_goal ?? 0;
     }
   },
   Mutation: {
