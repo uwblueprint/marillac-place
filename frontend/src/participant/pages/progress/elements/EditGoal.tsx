@@ -4,16 +4,21 @@ import ModalContainer from '../../../../admin/common/form/ModalContainer';
 
 interface EditGoalProps {
     handleClose: () => void
-    error: string | undefined
 }
 
-export const EditGoal: React.FC<EditGoalProps> = ({handleClose, error}) => {
+export const EditGoal: React.FC<EditGoalProps> = ({handleClose}) => {
     const [goal, setGoal] = useState("")
-
+    const [error, setError] = useState("")
+    
     const handleSave = () => {
-        // add logic below for saving the goal info
-
-        handleClose()
+        try {
+            // Add save goal logic here
+        
+            handleClose(); // only close if successful
+          } catch (err) {
+            console.error("Error saving goal:", err);
+            setError("Failed to save goal — please try again.");
+          }
     }
 
     return (

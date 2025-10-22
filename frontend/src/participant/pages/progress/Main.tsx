@@ -12,6 +12,8 @@ export default function ParticipantsProgressPage() {
     setEditGoal(false);
   };
 
+  
+
   return (
     <>
       <ParticipantPageHeader currentPage="Progress" />
@@ -41,7 +43,6 @@ export default function ParticipantsProgressPage() {
       { editGoal &&
         <EditGoal 
           handleClose={handleClose} 
-          error={error}
         />
       }
     </>
