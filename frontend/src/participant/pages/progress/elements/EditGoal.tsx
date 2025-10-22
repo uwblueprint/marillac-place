@@ -3,20 +3,25 @@ import React, { useState } from 'react';
 import ModalContainer from '../../../../admin/common/form/ModalContainer';
 
 interface EditGoalProps {
-    handleSave: () => void
-    handleCancel: () => void
+    handleClose: () => void
     error: string | undefined
 }
 
-export const EditGoal: React.FC<EditGoalProps> = ({handleSave, handleCancel, error}) => {
+export const EditGoal: React.FC<EditGoalProps> = ({handleClose, error}) => {
     const [goal, setGoal] = useState("")
+
+    const handleSave = () => {
+        // add logic below for saving the goal info
+
+        handleClose()
+    }
 
     return (
         <ModalContainer
             title="Edit Goal"
             submit_text="Save"
             submit_action={handleSave}
-            cancel_action={handleCancel}
+            cancel_action={handleClose}
             error={error}
         >
             <Flex justify="space-between">
