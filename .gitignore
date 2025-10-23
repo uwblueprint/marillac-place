@@ -11,3 +11,4 @@
 **/prisma/migrations
 **/.eslintcache
 .idea
+.env
