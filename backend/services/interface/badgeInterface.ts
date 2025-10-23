@@ -6,6 +6,10 @@ import {
   BadgeLevel,
 } from "@prisma/client";
 
+export type EarnedBadgeWithBadge = EarnedBadge & {
+  badge: Badge & { badge_level: BadgeLevel[] };
+};
+
 export default interface IBadgeService {
   getCustomBadges(): Promise<Badge[]>;
   getSystemBadges(): Promise<Badge[]>;
@@ -40,4 +44,6 @@ export default interface IBadgeService {
     badge_id: number,
     is_active: boolean
   ): Promise<boolean>;
+  getEarnedBadges(participant_id: number)://and this one
+   Promise<EarnedBadgeWithBadge[]>;//added this line 
 }

@@ -7,6 +7,8 @@ import {
 } from "@prisma/client";
 import BadgeService from "../services/implementation/badgeImplementation";
 import IBadgeService from "../services/interface/badgeInterface";
+import type { EarnedBadgeWithBadge } from "../services/interface/badgeInterface";
+//added this to import earnedbadgewithbadge
 
 const badgeService: IBadgeService = new BadgeService();
 
@@ -22,7 +24,7 @@ const badgeResolver = {
       { participant_id }: { participant_id: number }
     ): Promise<EarnedBadge[]> => {
       return badgeService.getEarnedBadges(participant_id);
-      }
+      },//added lines here
   },
   Mutation: {
     updateBadgeStatus: async (

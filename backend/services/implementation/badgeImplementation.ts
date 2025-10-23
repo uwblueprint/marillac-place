@@ -5,7 +5,7 @@ import {
   Badge,
   BadgeLevel,
 } from "@prisma/client";
-import IBadgeService from "../interface/badgeInterface";
+import IBadgeService, { EarnedBadgeWithBadge } from "../interface/badgeInterface";
 import prisma from "../../prisma";
 import { getToday } from "../../utils/formatDateTime";
 
@@ -32,7 +32,7 @@ class BadgeService implements IBadgeService {
     }
   }
 
-  async getEarnedBadges(participant_id: number): Promise<Badge[]> {
+  async getEarnedBadges(participant_id: number): Promise<EarnedBadgeWithBadge[]> {
     try {
       const earnedBadges = await prisma.earnedBadge.findMany({
         where: {participant_id},
