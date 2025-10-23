@@ -24,7 +24,7 @@ const badgeResolver = {
       { participant_id }: { participant_id: number }
     ): Promise<EarnedBadge[]> => {
       return badgeService.getEarnedBadges(participant_id);
-      },//added lines here
+      },
   },
   Mutation: {
     updateBadgeStatus: async (

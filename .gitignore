@@ -12,3 +12,5 @@
 **/.eslintcache
 .idea
 .env
+backend/.env
+frontend/.env

@@ -162,8 +162,7 @@ class BadgeService implements IBadgeService {
         }),
       )
     );
-    
-    // also add marillac bucks for the earned badge
+   
     await prisma.$transaction(
       eligibleParticipantIds.map((id) =>
         prisma.participant.update({
