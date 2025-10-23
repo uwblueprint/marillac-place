@@ -18,6 +18,11 @@ const badgeResolver = {
     getSystemBadges: async (): Promise<Badge[]> => {
       return badgeService.getSystemBadges();
     },
+    getEarnedBadges: async (_parent: undefined, 
+      { participant_id }: { participant_id: number }
+    ): Promise<EarnedBadge[]> => {
+      return badgeService.getEarnedBadges(participant_id);
+      }
   },
   Mutation: {
     updateBadgeStatus: async (

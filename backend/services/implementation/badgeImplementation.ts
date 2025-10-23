@@ -31,6 +31,31 @@ class BadgeService implements IBadgeService {
       throw new Error("Failed to get custom badges.");
     }
   }
+
+  async getEarnedBadges(participant_id: number): Promise<Badge[]> {
+    try {
+      const earnedBadges = await prisma.earnedBadge.findMany({
+        where: {participant_id},
+        include: {
+          badge: {
+            include: {
+              badge_level: true,
+            },
+          },
+        },
+        orderBy: {
+          date_received: 'desc'
+        },
+      });
+
+      return earnedBadges;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message || "Failed to get earned badges.");
+      }
+      throw new Error("Failed to get earned badges.");
+    }
+  }
   
   async getSystemBadges(): Promise<Badge[]> {
     try {
