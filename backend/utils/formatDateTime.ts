@@ -21,10 +21,14 @@ export function getNow(): string {
 }
 
 // Helper to get Date object for today and previous days
-export function getRecentDate(daysAgo: number, includeTime: boolean, time?: string): string {
+export function getRecentDate(
+  daysAgo: number,
+  includeTime: boolean,
+  time?: string
+): string {
   const date = new Date();
   date.setDate(date.getDate() - daysAgo);
-  
+
   if (includeTime) {
     if (time) {
       const [hours, minutes] = time.split(":").map(Number);
@@ -53,4 +57,11 @@ export function getWeekBounds(): { weekStart: string; weekEnd: string } {
   const weekEnd = formatDateTime(saturday, true);
 
   return { weekStart, weekEnd };
+}
+
+// takes in "YY-MM-DD, HH:mm" and convert to Date object
+export function formatDateFromDateString(dateString: string) {
+  const formatted = dateString.replace(", ", "T") + ":00";
+  const date = new Date(formatted);
+  return date
 }

@@ -11,7 +11,7 @@ const loginResolver = {
       {role, password}: {
         role: string;
         password: string;
-      },
+      }
     ) => {
       var storedPasswordHash = "";
 
@@ -50,7 +50,7 @@ const loginResolver = {
       {id, password}: {
         id: number;
         password: string;
-      },
+      }
     ) => {
       var participant: Participant | null = null;
       participant = await prisma.participant.findUnique({

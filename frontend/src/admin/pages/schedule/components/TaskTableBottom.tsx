@@ -15,22 +15,23 @@ import {
 } from "@chakra-ui/react";
 import CommentIcon from "@mui/icons-material/ModeCommentOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { CalendarEvent } from "../../types/ScheduleTypes";
+import { CalendarEvent } from "./ScheduleTypes";
 import {
   getTaskStatusColor,
   getTaskStatusBgColor,
   getTaskStatusText,
   formatEventTime,
-} from "../../utils/scheduleUtils";
+} from "../../../../utils/scheduleUtils";
+import { TaskType } from "../../../../types/task";
 
 interface TaskTableProps {
   tasks: CalendarEvent[];
   onTaskSelect: (event: CalendarEvent) => void;
 }
 
-export default function TaskTableTop({
+export default function TaskTableBottom({
   tasks,
-  onTaskSelect
+  onTaskSelect,
 }: TaskTableProps) {
   return (
     <Box overflow="hidden">
@@ -38,24 +39,28 @@ export default function TaskTableTop({
         border="1px solid"
         borderColor="neutral.300"
         borderRadius="8px"
+        mb="15px"
         w="100%"
       >
         <Table>
           <Thead>
             <Tr backgroundColor="neutral.200" w="100%">
               <Th width="30%">
-                <Text textStyle="web.s1" color="#000000" textTransform="none">Name</Text>
+                <Text textStyle="web.s1" color="#000000" textTransform="none">
+                  Name
+                </Text>
               </Th>
               <Th width="20%">
-                <Text textStyle="web.s1" color="#000000" textTransform="none">Status</Text>
-              </Th>
-              <Th width="15%">
-                <Text textStyle="web.s1" color="#000000" textTransform="none">Time</Text>
+                <Text textStyle="web.s1" color="#000000" textTransform="none">
+                  Status
+                </Text>
               </Th>
               <Th width="10%">
-                <Text textStyle="web.s1" color="#000000" textTransform="none">Marillac Bucks</Text>
+                <Text textStyle="web.s1" color="#000000" textTransform="none">
+                  Marillac Bucks
+                </Text>
               </Th>
-              <Th width="25%" />
+              <Th width="40%" />
             </Tr>
           </Thead>
           <Tbody>
@@ -66,7 +71,9 @@ export default function TaskTableTop({
                 outlineColor="neutral.300"
               >
                 <Td position="relative">
-                  <Text textStyle="web.b3" color="#000000">{event.title}</Text>
+                  <Text textStyle="web.b3" color="#000000">
+                    {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
+                  </Text>
                   {event.comment && (
                     <Box
                       position="absolute"
@@ -75,7 +82,10 @@ export default function TaskTableTop({
                       transform="translateY(-50%)"
                       color={getTaskStatusColor(event.task_status)}
                     >
-                      <CommentIcon sx={{ width: "15px", height: "15px" }} color="action" />
+                      <CommentIcon
+                        sx={{ width: "15px", height: "15px" }}
+                        color="action"
+                      />
                     </Box>
                   )}
                 </Td>
@@ -91,13 +101,6 @@ export default function TaskTableTop({
                     textAlign="center"
                   >
                     {getTaskStatusText(event.task_status)}
-                  </Text>
-                </Td>
-                <Td>
-                  <Text textStyle="web.b3" color="#000000">
-                    {event.allDay
-                      ? "Anytime"
-                      : formatEventTime(event.start, event.end)}
                   </Text>
                 </Td>
                 <Td>

@@ -11,8 +11,11 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { Link as RouterLink } from "react-router-dom";
 import { GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
-import { AnnouncementDisplayInfo, AnnouncementData } from "../../../../types/AnnouncementTypes";
-import { ROOM_NUMBERS } from "../../../../constants/rooms";
+import {
+  AnnouncementDisplayInfo,
+  AnnouncementData,
+} from "../../../../types/AnnouncementTypes";
+import { ROOM_NUMBERS } from "../../../../constants/misc";
 import { getRecentDate } from "../../../../utils/formatDateTime";
 
 const getRoomString = (rooms: number[]) => {
@@ -22,46 +25,49 @@ const getRoomString = (rooms: number[]) => {
   if (rooms.length === ROOM_NUMBERS.length) {
     return "All Rooms";
   }
-  return `Rooms ${rooms.join(', ')}`;
-}
+  return `Rooms ${rooms.join(", ")}`;
+};
 
-const AnnouncementCard: React.FC<{announcement: AnnouncementDisplayInfo}> = ({announcement}) => {
-    const formatDate = (date: Date) => {
-        return date.toLocaleString("en-ca", {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-        }).toLowerCase();
-    };
+const AnnouncementCard: React.FC<{ announcement: AnnouncementDisplayInfo }> = ({
+  announcement,
+}) => {
+  const formatDate = (date: Date) => {
+    return date
+      .toLocaleString("en-ca", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      })
+      .toLowerCase();
+  };
 
-    return (
-        <Flex
-          flexDir="column"
-          width="100%"
-          bg="neutral.100"
-          border="1px solid"
-          borderColor="neutral.300"
-          rounded="8px"
-          paddingX="16px"
-          paddingY="12px"
-          gap="5px"
-        >
-        <Flex
-            width="100%"
-            alignItems="baseline"
-        >
-            <Text textStyle="web.b2" fontWeight={600} color="black">
-                {getRoomString(announcement.rooms)}
-            </Text>
-            <Text textStyle="web.b3" color="text.light.secondary" marginLeft="20px">
-                posted at {formatDate(announcement.creation_date)}
-            </Text>
-        </Flex>
-        <Flex width="100%">
-            <Text textStyle="web.b2" color="black">{announcement.message}</Text>
-        </Flex>
-        </Flex>
-    );
+  return (
+    <Flex
+      flexDir="column"
+      width="100%"
+      bg="neutral.100"
+      border="1px solid"
+      borderColor="neutral.300"
+      rounded="8px"
+      paddingX="16px"
+      paddingY="12px"
+      gap="5px"
+    >
+      <Flex width="100%" alignItems="baseline">
+        <Text textStyle="web.b2" fontWeight={600} color="black">
+          {getRoomString(announcement.rooms)}
+        </Text>
+        <Text textStyle="web.b3" color="text.light.secondary" marginLeft="20px">
+          posted at {formatDate(announcement.creation_date)}
+        </Text>
+      </Flex>
+      <Flex width="100%">
+        <Text textStyle="web.b2" color="black">
+          {announcement.message}
+        </Text>
+      </Flex>
+    </Flex>
+  );
 };
 
 const AnnouncementSection = () => {
@@ -73,16 +79,21 @@ const AnnouncementSection = () => {
     variables: {
       start: getRecentDate(0, true),
       end: getRecentDate(-1, true),
-  },
-  })
+    },
+  });
 
   // Get the display info for the announcements
-  const data: AnnouncementDisplayInfo[] = getAnnouncementsData?.getAnnouncementsInDateRange?.map((announcement: AnnouncementData) => ({
-    announcement_id: announcement.announcement_id,
-    rooms: announcement.user_announcements.map(ua => ua.participant.room_number).sort((a, b) => a - b),
-    creation_date: new Date(announcement.creation_date),
-    message: announcement.message,
-  })) || [];
+  const data: AnnouncementDisplayInfo[] =
+    getAnnouncementsData?.getAnnouncementsInDateRange?.map(
+      (announcement: AnnouncementData) => ({
+        announcement_id: announcement.announcement_id,
+        rooms: announcement.user_announcements
+          .map((ua) => ua.participant.room_number)
+          .sort((a, b) => a - b),
+        creation_date: new Date(announcement.creation_date),
+        message: announcement.message,
+      })
+    ) || [];
 
   return (
     <Flex
@@ -114,8 +125,8 @@ const AnnouncementSection = () => {
             {data.length} new post{data.length === 1 ? "" : "s"} today
           </Text>
         </Flex>
-        <Link 
-          as={RouterLink} 
+        <Link
+          as={RouterLink}
           to="/admin/announcements"
           textStyle="web.b3"
           fontFamily="Nunito"
@@ -123,7 +134,7 @@ const AnnouncementSection = () => {
           color="black"
           textDecoration="underline"
           _hover={{
-            textDecoration: "none"
+            textDecoration: "none",
           }}
         >
           View All
@@ -140,7 +151,7 @@ const AnnouncementSection = () => {
           },
         }}
       >
-        { getAnnouncementsLoading ? (
+        {getAnnouncementsLoading ? (
           <Text textStyle="web.b2" color="text.light.secondary">
             Loading...
           </Text>
@@ -148,28 +159,31 @@ const AnnouncementSection = () => {
           <Text textStyle="web.b2" color="text.light.secondary">
             {getAnnouncementsError?.message || "An error occurred"}
           </Text>
+        ) : data.length === 0 ? (
+          <Text textStyle="web.b2" color="text.light.secondary">
+            No Announcements Yet
+          </Text>
         ) : (
-          data.length === 0 ? (
-            <Text textStyle="web.b2" color="text.light.secondary">
-              No Announcements Yet
-            </Text>
-          ) : (
-            <Flex
-              width="100%"
-              height="100%"
-              flexDir="column"
-              justifyContent="flex-start"
-              gap="10px"
-            >
-              {data.map((announcement: AnnouncementDisplayInfo) => {
-                return <AnnouncementCard key={announcement.announcement_id} announcement={announcement} />
-              })}
-            </Flex>
-          )
+          <Flex
+            width="100%"
+            height="100%"
+            flexDir="column"
+            justifyContent="flex-start"
+            gap="10px"
+          >
+            {data.map((announcement: AnnouncementDisplayInfo) => {
+              return (
+                <AnnouncementCard
+                  key={announcement.announcement_id}
+                  announcement={announcement}
+                />
+              );
+            })}
+          </Flex>
         )}
       </Flex>
     </Flex>
   );
-}
+};
 
 export default AnnouncementSection;

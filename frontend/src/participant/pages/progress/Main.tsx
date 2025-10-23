@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import { Button, Flex, Text } from '@chakra-ui/react';
 import ParticipantPageHeader from '../../../common/participant/PageHeader';
 import { EditGoal } from './elements/EditGoal';
-
+import WeeklyEarningsChart from "./elements/EarningsWidget";
 
 export default function ParticipantsProgressPage() {
   const [editGoal, setEditGoal] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
-
+  const sampleWeeklyEarnings = [10, 15, 8, 20, 12, 18, 35];
+  
   const handleClose = () => {
     setEditGoal(false);
   };
 
+ 
   
 
   return (
@@ -45,6 +47,9 @@ export default function ParticipantsProgressPage() {
           handleClose={handleClose} 
         />
       }
+      <div style={{ padding: "10px 20px" }}>
+        <WeeklyEarningsChart weeklyEarnings={sampleWeeklyEarnings} />
+      </div>
     </>
-  )
+  );
 }

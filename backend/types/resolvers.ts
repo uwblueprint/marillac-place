@@ -11,10 +11,11 @@ const resolvers = gql`
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
-    getAssignedTasks(participant_id: Int!): AssignedTasksByDay!
-    getTasksByType(type: TaskType!): [Task]
+    getAssignedTasks(participant_id: Int!): GetAssignedTaskResponse!
+    getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
+    hasCompletedAllRequiredTasks(participantId: Int!): Boolean
   }
 
   type Mutation {
@@ -87,6 +88,19 @@ const resolvers = gql`
       marillac_bucks: Int!
       participant_ids: [Int!]!
     ): [Int!]!
+    updateAssignedTask(
+      id: Int!
+      taskName: String
+      taskStatus: Status
+      taskType: TaskType
+      goalName: String
+      goalDescription: String
+      startDate: String
+      endDate: String
+      marillacBucksAddition: Int
+      marillacBucksDeduction: Int
+      comment: String
+    ): Boolean
     editCustomBadge(
       custom_badge_id: Int!
       new_custom_badge_name: String
@@ -101,7 +115,7 @@ const resolvers = gql`
       endDate: String!
       marillacBucksAddition: Int!
       marillacBucksDeduction: Int!
-      taskType: String!
+      taskType: TaskType!
       goalName: String
       goalDescription: String
       comment: String
@@ -117,10 +131,7 @@ const resolvers = gql`
       system_badge_name: String!
       system_badge_criteria: String
     ): Boolean
-    updateBadgeStatus(
-      badge_id: Int!
-      is_active: Boolean!
-    ): Boolean
+    updateBadgeStatus(badge_id: Int!, is_active: Boolean!): Boolean
   }
 `;
 

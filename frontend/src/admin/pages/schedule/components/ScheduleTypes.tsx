@@ -26,7 +26,12 @@ export enum TaskStatus {
   EXCUSED = "EXCUSED",
 }
 
-export const TaskStatuses = [TaskStatus.ASSIGNED, TaskStatus.COMPLETE, TaskStatus.INCOMPLETE, TaskStatus.EXCUSED]
+export const TaskStatuses = [
+  TaskStatus.ASSIGNED,
+  TaskStatus.COMPLETE,
+  TaskStatus.INCOMPLETE,
+  TaskStatus.EXCUSED,
+];
 
 export enum TaskType {
   REQUIRED = "REQUIRED",
@@ -42,6 +47,8 @@ export interface CalendarEvent {
   allDay?: boolean;
   task_status: TaskStatus;
   task_type: TaskType;
+  goalName: string;
+  goalDescription: string;
   marillacBucksAddition: number;
   marillac_bucks_deduction: number;
   comment?: string;

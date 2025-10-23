@@ -2,14 +2,21 @@ import { Flex, Text, Grid, Button, Link } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/queries";
-import { ROOM_NUMBERS } from "../../../../constants/rooms";
-import { Status } from "../../../../types/TaskTypes";
+import { ROOM_NUMBERS } from "../../../../constants/misc";
 
 type RoomData = {
   roomNumber: number;
   participantId: number;
   taskAssigned: number;
 };
+
+enum Status {
+  PENDING_APPROVAL = "PENDING_APPROVAL",
+  ASSIGNED = "ASSIGNED",
+  INCOMPLETE = "INCOMPLETE",
+  COMPLETE = "COMPLETE",
+  EXCUSED = "EXCUSED",
+}
 
 export default function RoomsOverview() {
   const [roomData, setRoomData] = useState<RoomData[]>([]);

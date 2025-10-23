@@ -3,15 +3,16 @@ import { Box, Text, Flex } from "@chakra-ui/react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { CalendarEvent, TaskStatus } from "../../types/ScheduleTypes";
+import { CalendarEvent, TaskStatus } from "./ScheduleTypes";
 import {
   getTaskStatusColor,
   getTaskStatusBgColor,
   getDayNameMapping,
   formatEventTime,
-} from "../../utils/scheduleUtils";
+} from "../../../../utils/scheduleUtils";
 import { CommentIcon } from "./CustomIcons";
-import colors from "../../theme/colors";
+import colors from "../../../../theme/colors";
+import { TaskType } from "../../../../types/task";
 
 const localizer = momentLocalizer(moment);
 
@@ -79,7 +80,7 @@ const EventComponent: React.FC<{
   if (event.allDay) {
     return (
       <Text color="inherit" textStyle="web.s1" pt="1px">
-        {event.title}
+        {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
       </Text>
     );
   }
@@ -93,8 +94,12 @@ const EventComponent: React.FC<{
       direction="column"
       gap="2px"
     >
-      <Text color="inherit" textStyle="web.s1">{event.title}</Text>
-      <Text color="inherit" fontSize="10px">{formatEventTime(event.start, event.end)}</Text>
+      <Text color="inherit" textStyle="web.s1">
+        {event.title}
+      </Text>
+      <Text color="inherit" fontSize="10px">
+        {formatEventTime(event.start, event.end)}
+      </Text>
       {event.comment && (
         <div style={{ margin: "2px" }}>
           <CommentIcon size={12} color="currentColor" />

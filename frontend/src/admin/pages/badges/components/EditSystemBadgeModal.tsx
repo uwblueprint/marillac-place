@@ -11,7 +11,7 @@ import {
   ModalBody,
   ModalOverlay,
   NumberInput,
-  NumberInputField
+  NumberInputField,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { EDIT_BADGE_LEVEL, EDIT_SYSTEM_BADGE } from "../../../../gql/mutations";
@@ -31,7 +31,7 @@ const EditSystemBadgeModal = ({
   selected,
 }: EditSystemBadgeModalProps) => {
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
-  const badgeLevels = ['Novice', 'Bronze', 'Silver', 'Gold', 'Diamond'];
+  const badgeLevels = ["Novice", "Bronze", "Silver", "Gold", "Diamond"];
 
   const originalData: Record<string, { benchmark: number; bucks: number }> = {};
   for (const bl of selected.badge_level) {
@@ -55,14 +55,14 @@ const EditSystemBadgeModal = ({
     if (!badgeCriteria) {
       setError("Missing fields");
       return;
-    } 
+    }
 
     let prevBenchmark = 0;
     let prevBucks = 0;
     for (const bl of selected.badge_level) {
       const data = badgeData[badgeLevels[bl.level]];
       const { benchmark, bucks } = data;
- 
+
       if (benchmark <= 0 || bucks <= 0) {
         setError("Missing fields");
         return;
@@ -73,8 +73,8 @@ const EditSystemBadgeModal = ({
         return;
       }
 
-      prevBenchmark = benchmark
-      prevBucks = bucks
+      prevBenchmark = benchmark;
+      prevBucks = bucks;
     }
 
     try {
@@ -82,8 +82,8 @@ const EditSystemBadgeModal = ({
         variables: {
           system_badge_id: selected.badge_id,
           system_badge_name: selected.name,
-          system_badge_criteria: badgeCriteria
-        }
+          system_badge_criteria: badgeCriteria,
+        },
       });
     } catch (err: any) {
       setError("Failed to edit system badge");
@@ -93,21 +93,23 @@ const EditSystemBadgeModal = ({
     const mutationPromises: Promise<any>[] = [];
 
     for (const bl of selected.badge_level) {
-      const { benchmark: originalBenchmark, bucks: originalBucks } = originalData[badgeLevels[bl.level]]; 
+      const { benchmark: originalBenchmark, bucks: originalBucks } =
+        originalData[badgeLevels[bl.level]];
       const { benchmark, bucks } = badgeData[badgeLevels[bl.level]];
 
-      const hasChanged = originalBenchmark !== benchmark || originalBucks !== bucks;
-      if (hasChanged){
+      const hasChanged =
+        originalBenchmark !== benchmark || originalBucks !== bucks;
+      if (hasChanged) {
         mutationPromises.push(
           editBadgeLevel({
-            variables:{
+            variables: {
               badge_id: selected.badge_id,
               badge_level: bl.level,
               benchmark,
               marillac_bucks: bucks,
-            }
+            },
           })
-        )
+        );
       }
     }
 

@@ -1,12 +1,26 @@
-import { Modal, Grid, ModalOverlay, ModalContent, ModalBody, Flex, FormControl, FormLabel, Input, InputRightElement, InputGroup, Text, Button } from "@chakra-ui/react";
+import {
+  Modal,
+  Grid,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  InputRightElement,
+  InputGroup,
+  Text,
+  Button,
+} from "@chakra-ui/react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import LogoutIcon from '@mui/icons-material/Logout';
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { ROOM_NUMBERS } from "../../../../constants/rooms";
-import { UPDATE_PARTICIPANT } from "../../../../gql/mutations"
+import { ROOM_NUMBERS } from "../../../../constants/misc";
+import { UPDATE_PARTICIPANT } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";
 import GreenButton from "../../../common/buttons/GreenButton";
@@ -42,8 +56,13 @@ export default function EditParticipantCard({
 
   async function handleSubmit() {
     setError("");
-    if (!arrivalDate || !password || (endStay && !departureDate) || (swapParticipant && selectedSwap === -1)) {
-      setError("Missing fields")
+    if (
+      !arrivalDate ||
+      !password ||
+      (endStay && !departureDate) ||
+      (swapParticipant && selectedSwap === -1)
+    ) {
+      setError("Missing fields");
     } else if (swapParticipant && selectedSwap === roomNumber) {
       setError("Invalid swap.");
     } else if (
@@ -71,8 +90,8 @@ export default function EditParticipantCard({
               arrival_date: arrivalDate,
               departure_date: endStay ? departureDate : undefined,
               account_removal_date: endStay ? today : undefined,
-              password
-            }
+              password,
+            },
           });
 
           if (swapParticipant && selectedSwap in participants) {
@@ -80,20 +99,31 @@ export default function EditParticipantCard({
               variables: {
                 participant_id: participants[selectedSwap].participant_id,
                 room_number: roomNumber,
-              }
+              },
             });
           }
 
           if (swapParticipant) {
-            let message = "Participant #" + id + " moved to Room " + selectedSwap;
+            let message =
+              "Participant #" + id + " moved to Room " + selectedSwap;
             if (selectedSwap in participants) {
-              message += ", Participant #" + participants[selectedSwap].participant_id + " moved to Room " + roomNumber;
+              message +=
+                ", Participant #" +
+                participants[selectedSwap].participant_id +
+                " moved to Room " +
+                roomNumber;
             }
             localStorage.setItem("notification", message);
           } else if (endStay) {
-            localStorage.setItem("notification", "Participant #" + id + " removed from Room " + roomNumber);
+            localStorage.setItem(
+              "notification",
+              "Participant #" + id + " removed from Room " + roomNumber
+            );
           } else {
-            localStorage.setItem("notification", "Participant #" + id + " updated");
+            localStorage.setItem(
+              "notification",
+              "Participant #" + id + " updated"
+            );
           }
           window.location.reload();
         } catch (err: any) {
@@ -112,7 +142,9 @@ export default function EditParticipantCard({
       error={error}
     >
       <FormControl>
-        <Text textStyle="web.s1" color="text.light.secondary">ID Number</Text>
+        <Text textStyle="web.s1" color="text.light.secondary">
+          ID Number
+        </Text>
         <Input
           disabled
           type="number"
@@ -131,7 +163,7 @@ export default function EditParticipantCard({
         />
       </FormControl>
 
-      <CoreInput 
+      <CoreInput
         label="Arrival Date"
         current_value={arrivalDate}
         action={(e: any) => setArrivalDate(e.target.value)}
@@ -139,7 +171,7 @@ export default function EditParticipantCard({
         width="400px"
       />
 
-      <CoreInput 
+      <CoreInput
         label="Password"
         current_value={password}
         action={(e: any) => setPassword(e.target.value)}
@@ -148,22 +180,22 @@ export default function EditParticipantCard({
       />
 
       <Flex alignItems="center" justifyContent="flex-start" gap="8px">
-        <GreenButton 
+        <GreenButton
           text="Swap Participant"
           action={() => {
-            setEndStay(false)
-            setDepartureDate("")
-            setError("")
-            setSwapParticipant(true)
+            setEndStay(false);
+            setDepartureDate("");
+            setError("");
+            setSwapParticipant(true);
           }}
           is_active={swapParticipant}
         />
         <Button
           onClick={() => {
-            setSwapParticipant(false)
-            setSelectedSwap(-1)
-            setError("")
-            setEndStay(true)
+            setSwapParticipant(false);
+            setSelectedSwap(-1);
+            setError("");
+            setEndStay(true);
           }}
           isActive={endStay}
           cursor="pointer"
@@ -177,28 +209,32 @@ export default function EditParticipantCard({
           bg="#FFFFFF"
           color="#E30000"
           _hover={{
-              color: "#FFFFFF",
-              bg: "#E30000",
+            color: "#FFFFFF",
+            bg: "#E30000",
           }}
           _active={{
-              color: "#FFFFFF",
-              bg: "#E30000",
+            color: "#FFFFFF",
+            bg: "#E30000",
           }}
-      >
-          <Text textStyle="web.s1" color="inherit">End Stay</Text>
-      </Button>
+        >
+          <Text textStyle="web.s1" color="inherit">
+            End Stay
+          </Text>
+        </Button>
       </Flex>
 
       {(endStay || swapParticipant) && (
         <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
       )}
 
-      { swapParticipant && (
+      {swapParticipant && (
         <Flex flexDir="column">
-          <Text textStyle="web.s1" color="text.light.secondary" mb="3px">Available Rooms</Text>
+          <Text textStyle="web.s1" color="text.light.secondary" mb="3px">
+            Available Rooms
+          </Text>
           <Flex wrap="wrap" gap="5px" width="400px">
             {ROOM_NUMBERS.map((num: number) => (
-              <GreenButton 
+              <GreenButton
                 key={num}
                 text={"Room " + num}
                 action={() => setSelectedSwap(num)}
@@ -209,21 +245,29 @@ export default function EditParticipantCard({
         </Flex>
       )}
 
-      { selectedSwap !== -1 && (
-        selectedSwap === roomNumber ? (
-          <Text textStyle="web.b3">Participant #{participants[roomNumber].participant_id} is already in Room {roomNumber}.</Text>
+      {selectedSwap !== -1 &&
+        (selectedSwap === roomNumber ? (
+          <Text textStyle="web.b3">
+            Participant #{participants[roomNumber].participant_id} is already in
+            Room {roomNumber}.
+          </Text>
         ) : (
           <Flex flexDir="column" gap="5px">
-            <Text textStyle="web.b3">Participant #{participants[roomNumber].participant_id} will be moved to Room {selectedSwap}.</Text>
-            { selectedSwap in participants && (
-              <Text textStyle="web.b3">Participant #{participants[selectedSwap].participant_id} will be moved to Room {roomNumber}.</Text>
+            <Text textStyle="web.b3">
+              Participant #{participants[roomNumber].participant_id} will be
+              moved to Room {selectedSwap}.
+            </Text>
+            {selectedSwap in participants && (
+              <Text textStyle="web.b3">
+                Participant #{participants[selectedSwap].participant_id} will be
+                moved to Room {roomNumber}.
+              </Text>
             )}
           </Flex>
-        )
-      )}
+        ))}
 
-      { endStay && (
-        <CoreInput 
+      {endStay && (
+        <CoreInput
           label="Departure Date"
           current_value={departureDate}
           action={(e: any) => setDepartureDate(e.target.value)}
@@ -233,4 +277,4 @@ export default function EditParticipantCard({
       )}
     </ModalContainer>
   );
-};
+}
