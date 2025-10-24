@@ -10,26 +10,25 @@ import { ChakraProvider } from "@chakra-ui/react";
 import getApolloClient from "./utils/getApolloClient";
 import getChakraTheme from "./utils/getChakraTheme";
 
-import AdminLoginPage from "./pages/admin/login/Main";
-import AdminHomePage from "./pages/admin/home/Main";
-import AdminSchedulePage from "./pages/admin/schedule/Main";
-import AdminAnnouncementsPage from "./pages/admin/announcements/Main";
-import AdminParticipantsPage from "./pages/admin/participants/Main";
-import AdminTasksPage from "./pages/admin/tasks/Main";
-import AdminBadgesPage from "./pages/admin/badges/Main";
+import AdminLoginPage from "./admin/pages/login/Main";
+import AdminHomePage from "./admin/pages/home/Main";
+import AdminSchedulePage from "./admin/pages/schedule/Main";
+import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
+import AdminParticipantsPage from "./admin/pages/participants/Main";
+import AdminTasksPage from "./admin/pages/tasks/Main";
+import AdminBadgesPage from "./admin/pages/badges/Main";
 
-import ParticipantLoginPage from "./pages/participant/login/Main";
-// import ParticipantHomePage from "./pages/participant/home/index";
-// import ParticipantSchedulePage from "./pages/participant/schedule/index";
-// import ParticipantAnnouncementsPage from "./pages/participant/announcements/index";
-// import ParticipantTasksPage from "./pages/participant/tasks/index";
-// import ParticipantProgressPage from "./pages/participant/progress/index";
+import ParticipantLoginPage from "./participant/pages/login/Main";
+import ParticipantHomePage from "./participant/pages/home/Main";
+import ParticipantSchedulePage from "./participant/pages/schedule/Main";
+import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
+import ParticipantProgressPage from "./participant/pages/progress/Main";
 
-import NotFound from "./pages/NotFound";
+import NotFound from "./NotFound";
 
 import * as ROUTES from "./constants/routes";
-import AdminRoute from "./components/admin/AdminRoute";
-import ParticipantRoute from "./components/participant/ParticipantRoute";
+import AdminRoute from "./admin/common/misc/AdminRoute";
+import ParticipantRoute from "./participant/common/ParticipantRoute";
 
 const App = (): React.ReactElement => {
   const theme = getChakraTheme();
@@ -40,41 +39,94 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Switch>
-            <Route path={ROUTES.ADMIN_LOGIN_PAGE} element={<AdminLoginPage />} />
-            <Route path={ROUTES.ADMIN_HOME_PAGE} element={
-              <AdminRoute>
-                <AdminHomePage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_SCHEDULE_PAGE} element={
-              <AdminRoute>
-                <AdminSchedulePage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE} element={
-              <AdminRoute>
-                <AdminAnnouncementsPage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_PARTICIPANTS_PAGE} element={
-              <AdminRoute>
-                <AdminParticipantsPage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_TASKS_PAGE} element={
-              <AdminRoute>
-                <AdminTasksPage />
-              </AdminRoute>
-            }/>
-            <Route path={ROUTES.ADMIN_BADGES_PAGE} element={
-              <AdminRoute>
-                <AdminBadgesPage />
-              </AdminRoute>
-            }/>
+            <Route
+              path={ROUTES.ADMIN_LOGIN_PAGE}
+              element={<AdminLoginPage />}
+            />
+            <Route
+              path={ROUTES.ADMIN_HOME_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminHomePage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_SCHEDULE_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminSchedulePage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminAnnouncementsPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminParticipantsPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_TASKS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminTasksPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_BADGES_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminBadgesPage />
+                </AdminRoute>
+              }
+            />
 
             <Route
               path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
               element={<ParticipantLoginPage />}
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_HOME_PAGE}
+              element={
+                <ParticipantRoute>
+                  <ParticipantHomePage />
+                </ParticipantRoute>
+              }
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE}
+              element={
+                <ParticipantRoute>
+                  <ParticipantSchedulePage />
+                </ParticipantRoute>
+              }
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE}
+              element={
+                <ParticipantRoute>
+                  <ParticipantAnnouncementsPage />
+                </ParticipantRoute>
+              }
+            />
+            <Route
+              path={ROUTES.PARTICIPANTS_PROGRESS_PAGE}
+              element={
+                <ParticipantRoute>
+                  <ParticipantProgressPage />
+                </ParticipantRoute>
+              }
             />
 
             <Route path="*" element={<NotFound />} />

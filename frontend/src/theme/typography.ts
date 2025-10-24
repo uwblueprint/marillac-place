@@ -1,4 +1,4 @@
-import { defineStyleConfig } from '@chakra-ui/react';
+import { defineStyleConfig } from "@chakra-ui/react";
 
 export const Text = defineStyleConfig({
   baseStyle: {
@@ -57,11 +57,11 @@ export const textStyles = {
     },
     h2: {
       fontWeight: "600",
-      fontSize: "18px",
+      fontSize: "16px",
     },
     h3: {
       fontWeight: "600",
-      fontSize: "16px",
+      fontSize: "14px",
     },
     s1: {
       color: "#808080",
@@ -78,7 +78,7 @@ export const textStyles = {
     },
     b3: {
       fontWeight: "400",
-      fontSize: "8px",
+      fontSize: "12px",
     },
     c1: {
       color: "#808080",

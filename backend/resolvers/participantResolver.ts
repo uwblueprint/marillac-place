@@ -1,28 +1,76 @@
-import { Participant } from "@prisma/client";
-import ParticipantService from "../services/implementation/participantImplementation";
-import IParticipantService from "../services/interface/participantInterface";
+import { Participant, Prisma, PrismaClient } from "@prisma/client";
+import { getToday } from "../utils/formatDateTime";
 
-const participantService: IParticipantService = new ParticipantService();
+const prisma = new PrismaClient();
+
 const participantResolver = {
   Query: {
     getCurrentParticipants: async (): Promise<Participant[]> => {
-      return participantService.getCurrentParticipants();
+      const participants = await prisma.participant.findMany({
+        where: {
+          OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+        },
+        orderBy: [{ room_number: "asc" }],
+      });
+      return participants;
     },
     getPastParticipants: async (): Promise<Participant[]> => {
-      return participantService.getPastParticipants();
+      const participants = await prisma.participant.findMany({
+        where: {
+          departure_date: {
+            not: null,
+            lte: getToday(),
+          },
+        },
+        orderBy: [{ departure_date: "desc" }],
+      });
+      return participants;
     },
     getParticipantByRoom: async (
       _parent: undefined,
       { room_number }: { room_number: number }
     ): Promise<Participant | null> => {
-      return participantService.getParticipantByRoom(room_number);
+      return await prisma.participant.findFirst({
+        where: {
+          AND: [
+            { room_number },
+            {
+              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+            },
+          ],
+        },
+        include: {
+          assigned_tasks: true,
+        },
+      });
     },
     getParticipantsByRooms: async (
       _parent: undefined,
       { room_numbers }: { room_numbers: number[] }
     ): Promise<Participant[]> => {
-      return participantService.getParticipantsByRooms(room_numbers);
+      return await prisma.participant.findMany({
+        where: {
+          AND: [
+            { room_number: { in: room_numbers } },
+            {
+              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+            },
+          ],
+        },
+      });
     },
+    getParticipantById: async (
+      _parent: undefined,
+      { participantId }: { participantId: number }
+    ): Promise<Participant | null> => {
+      return await prisma.participant.findUnique(
+              {
+                  where: {
+                      participant_id: participantId,
+                  },
+              },
+          );
+    }
   },
   Mutation: {
     createParticipant: async (
@@ -39,12 +87,34 @@ const participantResolver = {
         password: string;
       }
     ): Promise<boolean> => {
-      return participantService.createParticipant(
-        participant_id,
-        room_number,
-        arrival_date,
-        password
-      );
+      let existingParticipant: Participant | null = null;
+   
+      existingParticipant = await prisma.participant.findUnique({
+        where: { participant_id },
+      });
+
+      let occupiedRoom: Participant | null = null;
+
+      occupiedRoom = await prisma.participant.findFirst({
+        where: {
+          room_number,
+          OR: [{ departure_date: null }, { departure_date: { gte: getToday() } }],
+        },
+      });
+
+      await prisma.participant.create({
+        data: {
+          participant_id,
+          room_number,
+          arrival_date,
+          password,
+          account_creation_date: getToday(),
+          participant_progress: {
+            create: {}
+          }
+        },
+      });
+      return true;
     },
     updateParticipant: async (
       _parent: undefined,
@@ -70,17 +140,25 @@ const participantResolver = {
         password?: string;
       }
     ): Promise<boolean> => {
-      return participantService.updateParticipant(
-        participant_id,
-        room_number,
-        arrival_date,
-        departure_date,
-        account_creation_date,
-        account_removal_date,
-        marillac_bucks,
-        marillac_bucks_goal,
-        password
-      );
+      const updatedData: Record<string, any> = {};
+      if (room_number) updatedData.room_number = room_number;
+      if (arrival_date) updatedData.arrival_date = arrival_date;
+      if (departure_date) updatedData.departure_date = departure_date;
+      if (account_creation_date)
+        updatedData.account_creation_date = account_creation_date;
+      if (account_removal_date)
+        updatedData.account_removal_date = account_removal_date;
+      if (marillac_bucks) updatedData.marillac_bucks = marillac_bucks;
+      if (marillac_bucks_goal)
+        updatedData.marillac_bucks_goal = marillac_bucks_goal;
+      if (password) updatedData.password = password;
+
+      await prisma.participant.update({
+        where: { participant_id },
+        data: updatedData,
+      })
+
+      return true;
     },
     updateMarillacBucks: async (
       _parent: undefined,
@@ -94,11 +172,11 @@ const participantResolver = {
         reason: string;
       }
     ): Promise<boolean> => {
-      return participantService.updateMarillacBucks(
-        participant_id,
-        marillac_bucks,
-        reason
-      );
+      await prisma.participant.update({
+        where: { participant_id },
+        data: { marillac_bucks },
+      });
+      return true;
     },
   },
 };

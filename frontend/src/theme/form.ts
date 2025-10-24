@@ -1,7 +1,7 @@
-import { defineStyleConfig } from '@chakra-ui/react';
+import { defineStyleConfig } from "@chakra-ui/react";
 
-import { inputAnatomy, selectAnatomy } from '@chakra-ui/anatomy';
-import { createMultiStyleConfigHelpers } from '@chakra-ui/styled-system';
+import { inputAnatomy, selectAnatomy } from "@chakra-ui/anatomy";
+import { createMultiStyleConfigHelpers } from "@chakra-ui/styled-system";
 
 const inputHelpers = createMultiStyleConfigHelpers(inputAnatomy.keys);
 const selectHelpers = createMultiStyleConfigHelpers(selectAnatomy.keys);
@@ -12,7 +12,7 @@ export const Input = inputHelpers.defineMultiStyleConfig({
       field: {
         padding: "8px 16px",
         border: "1px",
-        borderColor: '#C5C8D8',
+        borderColor: "#C5C8D8",
         borderRadius: "8px",
         fontFamily: "Nunito",
         fontWeight: "400",
@@ -31,11 +31,16 @@ export const Select = selectHelpers.defineMultiStyleConfig({
       field: {
         padding: "8px 16px",
         border: "1px",
-        borderColor: '#C5C8D8',
+        borderColor: "#C5C8D8",
         borderRadius: "8px",
         fontFamily: "Nunito",
         fontWeight: "400",
         fontSize: "12px",
+        _placeholder: {
+          fontFamily: "Nunito",
+          fontWeight: "400",
+          fontSize: "12px",
+        },
       },
     },
   },
@@ -46,7 +51,7 @@ export const Textarea = defineStyleConfig({
     primary: {
       padding: "8px 16px",
       border: "1px solid",
-      borderColor: '#C5C8D8',
+      borderColor: "#C5C8D8",
       borderRadius: "8px",
       fontFamily: "Nunito",
       fontWeight: "400",
@@ -59,6 +64,3 @@ export const Textarea = defineStyleConfig({
     },
   },
 });
-
-
-
