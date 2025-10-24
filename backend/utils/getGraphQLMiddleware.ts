@@ -49,6 +49,7 @@ export default function getGraphQLMiddleware() {
       createParticipant: verifyRole(["admin", "relief"]),
       updateParticipant: verifyRole(["admin", "relief"]),
       updateMarillacBucks: verifyRole(["admin", "relief"]),
+      updateMarillacBucksGoal: verifyRole(["admin", "relief"]),
       createNote: verifyRole(["admin", "relief"]),
       deleteNote: verifyRole(["admin", "relief"]),
       createAnnouncement: verifyRole(["admin", "relief"]),

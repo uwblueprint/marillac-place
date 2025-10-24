@@ -191,6 +191,21 @@ class ParticipantService implements IParticipantService {
       throw new Error("Something went wrong");
     }
   }
+
+  async updateMarillacBucksGoal(
+    participant_id: number,
+    marillac_bucks_goal: number
+  ): Promise<boolean> {
+    try {
+      await prisma.participant.update({
+        where: { participant_id },
+        data: { marillac_bucks_goal },
+      });
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong");
+    }
+  }
   //
   //     async getParticipantByRoom(roomNumber: number): Promise<Participant | null> {
   //         try {

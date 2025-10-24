@@ -106,6 +106,21 @@ const participantResolver = {
         reason
       );
     },
+    updateMarillacBucksGoal: async (
+      _parent: undefined,
+      {
+        participant_id,
+        marillac_bucks_goal,
+      }: {
+        participant_id: number;
+        marillac_bucks_goal: number;
+      }
+    ): Promise<boolean> => {
+      return participantService.updateMarillacBucksGoal(
+        participant_id,
+        marillac_bucks_goal
+      );
+    },
   },
 };
 

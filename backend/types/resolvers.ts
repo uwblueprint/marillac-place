@@ -43,6 +43,10 @@ const resolvers = gql`
       marillac_bucks: Int!
       reason: String!
     ): Boolean
+    updateMarillacBucksGoal(
+      participant_id: Int!
+      marillac_bucks_goal: Int
+    ): Boolean
     createNote(message: String!): Boolean
     deleteNote(note_id: Int!): Boolean
     createAnnouncement(

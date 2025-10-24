@@ -30,6 +30,10 @@ interface IParticipantService {
     marillac_bucks: number,
     reason: string
   ): Promise<boolean>;
+  updateMarillacBucksGoal(
+    participant_id: number,
+    marillac_bucks_goal: number
+  ): Promise<boolean>;
   // updateParticipantById(
   //   participantId: string,
   //   roomNumber?: number,
