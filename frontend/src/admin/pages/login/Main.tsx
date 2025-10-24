@@ -31,15 +31,7 @@ export default function AdminLoginPage() {
       navigate(ROUTES.ADMIN_HOME_PAGE);
     },
     onError: (err: Error) => {
-      // Check if it's a network error (CORS, connection refused, etc.)
-      if (err.message.includes("Failed to fetch") ||
-          err.message.includes("NetworkError") ||
-          err.message.includes("Network request failed")) {
-        setError("Unable to connect to server. Please check your internet connection and try again.");
-      } else {
-        // Show the actual error message from the backend
-        setError(err.message);
-      }
+      setError(err.message);
     },
   });
 
@@ -94,7 +86,7 @@ export default function AdminLoginPage() {
         <Flex width="30%" marginLeft="3vw">
           <img
             width="100%"
-            src="/assets/logo.png"
+            src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"}
             alt="Marillac Place Logo"
           />
         </Flex>

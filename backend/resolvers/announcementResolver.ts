@@ -1,68 +1,25 @@
-import { PrismaClient, Announcement, Priority } from "@prisma/client";
-import { getNow } from "../utils/formatDateTime";
+import { Announcement, Priority } from "@prisma/client";
+import AnnouncementService from "../services/implementation/announcementImplementation";
+import IAnnouncementService from "../services/interface/announcementInterface";
+import prisma from "../prisma";
 
-const prisma = new PrismaClient();
-
+const announcementService: IAnnouncementService = new AnnouncementService();
 const announcementResolver = {
   Query: {
     getAllAnnouncements: async (): Promise<Announcement[]> => {
-      return await prisma.announcement.findMany({
-        orderBy: {
-          creation_date: 'desc',
-        },
-        include: {
-          user_announcements: true,
-        },
-      });
+      return announcementService.getAllAnnouncements();
     },
     getAnnouncementsInDateRange: async (
       _parent: undefined,
       { start, end }: { start: string; end: string }
     ): Promise<Announcement[]> => {
-      return await prisma.announcement.findMany({
-        where: {
-          creation_date: {
-            lte: end,
-            gte: start,
-          },
-        },
-        orderBy: {
-          creation_date: 'desc',
-        },
-        include: {
-          user_announcements: {
-            include: {
-              participant: {
-                select: {
-                  room_number: true,
-                },
-              },
-            },
-          },
-        },
-      })
+      return announcementService.getAnnouncementsInDateRange(start, end);
     },
     getAnnouncementsByParticipants: async (
       _parent: undefined,
       { participant_ids }: { participant_ids: number[] }
     ): Promise<Announcement[]> => {
-      return await prisma.announcement.findMany({
-        orderBy: {
-          creation_date: 'desc',
-        },
-        where: {
-          user_announcements: {
-            every: {
-              participant_id: {
-                in: participant_ids,
-              },
-            },
-          },
-        },
-        include: {
-          user_announcements: true
-        }
-      });
+      return announcementService.getAnnouncementsByParticipants(participant_ids);
     },
   },
   Mutation: {
@@ -78,24 +35,11 @@ const announcementResolver = {
         message: string;
       }
     ): Promise<boolean> => {
-      const newAnnouncement = await prisma.announcement.create({
-        data: {
-          priority,
-          creation_date: getNow(),
-          message,
-        },
-      });
-
-      for (const participant of participants) {
-        await prisma.userAnnouncement.create({
-          data: {
-            participant_id: participant,
-            announcement_id: newAnnouncement.announcement_id,
-          },
-        });
-      }
-
-      return true;
+      return announcementService.createAnnouncement(
+        priority,
+        participants,
+        message
+      );
     },
     editAnnouncement: async (
       _parent: undefined,
@@ -109,26 +53,17 @@ const announcementResolver = {
         message?: string;
       }
     ): Promise<boolean> => {
-      const updatedData: Record<string, any> = {};
-      if (priority) updatedData.priority = priority;
-      if (message) updatedData.message = message;
-
-      await prisma.announcement.update({
-        where: { announcement_id },
-        data: updatedData,
-      });
-      return true;
+      return announcementService.editAnnouncement(
+        announcement_id,
+        priority,
+        message
+      );
     },
     deleteAnnouncement: async (
       _parent: undefined,
       { announcement_id }: { announcement_id: number }
     ): Promise<boolean> => {
-      await prisma.announcement.delete({
-        where: {
-          announcement_id,
-        },
-      });
-      return true;
+      return announcementService.deleteAnnouncement(announcement_id);
     },
     updatePinReadAnnouncement: async (
       _parent: undefined,

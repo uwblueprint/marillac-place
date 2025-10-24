@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Button,
   Flex,
@@ -20,22 +20,16 @@ import {
   Box,
 } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import {useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_ANNOUNCEMENT } from "../../../../gql/mutations";
 import { GET_CURRENT_PARTICIPANTS } from "../../../../gql/queries";
-import { ROOM_NUMBERS } from "../../../../constants/misc";
+import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import ModalContainer from "../../../common/form/ModalContainer";
 import GreenButton from "../../../common/buttons/GreenButton";
 import SelectionInput from "../../../common/form/SelectionInput";
 import TextInput from "../../../common/form/TextInput";
 
-const CreateAnnouncementModal = ({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
+const CreateAnnouncementModal = ({isOpen, onClose}: { isOpen: boolean, onClose: () => void }) => {
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [priority, setPriority] = useState("");
   const [message, setMessage] = useState("");
@@ -49,12 +43,9 @@ const CreateAnnouncementModal = ({
       } else if (selectedRooms.length === ROOM_NUMBERS.length) {
         listOfRooms = "All Rooms";
       } else {
-        listOfRooms = `Rooms ${selectedRooms.join(", ")}`;
+        listOfRooms = `Rooms ${selectedRooms.join(', ')}`;
       }
-      localStorage.setItem(
-        "notification",
-        "Announcement sent to " + listOfRooms
-      );
+      localStorage.setItem("notification", "Announcement sent to " + listOfRooms);
       onClose();
       window.location.reload();
     },
@@ -81,8 +72,7 @@ const CreateAnnouncementModal = ({
 
       const roomToParticipantMap: any = {};
       for (const participant of data.getCurrentParticipants) {
-        roomToParticipantMap[participant.room_number] =
-          participant.participant_id;
+        roomToParticipantMap[participant.room_number] = participant.participant_id
       }
 
       const participantIds: number[] = [];
@@ -95,15 +85,13 @@ const CreateAnnouncementModal = ({
         participantIds.push(participantId);
       }
 
-      createAnnouncement({
-        variables: {
-          priority,
-          participants: participantIds,
-          message,
-        },
-      });
-    } catch (err: any) {
-      console.log(err);
+      createAnnouncement({ variables: {
+        priority,
+        participants: participantIds,
+        message,
+      }});
+    } catch(err: any) {
+      console.log(err)
       setError("Unable to create announcement");
     }
   };
@@ -116,10 +104,10 @@ const CreateAnnouncementModal = ({
         setSelectedRooms(ROOM_NUMBERS);
       }
     } else {
-      setSelectedRooms((prev) => {
-        const next = [...prev];
+      setSelectedRooms(prev => {
+        const next = [...prev]
         if (next.includes(room)) {
-          return next.filter((r) => r !== room);
+          return next.filter(r => r !== room);
         }
         return [...next, room];
       });
@@ -135,15 +123,11 @@ const CreateAnnouncementModal = ({
       error={error}
     >
       <Flex gap="5px" wrap="wrap" alignItems="center" maxWidth="450px">
-        <Text textStyle="web.s1" color="text.light.secondary">
-          Send To:
-        </Text>
+        <Text textStyle="web.s1" color="text.light.secondary">Send To:</Text>
         {[[0], ...ROOM_NUMBERS].flat().map((room: number) => {
-          const isSelected =
-            selectedRooms.length === ROOM_NUMBERS.length ||
-            selectedRooms.includes(room);
+          const isSelected = selectedRooms.length === ROOM_NUMBERS.length || selectedRooms.includes(room);
           return (
-            <GreenButton
+            <GreenButton 
               key={room}
               text={room === 0 ? "All Rooms" : `Room ${room}`}
               action={() => toggleRoom(room)}
@@ -152,20 +136,20 @@ const CreateAnnouncementModal = ({
           );
         })}
       </Flex>
-
+      
       <SelectionInput
-        label="Priority Level"
+        label="Priority Level" 
         current_value={priority}
         action={(opt: string) => setPriority(opt)}
         mode="radio"
         value_options={{
-          Normal: "NORMAL",
-          High: "HIGH",
-          Critical: "CRITICAL",
+          "Normal": "NORMAL",
+          "High": "HIGH",
+          "Critical": "CRITICAL",
         }}
       />
 
-      <TextInput
+      <TextInput 
         label="Message"
         current_value={message}
         action={(e: any) => setMessage(e.target.value)}

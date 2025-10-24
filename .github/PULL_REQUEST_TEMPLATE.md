@@ -16,6 +16,7 @@
 ...
 
 ## Checklist
+- [ ] I have requested a review from the PL(s)
+- [ ] I have marked my ticket as "Ready for Review" in the Notion task board
+- [ ] I have completed everything in the checklist under my ticket
 - [ ] All of my containers are healthy and not producing any error messages
-- [ ] The frontend and backend ports are set to 3000 & 5000, respectively
-- [ ] If new packages were installed, I ran yarn install, and there is no package-lock.json file present in the codebase

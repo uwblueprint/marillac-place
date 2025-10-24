@@ -31,4 +31,4 @@ export default function getApolloClient() {
   });
 
   return apolloClient;
-}
+};

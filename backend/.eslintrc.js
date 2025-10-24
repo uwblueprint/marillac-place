@@ -19,7 +19,7 @@ module.exports = {
     "prettier/prettier": ["error", { endOfLine: "auto" }],
     "class-methods-use-this": 0,
     "import/prefer-default-export": "off",
-    "no-console": "off",
+    "no-console": "off"
   },
   ignorePatterns: ["build/*"],
 };

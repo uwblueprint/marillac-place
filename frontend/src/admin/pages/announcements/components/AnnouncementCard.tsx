@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { useMutation, gql } from "@apollo/client";
+import React, {useState} from "react";
+import { useMutation, gql } from '@apollo/client';
 import { useToast, Box, Text, IconButton, Flex } from "@chakra-ui/react";
 import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { DELETE_ANNOUNCEMENT } from "../../../../gql/mutations";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { DELETE_ANNOUNCEMENT } from '../../../../gql/mutations';
 import EditAnnouncementModal from "./EditAnnouncementModal";
 
 const useDeleteAnnouncement = () => {
   const [deleteAnnouncementMutation] = useMutation(DELETE_ANNOUNCEMENT);
 
   const handleDeleteAnnouncement = async (announcement_id: number) => {
-    if (typeof announcement_id !== "number" || Number.isNaN(announcement_id)) {
+    if (typeof announcement_id !== 'number' || Number.isNaN(announcement_id)) {
       console.log("Unable to delete announcement, invalid announcement id.");
       return;
     }
@@ -25,10 +25,10 @@ const useDeleteAnnouncement = () => {
         localStorage.setItem("notification", "Announcement deleted");
         window.location.reload();
       } else {
-        throw new Error("Announcement deletion failed.");
+        throw new Error('Announcement deletion failed.');
       }
     } catch (error: any) {
-      console.error("ERROR: Error in deleting announcement. ", error);
+      console.error('ERROR: Error in deleting announcement. ', error);
     }
   };
 
@@ -52,7 +52,7 @@ export default function AnnouncementCard({
 }: AnnouncementCardProps) {
   const { handleDeleteAnnouncement } = useDeleteAnnouncement();
   const [edit, setEdit] = useState(false);
-
+  
   return (
     <Box
       borderWidth="1px"
@@ -105,27 +105,23 @@ export default function AnnouncementCard({
           />
           <IconButton
             aria-label="Delete"
-            icon={
-              <DeleteOutlineIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />
-            }
+            icon={<DeleteOutlineIcon sx={{ fontSize: "18px", color: "#d34c5c" }} />}
             size="sm"
             variant="ghost"
             onClick={() => handleDeleteAnnouncement(announcement_id)}
           />
         </Flex>
       </Flex>
-      {edit && (
+      { edit &&
         <EditAnnouncementModal
           isOpen={edit}
           setIsOpen={() => setEdit(false)}
           announcementId={announcement_id}
           sendTo={room}
           initialMessage={message}
-          initialPriority={
-            importance === 2 ? "CRITICAL" : importance === 1 ? "HIGH" : "NORMAL"
-          }
+          initialPriority={importance === 2 ? "CRITICAL" : importance === 1 ? "HIGH" : "NORMAL"}
         />
-      )}
+      }
     </Box>
   );
 }

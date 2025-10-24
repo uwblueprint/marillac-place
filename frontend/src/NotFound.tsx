@@ -26,7 +26,7 @@ export default function NotFound() {
         padding="20px"
       >
         <img
-          src="/assets/logo.png"
+          src={process.env.REACT_APP_FRONTEND_URL + "/assets/logo.png"}
           alt="Marillac Place Logo"
           width="50%"
         />

@@ -6,25 +6,25 @@ const enums = gql`
     OPTIONAL
     INDIVIDUAL_GOAL
   }
-
+    
   enum TransactionType {
     EARNING
     PURCHASE
     REFUND
   }
-
+    
   enum BadgeType {
     SYSTEM
     CUSTOM
   }
-
+    
   enum RecurrenceFrequency {
     DAILY
     EVERY_SELECTED_DAYS
     ANY_SELECTED_DAYS
     PARTICIPANT_PREFERENCE
   }
-
+    
   enum DayOfWeek {
     MONDAY
     TUESDAY
@@ -34,26 +34,26 @@ const enums = gql`
     SATURDAY
     SUNDAY
   }
-
+    
   enum TimeOption {
     ANYTIME
     SPECIFIC
     PARTICIPANT_PREFERENCE
   }
-
+    
   enum Priority {
     NORMAL
     HIGH
     CRITICAL
   }
-
+    
   enum Status {
     ASSIGNED
     INCOMPLETE
     COMPLETE
     EXCUSED
   }
-
+    
   enum Icon {
     FIVE_STAR
     FOUR_STAR

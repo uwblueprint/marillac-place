@@ -1,33 +1,22 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Text,
-  Button,
-} from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalBody, Flex, FormControl, FormLabel, Input, Text, Button } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { UPDATE_PARTICIPANT } from "../../../../gql/mutations";
+import { UPDATE_PARTICIPANT } from "../../../../gql/mutations"
 import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";
 
 type EditPastParticipantCardProps = {
-  id: number;
-  arrival: string;
-  departure: string;
-  close: () => void;
+  id: number,
+  arrival: string,
+  departure: string,
+  close: () => void,
 };
 
 export default function EditPastParticipantCard({
   id,
   arrival,
   departure,
-  close,
+  close
 }: EditPastParticipantCardProps) {
   const [arrivalDate, setArrivalDate] = useState(arrival);
   const [departureDate, setDepartureDate] = useState(departure);
@@ -39,8 +28,9 @@ export default function EditPastParticipantCard({
   async function handleSubmit() {
     setError("");
     if (!arrivalDate || !departureDate) {
-      setError("Missing fields");
-    } else if (arrivalDate === arrival && departureDate === departure) {
+      setError("Missing fields")
+    } else if (
+      arrivalDate === arrival && departureDate === departure) {
       setError("No changes made");
     } else if (departureDate && arrivalDate >= departureDate) {
       setError("Arrival date must be less than departure date");
@@ -52,17 +42,12 @@ export default function EditPastParticipantCard({
         setError("Departure is in the future");
       } else {
         try {
-          await updateParticipant({
-            variables: {
-              participant_id: id,
-              arrival_date: arrivalDate,
-              departure_date: departureDate,
-            },
-          });
-          localStorage.setItem(
-            "notification",
-            "Participant #" + id + " updated"
-          );
+          await updateParticipant({ variables: {
+            participant_id: id,
+            arrival_date: arrivalDate,
+            departure_date: departureDate,
+          }});
+          localStorage.setItem("notification", "Participant #" + id + " updated");
           window.location.reload();
         } catch (err: any) {
           setError(err.message);
@@ -80,9 +65,7 @@ export default function EditPastParticipantCard({
       error={error}
     >
       <FormControl>
-        <Text textStyle="web.s1" color="text.light.secondary">
-          ID Number
-        </Text>
+        <Text textStyle="web.s1" color="text.light.secondary">ID Number</Text>
         <Input
           disabled
           type="number"
@@ -102,14 +85,14 @@ export default function EditPastParticipantCard({
       </FormControl>
 
       <Flex gap="8px">
-        <CoreInput
+        <CoreInput 
           label="Arrival Date"
           current_value={arrivalDate}
           action={(e: any) => setArrivalDate(e.target.value)}
           type="date"
           width="100%"
         />
-        <CoreInput
+        <CoreInput 
           label="Departure Date"
           current_value={departureDate}
           action={(e: any) => setDepartureDate(e.target.value)}
@@ -118,5 +101,5 @@ export default function EditPastParticipantCard({
         />
       </Flex>
     </ModalContainer>
-  );
-}
+  )
+};

@@ -33,6 +33,7 @@ export const GET_SYSTEM_BADGES = gql`
   }
 `;
 
+
 export const GET_CURRENT_PARTICIPANTS = gql`
   query getCurrentParticipants {
     getCurrentParticipants {
@@ -45,11 +46,11 @@ export const GET_CURRENT_PARTICIPANTS = gql`
 `;
 export const GET_MARILLAC_BUCKS = gql`
   query getMarillacBucks($participantId: Int!) {
-    getParticipantById(participantId: $participantId) {
-      marillac_bucks
-    }
+      getParticipantById(participantId: $participantId) {
+          marillac_bucks
+      }
   }
-`;
+`
 
 export const GET_PARTICIPANT_BY_ROOM = gql`
   query getParticipantByRoom($room_number: Int!) {
@@ -71,12 +72,6 @@ export const GET_PARTICIPANT_BY_ROOM = gql`
         comment
       }
     }
-  }
-`;
-
-export const HAS_COMPLETED_ALL_REQUIRED_TASKS = gql`
-  query hasCompletedAllRequiredTasks($participantId: Int!) {
-    hasCompletedAllRequiredTasks(participantId: $participantId)
   }
 `;
 
@@ -188,7 +183,7 @@ export const GET_TASK_BY_ID = gql`
 `;
 
 export const GET_TASKS_BY_TYPE = gql`
-  query getTasksByType($type: [TaskType!]!) {
+  query getTasksByType($type: TaskType!) {
     getTasksByType(type: $type) {
       task_id
       task_name
@@ -241,47 +236,3 @@ export const GET_CUSTOM_BADGES = gql`
     }
   }
 `;
-
-export const GET_ASSIGNED_TASKS = gql`
-  query getAssignedTasks($participant_id: Int!) {
-    getAssignedTasks(participant_id: $participant_id) {
-      SPECIFIC {
-        id
-        title
-        start
-        end
-        allDay
-        task_status
-        task_type
-        marillacBucksAddition
-        marillac_bucks_deduction
-        comment
-      }
-      ANYTIME {
-        id
-        title
-        start
-        end
-        allDay
-        task_status
-        task_type
-        marillacBucksAddition
-        marillac_bucks_deduction
-        comment
-      }
-      ANYDAY {
-        id
-        title
-        start
-        end
-        allDay
-        task_status
-        task_type
-        marillacBucksAddition
-        marillac_bucks_deduction
-        comment
-      }
-    }
-  }
-`;
-

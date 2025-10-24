@@ -39,4 +39,4 @@ export default function getGraphQLSchema() {
 
   const schemaWithMiddleware = applyMiddleware(schema, middleware);
   return schemaWithMiddleware;
-}
+};

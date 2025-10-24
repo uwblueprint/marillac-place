@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import AnnouncementCard from "./components/AnnouncementCard";
 import CreateAnnouncementModal from "./components/CreateAnnouncementModal";
-import { ROOM_NUMBERS } from "../../../constants/misc";
+import { ROOM_NUMBERS } from "../../../constants/rooms";
 import {
   GET_ALL_ANNOUNCEMENTS,
   GET_ANNOUNCEMENTS_BY_PARTICIPANTS,
-  GET_CURRENT_PARTICIPANTS,
+  GET_CURRENT_PARTICIPANTS
 } from "../../../gql/queries";
 import GreenButton from "../../common/buttons/GreenButton";
 import OrangeButton from "../../common/buttons/OrangeButton";
@@ -23,24 +23,21 @@ export default function AdminAnnouncementsPage() {
   const {
     data: participantData,
     loading: participantLoading,
-    error: participantError,
+    error: participantError
   } = useQuery(GET_CURRENT_PARTICIPANTS);
 
   const [getAnnouncementsByParticipants, announcementsByParticipantsResult] =
     useLazyQuery(GET_ANNOUNCEMENTS_BY_PARTICIPANTS);
 
-  const [getAllAnnouncements, allAnnouncementsResult] = useLazyQuery(
-    GET_ALL_ANNOUNCEMENTS
-  );
+  const [getAllAnnouncements, allAnnouncementsResult] =
+    useLazyQuery(GET_ALL_ANNOUNCEMENTS);
 
   const participantToRoomMap: Record<number, number> = {};
   const roomToParticipantMap: Record<number, number> = {};
   if (participantData?.getCurrentParticipants) {
     for (const participant of participantData.getCurrentParticipants) {
-      roomToParticipantMap[participant.room_number] =
-        participant.participant_id;
-      participantToRoomMap[participant.participant_id] =
-        participant.room_number;
+      roomToParticipantMap[participant.room_number] = participant.participant_id;
+      participantToRoomMap[participant.participant_id] = participant.room_number;
     }
   }
 
@@ -60,7 +57,7 @@ export default function AdminAnnouncementsPage() {
       .map((roomNumber) => roomToParticipantMap[roomNumber])
       .filter(Boolean);
 
-    console.log(selectedParticipantIds);
+    console.log(selectedParticipantIds)
 
     getAnnouncementsByParticipants({
       variables: { participant_ids: selectedParticipantIds },
@@ -89,14 +86,12 @@ export default function AdminAnnouncementsPage() {
   const announcementError =
     (!filter && allAnnouncementsResult.error) ||
     (filter && announcementsByParticipantsResult.error);
-  const announcementData = filter
-    ? announcementsByParticipantsResult.data?.getAnnouncementsByParticipants
-    : allAnnouncementsResult.data?.getAllAnnouncements ?? [];
+  const announcementData =
+    filter ? announcementsByParticipantsResult.data?.getAnnouncementsByParticipants
+      : allAnnouncementsResult.data?.getAllAnnouncements ?? []
 
-  if (announcementLoading || participantLoading)
-    return <Text>Loading announcements...</Text>;
-  if (announcementError || participantError)
-    return <Text color="red.500">Error loading announcements</Text>;
+  if (announcementLoading || participantLoading) return <Text>Loading announcements...</Text>;
+  if (announcementError || participantError) return <Text color="red.500">Error loading announcements</Text>;
 
   return (
     <Flex width="100%" flexDir="column" gap="15px">
@@ -123,20 +118,15 @@ export default function AdminAnnouncementsPage() {
       </Flex>
 
       <Flex alignItems="center" gap="10px">
-        <Text
-          textStyle="web.s1"
-          color="#000000"
-          marginRight="5px"
-          fontWeight={600}
-        >
+        <Text textStyle="web.s1" color="#000000" marginRight="5px" fontWeight={600}>
           Filters:
         </Text>
         {selectedButtons.map((isSelected: any, index: number) => (
-          <GreenButton
-            key={index}
-            text={"Room " + (index + 1)}
-            action={() => handleButtonClick(index)}
-            is_active={selectedButtons[index]}
+          <GreenButton 
+            key={index} 
+            text={"Room " + (index + 1)} 
+            action={() => handleButtonClick(index)} 
+            is_active={selectedButtons[index]} 
           />
         ))}
         <Text
@@ -169,43 +159,30 @@ export default function AdminAnnouncementsPage() {
       </Text>
 
       <VStack spacing={4} align="stretch" paddingBottom="20px">
-        {announcementData.length === 0 && <Text>No announcements found.</Text>}
+        {announcementData.length === 0 && (
+          <Text>No announcements found.</Text>
+        )}
         {announcementData.map((announcement: any) => (
           <AnnouncementCard
             key={announcement.announcement_id}
             announcement_id={announcement.announcement_id}
             room={
               announcement.user_announcements.length === 1
-                ? `Room ${
-                    participantToRoomMap[
-                      announcement.user_announcements[0].participant_id
-                    ]
-                  }`
+                ? `Room ${participantToRoomMap[announcement.user_announcements[0].participant_id]}`
                 : announcement.user_announcements.length === ROOM_NUMBERS.length
-                ? "All Rooms"
-                : `Rooms ${announcement.user_announcements
-                    .map((ua: any) => participantToRoomMap[ua.participant_id])
-                    .join(", ")}`
+                  ? "All Rooms"
+                  : `Rooms ${announcement.user_announcements.map((ua: any) => participantToRoomMap[ua.participant_id]).join(', ')}`
             }
             message={announcement.message}
             timestamp={announcement.creation_date}
             importance={
-              announcement.priority === "CRITICAL"
-                ? 2
-                : announcement.priority === "HIGH"
-                ? 1
-                : 0
+              announcement.priority === "CRITICAL" ? 2 : announcement.priority === "HIGH" ? 1 : 0
             }
           />
         ))}
       </VStack>
 
-      {create && (
-        <CreateAnnouncementModal
-          isOpen={create}
-          onClose={() => setCreate(false)}
-        />
-      )}
+      {create && <CreateAnnouncementModal isOpen={create} onClose={() => setCreate(false)} />}
     </Flex>
   );
 }

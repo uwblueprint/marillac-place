@@ -14,7 +14,7 @@ const OccupiedRoomCard = ({
 }: OccupiedRoomCardProps) => {
   const [editParticipant, setEditParticipant] = useState(false);
   const id = participants[roomNumber].participant_id;
-  const arrival = participants[roomNumber].arrival_date;
+  const arrival = participants[roomNumber].arrival_date
 
   return (
     <Flex
@@ -45,28 +45,22 @@ const OccupiedRoomCard = ({
         <Text textStyle="web.s1">Room {roomNumber}</Text>
       </Flex>
 
-      <Text textStyle="web.b3">
-        ID Number:&nbsp;
-        <Text as="span" fontWeight="700">
-          #{id}
-        </Text>
+      <Text textStyle="web.b3">ID Number:&nbsp;
+        <Text as="span" fontWeight="700">#{id}</Text>
       </Text>
-      <Text textStyle="web.b3">
-        Arrival Date:&nbsp;
-        <Text as="span" fontWeight="700">
-          {arrival}
-        </Text>
+      <Text textStyle="web.b3">Arrival Date:&nbsp;
+        <Text as="span" fontWeight="700">{arrival}</Text>
       </Text>
 
       <Flex position="absolute" bottom="12px">
-        <OrangeButton
+        <OrangeButton 
           text="Edit Participant"
-          action={() => setEditParticipant(true)}
-          is_active={editParticipant}
+          action={() => setEditParticipant(true)} 
+          is_active={editParticipant} 
         />
       </Flex>
 
-      {editParticipant && (
+      { editParticipant && (
         <EditParticipantCard
           roomNumber={roomNumber}
           participants={participants}

@@ -38,13 +38,7 @@ const AdminHomePage = (): React.ReactElement => {
       >
         {getDate()}
       </Text>
-      <Flex
-        w="100%"
-        h="100%"
-        flexDir="column"
-        minHeight="fit-content"
-        position="relative"
-      >
+      <Flex w="100%" h="100%" flexDir="column" minHeight="fit-content" position="relative">
         <Flex flexDir="column" w="calc(100% - 300px)" height="100%">
           <RoomsOverview />
           <AnnouncementSection />
