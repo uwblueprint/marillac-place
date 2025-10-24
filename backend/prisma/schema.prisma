@@ -245,5 +245,3 @@ model ParticipantProgress {
 
   @@map("participant_progress")
 }
-
-
