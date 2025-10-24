@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Flex, Text } from '@chakra-ui/react';
-import ParticipantPageHeader from '../../../common/participant/PageHeader';
+import ParticipantPageHeader from '../../common/PageHeader';
 import { EditGoal } from './elements/EditGoal';
 import WeeklyEarningsChart from "./elements/EarningsWidget";
 
