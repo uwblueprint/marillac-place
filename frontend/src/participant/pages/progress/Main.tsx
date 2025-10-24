@@ -9,7 +9,7 @@ import {
  useDisclosure
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import ParticipantPageHeader from '../../common/participant/PageHeader';
+import ParticipantPageHeader from '../../common/PageHeader';
 import CreateProgressModal from "./components/CreateProgressModal";
 import OrangeButton from "../../../admin/common/buttons/OrangeButton";
 
@@ -25,6 +25,7 @@ const [editGoal, setEditGoal] = useState(false);
   
   const handleClose = () => {
     setEditGoal(false);
+  }
 
  return (
    <>
@@ -73,4 +74,4 @@ const [editGoal, setEditGoal] = useState(false);
       </div>
    </>
  )
-  };
+};

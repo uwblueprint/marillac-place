@@ -6,11 +6,9 @@ import {
   Image,
   Box,
 } from "@chakra-ui/react";
-import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
 import { useQuery } from '@apollo/client';
 import { GET_MARILLAC_BUCKS } from "../../../../gql/queries";
-import { ROOM_NUMBERS } from "../../../../constants/rooms";
-import { ParticipantContext } from '../../../../common/participant/ParticipantContext';
+import { ParticipantContext } from '../../../common/ParticipantContext';
 import ModalContainer from "../../../../admin/common/form/ModalContainer";
 import CoreInput from "../../../../admin/common/form/CoreInput";
 
