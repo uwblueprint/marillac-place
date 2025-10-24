@@ -109,6 +109,9 @@ const participantResolver = {
           arrival_date,
           password,
           account_creation_date: getToday(),
+          participant_progress: {
+            create: {}
+          }
         },
       });
       return true;

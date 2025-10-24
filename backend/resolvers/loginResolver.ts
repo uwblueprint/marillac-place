@@ -1,5 +1,7 @@
 import { Participant, PrismaClient } from "@prisma/client";
 import { getToday } from "../utils/formatDateTime";
+import { evaluateBadge } from "../utils/evaluateBadge";
+import { updateLoginStreak } from "../utils/updateLoginStreak";
 
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
@@ -53,12 +55,16 @@ const loginResolver = {
       }
     ) => {
       var participant: Participant | null = null;
-      participant = await prisma.participant.findUnique({
-        where: {
-          participant_id: id,
-          OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
-        },
-      });
+      try {
+        participant = await prisma.participant.findUnique({
+          where: {
+            participant_id: id,
+            account_removal_date: null
+          },
+        });
+      } catch (err) {
+        throw new Error('Something went wrong');
+      }
 
       if (!participant) {
         throw new Error('ID # does not exist');
@@ -87,6 +93,13 @@ const loginResolver = {
           expiresIn: "12h",
         },
       );
+
+      try {
+        const days = await updateLoginStreak(participant.participant_id);
+        await evaluateBadge(days, id, 'Log-in Badge');
+      } catch (err) {
+        console.error("Failed to record login:", err);
+      }
 
       return { token };
     },

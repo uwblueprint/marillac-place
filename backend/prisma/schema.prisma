@@ -241,7 +241,7 @@ model ParticipantProgress {
   badges_achieved                Int[]    @default([])
   task_types_tried               String[] @default([])
 
-  participant Participant @relation(fields: [participant_id], references: [participant_id])
+  participant Participant @relation(fields: [participant_id], references: [participant_id], onDelete: Cascade)
 
   @@map("participant_progress")
 }

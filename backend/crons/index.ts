@@ -1,6 +1,7 @@
 import cron from "node-cron";
 import expireAdminNotes from "./scripts/expireAdminNotes";
-import expireAdminAnnouncements from "./scripts/expireAdminAnnouncements"
+import expireAdminAnnouncements from "./scripts/expireAdminAnnouncements";
+import expireLoginStreak from "./scripts/expireLoginStreak";
 import createAssignedTasks from "./scripts/createAssignedTask";
 
 cron.schedule("0 0 * * * *", async () => {
@@ -18,6 +19,15 @@ cron.schedule("0 0 0 * * *", async () => {
     console.log("Expired admin announcements");
   } else {
     console.log("Could not expire admin announcements");
+  }
+});
+
+cron.schedule("0 0 0 * * *", async () => {
+  const res = await expireLoginStreak();
+  if (res) {
+    console.log("Expired login streaks");
+  } else {
+    console.log("Could not expire login streaks");
   }
 });
 
