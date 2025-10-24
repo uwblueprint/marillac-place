@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { Button, Flex, Text } from '@chakra-ui/react';
 import ParticipantPageHeader from '../../common/PageHeader';
 import { EditGoal } from './elements/EditGoal';
+import { SetGoal } from './elements/SetGoal';
+
 import WeeklyEarningsChart from "./elements/EarningsWidget";
 
 export default function ParticipantsProgressPage() {
   const [editGoal, setEditGoal] = useState(false);
+  const [setGoal, setSetGoal] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
   const sampleWeeklyEarnings = [10, 15, 8, 20, 12, 18, 35];
   
   const handleClose = () => {
+    setSetGoal(false);
     setEditGoal(false);
   };
 
@@ -39,11 +43,11 @@ export default function ParticipantsProgressPage() {
             Marillac Bucks Goal
           </Text> 
         
-          <Text borderBottom="1px" textStyle="web.c1" onClick={() => setEditGoal(true)}>Edit Goal</Text>
+          <Text borderBottom="1px" textStyle="web.c1" onClick={() => setSetGoal(true)}>Set Goal</Text>
         </Flex>
       </Flex>
-      { editGoal &&
-        <EditGoal 
+      { setGoal &&
+        <SetGoal 
           handleClose={handleClose} 
         />
       }
