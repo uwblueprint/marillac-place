@@ -20,7 +20,7 @@ export async function evaluateBadge(
         where: { participant_id, name: badge_name },
         orderBy: {level: 'asc'},
       });
-      const nextLevel = earned ? earned.level + 1 : 1;
+      const nextLevel = earned ? earned.level + 1 : 0;
       const nextLevelEntry = badge.badge_level.find(bl => bl.level === nextLevel);
       if (!nextLevelEntry) return false;
       if (current_benchmark >= nextLevelEntry.benchmark) {

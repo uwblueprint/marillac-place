@@ -96,7 +96,7 @@ const loginResolver = {
 
       try {
         const days = await updateLoginStreak(participant.participant_id);
-        await evaluateBadge(days, id, 'login');
+        await evaluateBadge(days, id, 'Log-in Badge');
       } catch (err) {
         console.error("Failed to record login:", err);
       }
