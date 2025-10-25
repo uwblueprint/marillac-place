@@ -3,24 +3,20 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 
-type TaskBarProps = {
-  participantId: number | undefined;
+type Page = {
+  label: string;
+  route: string;
 };
 
-export default function TaskBar({ participantId }: TaskBarProps) {
+type TaskBarProps = {
+  participantId: number | undefined;
+  currentPageIndex: number;
+  pages: Page[];
+};
+
+export default function TaskBar({ participantId, currentPageIndex, pages }: TaskBarProps) {
   const navigate = useNavigate();
   const [signOut, setSignOut] = useState(false);
-
-  const pages = [
-    { label: "Home", route: ROUTES.PARTICIPANTS_HOME_PAGE },
-    { label: "Schedule", route: ROUTES.PARTICIPANTS_SCHEDULE_PAGE },
-    { label: "Announcements", route: ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE },
-    { label: "Progress", route: ROUTES.PARTICIPANTS_PROGRESS_PAGE },
-  ];
-
-  const currentPage = pages.findIndex(
-    (page) => page.route === window.location.pathname
-  );
 
   const handleSignOut = () => {
     localStorage.removeItem("participant_token");
@@ -47,7 +43,7 @@ export default function TaskBar({ participantId }: TaskBarProps) {
         ID #{participantId}
       </Text>
       <Tabs
-        index={currentPage}
+        index={currentPageIndex}
         orientation="vertical"
         variant="unstyled"
         width="100%"

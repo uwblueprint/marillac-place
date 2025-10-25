@@ -5,6 +5,7 @@ import * as ROUTES from "../../constants/routes";
 import { isParticipant, getParticipantId } from "../../utils/checkRole";
 import Loading from "../../Loading";
 import { ParticipantContext } from "./ParticipantContext";
+import ParticipantPageHeader from "./PageHeader";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
@@ -50,7 +51,10 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
     >
       <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column">
         <ParticipantContext.Provider value={{ id: participantId }}>
-          {children}
+          <ParticipantPageHeader />
+          <Flex flexDir="column" width="100%" padding="20px" overflow="scroll" gap="8px">
+            {children}
+          </Flex>
         </ParticipantContext.Provider>
       </Flex>
     </Flex>

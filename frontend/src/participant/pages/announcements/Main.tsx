@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Button, Flex, Grid, Text } from "@chakra-ui/react";
 import ParticipantPageHeader from "../../common/PageHeader";
-import ParticipantAnnouncementCard from "./elements/ParticipantAnnouncementCard";
+import ParticipantAnnouncementCard from "./components/ParticipantAnnouncementCard";
 
 export default function ParticipantsAnnouncementsPage() {
   const [filter, setFilter] = useState(0);
   return (
     <>
-      <ParticipantPageHeader currentPage="Announcements" />
       <Flex w="100%" padding="20px" flexDir="column" gap="15px">
         <Flex w="100%" alignItems="center" justifyContent="center" gap="5px">
           <Button

@@ -242,6 +242,19 @@ export const GET_CUSTOM_BADGES = gql`
   }
 `;
 
+export const GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE = gql`
+  query getAssignedTasksByParticipantIdAndDate($participantId: Int!, $date: String!) {
+    getAssignedTasksByParticipantIdAndDate(participantId: $participantId, date: $date) {
+      assigned_task_id
+      task_name
+      task_status
+      task_type
+      start_date
+      end_date
+      comment
+    }
+  }
+`;
 export const GET_ASSIGNED_TASKS = gql`
   query getAssignedTasks($participant_id: Int!) {
     getAssignedTasks(participant_id: $participant_id) {

@@ -182,3 +182,37 @@ export function formatTimeString(date: Date): string {
   }).format(date);
   return timeString;
 }
+
+
+export function getParticipantHomePageDateString() {
+  const date = new Date();
+  const parts = date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).split(",");
+
+  const formattedDate = parts[0].replace(",", "") + " - " + parts[1].trim() + "," + parts[2];
+  return formattedDate;
+}
+
+export function formatTimeRange(start: string, end: string): string {
+  if (start.slice(-5) === "00:00" && end.slice(-5) === "23:59") {
+    return "Anytime";
+  }
+
+  const timeFormatter = new Intl.DateTimeFormat("en-CA", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  const startDate = new Date(start.replace(", ", "T"));
+  const endDate = new Date(end.replace(", ", "T"));
+
+  const formattedStart = timeFormatter.format(startDate).toLowerCase()
+  const formattedEnd = timeFormatter.format(endDate).toLowerCase()
+
+  return `${formattedStart} - ${formattedEnd}`;
+}

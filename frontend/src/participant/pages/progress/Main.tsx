@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Flex, Text } from '@chakra-ui/react';
 import ParticipantPageHeader from '../../common/PageHeader';
-import { EditGoal } from './elements/EditGoal';
-import { SetGoal } from './elements/SetGoal';
+import { EditGoal } from './components/EditGoal';
+import { SetGoal } from './components/SetGoal';
 
-import WeeklyEarningsChart from "./elements/EarningsWidget";
+import WeeklyEarningsChart from "./components/EarningsWidget";
 
 export default function ParticipantsProgressPage() {
   const [editGoal, setEditGoal] = useState(false);
@@ -22,7 +22,6 @@ export default function ParticipantsProgressPage() {
 
   return (
     <>
-      <ParticipantPageHeader currentPage="Progress" />
       <Flex 
         width="90%"
         alignItems="flex-start"

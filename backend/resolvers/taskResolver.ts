@@ -31,6 +31,25 @@ const taskResolver = {
     // ): Promise<Task[]> => {
     //   return taskService.getTasksByRecurrenceFrequency(recurrencePreference);
     // },
+    getAssignedTasksByParticipantIdAndDate: async (
+      _parent: undefined,
+      { participantId, date }: { participantId: number; date: string }
+    ) => {
+      try {
+        const dateStart = `${date}, 00:00`;
+        const dateEnd = `${date}, 23:59`;
+        const assignedTasks = await prisma.assignedTask.findMany({
+          where: {
+            participant_id: participantId,
+            start_date: { lte: dateEnd },
+            end_date: { gte: dateStart }
+          },
+        });
+        return assignedTasks;
+      } catch (err) {
+        throw new Error("Something went wrong");
+      }
+    },
   },
   Mutation: {
     createTask: async (

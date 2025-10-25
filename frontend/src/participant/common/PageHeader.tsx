@@ -6,12 +6,20 @@ import { useQuery } from "@apollo/client";
 import TaskBar from "./TaskBar";
 import { ParticipantContext } from "./ParticipantContext";
 import { GET_MARILLAC_BUCKS } from "../../gql/queries";
+import * as ROUTES from "../../constants/routes";
 
-type PageHeaderProps = {
-  currentPage: string;
-};
+function ParticipantPageHeader() {
+  const pages = [
+    { label: "Home", route: ROUTES.PARTICIPANTS_HOME_PAGE },
+    { label: "Schedule", route: ROUTES.PARTICIPANTS_SCHEDULE_PAGE },
+    { label: "Announcements", route: ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE },
+    { label: "Progress", route: ROUTES.PARTICIPANTS_PROGRESS_PAGE },
+  ];
+  
+  const currentPageIndex = pages.findIndex(
+    (page) => page.route === window.location.pathname
+  );
 
-function ParticipantPageHeader({ currentPage }: PageHeaderProps) {
   const participant = useContext(ParticipantContext);
   const [showTaskBar, setShowTaskBar] = useState(false);
 
@@ -50,10 +58,14 @@ function ParticipantPageHeader({ currentPage }: PageHeaderProps) {
           <Flex onClick={() => setShowTaskBar(false)} cursor="pointer">
             <CloseIcon fontSize="medium" />
           </Flex>
-          <TaskBar participantId={participant?.id} />
+          <TaskBar 
+            participantId={participant?.id} 
+            currentPageIndex={currentPageIndex} 
+            pages={pages}
+          />
         </>
       )}
-      <Text textStyle="mobile.h1">{currentPage}</Text>
+      <Text textStyle="mobile.h1">{pages[currentPageIndex].label}</Text>
       <Flex gap="7px" alignItems="center" justifyContent="center">
         <Image
           src="/assets/marillac_bucks.png"
