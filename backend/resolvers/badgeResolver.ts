@@ -42,7 +42,16 @@ const badgeResolver = {
           name: 'asc'
         },
       });
-    }
+    },
+    getEarnedBadgesByParticipant: async (
+      _parent: undefined,
+      { participantId }: { participantId: number }
+    ): Promise<EarnedBadge[]> => {
+      return prisma.earnedBadge.findMany({
+        where: { participant_id: participantId },
+        orderBy: { date_received: "desc" },
+      });
+    },
   },
 
   Mutation: {
