@@ -1,31 +1,67 @@
 import { Button, Flex, Image, Input, Tab, TabList, Tabs, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useMutation } from '@apollo/client';
 import ModalContainer from '../../../../admin/common/form/ModalContainer';
+import { ParticipantContext } from '../../../common/ParticipantContext';
+import { UPDATE_MARILLAC_BUCKS_GOAL } from '../../../../gql/mutations';
 
 interface EditGoalProps {
     handleClose: () => void
+    onGoalUpdated: () => void
+    currentGoal: number
+    currentBalance: number
 }
 
-export const EditGoal: React.FC<EditGoalProps> = ({handleClose}) => {
+export const EditGoal: React.FC<EditGoalProps> = ({handleClose, onGoalUpdated, currentGoal, currentBalance}) => {
     const [goal, setGoal] = useState("")
     const [error, setError] = useState("")
+    const participantContext = useContext(ParticipantContext);
     
-    const handleSave = () => {
-        try {
-            // Add save goal logic here
+    const [updateGoalMutation] = useMutation(UPDATE_MARILLAC_BUCKS_GOAL);
+    
+    const handleSave = async () => {
+        if (!participantContext) {
+            setError("Not logged in");
+            return;
+        }
         
-            handleClose(); // only close if successful
-          } catch (err) {
-            console.error("Error saving goal:", err);
-            setError("Failed to save goal — please try again.");
-          }
+        const goalValue = parseInt(goal);
+        if (isNaN(goalValue)) {
+            setError("Please enter a valid number");
+            return;
+        }
+        
+        if (goalValue <= currentBalance) {
+            setError("Goals must be greater than current Marillac Bucks Balance");
+            return;
+        }
+        
+        try {
+            await updateGoalMutation({
+                variables: {
+                    participant_id: participantContext.id,
+                    new_goal_value: goalValue
+                }
+            });
+            
+            onGoalUpdated();
+            handleClose();
+        } catch (err: any) {
+            console.error("Error updating goal:", err);
+            setError(err.message || "Failed to update goal — please try again.");
+        }
     }
+    
+    // Show previous goal value
+    React.useEffect(() => {
+        setGoal(currentGoal.toString());
+    }, [currentGoal]);
 
     return (
         <ModalContainer
             title="Edit Goal"
             submit_text="Save"
-            submit_action={handleSave}
+            submit_action={async () => { await handleSave(); }}
             cancel_action={handleClose}
             error={error}
         >

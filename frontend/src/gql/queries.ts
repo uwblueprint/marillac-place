@@ -90,14 +90,12 @@ export const GET_PARTICIPANTS_BY_ROOMS = gql`
 `;
 
 export const GET_PARTICIPANT_BY_ID = gql`
-  query getParticipantById($participantId: String!) {
+  query getParticipantById($participantId: Int!) {
     getParticipantById(participantId: $participantId) {
-      participantId
-      roomNumber
-      arrival
-      departure
-      password
-      credit
+      participant_id
+      marillac_bucks
+      marillac_bucks_goal
+      room_number
     }
   }
 `;
