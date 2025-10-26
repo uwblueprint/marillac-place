@@ -6,9 +6,15 @@ const prisma = new PrismaClient();
 const noteResolver = {
   Query: {
     getNotes: async (): Promise<Note[]> => {
-      return await prisma.note.findMany({
-        orderBy: [{ creation_date: "desc" }],
-      });
+      try {
+        return await prisma.note.findMany({
+          orderBy: [{ creation_date: "desc" }],
+        });
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Error getting notes";
+        throw new Error(message);
+      }
     },
   },
   Mutation: {

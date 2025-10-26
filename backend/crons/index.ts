@@ -31,7 +31,7 @@ cron.schedule("0 0 0 * * *", async () => {
   }
 });
 
-cron.schedule("0 0 * * 1", async () => { 
+cron.schedule("0 0 * * 1", async () => {
   const res = await createAssignedTasks();
   if (res) {
     console.log("Created assigned tasks");
