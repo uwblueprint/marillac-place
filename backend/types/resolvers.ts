@@ -11,11 +11,19 @@ const resolvers = gql`
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
+    getAnnouncementsByParticipantIdAndDate(
+      participant_id: Int!
+      start_date: String!
+      end_date: String!
+    ): [Announcement]
     getAssignedTasks(participant_id: Int!): GetAssignedTaskResponse!
     getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
-    getAssignedTasksByParticipantIdAndDate(participantId: Int!, date: String!): [AssignedTask]
+    getAssignedTasksByParticipantIdAndDate(
+      participantId: Int!
+      date: String!
+    ): [AssignedTask]
     hasCompletedAllRequiredTasks(participantId: Int!): Boolean
     getEarnedBadgesByParticipant(participantId: Int!): [EarnedBadge!]!
   }
