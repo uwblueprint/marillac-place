@@ -1,10 +1,10 @@
+import { AssignedTask, TaskType, Status } from "@prisma/client";
 import prisma from "../prisma";
 import {
-  AssignedTask,
-  TaskType,
-  Status
-} from "@prisma/client";
-import { formatDateFromDateString, formatDateTime, getWeekBounds } from "../utils/formatDateTime";
+  formatDateFromDateString,
+  formatDateTime,
+  getWeekBounds,
+} from "../utils/formatDateTime";
 
 type CalendarEvent = {
   id: number;
@@ -17,9 +17,12 @@ type CalendarEvent = {
   marillacBucksAddition: number;
   marillac_bucks_deduction: number;
   comment: string | null;
-}
+};
 
-function convertAssignedTaskToCalendarEvent(task: AssignedTask, is_specific: boolean): CalendarEvent {
+function convertAssignedTaskToCalendarEvent(
+  task: AssignedTask,
+  is_specific: boolean
+): CalendarEvent {
   const event: CalendarEvent = {
     id: task.assigned_task_id,
     title: task.task_name,
@@ -31,8 +34,8 @@ function convertAssignedTaskToCalendarEvent(task: AssignedTask, is_specific: boo
     marillacBucksAddition: task.marillac_bucks_addition,
     marillac_bucks_deduction: task.marillac_bucks_deduction,
     comment: task.comment,
-  }
-  return event
+  };
+  return event;
 }
 
 function groupTasks(tasks: AssignedTask[]) {
@@ -41,9 +44,9 @@ function groupTasks(tasks: AssignedTask[]) {
   const anyday: CalendarEvent[] = [];
   const { weekStart, weekEnd } = getWeekBounds();
 
-  for (const task of tasks) {
+  tasks.forEach((task) => {
     if (task.start_date < weekStart || task.start_date > weekEnd) {
-      continue;
+      return;
     }
 
     const start = formatDateFromDateString(task.start_date);
@@ -55,7 +58,7 @@ function groupTasks(tasks: AssignedTask[]) {
 
     if (!isSameDay) {
       anyday.push(convertAssignedTaskToCalendarEvent(task, false));
-      continue;
+      return;
     }
 
     if (isDayStart && isDayEnd) {
@@ -63,13 +66,9 @@ function groupTasks(tasks: AssignedTask[]) {
     } else {
       specific.push(convertAssignedTaskToCalendarEvent(task, true));
     }
-  }
+  });
 
-  return {
-    SPECIFIC: specific,
-    ANYTIME: anytime,
-    ANYDAY: anyday,
-  };
+  return { SPECIFIC: specific, ANYTIME: anytime, ANYDAY: anyday };
 }
 
 const assignedTaskResolver = {
@@ -121,14 +120,14 @@ const assignedTaskResolver = {
     },
     getAssignedTasks: async (
       _parent: undefined,
-      { participant_id }: { participant_id: number },
+      { participant_id }: { participant_id: number }
     ): Promise<{
-      SPECIFIC: CalendarEvent[]
+      SPECIFIC: CalendarEvent[];
       ANYTIME: CalendarEvent[];
       ANYDAY: CalendarEvent[];
     }> => {
       const assignedTasks = await prisma.assignedTask.findMany({
-	      where: { participant_id: participant_id },
+        where: { participant_id },
       });
       return groupTasks(assignedTasks);
     },
@@ -139,7 +138,7 @@ const assignedTaskResolver = {
       { assigned_task_id }: { assigned_task_id: number }
     ): Promise<boolean> => {
       await prisma.assignedTask.delete({
-        where: { assigned_task_id: assigned_task_id },
+        where: { assigned_task_id },
       });
       return true;
     },
@@ -171,7 +170,7 @@ const assignedTaskResolver = {
         comment?: string;
       }
     ): Promise<boolean> => {
-      const updatedData: Record<string, any> = {};
+      const updatedData: Partial<AssignedTask> = {};
 
       if (taskName) updatedData.task_name = taskName;
       if (taskType) updatedData.task_type = taskType;
@@ -180,8 +179,10 @@ const assignedTaskResolver = {
       if (goalDescription) updatedData.goal_description = goalDescription;
       if (startDate) updatedData.start_date = startDate;
       if (endDate) updatedData.end_date = endDate;
-      if (marillacBucksAddition) updatedData.marillac_bucks_addition = marillacBucksAddition;
-      if (marillacBucksDeduction) updatedData.marillac_bucks_deduction = marillacBucksDeduction;
+      if (marillacBucksAddition)
+        updatedData.marillac_bucks_addition = marillacBucksAddition;
+      if (marillacBucksDeduction)
+        updatedData.marillac_bucks_deduction = marillacBucksDeduction;
       if (comment) updatedData.comment = comment;
 
       await prisma.assignedTask.update({
@@ -232,7 +233,7 @@ const assignedTaskResolver = {
         },
       });
       return true;
-    }
+    },
   },
 };
 
