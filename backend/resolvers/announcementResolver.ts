@@ -150,12 +150,16 @@ const announcementResolver = {
     },
   },
   UserAnnouncement: {
-    participant: async (parent: any) => {
-      return prisma.participant.findUnique({
-        where: {
-          participant_id: parent.participant_id,
-        },
-      });
+    participant: async (parent: { participant_id: number }) => {
+      try {
+        return await prisma.participant.findUnique({
+          where: {
+            participant_id: parent.participant_id,
+          },
+        });
+      } catch (err) {
+        throw new Error("Failed to get participant by announcement");
+      }
     },
   },
 };
