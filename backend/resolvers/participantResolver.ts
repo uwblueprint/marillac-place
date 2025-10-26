@@ -1,4 +1,4 @@
-import { Participant, Prisma, PrismaClient } from "@prisma/client";
+import { Participant, PrismaClient } from "@prisma/client";
 import { getToday } from "../utils/formatDateTime";
 
 const prisma = new PrismaClient();
@@ -8,7 +8,10 @@ const participantResolver = {
     getCurrentParticipants: async (): Promise<Participant[]> => {
       const participants = await prisma.participant.findMany({
         where: {
-          OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+          OR: [
+            { departure_date: null },
+            { departure_date: { gt: getToday() } },
+          ],
         },
         orderBy: [{ room_number: "asc" }],
       });
@@ -30,47 +33,63 @@ const participantResolver = {
       _parent: undefined,
       { room_number }: { room_number: number }
     ): Promise<Participant | null> => {
-      return await prisma.participant.findFirst({
-        where: {
-          AND: [
-            { room_number },
-            {
-              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
-            },
-          ],
-        },
-        include: {
-          assigned_tasks: true,
-        },
-      });
+      try {
+        return await prisma.participant.findFirst({
+          where: {
+            AND: [
+              { room_number },
+              {
+                OR: [
+                  { departure_date: null },
+                  { departure_date: { gt: getToday() } },
+                ],
+              },
+            ],
+          },
+          include: {
+            assigned_tasks: true,
+          },
+        });
+      } catch (error) {
+        throw new Error("Failed to get participant by room");
+      }
     },
     getParticipantsByRooms: async (
       _parent: undefined,
       { room_numbers }: { room_numbers: number[] }
     ): Promise<Participant[]> => {
-      return await prisma.participant.findMany({
-        where: {
-          AND: [
-            { room_number: { in: room_numbers } },
-            {
-              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
-            },
-          ],
-        },
-      });
+      try {
+        return await prisma.participant.findMany({
+          where: {
+            AND: [
+              { room_number: { in: room_numbers } },
+              {
+                OR: [
+                  { departure_date: null },
+                  { departure_date: { gt: getToday() } },
+                ],
+              },
+            ],
+          },
+        });
+      } catch (error) {
+        throw new Error("Failed to get participants by rooms");
+      }
     },
     getParticipantById: async (
       _parent: undefined,
       { participantId }: { participantId: number }
     ): Promise<Participant | null> => {
-      return await prisma.participant.findUnique(
-              {
-                  where: {
-                      participant_id: participantId,
-                  },
-              },
-          );
-    }
+      try {
+        return await prisma.participant.findUnique({
+          where: {
+            participant_id: participantId,
+          },
+        });
+      } catch (error) {
+        throw new Error("Failed to get participant by id");
+      }
+    },
   },
   Mutation: {
     createParticipant: async (
@@ -88,7 +107,7 @@ const participantResolver = {
       }
     ): Promise<boolean> => {
       let existingParticipant: Participant | null = null;
-   
+
       existingParticipant = await prisma.participant.findUnique({
         where: { participant_id },
       });
@@ -98,7 +117,10 @@ const participantResolver = {
       occupiedRoom = await prisma.participant.findFirst({
         where: {
           room_number,
-          OR: [{ departure_date: null }, { departure_date: { gte: getToday() } }],
+          OR: [
+            { departure_date: null },
+            { departure_date: { gte: getToday() } },
+          ],
         },
       });
 
@@ -110,8 +132,8 @@ const participantResolver = {
           password,
           account_creation_date: getToday(),
           participant_progress: {
-            create: {}
-          }
+            create: {},
+          },
         },
       });
       return true;
@@ -156,7 +178,7 @@ const participantResolver = {
       await prisma.participant.update({
         where: { participant_id },
         data: updatedData,
-      })
+      });
 
       return true;
     },
