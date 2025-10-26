@@ -31,84 +31,95 @@ async function createAssignedTasks(): Promise<boolean> {
 
     const mondayOfCurrentWeek = new Date();
 
-    for (const participant of participants) {
-      for (const task of requiredTasks) {
-        if (
-          task.recurrence_preference ===
-            RecurrenceFrequency.EVERY_SELECTED_DAYS ||
-          task.recurrence_preference === RecurrenceFrequency.DAILY
-        ) {
-          for (const repeatDay of task.repeat_days) {
-            const offset = weekdayOffsets[repeatDay];
-            const taskDate = new Date(mondayOfCurrentWeek);
-            taskDate.setDate(mondayOfCurrentWeek.getDate() + offset);
-            let startDate: Date;
-            let endDate: Date;
-            if (task.time_preference === TimeOption.SPECIFIC) {
-              startDate = new Date(taskDate);
-              endDate = new Date(taskDate);
-              if (task.start_time) {
-                const [hours, minutes] = task.start_time.split(":").map(Number);
-                startDate.setHours(hours, minutes, 0, 0);
-              }
-              if (task.end_time) {
-                const [hours, minutes] = task.end_time.split(":").map(Number);
-                endDate.setHours(hours, minutes, 0, 0);
-              }
-            } else {
-              startDate = new Date(taskDate);
+    await Promise.all(
+      participants.map(async (participant) => {
+        return Promise.all(
+          requiredTasks.map(async (task) => {
+            if (
+              task.recurrence_preference ===
+                RecurrenceFrequency.EVERY_SELECTED_DAYS ||
+              task.recurrence_preference === RecurrenceFrequency.DAILY
+            ) {
+              await Promise.all(
+                task.repeat_days.map(async (repeatDay) => {
+                  const offset = weekdayOffsets[repeatDay];
+                  const taskDate = new Date(mondayOfCurrentWeek);
+                  taskDate.setDate(mondayOfCurrentWeek.getDate() + offset);
+                  let startDate: Date;
+                  let endDate: Date;
+                  if (task.time_preference === TimeOption.SPECIFIC) {
+                    startDate = new Date(taskDate);
+                    endDate = new Date(taskDate);
+                    if (task.start_time) {
+                      const [hours, minutes] = task.start_time
+                        .split(":")
+                        .map(Number);
+                      startDate.setHours(hours, minutes, 0, 0);
+                    }
+                    if (task.end_time) {
+                      const [hours, minutes] = task.end_time
+                        .split(":")
+                        .map(Number);
+                      endDate.setHours(hours, minutes, 0, 0);
+                    }
+                  } else {
+                    startDate = new Date(taskDate);
+                    startDate.setHours(0, 0, 0, 0);
+                    endDate = new Date(taskDate);
+                    endDate.setHours(23, 59, 0, 0);
+                  }
+                  const startDateString = formatDateTime(startDate, true);
+                  const endDateString = formatDateTime(endDate, true);
+                  await prisma.assignedTask.create({
+                    data: {
+                      participant_id: participant.participant_id,
+                      task_name: task.task_name,
+                      task_type: task.task_type,
+                      start_date: startDateString,
+                      end_date: endDateString,
+                      marillac_bucks_addition: task.marillac_bucks_addition,
+                      marillac_bucks_deduction: task.marillac_bucks_deduction,
+                      comment: task.comment,
+                    },
+                  });
+                })
+              );
+            } else if (
+              task.recurrence_preference ===
+              RecurrenceFrequency.ANY_SELECTED_DAYS
+            ) {
+              const firstDayOffset = weekdayOffsets[task.repeat_days[0]];
+              const lastDayOffset =
+                weekdayOffsets[task.repeat_days[task.repeat_days.length - 1]];
+
+              const startDate = new Date(mondayOfCurrentWeek);
+              startDate.setDate(mondayOfCurrentWeek.getDate() + firstDayOffset);
               startDate.setHours(0, 0, 0, 0);
-              endDate = new Date(taskDate);
+
+              const endDate = new Date(mondayOfCurrentWeek);
+              endDate.setDate(mondayOfCurrentWeek.getDate() + lastDayOffset);
               endDate.setHours(23, 59, 0, 0);
+
+              const startDateString = formatDateTime(startDate, true);
+              const endDateString = formatDateTime(endDate, true);
+
+              await prisma.assignedTask.create({
+                data: {
+                  participant_id: participant.participant_id,
+                  task_name: task.task_name,
+                  task_type: task.task_type,
+                  start_date: startDateString,
+                  end_date: endDateString,
+                  marillac_bucks_addition: task.marillac_bucks_addition,
+                  marillac_bucks_deduction: task.marillac_bucks_deduction,
+                  comment: task.comment,
+                },
+              });
             }
-            const startDateString = formatDateTime(startDate, true);
-            const endDateString = formatDateTime(endDate, true);
-            await prisma.assignedTask.create({
-              data: {
-                participant_id: participant.participant_id,
-                task_name: task.task_name,
-                task_type: task.task_type,
-                start_date: startDateString,
-                end_date: endDateString,
-                marillac_bucks_addition: task.marillac_bucks_addition,
-                marillac_bucks_deduction: task.marillac_bucks_deduction,
-                comment: task.comment,
-              },
-            });
-          }
-        } else if (
-          task.recurrence_preference === RecurrenceFrequency.ANY_SELECTED_DAYS
-        ) {
-          const firstDayOffset = weekdayOffsets[task.repeat_days[0]];
-          const lastDayOffset =
-            weekdayOffsets[task.repeat_days[task.repeat_days.length - 1]];
-
-          const startDate = new Date(mondayOfCurrentWeek);
-          startDate.setDate(mondayOfCurrentWeek.getDate() + firstDayOffset);
-          startDate.setHours(0, 0, 0, 0);
-
-          const endDate = new Date(mondayOfCurrentWeek);
-          endDate.setDate(mondayOfCurrentWeek.getDate() + lastDayOffset);
-          endDate.setHours(23, 59, 0, 0);
-
-          const startDateString = formatDateTime(startDate, true);
-          const endDateString = formatDateTime(endDate, true);
-
-          await prisma.assignedTask.create({
-            data: {
-              participant_id: participant.participant_id,
-              task_name: task.task_name,
-              task_type: task.task_type,
-              start_date: startDateString,
-              end_date: endDateString,
-              marillac_bucks_addition: task.marillac_bucks_addition,
-              marillac_bucks_deduction: task.marillac_bucks_deduction,
-              comment: task.comment,
-            },
-          });
-        }
-      }
-    }
+          })
+        );
+      })
+    );
     return true;
   } catch (err) {
     console.error(err);
