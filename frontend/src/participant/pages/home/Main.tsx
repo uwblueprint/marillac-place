@@ -7,6 +7,7 @@ import { BadgeRarity } from "../../common/Badge";
 import TodoListWidget from "./components/TodoListWidget";
 import { getParticipantHomePageDateString } from "../../../utils/formatDateTime";
 import WidgetContainer from "../../common/WidgetContainer";
+import AnnouncementWidget from "./components/AnnouncementWidget";
 
 export default function ParticipantsHomePage() {
   return (
@@ -19,6 +20,7 @@ export default function ParticipantsHomePage() {
       <WidgetContainer>
         <TodoListWidget />
       </WidgetContainer>
+      <AnnouncementWidget />
     </>
   );
 }
