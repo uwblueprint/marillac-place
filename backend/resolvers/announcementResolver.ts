@@ -6,63 +6,75 @@ const prisma = new PrismaClient();
 const announcementResolver = {
   Query: {
     getAllAnnouncements: async (): Promise<Announcement[]> => {
-      return await prisma.announcement.findMany({
-        orderBy: {
-          creation_date: 'desc',
-        },
-        include: {
-          user_announcements: true,
-        },
-      });
+      try {
+        return await prisma.announcement.findMany({
+          orderBy: {
+            creation_date: "desc",
+          },
+          include: {
+            user_announcements: true,
+          },
+        });
+      } catch (err) {
+        throw new Error("Failed to get all announcements");
+      }
     },
     getAnnouncementsInDateRange: async (
       _parent: undefined,
       { start, end }: { start: string; end: string }
     ): Promise<Announcement[]> => {
-      return await prisma.announcement.findMany({
-        where: {
-          creation_date: {
-            lte: end,
-            gte: start,
+      try {
+        return await prisma.announcement.findMany({
+          where: {
+            creation_date: {
+              lte: end,
+              gte: start,
+            },
           },
-        },
-        orderBy: {
-          creation_date: 'desc',
-        },
-        include: {
-          user_announcements: {
-            include: {
-              participant: {
-                select: {
-                  room_number: true,
+          orderBy: {
+            creation_date: "desc",
+          },
+          include: {
+            user_announcements: {
+              include: {
+                participant: {
+                  select: {
+                    room_number: true,
+                  },
                 },
               },
             },
           },
-        },
-      })
+        });
+      } catch (err) {
+        throw new Error("Failed to get announcements in date range");
+      }
     },
     getAnnouncementsByParticipants: async (
       _parent: undefined,
       { participant_ids }: { participant_ids: number[] }
     ): Promise<Announcement[]> => {
-      return await prisma.announcement.findMany({
-        orderBy: {
-          creation_date: 'desc',
-        },
-        where: {
-          user_announcements: {
-            every: {
-              participant_id: {
-                in: participant_ids,
+      try {
+        return await prisma.announcement.findMany({
+          orderBy: {
+            creation_date: "desc",
+          },
+          where: {
+            user_announcements: {
+              every: {
+                participant_id: {
+                  in: participant_ids,
+                },
               },
             },
           },
-        },
-        include: {
-          user_announcements: true
-        }
-      });
+          include: {
+            user_announcements: true,
+          },
+        });
+      } catch (err) {
+        throw new Error("Failed to get announcements by participants");
+      }
     },
   },
   Mutation: {
