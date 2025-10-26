@@ -167,7 +167,7 @@ const announcementResolver = {
         message?: string;
       }
     ): Promise<boolean> => {
-      const updatedData: Record<string, any> = {};
+      const updatedData: { priority?: Priority; message?: string } = {};
       if (priority) updatedData.priority = priority;
       if (message) updatedData.message = message;
 
