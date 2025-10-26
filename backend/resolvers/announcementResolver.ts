@@ -90,24 +90,30 @@ const announcementResolver = {
         message: string;
       }
     ): Promise<boolean> => {
-      const newAnnouncement = await prisma.announcement.create({
-        data: {
-          priority,
-          creation_date: getNow(),
-          message,
-        },
-      });
-
-      for (const participant of participants) {
-        await prisma.userAnnouncement.create({
+      try {
+        const newAnnouncement = await prisma.announcement.create({
           data: {
-            participant_id: participant,
-            announcement_id: newAnnouncement.announcement_id,
+            priority,
+            creation_date: getNow(),
+            message,
           },
         });
-      }
 
-      return true;
+        await Promise.all(
+          participants.map((participant) =>
+            prisma.userAnnouncement.create({
+              data: {
+                participant_id: participant,
+                announcement_id: newAnnouncement.announcement_id,
+              },
+            })
+          )
+        );
+
+        return true;
+      } catch (err) {
+        throw new Error("Failed to create announcement");
+      }
     },
     editAnnouncement: async (
       _parent: undefined,
