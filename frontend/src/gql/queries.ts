@@ -283,6 +283,7 @@ export const GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE = gql`
     }
   }
 `;
+
 export const GET_ASSIGNED_TASKS = gql`
   query getAssignedTasks($participant_id: Int!) {
     getAssignedTasks(participant_id: $participant_id) {
