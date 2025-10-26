@@ -15,7 +15,10 @@ const resolvers = gql`
     getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
-    getAssignedTasksByParticipantIdAndDate(participantId: Int!, date: String!): [AssignedTask]
+    getAssignedTasksByParticipantIdAndDate(
+      participant_id: Int!
+      date: String!
+    ): [AssignedTask]
     hasCompletedAllRequiredTasks(participantId: Int!): Boolean
     getEarnedBadgesByParticipant(participantId: Int!): [EarnedBadge!]!
   }
