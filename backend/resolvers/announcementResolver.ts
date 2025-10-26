@@ -76,6 +76,46 @@ const announcementResolver = {
         throw new Error("Failed to get announcements by participants");
       }
     },
+    getAnnouncementsByParticipantIdAndDate: async (
+      _parent: undefined,
+      {
+        participant_id,
+        start_date,
+        end_date,
+      }: { participant_id: number; start_date: string; end_date: string }
+    ): Promise<Announcement[]> => {
+      try {
+        return await prisma.announcement.findMany({
+          orderBy: {
+            creation_date: "desc",
+          },
+          where: {
+            AND: [
+              {
+                creation_date: {
+                  lte: end_date,
+                  gte: start_date,
+                },
+              },
+              {
+                user_announcements: {
+                  some: {
+                    participant_id,
+                  },
+                },
+              },
+            ],
+          },
+          include: {
+            user_announcements: true,
+          },
+        });
+      } catch (err) {
+        throw new Error(
+          `Failed to get announcements by participant id and date: ${err}`
+        );
+      }
+    },
   },
   Mutation: {
     createAnnouncement: async (

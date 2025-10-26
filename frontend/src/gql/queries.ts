@@ -147,6 +147,28 @@ export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
   }
 `;
 
+export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID_AND_DATE = gql`
+  query getAnnouncementsByParticipantIdAndDate(
+    $participant_id: Int!
+    $start_date: String!
+    $end_date: String!
+  ) {
+    getAnnouncementsByParticipantIdAndDate(
+      participant_id: $participant_id
+      start_date: $start_date
+      end_date: $end_date
+    ) {
+      announcement_id
+      priority
+      creation_date
+      message
+      user_announcements {
+        participant_id
+      }
+    }
+  }
+`;
+
 export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
   query getAnnouncementByRooms($rooms: [Int]) {
     getAnnouncementByRooms(rooms: $rooms) {
