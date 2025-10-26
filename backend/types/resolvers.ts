@@ -17,6 +17,7 @@ const resolvers = gql`
     getSystemBadges: [Badge]
     getAssignedTasksByParticipantIdAndDate(participantId: Int!, date: String!): [AssignedTask]
     hasCompletedAllRequiredTasks(participantId: Int!): Boolean
+    getEarnedBadgesByParticipant(participantId: Int!): [EarnedBadge!]!
   }
 
   type Mutation {
