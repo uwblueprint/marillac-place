@@ -25,8 +25,8 @@ export const EditGoal: React.FC<EditGoalProps> = ({handleClose, onGoalUpdated, c
             return;
         }
         
-        const goalValue = parseInt(goal);
-        if (isNaN(goalValue)) {
+        const goalValue = parseInt(goal, 10);
+        if (Number.isNaN(goalValue)) {
             setError("Please enter a valid number");
             return;
         }
@@ -65,29 +65,41 @@ export const EditGoal: React.FC<EditGoalProps> = ({handleClose, onGoalUpdated, c
             cancel_action={handleClose}
             error={error}
         >
-            <Flex justify="space-between">
-                <Text textStyle="web.b1">Change goal:</Text>
-                <Flex
-                    align="center" justify="space-between"
-                >
-                    <Image src="/assets/marillac_bucks.png" alt="coin" />
-                    <Input
-                        ml="10px"
-                        size="sm"
-                        minWidth="32px"
-                        maxWidth="80px"
-                        height="32px"
-                        fontWeight="semibold"
-                        type="number"
-                        placeholder="0"
-                        value={goal}
-                        onFocus={(e) => {
-                            e.target.select();
-                        }}
-                        onChange={(e) => {
-                            setGoal(e.target.value)
-                        }}
-                    />
+            <Flex flexDirection="column" gap="15px">
+                {/* Previous Goal */}
+                <Flex justify="space-between">
+                    <Text textStyle="web.b1">Previous goal:</Text>
+                    <Flex align="center" justify="space-between">
+                        <Image src="/assets/marillac_bucks.png" alt="coin" />
+                        <Text ml="10px" fontWeight="semibold">{currentGoal}</Text>
+                    </Flex>
+                </Flex>
+
+                {/* New Goal */}
+                <Flex justify="space-between">
+                    <Text textStyle="web.b1">New goal:</Text>
+                    <Flex
+                        align="center" justify="space-between"
+                    >
+                        <Image src="/assets/marillac_bucks.png" alt="coin" />
+                        <Input
+                            ml="10px"
+                            size="sm"
+                            minWidth="32px"
+                            maxWidth="80px"
+                            height="32px"
+                            fontWeight="semibold"
+                            type="number"
+                            placeholder="0"
+                            value={goal}
+                            onFocus={(e) => {
+                                e.target.select();
+                            }}
+                            onChange={(e) => {
+                                setGoal(e.target.value)
+                            }}
+                        />
+                    </Flex>
                 </Flex>
             </Flex>
         </ModalContainer>

@@ -28,10 +28,10 @@ export const SetGoal: React.FC<SetGoalProps> = ({handleClose, onGoalSet}) => {
             return;
         }
         
-        const goalValue = parseInt(goal);
+        const goalValue = parseInt(goal, 10);
         console.log("🔢 Parsed goal value:", goalValue);
         
-        if (isNaN(goalValue) || goalValue <= 0) {
+        if (Number.isNaN(goalValue) || goalValue <= 0) {
             console.error("❌ Invalid goal value");
             setError("Goal must be greater than 0");
             return;
@@ -65,7 +65,7 @@ export const SetGoal: React.FC<SetGoalProps> = ({handleClose, onGoalSet}) => {
 
     return (
         <ModalContainer
-            title="Set Goal"
+            title="Set a Goal"
             submit_text="Save"
             submit_action={async () => { await handleSave(); }}
             cancel_action={handleClose}
