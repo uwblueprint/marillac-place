@@ -265,8 +265,14 @@ export const GET_CUSTOM_BADGES = gql`
 `;
 
 export const GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE = gql`
-  query getAssignedTasksByParticipantIdAndDate($participantId: Int!, $date: String!) {
-    getAssignedTasksByParticipantIdAndDate(participantId: $participantId, date: $date) {
+  query getAssignedTasksByParticipantIdAndDate(
+    $participantId: Int!
+    $date: String!
+  ) {
+    getAssignedTasksByParticipantIdAndDate(
+      participantId: $participantId
+      date: $date
+    ) {
       assigned_task_id
       task_name
       task_status
@@ -319,4 +325,3 @@ export const GET_ASSIGNED_TASKS = gql`
     }
   }
 `;
-

@@ -6,18 +6,18 @@ type WidgetContainerProps = {
 };
 
 export default function WidgetContainer({ children }: WidgetContainerProps) {
-    return (
-        <Flex
-            w="100%"
-            bg="white"
-            border="1px solid"
-            borderColor="neutral.300"
-            borderRadius="8px"
-            padding="16px"
-            flexDir="column"
-            gap="8px"
-        >
-            {children}
-        </Flex>
-    )
+  return (
+    <Flex
+      w="100%"
+      bg="white"
+      border="1px solid"
+      borderColor="neutral.300"
+      borderRadius="8px"
+      padding="16px"
+      flexDir="column"
+      gap="8px"
+    >
+      {children}
+    </Flex>
+  );
 }
