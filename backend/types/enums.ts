@@ -69,6 +69,11 @@ const enums = gql`
     PENCIL
     TOOL
   }
+
+  enum GoalAction {
+    SET
+    REACHED
+  }
 `;
 
 export default enums;

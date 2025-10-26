@@ -7,6 +7,11 @@ const resolvers = gql`
     getParticipantByRoom(room_number: Int!): Participant
     getParticipantsByRooms(room_numbers: [Int!]!): [Participant]
     getParticipantById(participantId: Int!): Participant
+    getGoalHistoryByParticipant(
+      participant_id: Int!
+      start_date: String
+      end_date: String
+    ): [GoalHistory!]!
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
@@ -142,6 +147,14 @@ const resolvers = gql`
       system_badge_criteria: String
     ): Boolean
     updateBadgeStatus(badge_id: Int!, is_active: Boolean!): Boolean
+    setMarillacBucksGoal(
+      participant_id: Int!
+      goal_value: Int!
+    ): Boolean
+    updateMarillacBucksGoal(
+      participant_id: Int!
+      new_goal_value: Int!
+    ): Boolean
   }
 `;
 
