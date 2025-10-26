@@ -1,5 +1,10 @@
+import {
+  TaskType,
+  RecurrenceFrequency,
+  TimeOption,
+  DayOfWeek,
+} from "@prisma/client";
 import prisma from "../../prisma";
-import { TaskType, RecurrenceFrequency, TimeOption, DayOfWeek } from "@prisma/client";
 import { formatDateTime, getToday } from "../../utils/formatDateTime";
 
 async function createAssignedTasks(): Promise<boolean> {
@@ -7,12 +12,12 @@ async function createAssignedTasks(): Promise<boolean> {
     const participants = await prisma.participant.findMany({
       where: {
         OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
-      }
+      },
     });
 
     const requiredTasks = await prisma.task.findMany({
       where: { task_type: TaskType.REQUIRED },
-    })
+    });
 
     const weekdayOffsets: { [key in DayOfWeek]: number } = {
       MONDAY: 0,
@@ -24,14 +29,17 @@ async function createAssignedTasks(): Promise<boolean> {
       SUNDAY: 6,
     };
 
-    const mondayOfCurrentWeek = new Date(); 
+    const mondayOfCurrentWeek = new Date();
 
     for (const participant of participants) {
       for (const task of requiredTasks) {
-        if (task.recurrence_preference === RecurrenceFrequency.EVERY_SELECTED_DAYS || 
-            task.recurrence_preference === RecurrenceFrequency.DAILY) {
+        if (
+          task.recurrence_preference ===
+            RecurrenceFrequency.EVERY_SELECTED_DAYS ||
+          task.recurrence_preference === RecurrenceFrequency.DAILY
+        ) {
           for (const repeatDay of task.repeat_days) {
-            const offset = weekdayOffsets[repeatDay]; 
+            const offset = weekdayOffsets[repeatDay];
             const taskDate = new Date(mondayOfCurrentWeek);
             taskDate.setDate(mondayOfCurrentWeek.getDate() + offset);
             let startDate: Date;
@@ -68,22 +76,24 @@ async function createAssignedTasks(): Promise<boolean> {
               },
             });
           }
-        } else if (task.recurrence_preference === RecurrenceFrequency.ANY_SELECTED_DAYS) {
-
+        } else if (
+          task.recurrence_preference === RecurrenceFrequency.ANY_SELECTED_DAYS
+        ) {
           const firstDayOffset = weekdayOffsets[task.repeat_days[0]];
-          const lastDayOffset = weekdayOffsets[task.repeat_days[task.repeat_days.length - 1]];
-  
+          const lastDayOffset =
+            weekdayOffsets[task.repeat_days[task.repeat_days.length - 1]];
+
           const startDate = new Date(mondayOfCurrentWeek);
           startDate.setDate(mondayOfCurrentWeek.getDate() + firstDayOffset);
           startDate.setHours(0, 0, 0, 0);
-          
+
           const endDate = new Date(mondayOfCurrentWeek);
           endDate.setDate(mondayOfCurrentWeek.getDate() + lastDayOffset);
           endDate.setHours(23, 59, 0, 0);
-          
+
           const startDateString = formatDateTime(startDate, true);
           const endDateString = formatDateTime(endDate, true);
-          
+
           await prisma.assignedTask.create({
             data: {
               participant_id: participant.participant_id,
@@ -104,6 +114,6 @@ async function createAssignedTasks(): Promise<boolean> {
     console.error(err);
     return false;
   }
-};
+}
 
 export default createAssignedTasks;
