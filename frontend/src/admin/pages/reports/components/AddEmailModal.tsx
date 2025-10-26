@@ -7,7 +7,10 @@ type AddEmailModalProps = {
   onSubmit: (emailData: any) => void;
 };
 
-export default function AddEmailModal({ onClose, onSubmit }: AddEmailModalProps) {
+export default function AddEmailModal({
+  onClose,
+  onSubmit,
+}: AddEmailModalProps) {
   const [email, setEmail] = useState("");
   const [weekly, setWeekly] = useState(false);
   const [monthly, setMonthly] = useState(false);
@@ -56,12 +59,17 @@ export default function AddEmailModal({ onClose, onSubmit }: AddEmailModalProps)
           }}
         />
       </FormControl>
-      
+
       <FormControl mt="20px">
         <FormLabel textStyle="web.s1" color="text.light.secondary">
           Report Frequency
         </FormLabel>
-        <FormControl display="flex" alignItems="center" justifyContent="space-between" mt="10px">
+        <FormControl
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt="10px"
+        >
           <FormLabel textStyle="web.b3" color="#000000" mb="0">
             Weekly Reports
           </FormLabel>
@@ -71,7 +79,12 @@ export default function AddEmailModal({ onClose, onSubmit }: AddEmailModalProps)
             colorScheme="blue"
           />
         </FormControl>
-        <FormControl display="flex" alignItems="center" justifyContent="space-between" mt="10px">
+        <FormControl
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt="10px"
+        >
           <FormLabel textStyle="web.b3" color="#000000" mb="0">
             Monthly Reports
           </FormLabel>

@@ -81,11 +81,7 @@ export default function ReportsTable({
           colorScheme="blue"
         />
       </Flex>,
-      <Text
-        key={`lastReport-${report.id}`}
-        textStyle="web.b3"
-        color="#000000"
-      >
+      <Text key={`lastReport-${report.id}`} textStyle="web.b3" color="#000000">
         {report.lastReportSent}
       </Text>,
       <Flex
@@ -109,10 +105,7 @@ export default function ReportsTable({
             }}
           />
         </Flex>
-        <Flex
-          cursor="pointer"
-          onClick={() => onDeleteEmail(report.id)}
-        >
+        <Flex cursor="pointer" onClick={() => onDeleteEmail(report.id)}>
           <DeleteOutlineIcon
             style={{
               width: "1.3rem",
@@ -153,11 +146,7 @@ export default function ReportsTable({
     >
       -
     </Text>,
-    <Text
-      key="empty-lastReport"
-      textStyle="web.b3"
-      color="#999999"
-    >
+    <Text key="empty-lastReport" textStyle="web.b3" color="#999999">
       -
     </Text>,
     <Text
@@ -201,7 +190,12 @@ export default function ReportsTable({
           </Thead>
           <Tbody>
             {allRows.map((row, index) => (
-              <Tr key={index} borderBottom="1px solid" borderColor="neutral.200">
+              <Tr
+                key={index}
+                borderBottom="1px solid"
+                borderColor="neutral.200"
+                backgroundColor={index % 2 === 0 ? "white" : "gray.50"}
+              >
                 {row.map((cell, cellIndex) => (
                   <Td key={cellIndex} padding="12px 16px">
                     {cell}
@@ -212,7 +206,7 @@ export default function ReportsTable({
           </Tbody>
         </Table>
       </TableContainer>
-      
+
       <Flex justifyContent="flex-end" width="100%">
         <Button
           leftIcon={<AddIcon />}

@@ -98,11 +98,11 @@ export default function AdminReportsPage() {
             Reports
           </Text>
           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
-            Reports will be automatically generated and emailed. Edit and select frequency of emails in the list below.
+            Reports will be automatically generated and emailed. Edit and select
+            frequency of emails in the list below.
           </Text>
         </Flex>
       </Flex>
-      
       <ReportsTable
         reports={reports}
         onAddEmail={() => setAddEmail(true)}
@@ -118,7 +118,6 @@ export default function AdminReportsPage() {
           onSubmit={handleAddEmail}
         />
       )}
-      
       {editEmail && selectedEmail && (
         <EditEmailModal
           email={selectedEmail}
