@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { Button, Flex, Grid, Text } from '@chakra-ui/react';
-import ParticipantPageHeader from '../../../common/participant/PageHeader';
-import ParticipantAnnouncementCard from './elements/ParticipantAnnouncementCard';
+import React, { useState } from "react";
+import { Button, Flex, Grid, Text } from "@chakra-ui/react";
+import ParticipantPageHeader from "../../common/PageHeader";
+import ParticipantAnnouncementCard from "./components/ParticipantAnnouncementCard";
 
 export default function ParticipantsAnnouncementsPage() {
   const [filter, setFilter] = useState(0);
   return (
     <>
-      <ParticipantPageHeader currentPage="Announcements" />
       <Flex w="100%" padding="20px" flexDir="column" gap="15px">
         <Flex w="100%" alignItems="center" justifyContent="center" gap="5px">
           <Button
@@ -39,7 +38,9 @@ export default function ParticipantsAnnouncementsPage() {
             Important
           </Button>
         </Flex>
-        <Text textStyle="mobile.c1" color="text.light.secondary">Most Recent</Text>
+        <Text textStyle="mobile.c1" color="text.light.secondary">
+          Most Recent
+        </Text>
         <ParticipantAnnouncementCard
           allRooms
           message="Reminding you about your social this Monday, remember to bring everything you need for this activity! Things to bring include sunscreen, water, bug repellent, running shoes, hair ties and anything else you deem necessary."
@@ -50,5 +51,5 @@ export default function ParticipantsAnnouncementsPage() {
         />
       </Flex>
     </>
-  )
+  );
 }

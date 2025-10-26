@@ -1,25 +1,120 @@
-import { Announcement, Priority } from "@prisma/client";
-import AnnouncementService from "../services/implementation/announcementImplementation";
-import IAnnouncementService from "../services/interface/announcementInterface";
-import prisma from "../prisma";
+import { PrismaClient, Announcement, Priority } from "@prisma/client";
+import { getNow } from "../utils/formatDateTime";
 
-const announcementService: IAnnouncementService = new AnnouncementService();
+const prisma = new PrismaClient();
+
 const announcementResolver = {
   Query: {
     getAllAnnouncements: async (): Promise<Announcement[]> => {
-      return announcementService.getAllAnnouncements();
+      try {
+        return await prisma.announcement.findMany({
+          orderBy: {
+            creation_date: "desc",
+          },
+          include: {
+            user_announcements: true,
+          },
+        });
+      } catch (err) {
+        throw new Error("Failed to get all announcements");
+      }
     },
     getAnnouncementsInDateRange: async (
       _parent: undefined,
       { start, end }: { start: string; end: string }
     ): Promise<Announcement[]> => {
-      return announcementService.getAnnouncementsInDateRange(start, end);
+      try {
+        return await prisma.announcement.findMany({
+          where: {
+            creation_date: {
+              lte: end,
+              gte: start,
+            },
+          },
+          orderBy: {
+            creation_date: "desc",
+          },
+          include: {
+            user_announcements: {
+              include: {
+                participant: {
+                  select: {
+                    room_number: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+      } catch (err) {
+        throw new Error("Failed to get announcements in date range");
+      }
     },
     getAnnouncementsByParticipants: async (
       _parent: undefined,
       { participant_ids }: { participant_ids: number[] }
     ): Promise<Announcement[]> => {
-      return announcementService.getAnnouncementsByParticipants(participant_ids);
+      try {
+        return await prisma.announcement.findMany({
+          orderBy: {
+            creation_date: "desc",
+          },
+          where: {
+            user_announcements: {
+              every: {
+                participant_id: {
+                  in: participant_ids,
+                },
+              },
+            },
+          },
+          include: {
+            user_announcements: true,
+          },
+        });
+      } catch (err) {
+        throw new Error("Failed to get announcements by participants");
+      }
+    },
+    getAnnouncementsByParticipantIdAndDate: async (
+      _parent: undefined,
+      {
+        participant_id,
+        start_date,
+        end_date,
+      }: { participant_id: number; start_date: string; end_date: string }
+    ): Promise<Announcement[]> => {
+      try {
+        return await prisma.announcement.findMany({
+          orderBy: {
+            creation_date: "desc",
+          },
+          where: {
+            AND: [
+              {
+                creation_date: {
+                  lte: end_date,
+                  gte: start_date,
+                },
+              },
+              {
+                user_announcements: {
+                  some: {
+                    participant_id,
+                  },
+                },
+              },
+            ],
+          },
+          include: {
+            user_announcements: true,
+          },
+        });
+      } catch (err) {
+        throw new Error(
+          `Failed to get announcements by participant id and date: ${err}`
+        );
+      }
     },
   },
   Mutation: {
@@ -35,11 +130,30 @@ const announcementResolver = {
         message: string;
       }
     ): Promise<boolean> => {
-      return announcementService.createAnnouncement(
-        priority,
-        participants,
-        message
-      );
+      try {
+        const newAnnouncement = await prisma.announcement.create({
+          data: {
+            priority,
+            creation_date: getNow(),
+            message,
+          },
+        });
+
+        await Promise.all(
+          participants.map((participant) =>
+            prisma.userAnnouncement.create({
+              data: {
+                participant_id: participant,
+                announcement_id: newAnnouncement.announcement_id,
+              },
+            })
+          )
+        );
+
+        return true;
+      } catch (err) {
+        throw new Error("Failed to create announcement");
+      }
     },
     editAnnouncement: async (
       _parent: undefined,
@@ -53,26 +167,39 @@ const announcementResolver = {
         message?: string;
       }
     ): Promise<boolean> => {
-      return announcementService.editAnnouncement(
-        announcement_id,
-        priority,
-        message
-      );
+      const updatedData: { priority?: Priority; message?: string } = {};
+      if (priority) updatedData.priority = priority;
+      if (message) updatedData.message = message;
+
+      await prisma.announcement.update({
+        where: { announcement_id },
+        data: updatedData,
+      });
+      return true;
     },
     deleteAnnouncement: async (
       _parent: undefined,
       { announcement_id }: { announcement_id: number }
     ): Promise<boolean> => {
-      return announcementService.deleteAnnouncement(announcement_id);
+      await prisma.announcement.delete({
+        where: {
+          announcement_id,
+        },
+      });
+      return true;
     },
   },
   UserAnnouncement: {
-    participant: async (parent: any) => {
-      return prisma.participant.findUnique({
-        where: {
-          participant_id: parent.participant_id,
-        },
-      });
+    participant: async (parent: { participant_id: number }) => {
+      try {
+        return await prisma.participant.findUnique({
+          where: {
+            participant_id: parent.participant_id,
+          },
+        });
+      } catch (err) {
+        throw new Error("Failed to get participant by announcement");
+      }
     },
   },
 };

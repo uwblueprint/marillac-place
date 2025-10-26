@@ -39,14 +39,14 @@ export default function EmptyRoomCard({ roomNumber }: EmptyRoomCardProps) {
       <Text textStyle="web.b3">This room is empty.</Text>
 
       <Flex position="absolute" bottom="12px">
-        <OrangeButton 
+        <OrangeButton
           text="Add Participant"
-          action={() => setAddParticipant(true)} 
-          is_active={addParticipant} 
+          action={() => setAddParticipant(true)}
+          is_active={addParticipant}
         />
       </Flex>
 
-      { addParticipant && (
+      {addParticipant && (
         <AddParticipantCard
           roomNumber={roomNumber}
           close={() => setAddParticipant(false)}
@@ -54,5 +54,4 @@ export default function EmptyRoomCard({ roomNumber }: EmptyRoomCardProps) {
       )}
     </Flex>
   );
-};
-
+}

@@ -33,7 +33,6 @@ export const GET_SYSTEM_BADGES = gql`
   }
 `;
 
-
 export const GET_CURRENT_PARTICIPANTS = gql`
   query getCurrentParticipants {
     getCurrentParticipants {
@@ -46,11 +45,11 @@ export const GET_CURRENT_PARTICIPANTS = gql`
 `;
 export const GET_MARILLAC_BUCKS = gql`
   query getMarillacBucks($participantId: Int!) {
-      getParticipantById(participantId: $participantId) {
-          marillac_bucks
-      }
+    getParticipantById(participantId: $participantId) {
+      marillac_bucks
+    }
   }
-`
+`;
 
 export const GET_PARTICIPANT_GOAL = gql`
   query getParticipantGoal($participantId: Int!) {
@@ -81,6 +80,12 @@ export const GET_PARTICIPANT_BY_ROOM = gql`
         comment
       }
     }
+  }
+`;
+
+export const HAS_COMPLETED_ALL_REQUIRED_TASKS = gql`
+  query hasCompletedAllRequiredTasks($participantId: Int!) {
+    hasCompletedAllRequiredTasks(participantId: $participantId)
   }
 `;
 
@@ -151,6 +156,28 @@ export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
   }
 `;
 
+export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID_AND_DATE = gql`
+  query getAnnouncementsByParticipantIdAndDate(
+    $participant_id: Int!
+    $start_date: String!
+    $end_date: String!
+  ) {
+    getAnnouncementsByParticipantIdAndDate(
+      participant_id: $participant_id
+      start_date: $start_date
+      end_date: $end_date
+    ) {
+      announcement_id
+      priority
+      creation_date
+      message
+      user_announcements {
+        participant_id
+      }
+    }
+  }
+`;
+
 export const GET_ANNOUNCEMENT_BY_ROOMS = gql`
   query getAnnouncementByRooms($rooms: [Int]) {
     getAnnouncementByRooms(rooms: $rooms) {
@@ -192,7 +219,7 @@ export const GET_TASK_BY_ID = gql`
 `;
 
 export const GET_TASKS_BY_TYPE = gql`
-  query getTasksByType($type: TaskType!) {
+  query getTasksByType($type: [TaskType!]!) {
     getTasksByType(type: $type) {
       task_id
       task_name
@@ -241,6 +268,69 @@ export const GET_CUSTOM_BADGES = gql`
         level
         benchmark
         marillac_bucks
+      }
+    }
+  }
+`;
+
+export const GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE = gql`
+  query getAssignedTasksByParticipantIdAndDate(
+    $participantId: Int!
+    $date: String!
+  ) {
+    getAssignedTasksByParticipantIdAndDate(
+      participantId: $participantId
+      date: $date
+    ) {
+      assigned_task_id
+      task_name
+      task_status
+      task_type
+      start_date
+      end_date
+      comment
+    }
+  }
+`;
+
+export const GET_ASSIGNED_TASKS = gql`
+  query getAssignedTasks($participant_id: Int!) {
+    getAssignedTasks(participant_id: $participant_id) {
+      SPECIFIC {
+        id
+        title
+        start
+        end
+        allDay
+        task_status
+        task_type
+        marillacBucksAddition
+        marillac_bucks_deduction
+        comment
+      }
+      ANYTIME {
+        id
+        title
+        start
+        end
+        allDay
+        task_status
+        task_type
+        marillacBucksAddition
+        marillac_bucks_deduction
+        comment
+      }
+      ANYDAY {
+        id
+        title
+        start
+        end
+        allDay
+        task_status
+        task_type
+        marillacBucksAddition
+        marillac_bucks_deduction
+        comment
       }
     }
   }
