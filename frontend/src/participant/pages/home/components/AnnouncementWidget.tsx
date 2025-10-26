@@ -1,15 +1,18 @@
 import React, { useContext } from "react";
 import { Divider, Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import Widget from "../elements/Widget";
+import { useNavigate } from "react-router-dom";
+import WidgetContainer from "../../../common/WidgetContainer";
 import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID_AND_DATE } from "../../../../gql/queries";
 import { AnnouncementDisplayInfo } from "../../../../types/AnnouncementTypes";
 import { getNow, getRecentDate } from "../../../../utils/formatDateTime";
 import { ParticipantContext } from "../../../common/ParticipantContext";
+import * as ROUTES from "../../../../constants/routes";
 
 export default function AnnouncementWidget() {
   const participant = useContext(ParticipantContext);
   const participantId = participant?.id ?? "";
+  const navigate = useNavigate();
 
   const {
     data: announcementData,
@@ -51,31 +54,41 @@ export default function AnnouncementWidget() {
   };
 
   return (
-    <Widget
-      title="Announcements"
-      linkTitle="Announcements"
-      navigateTo="announcements"
-    >
+    <WidgetContainer>
       <Flex flexDir="column" gap="12px">
-        {announcementData.getAnnouncementsByParticipantIdAndDate.map(
-          (announcement: AnnouncementDisplayInfo) => (
-            <Flex
-              width="100%"
-              flexDir="column"
-              gap="6px"
-              key={announcement.announcement_id}
-            >
-              <Divider />
-              <Text paddingTop="6px" textStyle="mobile.b1">
-                {announcement.message}
-              </Text>
-              <Text textStyle="mobile.b1" color="text.light.secondary">
-                {formatDate(new Date(announcement.creation_date))}
-              </Text>
-            </Flex>
-          )
-        )}
+        <Flex flexDir="row" justifyContent="space-between">
+          <Text textStyle="mobile.h2">Announcements</Text>
+          <Text
+            textStyle="mobile.b1"
+            onClick={() => navigate(ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE)}
+            textDecoration="underline"
+            cursor="pointer"
+          >
+            View All
+          </Text>
+        </Flex>
+
+        <Flex flexDir="column" gap="12px">
+          {announcementData.getAnnouncementsByParticipantIdAndDate.map(
+            (announcement: AnnouncementDisplayInfo) => (
+              <Flex
+                width="100%"
+                flexDir="column"
+                gap="6px"
+                key={announcement.announcement_id}
+              >
+                <Divider />
+                <Text paddingTop="6px" textStyle="mobile.b1">
+                  {announcement.message}
+                </Text>
+                <Text textStyle="mobile.b1" color="text.light.secondary">
+                  {formatDate(new Date(announcement.creation_date))}
+                </Text>
+              </Flex>
+            )
+          )}
+        </Flex>
       </Flex>
-    </Widget>
+    </WidgetContainer>
   );
 }
