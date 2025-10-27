@@ -29,7 +29,7 @@ export default function ModalContainer({
       <ModalContent
         width="fit-content"
         minWidth="350px"
-        maxWidth="550px"
+        maxWidth="350px"
         height="fit-content"
         boxShadow="xl"
         borderRadius="16px"
