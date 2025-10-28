@@ -149,21 +149,19 @@ export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
       message
       user_announcements {
         participant_id
+        read
+        pinned
       }
     }
   }
 `;
 
-export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID_AND_DATE = gql`
-  query getAnnouncementsByParticipantIdAndDate(
+export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID = gql`
+  query getAnnouncementsByParticipantId(
     $participant_id: Int!
-    $start_date: String!
-    $end_date: String!
   ) {
-    getAnnouncementsByParticipantIdAndDate(
+    getAnnouncementsByParticipantId(
       participant_id: $participant_id
-      start_date: $start_date
-      end_date: $end_date
     ) {
       announcement_id
       priority
@@ -230,6 +228,22 @@ export const GET_TASKS_BY_TYPE = gql`
       marillac_bucks_addition
       marillac_bucks_deduction
       comment
+    }
+  }
+`;
+
+export const GET_PARTICIPANT_FILTERED_ANNOUNCEMENTS = gql`
+  query getParticipantFilteredAnnouncements($participantId: Int!, $filter: AnnouncementFilter!) {
+    getParticipantAnnouncements(participantId: $participantId, filter: $filter) {
+      participant_id
+      announcement_id
+      read
+      pinned
+      announcement {
+        message
+        priority
+        creation_date
+      }
     }
   }
 `;

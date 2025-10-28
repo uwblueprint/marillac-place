@@ -78,13 +78,11 @@ const announcementResolver = {
         throw new Error("Failed to get announcements by participants");
       }
     },
-    getAnnouncementsByParticipantIdAndDate: async (
+    getAnnouncementsByParticipantId: async (
       _parent: undefined,
       {
         participant_id,
-        start_date,
-        end_date,
-      }: { participant_id: number; start_date: string; end_date: string }
+      }: { participant_id: number; }
     ): Promise<Announcement[]> => {
       try {
         return await prisma.announcement.findMany({
@@ -92,21 +90,11 @@ const announcementResolver = {
             creation_date: "desc",
           },
           where: {
-            AND: [
-              {
-                creation_date: {
-                  lte: end_date,
-                  gte: start_date,
-                },
+            user_announcements: {
+              some: {
+                participant_id,
               },
-              {
-                user_announcements: {
-                  some: {
-                    participant_id,
-                  },
-                },
-              },
-            ],
+            },
           },
           include: {
             user_announcements: true,
@@ -114,7 +102,7 @@ const announcementResolver = {
         });
       } catch (err) {
         throw new Error(
-          `Failed to get announcements by participant id and date: ${err}`
+          `Failed to get announcements by participant id: ${err}`
         );
       }
     },
@@ -122,21 +110,21 @@ const announcementResolver = {
         _parent: undefined,
         { participantId, filter }: { participantId: number; filter: AnnouncementFilter }
     ) => {
-        const where: any = { participant_id: participantId };
+      const where: any = { participant_id: participantId };
 
-        if (filter === "UNREAD") {
-          where.read = false;
-        } else if (filter === "PINNED") {
-          where.pinned = true;
-        } else if (filter === "IMPORTANT") {
-          where.announcement = {priority: { in: ["HIGH", "CRITICAL"] }};
-        }
+      if (filter === "UNREAD") {
+        where.read = false;
+      } else if (filter === "PINNED") {
+        where.pinned = true;
+      } else if (filter === "IMPORTANT") {
+        where.announcement = {priority: { in: ["HIGH", "CRITICAL"] }};
+      }
 
-        return prisma.userAnnouncement.findMany({
-          where,
-          include: { announcement: true },
-          orderBy: { announcement: { creation_date: "desc" } },
-        });
+      return prisma.userAnnouncement.findMany({
+        where,
+        include: { announcement: true },
+        orderBy: { announcement: { creation_date: "desc" } },
+      });
     },
   },
   Mutation: {

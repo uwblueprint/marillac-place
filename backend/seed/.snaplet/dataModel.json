@@ -836,114 +836,6 @@
         }
       ]
     },
-    "goal_history": {
-      "id": "public.goal_history",
-      "schemaName": "public",
-      "tableName": "goal_history",
-      "fields": [
-        {
-          "id": "public.goal_history.goal_history_id",
-          "name": "goal_history_id",
-          "columnName": "goal_history_id",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": {
-            "identifier": "\"public\".\"goal_history_goal_history_id_seq\"",
-            "increment": 1,
-            "start": 1
-          },
-          "hasDefaultValue": true,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.goal_history.participant_id",
-          "name": "participant_id",
-          "columnName": "participant_id",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.goal_history.goal_action",
-          "name": "goal_action",
-          "columnName": "goal_action",
-          "type": "varchar",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.goal_history.goal_value",
-          "name": "goal_value",
-          "columnName": "goal_value",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.goal_history.action_date",
-          "name": "action_date",
-          "columnName": "action_date",
-          "type": "varchar",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "participant",
-          "type": "participant",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "goal_historyToparticipant",
-          "relationFromFields": [
-            "participant_id"
-          ],
-          "relationToFields": [
-            "participant_id"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "goal_history_pkey",
-          "fields": [
-            "goal_history_id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
-    },
     "login": {
       "id": "public.login",
       "schemaName": "public",
@@ -1220,20 +1112,6 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "earned_badgeToparticipant",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "goal_history",
-          "type": "goal_history",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "goal_historyToparticipant",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
