@@ -112,6 +112,10 @@ const participantResolver = {
         where: { participant_id },
       });
 
+      if (existingParticipant) {
+        throw new Error("Participant already exists");
+      }
+
       let occupiedRoom: Participant | null = null;
 
       occupiedRoom = await prisma.participant.findFirst({
@@ -123,6 +127,10 @@ const participantResolver = {
           ],
         },
       });
+
+      if (occupiedRoom) {
+        throw new Error("Room is occupied");
+      }
 
       await prisma.participant.create({
         data: {
@@ -162,7 +170,7 @@ const participantResolver = {
         password?: string;
       }
     ): Promise<boolean> => {
-      const updatedData: Record<string, any> = {};
+      const updatedData: Partial<Participant> = {};
       if (room_number) updatedData.room_number = room_number;
       if (arrival_date) updatedData.arrival_date = arrival_date;
       if (departure_date) updatedData.departure_date = departure_date;
