@@ -1,4 +1,4 @@
-import { BadgeType, Icon } from "@prisma/client";
+import { BadgeType, Icon, RecurrenceFrequency, TaskType } from "@prisma/client";
 
 export const systemBadges = [
   {
@@ -92,9 +92,7 @@ export const systemBadges = [
     icon: Icon.FOUR_STAR, // Only one level for first goal
     type: BadgeType.SYSTEM,
     is_consecutive: false,
-    levels: [
-      { level: 0, benchmark: 1, marillac_bucks: 2 },
-    ],
+    levels: [{ level: 0, benchmark: 1, marillac_bucks: 2 }],
   },
   {
     name: "Jack of All Trades Badge",
@@ -103,8 +101,6 @@ export const systemBadges = [
     icon: Icon.TOOL,
     type: BadgeType.SYSTEM,
     is_consecutive: false,
-    levels: [
-      { level: 2, benchmark: 10, marillac_bucks: 10 },
-    ],
+    levels: [{ level: 2, benchmark: 10, marillac_bucks: 10 }],
   },
-]; 
+];
