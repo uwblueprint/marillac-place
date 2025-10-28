@@ -1,21 +1,11 @@
+/* eslint-disable */
 // @ts-nocheck
 // Seed script for Marillac Place:
 // Generates system badges and mock data for development/testing environments.
 
 import { createSeedClient } from "@snaplet/seed";
-import {
-  PrismaClient,
-  TaskType,
-  TransactionType,
-  BadgeType,
-  RecurrenceFrequency,
-  DayOfWeek,
-  TimeOption,
-  Priority,
-  Status,
-  Icon,
-} from "@prisma/client";
-import { individual_goal, systemBadges } from "./prodData";
+import { PrismaClient } from "@prisma/client";
+import { systemBadges } from "./prodData";
 import {
   participants,
   tasks,
@@ -35,21 +25,23 @@ async function seedProdData() {
 
     if (badgeCount === 0) {
       // No badges exist, seed all system badges
-      for (const badge of systemBadges) {
-        await prisma.badge.create({
-          data: {
-            name: badge.name,
-            description: badge.description,
-            badge_type: badge.type,
-            is_active: true,
-            is_consecutive: badge.is_consecutive,
-            icon: badge.icon,
-            badge_level: {
-              create: badge.levels,
+      await Promise.all(
+        systemBadges.map(async (badge) => {
+          return prisma.badge.create({
+            data: {
+              name: badge.name,
+              description: badge.description,
+              badge_type: badge.type,
+              is_active: true,
+              is_consecutive: badge.is_consecutive,
+              icon: badge.icon,
+              badge_level: {
+                create: badge.levels,
+              },
             },
-          },
-        });
-      }
+          });
+        })
+      );
       console.log("✅ System badges seeded");
     } else {
       console.log("✅ Badges already exist, skipping seeding");
@@ -59,23 +51,29 @@ async function seedProdData() {
   }
 }
 
-async function seedTestData(seed: any) {
+async function seedTestData() {
   // Seed minimal test participants for production testing
   const prisma = new PrismaClient();
   try {
-    for (const participant of testParticipants) {
-      // Check if participant already exists
-      const existing = await prisma.participant.findUnique({
-        where: { participant_id: participant.participant_id },
-      });
+    await Promise.all(
+      testParticipants.map(async (participant) => {
+        // Check if participant already exists
+        const existing = await prisma.participant.findUnique({
+          where: { participant_id: participant.participant_id },
+        });
 
-      if (!existing) {
-        await prisma.participant.create({ data: participant });
-        console.log(`✅ Test participant ${participant.participant_id} created`);
-      } else {
-        console.log(`ℹ️  Test participant ${participant.participant_id} already exists, skipping`);
-      }
-    }
+        if (!existing) {
+          await prisma.participant.create({ data: participant });
+          console.log(
+            `✅ Test participant ${participant.participant_id} created`
+          );
+        } else {
+          console.log(
+            `ℹ️  Test participant ${participant.participant_id} already exists, skipping`
+          );
+        }
+      })
+    );
   } catch (error) {
     console.error("⚠️ Error seeding test participants:", error);
   } finally {
@@ -116,20 +114,24 @@ async function seedMockData(seed: any) {
 
   const prisma = new PrismaClient();
   try {
-    for (const badge of customBadges) {
-      await prisma.badge.create({
-        data: {
-          name: badge.name,
-          description: badge.description,
-          badge_type: badge.type,
-          is_active: true,
-          is_consecutive: badge.is_consecutive,
-          icon: badge.icon,
-        },
-      });
-    }
-  } finally {
+    await Promise.all(
+      customBadges.map(async (badge) => {
+        return prisma.badge.create({
+          data: {
+            name: badge.name,
+            description: badge.description,
+            badge_type: badge.type,
+            is_active: true,
+            is_consecutive: badge.is_consecutive,
+            icon: badge.icon,
+          },
+        });
+      })
+    );
     console.log("✅ Custom badges seeded");
+  } catch (error) {
+    console.error("⚠️ Error seeding custom badges:", error);
+  } finally {
     await prisma.$disconnect();
   }
 }
@@ -153,7 +155,7 @@ const main = async () => {
     // Optionally seed test participants for production testing
     if (seedTestAccounts) {
       console.log("🧪 SEED_TEST_DATA enabled: seeding test participants");
-      await seedTestData(seed);
+      await seedTestData();
     }
   } else {
     // Development: reset database and seed all data
