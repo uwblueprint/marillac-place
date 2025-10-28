@@ -1,5 +1,5 @@
 import moment from "moment";
-import { TaskStatus } from "../types/ScheduleTypes";
+import { TaskStatus } from "../admin/pages/schedule/components/ScheduleTypes";
 import colors from "../theme/colors";
 
 // Get task status color (text color)

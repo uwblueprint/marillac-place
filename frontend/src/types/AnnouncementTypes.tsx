@@ -26,3 +26,9 @@ export interface AnnouncementDisplayInfo {
   creation_date: Date;
   message: string;
 }
+
+export enum Priority {
+  NORMAL = "NORMAL",
+  HIGH = "HIGH",
+  CRITICAL = "CRITICAL"
+}

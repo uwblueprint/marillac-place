@@ -17,6 +17,7 @@ import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
 import AdminParticipantsPage from "./admin/pages/participants/Main";
 import AdminTasksPage from "./admin/pages/tasks/Main";
 import AdminBadgesPage from "./admin/pages/badges/Main";
+import AdminReportsPage from "./admin/pages/reports/Main";
 
 import ParticipantLoginPage from "./participant/pages/login/Main";
 import ParticipantHomePage from "./participant/pages/home/Main";
@@ -28,7 +29,7 @@ import NotFound from "./NotFound";
 
 import * as ROUTES from "./constants/routes";
 import AdminRoute from "./admin/common/misc/AdminRoute";
-import ParticipantRoute from "./common/participant/ParticipantRoute";
+import ParticipantRoute from "./participant/common/ParticipantRoute";
 
 const App = (): React.ReactElement => {
   const theme = getChakraTheme();
@@ -88,6 +89,14 @@ const App = (): React.ReactElement => {
               element={
                 <AdminRoute>
                   <AdminBadgesPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_REPORTS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminReportsPage />
                 </AdminRoute>
               }
             />

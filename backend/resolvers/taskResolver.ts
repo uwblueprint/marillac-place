@@ -19,10 +19,10 @@ const taskResolver = {
     // },
     getTasksByType: async (
       _parent: undefined,
-      { type }: { type: TaskType }
+      { type }: { type: TaskType[] }
     ): Promise<Array<Task>> => {
       return await prisma.task.findMany({
-          where: { task_type: type },
+          where: { task_type: { in: type } },
       })
     },
     // getTasksByRecurrenceFrequency: async (
@@ -31,6 +31,25 @@ const taskResolver = {
     // ): Promise<Task[]> => {
     //   return taskService.getTasksByRecurrenceFrequency(recurrencePreference);
     // },
+    getAssignedTasksByParticipantIdAndDate: async (
+      _parent: undefined,
+      { participantId, date }: { participantId: number; date: string }
+    ) => {
+      try {
+        const dateStart = `${date}, 00:00`;
+        const dateEnd = `${date}, 23:59`;
+        const assignedTasks = await prisma.assignedTask.findMany({
+          where: {
+            participant_id: participantId,
+            start_date: { lte: dateEnd },
+            end_date: { gte: dateStart }
+          },
+        });
+        return assignedTasks;
+      } catch (err) {
+        throw new Error("Something went wrong");
+      }
+    },
   },
   Mutation: {
     createTask: async (
@@ -128,15 +147,6 @@ const taskResolver = {
     ): Promise<boolean> => {
       await prisma.task.delete({
         where: { task_id: taskId },
-      });
-      return true;
-    },
-    deleteAssignedTask: async (
-      _parent: undefined,
-      { assigned_task_id }: { assigned_task_id: number }
-    ): Promise<boolean> => {
-      await prisma.assignedTask.delete({
-        where: { assigned_task_id: assigned_task_id },
       });
       return true;
     },

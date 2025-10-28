@@ -19,7 +19,7 @@ import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { ROOM_NUMBERS } from "../../../../constants/rooms";
+import { ROOM_NUMBERS } from "../../../../constants/misc";
 import { UPDATE_PARTICIPANT } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";

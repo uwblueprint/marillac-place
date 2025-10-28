@@ -1,15 +1,30 @@
 import React from "react";
-import { Flex } from "@chakra-ui/react";
-import HomeContent from "./elements/HomeContent";
-import ParticipantPageHeader from "../../../common/participant/PageHeader";
-import BadgeRow from "./elements/BadgeRow";
-import { BadgeRarity } from "../../../common/components/Badge";
+import { Flex, Text } from "@chakra-ui/react";
+// import HomeContent from "./components/HomeContent";
+// import ParticipantPageHeader from "../../common/PageHeader";
+// import BadgeRow from "./components/BadgeRow";
+// import { BadgeRarity } from "../../common/Badge";
+import TodoListWidget from "./components/TodoListWidget";
+import { getParticipantHomePageDateString } from "../../../utils/formatDateTime";
+import WidgetContainer from "../../common/WidgetContainer";
+import AnnouncementWidget from "./components/AnnouncementWidget";
 
 export default function ParticipantsHomePage() {
   return (
     <>
-      <ParticipantPageHeader currentPage="Home" />
-      <HomeContent />
+      <Flex w="100%" flexDir="column" mb="12px">
+        <Text color="primary.700" textStyle="mobile.h1">
+          Welcome to Marillac Place
+        </Text>
+        <Text color="text.light.secondary" textStyle="mobile.h3">
+          {getParticipantHomePageDateString()}
+        </Text>
+      </Flex>
+
+      <WidgetContainer>
+        <TodoListWidget />
+      </WidgetContainer>
+      <AnnouncementWidget />
     </>
   );
 }

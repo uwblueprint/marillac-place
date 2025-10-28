@@ -24,7 +24,7 @@ export const participants = [
   },
   {
     participant_id: 2,
-    password: "marillac",
+    password: "test",
     room_number: 3,
     arrival_date: getRecentDate(1, false),
     account_creation_date: getRecentDate(1, false),
@@ -35,7 +35,7 @@ export const participants = [
   },
   {
     participant_id: 3,
-    password: "hello123",
+    password: "test",
     room_number: 7,
     arrival_date: getRecentDate(8, false),
     account_creation_date: getRecentDate(8, false),
@@ -46,7 +46,7 @@ export const participants = [
   },
   {
     participant_id: 8,
-    password: "sunshine",
+    password: "test",
     room_number: 8,
     arrival_date: getRecentDate(100, false),
     account_creation_date: getRecentDate(100, false),
@@ -57,7 +57,7 @@ export const participants = [
   },
   {
     participant_id: 9,
-    password: "blueberry",
+    password: "test",
     room_number: 9,
     arrival_date: getRecentDate(20, false),
     account_creation_date: getRecentDate(20, false),
@@ -69,6 +69,15 @@ export const participants = [
 ];
 
 export const tasks = [
+  {
+    task_name: "Individual Goal",
+    task_type: TaskType.INDIVIDUAL_GOAL,
+    recurrence_preference: RecurrenceFrequency.PARTICIPANT_PREFERENCE,
+    repeat_days: [],
+    time_preference: RecurrenceFrequency.PARTICIPANT_PREFERENCE,
+    marillac_bucks_addition: 0,
+    marillac_bucks_deduction: 0,
+  },
   // Required tasks
   {
     task_name: "Weekly Review",

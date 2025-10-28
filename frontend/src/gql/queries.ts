@@ -51,6 +51,15 @@ export const GET_MARILLAC_BUCKS = gql`
   }
 `;
 
+export const GET_PARTICIPANT_GOAL = gql`
+  query getParticipantGoal($participantId: Int!) {
+      getParticipantById(participantId: $participantId) {
+          marillac_bucks
+	  marillac_bucks_goal
+      }
+  }
+`
+
 export const GET_PARTICIPANT_BY_ROOM = gql`
   query getParticipantByRoom($room_number: Int!) {
     getParticipantByRoom(room_number: $room_number) {
@@ -90,14 +99,12 @@ export const GET_PARTICIPANTS_BY_ROOMS = gql`
 `;
 
 export const GET_PARTICIPANT_BY_ID = gql`
-  query getParticipantById($participantId: String!) {
+  query getParticipantById($participantId: Int!) {
     getParticipantById(participantId: $participantId) {
-      participantId
-      roomNumber
-      arrival
-      departure
-      password
-      credit
+      participant_id
+      marillac_bucks
+      marillac_bucks_goal
+      room_number
     }
   }
 `;
@@ -136,6 +143,26 @@ export const GET_ANNOUNCEMENTS_IN_DATE_RANGE = gql`
 export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
   query getAnnouncementsByParticipants($participant_ids: [Int!]!) {
     getAnnouncementsByParticipants(participant_ids: $participant_ids) {
+      announcement_id
+      priority
+      creation_date
+      message
+      user_announcements {
+        participant_id
+        read
+        pinned
+      }
+    }
+  }
+`;
+
+export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID = gql`
+  query getAnnouncementsByParticipantId(
+    $participant_id: Int!
+  ) {
+    getAnnouncementsByParticipantId(
+      participant_id: $participant_id
+    ) {
       announcement_id
       priority
       creation_date
@@ -187,239 +214,8 @@ export const GET_TASK_BY_ID = gql`
   }
 `;
 
-export const GET_ASSIGNED_TASKS = gql`
-  query getAssignedTasks($participant_id: Int!) {
-    getAssignedTasks(participant_id: $participant_id) {
-      MONDAY {
-        SPECIFIC {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-        ANYTIME {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-      }
-      TUESDAY {
-        SPECIFIC {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-        ANYTIME {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-      }
-      WEDNESDAY {
-        SPECIFIC {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-        ANYTIME {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-      }
-      THURSDAY {
-        SPECIFIC {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-        ANYTIME {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-      }
-      FRIDAY {
-        SPECIFIC {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-        ANYTIME {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-      }
-      SATURDAY {
-        SPECIFIC {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-        ANYTIME {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-      }
-      SUNDAY {
-        SPECIFIC {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-        ANYTIME {
-          assigned_task_id
-          participant_id
-          task_name
-          task_status
-          task_type
-          goal_name
-          goal_description
-          start_date
-          end_date
-          marillac_bucks_addition
-          marillac_bucks_deduction
-          comment
-        }
-      }
-      ANYDAY {
-        assigned_task_id
-        participant_id
-        task_name
-        task_status
-        task_type
-        goal_name
-        goal_description
-        start_date
-        end_date
-        marillac_bucks_addition
-        marillac_bucks_deduction
-        comment
-      }
-    }
-  }
-`;
-
 export const GET_TASKS_BY_TYPE = gql`
-  query getTasksByType($type: TaskType!) {
+  query getTasksByType($type: [TaskType!]!) {
     getTasksByType(type: $type) {
       task_id
       task_name
@@ -432,6 +228,22 @@ export const GET_TASKS_BY_TYPE = gql`
       marillac_bucks_addition
       marillac_bucks_deduction
       comment
+    }
+  }
+`;
+
+export const GET_PARTICIPANT_FILTERED_ANNOUNCEMENTS = gql`
+  query getParticipantFilteredAnnouncements($participantId: Int!, $filter: AnnouncementFilter!) {
+    getParticipantAnnouncements(participantId: $participantId, filter: $filter) {
+      participant_id
+      announcement_id
+      read
+      pinned
+      announcement {
+        message
+        priority
+        creation_date
+      }
     }
   }
 `;
@@ -468,6 +280,69 @@ export const GET_CUSTOM_BADGES = gql`
         level
         benchmark
         marillac_bucks
+      }
+    }
+  }
+`;
+
+export const GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE = gql`
+  query getAssignedTasksByParticipantIdAndDate(
+    $participantId: Int!
+    $date: String!
+  ) {
+    getAssignedTasksByParticipantIdAndDate(
+      participantId: $participantId
+      date: $date
+    ) {
+      assigned_task_id
+      task_name
+      task_status
+      task_type
+      start_date
+      end_date
+      comment
+    }
+  }
+`;
+
+export const GET_ASSIGNED_TASKS = gql`
+  query getAssignedTasks($participant_id: Int!) {
+    getAssignedTasks(participant_id: $participant_id) {
+      SPECIFIC {
+        id
+        title
+        start
+        end
+        allDay
+        task_status
+        task_type
+        marillacBucksAddition
+        marillac_bucks_deduction
+        comment
+      }
+      ANYTIME {
+        id
+        title
+        start
+        end
+        allDay
+        task_status
+        task_type
+        marillacBucksAddition
+        marillac_bucks_deduction
+        comment
+      }
+      ANYDAY {
+        id
+        title
+        start
+        end
+        allDay
+        task_status
+        task_type
+        marillacBucksAddition
+        marillac_bucks_deduction
+        comment
       }
     }
   }

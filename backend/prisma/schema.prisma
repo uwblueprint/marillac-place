@@ -76,6 +76,11 @@ enum Icon {
   TOOL
 }
 
+enum GoalAction {
+  SET
+  REACHED
+}
+
 model Participant {
   participant_id        Int     @id
   password              String
@@ -89,6 +94,9 @@ model Participant {
 
   assigned_tasks       AssignedTask[]
   user_announcements   UserAnnouncement[]
+
+  goal_history         GoalHistory[]
+
   logins               Login[]
   transactions         Transaction[]
   earned_badges        EarnedBadge[]
@@ -241,7 +249,19 @@ model ParticipantProgress {
   badges_achieved                Int[]    @default([])
   task_types_tried               String[] @default([])
 
-  participant Participant @relation(fields: [participant_id], references: [participant_id])
+  participant Participant @relation(fields: [participant_id], references: [participant_id], onDelete: Cascade)
 
   @@map("participant_progress")
+}
+
+model GoalHistory {
+  goal_history_id Int        @id @default(autoincrement())
+  participant_id  Int
+  goal_action     GoalAction
+  goal_value      Int
+  action_date     String
+
+  participant Participant @relation(fields: [participant_id], references: [participant_id])
+
+  @@map("goal_history")
 }

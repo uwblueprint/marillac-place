@@ -18,6 +18,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PAST_PARTICIPANTS } from "../../../../gql/queries";
 import EditPastParticipantCard from "./EditPastParticipantCard";
+import DataTable from "../../../common/misc/DataTable";
 
 type SortIconProps = {
   state: number;
@@ -130,133 +131,117 @@ const PastParticipantTable = () => {
     setDepartureState(newState);
   }
 
+  const columns = [
+    {
+      header: "ID Number",
+      width: "30%",
+      sort: (
+        <div onClick={() => handleIdStateChange()}>
+          <SortIcon state={idState} />
+        </div>
+      ),
+    },
+    {
+      header: "Arrival Date",
+      width: "30%",
+      sort: (
+        <div onClick={() => handleArrivalStateChange()}>
+          <SortIcon state={arrivalState} />
+        </div>
+      ),
+    },
+    {
+      header: "Departure Date",
+      width: "30%",
+      sort: (
+        <div onClick={() => handleDepartureStateChange()}>
+          <SortIcon state={departureState} />
+        </div>
+      ),
+    },
+    { header: "", width: "10%" },
+  ];
+
+  const rows: JSX.Element[][] = pastParticipants.length
+    ? pastParticipants.map((participant: any, index: number) => {
+        const cells: JSX.Element[] = [
+          <Text
+            key={`id-${participant.participant_id}`}
+            textStyle="web.b3"
+            color="#000000"
+          >
+            {participant.participant_id}
+          </Text>,
+          <Text
+            key={`arrival-${participant.participant_id}`}
+            textStyle="web.b3"
+            color="#000000"
+          >
+            {participant.arrival_date}
+          </Text>,
+          <Text
+            key={`departure-${participant.participant_id}`}
+            textStyle="web.b3"
+            color="#000000"
+          >
+            {participant.departure_date}
+          </Text>,
+          <Flex
+            key={`actions-${participant.participant_id}`}
+            alignItems="center"
+            justifyContent="flex-end"
+            gap="15px"
+          >
+            <Flex
+              onClick={() => {
+                setSelectedId(participant.participant_id);
+                setSelectedArrival(participant.arrival_date);
+                setSelectedDeparture(participant.departure_date);
+                setEdit(true);
+              }}
+            >
+              <EditIcon
+                style={{
+                  width: "1.2rem",
+                  height: "1.2rem",
+                  color: "#000000",
+                  cursor: "pointer",
+                }}
+              />
+            </Flex>
+            <FileDownloadOutlinedIcon
+              style={{
+                width: "1.3rem",
+                height: "1.3rem",
+                color: "#000000",
+              }}
+            />
+          </Flex>,
+        ];
+        return cells;
+      })
+    : [];
+
+  const editModal = (
+    <EditPastParticipantCard
+      id={selectedId}
+      arrival={selectedArrival}
+      departure={selectedDeparture}
+      close={() => setEdit(false)}
+    />
+  );
+
   return (
     <>
-      <TableContainer
-        border="1px solid"
-        borderColor="neutral.300"
-        borderRadius="8px"
-        mb="15px"
-      >
-        <Table>
-          <Thead>
-            <Tr backgroundColor="neutral.200" w="100%">
-              <Th width="30%">
-                <Flex alignItems="center" gap="8px">
-                  <Text textStyle="web.s1" color="#000000" textTransform="none">
-                    ID Number
-                  </Text>
-                  <div onClick={() => handleIdStateChange()}>
-                    <SortIcon state={idState} />
-                  </div>
-                </Flex>
-              </Th>
-              <Th width="30%">
-                <Flex alignItems="center" gap="8px">
-                  <Text textStyle="web.s1" color="#000000" textTransform="none">
-                    Arrival Date
-                  </Text>
-                  <div onClick={() => handleArrivalStateChange()}>
-                    <SortIcon state={arrivalState} />
-                  </div>
-                </Flex>
-              </Th>
-              <Th width="30%">
-                <Flex alignItems="center" gap="8px">
-                  <Text textStyle="web.s1" color="#000000" textTransform="none">
-                    Departure Date
-                  </Text>
-                  <div onClick={() => handleDepartureStateChange()}>
-                    <SortIcon state={departureState} />
-                  </div>
-                </Flex>
-              </Th>
-              <Th width="10%">&nbsp;</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {loading ? (
-              <Tr outline="1px solid" outlineColor="neutral.300">
-                <Td colSpan={4} textAlign="center">
-                  <Spinner />
-                </Td>
-              </Tr>
-            ) : error ? (
-              <Tr outline="1px solid" outlineColor="neutral.300">
-                <Td colSpan={4}>
-                  <Text textStyle="web.b3" color="#000000" textAlign="center">
-                    {error.message}
-                  </Text>
-                </Td>
-              </Tr>
-            ) : (
-              pastParticipants.map((participant: any, index: number) => (
-                <Tr
-                  key={participant.participant_id}
-                  outline={index % 2 ? "0px solid" : "1px solid"}
-                  outlineColor="neutral.300"
-                >
-                  <Td>
-                    <Text textStyle="web.b3" color="#000000">
-                      {participant.participant_id}
-                    </Text>
-                  </Td>
-                  <Td>
-                    <Text textStyle="web.b3" color="#000000">
-                      {participant.arrival_date}
-                    </Text>
-                  </Td>
-                  <Td>
-                    <Text textStyle="web.b3" color="#000000">
-                      {participant.departure_date}
-                    </Text>
-                  </Td>
-                  <Td>
-                    <Flex
-                      alignItems="center"
-                      justifyContent="flex-end"
-                      gap="15px"
-                    >
-                      <Flex
-                        onClick={() => {
-                          setSelectedId(participant.participant_id);
-                          setSelectedArrival(participant.arrival_date);
-                          setSelectedDeparture(participant.departure_date);
-                          setEdit(true);
-                        }}
-                      >
-                        <EditIcon
-                          style={{
-                            width: "1.2rem",
-                            height: "1.2rem",
-                            color: "#000000",
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Flex>
-                      <FileDownloadOutlinedIcon
-                        style={{
-                          width: "1.3rem",
-                          height: "1.3rem",
-                          color: "#000000",
-                        }}
-                      />
-                    </Flex>
-                  </Td>
-                </Tr>
-              ))
-            )}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      {edit && (
-        <EditPastParticipantCard
-          id={selectedId}
-          arrival={selectedArrival}
-          departure={selectedDeparture}
-          close={() => setEdit(false)}
-        />
-      )}
+      <DataTable
+        columns={columns}
+        rows={rows}
+        loading={loading}
+        edit={edit}
+        selected={selectedId}
+        error={error}
+        editModal={editModal}
+      />
     </>
   );
 };

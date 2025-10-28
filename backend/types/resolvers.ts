@@ -7,15 +7,27 @@ const resolvers = gql`
     getParticipantByRoom(room_number: Int!): Participant
     getParticipantsByRooms(room_numbers: [Int!]!): [Participant]
     getParticipantById(participantId: Int!): Participant
+    getGoalHistoryByParticipant(
+      participant_id: Int!
+      start_date: String
+      end_date: String
+    ): [GoalHistory!]!
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
-    getAssignedTasks(participant_id: Int!): AssignedTasksByDay!
-    getTasksByType(type: TaskType!): [Task]
+    getAnnouncementsByParticipantId(participant_id: Int!): [Announcement]
+    getAssignedTasks(participant_id: Int!): GetAssignedTaskResponse!
+    getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
+    getParticipantAnnouncements(participantId: Int!, filter: AnnouncementFilter = ALL): [UserAnnouncement!]!
+    getAssignedTasksByParticipantIdAndDate(
+      participantId: Int!
+      date: String!
+    ): [AssignedTask]
     hasCompletedAllRequiredTasks(participantId: Int!): Boolean
+    getEarnedBadgesByParticipant(participantId: Int!): [EarnedBadge!]!
   }
 
   type Mutation {
@@ -94,6 +106,19 @@ const resolvers = gql`
       marillac_bucks: Int!
       participant_ids: [Int!]!
     ): [Int!]!
+    updateAssignedTask(
+      id: Int!
+      taskName: String
+      taskStatus: Status
+      taskType: TaskType
+      goalName: String
+      goalDescription: String
+      startDate: String
+      endDate: String
+      marillacBucksAddition: Int
+      marillacBucksDeduction: Int
+      comment: String
+    ): Boolean
     editCustomBadge(
       custom_badge_id: Int!
       new_custom_badge_name: String
@@ -108,7 +133,7 @@ const resolvers = gql`
       endDate: String!
       marillacBucksAddition: Int!
       marillacBucksDeduction: Int!
-      taskType: String!
+      taskType: TaskType!
       goalName: String
       goalDescription: String
       comment: String
@@ -125,6 +150,14 @@ const resolvers = gql`
       system_badge_criteria: String
     ): Boolean
     updateBadgeStatus(badge_id: Int!, is_active: Boolean!): Boolean
+    setMarillacBucksGoal(
+      participant_id: Int!
+      goal_value: Int!
+    ): Boolean
+    updateMarillacBucksGoal(
+      participant_id: Int!
+      new_goal_value: Int!
+    ): Boolean
   }
 `;
 

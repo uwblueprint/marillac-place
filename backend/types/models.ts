@@ -18,6 +18,7 @@ const models = gql`
     transactions: [Transaction!]!
     earned_badges: [EarnedBadge!]!
     participant_progress: ParticipantProgress
+    goal_history: [GoalHistory!]!
   }
 
   type Task {
@@ -48,22 +49,6 @@ const models = gql`
     marillac_bucks_deduction: Int!
     comment: String
     participant: Participant!
-  }
-
-  type AssignedTaskGroup {
-    SPECIFIC: [AssignedTask!]!
-    ANYTIME: [AssignedTask!]!
-  }
-
-  type AssignedTasksByDay {
-    MONDAY: AssignedTaskGroup
-    TUESDAY: AssignedTaskGroup
-    WEDNESDAY: AssignedTaskGroup
-    THURSDAY: AssignedTaskGroup
-    FRIDAY: AssignedTaskGroup
-    SATURDAY: AssignedTaskGroup
-    SUNDAY: AssignedTaskGroup
-    ANYDAY: [AssignedTask!]!
   }
 
   type Note {
@@ -156,6 +141,16 @@ const models = gql`
     total_earnings: Int!
     badges_achieved: [Int!]!
     task_types_tried: [String!]!
+
+    participant: Participant!
+  }
+
+  type GoalHistory {
+    goal_history_id: Int!
+    participant_id: Int!
+    goal_action: GoalAction!
+    goal_value: Int!
+    action_date: String!
 
     participant: Participant!
   }

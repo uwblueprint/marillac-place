@@ -92,6 +92,35 @@ export const CREATE_ANNOUNCEMENT = gql`
   }
 `;
 
+export const CREATE_ASSIGNED_TASK = gql`
+  mutation createAssignedTask(
+    $participantId: Int!
+    $taskName: String!
+    $startDate: String!
+    $endDate: String!
+    $marillacBucksAddition: Int!
+    $marillacBucksDeduction: Int!
+    $taskType: TaskType!
+    $goalName: String
+    $goalDescription: String
+    $comment: String
+  ) {
+    createAssignedTask(
+      participantId: $participantId
+      taskName: $taskName
+      startDate: $startDate
+      endDate: $endDate
+      marillacBucksAddition: $marillacBucksAddition
+      marillacBucksDeduction: $marillacBucksDeduction
+      taskType: $taskType
+      goalName: $goalName
+      goalDescription: $goalDescription
+      comment: $comment
+    )
+  }
+`;
+
+
 export const EDIT_ANNOUNCEMENT = gql`
   mutation editAnnouncement(
     $announcement_id: Int!
@@ -158,46 +187,9 @@ export const CREATE_TASK = gql`
   }
 `;
 
-export const CREATE_ASSIGNED_TASK = gql`
-  mutation createAssignedTask(
-    $userID: Int
-    $type: TaskType!
-    $name: String!
-    $recurrencePreference: RecurrenceFrequency
-    $repeatDays: [String]
-    $timePreference: TimeOption!
-    $start: String
-    $end: String
-    $credit: Int!
-    $deduction: Int
-    $comment: String
-  ) {
-    createAssignedTask(
-      userID: $userID
-      type: $type
-      name: $name
-      recurrencePreference: $recurrencePreference
-      repeatDays: $repeatDays
-      timePreference: $timePreference
-      start: $start
-      end: $end
-      credit: $credit
-      deduction: $deduction
-      comment: $comment
-    ) {
-      assignedTaskId
-      userID
-      type
-      name
-      recurrencePreference
-      repeatDays
-      timePreference
-      start
-      end
-      credit
-      deduction
-      comment
-    }
+export const DELETE_ASSIGNED_TASK = gql`
+  mutation DeleteAssignedTask($assigned_task_id: Int!) {
+    deleteAssignedTask(assigned_task_id: $assigned_task_id)
   }
 `;
 
@@ -307,6 +299,47 @@ export const ASSIGN_CUSTOM_BADGE = gql`
       badge_id: $badge_id
       marillac_bucks: $marillac_bucks
       participant_ids: $participant_ids
+    )
+  }
+`;
+export const SET_MARILLAC_BUCKS_GOAL = gql`
+  mutation setMarillacBucksGoal($participant_id: Int!, $goal_value: Int!) {
+    setMarillacBucksGoal(participant_id: $participant_id, goal_value: $goal_value)
+  }
+`;
+
+export const UPDATE_MARILLAC_BUCKS_GOAL = gql`
+  mutation updateMarillacBucksGoal($participant_id: Int!, $new_goal_value: Int!) {
+    updateMarillacBucksGoal(participant_id: $participant_id, new_goal_value: $new_goal_value)
+  }
+`;
+
+export const UPDATE_ASSIGNED_TASK = gql`
+  mutation UpdateAssignedTask(
+    $id: Int!
+    $taskName: String
+    $taskStatus: Status
+    $taskType: TaskType
+    $goalName: String
+    $goalDescription: String
+    $startDate: String
+    $endDate: String
+    $marillacBucksAddition: Int
+    $marillacBucksDeduction: Int
+    $comment: String
+  ) {
+    updateAssignedTask(
+      id: $id
+      taskName: $taskName
+      taskStatus: $taskStatus
+      taskType: $taskType
+      goalName: $goalName
+      goalDescription: $goalDescription
+      startDate: $startDate
+      endDate: $endDate
+      marillacBucksAddition: $marillacBucksAddition
+      marillacBucksDeduction: $marillacBucksDeduction
+      comment: $comment
     )
   }
 `;
