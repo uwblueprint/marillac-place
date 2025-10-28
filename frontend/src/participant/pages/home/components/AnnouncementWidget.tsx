@@ -67,7 +67,7 @@ export default function AnnouncementWidget() {
         </Flex>
 
         <Flex flexDir="column" gap="12px">
-          {announcementData.getAnnouncementsByParticipantIdAndDate.map(
+          {announcementData.getAnnouncementsByParticipantId.map(
             (announcement: AnnouncementDisplayInfo) => (
               <Flex
                 width="100%"
