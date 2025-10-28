@@ -1,12 +1,8 @@
 import React from "react";
 import { FormControl, Text, Textarea } from "@chakra-ui/react";
-import { InputProps } from "../../../types";
+import { InputProps } from "../../../types/component";
 
-type TextInputProps = InputProps & {
-    width?: string;
-}
-
-export default function TextInput({ label, current_value, action, width = "450px" }: TextInputProps) {
+export default function TextInput({ label, current_value, action, width = "450px" }: InputProps) {
     return (
         <FormControl>
             <Text textStyle="web.s1" color="text.light.secondary">{label}</Text>

@@ -4,11 +4,13 @@ import { Text, Card, CardHeader, CardBody, Progress, Image, Flex, Button, Box } 
 type BucksGoalCardProps = {
   value: number;
   goal: number | null;
+  handleClick: () =>  void
 };
 
 export default function BucksGoalCard({
   value,
-  goal
+  goal,
+  handleClick
 }: BucksGoalCardProps) {
   const metGoal = value >= (goal ?? -1);
   const goalExists = !!goal;
@@ -24,7 +26,7 @@ export default function BucksGoalCard({
       <CardHeader pb="10px">
 	<Flex direction="row" justifyContent="space-between">
 	  <Text fontWeight="bold">Marillac Bucks Goal</Text>
-	  <Button variant="link">
+	  <Button onClick={handleClick} variant="link">
 	    {editGoalText()}
 	  </Button>
 	</Flex>

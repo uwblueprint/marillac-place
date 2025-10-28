@@ -1,5 +1,19 @@
 import React, { useState } from "react";
-import { Button, Flex, Input, InputGroup, FormLabel, FormControl, Text, Modal, ModalContent, ModalHeader, ModalBody, ModalOverlay, InputRightElement } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Input,
+  InputGroup,
+  FormLabel,
+  FormControl,
+  Text,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalOverlay,
+  InputRightElement,
+} from "@chakra-ui/react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useMutation } from "@apollo/client";
@@ -25,7 +39,10 @@ const AddParticipantCard = ({
 
   const [createParticipant, { loading }] = useMutation(CREATE_PARTICIPANT, {
     onCompleted: () => {
-      localStorage.setItem("notification", "Participant #" + id + " added to Room " + roomNumber);
+      localStorage.setItem(
+        "notification",
+        "Participant #" + id + " added to Room " + roomNumber
+      );
       window.location.reload();
     },
     onError: (err) => {
@@ -45,12 +62,14 @@ const AddParticipantCard = ({
         return;
       }
 
-      createParticipant({ variables: {
-        participant_id: Number(id),
-        room_number: roomNumber,
-        arrival_date: arrivalDate,
-        password
-      }});
+      createParticipant({
+        variables: {
+          participant_id: Number(id),
+          room_number: roomNumber,
+          arrival_date: arrivalDate,
+          password,
+        },
+      });
     }
   }
 
@@ -62,21 +81,21 @@ const AddParticipantCard = ({
       cancel_action={close}
       error={error}
     >
-      <CoreInput 
+      <CoreInput
         label="ID Number"
         current_value={id}
         action={(e: any) => setId(e.target.value)}
         type="number"
         width="350px"
       />
-      <CoreInput 
+      <CoreInput
         label="Arrival Date"
         current_value={arrivalDate}
         action={(e: any) => setArrivalDate(e.target.value)}
         type="date"
         width="350px"
       />
-      <CoreInput 
+      <CoreInput
         label="Password"
         current_value={password}
         action={(e: any) => setPassword(e.target.value)}

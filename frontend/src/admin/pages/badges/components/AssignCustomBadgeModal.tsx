@@ -22,8 +22,8 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { ROOM_NUMBERS } from "../../../../constants/rooms";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import { ROOM_NUMBERS } from "../../../../constants/misc";
 import {
   GET_PARTICIPANTS_BY_ROOMS,
   GET_CUSTOM_BADGES,
@@ -31,6 +31,8 @@ import {
 import { ASSIGN_CUSTOM_BADGE } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import GreenButton from "../../../common/buttons/GreenButton";
+import CoreInput from "../../../common/form/CoreInput";
+import SelectionInput from "../../../common/form/SelectionInput";
 
 interface AssignCustomBadgeModalProps {
   onClose: () => void;
@@ -118,91 +120,50 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
         setBadges([]);
         onClose();
       }}
+      error={error}
     >
-          <Flex flexDir="column" gap="10px">
-            <FormControl>
-              <FormLabel mb="5px">
-                <Text textStyle="web.s1" color="text.light.secondary">
-                  Badge Name
-                </Text>
-              </FormLabel>
-              <Select
-                variant="primary"
-                textStyle="web.b3"
-                fontSize="14px"
-                value={badgeName}
-                onChange={(e) => setBadgeName(e.target.value)}
-                placeholder="Select a Badge"
-              >
-                {badgeData?.getCustomBadges?.map((badge: any) => (
-                  <option key={badge.name} value={badge.name}>
-                    {badge.name}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
+      <SelectionInput
+        label="Badge Name"
+        current_value={badgeName}
+        action={(e: any) => setBadgeName(e.target.value)} 
+        mode="dropdown"
+        value_options={Object.fromEntries(
+          badgeData?.getCustomBadges?.map((badge: any) => [badge.name, badge.name]) ?? []
+        )}
+        width="100%"
+      />
+            
+      <CoreInput
+        label="Badge Value"
+        current_value={badgeValue}
+        action={(e: any) => {
+          const val = e.target.value;
+          if (val === "") {
+            setBadgeValue("");
+          } else {
+            const num = parseFloat(val);
+            if (!Number.isNaN(num)) {
+              setBadgeValue(val);
+            }
+          }
+        }}
+        type="number"
+        width="100%"
+      />
 
-            <FormControl>
-              <FormLabel mb="5px">
-                <Text textStyle="web.s1" color="text.light.secondary">
-                  Badge Value
-                </Text>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement>
-                  <AttachMoneyIcon style={{ color: 'inherit', fontSize: 15 }} />
-                </InputLeftElement>
-                <Input
-                  type="number"
-                  variant="primary"
-                  value={badgeValue}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (val === "") {
-                      setBadgeValue("");
-                    } else {
-                      const num = parseFloat(val);
-                      if (!Number.isNaN(num)) {
-                        setBadgeValue(val);
-                      }
-                    }
-                  }}
-                  placeholder="0.00"
-                  min={0}
-                  step={0.01}
-                  pl="7"
-                />
-              </InputGroup>
-            </FormControl>
+      <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
 
-            <Flex w="100%" h="1px" bg="neutral.300" mt="10px" />
-
-            <Text textStyle="web.s1" color="text.light.secondary">
-              Choose Room(s)
-            </Text>
-            <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">
-              {ROOM_NUMBERS.map((num: number) => (
-                <GreenButton 
-                  key={num}
-                  text={"Room " + num}
-                  action={() => toggleRoomSelection(num)}
-                  is_active={selectedRooms.includes(num)}
-                />
-              ))}
-            </Grid>
-            {error && (
-              <Text
-                textStyle="web.b2"
-                fontWeight="600"
-                color="#E30000"
-                mt="10px"
-                mb="-5px"
-                textAlign="left"
-              >
-                {error}
-              </Text>
-            )}
-          </Flex>
+      <Text textStyle="web.s1" color="text.light.secondary">Choose Room(s)</Text>
+      <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">
+        {ROOM_NUMBERS.map((num: number) => (
+          <GreenButton 
+            key={num}
+            text={"Room " + num}
+            action={() => toggleRoomSelection(num)}
+            is_active={selectedRooms.includes(num)}
+          />
+        ))}
+      </Grid>
     </ModalContainer>
   );
 };
