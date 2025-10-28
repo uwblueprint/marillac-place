@@ -206,6 +206,15 @@ const participantResolver = {
         where: { participant_id },
         data: { marillac_bucks },
       });
+      await prisma.transaction.create({
+        data: {
+          participant_id,
+          marillac_bucks,
+          description: reason,
+          transaction_date: getToday(),
+          transaction_type: "EARNING",
+        },
+      });
       return true;
     },
   },
