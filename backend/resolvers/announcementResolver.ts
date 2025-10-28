@@ -198,6 +198,35 @@ const announcementResolver = {
       });
       return true;
     },
+    updatePinReadAnnouncement: async (
+      _parent: undefined,
+      {
+        announcement_id,
+        participant_id,
+        read,
+        pinned,
+      }: {
+        announcement_id: number,
+        participant_id: number,
+        pinned?: boolean,
+        read?: boolean,
+      }
+    ): Promise<boolean> => {
+      const updatedData: { pinned?: boolean; read?: boolean } = {};
+      if (pinned != undefined) updatedData.pinned = pinned;
+      if (read != undefined ) updatedData.read = read;
+
+      await prisma.userAnnouncement.update({
+        where: {
+          announcement_id_participant_id: {
+            announcement_id,
+            participant_id,
+          },
+        },
+        data: updatedData,
+      });
+      return true;
+    },
   },
   UserAnnouncement: {
     participant: async (parent: { participant_id: number }) => {
