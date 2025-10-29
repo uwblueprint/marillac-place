@@ -26,7 +26,7 @@ export default function getApolloClient() {
   });
 
   const apolloClient = new ApolloClient({
-    link: header.concat(endpoint as any),
+    link: header.concat(endpoint),
     cache: new InMemoryCache(),
   });
 

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/no-var-requires */
 const webpack = require("webpack");
 
 module.exports = {
