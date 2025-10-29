@@ -37,7 +37,7 @@ export default function AnnouncementWidget() {
       day: "numeric",
     };
 
-    const parts = new Intl.DateTimeFormat("en-US", options).formatToParts(date);
+    const parts = new Intl.DateTimeFormat("en-CA", options).formatToParts(date);
 
     const get = (type: string) =>
       parts.find((p) => p.type === type)?.value || "";
@@ -53,7 +53,7 @@ export default function AnnouncementWidget() {
 
   return (
     <WidgetContainer>
-      <Flex flexDir="column" gap="12px">
+      <>
         <Flex flexDir="row" justifyContent="space-between">
           <Text textStyle="mobile.h2">Announcements</Text>
           <Text
@@ -62,31 +62,29 @@ export default function AnnouncementWidget() {
             textDecoration="underline"
             cursor="pointer"
           >
-            View All
+            Announcements
           </Text>
         </Flex>
 
-        <Flex flexDir="column" gap="12px">
-          {announcementData.getAnnouncementsByParticipantId.map(
-            (announcement: AnnouncementDisplayInfo) => (
-              <Flex
-                width="100%"
-                flexDir="column"
-                gap="6px"
-                key={announcement.announcement_id}
-              >
-                <Divider />
-                <Text paddingTop="6px" textStyle="mobile.b1">
-                  {announcement.message}
-                </Text>
-                <Text textStyle="mobile.b1" color="text.light.secondary">
-                  {formatDate(new Date(announcement.creation_date))}
-                </Text>
-              </Flex>
-            )
-          )}
-        </Flex>
-      </Flex>
+        {announcementData.getAnnouncementsByParticipantId.map(
+          (announcement: AnnouncementDisplayInfo) => (
+            <Flex
+              width="100%"
+              flexDir="column"
+              gap="6px"
+              key={announcement.announcement_id}
+            >
+              <Divider borderColor="neutral.300" />
+              <Text paddingTop="4px" textStyle="mobile.b1">
+                {announcement.message}
+              </Text>
+              <Text textStyle="mobile.b1" color="text.light.secondary">
+                {formatDate(new Date(announcement.creation_date))}
+              </Text>
+            </Flex>
+          )
+        )}
+      </>
     </WidgetContainer>
   );
 }

@@ -28,7 +28,7 @@ export default function ParticipantAnnouncementCard({
       w="100%"
       borderTop="1px solid"
       borderColor="neutral.300"
-      paddingTop="15px"
+      paddingTop="12px"
       paddingLeft="25px"
       flexDir="column"
       position="relative"
