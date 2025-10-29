@@ -39,3 +39,25 @@ cron.schedule("0 0 * * 1", async () => {
     console.log("Could not create assigned tasks");
   }
 });
+
+
+cron.schedule( "0 9 * * 1 ", async () =>{
+  const timestamp = new Date().toISOString();
+  const res = await sendWeeklyReports();
+  if (res){
+    console.log(`[${timestamp}] Weekly report sent to subscribed recipients`);
+  } else {
+    console.log(`[${timestamp}] Weekly report FAILED to send`);  
+  }
+});
+
+cron.schedule( "0 9 1 * 1 ", async () =>{
+  const timestamp = new Date().toISOString();
+  const res = await sendMonthlyReports();
+  if (res){
+    console.log(`[${timestamp}] Weekly report sent to subscribed recipients`);
+  } else {
+    console.log(`[${timestamp}] Weekly report FAILED to send`);  
+  }
+});
+
