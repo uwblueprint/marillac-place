@@ -33,7 +33,7 @@ jobs:
 
       - name: Set up Node.js
         if: steps.changes.outputs.frontend == 'true' || steps.changes.outputs.backend == 'true'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: "18.18.2"
           cache: "yarn"
