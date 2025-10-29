@@ -6,6 +6,7 @@ import { SetGoal } from "./components/SetGoal";
 import { GET_PARTICIPANT_BY_ID } from "../../../gql/queries";
 import WeeklyEarningsChart from "./components/EarningsWidget";
 import BucksGoalCard from "./elements/BucksGoalCard";
+import BadgeWidget from "./components/BadgeWidget";
 
 export default function ParticipantsProgressPage() {
   const [editGoal, setEditGoal] = useState(false);
@@ -71,6 +72,36 @@ export default function ParticipantsProgressPage() {
       )}
       <div style={{ padding: "10px 20px" }}>
         <WeeklyEarningsChart weeklyEarnings={sampleWeeklyEarnings} />
+      </div>
+
+      <div style={{ padding: "10px 20px" }}>
+        <BadgeWidget badgesToDisplayInWidget={[{
+                title: "Beginner Log In Badge",
+                subtitle: "Completed 7 days in a row",
+                badge: {
+                    icon: "five_star",
+                    rarity: "gold",
+                    percentComplete: 100,
+                },
+            },
+            {
+                title: "Beginner Perfect Score Badge",
+                subtitle: "Completed 7 days in a row",
+                badge: {
+                    icon: "diamond",
+                    rarity: "diamond",
+                    percentComplete: 50,
+                },
+            },
+            {
+                title: "Hello world",
+                subtitle: "Completed 7 days in a row",
+                badge: {
+                    icon: "tool",
+                    rarity: "green",
+                    percentComplete: 100,
+                },
+            },]}/>
       </div>
     </>
   );
