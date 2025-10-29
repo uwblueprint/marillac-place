@@ -4,7 +4,7 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import CircleIcon from "@mui/icons-material/Circle";
-import React from "react";
+import React, { useState } from "react";
 import notification from "../../../icons/announcements/notification.svg"
 import group from "../../../icons/announcements/group.svg"
 import profile from "../../../icons/announcements/profile.svg"
@@ -20,9 +20,11 @@ type ParticipantAnnouncementCardProps = {
   hasRead: boolean;
   isPinned: boolean;
   time: string;
+  userAnnouncementId: number;
 };
 
 export default function ParticipantAnnouncementCard({
+  userAnnouncementId,
   allRooms,
   message,
   importance,
@@ -39,7 +41,6 @@ export default function ParticipantAnnouncementCard({
       paddingLeft="25px"
       flexDir="column"
       position="relative"
-      cursor="pointer"
     >
       {!hasRead && (
         <Flex position="absolute" top="42px" left="0px">

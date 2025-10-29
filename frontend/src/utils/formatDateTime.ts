@@ -237,7 +237,6 @@ export const displayDate2 = (date: Date) => {
   const month = get("month");
   const day = get("day");
   const dayPeriod = get("dayPeriod").toUpperCase().replaceAll(".", "");
-  console.log(dayPeriod)
 
   return `${hour}:${minute} ${dayPeriod}, ${month} ${day}`;
 };
