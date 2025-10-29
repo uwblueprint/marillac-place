@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
+import { GraphQLResolveInfo } from "graphql";
 
 type ResolverFunction = (
   parent: unknown,
   args: Record<string, unknown>,
   context: { req: { headers: { authorization?: string } } },
-  info: unknown
+  info: GraphQLResolveInfo
 ) => Promise<unknown> | unknown;
 
 interface JWTPayload {
@@ -18,7 +19,7 @@ function verifyRole(allowedRoles: string[]) {
     parent: unknown,
     args: Record<string, unknown>,
     context: { req: { headers: { authorization?: string } } },
-    info: unknown
+    info: GraphQLResolveInfo
   ) {
     const authHeader = context.req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer")) {

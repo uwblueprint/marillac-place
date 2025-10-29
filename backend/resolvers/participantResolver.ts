@@ -1,4 +1,4 @@
-import { Participant, PrismaClient } from "@prisma/client";
+import { Participant, Prisma, PrismaClient } from "@prisma/client";
 import { getToday } from "../utils/formatDateTime";
 import { checkAndRecordGoalReached } from "../utils/checkGoalReached";
 
