@@ -265,3 +265,13 @@ model GoalHistory {
 
   @@map("goal_history")
 }
+
+model ReportRecipient {
+  report_recipient_id Int @id @default(autoincrement())
+  email String
+  weekly Boolean
+  monthly Boolean
+  last_report_sent String?
+
+  @@map("report_recipient")
+}
