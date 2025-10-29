@@ -7,19 +7,21 @@ const resolvers = gql`
     getParticipantByRoom(room_number: Int!): Participant
     getParticipantsByRooms(room_numbers: [Int!]!): [Participant]
     getParticipantById(participantId: Int!): Participant
+    getGoalHistoryByParticipant(
+      participant_id: Int!
+      start_date: String
+      end_date: String
+    ): [GoalHistory!]!
     getNotes: [Note]
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
-    getAnnouncementsByParticipantIdAndDate(
-      participant_id: Int!
-      start_date: String!
-      end_date: String!
-    ): [Announcement]
+    getAnnouncementsByParticipantId(participant_id: Int!): [Announcement]
     getAssignedTasks(participant_id: Int!): GetAssignedTaskResponse!
     getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
+    getParticipantAnnouncements(participantId: Int!, filter: AnnouncementFilter = ALL): [UserAnnouncement!]!
     getAssignedTasksByParticipantIdAndDate(
       participantId: Int!
       date: String!
@@ -67,6 +69,12 @@ const resolvers = gql`
       message: String
     ): Boolean
     deleteAnnouncement(announcement_id: Int!): Boolean
+    updatePinReadAnnouncement(
+    announcement_id: Int!
+    participant_id: Int!
+    pinned: Boolean
+    read: Boolean
+    ): Boolean
     createTask(
       type: TaskType!
       name: String!
@@ -142,6 +150,14 @@ const resolvers = gql`
       system_badge_criteria: String
     ): Boolean
     updateBadgeStatus(badge_id: Int!, is_active: Boolean!): Boolean
+    setMarillacBucksGoal(
+      participant_id: Int!
+      goal_value: Int!
+    ): Boolean
+    updateMarillacBucksGoal(
+      participant_id: Int!
+      new_goal_value: Int!
+    ): Boolean
   }
 `;
 

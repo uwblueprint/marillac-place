@@ -54,6 +54,13 @@ const enums = gql`
     EXCUSED
   }
 
+  enum AnnouncementFilter {
+    ALL
+    UNREAD
+    PINNED
+    IMPORTANT
+  }
+    
   enum Icon {
     FIVE_STAR
     FOUR_STAR
@@ -68,6 +75,11 @@ const enums = gql`
     DIAMOND
     PENCIL
     TOOL
+  }
+
+  enum GoalAction {
+    SET
+    REACHED
   }
 `;
 

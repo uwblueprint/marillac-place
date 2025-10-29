@@ -1,18 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Tabs,
-  TabList,
-  Tab,
-  Box,
-  Button,
-  Flex,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  Text,
-} from "@chakra-ui/react";
+import { Tabs, TabList, Tab, Box, Flex, Text } from "@chakra-ui/react";
 import * as ROUTES from "../../../constants/routes";
 import SimpleButton from "../buttons/SimpleButton";
 import ModalContainer from "../form/ModalContainer";
@@ -82,6 +70,7 @@ export default function SideBar() {
     { label: "Participants", route: ROUTES.ADMIN_PARTICIPANTS_PAGE },
     { label: "Task Library", route: ROUTES.ADMIN_TASKS_PAGE },
     { label: "Badge Library", route: ROUTES.ADMIN_BADGES_PAGE },
+    { label: "Reports", route: ROUTES.ADMIN_REPORTS_PAGE },
   ];
 
   const currentPage = pages.findIndex(
@@ -105,11 +94,7 @@ export default function SideBar() {
       alignItems="left"
     >
       <Flex width="100%" flexDir="column" gap="40px" alignItems="left">
-        <img
-          src="/assets/logo.png"
-          alt="Marillac Place Logo"
-          width="85%"
-        />
+        <img src="/assets/logo.png" alt="Marillac Place Logo" width="85%" />
 
         <Tabs
           index={currentPage}

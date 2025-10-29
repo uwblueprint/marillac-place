@@ -18,6 +18,7 @@ const models = gql`
     transactions: [Transaction!]!
     earned_badges: [EarnedBadge!]!
     participant_progress: ParticipantProgress
+    goal_history: [GoalHistory!]!
   }
 
   type Task {
@@ -140,6 +141,16 @@ const models = gql`
     total_earnings: Int!
     badges_achieved: [Int!]!
     task_types_tried: [String!]!
+
+    participant: Participant!
+  }
+
+  type GoalHistory {
+    goal_history_id: Int!
+    participant_id: Int!
+    goal_action: GoalAction!
+    goal_value: Int!
+    action_date: String!
 
     participant: Participant!
   }

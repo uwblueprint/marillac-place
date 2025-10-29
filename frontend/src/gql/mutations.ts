@@ -302,6 +302,18 @@ export const ASSIGN_CUSTOM_BADGE = gql`
     )
   }
 `;
+export const SET_MARILLAC_BUCKS_GOAL = gql`
+  mutation setMarillacBucksGoal($participant_id: Int!, $goal_value: Int!) {
+    setMarillacBucksGoal(participant_id: $participant_id, goal_value: $goal_value)
+  }
+`;
+
+export const UPDATE_MARILLAC_BUCKS_GOAL = gql`
+  mutation updateMarillacBucksGoal($participant_id: Int!, $new_goal_value: Int!) {
+    updateMarillacBucksGoal(participant_id: $participant_id, new_goal_value: $new_goal_value)
+  }
+`;
+
 export const UPDATE_ASSIGNED_TASK = gql`
   mutation UpdateAssignedTask(
     $id: Int!

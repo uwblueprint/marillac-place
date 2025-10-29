@@ -3,7 +3,7 @@ import { Divider, Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import WidgetContainer from "../../../common/WidgetContainer";
-import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID_AND_DATE } from "../../../../gql/queries";
+import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID } from "../../../../gql/queries";
 import { AnnouncementDisplayInfo } from "../../../../types/AnnouncementTypes";
 import { getNow, getRecentDate } from "../../../../utils/formatDateTime";
 import { ParticipantContext } from "../../../common/ParticipantContext";
@@ -18,11 +18,9 @@ export default function AnnouncementWidget() {
     data: announcementData,
     loading: announcementLoading,
     error: announcementError,
-  } = useQuery(GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID_AND_DATE, {
+  } = useQuery(GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID, {
     variables: {
       participant_id: participantId,
-      start_date: getRecentDate(7, true),
-      end_date: getNow(),
     },
   });
 
@@ -69,7 +67,7 @@ export default function AnnouncementWidget() {
         </Flex>
 
         <Flex flexDir="column" gap="12px">
-          {announcementData.getAnnouncementsByParticipantIdAndDate.map(
+          {announcementData.getAnnouncementsByParticipantId.map(
             (announcement: AnnouncementDisplayInfo) => (
               <Flex
                 width="100%"

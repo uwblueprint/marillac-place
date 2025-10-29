@@ -12,9 +12,10 @@ type TaskBarProps = {
   participantId: number | undefined;
   currentPageIndex: number;
   pages: Page[];
+  closeTaskBar: () => void;
 };
 
-export default function TaskBar({ participantId, currentPageIndex, pages }: TaskBarProps) {
+export default function TaskBar({ participantId, currentPageIndex, pages, closeTaskBar }: TaskBarProps) {
   const navigate = useNavigate();
   const [signOut, setSignOut] = useState(false);
 
@@ -60,7 +61,10 @@ export default function TaskBar({ participantId, currentPageIndex, pages }: Task
               fontSize="16px"
               fontFamily="Nunito"
               color="#000000"
-              onClick={() => navigate(page.route)}
+              onClick={() => {
+                navigate(page.route);
+                closeTaskBar();
+              }}
               _selected={{
                 fontWeight: 700,
                 color: "neutral.0",

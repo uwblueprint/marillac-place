@@ -51,6 +51,15 @@ export const GET_MARILLAC_BUCKS = gql`
   }
 `;
 
+export const GET_PARTICIPANT_GOAL = gql`
+  query getParticipantGoal($participantId: Int!) {
+      getParticipantById(participantId: $participantId) {
+          marillac_bucks
+	  marillac_bucks_goal
+      }
+  }
+`
+
 export const GET_PARTICIPANT_BY_ROOM = gql`
   query getParticipantByRoom($room_number: Int!) {
     getParticipantByRoom(room_number: $room_number) {
@@ -90,14 +99,12 @@ export const GET_PARTICIPANTS_BY_ROOMS = gql`
 `;
 
 export const GET_PARTICIPANT_BY_ID = gql`
-  query getParticipantById($participantId: String!) {
+  query getParticipantById($participantId: Int!) {
     getParticipantById(participantId: $participantId) {
-      participantId
-      roomNumber
-      arrival
-      departure
-      password
-      credit
+      participant_id
+      marillac_bucks
+      marillac_bucks_goal
+      room_number
     }
   }
 `;
@@ -142,21 +149,19 @@ export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
       message
       user_announcements {
         participant_id
+        read
+        pinned
       }
     }
   }
 `;
 
-export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID_AND_DATE = gql`
-  query getAnnouncementsByParticipantIdAndDate(
+export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID = gql`
+  query getAnnouncementsByParticipantId(
     $participant_id: Int!
-    $start_date: String!
-    $end_date: String!
   ) {
-    getAnnouncementsByParticipantIdAndDate(
+    getAnnouncementsByParticipantId(
       participant_id: $participant_id
-      start_date: $start_date
-      end_date: $end_date
     ) {
       announcement_id
       priority
@@ -223,6 +228,22 @@ export const GET_TASKS_BY_TYPE = gql`
       marillac_bucks_addition
       marillac_bucks_deduction
       comment
+    }
+  }
+`;
+
+export const GET_PARTICIPANT_FILTERED_ANNOUNCEMENTS = gql`
+  query getParticipantFilteredAnnouncements($participantId: Int!, $filter: AnnouncementFilter!) {
+    getParticipantAnnouncements(participantId: $participantId, filter: $filter) {
+      participant_id
+      announcement_id
+      read
+      pinned
+      announcement {
+        message
+        priority
+        creation_date
+      }
     }
   }
 `;

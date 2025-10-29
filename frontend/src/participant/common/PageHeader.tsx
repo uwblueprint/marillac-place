@@ -62,6 +62,7 @@ function ParticipantPageHeader() {
             participantId={participant?.id} 
             currentPageIndex={currentPageIndex} 
             pages={pages}
+            closeTaskBar={() => setShowTaskBar(false)}
           />
         </>
       )}
