@@ -51,11 +51,11 @@ jobs:
         run: npx prisma generate
 
       - name: Lint frontend
-        if: steps.changes.outputs.frontend == 'true'
+        if: always() &&steps.changes.outputs.frontend == 'true'
         working-directory: ./frontend
         run: yarn lint
 
       - name: Lint backend
-        if: steps.changes.outputs.backend == 'true'
+        if: always() &&steps.changes.outputs.backend == 'true'
         working-directory: ./backend
         run: yarn lint
