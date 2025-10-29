@@ -86,13 +86,11 @@ const participantResolver = {
       _parent: undefined,
       { participantId }: { participantId: number }
     ): Promise<Participant | null> => {
-      return await prisma.participant.findUnique(
-              {
-                  where: {
-                      participant_id: participantId,
-                  },
-              },
-          );
+      return prisma.participant.findUnique({
+        where: {
+          participant_id: participantId,
+        },
+      });
     },
     getGoalHistoryByParticipant: async (
       _parent: undefined,
@@ -106,14 +104,6 @@ const participantResolver = {
         end_date?: string;
       }
     ) => {
-      const where: any = { participant_id };
-
-      if (start_date || end_date) {
-        where.action_date = {};
-        if (start_date) where.action_date.gte = start_date;
-        if (end_date) where.action_date.lte = end_date;
-      }
-
       const result = await prisma.$queryRaw`
         SELECT * FROM goal_history
         WHERE participant_id = ${participant_id}
@@ -122,7 +112,9 @@ const participantResolver = {
               ? Prisma.sql`AND action_date >= ${start_date}`
               : Prisma.empty
           }
-          ${end_date ? Prisma.sql`AND action_date <= ${end_date}` : Prisma.empty}
+          ${
+            end_date ? Prisma.sql`AND action_date <= ${end_date}` : Prisma.empty
+          }
         ORDER BY action_date DESC
       `;
 
@@ -233,7 +225,7 @@ const participantResolver = {
       {
         participant_id,
         marillac_bucks,
-        reason,
+        reason: _reason,
       }: {
         participant_id: number;
         marillac_bucks: number;
