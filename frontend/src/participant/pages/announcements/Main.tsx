@@ -11,7 +11,6 @@ import { Priority } from "../../../types/AnnouncementTypes";
 import GreenButton from "../../common/GreenButton";
 import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";
 
-// Keep labels stable
 const FILTER_LABELS = ["ALL", "UNREAD", "PINNED", "IMPORTANT"] as const;
 
 export default function ParticipantsAnnouncementsPage() {
@@ -91,13 +90,15 @@ export default function ParticipantsAnnouncementsPage() {
             Most Recent
           </Text>
           {data.map((a: any, i: number) => {
-            const uaid = a.announcement_id;
+            const {
+              announcement_id: uaid,
+              read,
+              pinned,
+              announcement: { message, priority, creation_date: date },
+            } = a;
+
             const allRooms = false;
-            const message = isAll ? a.message : a.announcement.message
-            const importance = Object.values(Priority).indexOf(isAll ? a.priority : a.announcement.priority)
-            const read = isAll ? a.user_announcements.read : a.read
-            const pinned = isAll ? a.user_announcements.pinned : a.pinned
-            const date = isAll ? a.creation_date : a.announcement.creation_date
+            const importance = Object.values(Priority).indexOf(priority);
 
             return (
               <Flex key={i} cursor="pointer" onClick={() => {

@@ -4,7 +4,6 @@ import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import WidgetContainer from "../../../common/WidgetContainer";
 import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID } from "../../../../gql/queries";
-import { AnnouncementDisplayInfo } from "../../../../types/AnnouncementTypes";
 import { displayDate2, getNow, getRecentDate } from "../../../../utils/formatDateTime";
 import { ParticipantContext } from "../../../common/ParticipantContext";
 import * as ROUTES from "../../../../constants/routes";
@@ -43,7 +42,7 @@ export default function AnnouncementWidget() {
         </Flex>
 
         {announcementData.getAnnouncementsByParticipantId.map(
-          (announcement: AnnouncementDisplayInfo) => (
+          (announcement: any) => (
             <Flex
               width="100%"
               flexDir="column"
@@ -52,10 +51,10 @@ export default function AnnouncementWidget() {
             >
               <Divider borderColor="neutral.300" />
               <Text paddingTop="4px" textStyle="mobile.b1">
-                {announcement.message}
+                {announcement.announcement.message}
               </Text>
               <Text textStyle="mobile.b1" color="text.light.secondary">
-                {displayDate2(new Date(announcement.creation_date))}
+                {displayDate2(new Date(announcement.announcement.creation_date))}
               </Text>
             </Flex>
           )

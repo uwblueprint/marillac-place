@@ -308,6 +308,22 @@ export const SET_MARILLAC_BUCKS_GOAL = gql`
   }
 `;
 
+export const UPDATE_PIN_READ_ANNOUNCEMENTS = gql`
+  mutation UpdatePinReadAnnouncement(
+    $announcement_id: Int!
+    $participant_id: Int!
+    $pinned: Boolean
+    $read: Boolean
+  ) {
+    updatePinReadAnnouncement(
+      announcement_id: $announcement_id
+      participant_id: $participant_id
+      pinned: $pinned
+      read: $read
+    )
+  }
+`
+
 export const UPDATE_MARILLAC_BUCKS_GOAL = gql`
   mutation updateMarillacBucksGoal($participant_id: Int!, $new_goal_value: Int!) {
     updateMarillacBucksGoal(participant_id: $participant_id, new_goal_value: $new_goal_value)
