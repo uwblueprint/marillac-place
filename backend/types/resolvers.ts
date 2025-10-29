@@ -28,6 +28,7 @@ const resolvers = gql`
     ): [AssignedTask]
     hasCompletedAllRequiredTasks(participantId: Int!): Boolean
     getEarnedBadgesByParticipant(participantId: Int!): [EarnedBadge!]!
+    getWeeklyEarnings(participant_id: Int!): [Int!]!
   }
 
   type Mutation {
