@@ -96,30 +96,38 @@ const participantResolver = {
     },
     getGoalHistoryByParticipant: async (
       _parent: undefined,
-      { participant_id, start_date, end_date }: { 
-        participant_id: number; 
-        start_date?: string; 
-        end_date?: string 
+      {
+        participant_id,
+        start_date,
+        end_date,
+      }: {
+        participant_id: number;
+        start_date?: string;
+        end_date?: string;
       }
     ) => {
       const where: any = { participant_id };
-      
+
       if (start_date || end_date) {
         where.action_date = {};
         if (start_date) where.action_date.gte = start_date;
         if (end_date) where.action_date.lte = end_date;
       }
-      
+
       const result = await prisma.$queryRaw`
         SELECT * FROM goal_history
         WHERE participant_id = ${participant_id}
-          ${start_date ? Prisma.sql`AND action_date >= ${start_date}` : Prisma.empty}
+          ${
+            start_date
+              ? Prisma.sql`AND action_date >= ${start_date}`
+              : Prisma.empty
+          }
           ${end_date ? Prisma.sql`AND action_date <= ${end_date}` : Prisma.empty}
         ORDER BY action_date DESC
       `;
 
       return result;
-    }
+    },
   },
   Mutation: {
     createParticipant: async (
@@ -236,10 +244,10 @@ const participantResolver = {
         where: { participant_id },
         data: { marillac_bucks },
       });
-      
+
       // Check if this update caused the participant to reach their goal
       await checkAndRecordGoalReached(participant_id);
-      
+
       return true;
     },
     setMarillacBucksGoal: async (
@@ -254,26 +262,26 @@ const participantResolver = {
     ): Promise<boolean> => {
       console.log("🎯 Backend: setMarillacBucksGoal called");
       console.log("📋 Params:", { participant_id, goal_value });
-      
+
       if (goal_value <= 0) {
         console.error("❌ Invalid goal value:", goal_value);
         throw new Error("Goal value must be greater than 0");
       }
-      
+
       console.log("✅ Updating participant goal...");
       await prisma.participant.update({
         where: { participant_id },
         data: { marillac_bucks_goal: goal_value },
       });
       console.log("✅ Participant goal updated");
-      
+
       console.log("✅ Inserting into goal_history...");
       await prisma.$executeRaw`
         INSERT INTO goal_history (participant_id, goal_action, goal_value, action_date)
         VALUES (${participant_id}, 'SET', ${goal_value}, ${getToday()})
       `;
       console.log("✅ Goal history recorded");
-      
+
       console.log("🎯 Goal successfully set!");
       return true;
     },
@@ -290,25 +298,27 @@ const participantResolver = {
       const participant = await prisma.participant.findUnique({
         where: { participant_id },
       });
-      
+
       if (!participant) {
         throw new Error("Participant not found");
       }
-      
+
       if (new_goal_value <= participant.marillac_bucks) {
-        throw new Error("Goals must be greater than current Marillac Bucks Balance");
+        throw new Error(
+          "Goals must be greater than current Marillac Bucks Balance"
+        );
       }
-      
+
       await prisma.participant.update({
         where: { participant_id },
         data: { marillac_bucks_goal: new_goal_value },
       });
-      
+
       await prisma.$executeRaw`
         INSERT INTO goal_history (participant_id, goal_action, goal_value, action_date)
         VALUES (${participant_id}, 'SET', ${new_goal_value}, ${getToday()})
       `;
-      
+
       return true;
     },
   },

@@ -111,12 +111,7 @@ const announcementResolver = {
         filter,
       }: { participantId: number; filter: AnnouncementFilter }
     ) => {
-      const where: {
-        participant_id: number;
-        read?: boolean;
-        pinned?: boolean;
-        announcement?: { priority: { in: string[] } };
-      } = { participant_id: participantId };
+      const where: any = { participant_id: participantId };
 
       if (filter === "UNREAD") {
         where.read = false;
