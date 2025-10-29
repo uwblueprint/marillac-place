@@ -68,6 +68,10 @@ export const textStyles = {
       fontWeight: "600",
       fontSize: "12px",
     },
+    b0: {
+      fontWeight: "600",
+      fontSize: "14px",
+    },
     b1: {
       fontWeight: "400",
       fontSize: "14px",

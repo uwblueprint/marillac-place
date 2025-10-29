@@ -69,7 +69,7 @@ export default function ParticipantsAnnouncementsPage() {
         <Flex>No announcements.</Flex>
       ) : (
         <>
-          <Text textStyle="mobile.c1" color="text.light.secondary">
+          <Text textStyle="mobile.s1" color="text.light.secondary">
             Most Recent
           </Text>
           {data.map((a: any) => {

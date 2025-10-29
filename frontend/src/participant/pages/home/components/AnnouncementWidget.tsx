@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import WidgetContainer from "../../../common/WidgetContainer";
 import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID } from "../../../../gql/queries";
 import { AnnouncementDisplayInfo } from "../../../../types/AnnouncementTypes";
-import { getNow, getRecentDate } from "../../../../utils/formatDateTime";
+import { displayDate2, getNow, getRecentDate } from "../../../../utils/formatDateTime";
 import { ParticipantContext } from "../../../common/ParticipantContext";
 import * as ROUTES from "../../../../constants/routes";
 
@@ -26,30 +26,6 @@ export default function AnnouncementWidget() {
 
   if (announcementLoading) return <Text>Loading announcements.</Text>;
   if (announcementError) return <Text>Error fetching announcements.</Text>;
-
-  const formatDate = (date: Date) => {
-    const options: Intl.DateTimeFormatOptions = {
-      timeZone: "America/New_York",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-      month: "short",
-      day: "numeric",
-    };
-
-    const parts = new Intl.DateTimeFormat("en-CA", options).formatToParts(date);
-
-    const get = (type: string) =>
-      parts.find((p) => p.type === type)?.value || "";
-
-    const hour = get("hour");
-    const minute = get("minute");
-    const month = get("month");
-    const day = get("day");
-    const dayPeriod = get("dayPeriod").toLowerCase();
-
-    return `${hour}:${minute} ${dayPeriod}, ${month} ${day}`;
-  };
 
   return (
     <WidgetContainer>
@@ -79,7 +55,7 @@ export default function AnnouncementWidget() {
                 {announcement.message}
               </Text>
               <Text textStyle="mobile.b1" color="text.light.secondary">
-                {formatDate(new Date(announcement.creation_date))}
+                {displayDate2(new Date(announcement.creation_date))}
               </Text>
             </Flex>
           )
