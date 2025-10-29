@@ -8,7 +8,7 @@
     "build": "tsc",
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
-    "postinstall": "tsc",
+    "postinstall": "npx prisma generate && tsc",
     "prismaInitAndRun": "if [ \"$NODE_ENV\" = \"production\" ]; then npx prisma db push; else npx prisma migrate deploy; fi && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && nodemon -L",
     "start": "npx prisma generate && node build/server.js"
   },

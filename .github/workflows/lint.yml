@@ -45,6 +45,11 @@ jobs:
         if: steps.changes.outputs.frontend == 'true' || steps.changes.outputs.backend == 'true'
         run: yarn --cwd ./frontend --prefer-offline && yarn --cwd ./backend --prefer-offline
 
+      - name: Generate Prisma Client
+        if: steps.changes.outputs.backend == 'true'
+        working-directory: ./backend
+        run: npx prisma generate
+
       - name: Lint frontend
         if: steps.changes.outputs.frontend == 'true'
         working-directory: ./frontend
