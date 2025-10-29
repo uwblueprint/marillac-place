@@ -1,4 +1,4 @@
-import { PrismaClient, Announcement, Priority } from "@prisma/client";
+import { PrismaClient, Prisma, Announcement, Priority } from "@prisma/client";
 import { getNow } from "../utils/formatDateTime";
 
 const prisma = new PrismaClient();
@@ -111,19 +111,16 @@ const announcementResolver = {
         filter,
       }: { participantId: number; filter: AnnouncementFilter }
     ) => {
-      const where: {
-        participant_id: number;
-        read?: boolean;
-        pinned?: boolean;
-        announcement?: { priority: { in: string[] } };
-      } = { participant_id: participantId };
+      const where: Prisma.UserAnnouncementWhereInput = {
+        participant_id: participantId,
+      };
 
       if (filter === "UNREAD") {
         where.read = false;
       } else if (filter === "PINNED") {
         where.pinned = true;
       } else if (filter === "IMPORTANT") {
-        where.announcement = { priority: { in: ["HIGH", "CRITICAL"] } };
+        where.announcement = { priority: { in: [Priority.HIGH, Priority.CRITICAL] } };
       }
 
       return prisma.userAnnouncement.findMany({
