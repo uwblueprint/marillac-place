@@ -120,7 +120,9 @@ const announcementResolver = {
       } else if (filter === "PINNED") {
         where.pinned = true;
       } else if (filter === "IMPORTANT") {
-        where.announcement = { priority: { in: [Priority.HIGH, Priority.CRITICAL] } };
+        where.announcement = {
+          priority: { in: [Priority.HIGH, Priority.CRITICAL] },
+        };
       }
 
       return prisma.userAnnouncement.findMany({

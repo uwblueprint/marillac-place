@@ -4,11 +4,6 @@ import { checkAndRecordGoalReached } from "../utils/checkGoalReached";
 
 const prisma = new PrismaClient();
 
-enum GoalAction {
-  SET = "SET",
-  REACHED = "REACHED",
-}
-
 const participantResolver = {
   Query: {
     getCurrentParticipants: async (): Promise<Participant[]> => {
@@ -225,7 +220,6 @@ const participantResolver = {
       {
         participant_id,
         marillac_bucks,
-        reason: _reason,
       }: {
         participant_id: number;
         marillac_bucks: number;
