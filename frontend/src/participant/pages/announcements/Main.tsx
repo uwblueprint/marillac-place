@@ -9,13 +9,24 @@ import {
 import { ParticipantContext } from "../../common/ParticipantContext";
 import { Priority } from "../../../types/AnnouncementTypes";
 import GreenButton from "../../common/GreenButton";
+import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";
 
-// Keep labels stable
 const FILTER_LABELS = ["ALL", "UNREAD", "PINNED", "IMPORTANT"] as const;
 
 export default function ParticipantsAnnouncementsPage() {
   const participant = useContext(ParticipantContext);
   const participantId = participant?.id;
+
+  const [expandedView, setExpandedView] = useState(false);
+  const [selected, setSelected] = useState({
+    uaid: -1,
+    allRooms: false,
+    message: "",
+    importance: -1,
+    read: false, 
+    pinned: false, 
+    date: ""
+  })
 
   const [filter, setFilter] = useState(0);
   const isAll = filter === 0;
@@ -56,6 +67,12 @@ export default function ParticipantsAnnouncementsPage() {
   if (loading) return <Text>Loading announcements…</Text>;
   if (error) return <Text color="red.500">Error loading announcements.</Text>;
 
+  if (expandedView && selected) {
+    return (
+      <AnnouncementsExpandedView announcement={selected} />
+    )
+  }
+
   return (
     <>
       <Flex w="100%" alignItems="center" justifyContent="center" gap="8px">
@@ -69,20 +86,43 @@ export default function ParticipantsAnnouncementsPage() {
         <Flex>No announcements.</Flex>
       ) : (
         <>
-          <Text textStyle="mobile.c1" color="text.light.secondary">
+          <Text textStyle="mobile.s1" color="text.light.secondary">
             Most Recent
           </Text>
-          {data.map((a: any) => {
+          {data.map((a: any, i: number) => {
+            const {
+              announcement_id: uaid,
+              read,
+              pinned,
+              announcement: { message, priority, creation_date: date },
+            } = a;
+
+            const allRooms = false;
+            const importance = Object.values(Priority).indexOf(priority);
+
             return (
-              <ParticipantAnnouncementCard
-                key={a.announcement_id}
-                allRooms={false}
-                message={isAll ? a.message : a.announcement.message}
-                importance={Object.values(Priority).indexOf(isAll ? a.priority : a.announcement.priority)}
-                hasRead={isAll ? a.user_announcements.read : a.read}
-                isPinned={isAll ? a.user_announcements.pinned : a.pinned}
-                time={isAll ? a.creation_date : a.announcement.creation_date}
-              />
+              <Flex key={i} cursor="pointer" onClick={() => {
+                setSelected({
+                  uaid,
+                  allRooms,
+                  message, 
+                  importance, 
+                  read, 
+                  pinned, 
+                  date
+                })
+                setExpandedView(true)
+              }}>
+                <ParticipantAnnouncementCard
+                  userAnnouncementId={uaid}
+                  allRooms={allRooms}
+                  message={message}
+                  importance={importance}
+                  hasRead={read}
+                  isPinned={pinned}
+                  time={date}
+                />
+              </Flex>
             );
           })}
         </>

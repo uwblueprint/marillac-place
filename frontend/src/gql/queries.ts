@@ -164,11 +164,13 @@ export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID = gql`
       participant_id: $participant_id
     ) {
       announcement_id
-      priority
-      creation_date
-      message
-      user_announcements {
-        participant_id
+      participant_id
+      read
+      pinned
+      announcement {
+        priority
+        creation_date
+        message
       }
     }
   }

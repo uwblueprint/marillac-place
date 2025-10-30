@@ -216,3 +216,27 @@ export function formatTimeRange(start: string, end: string): string {
 
   return `${formattedStart} - ${formattedEnd}`;
 }
+
+export const displayDate2 = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: "America/New_York",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    month: "short",
+    day: "numeric",
+  };
+
+  const parts = new Intl.DateTimeFormat("en-CA", options).formatToParts(date);
+
+  const get = (type: string) =>
+    parts.find((p) => p.type === type)?.value || "";
+
+  const hour = get("hour");
+  const minute = get("minute");
+  const month = get("month");
+  const day = get("day");
+  const dayPeriod = get("dayPeriod").toUpperCase().replaceAll(".", "");
+
+  return `${hour}:${minute} ${dayPeriod}, ${month} ${day}`;
+};
