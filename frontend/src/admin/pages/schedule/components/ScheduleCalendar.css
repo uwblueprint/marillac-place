@@ -143,7 +143,9 @@
 }
 
 .rbc-row-segment * {
-  border: none !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
 }
 
 .rbc-row-content {
@@ -226,10 +228,6 @@
   padding-right: 8px;
 }
 
-.rbc-events-container {
-  border-left: 1px solid var(--border-color);
-}
-
 /* Remove all horizontal grid lines */
 .rbc-timeslot-group,
 .rbc-time-slot,
@@ -248,99 +246,31 @@
   background-color: transparent !important;
 }
 
-/* Ensure today's date text is white when it has orange background */
-.rbc-header [style*="background"] [style*="color: white"] {
-  color: white !important;
-}
-
-/* Alternative approach - target any orange background */
-.rbc-header [style*="background: rgb(237, 137, 54)"] *,
-.rbc-header [style*="background: rgb(245, 130, 32)"] *,
-.rbc-header [style*="background: orange"] * {
-  color: white !important;
-}
-
 /* Base event styling */
 .rbc-event {
+  background-color: transparent !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
   border-radius: 6px !important;
-  border: none !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 6px !important;
-}
-
-.rbc-event-label {
-  font-size: 10px;
-  font-weight: 400;
-}
-
-/* All-day events base styling */
-.rbc-event-allday,
-.rbc-event.rbc-event-allday {
-  height: auto !important;
-  min-height: 20px !important;
-  margin: 1px 0 !important;
-  padding: 2px 6px !important;
-  border-radius: 4px !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  white-space: normal !important;
   overflow: visible !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  position: relative !important;
-  z-index: 1 !important;
+  padding: 0 !important;
 }
 
-/* Status-specific colors for all events (both timed and all-day) */
-.rbc-event.status-complete,
-.rbc-event-allday.status-complete {
-  background-color: var(--status-complete-bg) !important;
-  color: var(--status-complete-text) !important;
-  border-left: 4px solid var(--status-complete) !important;
+/* Override React Big Calendar's default 1px border on day slot events */
+.rbc-day-slot .rbc-event,
+.rbc-day-slot .rbc-background-event {
+  border: none !important;
 }
 
-.rbc-event.status-assigned,
-.rbc-event-allday.status-assigned {
-  background-color: var(--status-assigned-bg) !important;
-  color: var(--status-assigned-text) !important;
-  border-left: 4px solid var(--status-assigned) !important;
+/* Control right gap for events container based on participant/admin view */
+#react-big-calendar-container[data-participant="true"] .rbc-events-container {
+  margin-right: 0px !important;
 }
 
-.rbc-event.status-incomplete,
-.rbc-event-allday.status-incomplete {
-  background-color: var(--status-incomplete-bg) !important;
-  color: var(--status-incomplete-text) !important;
-  border-left: 4px solid var(--status-incomplete) !important;
-}
-
-.rbc-event.status-excused,
-.rbc-event-allday.status-excused {
-  background-color: var(--status-excused-bg) !important;
-  color: var(--status-excused-text) !important;
-  border-left: 4px solid var(--status-excused) !important;
-}
-
-/* All-day specific status colors (for cases where [data-allday="true"] is used) */
-.rbc-event[data-allday="true"].status-complete {
-  background-color: var(--status-complete) !important;
-  color: white !important;
-}
-
-.rbc-event[data-allday="true"].status-assigned {
-  background-color: var(--status-assigned) !important;
-  color: white !important;
-}
-
-.rbc-event[data-allday="true"].status-incomplete {
-  background-color: var(--status-incomplete) !important;
-  color: white !important;
-}
-
-.rbc-event[data-allday="true"].status-excused {
-  background-color: var(--status-excused) !important;
-  color: white !important;
+#react-big-calendar-container[data-participant="false"] .rbc-events-container {
+  margin-right: 2px !important;
 }
 
 /* Event content text wrapping */
@@ -379,10 +309,6 @@
   width: 8px;
 }
 
-.rbc-time-content::-webkit-scrollbar-track {
-  background-color: var(--bg-light);
-}
-
 .rbc-time-content::-webkit-scrollbar-thumb {
   background-color: #cbd5e0;
   border-radius: 4px;
@@ -390,26 +316,4 @@
 
 .rbc-time-content::-webkit-scrollbar-thumb:hover {
   background-color: #a0aec0;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .rbc-toolbar {
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .rbc-toolbar-label {
-    order: -1;
-    margin-bottom: 8px;
-  }
-  
-  .rbc-btn-group {
-    justify-content: center;
-  }
-  
-  .rbc-event {
-    font-size: 10px;
-    padding: 1px 4px !important;
-  }
 } 

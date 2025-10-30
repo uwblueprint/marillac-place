@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createContext, useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import * as ROUTES from "../../constants/routes";
 import { isParticipant, getParticipantId } from "../../utils/checkRole";
@@ -12,9 +12,14 @@ type ParticipantRouteProps = {
 };
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
+  const location = useLocation();
   const [authorized, setAuthorized] = useState(false);
   const [participantId, setParticipantId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Pages that need full-width layout (no padding on the wrapper)
+  const isFullWidthPage =
+    location.pathname === ROUTES.PARTICIPANTS_SCHEDULE_PAGE;
 
   useEffect(() => {
     const checkRole = async () => {
@@ -52,7 +57,13 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column">
         <ParticipantContext.Provider value={{ id: participantId }}>
           <ParticipantPageHeader />
-          <Flex flexDir="column" width="100%" padding="20px" overflow="scroll" gap="8px">
+          <Flex
+            flexDir="column"
+            width="100%"
+            padding={isFullWidthPage ? "0" : "20px"}
+            overflow="scroll"
+            gap={isFullWidthPage ? "0" : "8px"}
+          >
             {children}
           </Flex>
         </ParticipantContext.Provider>

@@ -20,7 +20,7 @@ import {
   getTaskStatusColor,
   getTaskStatusBgColor,
   getTaskStatusText,
-  formatEventTime,
+  formatTimeRange,
 } from "../../../../utils/scheduleUtils";
 import { TaskType } from "../../../../types/task";
 
@@ -73,7 +73,9 @@ export default function TaskTableTop({ tasks, onTaskSelect }: TaskTableProps) {
               >
                 <Td position="relative">
                   <Text textStyle="web.b3" color="#000000">
-                    {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
+                    {event.task_type === TaskType.INDIVIDUAL_GOAL
+                      ? event.goalName
+                      : event.title}
                   </Text>
                   {event.comment && (
                     <Box
@@ -108,7 +110,7 @@ export default function TaskTableTop({ tasks, onTaskSelect }: TaskTableProps) {
                   <Text textStyle="web.b3" color="#000000">
                     {event.allDay
                       ? "Anytime"
-                      : formatEventTime(event.start, event.end)}
+                      : formatTimeRange(event.start, event.end)}
                   </Text>
                 </Td>
                 <Td>

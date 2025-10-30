@@ -20,7 +20,7 @@ import {
   getTaskStatusColor,
   getTaskStatusBgColor,
   getTaskStatusText,
-  formatEventTime,
+  formatTimeRange,
 } from "../../../../utils/scheduleUtils";
 import { TaskType } from "../../../../types/task";
 
@@ -72,7 +72,9 @@ export default function TaskTableBottom({
               >
                 <Td position="relative">
                   <Text textStyle="web.b3" color="#000000">
-                    {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
+                    {event.task_type === TaskType.INDIVIDUAL_GOAL
+                      ? event.goalName
+                      : event.title}
                   </Text>
                   {event.comment && (
                     <Box

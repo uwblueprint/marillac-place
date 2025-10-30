@@ -47,10 +47,8 @@ export interface CalendarEvent {
   allDay?: boolean;
   task_status: TaskStatus;
   task_type: TaskType;
-  goalName: string;
-  goalDescription: string;
   marillacBucksAddition: number;
-  marillac_bucks_deduction: number;
+  marillacBucksDeduction: number;
   comment?: string;
 }
 

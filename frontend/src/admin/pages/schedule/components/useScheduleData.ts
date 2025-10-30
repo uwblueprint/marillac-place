@@ -1,95 +1,247 @@
-import { useState, useMemo, useEffect } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useState, useMemo } from "react";
+import moment from "moment";
 import {
   ParticipantData,
   TaskStatus,
   TaskType,
   CalendarEvent,
-  AssignedTask,
 } from "./ScheduleTypes";
-import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/queries";
-import { formatDateFromDateString, getWeekBounds } from "../../../../utils/formatDateTime";
 
-export const useScheduleData = (selectedRoom: number) => {
-  const [participantId, setParticipantId] = useState<number | null>(null);
-  const [marillacBucks, setMarillacBucks] = useState<number>(0);
-  const [specificTasks, setSpecificTasks] = useState<CalendarEvent[]>([])
-  const [anytimeTasks, setAnytimeTasks] = useState<CalendarEvent[]>([])
-  const [anydayTasks, setAnydayTasks] = useState<CalendarEvent[]>([])
+export const useScheduleData = (selectedRoom: number, currentDate: Date) => {
+  // Mock data for now - this will be replaced with actual API calls
+  const participantData: ParticipantData = {
+    participant_id: 1,
+    room_number: selectedRoom,
+    marillac_bucks: 150,
+    assigned_tasks: [],
+  };
 
-  const [fetchData, { loading, error, data }] = useLazyQuery(GET_PARTICIPANT_BY_ROOM);
+  const currentWeekStart = moment(currentDate).startOf("week");
 
-  function groupTasks(tasks: AssignedTask[]) {
-    const { weekStart, weekEnd } = getWeekBounds();
+  // Mock events for testing
+  const regularEvents: CalendarEvent[] = [
+    {
+      id: 1,
+      title: "Morning Exercise",
+      start: moment(currentWeekStart).hour(8).minute(0).toDate(),
+      end: moment(currentWeekStart).hour(9).minute(0).toDate(),
+      allDay: false,
+      task_status: TaskStatus.ASSIGNED,
+      task_type: TaskType.REQUIRED,
+      marillacBucksAddition: 10,
+      marillacBucksDeduction: 0,
+      comment: undefined,
+    },
+    {
+      id: 2,
+      title: "Study Session",
+      start: moment(currentWeekStart)
+        .add(1, "days")
+        .hour(14)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(1, "days").hour(16).minute(0).toDate(),
+      allDay: false,
+      task_status: TaskStatus.COMPLETE,
+      task_type: TaskType.REQUIRED,
+      marillacBucksAddition: 15,
+      marillacBucksDeduction: 0,
+      comment: "Great job completing early!",
+    },
+    {
+      id: 3,
+      title: "Group Therapy",
+      start: moment(currentWeekStart)
+        .add(2, "days")
+        .hour(10)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(2, "days").hour(11).minute(30).toDate(),
+      allDay: false,
+      task_status: TaskStatus.INCOMPLETE,
+      task_type: TaskType.REQUIRED,
+      marillacBucksAddition: 25,
+      marillacBucksDeduction: 5,
+      comment: undefined,
+    },
+    {
+      id: 4,
+      title: "Art Workshop",
+      start: moment(currentWeekStart)
+        .add(3, "days")
+        .hour(15)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(3, "days").hour(17).minute(0).toDate(),
+      allDay: false,
+      task_status: TaskStatus.ASSIGNED,
+      task_type: TaskType.REQUIRED,
+      marillacBucksAddition: 15,
+      marillacBucksDeduction: 0,
+      comment: undefined,
+    },
+    {
+      id: 5,
+      title: "Personal Goal: Learn Spanish",
+      start: moment(currentWeekStart)
+        .add(4, "days")
+        .hour(19)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(4, "days").hour(20).minute(30).toDate(),
+      allDay: false,
+      task_status: TaskStatus.ASSIGNED,
+      task_type: TaskType.INDIVIDUAL_GOAL,
+      marillacBucksAddition: 30,
+      marillacBucksDeduction: 0,
+      comment: undefined,
+    },
+    {
+      id: 6,
+      title: "Meal Planning",
+      start: moment(currentWeekStart)
+        .add(5, "days")
+        .hour(16)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(5, "days").hour(17).minute(30).toDate(),
+      allDay: false,
+      task_status: TaskStatus.COMPLETE,
+      task_type: TaskType.OPTIONAL,
+      marillacBucksAddition: 10,
+      marillacBucksDeduction: 0,
+      comment: "Well planned meals for the week!",
+    },
+    {
+      id: 7,
+      title: "Life Skills Workshop",
+      start: moment(currentWeekStart)
+        .add(6, "days")
+        .hour(13)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(6, "days").hour(15).minute(0).toDate(),
+      allDay: false,
+      task_status: TaskStatus.COMPLETE,
+      task_type: TaskType.OPTIONAL,
+      marillacBucksAddition: 40,
+      marillacBucksDeduction: 0,
+      comment: "Excellent participation throughout the workshop!",
+    },
+    {
+      id: 8,
+      title: "Personal Goal: Reading",
+      start: moment(currentWeekStart)
+        .add(1, "days")
+        .hour(20)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(1, "days").hour(21).minute(0).toDate(),
+      allDay: false,
+      task_status: TaskStatus.EXCUSED,
+      task_type: TaskType.INDIVIDUAL_GOAL,
+      marillacBucksAddition: 20,
+      marillacBucksDeduction: 0,
+      comment: "Cancelled due to scheduling conflict",
+    },
+    {
+      id: 9,
+      title: "Community Service",
+      start: moment(currentWeekStart).add(3, "days").hour(9).minute(0).toDate(),
+      end: moment(currentWeekStart).add(3, "days").hour(12).minute(0).toDate(),
+      allDay: false,
+      task_status: TaskStatus.ASSIGNED,
+      task_type: TaskType.REQUIRED,
+      marillacBucksAddition: 35,
+      marillacBucksDeduction: 0,
+      comment: undefined,
+    },
+  ];
 
-    const specific: CalendarEvent[] = [];
-    const anytime: CalendarEvent[] = [];
-    const anyday: CalendarEvent[] = [];
-
-    for (const task of tasks) {
-      const start = formatDateFromDateString(task.start_date);
-      const end = formatDateFromDateString(task.end_date);
-
-      if (task.start_date >= weekStart || task.start_date <= weekEnd) {
-        const isSameDay = start.toDateString() === end.toDateString();
-        const isDayStart = start.getHours() === 0 && start.getMinutes() === 0;
-        const isDayEnd = end.getHours() === 23 && end.getMinutes() === 59;
-
-        const event: CalendarEvent = {
-          id: task.assigned_task_id,
-          title: task.task_name,
-          start,
-          end,
-          allDay: !isSameDay || (isDayStart && isDayEnd),
-          task_status: task.task_status,
-          task_type: task.task_type,
-          goalName: task.goal_name ?? "",
-          goalDescription: task.goal_description ?? "",
-          marillacBucksAddition: task.marillac_bucks_addition,
-          marillac_bucks_deduction: task.marillac_bucks_deduction,
-          comment: task.comment,
-        };
-
-        if (!isSameDay) {
-          anyday.push(event);
-        } else if (isDayStart && isDayEnd) {
-          anytime.push(event);
-        } else {
-          specific.push(event);
-        }
-      }
-    }
-
-    setSpecificTasks(specific)
-    setAnytimeTasks(anytime)
-    setAnydayTasks(anyday)
-  }
-
-  useEffect(() => {
-    setParticipantId(null)
-    setMarillacBucks(0)
-    setSpecificTasks([])
-    setAnytimeTasks([])
-    setAnydayTasks([])
-    fetchData({ variables: { room_number: selectedRoom } })
-  }, [selectedRoom, fetchData]);
-
-  useEffect(() => {
-    if (!loading && !error && data && data.getParticipantByRoom) {
-      const participant = data.getParticipantByRoom
-      setParticipantId(participant.participant_id)
-      setMarillacBucks(participant.marillac_bucks)
-      groupTasks(participant.assigned_tasks)
-    }
-  }, [data, loading, error]);
+  const allDayEvents: CalendarEvent[] = [
+    {
+      id: 10,
+      title: "Weekly Reflection",
+      start: moment(currentWeekStart).hour(0).minute(0).toDate(),
+      end: moment(currentWeekStart).hour(23).minute(59).toDate(),
+      allDay: true,
+      task_status: TaskStatus.ASSIGNED,
+      task_type: TaskType.REQUIRED,
+      marillacBucksAddition: 20,
+      marillacBucksDeduction: 0,
+      comment: undefined,
+    },
+    {
+      id: 11,
+      title: "Skills Assessment",
+      start: moment(currentWeekStart)
+        .add(1, "days")
+        .hour(10)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(1, "days").hour(11).minute(30).toDate(),
+      allDay: false,
+      task_status: TaskStatus.COMPLETE,
+      task_type: TaskType.REQUIRED,
+      marillacBucksAddition: 30,
+      marillacBucksDeduction: 0,
+      comment: "Excellent progress!",
+    },
+    {
+      id: 12,
+      title: "Skills Assessment",
+      start: moment(currentWeekStart)
+        .add(2, "days")
+        .hour(10)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(2, "days").hour(11).minute(30).toDate(),
+      allDay: false,
+      task_status: TaskStatus.COMPLETE,
+      task_type: TaskType.REQUIRED,
+      marillacBucksAddition: 30,
+      marillacBucksDeduction: 0,
+      comment: "Excellent progress!",
+    },
+    {
+      id: 13,
+      title: "Volunteer Work",
+      start: moment(currentWeekStart)
+        .add(4, "days")
+        .hour(14)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(4, "days").hour(16).minute(0).toDate(),
+      allDay: false,
+      task_status: TaskStatus.ASSIGNED,
+      task_type: TaskType.OPTIONAL,
+      marillacBucksAddition: 15,
+      marillacBucksDeduction: 0,
+      comment: undefined,
+    },
+    {
+      id: 14,
+      title: "Personal Goal: Fitness",
+      start: moment(currentWeekStart)
+        .add(5, "days")
+        .hour(18)
+        .minute(0)
+        .toDate(),
+      end: moment(currentWeekStart).add(5, "days").hour(19).minute(30).toDate(),
+      allDay: false,
+      task_status: TaskStatus.EXCUSED,
+      task_type: TaskType.INDIVIDUAL_GOAL,
+      marillacBucksAddition: 25,
+      marillacBucksDeduction: 0,
+      comment: "Rescheduled due to medical appointment",
+    },
+  ];
 
   return {
-    loading,
-    error,
-    participantId,
-    marillacBucks,
-    specificTasks,
-    anytimeTasks,
-    anydayTasks,
+    loading: false,
+    error: null,
+    participantData,
+    regularEvents,
+    allDayEvents,
   };
 };

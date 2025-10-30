@@ -124,11 +124,24 @@ export const getDayNameMapping = (): { [key: string]: string } => ({
   SAT: "SAT",
 });
 
-// Format event time for calendar display
-export const formatEventTime = (start: Date, end: Date): string => {
-  const startTime = moment(start).format("h:mm A");
-  const endTime = moment(end).format("h:mm A");
+// Format a single time for display
+export const formatTime = (
+  date: Date,
+  options?: { showMeridiem?: boolean }
+): string => {
+  const showMeridiem = options?.showMeridiem !== false;
+  const fmt = showMeridiem ? "h:mm A" : "h:mm";
+  return moment(date).format(fmt);
+};
 
+// Format an event time range using single-time formatter
+export const formatTimeRange = (
+  start: Date,
+  end: Date,
+  showMeridiem = true
+): string => {
+  const startTime = formatTime(start, { showMeridiem });
+  const endTime = formatTime(end, { showMeridiem });
   if (startTime === endTime) {
     return startTime;
   }

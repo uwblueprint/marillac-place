@@ -101,3 +101,41 @@ export const CommentIcon: React.FC<IconProps> = ({
     />
   </svg>
 );
+
+export const ChevronLeftIcon: React.FC<IconProps> = ({
+  size = 8,
+  color = "#0C727E",
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size * 1.5}
+    viewBox="0 0 8 12"
+    fill="none"
+  >
+    <path
+      d="M6.41309 0.706665L1.41309 5.71293L6.41309 10.7192"
+      stroke={color}
+      strokeWidth="2"
+    />
+  </svg>
+);
+
+export const ChevronRightIcon: React.FC<IconProps> = ({
+  size = 8,
+  color = "#0C727E",
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size * 1.5}
+    viewBox="0 0 8 12"
+    fill="none"
+  >
+    <path
+      d="M0.708008 0.706665L5.70801 5.71293L0.708008 10.7192"
+      stroke={color}
+      strokeWidth="2"
+    />
+  </svg>
+);

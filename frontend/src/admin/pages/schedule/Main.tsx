@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Flex,
-  Button,
-  Text,
-  Spinner,
-  Box,
-  HStack,
-} from "@chakra-ui/react";
+import { Flex, Button, Text, Spinner, Box, HStack } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import moment from "moment";
 import { ListIcon, CalendarIcon } from "./components/CustomIcons";
@@ -22,6 +15,7 @@ import "./components/ScheduleCalendar.css";
 import OrangeButton from "../../common/buttons/OrangeButton";
 import SimpleButton from "../../common/buttons/SimpleButton";
 import AssignTaskModal from "./components/AssignTaskModal";
+import WeekNavigation from "./components/WeekNavigation";
 
 export default function AdminSchedulePage() {
   const [editMarillacBucks, setEditMarillacBucks] = useState(false);
@@ -47,15 +41,8 @@ export default function AdminSchedulePage() {
     localStorage.setItem("scheduleView", currentView);
   }, [currentView]);
 
-  const { 
-    loading,
-    error, 
-    participantId, 
-    marillacBucks, 
-    specificTasks,
-    anydayTasks,
-    anytimeTasks,
-  } = useScheduleData(selectedRoom);
+  const { loading, error, participantData, regularEvents, allDayEvents } =
+    useScheduleData(selectedRoom, currentDate);
 
   return (
     <Flex direction="column" h="100%" w="100%">
@@ -65,15 +52,15 @@ export default function AdminSchedulePage() {
       />
 
       <Box w="100%" flex={1} display="flex" flexDirection="column">
-        { loading ? (
+        {loading ? (
           <Flex justify="center" align="center" h="400px">
             <Spinner color="primary.700" size="lg" />
           </Flex>
         ) : error ? (
           <Flex justify="center" align="center" h="400px">
-            <Text color="red.500">{error.message}</Text>
+            <Text color="red.500">An error occurred</Text>
           </Flex>
-        ) : !participantId ? (
+        ) : !participantData ? (
           <Flex
             w="100%"
             h="80%"
@@ -102,11 +89,9 @@ export default function AdminSchedulePage() {
                   {moment(currentDate).format("MMMM YYYY").toUpperCase()}
                 </Text>
 
-                <SimpleButton
-                  text={getCurrentWeekRange(currentDate)}
-                  action={() => {}}
-                  is_active
-                  text_color="#0C727E"
+                <WeekNavigation
+                  currentDate={currentDate}
+                  onNavigate={setCurrentDate}
                 />
               </Flex>
 
@@ -122,7 +107,7 @@ export default function AdminSchedulePage() {
                 onClick={() => setEditMarillacBucks(true)}
               >
                 <Text textStyle="web.b2" fontWeight={700} color="inherit">
-                  {marillacBucks} M-Bucks
+                  {participantData.marillac_bucks} M-Bucks
                 </Text>
                 <EditIcon
                   style={{
@@ -188,23 +173,18 @@ export default function AdminSchedulePage() {
             </Flex>
 
             {/* Content based on current view */}
-            <Box
-              flex={1}
-              display="flex"
-              flexDirection="column"
-              minH={0}
-            >
+            <Box flex={1} display="flex" flexDirection="column" minH={0}>
               {currentView === ScheduleView.LIST ? (
                 <ScheduleListView
-                  specificTasks={specificTasks}
-                  anytimeTasks={anytimeTasks}
-                  anydayTasks={anydayTasks}
+                  specificTasks={regularEvents}
+                  anytimeTasks={allDayEvents}
+                  anydayTasks={[]}
                   onTaskSelect={setSelectedTask}
                 />
               ) : (
                 <ScheduleCalendar
-                  events={specificTasks}
-                  allDayEvents={[...anydayTasks, ...anytimeTasks]}
+                  events={regularEvents}
+                  allDayEvents={allDayEvents}
                   currentDate={currentDate}
                   onNavigate={setCurrentDate}
                   onSelectEvent={setSelectedTask}
@@ -216,20 +196,24 @@ export default function AdminSchedulePage() {
         )}
       </Box>
 
-      { editMarillacBucks && participantId && (
+      {editMarillacBucks && participantData && (
         <MarillacBalanceModal
           close={() => setEditMarillacBucks(false)}
-          participantId={participantId}
-          currentBalance={marillacBucks}
+          participantId={participantData.participant_id}
+          currentBalance={participantData.marillac_bucks}
           roomNumber={selectedRoom}
         />
       )}
 
-      { assignTask && participantId && (
-        <AssignTaskModal participantId={participantId} isOpen={assignTask} onClose={() => setAssignTask(false)} />
+      {assignTask && participantData && (
+        <AssignTaskModal
+          participantId={participantData.participant_id}
+          isOpen={assignTask}
+          onClose={() => setAssignTask(false)}
+        />
       )}
 
-      { selectedTask && (
+      {selectedTask && (
         <TaskDetailsModal
           task={selectedTask}
           onClose={() => setSelectedTask(null)}
