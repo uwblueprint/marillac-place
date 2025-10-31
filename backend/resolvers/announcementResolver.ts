@@ -1,4 +1,10 @@
-import { PrismaClient, Prisma, Announcement, Priority } from "@prisma/client";
+import {
+  PrismaClient,
+  Prisma,
+  Announcement,
+  Priority,
+  UserAnnouncement,
+} from "@prisma/client";
 import { getNow } from "../utils/formatDateTime";
 
 const prisma = new PrismaClient();
@@ -81,12 +87,12 @@ const announcementResolver = {
     getAnnouncementsByParticipantId: async (
       _parent: undefined,
       { participant_id }: { participant_id: number }
-    ): Promise<Announcement[]> => {
+    ): Promise<UserAnnouncement[]> => {
       try {
         return await prisma.userAnnouncement.findMany({
           orderBy: {
             announcement: {
-              creation_date: "desc"
+              creation_date: "desc",
             },
           },
           where: {
