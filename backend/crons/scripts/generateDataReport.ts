@@ -287,4 +287,3 @@ export async function generateMonthlyReport(): Promise<boolean> {
 
 // Export the main function for generating a data report by default
 export default generateDataReport;
-

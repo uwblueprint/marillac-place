@@ -207,4 +207,3 @@ export async function generateMonthlyReportCSV(): Promise<string | null> {
     return null;
   }
 }
-

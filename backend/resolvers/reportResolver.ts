@@ -77,4 +77,3 @@ const reportResolver = {
 };
 
 export default reportResolver;
-

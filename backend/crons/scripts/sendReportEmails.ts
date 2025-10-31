@@ -1,7 +1,10 @@
-import prisma from "../../prisma";
-import { generateWeeklyReportCSV, generateMonthlyReportCSV } from "./generateDataReportCSV";
-import { formatDateTime } from "../../utils/formatDateTime";
 import nodemailer from "nodemailer";
+import prisma from "../../prisma";
+import {
+  generateWeeklyReportCSV,
+  generateMonthlyReportCSV,
+} from "./generateDataReportCSV";
+import { formatDateTime } from "../../utils/formatDateTime";
 
 // Configure email transporter
 const transporter = nodemailer.createTransport({
@@ -177,4 +180,3 @@ export async function sendMonthlyReports(): Promise<boolean> {
     return false;
   }
 }
-
