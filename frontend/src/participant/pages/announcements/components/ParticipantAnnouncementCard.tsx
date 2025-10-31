@@ -4,7 +4,14 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import CircleIcon from "@mui/icons-material/Circle";
-import React from "react";
+import React, { useState } from "react";
+import notification from "../../../icons/announcements/notification.svg"
+import group from "../../../icons/announcements/group.svg"
+import profile from "../../../icons/announcements/profile.svg"
+import important from "../../../icons/announcements/important.svg"
+import orangepin from "../../../icons/announcements/orangepin.svg"
+import Icon from "../../../common/Icon";
+import { displayDate, displayDate2, formatDateTime } from "../../../../utils/formatDateTime";
 
 type ParticipantAnnouncementCardProps = {
   allRooms: boolean;
@@ -13,9 +20,11 @@ type ParticipantAnnouncementCardProps = {
   hasRead: boolean;
   isPinned: boolean;
   time: string;
+  userAnnouncementId: number;
 };
 
 export default function ParticipantAnnouncementCard({
+  userAnnouncementId,
   allRooms,
   message,
   importance,
@@ -28,51 +37,42 @@ export default function ParticipantAnnouncementCard({
       w="100%"
       borderTop="1px solid"
       borderColor="neutral.300"
-      paddingTop="15px"
+      paddingTop="12px"
       paddingLeft="25px"
       flexDir="column"
       position="relative"
     >
       {!hasRead && (
-        <CircleIcon
-          sx={{
-            fontSize: "12px",
-            color: "#E67D4F",
-            position: "absolute",
-            top: "20px",
-            left: "0px",
-          }}
-        />
+        <Flex position="absolute" top="42px" left="0px">
+          <Icon icon={notification} width="12px" height="12px" />
+        </Flex>
       )}
-      <Flex alignItems="center" justifyContent="space-between">
-        {allRooms ? (
-          <Flex alignItems="center" gap="10px">
-            <PeopleOutlineIcon fontSize="small" />
-            <Text textStyle="mobile.h3">All Rooms</Text>
-            <Text textStyle="mobile.b1" color="text.light.secondary">
-              {time}
-            </Text>
-          </Flex>
-        ) : (
-          <Flex alignItems="center" gap="10px">
-            <PersonOutlineIcon fontSize="small" />
-            <Text textStyle="mobile.h3">Your Room</Text>
-            <Text textStyle="mobile.b1" color="text.light.secondary">
-              {time}
-            </Text>
-          </Flex>
-        )}
 
-        <Flex>
-          {importance !== 0 && (
-            <PriorityHighIcon fontSize="small" sx={{ color: "#D34C5C" }} />
+      <Flex alignItems="center" justifyContent="space-between">
+        <Flex alignItems="center" gap="10px">
+          {allRooms ? (
+            <>
+              <Icon icon={group} width="15px" height="15px" />
+              <Text textStyle="mobile.b0">All Rooms</Text>
+            </>
+          ): (
+            <>
+              <Icon icon={profile} width="12px" height="12px" />
+              <Text textStyle="mobile.b0">Your Room</Text>
+            </>
           )}
-          {isPinned && (
-            <PushPinIcon fontSize="small" sx={{ color: "#E67D4F" }} />
-          )}
+          <Text textStyle="mobile.b1" color="text.light.secondary">
+            {displayDate2(new Date(time))}
+          </Text>
+        </Flex>
+
+        <Flex gap="12px" paddingRight="4px">
+          {importance !== 0 && <Icon icon={important} width="3.8px" height="3.8px" />}
+          {isPinned && <Icon icon={orangepin} width="10px" height="10px" />}
         </Flex>
       </Flex>
-      <Text textStyle="mobile.b1" marginTop="5px" h="45px" overflow="hidden">
+      
+      <Text textStyle="mobile.b1" marginTop="5px" minH="25px" maxH="45px" overflow="hidden">
         {message}
       </Text>
     </Flex>

@@ -16,7 +16,7 @@ const resolvers = gql`
     getAllAnnouncements: [Announcement]
     getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
     getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
-    getAnnouncementsByParticipantId(participant_id: Int!): [Announcement]
+    getAnnouncementsByParticipantId(participant_id: Int!): [UserAnnouncement]
     getAssignedTasks(participant_id: Int!): GetAssignedTaskResponse!
     getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]

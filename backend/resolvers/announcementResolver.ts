@@ -83,19 +83,17 @@ const announcementResolver = {
       { participant_id }: { participant_id: number }
     ): Promise<Announcement[]> => {
       try {
-        return await prisma.announcement.findMany({
+        return await prisma.userAnnouncement.findMany({
           orderBy: {
-            creation_date: "desc",
-          },
-          where: {
-            user_announcements: {
-              some: {
-                participant_id,
-              },
+            announcement: {
+              creation_date: "desc"
             },
           },
+          where: {
+            participant_id,
+          },
           include: {
-            user_announcements: true,
+            announcement: true,
           },
         });
       } catch (err) {

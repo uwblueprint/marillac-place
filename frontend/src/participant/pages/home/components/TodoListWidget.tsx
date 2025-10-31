@@ -60,12 +60,12 @@ const TodoListWidget = () => {
 
       {loading && <Spinner />}
 
-      {error && (
-        <Alert status="error" mb={4}>
-          <AlertIcon />
-          Error loading tasks.
-        </Alert>
-      )}
+        {error && (
+          <Alert status="error" mb={4}>
+            <AlertIcon />
+            Error loading tasks.
+          </Alert>
+        )}
 
       {!loading &&
         !error &&
