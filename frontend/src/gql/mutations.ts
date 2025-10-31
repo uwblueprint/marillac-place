@@ -367,3 +367,31 @@ export const UPDATE_ASSIGNED_TASK = gql`
     )
   }
 `;
+
+export const CREATE_REPORT_RECIPIENT = gql`
+  mutation createReportRecipient($email: String!, $weekly: Boolean!, $monthly: Boolean!) {
+    createReportRecipient(email: $email, weekly: $weekly, monthly: $monthly)
+  }
+`;
+
+export const UPDATE_REPORT_RECIPIENT = gql`
+  mutation updateReportRecipient(
+    $report_recipient_id: Int!
+    $email: String
+    $weekly: Boolean
+    $monthly: Boolean
+  ) {
+    updateReportRecipient(
+      report_recipient_id: $report_recipient_id
+      email: $email
+      weekly: $weekly
+      monthly: $monthly
+    )
+  }
+`;
+
+export const DELETE_REPORT_RECIPIENT = gql`
+  mutation deleteReportRecipient($report_recipient_id: Int!) {
+    deleteReportRecipient(report_recipient_id: $report_recipient_id)
+  }
+`;

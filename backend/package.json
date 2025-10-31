@@ -10,7 +10,10 @@
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "npx prisma generate && tsc",
     "prismaInitAndRun": "if [ \"$NODE_ENV\" = \"production\" ]; then npx prisma db push; else npx prisma migrate deploy; fi && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && nodemon -L",
-    "start": "npx prisma generate && node build/server.js"
+    "start": "npx prisma generate && node build/server.js",
+    "test:reports": "npx tsx test-report-emails.ts",
+    "test:reports:weekly": "npx tsx test-report-emails.ts weekly",
+    "test:reports:monthly": "npx tsx test-report-emails.ts monthly"
   },
   "keywords": [],
   "author": "",
