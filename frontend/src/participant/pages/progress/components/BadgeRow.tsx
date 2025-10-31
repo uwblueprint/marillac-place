@@ -1,10 +1,11 @@
 import React from "react";
-import { Box, Flex, Text, Divider, Button } from "@chakra-ui/react";
+import { Box, Flex, Text, Divider, Button, Image } from "@chakra-ui/react";
 import Badge, { BadgeRarity } from "../../../common/Badge";
 
 interface BadgeRowProps {
   title: string;
   subtitle: string;
+  bucks: number;
   badge: {
     icon: string;
     rarity: BadgeRarity;
@@ -13,51 +14,48 @@ interface BadgeRowProps {
   isLast?: boolean;
   isFirst?: boolean;
   showButton?: boolean;
+  achieved?: boolean;
   onProgressClick?: () => void;
 }
 
 const BadgeRow: React.FC<BadgeRowProps> = ({
   title,
   subtitle,
+  bucks,
   badge,
   isLast = false,
   isFirst= false,
   showButton = false,
+  achieved = false,
   onProgressClick,
 }) => {
   return (
     <Box>
-      {/* Message text with button */}
-      <Flex justify="space-between" align="center" mb="8px">
-        {showButton && onProgressClick && (
-          <Button
-            variant="link"
-            color="primary.700"
-            textStyle="mobile.h3"
-            textDecoration="underline"
-            onClick={onProgressClick}
-            _hover={{
-              color: "primary.700",
-              opacity: 0.8,
-            }}
-          >
-            Progress
-          </Button>
-        )}
-      </Flex>
-
       {/* Badge and content row */}
-      <Flex align="center" gap="12px" 
+      <Flex align="center" gap="14px" 
             borderTop={isFirst ? "0" : "1px solid"}
             borderColor="neutral.300" 
             pt={isFirst ? "0" : "16px"}
             mb={isLast ? "0" : "16px"}>
-        <Badge
-          icon={badge.icon}
-          rarity={badge.rarity}
-          size="medium"
-          percentComplete={badge.percentComplete ?? 100}
-        />
+        <Flex direction='column' gap={1} alignItems="center" >
+          <Badge
+            icon={badge.icon}
+            rarity={achieved ? badge.rarity: "silver"}
+            size={achieved ? "medium" : "small"}
+            percentComplete={badge.percentComplete ?? 100}
+          />
+          {
+            !achieved && (
+              <Text
+                textStyle="mobile.b1"
+                color="text.light.secondary"
+                lineHeight="1.3"
+              >
+              {badge.percentComplete}%
+              </Text>
+            )
+          }
+        </Flex>
         <Box flex="1">
           <Text
             textStyle="mobile.h3"
@@ -75,6 +73,18 @@ const BadgeRow: React.FC<BadgeRowProps> = ({
             {subtitle}
           </Text>
         </Box>
+        {
+          !achieved && (
+            <Flex
+              justifyContent="center" 
+              alignItems="center" 
+              gap="5px"
+            >
+              {bucks}
+              <Image src="/assets/marillac_bucks.png" alt="coin" />
+            </Flex>
+          ) 
+        }
       </Flex>
     </Box>
   );

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Box, Flex, Text, HStack } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { ParticipantContext } from "../../common/ParticipantContext";
 import { EditGoal } from "./components/EditGoal";
@@ -11,8 +12,10 @@ import BadgeWidget from "./components/BadgeWidget";
 export default function ParticipantsProgressPage() {
   const [editGoal, setEditGoal] = useState(false);
   const [setGoal, setSetGoal] = useState(false);
+  const [activeTab, setActiveTab] = useState("badges");
   const participantContext = useContext(ParticipantContext);
   const sampleWeeklyEarnings = [10, 15, 8, 20, 12, 18, 35];
+  
 
   // Fetch participant data to get current goal
   const { data, loading, refetch } = useQuery(GET_PARTICIPANT_BY_ID, {
@@ -74,35 +77,90 @@ export default function ParticipantsProgressPage() {
         <WeeklyEarningsChart weeklyEarnings={sampleWeeklyEarnings} />
       </div>
 
-      <div style={{ padding: "10px 20px" }}>
-        <BadgeWidget badgesToDisplayInWidget={[{
+      <Flex
+        justifyContent="center" 
+        alignItems="center" 
+      >
+        <Box
+          bg="white"
+          borderRadius="12px"
+          p="20px"
+          position="relative"
+          border="2px solid"
+          borderColor="#f0f0f0"
+          width="92%"
+        >
+          <HStack spacing={6} mb={4}>
+          {["badges", "achieved"].map((tab) => (
+            <Text
+              key={tab}
+              fontWeight={activeTab === tab ? "bold" : "medium"}
+              color={activeTab === tab ? "black" : "grey"}
+              textDecoration={activeTab === tab ? "underline" : "none"}
+              cursor="pointer"
+              _hover={{ color: "gray.700" }}
+              onClick={() => setActiveTab(tab)}
+              transition="all 0.2s ease"
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </Text>
+          ))}
+        </HStack>
+
+        {activeTab === "badges" ? (
+          <BadgeWidget allBadges={[
+              {
                 title: "Beginner Log In Badge",
                 subtitle: "Completed 7 days in a row",
-                badge: {
-                    icon: "five_star",
-                    rarity: "gold",
-                    percentComplete: 100,
-                },
-            },
-            {
+                bucks: 5,
+                badge: { icon: "five_star", rarity: "gold", percentComplete: 100 },
+              },
+              {
+                title: "Super Awesome Badge",
+                subtitle: "Completed 7 days in a row",
+                bucks: 5,
+                badge: { icon: "five_star", rarity: "gold", percentComplete: 20 },
+              },
+              {
                 title: "Beginner Perfect Score Badge",
                 subtitle: "Completed 7 days in a row",
-                badge: {
-                    icon: "diamond",
-                    rarity: "diamond",
-                    percentComplete: 50,
-                },
-            },
-            {
+                bucks: 5,
+                badge: { icon: "diamond", rarity: "diamond", percentComplete: 50 },
+              },
+              {
                 title: "Hello world",
                 subtitle: "Completed 7 days in a row",
-                badge: {
-                    icon: "tool",
-                    rarity: "green",
-                    percentComplete: 100,
-                },
-            },]}/>
-      </div>
+                bucks: 5,
+                badge: { icon: "tool", rarity: "green", percentComplete: 100 },
+              },
+            
+          ]} achieved={false} />
+        ) : (
+          <BadgeWidget allBadges={
+            [
+              {
+                title: "Beginner Log In Badge",
+                subtitle: "Completed 7 days in a row",
+                bucks: 5,
+                badge: { icon: "five_star", rarity: "gold", percentComplete: 100 },
+              },
+              {
+                title: "Beginner Perfect Score Badge",
+                subtitle: "Completed 7 days in a row",
+                bucks: 5,
+                badge: { icon: "diamond", rarity: "diamond", percentComplete: 50 },
+              },
+              {
+                title: "Hello world",
+                subtitle: "Completed 7 days in a row",
+                bucks: 5,
+                badge: { icon: "tool", rarity: "green", percentComplete: 100 },
+              },
+            ]
+          } achieved />
+        )}
+        </Box>
+      </Flex>
     </>
   );
 }

@@ -9,6 +9,7 @@ export type BadgeRowType = "congratulations" | "lostStreak" | "progress";
 export interface BadgeToDisplay {
   title: string;
   subtitle: string;
+  bucks: number;
   badge: {
     icon: string;
     rarity: BadgeRarity;
@@ -17,27 +18,37 @@ export interface BadgeToDisplay {
 }
 
 interface BadgeWidgetProps {
-  badgesToDisplayInWidget: BadgeToDisplay[];
+  allBadges: BadgeToDisplay[];
+  achieved: boolean;
 }
 
 const BadgeWidget: React.FC<BadgeWidgetProps> = ({
-  badgesToDisplayInWidget,
+  allBadges,
+  achieved,
 }) => {
+
+  const filteredBadges = (badgesToDisplayInWidget: BadgeToDisplay[], complete: boolean) => {
+    return badgesToDisplayInWidget.filter(badge => {
+      if (complete) {
+        return badge.badge.percentComplete === 100;
+      }
+      return badge.badge.percentComplete !== 100;
+    });
+  };
+  const badgesToDisplayInWidget = filteredBadges(allBadges, achieved);
 
   // fallback if no badges are provided
   if (!badgesToDisplayInWidget || badgesToDisplayInWidget.length === 0) {
     return (
       <Box
         bg="white"
-        borderTop="1px solid"
-        borderColor="black"
-        borderRadius="12px"
         p="20px"
         mb="16px"
       >
         <BadgeRow
           title="Add some badges!"
           subtitle="Pass badgesToDisplayInWidget prop with badge data."
+          bucks={0}
           badge={{
             icon: "five_star",
             rarity: "silver",
@@ -50,13 +61,7 @@ const BadgeWidget: React.FC<BadgeWidgetProps> = ({
   }
 
   return (
-    <Box
-      bg="white"
-      borderRadius="12px"
-      p="20px"
-      mb="16px"
-      position="relative"
-    >
+    <Box>
       {badgesToDisplayInWidget.map((badgeData, index) => {
         const key = `badge-${index}`;
         const isLast = index === badgesToDisplayInWidget.length - 1;
@@ -65,6 +70,7 @@ const BadgeWidget: React.FC<BadgeWidgetProps> = ({
         const {
           title,
           subtitle = "",
+          bucks = 0,
           badge = {
             icon: "diamond",
             rarity: "bronze",
@@ -78,9 +84,11 @@ const BadgeWidget: React.FC<BadgeWidgetProps> = ({
             title={title}
             subtitle={subtitle}
             badge={badge}
+            bucks={bucks}
             isLast={isLast}
             isFirst={isFirst}
             showButton={isFirst}
+            achieved={achieved}
             />
         );
       })}
