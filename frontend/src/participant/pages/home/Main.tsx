@@ -6,7 +6,6 @@ import { Flex, Text } from "@chakra-ui/react";
 // import { BadgeRarity } from "../../common/Badge";
 import TodoListWidget from "./components/TodoListWidget";
 import { getParticipantHomePageDateString } from "../../../utils/formatDateTime";
-import WidgetContainer from "../../common/WidgetContainer";
 import AnnouncementWidget from "./components/AnnouncementWidget";
 
 export default function ParticipantsHomePage() {
@@ -21,9 +20,7 @@ export default function ParticipantsHomePage() {
         </Text>
       </Flex>
 
-      <WidgetContainer>
-        <TodoListWidget />
-      </WidgetContainer>
+      <TodoListWidget />
       <AnnouncementWidget />
     </>
   );

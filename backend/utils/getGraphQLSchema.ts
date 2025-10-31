@@ -19,6 +19,7 @@ import loginResolver from "../resolvers/loginResolver";
 import taskResolver from "../resolvers/taskResolver";
 import badgeResolver from "../resolvers/badgeResolver";
 import assignedTaskResolver from "../resolvers/assignedTaskResolver";
+import reportResolver from "../resolvers/reportResolver";
 import getGraphQLMiddleware from "./getGraphQLMiddleware";
 
 export default function getGraphQLSchema() {
@@ -33,7 +34,8 @@ export default function getGraphQLSchema() {
       participantResolver,
       taskResolver,
       badgeResolver,
-      assignedTaskResolver
+      assignedTaskResolver,
+      reportResolver
     ),
   });
 

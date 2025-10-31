@@ -154,6 +154,14 @@ const models = gql`
 
     participant: Participant!
   }
+
+  type ReportRecipient {
+    report_recipient_id: Int!
+    email: String!
+    weekly: Boolean!
+    monthly: Boolean!
+    last_report_sent: String
+  }
 `;
 
 export default models;
