@@ -349,3 +349,15 @@ export const GET_ASSIGNED_TASKS = gql`
     }
   }
 `;
+
+export const GET_REPORT_RECIPIENTS = gql`
+  query getReportRecipients {
+    getReportRecipients {
+      report_recipient_id
+      email
+      weekly
+      monthly
+      last_report_sent
+    }
+  }
+`;

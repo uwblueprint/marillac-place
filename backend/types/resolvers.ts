@@ -21,13 +21,17 @@ const resolvers = gql`
     getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
-    getParticipantAnnouncements(participantId: Int!, filter: AnnouncementFilter = ALL): [UserAnnouncement!]!
+    getParticipantAnnouncements(
+      participantId: Int!
+      filter: AnnouncementFilter = ALL
+    ): [UserAnnouncement!]!
     getAssignedTasksByParticipantIdAndDate(
       participantId: Int!
       date: String!
     ): [AssignedTask]
     hasCompletedAllRequiredTasks(participantId: Int!): Boolean
     getEarnedBadgesByParticipant(participantId: Int!): [EarnedBadge!]!
+    getReportRecipients: [ReportRecipient!]!
   }
 
   type Mutation {
@@ -70,10 +74,10 @@ const resolvers = gql`
     ): Boolean
     deleteAnnouncement(announcement_id: Int!): Boolean
     updatePinReadAnnouncement(
-    announcement_id: Int!
-    participant_id: Int!
-    pinned: Boolean
-    read: Boolean
+      announcement_id: Int!
+      participant_id: Int!
+      pinned: Boolean
+      read: Boolean
     ): Boolean
     createTask(
       type: TaskType!
@@ -150,14 +154,11 @@ const resolvers = gql`
       system_badge_criteria: String
     ): Boolean
     updateBadgeStatus(badge_id: Int!, is_active: Boolean!): Boolean
-    setMarillacBucksGoal(
-      participant_id: Int!
-      goal_value: Int!
-    ): Boolean
-    updateMarillacBucksGoal(
-      participant_id: Int!
-      new_goal_value: Int!
-    ): Boolean
+    setMarillacBucksGoal(participant_id: Int!, goal_value: Int!): Boolean
+    updateMarillacBucksGoal(participant_id: Int!, new_goal_value: Int!): Boolean
+    createReportRecipient(email: String!, weekly: Boolean!, monthly: Boolean!): Boolean
+    updateReportRecipient(report_recipient_id: Int!, email: String, weekly: Boolean, monthly: Boolean): Boolean
+    deleteReportRecipient(report_recipient_id: Int!): Boolean
   }
 `;
 
