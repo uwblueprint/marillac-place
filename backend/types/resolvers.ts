@@ -26,10 +26,6 @@ const resolvers = gql`
       participantId: Int!
       filter: AnnouncementFilter = ALL
     ): [UserAnnouncement!]!
-    getParticipantAnnouncements(
-      participantId: Int!
-      filter: AnnouncementFilter = ALL
-    ): [UserAnnouncement!]!
     getAssignedTasksByParticipantIdAndDate(
       participantId: Int!
       date: String!
@@ -79,10 +75,6 @@ const resolvers = gql`
     ): Boolean
     deleteAnnouncement(announcement_id: Int!): Boolean
     updatePinReadAnnouncement(
-      announcement_id: Int!
-      participant_id: Int!
-      pinned: Boolean
-      read: Boolean
       announcement_id: Int!
       participant_id: Int!
       pinned: Boolean
