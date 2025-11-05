@@ -1,89 +1,154 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Flex, Text } from "@chakra-ui/react";
+import { useQuery, useMutation } from "@apollo/client";
 import ReportsTable from "./components/ReportsTable";
 import AddEmailModal from "./components/AddEmailModal";
 import EditEmailModal from "./components/EditEmailModal";
+import { GET_REPORT_RECIPIENTS } from "../../../gql/queries";
+import {
+  CREATE_REPORT_RECIPIENT,
+  UPDATE_REPORT_RECIPIENT,
+  DELETE_REPORT_RECIPIENT,
+} from "../../../gql/mutations";
+
+type ReportRecipient = {
+  report_recipient_id: number;
+  email: string;
+  weekly: boolean;
+  monthly: boolean;
+  last_report_sent: string | null;
+};
+
+type Report = {
+  id: number;
+  email: string;
+  weekly: boolean;
+  monthly: boolean;
+  lastReportSent: string;
+};
 
 export default function AdminReportsPage() {
   const [addEmail, setAddEmail] = useState(false);
   const [editEmail, setEditEmail] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
+  const [reports, setReports] = useState<Report[]>([]);
 
-  // Mock data for now - this would come from GraphQL queries
-  const [reports, setReports] = useState([
-    {
-      id: 1,
-      email: "admin@marillacplace.org",
-      weekly: true,
-      monthly: true,
-      lastReportSent: "2024-01-15",
-    },
-    {
-      id: 2,
-      email: "director@marillacplace.org",
-      weekly: true,
-      monthly: false,
-      lastReportSent: "2024-01-14",
-    },
-    {
-      id: 3,
-      email: "supervisor@marillacplace.org",
-      weekly: false,
-      monthly: true,
-      lastReportSent: "2024-01-01",
-    },
-    {
-      id: 4,
-      email: "coordinator@marillacplace.org",
-      weekly: true,
-      monthly: true,
-      lastReportSent: "2024-01-13",
-    },
-  ]);
+  const { loading, error, data, refetch } = useQuery(GET_REPORT_RECIPIENTS);
+  const [createReportRecipient] = useMutation(CREATE_REPORT_RECIPIENT);
+  const [updateReportRecipient] = useMutation(UPDATE_REPORT_RECIPIENT);
+  const [deleteReportRecipient] = useMutation(DELETE_REPORT_RECIPIENT);
 
-  const handleAddEmail = (emailData: any) => {
-    const newEmail = {
-      id: reports.length + 1,
-      ...emailData,
-    };
-    setReports([...reports, newEmail]);
-    setAddEmail(false);
+  // Transform backend data to frontend format
+  useEffect(() => {
+    if (data?.getReportRecipients) {
+      const transformed: Report[] = data.getReportRecipients.map(
+        (recipient: ReportRecipient) => ({
+          id: recipient.report_recipient_id,
+          email: recipient.email,
+          weekly: recipient.weekly,
+          monthly: recipient.monthly,
+          lastReportSent: recipient.last_report_sent || "Never",
+        })
+      );
+      setReports(transformed);
+    }
+  }, [data]);
+
+  const handleAddEmail = async (emailData: any) => {
+    try {
+      await createReportRecipient({
+        variables: {
+          email: emailData.email,
+          weekly: emailData.weekly,
+          monthly: emailData.monthly,
+        },
+      });
+      refetch();
+      setAddEmail(false);
+    } catch (err) {
+      console.error("Error creating report recipient:", err);
+    }
   };
 
-  const handleEditEmail = (emailData: any) => {
-    setReports(
-      reports.map((report) =>
-        report.id === selectedEmail.id ? { ...report, ...emailData } : report
-      )
-    );
-    setEditEmail(false);
-    setSelectedEmail(null);
+  const handleEditEmail = async (emailData: any) => {
+    try {
+      await updateReportRecipient({
+        variables: {
+          report_recipient_id: selectedEmail.id,
+          email: emailData.email,
+          weekly: emailData.weekly,
+          monthly: emailData.monthly,
+        },
+      });
+      refetch();
+      setEditEmail(false);
+      setSelectedEmail(null);
+    } catch (err) {
+      console.error("Error updating report recipient:", err);
+    }
   };
 
-  const handleDeleteEmail = (id: number) => {
-    setReports(reports.filter((report) => report.id !== id));
+  const handleDeleteEmail = async (id: number) => {
+    try {
+      await deleteReportRecipient({
+        variables: {
+          report_recipient_id: id,
+        },
+      });
+      refetch();
+    } catch (err) {
+      console.error("Error deleting report recipient:", err);
+    }
   };
 
-  const handleToggleWeekly = (id: number, weekly: boolean) => {
-    setReports(
-      reports.map((report) =>
-        report.id === id ? { ...report, weekly } : report
-      )
-    );
+  const handleToggleWeekly = async (id: number, weekly: boolean) => {
+    try {
+      await updateReportRecipient({
+        variables: {
+          report_recipient_id: id,
+          weekly,
+        },
+      });
+      refetch();
+    } catch (err) {
+      console.error("Error toggling weekly:", err);
+    }
   };
 
-  const handleToggleMonthly = (id: number, monthly: boolean) => {
-    setReports(
-      reports.map((report) =>
-        report.id === id ? { ...report, monthly } : report
-      )
-    );
+  const handleToggleMonthly = async (id: number, monthly: boolean) => {
+    try {
+      await updateReportRecipient({
+        variables: {
+          report_recipient_id: id,
+          monthly,
+        },
+      });
+      refetch();
+    } catch (err) {
+      console.error("Error toggling monthly:", err);
+    }
   };
 
   const handleEditClick = (email: any) => {
     setSelectedEmail(email);
     setEditEmail(true);
   };
+
+  if (loading) {
+    return (
+      <Flex width="100%" height="fit-content" justifyContent="center" padding="20px">
+        <Text>Loading...</Text>
+      </Flex>
+    );
+  }
+
+  if (error) {
+    return (
+      <Flex width="100%" height="fit-content" justifyContent="center" padding="20px">
+        <Text color="red">Error loading reports: {error.message}</Text>
+      </Flex>
+    );
+  }
 
   return (
     <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
