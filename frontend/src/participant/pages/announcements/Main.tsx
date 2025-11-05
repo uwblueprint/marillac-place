@@ -61,8 +61,8 @@ export default function ParticipantsAnnouncementsPage() {
   const loading = isAll ? allLoading : filteredLoading;
   const error = isAll ? allError : filteredError;
   const data = isAll
-    ? (allData?.getAnnouncementsByParticipantId ?? [])
-    : (filteredData?.getParticipantAnnouncements ?? []);
+    ? allData?.getAnnouncementsByParticipantId ?? []
+    : filteredData?.getParticipantAnnouncements ?? [];
 
   if (loading) return <Text>Loading announcements…</Text>;
   if (error) return <Text color="red.500">Error loading announcements.</Text>;
