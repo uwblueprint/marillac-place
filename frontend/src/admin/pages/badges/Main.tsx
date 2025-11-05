@@ -1,14 +1,5 @@
-import {
-  Button,
-  Flex,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Text,
-  Switch,
-} from "@chakra-ui/react";
-import AddIcon from "@mui/icons-material/Add";
-import { useQuery, useMutation } from "@apollo/client";
+import { Flex, Text } from "@chakra-ui/react";
+import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import CreateCustomBadgeModal from "./components/CreateCustomBadgeModal";
 import CustomBadgeTable from "./components/CustomBadgeTable";

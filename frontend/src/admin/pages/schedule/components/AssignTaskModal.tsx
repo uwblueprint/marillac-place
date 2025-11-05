@@ -63,14 +63,14 @@ export default function AssignTaskModal({
   useEffect(() => {
     if (!loading && !error && data && selectedTaskId !== null) {
       const selectedTask = data.getTasksByType.find(
-        (t: any) => t.task_id === Number(selectedTaskId),
+        (t: any) => t.task_id === Number(selectedTaskId)
       );
       if (selectedTask) {
         setTaskName(selectedTask.task_name);
         setTaskType(selectedTask.task_type as TaskType);
         setComments(selectedTask.comment ?? "");
         setRecurrence(
-          selectedTask.recurrence_preference as RecurrenceFrequency,
+          selectedTask.recurrence_preference as RecurrenceFrequency
         );
         setDays(selectedTask.repeat_days as DayOfWeek[]);
         setTime(selectedTask.time_preference as TimeOption);
@@ -105,7 +105,7 @@ export default function AssignTaskModal({
       days.length <= 1
     ) {
       setError(
-        "If the task can only be completed on a specific day, please choose 'Every selected day'",
+        "If the task can only be completed on a specific day, please choose 'Every selected day'"
       );
     } else if (
       recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS &&
@@ -184,7 +184,7 @@ export default function AssignTaskModal({
             data?.getTasksByType?.map((task: any) => [
               task.task_name,
               task.task_id,
-            ]) ?? [],
+            ]) ?? []
           )}
         />
       ) : (

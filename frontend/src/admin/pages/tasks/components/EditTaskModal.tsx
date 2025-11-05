@@ -25,10 +25,10 @@ export default function EditTaskModal({ selected, close }: EditTaskModalProps) {
   console.info(selected);
   const [taskName, setTaskName] = useState(selected.task_name);
   const [participantPreference, setParticipantPreference] = useState(
-    selected.recurrence_preference === "PARTICIPANT_PREFERENCE",
+    selected.recurrence_preference === "PARTICIPANT_PREFERENCE"
   );
   const [recurrence, setRecurrence] = useState<RecurrenceFrequency>(
-    selected.recurrence_preference,
+    selected.recurrence_preference
   );
   const [days, setDays] = useState<DayOfWeek[]>(selected.repeat_days);
   const [time, setTime] = useState<TimeOption>(selected.time_preference);
@@ -66,7 +66,7 @@ export default function EditTaskModal({ selected, close }: EditTaskModalProps) {
       days.length <= 1
     ) {
       setError(
-        "If the task can only be completed on a specific day, please choose 'Every selected day'",
+        "If the task can only be completed on a specific day, please choose 'Every selected day'"
       );
     } else if (
       recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS &&

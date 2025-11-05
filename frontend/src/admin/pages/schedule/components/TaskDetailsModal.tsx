@@ -2,24 +2,12 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   Text,
-  Button,
-  HStack,
-  VStack,
-  Box,
   Flex,
-  Textarea,
-  Circle,
 } from "@chakra-ui/react";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { CalendarEvent, TaskStatus, TaskStatuses } from "./ScheduleTypes";
+import { CalendarEvent, TaskStatus } from "./ScheduleTypes";
 import OrangeButton from "../../../common/buttons/OrangeButton";
 import SimpleButton from "../../../common/buttons/SimpleButton";
 import TextInput from "../../../common/form/TextInput";
@@ -34,7 +22,6 @@ import {
   convertToDaysListGivenRange,
   displayDate,
   formatDateFromString,
-  formatDateTime,
   formatTimeString,
   isAnytime,
 } from "../../../../utils/formatDateTime";
@@ -53,13 +40,13 @@ export default function TaskDetailsModal({
   onClose,
 }: TaskDetailsModalProps) {
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>(
-    task.task_status,
+    task.task_status
   );
   const [days, setDays] = useState<DayOfWeek[]>(
-    convertToDaysListGivenRange(task.start, task.end),
+    convertToDaysListGivenRange(task.start, task.end)
   );
   const [time, setTime] = useState<TimeOption>(
-    isAnytime(task.start, task.end) ? TimeOption.ANYTIME : TimeOption.SPECIFIC,
+    isAnytime(task.start, task.end) ? TimeOption.ANYTIME : TimeOption.SPECIFIC
   );
   const [startTime, setStartTime] = useState(formatTimeString(task.start));
   const [endTime, setEndTime] = useState(formatTimeString(task.end));

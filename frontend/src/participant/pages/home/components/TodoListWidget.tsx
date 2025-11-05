@@ -37,7 +37,7 @@ const TodoListWidget = () => {
     {
       variables: { participantId, date },
       skip: !participantId,
-    },
+    }
   );
 
   return (
@@ -98,12 +98,12 @@ const TodoListWidget = () => {
                 <Text color="text.light.secondary" textStyle="mobile.b1">
                   {formatTimeRange(
                     assigned_task.start_date,
-                    assigned_task.end_date,
+                    assigned_task.end_date
                   )}
                 </Text>
               </Flex>
             );
-          },
+          }
         )}
     </>
   );

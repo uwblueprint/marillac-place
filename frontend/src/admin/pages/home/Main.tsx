@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Flex, Box, Text } from "@chakra-ui/react";
+import React from "react";
+import { Flex, Text } from "@chakra-ui/react";
 import NoteSection from "./components/NoteSection";
 import RoomsOverview from "./components/RoomsOverview";
 import AnnouncementSection from "./components/AnnouncementSection";

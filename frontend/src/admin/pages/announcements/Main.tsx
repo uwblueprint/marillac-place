@@ -1,5 +1,4 @@
-import { Flex, Text, Button, VStack } from "@chakra-ui/react";
-import AddIcon from "@mui/icons-material/Add";
+import { Flex, Text, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import AnnouncementCard from "./components/AnnouncementCard";

@@ -1,21 +1,7 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Flex,
-  Input,
-  FormLabel,
-  FormControl,
-  Text,
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalOverlay,
-  NumberInput,
-  NumberInputField,
-} from "@chakra-ui/react";
+import { Flex, Input, FormLabel, FormControl, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { EDIT_BADGE_LEVEL, EDIT_SYSTEM_BADGE } from "../../../../gql/mutations";
-import { Badge } from "../../../../types/BadgeTypes";
 import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";
 
@@ -108,7 +94,7 @@ const EditSystemBadgeModal = ({
               benchmark,
               marillac_bucks: bucks,
             },
-          }),
+          })
         );
       }
     }

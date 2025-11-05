@@ -50,7 +50,7 @@ export default function HomeContent() {
     {
       variables: { participantId },
       skip: !participantId,
-    },
+    }
   );
 
   const hasCompletedAllTasks = tasksData?.hasCompletedAllRequiredTasks || false;

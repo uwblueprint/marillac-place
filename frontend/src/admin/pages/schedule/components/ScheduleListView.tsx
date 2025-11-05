@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { VStack, Box, Text, HStack, Button } from "@chakra-ui/react";
-import moment from "moment";
-import { CalendarEvent, ParticipantData } from "./ScheduleTypes";
-import { getDaysOfWeek } from "../../../../utils/scheduleUtils";
+import { CalendarEvent } from "./ScheduleTypes";
 import TaskTableTop from "./TaskTableTop";
 import TaskTableBottom from "./TaskTableBottom";
 import { DayOfWeek } from "../../../../types/task";

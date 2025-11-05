@@ -62,7 +62,7 @@ export default function AddTaskModal({ taskType, close }: AddTaskModalProps) {
       days.length <= 1
     ) {
       setError(
-        "If the task can only be completed on a specific day, please choose 'Every selected day'",
+        "If the task can only be completed on a specific day, please choose 'Every selected day'"
       );
     } else if (
       recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS &&

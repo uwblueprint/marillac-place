@@ -1,21 +1,12 @@
 import { Flex, Text } from "@chakra-ui/react";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
-import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
-import PushPinIcon from "@mui/icons-material/PushPin";
-import CircleIcon from "@mui/icons-material/Circle";
-import React, { useState } from "react";
+import React from "react";
 import notification from "../../../icons/announcements/notification.svg";
 import group from "../../../icons/announcements/group.svg";
 import profile from "../../../icons/announcements/profile.svg";
 import important from "../../../icons/announcements/important.svg";
 import orangepin from "../../../icons/announcements/orangepin.svg";
 import Icon from "../../../common/Icon";
-import {
-  displayDate,
-  displayDate2,
-  formatDateTime,
-} from "../../../../utils/formatDateTime";
+import { displayDate2 } from "../../../../utils/formatDateTime";
 
 type ParticipantAnnouncementCardProps = {
   allRooms: boolean;

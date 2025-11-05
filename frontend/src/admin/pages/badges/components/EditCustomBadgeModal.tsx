@@ -1,16 +1,4 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Flex,
-  Input,
-  FormLabel,
-  FormControl,
-  Text,
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalOverlay,
-} from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { EDIT_CUSTOM_BADGE } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";

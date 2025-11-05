@@ -1,4 +1,4 @@
-import { Flex, Text, Grid, Button, Link } from "@chakra-ui/react";
+import { Flex, Text, Grid, Link } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/queries";
@@ -21,7 +21,7 @@ enum Status {
 export default function RoomsOverview() {
   const [roomData, setRoomData] = useState<RoomData[]>([]);
   const [getRoomData, { loading, error }] = useLazyQuery(
-    GET_PARTICIPANT_BY_ROOM,
+    GET_PARTICIPANT_BY_ROOM
   );
 
   const handleViewSchedule = (roomNumber: number) => {
@@ -43,10 +43,10 @@ export default function RoomsOverview() {
               data?.getParticipantByRoom?.assigned_tasks?.filter(
                 (task: any) =>
                   task.task_status === Status.ASSIGNED ||
-                  task.task_status === Status.INCOMPLETE,
+                  task.task_status === Status.INCOMPLETE
               ).length || 0,
           };
-        }),
+        })
       );
 
       setRoomData(results);

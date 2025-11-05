@@ -1,28 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalOverlay,
-  Flex,
-  FormControl,
-  FormLabel,
-  Box,
-  Button,
-  Grid,
-  Heading,
-  Input,
-  Text,
-  VStack,
-  HStack,
-  extendTheme,
-  ChakraProvider,
-  InputGroup,
-  InputLeftElement,
-  Select,
-} from "@chakra-ui/react";
+import { Flex, Grid, Text } from "@chakra-ui/react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { ROOM_NUMBERS } from "../../../../constants/misc";
 import {
   GET_PARTICIPANTS_BY_ROOMS,
@@ -46,7 +24,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [error, setError] = useState("");
   const [badges, setBadges] = useState<{ badge_id: number; name: string }[]>(
-    [],
+    []
   );
   const { data: badgeData } = useQuery(GET_CUSTOM_BADGES);
 
@@ -61,7 +39,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
     onCompleted: () => {
       localStorage.setItem(
         "notification",
-        `Assigned Custom Badge: ${badgeName}`,
+        `Assigned Custom Badge: ${badgeName}`
       );
       onClose();
       window.location.reload();
@@ -73,7 +51,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
 
   const toggleRoomSelection = (room: number) => {
     setSelectedRooms((prev) =>
-      prev.includes(room) ? prev.filter((r) => r !== room) : [...prev, room],
+      prev.includes(room) ? prev.filter((r) => r !== room) : [...prev, room]
     );
   };
 
@@ -131,7 +109,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
           badgeData?.getCustomBadges?.map((badge: any) => [
             badge.name,
             badge.name,
-          ]) ?? [],
+          ]) ?? []
         )}
         width="100%"
       />

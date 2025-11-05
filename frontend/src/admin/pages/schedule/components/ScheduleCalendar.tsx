@@ -127,19 +127,19 @@ export default function ScheduleCalendar({
     const root = document.documentElement;
     root.style.setProperty(
       "--status-complete",
-      getTaskStatusColor(TaskStatus.COMPLETE),
+      getTaskStatusColor(TaskStatus.COMPLETE)
     );
     root.style.setProperty(
       "--status-assigned",
-      getTaskStatusColor(TaskStatus.ASSIGNED),
+      getTaskStatusColor(TaskStatus.ASSIGNED)
     );
     root.style.setProperty(
       "--status-incomplete",
-      getTaskStatusColor(TaskStatus.INCOMPLETE),
+      getTaskStatusColor(TaskStatus.INCOMPLETE)
     );
     root.style.setProperty(
       "--status-excused",
-      getTaskStatusColor(TaskStatus.EXCUSED),
+      getTaskStatusColor(TaskStatus.EXCUSED)
     );
 
     root.style.setProperty("--status-complete-bg", colors.actionsLight.green);

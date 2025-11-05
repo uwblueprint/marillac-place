@@ -38,7 +38,7 @@ export default function AdminParticipantsPage() {
               />
             ) : (
               <EmptyRoomCard key={num} roomNumber={num} />
-            ),
+            )
           )}
         </Grid>
       )}

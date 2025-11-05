@@ -17,7 +17,7 @@ function ParticipantPageHeader() {
   ];
 
   const currentPageIndex = pages.findIndex(
-    (page) => page.route === window.location.pathname,
+    (page) => page.route === window.location.pathname
   );
 
   const participant = useContext(ParticipantContext);

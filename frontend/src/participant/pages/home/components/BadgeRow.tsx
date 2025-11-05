@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Text, Divider, Button } from "@chakra-ui/react";
+import { Box, Flex, Text, Button } from "@chakra-ui/react";
 import Badge, { BadgeRarity } from "../../../common/Badge";
 
 interface BadgeRowProps {

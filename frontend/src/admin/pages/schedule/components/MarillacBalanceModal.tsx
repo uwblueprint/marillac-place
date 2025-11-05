@@ -1,23 +1,5 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  RadioGroup,
-  Radio,
-  Stack,
-  Text,
-  Flex,
-  Button,
-  FormControl,
-  FormLabel,
-  Textarea,
-  Input,
-  InputLeftElement,
-  InputGroup,
-} from "@chakra-ui/react";
+import { Text, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useMutation } from "@apollo/client";
 import { UPDATE_MARILLAC_BUCKS } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
@@ -78,7 +60,7 @@ export default function MarillacBalanceModal({
 
       localStorage.setItem(
         "notification",
-        "Updated Balance: $" + newBalance + " for Room " + roomNumber,
+        "Updated Balance: $" + newBalance + " for Room " + roomNumber
       );
       window.location.reload();
     }

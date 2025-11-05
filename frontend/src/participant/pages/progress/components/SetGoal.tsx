@@ -1,13 +1,4 @@
-import {
-  Button,
-  Flex,
-  Image,
-  Input,
-  Tab,
-  TabList,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, Image, Input, Text } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import ModalContainer from "../../../../admin/common/form/ModalContainer";
@@ -62,7 +53,7 @@ export const SetGoal: React.FC<SetGoalProps> = ({ handleClose, onGoalSet }) => {
       console.log("✅ Mutation success:", result);
       console.log("🎯 Goal saved successfully!");
       console.log(
-        `✅ GOAL SAVED: ${goalValue} Marillac Bucks for participant ${participantContext.id}`,
+        `✅ GOAL SAVED: ${goalValue} Marillac Bucks for participant ${participantContext.id}`
       );
 
       onGoalSet();

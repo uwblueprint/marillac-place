@@ -48,7 +48,7 @@ export default function AdminReportsPage() {
           weekly: recipient.weekly,
           monthly: recipient.monthly,
           lastReportSent: recipient.last_report_sent || "Never",
-        }),
+        })
       );
       setReports(transformed);
     }

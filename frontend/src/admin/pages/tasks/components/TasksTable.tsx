@@ -1,15 +1,4 @@
-import {
-  TableContainer,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Text,
-  Flex,
-  Spinner,
-} from "@chakra-ui/react";
+import { Text, Flex } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import React, { useState } from "react";
@@ -77,18 +66,18 @@ const TasksTable = ({ loading, error, tasks }: TasksTableProps) => {
             {task.recurrence_preference === "PARTICIPANT_PREFERENCE"
               ? "Participant Preference"
               : task.recurrence_preference === "DAILY"
-                ? "Daily"
-                : (task.recurrence_preference === "EVERY_SELECTED_DAYS"
-                    ? "Every"
-                    : "Any") +
-                  (task.repeat_days.length === 7
-                    ? "day"
-                    : (task.recurrence_preference === "ANY_SELECTED_DAYS"
-                        ? " of "
-                        : " ") +
-                      task.repeat_days
-                        .map((day: string) => days[day])
-                        .join(", "))}
+              ? "Daily"
+              : (task.recurrence_preference === "EVERY_SELECTED_DAYS"
+                  ? "Every"
+                  : "Any") +
+                (task.repeat_days.length === 7
+                  ? "day"
+                  : (task.recurrence_preference === "ANY_SELECTED_DAYS"
+                      ? " of "
+                      : " ") +
+                    task.repeat_days
+                      .map((day: string) => days[day])
+                      .join(", "))}
           </Text>,
           <Text
             key={`times-${task.task_id}`}
@@ -98,10 +87,8 @@ const TasksTable = ({ loading, error, tasks }: TasksTableProps) => {
             {task.time_preference === "PARTICIPANT_PREFERENCE"
               ? "Participant Preference"
               : task.time_preference === "ANYTIME"
-                ? "Anytime"
-                : formatTime(task.start_time) +
-                  " - " +
-                  formatTime(task.end_time)}
+              ? "Anytime"
+              : formatTime(task.start_time) + " - " + formatTime(task.end_time)}
           </Text>,
           <Text
             key={`bucks-${task.task_id}`}

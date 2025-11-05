@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
         err.message.includes("Network request failed")
       ) {
         setError(
-          "Unable to connect to server. Please check your internet connection and try again.",
+          "Unable to connect to server. Please check your internet connection and try again."
         );
       } else {
         // Show the actual error message from the backend

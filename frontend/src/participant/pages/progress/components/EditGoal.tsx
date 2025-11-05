@@ -1,13 +1,4 @@
-import {
-  Button,
-  Flex,
-  Image,
-  Input,
-  Tab,
-  TabList,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, Image, Input, Text } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import ModalContainer from "../../../../admin/common/form/ModalContainer";

@@ -1,5 +1,5 @@
 import { Flex, Tab, TabList, Tabs, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 
@@ -22,7 +22,6 @@ export default function TaskBar({
   closeTaskBar,
 }: TaskBarProps) {
   const navigate = useNavigate();
-  const [signOut, setSignOut] = useState(false);
 
   const handleSignOut = () => {
     localStorage.removeItem("participant_token");

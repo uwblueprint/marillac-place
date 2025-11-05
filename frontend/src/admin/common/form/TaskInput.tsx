@@ -1,23 +1,5 @@
-import {
-  RadioGroup,
-  Stack,
-  Radio,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  Text,
-  Textarea,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  InputLeftElement,
-  InputGroup,
-  Checkbox,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { Flex } from "@chakra-ui/react";
+import React, { useEffect } from "react";
 import CoreInput from "./CoreInput";
 import TextInput from "./TextInput";
 import SelectionInput from "./SelectionInput";

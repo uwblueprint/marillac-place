@@ -1,25 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Flex,
-  Text,
-  Textarea,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalOverlay,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  Stack,
-  Radio,
-  Wrap,
-  WrapItem,
-  Grid,
-  Box,
-} from "@chakra-ui/react";
-import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
+import { Flex, Text } from "@chakra-ui/react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_ANNOUNCEMENT } from "../../../../gql/mutations";
 import { GET_CURRENT_PARTICIPANTS } from "../../../../gql/queries";
@@ -53,7 +33,7 @@ const CreateAnnouncementModal = ({
       }
       localStorage.setItem(
         "notification",
-        "Announcement sent to " + listOfRooms,
+        "Announcement sent to " + listOfRooms
       );
       onClose();
       window.location.reload();

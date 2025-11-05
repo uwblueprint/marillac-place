@@ -4,11 +4,7 @@ import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import WidgetContainer from "../../../common/WidgetContainer";
 import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID } from "../../../../gql/queries";
-import {
-  displayDate2,
-  getNow,
-  getRecentDate,
-} from "../../../../utils/formatDateTime";
+import { displayDate2 } from "../../../../utils/formatDateTime";
 import { ParticipantContext } from "../../../common/ParticipantContext";
 import * as ROUTES from "../../../../constants/routes";
 
@@ -59,11 +55,11 @@ export default function AnnouncementWidget() {
               </Text>
               <Text textStyle="mobile.b1" color="text.light.secondary">
                 {displayDate2(
-                  new Date(announcement.announcement.creation_date),
+                  new Date(announcement.announcement.creation_date)
                 )}
               </Text>
             </Flex>
-          ),
+          )
         )}
       </>
     </WidgetContainer>

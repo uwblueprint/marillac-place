@@ -119,9 +119,7 @@ const NoteSection = () => {
             >
               {getNotesData.getNotes.map((note: any) => {
                 const creation = new Date(
-                  note.creation_date
-                    .replace("p.m.", "PM")
-                    .replace("a.m.", "AM"),
+                  note.creation_date.replace("p.m.", "PM").replace("a.m.", "AM")
                 )
                   .toLocaleString("en-ca", {
                     hour: "numeric",

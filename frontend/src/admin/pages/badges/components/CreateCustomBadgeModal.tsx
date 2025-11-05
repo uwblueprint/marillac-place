@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
   FormControl,
   FormLabel,
-  Input,
-  Button,
   Flex,
   Text,
   Grid,

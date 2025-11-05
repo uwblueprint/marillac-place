@@ -1,22 +1,4 @@
-import {
-  Modal,
-  Grid,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  InputRightElement,
-  InputGroup,
-  Text,
-  Button,
-} from "@chakra-ui/react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import LogoutIcon from "@mui/icons-material/Logout";
+import { Flex, FormControl, Input, Text, Button } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { ROOM_NUMBERS } from "../../../../constants/misc";
@@ -48,7 +30,6 @@ export default function EditParticipantCard({
   const [swapParticipant, setSwapParticipant] = useState(false);
   const [endStay, setEndStay] = useState(false);
 
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [selectedSwap, setSelectedSwap] = useState(-1);
 
@@ -117,12 +98,12 @@ export default function EditParticipantCard({
           } else if (endStay) {
             localStorage.setItem(
               "notification",
-              "Participant #" + id + " removed from Room " + roomNumber,
+              "Participant #" + id + " removed from Room " + roomNumber
             );
           } else {
             localStorage.setItem(
               "notification",
-              "Participant #" + id + " updated",
+              "Participant #" + id + " updated"
             );
           }
           window.location.reload();

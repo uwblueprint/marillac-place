@@ -2,7 +2,6 @@ import React from "react";
 import {
   Box,
   Text,
-  HStack,
   Table,
   Thead,
   Tbody,
@@ -10,7 +9,6 @@ import {
   Th,
   Td,
   TableContainer,
-  IconButton,
   Flex,
 } from "@chakra-ui/react";
 import CommentIcon from "@mui/icons-material/ModeCommentOutlined";
@@ -20,7 +18,6 @@ import {
   getTaskStatusColor,
   getTaskStatusBgColor,
   getTaskStatusText,
-  formatEventTime,
 } from "../../../../utils/scheduleUtils";
 import { TaskType } from "../../../../types/task";
 

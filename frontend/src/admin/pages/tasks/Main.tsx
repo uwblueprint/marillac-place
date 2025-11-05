@@ -1,12 +1,10 @@
 import {
-  Button,
   Flex,
   Input,
   InputGroup,
   InputLeftElement,
   Text,
 } from "@chakra-ui/react";
-import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
@@ -36,8 +34,8 @@ export default function AdminTasksPage() {
         data.getTasksByType.filter(
           (task: any) =>
             typeof task.task_name === "string" &&
-            task.task_name.toLowerCase().includes(taskFilter.toLowerCase()),
-        ),
+            task.task_name.toLowerCase().includes(taskFilter.toLowerCase())
+        )
       );
     }
   }, [taskFilter, loading, error, data]);
