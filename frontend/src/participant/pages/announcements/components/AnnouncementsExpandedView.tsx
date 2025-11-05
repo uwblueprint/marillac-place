@@ -1,5 +1,5 @@
 import { Divider, Flex, Text } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { displayDate2 } from "../../../../utils/formatDateTime";
 import Icon from "../../../common/Icon";
@@ -32,7 +32,7 @@ export default function AnnouncementsExpandedView({
   const participantId = participant?.id;
 
   const [pinned, setPinned] = useState<boolean>(announcement.pinned);
-  const [prevPinned, setPrevPinned] = useState<boolean>(announcement.pinned);
+  const prevPinnedRef = useRef<boolean>(announcement.pinned);
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState("");
 
@@ -44,7 +44,7 @@ export default function AnnouncementsExpandedView({
       active = false;
     };
 
-    if (!participantId || pinned === prevPinned) {
+    if (!participantId || pinned === prevPinnedRef.current) {
       return cleanup;
     }
 
@@ -60,17 +60,17 @@ export default function AnnouncementsExpandedView({
         });
 
         if (active) {
-          setPrevPinned(pinned);
+          prevPinnedRef.current = pinned;
         }
       } catch (err) {
-        if (active) setPinned(prevPinned);
+        if (active) setPinned(prevPinnedRef.current);
       } finally {
         if (active) setUpdating(false);
       }
     })();
 
     return cleanup;
-  }, [pinned]);
+  }, [announcement.uaid, participantId, pinned, updatePinRead]);
 
   useEffect(() => {
     let active = true;
