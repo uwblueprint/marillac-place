@@ -369,7 +369,11 @@ export const UPDATE_ASSIGNED_TASK = gql`
 `;
 
 export const CREATE_REPORT_RECIPIENT = gql`
-  mutation createReportRecipient($email: String!, $weekly: Boolean!, $monthly: Boolean!) {
+  mutation createReportRecipient(
+    $email: String!
+    $weekly: Boolean!
+    $monthly: Boolean!
+  ) {
     createReportRecipient(email: $email, weekly: $weekly, monthly: $monthly)
   }
 `;
