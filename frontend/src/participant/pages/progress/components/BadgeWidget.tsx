@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import { BadgeRarity } from "../../../common/Badge";
 import BadgeRow from "./BadgeRow";
 
@@ -22,13 +21,12 @@ interface BadgeWidgetProps {
   achieved: boolean;
 }
 
-const BadgeWidget: React.FC<BadgeWidgetProps> = ({
-  allBadges,
-  achieved,
-}) => {
-
-  const filteredBadges = (badgesToDisplayInWidget: BadgeToDisplay[], complete: boolean) => {
-    return badgesToDisplayInWidget.filter(badge => {
+const BadgeWidget: React.FC<BadgeWidgetProps> = ({ allBadges, achieved }) => {
+  const filteredBadges = (
+    badgesToDisplayInWidget: BadgeToDisplay[],
+    complete: boolean
+  ) => {
+    return badgesToDisplayInWidget.filter((badge) => {
       if (complete) {
         return badge.badge.percentComplete === 100;
       }
@@ -40,11 +38,7 @@ const BadgeWidget: React.FC<BadgeWidgetProps> = ({
   // fallback if no badges are provided
   if (!badgesToDisplayInWidget || badgesToDisplayInWidget.length === 0) {
     return (
-      <Box
-        bg="white"
-        p="20px"
-        mb="16px"
-      >
+      <Box bg="white" p="20px" mb="16px">
         <BadgeRow
           title="Add some badges!"
           subtitle="Pass badgesToDisplayInWidget prop with badge data."
@@ -89,7 +83,7 @@ const BadgeWidget: React.FC<BadgeWidgetProps> = ({
             isFirst={isFirst}
             showButton={isFirst}
             achieved={achieved}
-            />
+          />
         );
       })}
     </Box>

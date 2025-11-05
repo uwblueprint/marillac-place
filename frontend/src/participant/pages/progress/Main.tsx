@@ -95,10 +95,7 @@ export default function ParticipantsProgressPage() {
         <WeeklyEarningsChart weeklyEarnings={weeklyEarnings} />
       </div>
 
-      <Flex
-        justifyContent="center" 
-        alignItems="center" 
-      >
+      <Flex justifyContent="center" alignItems="center">
         <Box
           bg="white"
           borderRadius="12px"
@@ -109,74 +106,105 @@ export default function ParticipantsProgressPage() {
           width="92%"
         >
           <HStack spacing={6} mb={4}>
-          {["badges", "achieved"].map((tab) => (
-            <Text
-              key={tab}
-              fontWeight={activeTab === tab ? "bold" : "medium"}
-              color={activeTab === tab ? "black" : "grey"}
-              textDecoration={activeTab === tab ? "underline" : "none"}
-              cursor="pointer"
-              _hover={{ color: "gray.700" }}
-              onClick={() => setActiveTab(tab)}
-              transition="all 0.2s ease"
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </Text>
-          ))}
-        </HStack>
+            {["badges", "achieved"].map((tab) => (
+              <Text
+                key={tab}
+                fontWeight={activeTab === tab ? "bold" : "medium"}
+                color={activeTab === tab ? "black" : "grey"}
+                textDecoration={activeTab === tab ? "underline" : "none"}
+                cursor="pointer"
+                _hover={{ color: "gray.700" }}
+                onClick={() => setActiveTab(tab)}
+                transition="all 0.2s ease"
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </Text>
+            ))}
+          </HStack>
 
-        {activeTab === "badges" ? (
-          <BadgeWidget allBadges={[
-              {
-                title: "Beginner Log In Badge",
-                subtitle: "Completed 7 days in a row",
-                bucks: 5,
-                badge: { icon: "five_star", rarity: "gold", percentComplete: 100 },
-              },
-              {
-                title: "Super Awesome Badge",
-                subtitle: "Completed 7 days in a row",
-                bucks: 5,
-                badge: { icon: "five_star", rarity: "gold", percentComplete: 20 },
-              },
-              {
-                title: "Beginner Perfect Score Badge",
-                subtitle: "Completed 7 days in a row",
-                bucks: 5,
-                badge: { icon: "diamond", rarity: "diamond", percentComplete: 50 },
-              },
-              {
-                title: "Hello world",
-                subtitle: "Completed 7 days in a row",
-                bucks: 5,
-                badge: { icon: "tool", rarity: "green", percentComplete: 100 },
-              },
-            
-          ]} achieved={false} />
-        ) : (
-          <BadgeWidget allBadges={
-            [
-              {
-                title: "Beginner Log In Badge",
-                subtitle: "Completed 7 days in a row",
-                bucks: 5,
-                badge: { icon: "five_star", rarity: "gold", percentComplete: 100 },
-              },
-              {
-                title: "Beginner Perfect Score Badge",
-                subtitle: "Completed 7 days in a row",
-                bucks: 5,
-                badge: { icon: "diamond", rarity: "diamond", percentComplete: 50 },
-              },
-              {
-                title: "Hello world",
-                subtitle: "Completed 7 days in a row",
-                bucks: 5,
-                badge: { icon: "tool", rarity: "green", percentComplete: 100 },
-              },
-            ]
-          } achieved />
-        )}
+          {activeTab === "badges" ? (
+            <BadgeWidget
+              allBadges={[
+                {
+                  title: "Beginner Log In Badge",
+                  subtitle: "Completed 7 days in a row",
+                  bucks: 5,
+                  badge: {
+                    icon: "five_star",
+                    rarity: "gold",
+                    percentComplete: 100,
+                  },
+                },
+                {
+                  title: "Super Awesome Badge",
+                  subtitle: "Completed 7 days in a row",
+                  bucks: 5,
+                  badge: {
+                    icon: "five_star",
+                    rarity: "gold",
+                    percentComplete: 20,
+                  },
+                },
+                {
+                  title: "Beginner Perfect Score Badge",
+                  subtitle: "Completed 7 days in a row",
+                  bucks: 5,
+                  badge: {
+                    icon: "diamond",
+                    rarity: "diamond",
+                    percentComplete: 50,
+                  },
+                },
+                {
+                  title: "Hello world",
+                  subtitle: "Completed 7 days in a row",
+                  bucks: 5,
+                  badge: {
+                    icon: "tool",
+                    rarity: "green",
+                    percentComplete: 100,
+                  },
+                },
+              ]}
+              achieved={false}
+            />
+          ) : (
+            <BadgeWidget
+              allBadges={[
+                {
+                  title: "Beginner Log In Badge",
+                  subtitle: "Completed 7 days in a row",
+                  bucks: 5,
+                  badge: {
+                    icon: "five_star",
+                    rarity: "gold",
+                    percentComplete: 100,
+                  },
+                },
+                {
+                  title: "Beginner Perfect Score Badge",
+                  subtitle: "Completed 7 days in a row",
+                  bucks: 5,
+                  badge: {
+                    icon: "diamond",
+                    rarity: "diamond",
+                    percentComplete: 50,
+                  },
+                },
+                {
+                  title: "Hello world",
+                  subtitle: "Completed 7 days in a row",
+                  bucks: 5,
+                  badge: {
+                    icon: "tool",
+                    rarity: "green",
+                    percentComplete: 100,
+                  },
+                },
+              ]}
+              achieved
+            />
+          )}
         </Box>
       </Flex>
     </>
