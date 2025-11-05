@@ -53,12 +53,12 @@ export const GET_MARILLAC_BUCKS = gql`
 
 export const GET_PARTICIPANT_GOAL = gql`
   query getParticipantGoal($participantId: Int!) {
-      getParticipantById(participantId: $participantId) {
-          marillac_bucks
-	  marillac_bucks_goal
-      }
+    getParticipantById(participantId: $participantId) {
+      marillac_bucks
+      marillac_bucks_goal
+    }
   }
-`
+`;
 
 export const GET_PARTICIPANT_BY_ROOM = gql`
   query getParticipantByRoom($room_number: Int!) {
@@ -157,12 +157,8 @@ export const GET_ANNOUNCEMENTS_BY_PARTICIPANTS = gql`
 `;
 
 export const GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID = gql`
-  query getAnnouncementsByParticipantId(
-    $participant_id: Int!
-  ) {
-    getAnnouncementsByParticipantId(
-      participant_id: $participant_id
-    ) {
+  query getAnnouncementsByParticipantId($participant_id: Int!) {
+    getAnnouncementsByParticipantId(participant_id: $participant_id) {
       announcement_id
       participant_id
       read
@@ -235,8 +231,14 @@ export const GET_TASKS_BY_TYPE = gql`
 `;
 
 export const GET_PARTICIPANT_FILTERED_ANNOUNCEMENTS = gql`
-  query getParticipantFilteredAnnouncements($participantId: Int!, $filter: AnnouncementFilter!) {
-    getParticipantAnnouncements(participantId: $participantId, filter: $filter) {
+  query getParticipantFilteredAnnouncements(
+    $participantId: Int!
+    $filter: AnnouncementFilter!
+  ) {
+    getParticipantAnnouncements(
+      participantId: $participantId
+      filter: $filter
+    ) {
       participant_id
       announcement_id
       read

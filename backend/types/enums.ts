@@ -60,7 +60,7 @@ const enums = gql`
     PINNED
     IMPORTANT
   }
-    
+
   enum Icon {
     FIVE_STAR
     FOUR_STAR

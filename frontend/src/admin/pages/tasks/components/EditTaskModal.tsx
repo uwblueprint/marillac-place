@@ -1,8 +1,4 @@
-import {
-  Text,
-  Flex,
-  Checkbox,
-} from "@chakra-ui/react";
+import { Text, Flex, Checkbox } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_TASK } from "../../../../gql/mutations";
@@ -11,7 +7,13 @@ import CoreInput from "../../../common/form/CoreInput";
 import TextInput from "../../../common/form/TextInput";
 import { toTitleCase } from "../../../../utils/string_helpers";
 import TaskInput from "../../../common/form/TaskInput";
-import { DayOfWeek, RecurrenceFrequency, TaskInfo, TaskType, TimeOption } from "../../../../types/task";
+import {
+  DayOfWeek,
+  RecurrenceFrequency,
+  TaskInfo,
+  TaskType,
+  TimeOption,
+} from "../../../../types/task";
 import { sendNotification } from "../../../../utils/sendNotification";
 
 type EditTaskModalProps = {
@@ -25,7 +27,9 @@ export default function EditTaskModal({ selected, close }: EditTaskModalProps) {
   const [participantPreference, setParticipantPreference] = useState(
     selected.recurrence_preference === "PARTICIPANT_PREFERENCE"
   );
-  const [recurrence, setRecurrence] = useState<RecurrenceFrequency>(selected.recurrence_preference);
+  const [recurrence, setRecurrence] = useState<RecurrenceFrequency>(
+    selected.recurrence_preference
+  );
   const [days, setDays] = useState<DayOfWeek[]>(selected.repeat_days);
   const [time, setTime] = useState<TimeOption>(selected.time_preference);
   const [startTime, setStartTime] = useState(selected.start_time ?? "");
@@ -37,7 +41,7 @@ export default function EditTaskModal({ selected, close }: EditTaskModalProps) {
 
   const [updateTask] = useMutation(UPDATE_TASK, {
     onCompleted: () => {
-      sendNotification(`Task ${taskName} updated.`)
+      sendNotification(`Task ${taskName} updated.`);
     },
     onError: (err) => {
       setError(err.message);
@@ -46,23 +50,28 @@ export default function EditTaskModal({ selected, close }: EditTaskModalProps) {
 
   function handleSubmit() {
     if (
-      !taskName || 
-      (
-        !participantPreference &&
-        (
-          days.length === 0 ||
-          (time === TimeOption.SPECIFIC && (startTime === "" || endTime === ""))
-        )
-      )
+      !taskName ||
+      (!participantPreference &&
+        (days.length === 0 ||
+          (time === TimeOption.SPECIFIC &&
+            (startTime === "" || endTime === ""))))
     ) {
       setError("Missing fields");
     } else if (addition < 0 || deduction < 0) {
       setError("Invalid values for marillac bucks");
     } else if (time === TimeOption.SPECIFIC && startTime >= endTime) {
       setError("Start time should be earlier than end time");
-    } else if (recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS && days.length <= 1) {
-      setError("If the task can only be completed on a specific day, please choose 'Every selected day'");
-    } else if (recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS && time !== TimeOption.ANYTIME) {
+    } else if (
+      recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS &&
+      days.length <= 1
+    ) {
+      setError(
+        "If the task can only be completed on a specific day, please choose 'Every selected day'"
+      );
+    } else if (
+      recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS &&
+      time !== TimeOption.ANYTIME
+    ) {
       setError("Anyday tasks must also be anytime tasks");
     } else {
       updateTask({
@@ -143,7 +152,7 @@ export default function EditTaskModal({ selected, close }: EditTaskModalProps) {
               width="50%"
             />
           </Flex>
-    
+
           <TextInput
             label="Comments"
             current_value={comments}
@@ -151,7 +160,7 @@ export default function EditTaskModal({ selected, close }: EditTaskModalProps) {
           />
         </>
       ) : (
-        <TaskInput 
+        <TaskInput
           set_recurrence={setRecurrence}
           set_days={setDays}
           set_time={setTime}

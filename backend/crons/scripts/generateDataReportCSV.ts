@@ -1,16 +1,16 @@
 import path from "path";
 import fs from "fs/promises";
-import generateDataReport from "./generateDataReport";
+import { generateDataReport, DataReport } from "./generateDataReport";
 
 // Convert JSON data to CSV format
-function jsonToCsv(data: any[], headers: string[]): string {
-  if (data.length === 0) return headers.join(",") + "\n";
+function jsonToCsv(data: object[], headers: string[]): string {
+  if (data.length === 0) return `${headers.join(",")}\n`;
 
   const csvRows = [headers.join(",")];
 
-  for (const row of data) {
+  const rows = data.map((row) => {
     const values = headers.map((header) => {
-      const value = row[header];
+      const value = (row as Record<string, unknown>)[header];
       // Escape commas and quotes in CSV
       if (
         typeof value === "string" &&
@@ -20,14 +20,15 @@ function jsonToCsv(data: any[], headers: string[]): string {
       }
       return value ?? "";
     });
-    csvRows.push(values.join(","));
-  }
+    return values.join(",");
+  });
+  csvRows.push(...rows);
 
-  return csvRows.join("\n") + "\n";
+  return `${csvRows.join("\n")}\n`;
 }
 
 // Generate a single comprehensive CSV with all data types
-function generateComprehensiveCSV(report: any): string {
+function generateComprehensiveCSV(report: DataReport): string {
   const csvSections: string[] = [];
 
   // Report header information
@@ -207,4 +208,3 @@ export async function generateMonthlyReportCSV(): Promise<string | null> {
     return null;
   }
 }
-

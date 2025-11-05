@@ -4,17 +4,15 @@ import { checkAndRecordGoalReached } from "../utils/checkGoalReached";
 
 const prisma = new PrismaClient();
 
-enum GoalAction {
-  SET = "SET",
-  REACHED = "REACHED",
-}
-
 const participantResolver = {
   Query: {
     getCurrentParticipants: async (): Promise<Participant[]> => {
       const participants = await prisma.participant.findMany({
         where: {
-          OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
+          OR: [
+            { departure_date: null },
+            { departure_date: { gt: getToday() } },
+          ],
         },
         orderBy: [{ room_number: "asc" }],
       });
@@ -36,68 +34,82 @@ const participantResolver = {
       _parent: undefined,
       { room_number }: { room_number: number }
     ): Promise<Participant | null> => {
-      return await prisma.participant.findFirst({
-        where: {
-          AND: [
-            { room_number },
-            {
-              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
-            },
-          ],
-        },
-        include: {
-          assigned_tasks: true,
-        },
-      });
+      try {
+        return await prisma.participant.findFirst({
+          where: {
+            AND: [
+              { room_number },
+              {
+                OR: [
+                  { departure_date: null },
+                  { departure_date: { gt: getToday() } },
+                ],
+              },
+            ],
+          },
+          include: {
+            assigned_tasks: true,
+          },
+        });
+      } catch (error) {
+        throw new Error("Failed to get participant by room");
+      }
     },
     getParticipantsByRooms: async (
       _parent: undefined,
       { room_numbers }: { room_numbers: number[] }
     ): Promise<Participant[]> => {
-      return await prisma.participant.findMany({
-        where: {
-          AND: [
-            { room_number: { in: room_numbers } },
-            {
-              OR: [{ departure_date: null }, { departure_date: { gt: getToday() } }],
-            },
-          ],
-        },
-      });
+      try {
+        return await prisma.participant.findMany({
+          where: {
+            AND: [
+              { room_number: { in: room_numbers } },
+              {
+                OR: [
+                  { departure_date: null },
+                  { departure_date: { gt: getToday() } },
+                ],
+              },
+            ],
+          },
+        });
+      } catch (error) {
+        throw new Error("Failed to get participants by rooms");
+      }
     },
     getParticipantById: async (
       _parent: undefined,
       { participantId }: { participantId: number }
     ): Promise<Participant | null> => {
-      return await prisma.participant.findUnique(
-              {
-                  where: {
-                      participant_id: participantId,
-                  },
-              },
-          );
+      return prisma.participant.findUnique({
+        where: {
+          participant_id: participantId,
+        },
+      });
     },
     getGoalHistoryByParticipant: async (
       _parent: undefined,
-      { participant_id, start_date, end_date }: { 
-        participant_id: number; 
-        start_date?: string; 
-        end_date?: string 
+      {
+        participant_id,
+        start_date,
+        end_date,
+      }: {
+        participant_id: number;
+        start_date?: string;
+        end_date?: string;
       }
     ) => {
-      const where: any = { participant_id };
-      
-      if (start_date || end_date) {
-        where.action_date = {};
-        if (start_date) where.action_date.gte = start_date;
-        if (end_date) where.action_date.lte = end_date;
-      }
-      
       const result = await prisma.$queryRaw`
         SELECT * FROM goal_history
         WHERE participant_id = ${participant_id}
-          ${start_date ? Prisma.sql`AND action_date >= ${start_date}` : Prisma.empty}
-          ${end_date ? Prisma.sql`AND action_date <= ${end_date}` : Prisma.empty}
+          ${
+            start_date
+              ? Prisma.sql`AND action_date >= ${start_date}`
+              : Prisma.empty
+          }
+          ${
+            end_date ? Prisma.sql`AND action_date <= ${end_date}` : Prisma.empty
+          }
         ORDER BY action_date DESC
       `;
 
@@ -140,7 +152,7 @@ const participantResolver = {
       );
 
       return last7Days.map((day) => earningsMap[day] || 0);
-      },
+    },
   },
   Mutation: {
     createParticipant: async (
@@ -158,19 +170,30 @@ const participantResolver = {
       }
     ): Promise<boolean> => {
       let existingParticipant: Participant | null = null;
-   
+
       existingParticipant = await prisma.participant.findUnique({
         where: { participant_id },
       });
+
+      if (existingParticipant) {
+        throw new Error("Participant already exists");
+      }
 
       let occupiedRoom: Participant | null = null;
 
       occupiedRoom = await prisma.participant.findFirst({
         where: {
           room_number,
-          OR: [{ departure_date: null }, { departure_date: { gte: getToday() } }],
+          OR: [
+            { departure_date: null },
+            { departure_date: { gte: getToday() } },
+          ],
         },
       });
+
+      if (occupiedRoom) {
+        throw new Error("Room is occupied");
+      }
 
       await prisma.participant.create({
         data: {
@@ -180,8 +203,8 @@ const participantResolver = {
           password,
           account_creation_date: getToday(),
           participant_progress: {
-            create: {}
-          }
+            create: {},
+          },
         },
       });
       return true;
@@ -210,7 +233,7 @@ const participantResolver = {
         password?: string;
       }
     ): Promise<boolean> => {
-      const updatedData: Record<string, any> = {};
+      const updatedData: Partial<Participant> = {};
       if (room_number) updatedData.room_number = room_number;
       if (arrival_date) updatedData.arrival_date = arrival_date;
       if (departure_date) updatedData.departure_date = departure_date;
@@ -226,7 +249,7 @@ const participantResolver = {
       await prisma.participant.update({
         where: { participant_id },
         data: updatedData,
-      })
+      });
 
       return true;
     },
@@ -235,7 +258,6 @@ const participantResolver = {
       {
         participant_id,
         marillac_bucks,
-        reason,
       }: {
         participant_id: number;
         marillac_bucks: number;
@@ -246,10 +268,10 @@ const participantResolver = {
         where: { participant_id },
         data: { marillac_bucks },
       });
-      
+
       // Check if this update caused the participant to reach their goal
       await checkAndRecordGoalReached(participant_id);
-      
+
       return true;
     },
     setMarillacBucksGoal: async (
@@ -264,26 +286,26 @@ const participantResolver = {
     ): Promise<boolean> => {
       console.log("🎯 Backend: setMarillacBucksGoal called");
       console.log("📋 Params:", { participant_id, goal_value });
-      
+
       if (goal_value <= 0) {
         console.error("❌ Invalid goal value:", goal_value);
         throw new Error("Goal value must be greater than 0");
       }
-      
+
       console.log("✅ Updating participant goal...");
       await prisma.participant.update({
         where: { participant_id },
         data: { marillac_bucks_goal: goal_value },
       });
       console.log("✅ Participant goal updated");
-      
+
       console.log("✅ Inserting into goal_history...");
       await prisma.$executeRaw`
         INSERT INTO goal_history (participant_id, goal_action, goal_value, action_date)
         VALUES (${participant_id}, 'SET', ${goal_value}, ${getToday()})
       `;
       console.log("✅ Goal history recorded");
-      
+
       console.log("🎯 Goal successfully set!");
       return true;
     },
@@ -300,25 +322,27 @@ const participantResolver = {
       const participant = await prisma.participant.findUnique({
         where: { participant_id },
       });
-      
+
       if (!participant) {
         throw new Error("Participant not found");
       }
-      
+
       if (new_goal_value <= participant.marillac_bucks) {
-        throw new Error("Goals must be greater than current Marillac Bucks Balance");
+        throw new Error(
+          "Goals must be greater than current Marillac Bucks Balance"
+        );
       }
-      
+
       await prisma.participant.update({
         where: { participant_id },
         data: { marillac_bucks_goal: new_goal_value },
       });
-      
+
       await prisma.$executeRaw`
         INSERT INTO goal_history (participant_id, goal_action, goal_value, action_date)
         VALUES (${participant_id}, 'SET', ${new_goal_value}, ${getToday()})
       `;
-      
+
       return true;
     },
   },

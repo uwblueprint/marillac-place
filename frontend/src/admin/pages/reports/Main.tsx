@@ -136,7 +136,12 @@ export default function AdminReportsPage() {
 
   if (loading) {
     return (
-      <Flex width="100%" height="fit-content" justifyContent="center" padding="20px">
+      <Flex
+        width="100%"
+        height="fit-content"
+        justifyContent="center"
+        padding="20px"
+      >
         <Text>Loading...</Text>
       </Flex>
     );
@@ -144,7 +149,12 @@ export default function AdminReportsPage() {
 
   if (error) {
     return (
-      <Flex width="100%" height="fit-content" justifyContent="center" padding="20px">
+      <Flex
+        width="100%"
+        height="fit-content"
+        justifyContent="center"
+        padding="20px"
+      >
         <Text color="red">Error loading reports: {error.message}</Text>
       </Flex>
     );

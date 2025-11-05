@@ -1,28 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalOverlay,
-  Flex,
-  FormControl,
-  FormLabel,
-  Box,
-  Button,
-  Grid,
-  Heading,
-  Input,
-  Text,
-  VStack,
-  HStack,
-  extendTheme,
-  ChakraProvider,
-  InputGroup,
-  InputLeftElement,
-  Select,
-} from "@chakra-ui/react";
+import { Flex, Grid, Text } from "@chakra-ui/react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { ROOM_NUMBERS } from "../../../../constants/misc";
 import {
   GET_PARTICIPANTS_BY_ROOMS,
@@ -125,14 +103,17 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       <SelectionInput
         label="Badge Name"
         current_value={badgeName}
-        action={(e: any) => setBadgeName(e.target.value)} 
+        action={(e: any) => setBadgeName(e.target.value)}
         mode="dropdown"
         value_options={Object.fromEntries(
-          badgeData?.getCustomBadges?.map((badge: any) => [badge.name, badge.name]) ?? []
+          badgeData?.getCustomBadges?.map((badge: any) => [
+            badge.name,
+            badge.name,
+          ]) ?? []
         )}
         width="100%"
       />
-            
+
       <CoreInput
         label="Badge Value"
         current_value={badgeValue}
@@ -153,10 +134,12 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
 
       <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
 
-      <Text textStyle="web.s1" color="text.light.secondary">Choose Room(s)</Text>
+      <Text textStyle="web.s1" color="text.light.secondary">
+        Choose Room(s)
+      </Text>
       <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">
         {ROOM_NUMBERS.map((num: number) => (
-          <GreenButton 
+          <GreenButton
             key={num}
             text={"Room " + num}
             action={() => toggleRoomSelection(num)}

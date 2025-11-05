@@ -1,16 +1,4 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Flex,
-  Input,
-  FormLabel,
-  FormControl,
-  Text,
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalOverlay,
-} from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { EDIT_CUSTOM_BADGE } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
@@ -61,14 +49,14 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
       cancel_action={onClose}
       error={error}
     >
-      <CoreInput 
+      <CoreInput
         label="Badge Name"
         current_value={badgeName}
         action={(e: any) => setBadgeName(e.target.value)}
         type="text"
         width="350px"
       />
-      <CoreInput 
+      <CoreInput
         label="Badge Criteria"
         current_value={badgeCriteria}
         action={(e: any) => setBadgeCriteria(e.target.value)}

@@ -1,29 +1,15 @@
-import {
-  RadioGroup,
-  Stack,
-  Radio,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  Text,
-  Textarea,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  InputLeftElement,
-  InputGroup,
-  Checkbox,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { Flex } from "@chakra-ui/react";
+import React, { useEffect } from "react";
 import CoreInput from "./CoreInput";
 import TextInput from "./TextInput";
 import SelectionInput from "./SelectionInput";
 import GreenButton from "../buttons/GreenButton";
 import { toTitleCase } from "../../../utils/string_helpers";
-import { DayOfWeek, RecurrenceFrequency, TimeOption } from "../../../types/task";
+import {
+  DayOfWeek,
+  RecurrenceFrequency,
+  TimeOption,
+} from "../../../types/task";
 import { weekdays } from "../../../constants/misc";
 
 type TaskInputProps = {
@@ -45,7 +31,7 @@ type TaskInputProps = {
   comments?: string;
 };
 
-export default function TaskInput({ 
+export default function TaskInput({
   set_recurrence,
   set_days,
   set_time,
@@ -67,13 +53,13 @@ export default function TaskInput({
     if (recurrence === RecurrenceFrequency.DAILY) {
       set_days(weekdays as DayOfWeek[]);
     } else if (recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS) {
-      const earliestDay = days[0]
-      const latestDay = days[days.length - 1]
+      const earliestDay = days[0];
+      const latestDay = days[days.length - 1];
       const a = weekdays.indexOf(earliestDay as string);
       const b = weekdays.indexOf(latestDay as string);
       set_days([...weekdays.slice(a, b + 1)]);
     }
-  }, [recurrence])
+  }, [recurrence]);
 
   function handleSelectDay(day: DayOfWeek) {
     if (recurrence === RecurrenceFrequency.EVERY_SELECTED_DAYS) {
@@ -110,7 +96,7 @@ export default function TaskInput({
         action={(opt: RecurrenceFrequency) => set_recurrence(opt)}
         mode="radio"
         value_options={{
-          "Daily": RecurrenceFrequency.DAILY,
+          Daily: RecurrenceFrequency.DAILY,
           "Every selected day": RecurrenceFrequency.EVERY_SELECTED_DAYS,
           "Any selected day": RecurrenceFrequency.ANY_SELECTED_DAYS,
         }}
@@ -139,17 +125,13 @@ export default function TaskInput({
         }}
         mode="radio"
         value_options={{
-          "Anytime": TimeOption.ANYTIME,
+          Anytime: TimeOption.ANYTIME,
           "Select Time": TimeOption.SPECIFIC,
         }}
       />
 
       {time === TimeOption.SPECIFIC && (
-        <Flex
-          width="100%"
-          alignItems="center"
-          justifyContent="space-between"
-        >
+        <Flex width="100%" alignItems="center" justifyContent="space-between">
           <CoreInput
             label="Start Time"
             current_value={start_time}

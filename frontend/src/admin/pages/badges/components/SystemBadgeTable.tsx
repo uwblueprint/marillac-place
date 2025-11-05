@@ -1,22 +1,8 @@
-import {
-  TableContainer,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Text,
-  Flex,
-  Spinner,
-  Image as ChakraImage,
-  Switch,
-} from "@chakra-ui/react";
+import { Text, Flex, Image as ChakraImage, Switch } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_BADGE_STATUS } from "../../../../gql/mutations";
-import { Icon } from "../../../../constants/icons";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
 import DataTable from "../../../common/misc/DataTable";
 
@@ -34,7 +20,7 @@ const SystemBadgeTable = ({
   const levels = ["N", "B", "S", "G", "D"];
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState(null);
-  
+
   const [statuses, setStatuses] = useState<Record<number, boolean>>({});
   const [updateBadgeStatus] = useMutation(UPDATE_BADGE_STATUS);
 

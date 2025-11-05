@@ -120,7 +120,6 @@ export const CREATE_ASSIGNED_TASK = gql`
   }
 `;
 
-
 export const EDIT_ANNOUNCEMENT = gql`
   mutation editAnnouncement(
     $announcement_id: Int!
@@ -304,7 +303,10 @@ export const ASSIGN_CUSTOM_BADGE = gql`
 `;
 export const SET_MARILLAC_BUCKS_GOAL = gql`
   mutation setMarillacBucksGoal($participant_id: Int!, $goal_value: Int!) {
-    setMarillacBucksGoal(participant_id: $participant_id, goal_value: $goal_value)
+    setMarillacBucksGoal(
+      participant_id: $participant_id
+      goal_value: $goal_value
+    )
   }
 `;
 
@@ -322,11 +324,17 @@ export const UPDATE_PIN_READ_ANNOUNCEMENTS = gql`
       read: $read
     )
   }
-`
+`;
 
 export const UPDATE_MARILLAC_BUCKS_GOAL = gql`
-  mutation updateMarillacBucksGoal($participant_id: Int!, $new_goal_value: Int!) {
-    updateMarillacBucksGoal(participant_id: $participant_id, new_goal_value: $new_goal_value)
+  mutation updateMarillacBucksGoal(
+    $participant_id: Int!
+    $new_goal_value: Int!
+  ) {
+    updateMarillacBucksGoal(
+      participant_id: $participant_id
+      new_goal_value: $new_goal_value
+    )
   }
 `;
 
@@ -361,7 +369,11 @@ export const UPDATE_ASSIGNED_TASK = gql`
 `;
 
 export const CREATE_REPORT_RECIPIENT = gql`
-  mutation createReportRecipient($email: String!, $weekly: Boolean!, $monthly: Boolean!) {
+  mutation createReportRecipient(
+    $email: String!
+    $weekly: Boolean!
+    $monthly: Boolean!
+  ) {
     createReportRecipient(email: $email, weekly: $weekly, monthly: $monthly)
   }
 `;

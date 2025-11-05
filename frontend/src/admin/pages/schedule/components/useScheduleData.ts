@@ -1,23 +1,22 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
-import {
-  ParticipantData,
-  TaskStatus,
-  TaskType,
-  CalendarEvent,
-  AssignedTask,
-} from "./ScheduleTypes";
+import { CalendarEvent, AssignedTask } from "./ScheduleTypes";
 import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/queries";
-import { formatDateFromDateString, getWeekBounds } from "../../../../utils/formatDateTime";
+import {
+  formatDateFromDateString,
+  getWeekBounds,
+} from "../../../../utils/formatDateTime";
 
 export const useScheduleData = (selectedRoom: number) => {
   const [participantId, setParticipantId] = useState<number | null>(null);
   const [marillacBucks, setMarillacBucks] = useState<number>(0);
-  const [specificTasks, setSpecificTasks] = useState<CalendarEvent[]>([])
-  const [anytimeTasks, setAnytimeTasks] = useState<CalendarEvent[]>([])
-  const [anydayTasks, setAnydayTasks] = useState<CalendarEvent[]>([])
+  const [specificTasks, setSpecificTasks] = useState<CalendarEvent[]>([]);
+  const [anytimeTasks, setAnytimeTasks] = useState<CalendarEvent[]>([]);
+  const [anydayTasks, setAnydayTasks] = useState<CalendarEvent[]>([]);
 
-  const [fetchData, { loading, error, data }] = useLazyQuery(GET_PARTICIPANT_BY_ROOM);
+  const [fetchData, { loading, error, data }] = useLazyQuery(
+    GET_PARTICIPANT_BY_ROOM
+  );
 
   function groupTasks(tasks: AssignedTask[]) {
     const { weekStart, weekEnd } = getWeekBounds();
@@ -60,26 +59,26 @@ export const useScheduleData = (selectedRoom: number) => {
       }
     }
 
-    setSpecificTasks(specific)
-    setAnytimeTasks(anytime)
-    setAnydayTasks(anyday)
+    setSpecificTasks(specific);
+    setAnytimeTasks(anytime);
+    setAnydayTasks(anyday);
   }
 
   useEffect(() => {
-    setParticipantId(null)
-    setMarillacBucks(0)
-    setSpecificTasks([])
-    setAnytimeTasks([])
-    setAnydayTasks([])
-    fetchData({ variables: { room_number: selectedRoom } })
+    setParticipantId(null);
+    setMarillacBucks(0);
+    setSpecificTasks([]);
+    setAnytimeTasks([]);
+    setAnydayTasks([]);
+    fetchData({ variables: { room_number: selectedRoom } });
   }, [selectedRoom, fetchData]);
 
   useEffect(() => {
     if (!loading && !error && data && data.getParticipantByRoom) {
-      const participant = data.getParticipantByRoom
-      setParticipantId(participant.participant_id)
-      setMarillacBucks(participant.marillac_bucks)
-      groupTasks(participant.assigned_tasks)
+      const participant = data.getParticipantByRoom;
+      setParticipantId(participant.participant_id);
+      setMarillacBucks(participant.marillac_bucks);
+      groupTasks(participant.assigned_tasks);
     }
   }, [data, loading, error]);
 

@@ -157,8 +157,17 @@ const resolvers = gql`
     updateBadgeStatus(badge_id: Int!, is_active: Boolean!): Boolean
     setMarillacBucksGoal(participant_id: Int!, goal_value: Int!): Boolean
     updateMarillacBucksGoal(participant_id: Int!, new_goal_value: Int!): Boolean
-    createReportRecipient(email: String!, weekly: Boolean!, monthly: Boolean!): Boolean
-    updateReportRecipient(report_recipient_id: Int!, email: String, weekly: Boolean, monthly: Boolean): Boolean
+    createReportRecipient(
+      email: String!
+      weekly: Boolean!
+      monthly: Boolean!
+    ): Boolean
+    updateReportRecipient(
+      report_recipient_id: Int!
+      email: String
+      weekly: Boolean
+      monthly: Boolean
+    ): Boolean
     deleteReportRecipient(report_recipient_id: Int!): Boolean
   }
 `;

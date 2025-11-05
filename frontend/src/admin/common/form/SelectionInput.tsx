@@ -1,5 +1,12 @@
 import React from "react";
-import { FormControl, RadioGroup, Stack, Radio, Text, Select } from "@chakra-ui/react";
+import {
+  FormControl,
+  RadioGroup,
+  Stack,
+  Radio,
+  Text,
+  Select,
+} from "@chakra-ui/react";
 import { InputProps } from "../../../types/component";
 
 type SelectionInputProps = InputProps & {

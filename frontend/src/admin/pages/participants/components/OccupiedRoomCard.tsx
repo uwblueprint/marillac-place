@@ -1,4 +1,4 @@
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import EditParticipantCard from "./EditParticipantCard";
 import OrangeButton from "../../../common/buttons/OrangeButton";

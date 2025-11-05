@@ -2,36 +2,29 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   Text,
-  Button,
-  HStack,
-  VStack,
-  Box,
   Flex,
-  Textarea,
-  Circle,
 } from "@chakra-ui/react";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import {
-  CalendarEvent,
-  TaskStatus,
-  TaskStatuses,
-} from "./ScheduleTypes";
+import { CalendarEvent, TaskStatus } from "./ScheduleTypes";
 import OrangeButton from "../../../common/buttons/OrangeButton";
 import SimpleButton from "../../../common/buttons/SimpleButton";
 import TextInput from "../../../common/form/TextInput";
 import { toTitleCase } from "../../../../utils/string_helpers";
 import { sendNotification } from "../../../../utils/sendNotification";
-import { DELETE_ASSIGNED_TASK, UPDATE_ASSIGNED_TASK } from "../../../../gql/mutations";
+import {
+  DELETE_ASSIGNED_TASK,
+  UPDATE_ASSIGNED_TASK,
+} from "../../../../gql/mutations";
 import { DayOfWeek, TaskType, TimeOption } from "../../../../types/task";
-import { convertToDaysListGivenRange, displayDate, formatDateFromString, formatDateTime, formatTimeString, isAnytime } from "../../../../utils/formatDateTime";
+import {
+  convertToDaysListGivenRange,
+  displayDate,
+  formatDateFromString,
+  formatTimeString,
+  isAnytime,
+} from "../../../../utils/formatDateTime";
 import { weekdays } from "../../../../constants/misc";
 import GreenButton from "../../../common/buttons/GreenButton";
 import SelectionInput from "../../../common/form/SelectionInput";
@@ -46,21 +39,27 @@ export default function TaskDetailsModal({
   task,
   onClose,
 }: TaskDetailsModalProps) {
-  const [selectedStatus, setSelectedStatus] = useState<TaskStatus>(task.task_status);
-  const [days, setDays] = useState<DayOfWeek[]>(convertToDaysListGivenRange(task.start, task.end));
-  const [time, setTime] = useState<TimeOption>(isAnytime(task.start, task.end) ? TimeOption.ANYTIME : TimeOption.SPECIFIC);
+  const [selectedStatus, setSelectedStatus] = useState<TaskStatus>(
+    task.task_status
+  );
+  const [days, setDays] = useState<DayOfWeek[]>(
+    convertToDaysListGivenRange(task.start, task.end)
+  );
+  const [time, setTime] = useState<TimeOption>(
+    isAnytime(task.start, task.end) ? TimeOption.ANYTIME : TimeOption.SPECIFIC
+  );
   const [startTime, setStartTime] = useState(formatTimeString(task.start));
   const [endTime, setEndTime] = useState(formatTimeString(task.end));
   const [addition, setAddition] = useState(task.marillacBucksAddition);
   const [deduction, setDeduction] = useState(task.marillac_bucks_deduction);
   const [comments, setComments] = useState<string>(task.comment ?? "");
 
-  const [editDetails, setEditDetails] = useState<boolean>(false)
+  const [editDetails, setEditDetails] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
   const [deleteAssignedTask] = useMutation(DELETE_ASSIGNED_TASK, {
     onCompleted: () => {
-      sendNotification(`Task ${task.title} deleted.`)
+      sendNotification(`Task ${task.title} deleted.`);
     },
     onError: (err: any) => {
       setError(err.message);
@@ -69,20 +68,20 @@ export default function TaskDetailsModal({
 
   const [updateAssignedTask] = useMutation(UPDATE_ASSIGNED_TASK, {
     onCompleted: () => {
-      sendNotification(`Task ${task.title} edited.`)
+      sendNotification(`Task ${task.title} edited.`);
     },
     onError: (err: any) => {
       setError(err.message);
     },
-  })
+  });
 
   const handleDelete = () => {
     deleteAssignedTask({
       variables: {
-        assigned_task_id: task.id
+        assigned_task_id: task.id,
       },
     });
-  }
+  };
 
   const handleSave = () => {
     setError("");
@@ -98,14 +97,14 @@ export default function TaskDetailsModal({
     } else if (days.length > 1 && time !== TimeOption.ANYTIME) {
       setError("Tasks spanning over multiple days must be anytime tasks");
     } else {
-      let startDate = ""
-      let endDate = ""
+      let startDate = "";
+      let endDate = "";
       if (days.length > 1) {
-        startDate = formatDateFromString(days[0])
-        endDate = formatDateFromString(days[days.length - 1], "", true)
+        startDate = formatDateFromString(days[0]);
+        endDate = formatDateFromString(days[days.length - 1], "", true);
       } else {
-        startDate = formatDateFromString(days[0] as DayOfWeek, startTime)
-        endDate = formatDateFromString(days[0] as DayOfWeek, endTime)
+        startDate = formatDateFromString(days[0] as DayOfWeek, startTime);
+        endDate = formatDateFromString(days[0] as DayOfWeek, endTime);
       }
 
       updateAssignedTask({
@@ -155,19 +154,23 @@ export default function TaskDetailsModal({
         paddingY="25px"
       >
         <Flex justify="space-between" align="center" mb="10px">
-          { !editDetails ? (
-            <Text textStyle="web.h3">{task.task_type === TaskType.INDIVIDUAL_GOAL ? task.goalName : task.title}</Text>
+          {!editDetails ? (
+            <Text textStyle="web.h3">
+              {task.task_type === TaskType.INDIVIDUAL_GOAL
+                ? task.goalName
+                : task.title}
+            </Text>
           ) : (
             <Text textStyle="web.h3">Edit Assigned Task</Text>
           )}
           <Flex alignItems="center" justifyContent="flex-end" gap="12px">
-            { !editDetails && (
+            {!editDetails && (
               <SimpleButton
                 text="Edit"
                 action={() => {
-                  setSelectedStatus(task.task_status)
-                  setComments(task.comment ?? "")
-                  setEditDetails(true)
+                  setSelectedStatus(task.task_status);
+                  setComments(task.comment ?? "");
+                  setEditDetails(true);
                 }}
                 is_active={false}
                 text_color="#0C727E"
@@ -182,16 +185,24 @@ export default function TaskDetailsModal({
           </Flex>
         </Flex>
 
-        { editDetails ? (
+        {editDetails ? (
           <Flex flexDir="column" gap="8px">
             <Flex gap="5px" align="flex-end">
-              <Text textStyle="web.s1" color="text.light.secondary">Task Name</Text>
-              <Text textStyle="web.b3" color="#000000">{task.task_type === TaskType.INDIVIDUAL_GOAL ? task.goalName : task.title}</Text>
+              <Text textStyle="web.s1" color="text.light.secondary">
+                Task Name
+              </Text>
+              <Text textStyle="web.b3" color="#000000">
+                {task.task_type === TaskType.INDIVIDUAL_GOAL
+                  ? task.goalName
+                  : task.title}
+              </Text>
             </Flex>
 
             <Flex w="100%" h="1px" bg="neutral.300" mt="3px" />
 
-            <Text textStyle="web.s1" color="text.light.secondary">Select Days</Text>
+            <Text textStyle="web.s1" color="text.light.secondary">
+              Select Days
+            </Text>
             <Flex gap="5px">
               {weekdays.map((day: string, index) => (
                 <GreenButton
@@ -215,11 +226,11 @@ export default function TaskDetailsModal({
               }}
               mode="radio"
               value_options={{
-                "Anytime": TimeOption.ANYTIME,
+                Anytime: TimeOption.ANYTIME,
                 "Select Time": TimeOption.SPECIFIC,
               }}
             />
-      
+
             {time === TimeOption.SPECIFIC && (
               <Flex
                 width="100%"
@@ -242,8 +253,12 @@ export default function TaskDetailsModal({
                 />
               </Flex>
             )}
-      
-            <Flex width="100%" alignItems="center" justifyContent="space-between">
+
+            <Flex
+              width="100%"
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <CoreInput
                 label="Marillac Bucks"
                 current_value={String(addition)}
@@ -259,7 +274,7 @@ export default function TaskDetailsModal({
                 width="50%"
               />
             </Flex>
-      
+
             <TextInput
               label="Comments"
               current_value={comments}
@@ -282,12 +297,12 @@ export default function TaskDetailsModal({
               </Text>
               <Text textStyle="web.b3" color="#000000">
                 {(() => {
-                  const startDate = displayDate(task.start)
-                  const endDate = displayDate(task.end)
+                  const startDate = displayDate(task.start);
+                  const endDate = displayDate(task.end);
                   if (startDate === endDate) {
-                    return startDate
+                    return startDate;
                   }
-                  return `${startDate} to ${endDate}`
+                  return `${startDate} to ${endDate}`;
                 })()}
               </Text>
             </Flex>
@@ -319,8 +334,14 @@ export default function TaskDetailsModal({
                   is_active={selectedStatus === TaskStatus.ASSIGNED}
                   text_color="#000000"
                   icon={
-                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="9.5" cy="9.5" r="9.5" fill="#A8C3E2"/>
+                    <svg
+                      width="19"
+                      height="19"
+                      viewBox="0 0 19 19"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="9.5" cy="9.5" r="9.5" fill="#A8C3E2" />
                     </svg>
                   }
                 />
@@ -330,8 +351,14 @@ export default function TaskDetailsModal({
                   is_active={selectedStatus === TaskStatus.COMPLETE}
                   text_color="#000000"
                   icon={
-                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="9.5" cy="9.5" r="9.5" fill="#CDEECE"/>
+                    <svg
+                      width="19"
+                      height="19"
+                      viewBox="0 0 19 19"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="9.5" cy="9.5" r="9.5" fill="#CDEECE" />
                     </svg>
                   }
                 />
@@ -341,8 +368,14 @@ export default function TaskDetailsModal({
                   is_active={selectedStatus === TaskStatus.EXCUSED}
                   text_color="#000000"
                   icon={
-                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="9.5" cy="9.5" r="9.5" fill="#FFE5B2"/>
+                    <svg
+                      width="19"
+                      height="19"
+                      viewBox="0 0 19 19"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="9.5" cy="9.5" r="9.5" fill="#FFE5B2" />
                     </svg>
                   }
                 />
@@ -352,8 +385,14 @@ export default function TaskDetailsModal({
                   is_active={selectedStatus === TaskStatus.INCOMPLETE}
                   text_color="#000000"
                   icon={
-                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="9.5" cy="9.5" r="9.5" fill="#F8D7DB"/>
+                    <svg
+                      width="19"
+                      height="19"
+                      viewBox="0 0 19 19"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="9.5" cy="9.5" r="9.5" fill="#F8D7DB" />
                     </svg>
                   }
                 />

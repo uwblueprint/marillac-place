@@ -1,4 +1,10 @@
-import { PrismaClient, Announcement, Priority, UserAnnouncement } from "@prisma/client";
+import {
+  PrismaClient,
+  Prisma,
+  Announcement,
+  Priority,
+  UserAnnouncement,
+} from "@prisma/client";
 import { getNow } from "../utils/formatDateTime";
 
 const prisma = new PrismaClient();
@@ -80,15 +86,13 @@ const announcementResolver = {
     },
     getAnnouncementsByParticipantId: async (
       _parent: undefined,
-      {
-        participant_id,
-      }: { participant_id: number; }
+      { participant_id }: { participant_id: number }
     ): Promise<UserAnnouncement[]> => {
       try {
         return await prisma.userAnnouncement.findMany({
           orderBy: {
             announcement: {
-              creation_date: "desc"
+              creation_date: "desc",
             },
           },
           where: {
@@ -105,17 +109,24 @@ const announcementResolver = {
       }
     },
     getParticipantAnnouncements: async (
-        _parent: undefined,
-        { participantId, filter }: { participantId: number; filter: AnnouncementFilter }
+      _parent: undefined,
+      {
+        participantId,
+        filter,
+      }: { participantId: number; filter: AnnouncementFilter }
     ) => {
-      const where: any = { participant_id: participantId };
+      const where: Prisma.UserAnnouncementWhereInput = {
+        participant_id: participantId,
+      };
 
       if (filter === "UNREAD") {
         where.read = false;
       } else if (filter === "PINNED") {
         where.pinned = true;
       } else if (filter === "IMPORTANT") {
-        where.announcement = {priority: { in: ["HIGH", "CRITICAL"] }};
+        where.announcement = {
+          priority: { in: [Priority.HIGH, Priority.CRITICAL] },
+        };
       }
 
       return prisma.userAnnouncement.findMany({
@@ -204,15 +215,15 @@ const announcementResolver = {
         read,
         pinned,
       }: {
-        announcement_id: number,
-        participant_id: number,
-        pinned?: boolean,
-        read?: boolean,
+        announcement_id: number;
+        participant_id: number;
+        pinned?: boolean;
+        read?: boolean;
       }
     ): Promise<boolean> => {
       const updatedData: { pinned?: boolean; read?: boolean } = {};
-      if (pinned != undefined) updatedData.pinned = pinned;
-      if (read != undefined ) updatedData.read = read;
+      if (pinned !== undefined) updatedData.pinned = pinned;
+      if (read !== undefined) updatedData.read = read;
 
       await prisma.userAnnouncement.update({
         where: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import * as ROUTES from "../../constants/routes";
@@ -52,7 +52,13 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column">
         <ParticipantContext.Provider value={{ id: participantId }}>
           <ParticipantPageHeader />
-          <Flex flexDir="column" width="100%" padding="20px" overflow="scroll" gap="8px">
+          <Flex
+            flexDir="column"
+            width="100%"
+            padding="20px"
+            overflow="scroll"
+            gap="8px"
+          >
             {children}
           </Flex>
         </ParticipantContext.Provider>

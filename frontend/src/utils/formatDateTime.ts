@@ -88,21 +88,25 @@ const dayMap: Record<DayOfWeek, number> = {
   SUNDAY: 6,
 };
 
-export function formatDateFromString(day: DayOfWeek, time?: string, is_end?: boolean): string {
+export function formatDateFromString(
+  day: DayOfWeek,
+  time?: string,
+  is_end?: boolean
+): string {
   const currentDate = new Date();
   const whichDay = currentDate.getDay();
-  const diffToMonday = whichDay === 0 ? -6 : 1 - whichDay
+  const diffToMonday = whichDay === 0 ? -6 : 1 - whichDay;
 
   const targetDay = new Date();
-  targetDay.setDate(currentDate.getDate() + diffToMonday + dayMap[day])
+  targetDay.setDate(currentDate.getDate() + diffToMonday + dayMap[day]);
 
   if (time && time !== "") {
     const [hh, mm] = time.split(":");
     targetDay.setHours(Number(hh), Number(mm), 0, 0);
   } else if (!is_end) {
-    targetDay.setHours(0, 0, 0, 0)
+    targetDay.setHours(0, 0, 0, 0);
   } else {
-    targetDay.setHours(23, 59, 59, 999)
+    targetDay.setHours(23, 59, 59, 999);
   }
 
   return fmt.format(targetDay);
@@ -112,7 +116,7 @@ export function formatDateFromString(day: DayOfWeek, time?: string, is_end?: boo
 export function formatDateFromDateString(dateString: string) {
   const formatted = dateString.replace(", ", "T") + ":00";
   const date = new Date(formatted);
-  return date
+  return date;
 }
 
 // format date string from string
@@ -122,10 +126,10 @@ export function formatDateFromDateString(dateString: string) {
 export function isSameDay(day: DayOfWeek, date: Date) {
   const currentDate = new Date();
   const whichDay = currentDate.getDay();
-  const diffToMonday = whichDay === 0 ? -6 : 1 - whichDay
+  const diffToMonday = whichDay === 0 ? -6 : 1 - whichDay;
 
   const targetDay = new Date();
-  targetDay.setDate(currentDate.getDate() + diffToMonday + dayMap[day])
+  targetDay.setDate(currentDate.getDate() + diffToMonday + dayMap[day]);
 
   return (
     date.getFullYear() === targetDay.getFullYear() &&
@@ -134,7 +138,10 @@ export function isSameDay(day: DayOfWeek, date: Date) {
   );
 }
 
-export function convertToDaysListGivenRange(start: Date, end: Date): DayOfWeek[] {
+export function convertToDaysListGivenRange(
+  start: Date,
+  end: Date
+): DayOfWeek[] {
   const map: Record<number, DayOfWeek> = {
     0: DayOfWeek.SUNDAY,
     1: DayOfWeek.MONDAY,
@@ -150,7 +157,7 @@ export function convertToDaysListGivenRange(start: Date, end: Date): DayOfWeek[]
 
   while (current <= end) {
     result.push(map[current.getDay()]);
-    current.setDate(current.getDate() + 1); 
+    current.setDate(current.getDate() + 1);
   }
 
   return result;
@@ -162,7 +169,7 @@ export function isAnytime(start: Date, end: Date): boolean {
     start.getMinutes() === 0 &&
     end.getHours() === 23 &&
     end.getMinutes() === 59
-  )
+  );
 }
 
 export function displayDate(date: Date) {
@@ -172,28 +179,30 @@ export function displayDate(date: Date) {
     month: "short",
     day: "numeric",
   }).format(date);
-};
+}
 
 export function formatTimeString(date: Date): string {
-  const timeString = new Intl.DateTimeFormat('en-CA', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
+  const timeString = new Intl.DateTimeFormat("en-CA", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
   }).format(date);
   return timeString;
 }
 
-
 export function getParticipantHomePageDateString() {
   const date = new Date();
-  const parts = date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }).split(",");
+  const parts = date
+    .toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
+    .split(",");
 
-  const formattedDate = parts[0].replace(",", "") + " - " + parts[1].trim() + "," + parts[2];
+  const formattedDate =
+    parts[0].replace(",", "") + " - " + parts[1].trim() + "," + parts[2];
   return formattedDate;
 }
 
@@ -211,8 +220,8 @@ export function formatTimeRange(start: string, end: string): string {
   const startDate = new Date(start.replace(", ", "T"));
   const endDate = new Date(end.replace(", ", "T"));
 
-  const formattedStart = timeFormatter.format(startDate).toLowerCase()
-  const formattedEnd = timeFormatter.format(endDate).toLowerCase()
+  const formattedStart = timeFormatter.format(startDate).toLowerCase();
+  const formattedEnd = timeFormatter.format(endDate).toLowerCase();
 
   return `${formattedStart} - ${formattedEnd}`;
 }
@@ -229,8 +238,7 @@ export const displayDate2 = (date: Date) => {
 
   const parts = new Intl.DateTimeFormat("en-CA", options).formatToParts(date);
 
-  const get = (type: string) =>
-    parts.find((p) => p.type === type)?.value || "";
+  const get = (type: string) => parts.find((p) => p.type === type)?.value || "";
 
   const hour = get("hour");
   const minute = get("minute");

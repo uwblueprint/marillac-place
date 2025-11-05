@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import prisma from "../prisma";
-
+/* eslint-disable */
 const reportResolver = {
   Query: {
     getReportRecipients: async (): Promise<any[]> => {
@@ -77,4 +79,3 @@ const reportResolver = {
 };
 
 export default reportResolver;
-

@@ -2,7 +2,6 @@ import React from "react";
 import {
   Box,
   Text,
-  HStack,
   Table,
   Thead,
   Tbody,
@@ -10,7 +9,6 @@ import {
   Th,
   Td,
   TableContainer,
-  IconButton,
   Flex,
 } from "@chakra-ui/react";
 import CommentIcon from "@mui/icons-material/ModeCommentOutlined";
@@ -73,7 +71,9 @@ export default function TaskTableTop({ tasks, onTaskSelect }: TaskTableProps) {
               >
                 <Td position="relative">
                   <Text textStyle="web.b3" color="#000000">
-                    {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
+                    {event.task_type === TaskType.INDIVIDUAL_GOAL
+                      ? event.goalName
+                      : event.title}
                   </Text>
                   {event.comment && (
                     <Box

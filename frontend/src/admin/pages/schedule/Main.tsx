@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Flex,
-  Button,
-  Text,
-  Spinner,
-  Box,
-  HStack,
-} from "@chakra-ui/react";
+import { Flex, Button, Text, Spinner, Box, HStack } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import moment from "moment";
 import { ListIcon, CalendarIcon } from "./components/CustomIcons";
@@ -47,11 +40,11 @@ export default function AdminSchedulePage() {
     localStorage.setItem("scheduleView", currentView);
   }, [currentView]);
 
-  const { 
+  const {
     loading,
-    error, 
-    participantId, 
-    marillacBucks, 
+    error,
+    participantId,
+    marillacBucks,
     specificTasks,
     anydayTasks,
     anytimeTasks,
@@ -65,7 +58,7 @@ export default function AdminSchedulePage() {
       />
 
       <Box w="100%" flex={1} display="flex" flexDirection="column">
-        { loading ? (
+        {loading ? (
           <Flex justify="center" align="center" h="400px">
             <Spinner color="primary.700" size="lg" />
           </Flex>
@@ -188,12 +181,7 @@ export default function AdminSchedulePage() {
             </Flex>
 
             {/* Content based on current view */}
-            <Box
-              flex={1}
-              display="flex"
-              flexDirection="column"
-              minH={0}
-            >
+            <Box flex={1} display="flex" flexDirection="column" minH={0}>
               {currentView === ScheduleView.LIST ? (
                 <ScheduleListView
                   specificTasks={specificTasks}
@@ -216,7 +204,7 @@ export default function AdminSchedulePage() {
         )}
       </Box>
 
-      { editMarillacBucks && participantId && (
+      {editMarillacBucks && participantId && (
         <MarillacBalanceModal
           close={() => setEditMarillacBucks(false)}
           participantId={participantId}
@@ -225,11 +213,15 @@ export default function AdminSchedulePage() {
         />
       )}
 
-      { assignTask && participantId && (
-        <AssignTaskModal participantId={participantId} isOpen={assignTask} onClose={() => setAssignTask(false)} />
+      {assignTask && participantId && (
+        <AssignTaskModal
+          participantId={participantId}
+          isOpen={assignTask}
+          onClose={() => setAssignTask(false)}
+        />
       )}
 
-      { selectedTask && (
+      {selectedTask && (
         <TaskDetailsModal
           task={selectedTask}
           onClose={() => setSelectedTask(null)}

@@ -1,21 +1,4 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Flex,
-  Input,
-  InputGroup,
-  FormLabel,
-  FormControl,
-  Text,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalOverlay,
-  InputRightElement,
-} from "@chakra-ui/react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useMutation } from "@apollo/client";
 import { CREATE_PARTICIPANT } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
@@ -34,7 +17,6 @@ const AddParticipantCard = ({
   const [arrivalDate, setArrivalDate] = useState("");
   const [password, setPassword] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const [createParticipant, { loading }] = useMutation(CREATE_PARTICIPANT, {

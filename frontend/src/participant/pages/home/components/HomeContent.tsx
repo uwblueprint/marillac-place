@@ -58,8 +58,8 @@ export default function HomeContent() {
   const badge = {
     icon: "heart",
     rarity: "silver" as BadgeRarity,
-    percentComplete: 20
-  }
+    percentComplete: 20,
+  };
 
   return (
     <Flex w="100%" flexDir="column" gap="16px" padding="20px">
@@ -95,10 +95,10 @@ export default function HomeContent() {
         flexDir="column"
         gap="12px"
       >
-        <BadgeRow 
-          messageText="this is message text" 
-          subtitle="this is subtitle" 
-          title="this is title" 
+        <BadgeRow
+          messageText="this is message text"
+          subtitle="this is subtitle"
+          title="this is title"
           badge={badge}
         />
       </Flex>

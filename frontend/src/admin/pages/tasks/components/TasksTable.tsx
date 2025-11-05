@@ -1,15 +1,4 @@
-import {
-  TableContainer,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Text,
-  Flex,
-  Spinner,
-} from "@chakra-ui/react";
+import { Text, Flex } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import React, { useState } from "react";

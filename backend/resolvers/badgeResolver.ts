@@ -3,45 +3,57 @@ import {
   BadgeType,
   Icon,
   Badge,
-  BadgeLevel,
+  // BadgeLevel,
   PrismaClient,
 } from "@prisma/client";
 
-import { getNow } from "../utils/formatDateTime";
+// import { getNow } from "../utils/formatDateTime";
 
 const prisma = new PrismaClient();
 
 const badgeResolver = {
   Query: {
     getCustomBadges: async (): Promise<Badge[]> => {
-      return await prisma.badge.findMany({
-        where: {
-          badge_type: "CUSTOM",
-        },
-        include: {
-          badge_level: true,
-        },
-        orderBy: {
-          name: 'asc'
-        },
-      });
+      try {
+        return await prisma.badge.findMany({
+          where: {
+            badge_type: "CUSTOM",
+          },
+          include: {
+            badge_level: true,
+          },
+          orderBy: {
+            name: "asc",
+          },
+        });
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Error getting custom badges";
+        throw new Error(message);
+      }
     },
     getSystemBadges: async (): Promise<Badge[]> => {
-      return await prisma.badge.findMany({
-        where: {
-          badge_type: "SYSTEM",
-        },
-        include: {
-          badge_level: {
-            orderBy: {
-              level: 'asc',
+      try {
+        return await prisma.badge.findMany({
+          where: {
+            badge_type: "SYSTEM",
+          },
+          include: {
+            badge_level: {
+              orderBy: {
+                level: "asc",
+              },
             },
           },
-        },
-        orderBy: {
-          name: 'asc'
-        },
-      });
+          orderBy: {
+            name: "asc",
+          },
+        });
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Error getting system badges";
+        throw new Error(message);
+      }
     },
     getEarnedBadgesByParticipant: async (
       _parent: undefined,
@@ -68,13 +80,13 @@ const badgeResolver = {
       const badge = await prisma.badge.findUnique({
         where: { badge_id },
       });
-      if (!badge){
+      if (!badge) {
         throw new Error("Badge not found");
       }
       await prisma.badge.update({
         where: { badge_id },
         data: {
-          is_active
+          is_active,
         },
       });
       return true;
@@ -120,7 +132,7 @@ const badgeResolver = {
       const eligibleParticipantIds = participant_ids.filter(
         (id) => !alreadyEarnedIds.has(id)
       );
-      
+
       if (eligibleParticipantIds.length === 0) {
         throw new Error("Participants have already received this badge");
       }
@@ -137,10 +149,10 @@ const badgeResolver = {
               badge_icon: badge.icon,
               level: 1,
             },
-          }),
+          })
         )
       );
-      
+
       // also add marillac bucks for the earned badge
       await prisma.$transaction(
         eligibleParticipantIds.map((id) =>
@@ -151,10 +163,10 @@ const badgeResolver = {
                 increment: marillac_bucks,
               },
             },
-          }),
+          })
         )
       );
-      
+
       return eligibleParticipantIds;
     },
 
@@ -170,7 +182,10 @@ const badgeResolver = {
         new_custom_badge_description?: string;
       }
     ): Promise<boolean> => {
-      if (new_custom_badge_name == undefined && new_custom_badge_description == undefined) {
+      if (
+        new_custom_badge_name === undefined &&
+        new_custom_badge_description === undefined
+      ) {
         throw new Error("No edits provided");
       }
       await prisma.badge.update({
@@ -199,21 +214,23 @@ const badgeResolver = {
       }
     ): Promise<boolean> => {
       const badge = await prisma.badge.findUnique({
-        where: {badge_id:system_badge_id},
+        where: { badge_id: system_badge_id },
       });
-      if (!badge || badge.badge_type !== "SYSTEM"){
+      if (!badge || badge.badge_type !== "SYSTEM") {
         throw new Error("BAdge not found or not a system badge");
       }
       await prisma.badge.update({
-        where: { badge_id: system_badge_id},
+        where: { badge_id: system_badge_id },
         data: {
           name: system_badge_name,
-          ...(system_badge_criteria !== undefined && { description: system_badge_criteria }),
+          ...(system_badge_criteria !== undefined && {
+            description: system_badge_criteria,
+          }),
         },
       });
       return true;
     },
-    
+
     createCustomBadge: async (
       _parent: undefined,
       {

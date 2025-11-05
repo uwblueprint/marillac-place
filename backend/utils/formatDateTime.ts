@@ -2,13 +2,13 @@ export function formatDateTime(date: Date, includeTime: boolean): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  
+
   if (includeTime) {
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
     return `${year}-${month}-${day}, ${hours}:${minutes}`;
   }
-  
+
   return `${year}-${month}-${day}`;
 }
 
@@ -61,7 +61,7 @@ export function getWeekBounds(): { weekStart: string; weekEnd: string } {
 
 // takes in "YY-MM-DD, HH:mm" and convert to Date object
 export function formatDateFromDateString(dateString: string) {
-  const formatted = dateString.replace(", ", "T") + ":00";
+  const formatted = `${dateString.replace(", ", "T")}:00`;
   const date = new Date(formatted);
-  return date
+  return date;
 }

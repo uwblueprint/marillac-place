@@ -1,15 +1,4 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Text,
-  Button,
-} from "@chakra-ui/react";
+import { Flex, FormControl, Input, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { UPDATE_PARTICIPANT } from "../../../../gql/mutations";

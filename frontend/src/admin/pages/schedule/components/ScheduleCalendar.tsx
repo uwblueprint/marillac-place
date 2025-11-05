@@ -80,7 +80,9 @@ const EventComponent: React.FC<{
   if (event.allDay) {
     return (
       <Text color="inherit" textStyle="web.s1" pt="1px">
-        {event.task_type === TaskType.INDIVIDUAL_GOAL ? event.goalName : event.title}
+        {event.task_type === TaskType.INDIVIDUAL_GOAL
+          ? event.goalName
+          : event.title}
       </Text>
     );
   }

@@ -1,12 +1,10 @@
 import {
-  Button,
   Flex,
   Input,
   InputGroup,
   InputLeftElement,
   Text,
 } from "@chakra-ui/react";
-import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
@@ -62,10 +60,14 @@ export default function AdminTasksPage() {
         <Text
           textStyle="web.b1"
           fontWeight="700"
-          color={selectedTaskType === TaskType.REQUIRED ? "primary.700" : "#000000"}
+          color={
+            selectedTaskType === TaskType.REQUIRED ? "primary.700" : "#000000"
+          }
           cursor="pointer"
           onClick={() => setSelectedTaskType(TaskType.REQUIRED)}
-          borderBottom={selectedTaskType === TaskType.REQUIRED ? "3px solid" : "0"}
+          borderBottom={
+            selectedTaskType === TaskType.REQUIRED ? "3px solid" : "0"
+          }
           borderColor="primary.700"
           px="12px"
           pb="12px"
@@ -75,10 +77,14 @@ export default function AdminTasksPage() {
         <Text
           textStyle="web.b1"
           fontWeight="700"
-          color={selectedTaskType === TaskType.OPTIONAL ? "primary.700" : "#000000"}
+          color={
+            selectedTaskType === TaskType.OPTIONAL ? "primary.700" : "#000000"
+          }
           cursor="pointer"
           onClick={() => setSelectedTaskType(TaskType.OPTIONAL)}
-          borderBottom={selectedTaskType === TaskType.OPTIONAL ? "3px solid" : "0"}
+          borderBottom={
+            selectedTaskType === TaskType.OPTIONAL ? "3px solid" : "0"
+          }
           borderColor="primary.700"
           px="12px"
           pb="12px"
@@ -116,7 +122,10 @@ export default function AdminTasksPage() {
         <TasksTable loading={loading} error={error} tasks={tasks} />
       </Flex>
       {addTask && (
-        <AddTaskModal taskType={selectedTaskType} close={() => setAddTask(false)} />
+        <AddTaskModal
+          taskType={selectedTaskType}
+          close={() => setAddTask(false)}
+        />
       )}
     </>
   );

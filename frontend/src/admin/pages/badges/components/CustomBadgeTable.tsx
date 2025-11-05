@@ -1,22 +1,8 @@
-import {
-  TableContainer,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Text,
-  Flex,
-  Spinner,
-  Image as ChakraImage,
-} from "@chakra-ui/react";
+import { Text, Flex, Image as ChakraImage } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import EditSystemBadgeModal from "./EditSystemBadgeModal";
-import { Icon } from "../../../../constants/icons";
 import { DELETE_CUSTOM_BADGE } from "../../../../gql/mutations";
 import EditCustomBadgeModal from "./EditCustomBadgeModal";
 import DataTable from "../../../common/misc/DataTable";
@@ -125,15 +111,15 @@ const CustomBadgeTable = ({
   );
 
   return (
-      <DataTable
-        loading={loading}
-        error={error}
-        columns={columns}
-        rows={rows}
-        editModal={editModal}
-        selected={selected}
-        edit={edit}
-      />
+    <DataTable
+      loading={loading}
+      error={error}
+      columns={columns}
+      rows={rows}
+      editModal={editModal}
+      selected={selected}
+      edit={edit}
+    />
   );
 };
 

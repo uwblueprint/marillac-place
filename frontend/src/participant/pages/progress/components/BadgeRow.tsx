@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Text, Divider, Button, Image } from "@chakra-ui/react";
+import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import Badge, { BadgeRarity } from "../../../common/Badge";
 
 interface BadgeRowProps {
@@ -24,7 +24,7 @@ const BadgeRow: React.FC<BadgeRowProps> = ({
   bucks,
   badge,
   isLast = false,
-  isFirst= false,
+  isFirst = false,
   showButton = false,
   achieved = false,
   onProgressClick,
@@ -32,29 +32,30 @@ const BadgeRow: React.FC<BadgeRowProps> = ({
   return (
     <Box>
       {/* Badge and content row */}
-      <Flex align="center" gap="14px" 
-            borderTop={isFirst ? "0" : "1px solid"}
-            borderColor="neutral.300" 
-            pt={isFirst ? "0" : "16px"}
-            mb={isLast ? "0" : "16px"}>
-        <Flex direction='column' gap={1} alignItems="center" >
+      <Flex
+        align="center"
+        gap="14px"
+        borderTop={isFirst ? "0" : "1px solid"}
+        borderColor="neutral.300"
+        pt={isFirst ? "0" : "16px"}
+        mb={isLast ? "0" : "16px"}
+      >
+        <Flex direction="column" gap={1} alignItems="center">
           <Badge
             icon={badge.icon}
-            rarity={achieved ? badge.rarity: "silver"}
+            rarity={achieved ? badge.rarity : "silver"}
             size={achieved ? "medium" : "small"}
             percentComplete={badge.percentComplete ?? 100}
           />
-          {
-            !achieved && (
-              <Text
-                textStyle="mobile.b1"
-                color="text.light.secondary"
-                lineHeight="1.3"
-              >
+          {!achieved && (
+            <Text
+              textStyle="mobile.b1"
+              color="text.light.secondary"
+              lineHeight="1.3"
+            >
               {badge.percentComplete}%
-              </Text>
-            )
-          }
+            </Text>
+          )}
         </Flex>
         <Box flex="1">
           <Text
@@ -73,18 +74,12 @@ const BadgeRow: React.FC<BadgeRowProps> = ({
             {subtitle}
           </Text>
         </Box>
-        {
-          !achieved && (
-            <Flex
-              justifyContent="center" 
-              alignItems="center" 
-              gap="5px"
-            >
-              {bucks}
-              <Image src="/assets/marillac_bucks.png" alt="coin" />
-            </Flex>
-          ) 
-        }
+        {!achieved && (
+          <Flex justifyContent="center" alignItems="center" gap="5px">
+            {bucks}
+            <Image src="/assets/marillac_bucks.png" alt="coin" />
+          </Flex>
+        )}
       </Flex>
     </Box>
   );

@@ -21,9 +21,13 @@ const taskResolver = {
       _parent: undefined,
       { type }: { type: TaskType[] }
     ): Promise<Array<Task>> => {
-      return await prisma.task.findMany({
+      try {
+        return await prisma.task.findMany({
           where: { task_type: { in: type } },
-      })
+        });
+      } catch (err) {
+        throw new Error(`Failed to get tasks by type`);
+      }
     },
     // getTasksByRecurrenceFrequency: async (
     //   _parent: undefined,
@@ -42,7 +46,7 @@ const taskResolver = {
           where: {
             participant_id: participantId,
             start_date: { lte: dateEnd },
-            end_date: { gte: dateStart }
+            end_date: { gte: dateStart },
           },
         });
         return assignedTasks;
@@ -122,7 +126,18 @@ const taskResolver = {
         comment?: string;
       }
     ): Promise<boolean> => {
-      const updatedData: Record<string, any> = {};
+      const updatedData: {
+        task_type?: TaskType;
+        task_name?: string;
+        recurrence_preference?: RecurrenceFrequency;
+        repeat_days?: DayOfWeek[];
+        time_preference?: TimeOption;
+        marillac_bucks_addition?: number;
+        marillac_bucks_deduction?: number;
+        start_time?: string;
+        end_time?: string;
+        comment?: string;
+      } = {};
       if (type) updatedData.task_type = type;
       if (name) updatedData.task_name = name;
       if (recurrencePreference)

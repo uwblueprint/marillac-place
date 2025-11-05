@@ -28,12 +28,14 @@ const server = new ApolloServer({
 const getFrontendOrigin = () => {
   const url = process.env.FRONTEND_URL || "";
   if (!url) {
-    console.warn("⚠️  WARNING: FRONTEND_URL environment variable is not set. CORS may not work correctly!");
+    console.warn(
+      "⚠️  WARNING: FRONTEND_URL environment variable is not set. CORS may not work correctly!"
+    );
     return "";
   }
 
   // If URL already has protocol, return as-is
-  if (url.startsWith('http://') || url.startsWith('https://')) {
+  if (url.startsWith("http://") || url.startsWith("https://")) {
     return url;
   }
 
@@ -61,11 +63,11 @@ app.get("*", (req, res) => {
     return res.status(404).json({ error: "Not found" });
   }
 
-  res.sendFile(path.join(frontendPath, "index.html"));
+  return res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen({ port: PORT }, () => {
   console.info(`Server is listening on port ${PORT}!`);
-  console.info(`CORS enabled for origin: ${getFrontendOrigin() || 'NOT SET'}`);
+  console.info(`CORS enabled for origin: ${getFrontendOrigin() || "NOT SET"}`);
 });

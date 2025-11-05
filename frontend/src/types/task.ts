@@ -8,7 +8,7 @@ export enum RecurrenceFrequency {
   DAILY = "DAILY",
   EVERY_SELECTED_DAYS = "EVERY_SELECTED_DAYS",
   ANY_SELECTED_DAYS = "ANY_SELECTED_DAYS",
-  PARTICIPANT_PREFERENCE = "PARTICIPANT_PREFERENCE"
+  PARTICIPANT_PREFERENCE = "PARTICIPANT_PREFERENCE",
 }
 
 export enum DayOfWeek {
@@ -32,11 +32,11 @@ export type TaskInfo = {
   task_name: string;
   task_type: TaskType;
   recurrence_preference: RecurrenceFrequency;
-  repeat_days: DayOfWeek[];             
-  time_preference: TimeOption;         
-  start_time?: string;              
-  end_time?: string;              
-  marillac_bucks_addition: number;  
+  repeat_days: DayOfWeek[];
+  time_preference: TimeOption;
+  start_time?: string;
+  end_time?: string;
+  marillac_bucks_addition: number;
   marillac_bucks_deduction: number;
-  comment?: string;                 
-}
+  comment?: string;
+};

@@ -1,12 +1,25 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+import { GraphQLResolveInfo } from "graphql";
+
+type ResolverFunction = (
+  parent: unknown,
+  args: Record<string, unknown>,
+  context: { req: { headers: { authorization?: string } } },
+  info: GraphQLResolveInfo
+) => Promise<unknown> | unknown;
+
+interface JWTPayload {
+  role: string;
+  [key: string]: unknown;
+}
 
 function verifyRole(allowedRoles: string[]) {
-  return async function (
-    resolve: any,
-    parent: any,
-    args: any,
-    context: any,
-    info: any
+  return async function verifyRoleMiddleware(
+    resolve: ResolverFunction,
+    parent: unknown,
+    args: Record<string, unknown>,
+    context: { req: { headers: { authorization?: string } } },
+    info: GraphQLResolveInfo
   ) {
     const authHeader = context.req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer")) {
@@ -16,7 +29,7 @@ function verifyRole(allowedRoles: string[]) {
     try {
       const TOKEN = authHeader.split(" ")[1];
       const JWT_SECRET = process.env.JWT_SECRET ?? "";
-      const DATA: any = jwt.verify(TOKEN, JWT_SECRET);
+      const DATA = jwt.verify(TOKEN, JWT_SECRET) as JWTPayload;
       const { role } = DATA;
 
       if (!allowedRoles.includes(role)) {

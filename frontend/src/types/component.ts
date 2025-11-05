@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type ButtonProps = {
   text: string;
   action: () => void;
@@ -14,12 +15,12 @@ export type ModalProps = {
 };
 
 export type InputProps = {
-    label: string;
-    current_value: any;
-    action: any;
-    width?: string;
-}
- 
+  label: string;
+  current_value: any;
+  action: any;
+  width?: string;
+};
+
 export type TableProps = {
   loading: boolean;
   edit: boolean;
@@ -29,4 +30,3 @@ export type TableProps = {
   rows: JSX.Element[][];
   editModal: JSX.Element | null;
 };
-
