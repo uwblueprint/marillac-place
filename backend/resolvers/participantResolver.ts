@@ -115,6 +115,44 @@ const participantResolver = {
 
       return result;
     },
+    getWeeklyEarnings: async (
+      _parent: undefined,
+      { participant_id }: { participant_id: number }
+    ): Promise<number[]> => {
+      const today = new Date();
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(today.getDate() - 6);
+
+      const todayStr = today.toISOString().split("T")[0];
+      const startStr = sevenDaysAgo.toISOString().split("T")[0];
+
+      const results = await prisma.$queryRaw<
+        { transaction_date: string; total: number }[]
+      >`
+        SELECT 
+          transaction_date,
+          SUM(marillac_bucks) AS total
+        FROM transaction
+        WHERE participant_id = ${participant_id}
+          AND transaction_type = 'EARNING'
+          AND transaction_date >= ${startStr}
+          AND transaction_date <= ${todayStr}
+        GROUP BY transaction_date
+        ORDER BY transaction_date ASC
+      `;
+
+      const last7Days: string[] = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date();
+        d.setDate(today.getDate() - (6 - i));
+        return d.toISOString().split("T")[0];
+      });
+
+      const earningsMap = Object.fromEntries(
+        results.map((r) => [r.transaction_date, Number(r.total)])
+      );
+
+      return last7Days.map((day) => earningsMap[day] || 0);
+      },
   },
   Mutation: {
     createParticipant: async (

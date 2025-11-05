@@ -352,6 +352,12 @@ export const GET_ASSIGNED_TASKS = gql`
   }
 `;
 
+export const GET_WEEKLY_EARNINGS = gql`
+  query GetWeeklyEarnings($participant_id: Int!) {
+    getWeeklyEarnings(participant_id: $participant_id)
+  }
+`;
+
 export const GET_REPORT_RECIPIENTS = gql`
   query getReportRecipients {
     getReportRecipients {
