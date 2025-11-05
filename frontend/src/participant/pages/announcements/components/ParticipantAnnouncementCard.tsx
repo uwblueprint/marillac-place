@@ -5,13 +5,17 @@ import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import CircleIcon from "@mui/icons-material/Circle";
 import React, { useState } from "react";
-import notification from "../../../icons/announcements/notification.svg"
-import group from "../../../icons/announcements/group.svg"
-import profile from "../../../icons/announcements/profile.svg"
-import important from "../../../icons/announcements/important.svg"
-import orangepin from "../../../icons/announcements/orangepin.svg"
+import notification from "../../../icons/announcements/notification.svg";
+import group from "../../../icons/announcements/group.svg";
+import profile from "../../../icons/announcements/profile.svg";
+import important from "../../../icons/announcements/important.svg";
+import orangepin from "../../../icons/announcements/orangepin.svg";
 import Icon from "../../../common/Icon";
-import { displayDate, displayDate2, formatDateTime } from "../../../../utils/formatDateTime";
+import {
+  displayDate,
+  displayDate2,
+  formatDateTime,
+} from "../../../../utils/formatDateTime";
 
 type ParticipantAnnouncementCardProps = {
   allRooms: boolean;
@@ -55,7 +59,7 @@ export default function ParticipantAnnouncementCard({
               <Icon icon={group} width="15px" height="15px" />
               <Text textStyle="mobile.b0">All Rooms</Text>
             </>
-          ): (
+          ) : (
             <>
               <Icon icon={profile} width="12px" height="12px" />
               <Text textStyle="mobile.b0">Your Room</Text>
@@ -67,12 +71,20 @@ export default function ParticipantAnnouncementCard({
         </Flex>
 
         <Flex gap="12px" paddingRight="4px">
-          {importance !== 0 && <Icon icon={important} width="3.8px" height="3.8px" />}
+          {importance !== 0 && (
+            <Icon icon={important} width="3.8px" height="3.8px" />
+          )}
           {isPinned && <Icon icon={orangepin} width="10px" height="10px" />}
         </Flex>
       </Flex>
-      
-      <Text textStyle="mobile.b1" marginTop="5px" minH="25px" maxH="45px" overflow="hidden">
+
+      <Text
+        textStyle="mobile.b1"
+        marginTop="5px"
+        minH="25px"
+        maxH="45px"
+        overflow="hidden"
+      >
         {message}
       </Text>
     </Flex>

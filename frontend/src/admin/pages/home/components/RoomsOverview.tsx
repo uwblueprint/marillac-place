@@ -21,7 +21,7 @@ enum Status {
 export default function RoomsOverview() {
   const [roomData, setRoomData] = useState<RoomData[]>([]);
   const [getRoomData, { loading, error }] = useLazyQuery(
-    GET_PARTICIPANT_BY_ROOM
+    GET_PARTICIPANT_BY_ROOM,
   );
 
   const handleViewSchedule = (roomNumber: number) => {
@@ -43,10 +43,10 @@ export default function RoomsOverview() {
               data?.getParticipantByRoom?.assigned_tasks?.filter(
                 (task: any) =>
                   task.task_status === Status.ASSIGNED ||
-                  task.task_status === Status.INCOMPLETE
+                  task.task_status === Status.INCOMPLETE,
               ).length || 0,
           };
-        })
+        }),
       );
 
       setRoomData(results);

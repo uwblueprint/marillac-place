@@ -16,7 +16,7 @@ import OrangeButton from "../../common/buttons/OrangeButton";
 export default function AdminAnnouncementsPage() {
   const [create, setCreate] = useState(false);
   const [selectedButtons, setSelectedButtons] = useState<boolean[]>(
-    new Array(10).fill(false)
+    new Array(10).fill(false),
   );
   const [filter, setFilter] = useState(false);
 
@@ -30,7 +30,7 @@ export default function AdminAnnouncementsPage() {
     useLazyQuery(GET_ANNOUNCEMENTS_BY_PARTICIPANTS);
 
   const [getAllAnnouncements, allAnnouncementsResult] = useLazyQuery(
-    GET_ALL_ANNOUNCEMENTS
+    GET_ALL_ANNOUNCEMENTS,
   );
 
   const participantToRoomMap: Record<number, number> = {};
@@ -91,7 +91,7 @@ export default function AdminAnnouncementsPage() {
     (filter && announcementsByParticipantsResult.error);
   const announcementData = filter
     ? announcementsByParticipantsResult.data?.getAnnouncementsByParticipants
-    : allAnnouncementsResult.data?.getAllAnnouncements ?? [];
+    : (allAnnouncementsResult.data?.getAllAnnouncements ?? []);
 
   if (announcementLoading || participantLoading)
     return <Text>Loading announcements...</Text>;
@@ -182,10 +182,10 @@ export default function AdminAnnouncementsPage() {
                     ]
                   }`
                 : announcement.user_announcements.length === ROOM_NUMBERS.length
-                ? "All Rooms"
-                : `Rooms ${announcement.user_announcements
-                    .map((ua: any) => participantToRoomMap[ua.participant_id])
-                    .join(", ")}`
+                  ? "All Rooms"
+                  : `Rooms ${announcement.user_announcements
+                      .map((ua: any) => participantToRoomMap[ua.participant_id])
+                      .join(", ")}`
             }
             message={announcement.message}
             timestamp={announcement.creation_date}
@@ -193,8 +193,8 @@ export default function AdminAnnouncementsPage() {
               announcement.priority === "CRITICAL"
                 ? 2
                 : announcement.priority === "HIGH"
-                ? 1
-                : 0
+                  ? 1
+                  : 0
             }
           />
         ))}

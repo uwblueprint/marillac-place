@@ -23,10 +23,10 @@ export default function ParticipantsAnnouncementsPage() {
     allRooms: false,
     message: "",
     importance: -1,
-    read: false, 
-    pinned: false, 
-    date: ""
-  })
+    read: false,
+    pinned: false,
+    date: "",
+  });
 
   const [filter, setFilter] = useState(0);
   const isAll = filter === 0;
@@ -61,25 +61,39 @@ export default function ParticipantsAnnouncementsPage() {
   const loading = isAll ? allLoading : filteredLoading;
   const error = isAll ? allError : filteredError;
   const data = isAll
-    ? allData?.getAnnouncementsByParticipantId ?? []
-    : filteredData?.getParticipantAnnouncements ?? [];
+    ? (allData?.getAnnouncementsByParticipantId ?? [])
+    : (filteredData?.getParticipantAnnouncements ?? []);
 
   if (loading) return <Text>Loading announcements…</Text>;
   if (error) return <Text color="red.500">Error loading announcements.</Text>;
 
   if (expandedView && selected) {
-    return (
-      <AnnouncementsExpandedView announcement={selected} />
-    )
+    return <AnnouncementsExpandedView announcement={selected} />;
   }
 
   return (
     <>
       <Flex w="100%" alignItems="center" justifyContent="center" gap="8px">
-        <GreenButton text="All"       action={() => setFilter(0)} is_active={filter === 0} />
-        <GreenButton text="Unread"    action={() => setFilter(1)} is_active={filter === 1} />
-        <GreenButton text="Pinned"    action={() => setFilter(2)} is_active={filter === 2} />
-        <GreenButton text="Important" action={() => setFilter(3)} is_active={filter === 3} />
+        <GreenButton
+          text="All"
+          action={() => setFilter(0)}
+          is_active={filter === 0}
+        />
+        <GreenButton
+          text="Unread"
+          action={() => setFilter(1)}
+          is_active={filter === 1}
+        />
+        <GreenButton
+          text="Pinned"
+          action={() => setFilter(2)}
+          is_active={filter === 2}
+        />
+        <GreenButton
+          text="Important"
+          action={() => setFilter(3)}
+          is_active={filter === 3}
+        />
       </Flex>
 
       {!data || data.length === 0 ? (
@@ -101,18 +115,22 @@ export default function ParticipantsAnnouncementsPage() {
             const importance = Object.values(Priority).indexOf(priority);
 
             return (
-              <Flex key={i} cursor="pointer" onClick={() => {
-                setSelected({
-                  uaid,
-                  allRooms,
-                  message, 
-                  importance, 
-                  read, 
-                  pinned, 
-                  date
-                })
-                setExpandedView(true)
-              }}>
+              <Flex
+                key={i}
+                cursor="pointer"
+                onClick={() => {
+                  setSelected({
+                    uaid,
+                    allRooms,
+                    message,
+                    importance,
+                    read,
+                    pinned,
+                    date,
+                  });
+                  setExpandedView(true);
+                }}
+              >
                 <ParticipantAnnouncementCard
                   userAnnouncementId={uaid}
                   allRooms={allRooms}

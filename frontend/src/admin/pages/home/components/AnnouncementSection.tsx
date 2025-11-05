@@ -92,7 +92,7 @@ const AnnouncementSection = () => {
           .sort((a, b) => a - b),
         creation_date: new Date(announcement.creation_date),
         message: announcement.message,
-      })
+      }),
     ) || [];
 
   return (

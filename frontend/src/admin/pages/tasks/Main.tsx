@@ -36,8 +36,8 @@ export default function AdminTasksPage() {
         data.getTasksByType.filter(
           (task: any) =>
             typeof task.task_name === "string" &&
-            task.task_name.toLowerCase().includes(taskFilter.toLowerCase())
-        )
+            task.task_name.toLowerCase().includes(taskFilter.toLowerCase()),
+        ),
       );
     }
   }, [taskFilter, loading, error, data]);
@@ -62,10 +62,14 @@ export default function AdminTasksPage() {
         <Text
           textStyle="web.b1"
           fontWeight="700"
-          color={selectedTaskType === TaskType.REQUIRED ? "primary.700" : "#000000"}
+          color={
+            selectedTaskType === TaskType.REQUIRED ? "primary.700" : "#000000"
+          }
           cursor="pointer"
           onClick={() => setSelectedTaskType(TaskType.REQUIRED)}
-          borderBottom={selectedTaskType === TaskType.REQUIRED ? "3px solid" : "0"}
+          borderBottom={
+            selectedTaskType === TaskType.REQUIRED ? "3px solid" : "0"
+          }
           borderColor="primary.700"
           px="12px"
           pb="12px"
@@ -75,10 +79,14 @@ export default function AdminTasksPage() {
         <Text
           textStyle="web.b1"
           fontWeight="700"
-          color={selectedTaskType === TaskType.OPTIONAL ? "primary.700" : "#000000"}
+          color={
+            selectedTaskType === TaskType.OPTIONAL ? "primary.700" : "#000000"
+          }
           cursor="pointer"
           onClick={() => setSelectedTaskType(TaskType.OPTIONAL)}
-          borderBottom={selectedTaskType === TaskType.OPTIONAL ? "3px solid" : "0"}
+          borderBottom={
+            selectedTaskType === TaskType.OPTIONAL ? "3px solid" : "0"
+          }
           borderColor="primary.700"
           px="12px"
           pb="12px"
@@ -116,7 +124,10 @@ export default function AdminTasksPage() {
         <TasksTable loading={loading} error={error} tasks={tasks} />
       </Flex>
       {addTask && (
-        <AddTaskModal taskType={selectedTaskType} close={() => setAddTask(false)} />
+        <AddTaskModal
+          taskType={selectedTaskType}
+          close={() => setAddTask(false)}
+        />
       )}
     </>
   );

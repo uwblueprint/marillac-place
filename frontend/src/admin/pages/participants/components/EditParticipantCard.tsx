@@ -117,12 +117,12 @@ export default function EditParticipantCard({
           } else if (endStay) {
             localStorage.setItem(
               "notification",
-              "Participant #" + id + " removed from Room " + roomNumber
+              "Participant #" + id + " removed from Room " + roomNumber,
             );
           } else {
             localStorage.setItem(
               "notification",
-              "Participant #" + id + " updated"
+              "Participant #" + id + " updated",
             );
           }
           window.location.reload();

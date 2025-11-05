@@ -27,12 +27,12 @@ export default function ScheduleListView({
 
   const getTasksForDay = (dayName: DayOfWeek): CalendarEvent[] => {
     const specficTasksForDay = specificTasks.filter((task) => {
-      return isSameDay(dayName, task.start)
+      return isSameDay(dayName, task.start);
     });
     const anytimeTasksForDay = anytimeTasks.filter((task) => {
-      return isSameDay(dayName, task.start)
+      return isSameDay(dayName, task.start);
     });
-    return [...specficTasksForDay, ...anytimeTasksForDay]
+    return [...specficTasksForDay, ...anytimeTasksForDay];
   };
 
   return (
@@ -53,7 +53,9 @@ export default function ScheduleListView({
           {weekdays.map((day, index) => (
             <Button
               key={index}
-              variant={selectedDay === day as DayOfWeek ? "primaryFilled" : "white"}
+              variant={
+                selectedDay === (day as DayOfWeek) ? "primaryFilled" : "white"
+              }
               borderBottomRadius={0}
               flex={1}
               py={2}

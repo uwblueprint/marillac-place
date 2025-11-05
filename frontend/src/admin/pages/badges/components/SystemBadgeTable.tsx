@@ -34,7 +34,7 @@ const SystemBadgeTable = ({
   const levels = ["N", "B", "S", "G", "D"];
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState(null);
-  
+
   const [statuses, setStatuses] = useState<Record<number, boolean>>({});
   const [updateBadgeStatus] = useMutation(UPDATE_BADGE_STATUS);
 
@@ -43,7 +43,7 @@ const SystemBadgeTable = ({
       badges.reduce((acc, badge) => {
         acc[badge.badge_id] = badge.is_active;
         return acc;
-      }, {})
+      }, {}),
     );
   }, [badges]);
 

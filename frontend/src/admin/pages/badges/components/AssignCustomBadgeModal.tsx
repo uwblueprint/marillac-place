@@ -46,7 +46,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [error, setError] = useState("");
   const [badges, setBadges] = useState<{ badge_id: number; name: string }[]>(
-    []
+    [],
   );
   const { data: badgeData } = useQuery(GET_CUSTOM_BADGES);
 
@@ -61,7 +61,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
     onCompleted: () => {
       localStorage.setItem(
         "notification",
-        `Assigned Custom Badge: ${badgeName}`
+        `Assigned Custom Badge: ${badgeName}`,
       );
       onClose();
       window.location.reload();
@@ -73,7 +73,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
 
   const toggleRoomSelection = (room: number) => {
     setSelectedRooms((prev) =>
-      prev.includes(room) ? prev.filter((r) => r !== room) : [...prev, room]
+      prev.includes(room) ? prev.filter((r) => r !== room) : [...prev, room],
     );
   };
 
@@ -125,14 +125,17 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       <SelectionInput
         label="Badge Name"
         current_value={badgeName}
-        action={(e: any) => setBadgeName(e.target.value)} 
+        action={(e: any) => setBadgeName(e.target.value)}
         mode="dropdown"
         value_options={Object.fromEntries(
-          badgeData?.getCustomBadges?.map((badge: any) => [badge.name, badge.name]) ?? []
+          badgeData?.getCustomBadges?.map((badge: any) => [
+            badge.name,
+            badge.name,
+          ]) ?? [],
         )}
         width="100%"
       />
-            
+
       <CoreInput
         label="Badge Value"
         current_value={badgeValue}
@@ -153,10 +156,12 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
 
       <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
 
-      <Text textStyle="web.s1" color="text.light.secondary">Choose Room(s)</Text>
+      <Text textStyle="web.s1" color="text.light.secondary">
+        Choose Room(s)
+      </Text>
       <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">
         {ROOM_NUMBERS.map((num: number) => (
-          <GreenButton 
+          <GreenButton
             key={num}
             text={"Room " + num}
             action={() => toggleRoomSelection(num)}

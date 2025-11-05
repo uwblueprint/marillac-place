@@ -30,5 +30,5 @@ export interface AnnouncementDisplayInfo {
 export enum Priority {
   NORMAL = "NORMAL",
   HIGH = "HIGH",
-  CRITICAL = "CRITICAL"
+  CRITICAL = "CRITICAL",
 }

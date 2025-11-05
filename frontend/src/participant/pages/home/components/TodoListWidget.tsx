@@ -37,7 +37,7 @@ const TodoListWidget = () => {
     {
       variables: { participantId, date },
       skip: !participantId,
-    }
+    },
   );
 
   return (
@@ -60,12 +60,12 @@ const TodoListWidget = () => {
 
       {loading && <Spinner />}
 
-        {error && (
-          <Alert status="error" mb={4}>
-            <AlertIcon />
-            Error loading tasks.
-          </Alert>
-        )}
+      {error && (
+        <Alert status="error" mb={4}>
+          <AlertIcon />
+          Error loading tasks.
+        </Alert>
+      )}
 
       {!loading &&
         !error &&
@@ -98,12 +98,12 @@ const TodoListWidget = () => {
                 <Text color="text.light.secondary" textStyle="mobile.b1">
                   {formatTimeRange(
                     assigned_task.start_date,
-                    assigned_task.end_date
+                    assigned_task.end_date,
                   )}
                 </Text>
               </Flex>
             );
-          }
+          },
         )}
     </>
   );

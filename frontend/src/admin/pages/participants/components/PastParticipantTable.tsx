@@ -79,11 +79,11 @@ const PastParticipantTable = () => {
     let sorted: any;
     if (newState === 1) {
       sorted = [...pastParticipants].sort(
-        (a: any, b: any) => a.participant_id - b.participant_id
+        (a: any, b: any) => a.participant_id - b.participant_id,
       );
     } else {
       sorted = [...pastParticipants].sort(
-        (a: any, b: any) => b.participant_id - a.participant_id
+        (a: any, b: any) => b.participant_id - a.participant_id,
       );
     }
 
@@ -99,11 +99,11 @@ const PastParticipantTable = () => {
     let sorted: any;
     if (newState === 1) {
       sorted = [...pastParticipants].sort((a: any, b: any) =>
-        a.arrival_date.localeCompare(b.arrival_date)
+        a.arrival_date.localeCompare(b.arrival_date),
       );
     } else {
       sorted = [...pastParticipants].sort((a: any, b: any) =>
-        b.arrival_date.localeCompare(a.arrival_date)
+        b.arrival_date.localeCompare(a.arrival_date),
       );
     }
 
@@ -119,11 +119,11 @@ const PastParticipantTable = () => {
     let sorted: any;
     if (newState === 1) {
       sorted = [...pastParticipants].sort((a: any, b: any) =>
-        a.departure_date.localeCompare(b.departure_date)
+        a.departure_date.localeCompare(b.departure_date),
       );
     } else {
       sorted = [...pastParticipants].sort((a: any, b: any) =>
-        b.departure_date.localeCompare(a.departure_date)
+        b.departure_date.localeCompare(a.departure_date),
       );
     }
 

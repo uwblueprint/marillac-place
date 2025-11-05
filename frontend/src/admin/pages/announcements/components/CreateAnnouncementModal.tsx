@@ -53,7 +53,7 @@ const CreateAnnouncementModal = ({
       }
       localStorage.setItem(
         "notification",
-        "Announcement sent to " + listOfRooms
+        "Announcement sent to " + listOfRooms,
       );
       onClose();
       window.location.reload();

@@ -78,7 +78,7 @@ export default function MarillacBalanceModal({
 
       localStorage.setItem(
         "notification",
-        "Updated Balance: $" + newBalance + " for Room " + roomNumber
+        "Updated Balance: $" + newBalance + " for Room " + roomNumber,
       );
       window.location.reload();
     }

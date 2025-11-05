@@ -33,7 +33,7 @@ const WeeklyEarningsChart = ({
     (earnings = 0, index) => ({
       amount: earnings,
       isToday: index === 6,
-    })
+    }),
   );
 
   const maxEarnings = Math.max(...weeklyEarnings.filter((val) => val != null));
@@ -43,7 +43,7 @@ const WeeklyEarningsChart = ({
   // will need to turn this into a parameter:
   const lastWeekTotal = thisWeekTotal * 0.77;
   const percentageChange = Math.round(
-    ((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100
+    ((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100,
   );
 
   return (

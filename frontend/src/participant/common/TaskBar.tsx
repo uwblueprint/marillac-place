@@ -15,7 +15,12 @@ type TaskBarProps = {
   closeTaskBar: () => void;
 };
 
-export default function TaskBar({ participantId, currentPageIndex, pages, closeTaskBar }: TaskBarProps) {
+export default function TaskBar({
+  participantId,
+  currentPageIndex,
+  pages,
+  closeTaskBar,
+}: TaskBarProps) {
   const navigate = useNavigate();
   const [signOut, setSignOut] = useState(false);
 

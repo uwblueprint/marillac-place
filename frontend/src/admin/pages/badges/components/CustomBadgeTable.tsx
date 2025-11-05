@@ -125,15 +125,15 @@ const CustomBadgeTable = ({
   );
 
   return (
-      <DataTable
-        loading={loading}
-        error={error}
-        columns={columns}
-        rows={rows}
-        editModal={editModal}
-        selected={selected}
-        edit={edit}
-      />
+    <DataTable
+      loading={loading}
+      error={error}
+      columns={columns}
+      rows={rows}
+      editModal={editModal}
+      selected={selected}
+      edit={edit}
+    />
   );
 };
 

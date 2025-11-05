@@ -61,14 +61,14 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
       cancel_action={onClose}
       error={error}
     >
-      <CoreInput 
+      <CoreInput
         label="Badge Name"
         current_value={badgeName}
         action={(e: any) => setBadgeName(e.target.value)}
         type="text"
         width="350px"
       />
-      <CoreInput 
+      <CoreInput
         label="Badge Criteria"
         current_value={badgeCriteria}
         action={(e: any) => setBadgeCriteria(e.target.value)}

@@ -12,7 +12,7 @@ export default function SimpleButton({
   action,
   is_active,
   text_color,
-  icon
+  icon,
 }: SimpleButtonProps) {
   return (
     <Button
@@ -36,7 +36,12 @@ export default function SimpleButton({
     >
       <Flex alignItems="center" gap="5px">
         {icon && (
-          <Flex width="12px" height="12px" alignItems="center" justifyContent="center">
+          <Flex
+            width="12px"
+            height="12px"
+            alignItems="center"
+            justifyContent="center"
+          >
             {icon}
           </Flex>
         )}

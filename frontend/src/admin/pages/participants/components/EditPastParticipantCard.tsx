@@ -61,7 +61,7 @@ export default function EditPastParticipantCard({
           });
           localStorage.setItem(
             "notification",
-            "Participant #" + id + " updated"
+            "Participant #" + id + " updated",
           );
           window.location.reload();
         } catch (err: any) {

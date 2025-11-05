@@ -41,7 +41,7 @@ const AddParticipantCard = ({
     onCompleted: () => {
       localStorage.setItem(
         "notification",
-        "Participant #" + id + " added to Room " + roomNumber
+        "Participant #" + id + " added to Room " + roomNumber,
       );
       window.location.reload();
     },

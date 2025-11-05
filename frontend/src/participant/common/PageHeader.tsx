@@ -15,9 +15,9 @@ function ParticipantPageHeader() {
     { label: "Announcements", route: ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE },
     { label: "Progress", route: ROUTES.PARTICIPANTS_PROGRESS_PAGE },
   ];
-  
+
   const currentPageIndex = pages.findIndex(
-    (page) => page.route === window.location.pathname
+    (page) => page.route === window.location.pathname,
   );
 
   const participant = useContext(ParticipantContext);
@@ -58,9 +58,9 @@ function ParticipantPageHeader() {
           <Flex onClick={() => setShowTaskBar(false)} cursor="pointer">
             <CloseIcon fontSize="medium" />
           </Flex>
-          <TaskBar 
-            participantId={participant?.id} 
-            currentPageIndex={currentPageIndex} 
+          <TaskBar
+            participantId={participant?.id}
+            currentPageIndex={currentPageIndex}
             pages={pages}
             closeTaskBar={() => setShowTaskBar(false)}
           />
