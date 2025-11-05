@@ -152,7 +152,7 @@ const participantResolver = {
       );
 
       return last7Days.map((day) => earningsMap[day] || 0);
-      },
+    },
   },
   Mutation: {
     createParticipant: async (
