@@ -1,6 +1,7 @@
 import { Participant, Prisma, PrismaClient } from "@prisma/client";
 import { getToday } from "../utils/formatDateTime";
 import { checkAndRecordGoalReached } from "../utils/checkGoalReached";
+import { updateMarillacBucks } from "../utils/updateMarillacBucks";
 
 const prisma = new PrismaClient();
 
@@ -180,7 +181,20 @@ const participantResolver = {
         updatedData.account_creation_date = account_creation_date;
       if (account_removal_date)
         updatedData.account_removal_date = account_removal_date;
-      if (marillac_bucks) updatedData.marillac_bucks = marillac_bucks;
+      if (marillac_bucks)  {
+        // updatedData.marillac_bucks = marillac_bucks; // edit here
+        const old_result = await prisma.participant.findUnique({
+          where: { participant_id },
+          select: { marillac_bucks: true }
+        })
+      
+        const old_marillac_bucks = old_result?.marillac_bucks
+        
+        await updateMarillacBucks(participant_id, old_marillac_bucks - marillac_bucks)
+        
+        // Check if this update caused the participant to reach their goal
+        await checkAndRecordGoalReached(participant_id);
+      }
       if (marillac_bucks_goal)
         updatedData.marillac_bucks_goal = marillac_bucks_goal;
       if (password) updatedData.password = password;
@@ -204,10 +218,18 @@ const participantResolver = {
         reason: string;
       }
     ): Promise<boolean> => {
-      await prisma.participant.update({
-        where: { participant_id },
-        data: { marillac_bucks },
-      });
+      // await prisma.participant.update({
+      //   where: { participant_id },
+      //   data: { marillac_bucks },
+      // });
+      const old_result = await prisma.participant.findUnique({
+          where: { participant_id },
+          select: { marillac_bucks: true }
+        })
+      
+      const old_marillac_bucks = old_result?.marillac_bucks
+      
+      await updateMarillacBucks(participant_id, old_marillac_bucks - marillac_bucks, reason)
       
       // Check if this update caused the participant to reach their goal
       await checkAndRecordGoalReached(participant_id);
