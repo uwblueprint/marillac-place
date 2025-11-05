@@ -41,7 +41,7 @@ interface LoginStats {
   login_date: string;
 }
 
-interface DataReport {
+export interface DataReport {
   reportPeriod: string;
   startDate: string;
   endDate: string;
@@ -54,7 +54,7 @@ interface DataReport {
 }
 
 // Main function to generate a json  for data report
-async function generateDataReport(
+export async function generateDataReport(
   params: DataReportParams
 ): Promise<DataReport | null> {
   try {
