@@ -30,15 +30,10 @@ export async function updateMarillacBucks(
     added_marillac_bucks: number,
     transaction_description? : string
 ): Promise<number> {
-
-  // const old_result = await prisma.participant.findUnique({
-  //   where: { participant_id },
-  //   select: { marillac_bucks: true }
-  // })
-
-  // const old_marillac_bucks = old_result?.marillac_bucks
-
-  // update marillac bucks
+  if (added_marillac_bucks === 0) {
+    return 0
+  }
+  
   const updated_result = await prisma.participant.update({
     where: { participant_id },
     data: { marillac_bucks: { increment: added_marillac_bucks } },
@@ -61,7 +56,7 @@ export async function updateMarillacBucks(
     await prisma.participantProgress.update({
       where: { participant_id },
       data: { 
-        total_earnings : new_marillac_bucks
+        total_earnings : {increment: added_marillac_bucks}
       }
     })
 
@@ -79,7 +74,7 @@ export async function updateMarillacBucks(
       participant_id,
       getToday(),
       TransactionType.PURCHASE,
-      added_marillac_bucks,
+      -added_marillac_bucks,
       transaction_description ? transaction_description : ""
     )
   }

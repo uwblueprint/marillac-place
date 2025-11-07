@@ -8,6 +8,7 @@ import {
 } from "@prisma/client";
 
 import { getNow } from "../utils/formatDateTime";
+import { updateMarillacBucks } from "../utils/updateMarillacBucks";
 
 const prisma = new PrismaClient();
 
@@ -142,18 +143,21 @@ const badgeResolver = {
       );
       
       // also add marillac bucks for the earned badge
-      await prisma.$transaction(
-        eligibleParticipantIds.map((id) =>
-          prisma.participant.update({
-            where: { participant_id: id },
-            data: {
-              marillac_bucks: {
-                increment: marillac_bucks,
-              },
-            },
-          }),
-        )
-      );
+      eligibleParticipantIds.map((id) => {
+        updateMarillacBucks(id, marillac_bucks)
+      })
+      // await prisma.$transaction(
+      //   eligibleParticipantIds.map((id) =>
+      //     prisma.participant.update({
+      //       where: { participant_id: id },
+      //       data: {
+      //         marillac_bucks: {
+      //           increment: marillac_bucks,
+      //         },
+      //       },
+      //     }),
+      //   )
+      // );
       
       return eligibleParticipantIds;
     },

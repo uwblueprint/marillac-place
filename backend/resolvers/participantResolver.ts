@@ -181,16 +181,15 @@ const participantResolver = {
         updatedData.account_creation_date = account_creation_date;
       if (account_removal_date)
         updatedData.account_removal_date = account_removal_date;
-      if (marillac_bucks)  {
-        // updatedData.marillac_bucks = marillac_bucks; // edit here
+      if (marillac_bucks) {
         const old_result = await prisma.participant.findUnique({
           where: { participant_id },
           select: { marillac_bucks: true }
         })
       
-        const old_marillac_bucks = old_result?.marillac_bucks
+        const old_marillac_bucks = old_result!.marillac_bucks
         
-        await updateMarillacBucks(participant_id, old_marillac_bucks - marillac_bucks)
+        await updateMarillacBucks(participant_id, marillac_bucks - old_marillac_bucks)
         
         // Check if this update caused the participant to reach their goal
         await checkAndRecordGoalReached(participant_id);
@@ -218,18 +217,14 @@ const participantResolver = {
         reason: string;
       }
     ): Promise<boolean> => {
-      // await prisma.participant.update({
-      //   where: { participant_id },
-      //   data: { marillac_bucks },
-      // });
       const old_result = await prisma.participant.findUnique({
           where: { participant_id },
           select: { marillac_bucks: true }
         })
       
-      const old_marillac_bucks = old_result?.marillac_bucks
+      const old_marillac_bucks = old_result?.marillac_bucks || 0
       
-      await updateMarillacBucks(participant_id, old_marillac_bucks - marillac_bucks, reason)
+      await updateMarillacBucks(participant_id, marillac_bucks - old_marillac_bucks, reason)
       
       // Check if this update caused the participant to reach their goal
       await checkAndRecordGoalReached(participant_id);
