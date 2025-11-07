@@ -38,7 +38,7 @@ export default function MarillacBalanceModal({
     if (numericAmount <= 0) {
       setError("Amount must be positive");
     } else if (numericAmount > currentBalance && action === "remove") {
-      setError("Cannot remove an amount greater than the current balance");
+      setError("Insufficient funds. Cannot remove more than current balance.");
     } else {
       let newBalance = currentBalance;
       if (action === "add") {

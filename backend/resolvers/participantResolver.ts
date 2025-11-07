@@ -1,4 +1,9 @@
-import { Participant, Prisma, PrismaClient } from "@prisma/client";
+import {
+  Participant,
+  Prisma,
+  PrismaClient,
+  TransactionType,
+} from "@prisma/client";
 import { getToday } from "../utils/formatDateTime";
 import { checkAndRecordGoalReached } from "../utils/checkGoalReached";
 
@@ -258,16 +263,60 @@ const participantResolver = {
       {
         participant_id,
         marillac_bucks,
+        reason,
       }: {
         participant_id: number;
         marillac_bucks: number;
         reason: string;
       }
     ): Promise<boolean> => {
-      await prisma.participant.update({
+      // Get current participant to check balance
+      const participant = await prisma.participant.findUnique({
         where: { participant_id },
-        data: { marillac_bucks },
+        select: { marillac_bucks: true },
       });
+
+      if (!participant) {
+        throw new Error("Participant not found");
+      }
+
+      const currentBalance = participant.marillac_bucks;
+      const difference = marillac_bucks - currentBalance;
+      const isIncreasing = difference > 0;
+
+      // If no change, just return (no transaction needed)
+      if (difference === 0) {
+        return true;
+      }
+
+      // Check for sufficient funds if removing bucks
+      if (!isIncreasing && currentBalance < Math.abs(difference)) {
+        throw new Error(
+          "Insufficient funds. Cannot remove more than current balance."
+        );
+      }
+
+      // Determine transaction type
+      const transactionType = isIncreasing
+        ? TransactionType.REFUND
+        : TransactionType.PURCHASE;
+
+      // Update participant balance and create transaction in a transaction
+      await prisma.$transaction([
+        prisma.participant.update({
+          where: { participant_id },
+          data: { marillac_bucks },
+        }),
+        prisma.transaction.create({
+          data: {
+            participant_id,
+            transaction_date: getToday(),
+            transaction_type: transactionType,
+            description: reason,
+            marillac_bucks: Math.abs(difference),
+          },
+        }),
+      ]);
 
       // Check if this update caused the participant to reach their goal
       await checkAndRecordGoalReached(participant_id);
