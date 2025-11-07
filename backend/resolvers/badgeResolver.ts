@@ -142,22 +142,12 @@ const badgeResolver = {
         )
       );
       
-      // also add marillac bucks for the earned badge
-      eligibleParticipantIds.map((id) => {
-        updateMarillacBucks(id, marillac_bucks)
-      })
-      // await prisma.$transaction(
-      //   eligibleParticipantIds.map((id) =>
-      //     prisma.participant.update({
-      //       where: { participant_id: id },
-      //       data: {
-      //         marillac_bucks: {
-      //           increment: marillac_bucks,
-      //         },
-      //       },
-      //     }),
-      //   )
-      // );
+      // update marillac bucks
+      await Promise.all(
+        eligibleParticipantIds.map((id) => {
+          updateMarillacBucks(id, marillac_bucks)
+        })
+      )
       
       return eligibleParticipantIds;
     },
