@@ -5,6 +5,7 @@ import {
   formatDateTime,
   getWeekBounds,
 } from "../utils/formatDateTime";
+import { evaluateBadge } from "../utils/evaluateBadge";
 
 type CalendarEvent = {
   id: number;
@@ -171,6 +172,47 @@ const assignedTaskResolver = {
       }
     ): Promise<boolean> => {
       const updatedData: Partial<AssignedTask> = {};
+      if (taskStatus === Status.COMPLETE) {
+        // Fetch the participant_id of this assigned task
+        const assignedTask = await prisma.assignedTask.findUnique({
+          where: { assigned_task_id: id },
+        });
+
+        // Increase the 'optional_tasks_completed' count in participantProgress
+        if (
+          assignedTask &&
+          assignedTask.task_type === TaskType.OPTIONAL &&
+          assignedTask.task_status !== Status.COMPLETE
+        ) {
+          const participantProgress =
+            await prisma.participantProgress.findUnique({
+              where: { participant_id: assignedTask?.participant_id },
+            });
+
+          if (participantProgress) {
+            const updatedParticpantProgress =
+              await prisma.participantProgress.update({
+                where: { participant_id: assignedTask.participant_id },
+                data: {
+                  optional_tasks_completed: {
+                    increment: 1,
+                  },
+                  weeks_optional_tasks_complete: {
+                    increment:
+                      participantProgress.optional_tasks_completed === 2
+                        ? 1
+                        : 0,
+                  },
+                },
+              });
+            await evaluateBadge(
+              updatedParticpantProgress.weeks_optional_tasks_complete,
+              assignedTask.participant_id,
+              "Perfect Score Badge for Optional Tasks"
+            );
+          }
+        }
+      }
 
       if (taskName) updatedData.task_name = taskName;
       if (taskType) updatedData.task_type = taskType;

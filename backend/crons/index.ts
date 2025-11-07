@@ -7,6 +7,7 @@ import {
   sendWeeklyReports,
   sendMonthlyReports,
 } from "./scripts/sendReportEmails";
+import expireParticipantOptionalTasks from "./scripts/expireParticipantOptionalTasks";
 
 cron.schedule("0 0 * * * *", async () => {
   const res = await expireAdminNotes();
@@ -71,5 +72,15 @@ cron.schedule("0 9 1 * *", async () => {
     console.log(`[${timestamp}] Monthly reports sent successfully`);
   } else {
     console.log(`[${timestamp}] Could not send monthly reports`);
+  }
+});
+
+// Reset participant optional tasks every Monday at midnight
+cron.schedule("0 0 * * 1", async () => {
+  const res = await expireParticipantOptionalTasks();
+  if (res) {
+    console.log("Expired participant optional tasks");
+  } else {
+    console.log("Could not expire participant optional tasks");
   }
 });

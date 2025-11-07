@@ -18,7 +18,7 @@ export async function evaluateBadge(
     if (!badge) throw new Error(`Badge not found.`);
     const earned = await prisma.earnedBadge.findFirst({
       where: { participant_id, name: badge_name },
-      orderBy: { level: "asc" },
+      orderBy: { level: "desc" },
     });
     const nextLevel = earned ? earned.level + 1 : 0;
     const nextLevelEntry = badge.badge_level.find(
