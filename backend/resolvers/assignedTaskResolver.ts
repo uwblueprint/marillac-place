@@ -5,6 +5,7 @@ import {
   formatDateTime,
   getWeekBounds,
 } from "../utils/formatDateTime";
+import { evaluateBadge } from "../utils/evaluateBadge";
 
 type CalendarEvent = {
   id: number;
@@ -185,10 +186,66 @@ const assignedTaskResolver = {
         updatedData.marillac_bucks_deduction = marillacBucksDeduction;
       if (comment) updatedData.comment = comment;
 
-      await prisma.assignedTask.update({
+      const updatedTask = await prisma.assignedTask.update({
         where: { assigned_task_id: id },
         data: updatedData,
       });
+
+      // Check if this is a REQUIRED task being marked as complete or if its not 
+      if (taskStatus === Status.COMPLETE && updatedTask.task_type === TaskType.REQUIRED) {
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+        const monday = new Date(today);
+        monday.setDate(today.getDate() - daysFromMonday);
+        monday.setHours(0, 0, 0, 0);
+
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        sunday.setHours(23, 59, 59, 999);
+
+        const weekStart = formatDateTime(monday, false);
+        const weekEnd = formatDateTime(sunday, false);
+
+        //get all required tasks for this participant in the current week
+        const requiredTasks = await prisma.assignedTask.findMany({
+          where: {
+            participant_id: updatedTask.participant_id,
+            task_type: TaskType.REQUIRED,
+            start_date: {
+              gte: weekStart,
+            },
+            end_date: {
+              lte: weekEnd,
+            },
+          },
+        });
+
+        //check if all required tasks are completed
+        const allTasksCompleted = requiredTasks.every(
+          (task) => task.task_status === Status.COMPLETE
+        );
+
+        if (allTasksCompleted) {
+          //update participant progress
+          const progress = await prisma.participantProgress.update({
+            where: { participant_id: updatedTask.participant_id },
+            data: {
+              weeks_mandatory_tasks_complete: {
+                increment: 1
+              }
+            }
+          });
+
+          // Evaluate badge progress
+          await evaluateBadge(
+            progress.weeks_mandatory_tasks_complete,
+            updatedTask.participant_id,
+            "Perfect Score"
+          );
+        }
+      }
 
       return true;
     },
