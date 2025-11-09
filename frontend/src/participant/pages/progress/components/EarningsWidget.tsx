@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -23,28 +23,36 @@ interface WeeklyEarningsChartProps {
 
 interface ChartDataItem {
   amount: number;
+  day: string;
   isToday: boolean;
 }
 
 const WeeklyEarningsChart = ({
   weeklyEarnings = [],
 }: WeeklyEarningsChartProps) => {
-  const chartData: ChartDataItem[] = weeklyEarnings.map(
-    (earnings = 0, index) => ({
+  const [selectedBarIndex, setSelectedBarIndex] = useState<number | null>(null);
+
+  // Day labels for the week (Monday = index 0, Sunday = index 6)
+  const allDayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  // Calculate which day of the week today is (0 = Monday, 6 = Sunday)
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  const todayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Convert to 0 = Monday
+
+  // Only show days from Monday up to today
+  const chartData: ChartDataItem[] = weeklyEarnings
+    .slice(0, todayIndex + 1) // Only include Monday through today
+    .map((earnings = 0, index) => ({
       amount: earnings,
-      isToday: index === 6,
-    })
-  );
+      day: allDayLabels[index] || "",
+      isToday: index === todayIndex,
+    }));
 
-  const maxEarnings = Math.max(...weeklyEarnings.filter((val) => val != null));
-  const upperBound = Math.ceil(maxEarnings * 1.2);
-
-  const thisWeekTotal = weeklyEarnings.reduce((sum, val = 0) => sum + val, 0);
-  // will need to turn this into a parameter:
-  const lastWeekTotal = thisWeekTotal * 0.77;
-  const percentageChange = Math.round(
-    ((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100
-  );
+  // Calculate max earnings from only the days we're showing
+  const visibleEarnings = weeklyEarnings.slice(0, todayIndex + 1);
+  const maxEarnings = Math.max(...visibleEarnings.filter((val) => val != null), 0);
+  const upperBound = Math.ceil(maxEarnings * 1.2) || 10;
 
   return (
     <div
@@ -82,10 +90,10 @@ const WeeklyEarningsChart = ({
               vertical={false}
             />
             <XAxis
-              dataKey="amount"
+              dataKey="day"
               axisLine={false}
               tickLine={false}
-              tick={false}
+              tick={{ fill: colors.text.light.secondary, fontSize: 12 }}
             />
             <YAxis
               domain={[0, upperBound]}
@@ -95,7 +103,14 @@ const WeeklyEarningsChart = ({
               tickFormatter={(value) => `$${value}`}
               width={30}
             />
-            <Bar dataKey="amount" radius={[2, 2, 0, 0]}>
+            <Bar
+              dataKey="amount"
+              radius={[2, 2, 0, 0]}
+              onClick={(data: any, index: number) => {
+                setSelectedBarIndex(index === selectedBarIndex ? null : index);
+              }}
+              style={{ cursor: "pointer" }}
+            >
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
@@ -109,7 +124,8 @@ const WeeklyEarningsChart = ({
                 content={(props: any) => {
                   const { x, y, value, index } = props;
                   if (
-                    index === chartData.length - 1 &&
+                    selectedBarIndex !== null &&
+                    index === selectedBarIndex &&
                     x !== undefined &&
                     y !== undefined &&
                     value !== undefined
@@ -133,25 +149,6 @@ const WeeklyEarningsChart = ({
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-        }}
-      >
-        <span
-          style={{
-            color: colors.success[900],
-            fontSize: 18,
-            fontWeight: "bold",
-          }}
-        >
-          ▲ {percentageChange}% Compared to Last Week
-        </span>
       </div>
     </div>
   );

@@ -120,30 +120,36 @@ const participantResolver = {
       { participant_id }: { participant_id: number }
     ): Promise<number[]> => {
       const today = new Date();
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(today.getDate() - 6);
+
+      const dayOfWeek = today.getDay();
+      const mondayOffset = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+      const monday = new Date(today);
+      monday.setDate(today.getDate() - mondayOffset);
+      monday.setHours(0, 0, 0, 0);
 
       const todayStr = today.toISOString().split("T")[0];
-      const startStr = sevenDaysAgo.toISOString().split("T")[0];
+      const mondayStr = monday.toISOString().split("T")[0];
 
       const results = await prisma.$queryRaw<
         { transaction_date: string; total: number }[]
       >`
-        SELECT 
+        SELECT
           transaction_date,
           SUM(marillac_bucks) AS total
         FROM transaction
         WHERE participant_id = ${participant_id}
           AND transaction_type = 'EARNING'
-          AND transaction_date >= ${startStr}
+          AND transaction_date >= ${mondayStr}
           AND transaction_date <= ${todayStr}
         GROUP BY transaction_date
         ORDER BY transaction_date ASC
       `;
 
-      const last7Days: string[] = Array.from({ length: 7 }, (_, i) => {
-        const d = new Date();
-        d.setDate(today.getDate() - (6 - i));
+      // Create array for Monday through Sunday (7 days)
+      const weekDays: string[] = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
         return d.toISOString().split("T")[0];
       });
 
@@ -151,7 +157,7 @@ const participantResolver = {
         results.map((r) => [r.transaction_date, Number(r.total)])
       );
 
-      return last7Days.map((day) => earningsMap[day] || 0);
+      return weekDays.map((day) => earningsMap[day] || 0);
     },
   },
   Mutation: {
@@ -342,6 +348,53 @@ const participantResolver = {
         INSERT INTO goal_history (participant_id, goal_action, goal_value, action_date)
         VALUES (${participant_id}, 'SET', ${new_goal_value}, ${getToday()})
       `;
+
+      return true;
+    },
+    createEarningTransaction: async (
+      _parent: undefined,
+      {
+        participant_id,
+        transaction_date,
+        marillac_bucks,
+        description,
+      }: {
+        participant_id: number;
+        transaction_date: string;
+        marillac_bucks: number;
+        description?: string;
+      }
+    ): Promise<boolean> => {
+      if (marillac_bucks <= 0) {
+        throw new Error("Marillac bucks must be greater than 0");
+      }
+
+      const participant = await prisma.participant.findUnique({
+        where: { participant_id },
+      });
+
+      if (!participant) {
+        throw new Error("Participant not found");
+      }
+
+      await prisma.transaction.create({
+        data: {
+          participant_id,
+          transaction_date,
+          transaction_type: "EARNING",
+          marillac_bucks,
+          description: description || "Daily earnings",
+        },
+      });
+
+      const newBalance = participant.marillac_bucks + marillac_bucks;
+
+      await prisma.participant.update({
+        where: { participant_id },
+        data: { marillac_bucks: newBalance },
+      });
+
+      await checkAndRecordGoalReached(participant_id);
 
       return true;
     },
