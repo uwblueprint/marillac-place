@@ -40,7 +40,7 @@ enum TaskStatus {
 enum DayPreference {
   DAILY
   EVERY_SELECTED_DAYS
-  ANY_SELECTED_DAYS
+  DAY_RANGE
   PARTICIPANT_PREFERENCE
 }
 
@@ -164,17 +164,17 @@ model ReceivedAnnouncement {
 }
 
 model Task {
-  name            String         @id
+  tid             Int            @id @default(autoincrement())
+  name            String         @unique
   type            TaskType
-  description     String
   value           Int
-  penalty         Int
+  penalty         Int            @default(0)
   comment         String?
   day_preference  DayPreference
   days            DayOfWeek[]
   time_preference TimePreference
-  start_time      DateTime       @db.Time
-  end_time        DateTime       @db.Time
+  start_time      DateTime?      @db.Time
+  end_time        DateTime?      @db.Time
 
   AssignedTask AssignedTask[]
 
@@ -182,7 +182,7 @@ model Task {
 }
 
 model AssignedTask {
-  name       String
+  tid        Int
   pid        Int
   status     TaskStatus @default(ASSIGNED)
   value      Int
@@ -191,15 +191,16 @@ model AssignedTask {
   start_date DateTime
   end_date   DateTime
 
-  task        Task        @relation(fields: [name], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  task        Task        @relation(fields: [tid], references: [tid], onDelete: Cascade, onUpdate: Cascade)
   participant Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id([name, pid])
+  @@id([tid, pid])
   @@map("assigned_task")
 }
 
 model CustomBadge {
-  name        String @id
+  bid         Int    @id @default(autoincrement())
+  name        String @unique
   icon        Icon
   description String
 
@@ -209,13 +210,13 @@ model CustomBadge {
 }
 
 model EarnedCustomBadge {
-  name String
-  pid  Int
+  bid Int
+  pid Int
 
   participant  Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
-  custom_badge CustomBadge @relation(fields: [name], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  custom_badge CustomBadge @relation(fields: [bid], references: [bid], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id([name, pid])
+  @@id([bid, pid])
   @@map("earned_custom_badge")
 }
 
