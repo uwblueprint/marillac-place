@@ -5,6 +5,7 @@ import { merge } from "lodash";
 import {
   typeDefs as scalarTypeDefs,
   resolvers as scalarResolvers,
+  DateTimeResolver,
 } from "graphql-scalars";
 
 import models from "../gql/types/models";
@@ -35,6 +36,7 @@ export default function getGraphQLSchema() {
       taskResolver,
       badgeResolver,
       assignedTaskResolver,
+      DateTimeResolver
       reportResolver
     ),
   });

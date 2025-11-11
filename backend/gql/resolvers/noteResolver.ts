@@ -10,7 +10,8 @@ const noteResolver = {
     },
   },
   Mutation: {
-    createNote: async (_parent: undefined,
+    createNote: async (
+      _parent: undefined,
       { message }: {
         message: string;
       }
@@ -19,7 +20,8 @@ const noteResolver = {
         data: { message },
       });
     },
-    deleteNote: async (_parent: undefined,
+    deleteNote: async (
+      _parent: undefined,
       { nid }: {
         nid: number;
       }

@@ -15,6 +15,8 @@ const resolvers = gql`
       pinned: Boolean
       important: Boolean
     ): [ReceivedAnnouncement!]!
+
+    getEarningGoal(pid: Int!): EarningGoal
     
 
     getPastParticipants: [Participant]
@@ -70,6 +72,17 @@ const resolvers = gql`
       pinned: Boolean
       read: Boolean
     ): ReceivedAnnouncement!
+
+    createEarningGoal(
+      pid: Int!
+      action: GoalAction!
+      value: Int!
+    ): EarningGoal!
+    updateEarningGoal(
+      pid: Int!
+      date: Date!
+      value: Int!
+    ): EarningGoal!
 
 
     adminLogin(role: String!, password: String!): LoginResponse
