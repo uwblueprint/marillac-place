@@ -7,10 +7,10 @@ import {
   resolvers as scalarResolvers,
 } from "graphql-scalars";
 
-import models from "../types/models";
-import enums from "../types/enums";
-import resolvers from "../types/resolvers";
-import responses from "../types/responses";
+import models from "../gql/types/models";
+import enums from "../gql/types/enums";
+import resolvers from "../gql/types/resolvers";
+import responses from "../gql/types/responses";
 
 import participantResolver from "../resolvers/participantResolver";
 import noteResolver from "../resolvers/noteResolver";

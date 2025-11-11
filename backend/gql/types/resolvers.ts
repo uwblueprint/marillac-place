@@ -2,6 +2,21 @@ import { gql } from "apollo-server-express";
 
 const resolvers = gql`
   type Query {
+    getNotes: [Note!]!
+
+    getReportRecipients: [ReportRecipient!]!
+
+    getAnnouncementsFromToday: [Announcement!]!
+    getAnnouncementsSentToParticipants(pids: [Int!]!): [Announcement!]!
+
+    getReceivedAnnouncements(
+      pid: Int!
+      unread: Boolean
+      pinned: Boolean
+      important: Boolean
+    ): [ReceivedAnnouncement!]!
+    
+
     getPastParticipants: [Participant]
     getCurrentParticipants: [Participant]
     getParticipantByRoom(room_number: Int!): Participant
@@ -13,29 +28,50 @@ const resolvers = gql`
       start_date: String
       end_date: String
     ): [GoalHistory!]!
-    getNotes: [Note]
-    getAllAnnouncements: [Announcement]
-    getAnnouncementsInDateRange(start: String!, end: String!): [Announcement]
-    getAnnouncementsByParticipants(participant_ids: [Int!]!): [Announcement]
-    getAnnouncementsByParticipantId(participant_id: Int!): [UserAnnouncement]
     getAssignedTasks(participant_id: Int!): GetAssignedTaskResponse!
     getTasksByType(type: [TaskType!]!): [Task]
     getCustomBadges: [Badge]
     getSystemBadges: [Badge]
-    getParticipantAnnouncements(
-      participantId: Int!
-      filter: AnnouncementFilter = ALL
-    ): [UserAnnouncement!]!
     getAssignedTasksByParticipantIdAndDate(
       participantId: Int!
       date: String!
     ): [AssignedTask]
     hasCompletedAllRequiredTasks(participantId: Int!): Boolean
     getEarnedBadgesByParticipant(participantId: Int!): [EarnedBadge!]!
-    getReportRecipients: [ReportRecipient!]!
+  
   }
 
   type Mutation {
+    createNote(message: String!): Note!
+    deleteNote(nid: Int!): Note!
+
+    updateReportRecipient(
+      email: String!
+      weekly: Boolean
+      monthly: Boolean
+    ): ReportRecipient!
+    deleteReportRecipient(email: String!): ReportRecipient!
+
+    createAnnouncement(
+      priority: Priority!
+      pids: [Int!]!
+      message: String!
+    ): Announcement!
+    updateAnnouncement(
+      aid: Int!
+      priority: Priority
+      message: String
+    ): Announcement!
+    deleteAnnouncement(aid: Int!): Announcement!
+
+    updateReceivedAnnouncement(
+      aid: Int!
+      pid: Int!
+      pinned: Boolean
+      read: Boolean
+    ): ReceivedAnnouncement!
+
+
     adminLogin(role: String!, password: String!): LoginResponse
     participantLogin(id: Int!, password: String!): LoginResponse
     createCustomBadge(name: String!, description: String!, icon: Icon!): Boolean
@@ -60,25 +96,6 @@ const resolvers = gql`
       participant_id: Int!
       marillac_bucks: Int!
       reason: String!
-    ): Boolean
-    createNote(message: String!): Boolean
-    deleteNote(note_id: Int!): Boolean
-    createAnnouncement(
-      priority: Priority!
-      participants: [Int!]!
-      message: String!
-    ): Boolean
-    editAnnouncement(
-      announcement_id: Int!
-      priority: Priority
-      message: String
-    ): Boolean
-    deleteAnnouncement(announcement_id: Int!): Boolean
-    updatePinReadAnnouncement(
-      announcement_id: Int!
-      participant_id: Int!
-      pinned: Boolean
-      read: Boolean
     ): Boolean
     createTask(
       type: TaskType!
@@ -162,13 +179,6 @@ const resolvers = gql`
       weekly: Boolean!
       monthly: Boolean!
     ): Boolean
-    updateReportRecipient(
-      report_recipient_id: Int!
-      email: String
-      weekly: Boolean
-      monthly: Boolean
-    ): Boolean
-    deleteReportRecipient(report_recipient_id: Int!): Boolean
   }
 `;
 

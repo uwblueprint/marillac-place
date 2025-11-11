@@ -12,8 +12,10 @@ export function formatDateTime(date: Date, includeTime: boolean): string {
   return `${year}-${month}-${day}`;
 }
 
-export function getToday(): string {
-  return formatDateTime(new Date(), false);
+export function getToday(): Date {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
 }
 
 export function getNow(): string {

@@ -1,27 +1,40 @@
 import { gql } from "apollo-server-express";
 
 const enums = gql`
-  enum TaskType {
-    REQUIRED
-    OPTIONAL
-    INDIVIDUAL_GOAL
-  }
-
   enum TransactionType {
     EARNING
     PURCHASE
     REFUND
   }
 
-  enum BadgeType {
-    SYSTEM
-    CUSTOM
+  enum GoalAction {
+    SET
+    REACHED
   }
 
-  enum RecurrenceFrequency {
+  enum Priority {
+    NORMAL
+    HIGH
+    CRITICAL
+  }
+
+  enum TaskType {
+    REQUIRED
+    OPTIONAL
+    INDIVIDUAL_GOAL
+  }
+
+  enum TaskStatus {
+    ASSIGNED
+    INCOMPLETE
+    COMPLETE
+    EXCUSED
+  }
+
+  enum DayPreference {
     DAILY
     EVERY_SELECTED_DAYS
-    ANY_SELECTED_DAYS
+    DAY_RANGE
     PARTICIPANT_PREFERENCE
   }
 
@@ -35,30 +48,18 @@ const enums = gql`
     SUNDAY
   }
 
-  enum TimeOption {
+  enum TimePreference {
     ANYTIME
     SPECIFIC
     PARTICIPANT_PREFERENCE
   }
 
-  enum Priority {
-    NORMAL
-    HIGH
-    CRITICAL
-  }
-
-  enum Status {
-    ASSIGNED
-    INCOMPLETE
-    COMPLETE
-    EXCUSED
-  }
-
-  enum AnnouncementFilter {
-    ALL
-    UNREAD
-    PINNED
-    IMPORTANT
+  enum Level {
+    NOVICE
+    BRONZE
+    SILVER
+    GOLD
+    DIAMOND
   }
 
   enum Icon {
@@ -75,11 +76,6 @@ const enums = gql`
     DIAMOND
     PENCIL
     TOOL
-  }
-
-  enum GoalAction {
-    SET
-    REACHED
   }
 `;
 
