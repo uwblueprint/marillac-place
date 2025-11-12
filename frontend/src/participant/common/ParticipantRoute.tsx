@@ -44,7 +44,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   return (
     <Flex
       w="100vw"
-      h="100vh"
+      minH="100vh"
       alignItems="flex-start"
       justifyContent="center"
       bg="neutral.100"
