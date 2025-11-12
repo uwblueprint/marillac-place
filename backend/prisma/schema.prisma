@@ -85,12 +85,13 @@ enum Icon {
 }
 
 model Participant {
-  pid       Int       @id
-  password  String
-  room      Int
-  arrival   DateTime  @default(now())
-  departure DateTime?
-  balance   Int       @default(0)
+  pid            Int       @id
+  password       String
+  room           Int
+  arrival        DateTime  @default(now())
+  departure      DateTime?
+  balance        Int       @default(0)
+  total_earnings Int       @default(0)
 
   Transaction          Transaction[]
   EarningGoal          EarningGoal[]

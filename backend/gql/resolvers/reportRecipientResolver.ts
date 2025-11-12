@@ -2,10 +2,10 @@
 import { ReportRecipient } from "@prisma/client";
 import db from "../../prisma";
 
-const reportResolver = {
+const reportRecipientResolver = {
   Query: {
     getReportRecipients: async (): Promise<ReportRecipient[]> => {
-      return db.reportRecipient.findMany({
+      return await db.reportRecipient.findMany({
         orderBy: { email: "asc" },
       });
     },
@@ -19,8 +19,8 @@ const reportResolver = {
         monthly: boolean 
       }
     ): Promise<ReportRecipient> => {
-      return db.reportRecipient.create({
-        data: { email, weekly, monthly },
+      return await db.reportRecipient.create({
+        data: { email, weekly, monthly }
       });
     },
     updateReportRecipient: async (
@@ -38,7 +38,7 @@ const reportResolver = {
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");
 
-      return db.reportRecipient.update({
+      return await db.reportRecipient.update({
         where: { email },
         data: updates,
       });
@@ -49,11 +49,11 @@ const reportResolver = {
         email: string;
       }
     ): Promise<ReportRecipient> => {
-      return db.reportRecipient.delete({
+      return await db.reportRecipient.delete({
         where: { email },
       });
     },
   },
 };
 
-export default reportResolver;
+export default reportRecipientResolver;

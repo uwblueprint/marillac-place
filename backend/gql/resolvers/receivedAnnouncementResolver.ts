@@ -22,7 +22,7 @@ const receivedAnnouncementResolver = {
         where.announcement = { priority: Priority.NORMAL }
       }
 
-      return db.receivedAnnouncement.findMany({
+      return await db.receivedAnnouncement.findMany({
         where,
         include: { announcement: true },
         orderBy: { announcement: { date: "desc" } },
@@ -46,7 +46,7 @@ const receivedAnnouncementResolver = {
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");
 
-      return db.receivedAnnouncement.update({
+      return await db.receivedAnnouncement.update({
         where: {
           aid_pid: { aid, pid },
         },
@@ -56,7 +56,7 @@ const receivedAnnouncementResolver = {
   },
   UserAnnouncement: {
     participant: async (parent: { pid: number }) => {
-      return db.participant.findUnique({
+      return await db.participant.findUnique({
         where: { pid: parent.pid }
       });
     },

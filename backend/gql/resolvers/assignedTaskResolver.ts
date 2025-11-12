@@ -1,240 +1,200 @@
-import { AssignedTask, TaskType, Status } from "@prisma/client";
-import prisma from "../prisma";
-import {
-  formatDateFromDateString,
-  formatDateTime,
-  getWeekBounds,
-} from "../utils/formatDateTime";
-
-type CalendarEvent = {
-  id: number;
-  title: string;
-  start: string;
-  end: string;
-  allDay: boolean;
-  task_status: Status;
-  task_type: TaskType;
-  marillacBucksAddition: number;
-  marillac_bucks_deduction: number;
-  comment: string | null;
-};
-
-function convertAssignedTaskToCalendarEvent(
-  task: AssignedTask,
-  is_specific: boolean
-): CalendarEvent {
-  const event: CalendarEvent = {
-    id: task.assigned_task_id,
-    title: task.task_name,
-    start: task.start_date,
-    end: task.end_date,
-    allDay: !is_specific,
-    task_status: task.task_status,
-    task_type: task.task_type,
-    marillacBucksAddition: task.marillac_bucks_addition,
-    marillac_bucks_deduction: task.marillac_bucks_deduction,
-    comment: task.comment,
-  };
-  return event;
-}
-
-function groupTasks(tasks: AssignedTask[]) {
-  const specific: CalendarEvent[] = [];
-  const anytime: CalendarEvent[] = [];
-  const anyday: CalendarEvent[] = [];
-  const { weekStart, weekEnd } = getWeekBounds();
-
-  tasks.forEach((task) => {
-    if (task.start_date < weekStart || task.start_date > weekEnd) {
-      return;
-    }
-
-    const start = formatDateFromDateString(task.start_date);
-    const end = formatDateFromDateString(task.end_date);
-
-    const isSameDay = start.toDateString() === end.toDateString();
-    const isDayStart = start.getHours() === 0 && start.getMinutes() === 0;
-    const isDayEnd = end.getHours() === 23 && end.getMinutes() === 59;
-
-    if (!isSameDay) {
-      anyday.push(convertAssignedTaskToCalendarEvent(task, false));
-      return;
-    }
-
-    if (isDayStart && isDayEnd) {
-      anytime.push(convertAssignedTaskToCalendarEvent(task, false));
-    } else {
-      specific.push(convertAssignedTaskToCalendarEvent(task, true));
-    }
-  });
-
-  return { SPECIFIC: specific, ANYTIME: anytime, ANYDAY: anyday };
-}
+import { AssignedTask, Task, TaskStatus } from "@prisma/client";
+import db from "../../prisma";
+import { getToday } from "../../utils/dateUtils";
 
 const assignedTaskResolver = {
   Query: {
-    hasCompletedAllRequiredTasks: async (
-      _parent: undefined,
-      { participantId }: { participantId: number }
-    ): Promise<boolean> => {
-      const today = new Date();
-      const dayOfWeek = today.getDay();
-      const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-
-      const monday = new Date(today);
-      monday.setDate(today.getDate() - daysFromMonday);
-      monday.setHours(0, 0, 0, 0);
-
-      const sunday = new Date(monday);
-      sunday.setDate(monday.getDate() + 6);
-      sunday.setHours(23, 59, 59, 999);
-
-      const weekStart = formatDateTime(monday, false);
-      const weekEnd = formatDateTime(sunday, false);
-
-      // Get all required tasks assigned to this participant for the current week
-      const requiredTasks = await prisma.assignedTask.findMany({
+    getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
+      const today = getToday();
+      const currentParticipants = await db.participant.findMany({
         where: {
-          participant_id: participantId,
-          task_type: TaskType.REQUIRED,
-          start_date: {
-            gte: weekStart,
-          },
-          end_date: {
-            lte: weekEnd,
-          },
+          OR: [
+            { departure: null },
+            { departure: { gt: today } },
+          ],
+        },
+        select: {
+          pid: true,
+          room: true,
         },
       });
 
-      // If no required tasks are assigned, consider it as completed
-      if (requiredTasks.length === 0) {
-        return true;
-      }
+      const currentPids = currentParticipants.map(p => p.pid);
+      const pidToRoom = new Map(currentParticipants.map(p => [p.pid, p.room]));
 
-      // Check if all required tasks are completed
-      const completedTasks = requiredTasks.filter(
-        (task) => task.task_status === "COMPLETE"
-      );
+      if (currentParticipants.length === 0) return Array(10).fill(0);
 
-      return completedTasks.length === requiredTasks.length;
-    },
-    getAssignedTasks: async (
-      _parent: undefined,
-      { participant_id }: { participant_id: number }
-    ): Promise<{
-      SPECIFIC: CalendarEvent[];
-      ANYTIME: CalendarEvent[];
-      ANYDAY: CalendarEvent[];
-    }> => {
-      const assignedTasks = await prisma.assignedTask.findMany({
-        where: { participant_id },
+      const assignedTaskCounts = await db.assignedTask.groupBy({
+        by: ['pid'],
+        where: {
+          pid: { in: currentPids },
+          status: TaskStatus.ASSIGNED,
+        },
+        _count: { tid: true },
       });
-      return groupTasks(assignedTasks);
+
+      const counts = Array(10).fill(0);
+      for (const { pid, _count } of assignedTaskCounts) {
+        const room = pidToRoom.get(pid);
+        if (room === undefined) continue;
+        counts[room - 1] += _count.tid;
+      }
+      return counts;
+    },
+    getAssignedTasksForToday: async (
+      _parent: undefined,
+      { pid }: { 
+        pid: number 
+      }
+    ): Promise<AssignedTask[]> => {
+      const startOfDay = getToday();
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999)
+
+      return await db.assignedTask.findMany({
+        where: {
+          pid,
+          start_date: { lte: endOfDay },
+          end_date: { gte: startOfDay },
+        },
+        include: { task: true }
+      });
+    },
+    getAssignedTasksByWeek: async (
+      _parent: undefined,
+      { pid, weekStart }: {
+        pid: number;
+        weekStart: Date;
+      }
+    ): Promise<AssignedTask[]> => {
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      weekEnd.setHours(23, 59, 59, 999);
+
+      return await db.assignedTask.findMany({
+        where: {
+          pid,
+          start_date: { lte: weekEnd },
+          end_date: { gte: weekStart },
+        },
+        include: { task: true }
+      });
     },
   },
   Mutation: {
-    deleteAssignedTask: async (
+    createAssignedTask: async (
       _parent: undefined,
-      { assigned_task_id }: { assigned_task_id: number }
-    ): Promise<boolean> => {
-      await prisma.assignedTask.delete({
-        where: { assigned_task_id },
+      {
+        tid,
+        pid,
+        value,
+        penalty,
+        start_date,
+        end_date,
+        comment,
+      }: {
+        tid: number;
+        pid: number;
+        value: number;
+        penalty: number;
+        start_date: Date;
+        end_date: Date;
+        comment?: string;
+      }
+    ): Promise<AssignedTask> => {
+      return await db.assignedTask.create({
+        data: { tid, pid, value, penalty, start_date, end_date, comment },
       });
-      return true;
     },
     updateAssignedTask: async (
       _parent: undefined,
       {
-        id,
-        taskName,
-        taskStatus,
-        taskType,
-        goalName,
-        goalDescription,
-        startDate,
-        endDate,
-        marillacBucksAddition,
-        marillacBucksDeduction,
+        tid,
+        pid,
+        value,
+        penalty,
+        start_date,
+        end_date,
         comment,
       }: {
-        id: number;
-        taskName?: string;
-        taskStatus?: Status;
-        taskType?: TaskType;
-        goalName?: string;
-        goalDescription?: string;
-        startDate?: string;
-        endDate?: string;
-        marillacBucksAddition?: number;
-        marillacBucksDeduction?: number;
+        tid: number;
+        pid: number;
+        value?: number;
+        penalty?: number;
+        start_date?: Date;
+        end_date?: Date;
         comment?: string;
       }
-    ): Promise<boolean> => {
-      const updatedData: Partial<AssignedTask> = {};
+    ): Promise<AssignedTask> => {
+      const updates: any = {};
+      if (value) updates.value = value;
+      if (penalty) updates.penalty = penalty;
+      if (start_date) updates.start_date = start_date;
+      if (end_date) updates.end_date = end_date;
+      if (comment) updates.comment = comment;
 
-      if (taskName) updatedData.task_name = taskName;
-      if (taskType) updatedData.task_type = taskType;
-      if (taskStatus) updatedData.task_status = taskStatus;
-      if (goalName) updatedData.goal_name = goalName;
-      if (goalDescription) updatedData.goal_description = goalDescription;
-      if (startDate) updatedData.start_date = startDate;
-      if (endDate) updatedData.end_date = endDate;
-      if (marillacBucksAddition)
-        updatedData.marillac_bucks_addition = marillacBucksAddition;
-      if (marillacBucksDeduction)
-        updatedData.marillac_bucks_deduction = marillacBucksDeduction;
-      if (comment) updatedData.comment = comment;
+      const isEmpty = Object.keys(updates).length === 0;
+      if (isEmpty) throw new Error("no updates received");
 
-      await prisma.assignedTask.update({
-        where: { assigned_task_id: id },
-        data: updatedData,
+      return await db.assignedTask.update({
+        where: { tid_pid: { tid, pid } },
+        data: updates,
       });
-
-      return true;
     },
-    createAssignedTask: async (
+    updateAssignedTaskStatus: async (
       _parent: undefined,
       {
-        participantId,
-        taskName,
-        startDate,
-        endDate,
-        marillacBucksAddition,
-        marillacBucksDeduction,
-        taskType,
-        goalName,
-        goalDescription,
-        comment,
+        tid,
+        pid,
+        status
       }: {
-        participantId: number;
-        taskName: string;
-        startDate: string;
-        endDate: string;
-        marillacBucksAddition: number;
-        marillacBucksDeduction: number;
-        taskType: TaskType;
-        goalName?: string;
-        goalDescription?: string;
-        comment?: string;
+        tid: number;
+        pid: number;
+        status: TaskStatus;
       }
-    ): Promise<boolean> => {
-      await prisma.assignedTask.create({
-        data: {
-          participant_id: participantId,
-          task_name: taskName,
-          start_date: startDate,
-          end_date: endDate,
-          marillac_bucks_addition: marillacBucksAddition,
-          marillac_bucks_deduction: marillacBucksDeduction,
-          task_type: taskType,
-          goal_name: goalName,
-          goal_description: goalDescription,
-          comment,
-        },
+    ): Promise<AssignedTask> => {
+      if (status === TaskStatus.ASSIGNED) {
+        throw new Error("invalid status update")
+      }
+
+      if (status === TaskStatus.COMPLETE) {
+        // get task object
+        // process earning
+        // perfect score, jack of all trades, first goal, individual goal badge logic goes here
+      }
+      
+      return await db.assignedTask.update({
+        where: { tid_pid: { tid, pid } },
+        data: { status },
       });
-      return true;
+    },
+    deleteAssignedTask: async (
+      _parent: undefined,
+      { pid, tid }: { 
+        pid: number;
+        tid: number;
+      }
+    ): Promise<AssignedTask> => {
+      return await db.assignedTask.delete({
+        where: { tid_pid: { tid, pid } },
+      });
     },
   },
 };
 
 export default assignedTaskResolver;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

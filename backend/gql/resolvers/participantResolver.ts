@@ -1,349 +1,99 @@
-import { Participant, Prisma, PrismaClient } from "@prisma/client";
-import { getToday } from "../utils/formatDateTime";
-import { checkAndRecordGoalReached } from "../utils/checkGoalReached";
-
-const prisma = new PrismaClient();
+import { Participant, TransactionType } from "@prisma/client";
+import db from "../../prisma";
+import { getToday } from "../../utils/dateUtils";
+import { initBadgeLevelProgress } from "../../utils/badgeUtils";
 
 const participantResolver = {
   Query: {
     getCurrentParticipants: async (): Promise<Participant[]> => {
-      const participants = await prisma.participant.findMany({
+      const today = getToday();
+      return await db.participant.findMany({
         where: {
           OR: [
-            { departure_date: null },
-            { departure_date: { gt: getToday() } },
+            { departure: null },
+            { departure: { gt: today } },
           ],
         },
-        orderBy: [{ room_number: "asc" }],
+        orderBy: [{ room: "asc" }],
       });
-      return participants;
     },
     getPastParticipants: async (): Promise<Participant[]> => {
-      const participants = await prisma.participant.findMany({
+      const today = getToday();
+      return await db.participant.findMany({
         where: {
-          departure_date: {
+          departure: {
             not: null,
-            lte: getToday(),
+            lte: today,
           },
         },
-        orderBy: [{ departure_date: "desc" }],
+        orderBy: [{ departure: "desc" }],
       });
-      return participants;
-    },
-    getParticipantByRoom: async (
-      _parent: undefined,
-      { room_number }: { room_number: number }
-    ): Promise<Participant | null> => {
-      try {
-        return await prisma.participant.findFirst({
-          where: {
-            AND: [
-              { room_number },
-              {
-                OR: [
-                  { departure_date: null },
-                  { departure_date: { gt: getToday() } },
-                ],
-              },
-            ],
-          },
-          include: {
-            assigned_tasks: true,
-          },
-        });
-      } catch (error) {
-        throw new Error("Failed to get participant by room");
-      }
-    },
-    getParticipantsByRooms: async (
-      _parent: undefined,
-      { room_numbers }: { room_numbers: number[] }
-    ): Promise<Participant[]> => {
-      try {
-        return await prisma.participant.findMany({
-          where: {
-            AND: [
-              { room_number: { in: room_numbers } },
-              {
-                OR: [
-                  { departure_date: null },
-                  { departure_date: { gt: getToday() } },
-                ],
-              },
-            ],
-          },
-        });
-      } catch (error) {
-        throw new Error("Failed to get participants by rooms");
-      }
-    },
-    getParticipantById: async (
-      _parent: undefined,
-      { participantId }: { participantId: number }
-    ): Promise<Participant | null> => {
-      return prisma.participant.findUnique({
-        where: {
-          participant_id: participantId,
-        },
-      });
-    },
-    getGoalHistoryByParticipant: async (
-      _parent: undefined,
-      {
-        participant_id,
-        start_date,
-        end_date,
-      }: {
-        participant_id: number;
-        start_date?: string;
-        end_date?: string;
-      }
-    ) => {
-      const result = await prisma.$queryRaw`
-        SELECT * FROM goal_history
-        WHERE participant_id = ${participant_id}
-          ${
-            start_date
-              ? Prisma.sql`AND action_date >= ${start_date}`
-              : Prisma.empty
-          }
-          ${
-            end_date ? Prisma.sql`AND action_date <= ${end_date}` : Prisma.empty
-          }
-        ORDER BY action_date DESC
-      `;
-
-      return result;
-    },
-    getWeeklyEarnings: async (
-      _parent: undefined,
-      { participant_id }: { participant_id: number }
-    ): Promise<number[]> => {
-      const today = new Date();
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(today.getDate() - 6);
-
-      const todayStr = today.toISOString().split("T")[0];
-      const startStr = sevenDaysAgo.toISOString().split("T")[0];
-
-      const results = await prisma.$queryRaw<
-        { transaction_date: string; total: number }[]
-      >`
-        SELECT 
-          transaction_date,
-          SUM(marillac_bucks) AS total
-        FROM transaction
-        WHERE participant_id = ${participant_id}
-          AND transaction_type = 'EARNING'
-          AND transaction_date >= ${startStr}
-          AND transaction_date <= ${todayStr}
-        GROUP BY transaction_date
-        ORDER BY transaction_date ASC
-      `;
-
-      const last7Days: string[] = Array.from({ length: 7 }, (_, i) => {
-        const d = new Date();
-        d.setDate(today.getDate() - (6 - i));
-        return d.toISOString().split("T")[0];
-      });
-
-      const earningsMap = Object.fromEntries(
-        results.map((r) => [r.transaction_date, Number(r.total)])
-      );
-
-      return last7Days.map((day) => earningsMap[day] || 0);
     },
   },
   Mutation: {
     createParticipant: async (
       _parent: undefined,
-      {
-        participant_id,
-        room_number,
-        arrival_date,
-        password,
-      }: {
-        participant_id: number;
-        room_number: number;
-        arrival_date: string;
+      { pid, password, room, arrival }: {
+        pid: number;
         password: string;
+        room: number;
+        arrival: Date;
       }
-    ): Promise<boolean> => {
-      let existingParticipant: Participant | null = null;
-
-      existingParticipant = await prisma.participant.findUnique({
-        where: { participant_id },
+    ): Promise<Participant> => {
+      const existingParticipant = await db.participant.findUnique({
+        where: { pid }
       });
+      if (existingParticipant) throw new Error("participant id already exists")
 
-      if (existingParticipant) {
-        throw new Error("Participant already exists");
-      }
+      const today = getToday();
+      const validArrival = arrival <= today;
+      if (!validArrival) throw new Error("arrival is in the future")
 
-      let occupiedRoom: Participant | null = null;
-
-      occupiedRoom = await prisma.participant.findFirst({
+      const occupiedRoom = await db.participant.findFirst({
         where: {
-          room_number,
+          room,
           OR: [
-            { departure_date: null },
-            { departure_date: { gte: getToday() } },
+            { departure: null },
+            { departure: { gt: today } },
           ],
         },
       });
+      if (occupiedRoom) throw new Error ("room is occupied")
 
-      if (occupiedRoom) {
-        throw new Error("Room is occupied");
-      }
-
-      await prisma.participant.create({
+      const participant = await db.participant.create({
         data: {
-          participant_id,
-          room_number,
-          arrival_date,
-          password,
-          account_creation_date: getToday(),
-          participant_progress: {
-            create: {},
-          },
+          pid,
+          room,
+          arrival,
+          password
         },
       });
-      return true;
+      await initBadgeLevelProgress(pid);
+      return participant;
     },
     updateParticipant: async (
       _parent: undefined,
-      {
-        participant_id,
-        room_number,
-        arrival_date,
-        departure_date,
-        account_creation_date,
-        account_removal_date,
-        marillac_bucks,
-        marillac_bucks_goal,
-        password,
-      }: {
-        participant_id: number;
-        room_number?: number;
-        arrival_date?: string;
-        departure_date?: string;
-        account_creation_date?: string;
-        account_removal_date?: string;
-        marillac_bucks?: number;
-        marillac_bucks_goal?: number;
+      { pid, password, room, arrival, departure }: {
+        pid: number;
         password?: string;
+        room?: number;
+        arrival?: Date;
+        departure?: string;
       }
-    ): Promise<boolean> => {
-      const updatedData: Partial<Participant> = {};
-      if (room_number) updatedData.room_number = room_number;
-      if (arrival_date) updatedData.arrival_date = arrival_date;
-      if (departure_date) updatedData.departure_date = departure_date;
-      if (account_creation_date)
-        updatedData.account_creation_date = account_creation_date;
-      if (account_removal_date)
-        updatedData.account_removal_date = account_removal_date;
-      if (marillac_bucks) updatedData.marillac_bucks = marillac_bucks;
-      if (marillac_bucks_goal)
-        updatedData.marillac_bucks_goal = marillac_bucks_goal;
-      if (password) updatedData.password = password;
+    ): Promise<Participant> => {
+      const updates: any = {};
+      if (password) updates.password = password;
+      if (room) updates.room = room;
+      if (arrival) updates.arrival = arrival;
+      if (departure) updates.departure = departure;
 
-      await prisma.participant.update({
-        where: { participant_id },
-        data: updatedData,
+      const isEmpty = Object.keys(updates).length === 0;
+      if (isEmpty) throw new Error("no updates received");
+
+      return await db.participant.update({
+        where: { pid },
+        data: updates,
       });
-
-      return true;
-    },
-    updateMarillacBucks: async (
-      _parent: undefined,
-      {
-        participant_id,
-        marillac_bucks,
-      }: {
-        participant_id: number;
-        marillac_bucks: number;
-        reason: string;
-      }
-    ): Promise<boolean> => {
-      await prisma.participant.update({
-        where: { participant_id },
-        data: { marillac_bucks },
-      });
-
-      // Check if this update caused the participant to reach their goal
-      await checkAndRecordGoalReached(participant_id);
-
-      return true;
-    },
-    setMarillacBucksGoal: async (
-      _parent: undefined,
-      {
-        participant_id,
-        goal_value,
-      }: {
-        participant_id: number;
-        goal_value: number;
-      }
-    ): Promise<boolean> => {
-      console.log("🎯 Backend: setMarillacBucksGoal called");
-      console.log("📋 Params:", { participant_id, goal_value });
-
-      if (goal_value <= 0) {
-        console.error("❌ Invalid goal value:", goal_value);
-        throw new Error("Goal value must be greater than 0");
-      }
-
-      console.log("✅ Updating participant goal...");
-      await prisma.participant.update({
-        where: { participant_id },
-        data: { marillac_bucks_goal: goal_value },
-      });
-      console.log("✅ Participant goal updated");
-
-      console.log("✅ Inserting into goal_history...");
-      await prisma.$executeRaw`
-        INSERT INTO goal_history (participant_id, goal_action, goal_value, action_date)
-        VALUES (${participant_id}, 'SET', ${goal_value}, ${getToday()})
-      `;
-      console.log("✅ Goal history recorded");
-
-      console.log("🎯 Goal successfully set!");
-      return true;
-    },
-    updateMarillacBucksGoal: async (
-      _parent: undefined,
-      {
-        participant_id,
-        new_goal_value,
-      }: {
-        participant_id: number;
-        new_goal_value: number;
-      }
-    ): Promise<boolean> => {
-      const participant = await prisma.participant.findUnique({
-        where: { participant_id },
-      });
-
-      if (!participant) {
-        throw new Error("Participant not found");
-      }
-
-      if (new_goal_value <= participant.marillac_bucks) {
-        throw new Error(
-          "Goals must be greater than current Marillac Bucks Balance"
-        );
-      }
-
-      await prisma.participant.update({
-        where: { participant_id },
-        data: { marillac_bucks_goal: new_goal_value },
-      });
-
-      await prisma.$executeRaw`
-        INSERT INTO goal_history (participant_id, goal_action, goal_value, action_date)
-        VALUES (${participant_id}, 'SET', ${new_goal_value}, ${getToday()})
-      `;
-
-      return true;
     },
   },
 };

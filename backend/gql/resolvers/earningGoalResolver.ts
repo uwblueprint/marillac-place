@@ -7,7 +7,7 @@ const earningGoalResolver = {
       _parent: undefined,
       { pid }: { pid: number; }
     ): Promise<EarningGoal | null> => {
-      return db.earningGoal.findFirst({
+      return await db.earningGoal.findFirst({
         where: { pid },
         orderBy: [{ date: "desc" }],
       });
@@ -22,7 +22,7 @@ const earningGoalResolver = {
         value: number;
       }
     ): Promise<EarningGoal> => {
-      return db.earningGoal.create({
+      return await db.earningGoal.create({
         data: { pid, action, value },
       });
     },
@@ -34,7 +34,7 @@ const earningGoalResolver = {
         value: number;
       }
     ): Promise<EarningGoal> => {
-      return db.earningGoal.update({
+      return await db.earningGoal.update({
         where: { 
           pid_date: { pid, date } 
         },

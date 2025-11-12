@@ -1,5 +1,5 @@
 import { DayOfWeek, DayPreference, Icon, Level, TaskType, TimePreference } from "@prisma/client";
-import * as systemBadge from "../constants/systemBadgeNames";
+import * as systemBadge from "../constants/systemBadges";
 
 export const systemBadges = [
   {

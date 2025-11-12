@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
-import getGraphQLSchema from "./utils/getGraphQLSchema";
+import getGraphQLSchema from "./gql/getGraphQLSchema";
 
 require("./crons/index");
 

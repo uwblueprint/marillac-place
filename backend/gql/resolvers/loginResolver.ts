@@ -1,108 +1,81 @@
 import jwt from "jsonwebtoken";
-import { Participant, PrismaClient } from "@prisma/client";
-import { evaluateBadge } from "../utils/evaluateBadge";
-import { updateLoginStreak } from "../utils/updateLoginStreak";
+import { Participant } from "@prisma/client";
+import * as staffRole from "../../constants/staffRoles";
+import { LOGIN } from "../../constants/systemBadges"
+import db from "../../prisma";
+import { getToday } from "../../utils/dateUtils";
+import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 
-const prisma = new PrismaClient();
+type AdminLoginResponse = {
+  token: string;
+}
+
+type ParticipantLoginResponse = {
+  token: string;
+  participant: Participant;
+}
 
 const loginResolver = {
   Mutation: {
     adminLogin: async (
       _parent: undefined,
-      {
-        role,
-        password,
-      }: {
+      { role, password }: {
         role: string;
         password: string;
       }
-    ) => {
-      let storedPasswordHash = "";
+    ): Promise<AdminLoginResponse> => {
+      if (!staffRole.STAFF_ROLES.includes(role)) throw new Error("invalid role");
 
-      if (role === "admin") {
-        storedPasswordHash = process.env.ADMIN_STAFF_PASSWORD ?? "";
-      } else if (role === "relief") {
-        storedPasswordHash = process.env.RELIEF_STAFF_PASSWORD ?? "";
-      } else {
-        throw new Error("Role provided does not exist");
+      let expectedPassword: string = process.env.ADMIN_STAFF_PASSWORD ?? "";
+      if (role === staffRole.RELIEF) {
+        expectedPassword = process.env.RELIEF_STAFF_PASSWORD ?? "";
       }
+      if (expectedPassword === "") throw new Error("password unset");
 
-      const isPasswordValid: boolean = password === storedPasswordHash;
-
-      if (!isPasswordValid) {
-        throw new Error("Password is incorrect");
-      }
+      const validPassword: boolean = password === expectedPassword;
+      if (!validPassword) throw new Error("incorrect password");
 
       const jwtSecretKey = process.env.JWT_SECRET ?? "";
+      if (!jwtSecretKey) throw new Error("jwt key missing");
 
-      if (!jwtSecretKey) {
-        throw new Error("Something went wrong");
-      }
-
-      const token = jwt.sign({ role }, jwtSecretKey, {
-        expiresIn: "12h",
-      });
-
+      const token = jwt.sign({ role }, jwtSecretKey, { expiresIn: "12h" });
       return { token };
     },
     participantLogin: async (
       _parent: undefined,
-      {
-        id,
-        password,
-      }: {
-        id: number;
+      { pid, password }: {
+        pid: number;
         password: string;
       }
-    ) => {
-      let participant: Participant | null = null;
-      try {
-        participant = await prisma.participant.findUnique({
-          where: {
-            participant_id: id,
-            account_removal_date: null,
-          },
-        });
-      } catch (err) {
-        throw new Error("Something went wrong");
-      }
+    ): Promise<ParticipantLoginResponse> => {
+      const today = getToday()
+      const participant: Participant | null = await db.participant.findUnique({
+        where: {
+          pid,
+          OR: [
+            { departure: null },
+            { departure: { gt: today } },
+          ],
+        },
+      });
 
-      if (!participant) {
-        throw new Error("ID # does not exist");
-      }
-
-      const isPasswordValid = password === participant.password;
-
-      if (!isPasswordValid) {
-        throw new Error("Password is incorrect");
-      }
+      if (!participant) throw new Error("participant not found")
+      
+      const validPassword: boolean = password === participant.password;
+      if (!validPassword) throw new Error("incorrect password");
 
       const jwtSecretKey = process.env.JWT_SECRET ?? "";
+      if (!jwtSecretKey) throw new Error("jwt key missing");
 
-      if (!jwtSecretKey) {
-        console.error("JWT secret key not setup");
-        throw new Error("Something went wrong");
-      }
+      await db.loginHistory.create({ data: { pid } });
+      await updateBadgeLevelProgress(LOGIN, pid, 1);
 
       const token = jwt.sign(
-        {
-          role: "participant",
-          id,
-        },
+        { role: "participant", pid },
         jwtSecretKey,
-        {
-          expiresIn: "12h",
-        }
+        { expiresIn: "12h" }
       );
-
-      try {
-        const days = await updateLoginStreak(participant.participant_id);
-        await evaluateBadge(days, id, "Log-in Badge");
-      } catch (err) {
-        console.error("Failed to record login:", err);
-      }
-
-      return { token };
+      return { token, participant };
     },
   },
 };

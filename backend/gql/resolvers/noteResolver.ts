@@ -4,7 +4,7 @@ import db from "../../prisma";
 const noteResolver = {
   Query: {
     getNotes: async (): Promise<Note[]> => {
-      return db.note.findMany({
+      return await db.note.findMany({
         orderBy: [{ date: "desc" }],
       });
     },
@@ -16,7 +16,7 @@ const noteResolver = {
         message: string;
       }
     ): Promise<Note> => {
-      return db.note.create({
+      return await db.note.create({
         data: { message },
       });
     },
@@ -26,7 +26,7 @@ const noteResolver = {
         nid: number;
       }
     ): Promise<Note> => {
-      return db.note.delete({
+      return await db.note.delete({
         where: { nid },
       });
     },

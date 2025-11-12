@@ -1,12 +1,12 @@
 import { Announcement, Priority } from "@prisma/client";
-import { getToday } from "../../utils/date";
+import { getToday } from "../../utils/dateUtils";
 import db from "../../prisma";
 
 const announcementResolver = {
   Query: {
     getAnnouncementsFromToday: async (): Promise<Announcement[]> => {
       const today = getToday();
-      return db.announcement.findMany({
+      return await db.announcement.findMany({
         where: {
           date: { gte: today },
         },
@@ -32,7 +32,7 @@ const announcementResolver = {
         pids: number[] 
       }
     ): Promise<Announcement[]> => {
-      return db.announcement.findMany({
+      return await db.announcement.findMany({
         orderBy: { date: "desc" },
         where: {
           ReceivedAnnouncement: {
@@ -94,7 +94,7 @@ const announcementResolver = {
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");
 
-      return db.announcement.update({
+      return await db.announcement.update({
         where: { aid },
         data: updates,
       });
@@ -105,7 +105,7 @@ const announcementResolver = {
         aid: number 
       }
     ): Promise<Announcement> => {
-      return db.announcement.delete({
+      return await db.announcement.delete({
         where: { aid }
       });
     },
