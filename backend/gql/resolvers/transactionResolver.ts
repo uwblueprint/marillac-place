@@ -9,24 +9,26 @@ const transactionResolver = {
   Query: {
     getWeeklyEarnings: async (
       _parent: undefined,
-      { pid }: {
+      {
+        pid,
+      }: {
         pid: number;
       }
     ): Promise<GetWeeklyEarningsResponse> => {
-      const monday = getBeginningOfWeek();
-      const nextMonday = new Date(monday.getTime() + (7 * 86400000));
+      const sunday = getBeginningOfWeek();
+      const nextSunday = new Date(sunday.getTime() + 7 * 86400000);
 
       const transactions = await db.transaction.findMany({
         where: {
           pid,
           type: TransactionType.EARNING,
           date: {
-            gte: monday,
-            lt: nextMonday,
+            gte: sunday,
+            lt: nextSunday,
           },
-        }
+        },
       });
-      
+
       const totals: GetWeeklyEarningsResponse = {
         [DayOfWeek.SUNDAY]: 0,
         [DayOfWeek.MONDAY]: 0,
@@ -37,10 +39,10 @@ const transactionResolver = {
         [DayOfWeek.SATURDAY]: 0,
       };
 
-      for (const transaction of transactions) {
+      transactions.forEach((transaction) => {
         const day = orderedDays[new Date(transaction.date).getDay()];
         totals[day] += transaction.amount;
-      }
+      });
 
       return totals;
     },
@@ -48,18 +50,22 @@ const transactionResolver = {
   Mutation: {
     updateBalance: async (
       _parent: undefined,
-      { pid, amount, reason }: {
+      {
+        pid,
+        amount,
+        reason,
+      }: {
         pid: number;
         amount: number;
         reason: string;
       }
     ): Promise<Transaction> => {
-      if (amount === 0) throw new Error("invalid amount")
+      if (amount === 0) throw new Error("invalid amount");
 
       const participant = await db.participant.findUnique({
-        where: { pid }
+        where: { pid },
       });
-      if (!participant) throw new Error("participant not found")
+      if (!participant) throw new Error("participant not found");
 
       const newBalance = participant.balance + amount;
       await db.participant.update({
@@ -67,12 +73,13 @@ const transactionResolver = {
         data: { balance: newBalance },
       });
 
-      const type = amount < 0 ? TransactionType.PURCHASE : TransactionType.REFUND;
-      return await db.transaction.create({
-        data: { pid, amount: Math.abs(amount), type, reason }
-      })
-    }
-  }
+      const type =
+        amount < 0 ? TransactionType.PURCHASE : TransactionType.REFUND;
+      return db.transaction.create({
+        data: { pid, amount: Math.abs(amount), type, reason },
+      });
+    },
+  },
 };
 
 export default transactionResolver;

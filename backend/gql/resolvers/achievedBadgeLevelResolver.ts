@@ -5,11 +5,13 @@ const achievedBadgeLevelResolver = {
   Query: {
     getAchievedBadgeLevels: async (
       _parent: undefined,
-      { pid }: { 
-        pid: number 
+      {
+        pid,
+      }: {
+        pid: number;
       }
     ): Promise<AchievedBadgeLevel[]> => {
-      return await db.achievedBadgeLevel.findMany({
+      return db.achievedBadgeLevel.findMany({
         where: {
           pid,
           badge_level: {
@@ -28,8 +30,7 @@ const achievedBadgeLevelResolver = {
       });
     },
   },
-  Mutation: {
-  },
+  Mutation: {},
 };
 
 export default achievedBadgeLevelResolver;

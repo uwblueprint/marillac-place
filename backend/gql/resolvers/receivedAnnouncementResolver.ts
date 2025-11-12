@@ -5,8 +5,13 @@ const receivedAnnouncementResolver = {
   Query: {
     getReceivedAnnouncements: async (
       _parent: undefined,
-      { pid, unread, pinned, important }: { 
-        pid: number; 
+      {
+        pid,
+        unread,
+        pinned,
+        important,
+      }: {
+        pid: number;
         unread?: boolean;
         pinned?: boolean;
         important?: boolean;
@@ -17,12 +22,14 @@ const receivedAnnouncementResolver = {
       if (unread !== undefined) where.read = !unread;
       if (pinned !== undefined) where.pinned = pinned;
       if (important !== undefined && important) {
-        where.announcement = { priority: { in: [Priority.HIGH, Priority.CRITICAL] } }
+        where.announcement = {
+          priority: { in: [Priority.HIGH, Priority.CRITICAL] },
+        };
       } else if (important !== undefined && !important) {
-        where.announcement = { priority: Priority.NORMAL }
+        where.announcement = { priority: Priority.NORMAL };
       }
 
-      return await db.receivedAnnouncement.findMany({
+      return db.receivedAnnouncement.findMany({
         where,
         include: { announcement: true },
         orderBy: { announcement: { date: "desc" } },
@@ -32,21 +39,26 @@ const receivedAnnouncementResolver = {
   Mutation: {
     updateReceivedAnnouncement: async (
       _parent: undefined,
-      { aid, pid, read, pinned }: {
+      {
+        aid,
+        pid,
+        read,
+        pinned,
+      }: {
         aid: number;
         pid: number;
         pinned?: boolean;
         read?: boolean;
       }
     ): Promise<ReceivedAnnouncement> => {
-      const updates: any = {};
+      const updates: Partial<ReceivedAnnouncement> = {};
       if (pinned !== undefined) updates.pinned = pinned;
       if (read !== undefined) updates.read = read;
 
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");
 
-      return await db.receivedAnnouncement.update({
+      return db.receivedAnnouncement.update({
         where: {
           aid_pid: { aid, pid },
         },
@@ -56,8 +68,8 @@ const receivedAnnouncementResolver = {
   },
   UserAnnouncement: {
     participant: async (parent: { pid: number }) => {
-      return await db.participant.findUnique({
-        where: { pid: parent.pid }
+      return db.participant.findUnique({
+        where: { pid: parent.pid },
       });
     },
   },

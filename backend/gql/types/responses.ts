@@ -9,7 +9,7 @@ const responses = gql`
     token: String!
     participant: Participant!
   }
-  
+
   type GetWeeklyEarningsResponse {
     SUNDAY: Int!
     MONDAY: Int!

@@ -1,5 +1,12 @@
-import { DayOfWeek, DayPreference, Icon, Level, TaskType, TimePreference } from "@prisma/client";
-import * as systemBadge from "../constants/systemBadges";
+import {
+  DayOfWeek,
+  DayPreference,
+  Icon,
+  Level,
+  TaskType,
+  TimePreference,
+} from "@prisma/client";
+import * as systemBadge from "../../constants/systemBadges";
 
 export const systemBadges = [
   {
@@ -42,7 +49,7 @@ export const systemBadges = [
     name: systemBadge.FIRST_GOAL,
     description: "Set and complete first individual goal",
     is_active: true,
-    icon: Icon.FIVE_STAR, 
+    icon: Icon.FIVE_STAR,
   },
   {
     name: systemBadge.JACK_OF_ALL_TRADES,
@@ -245,7 +252,7 @@ export const badgeLevels = [
     value: 10,
     benchmark: 10,
   },
-]
+];
 
 export const tasks = [
   {
@@ -309,7 +316,12 @@ export const tasks = [
     type: TaskType.OPTIONAL,
     value: 5,
     day_preference: DayPreference.EVERY_SELECTED_DAYS,
-    days: [DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY],
+    days: [
+      DayOfWeek.MONDAY,
+      DayOfWeek.TUESDAY,
+      DayOfWeek.WEDNESDAY,
+      DayOfWeek.THURSDAY,
+    ],
     time_preference: TimePreference.ANYTIME,
   },
   {
@@ -336,4 +348,4 @@ export const tasks = [
     days: [],
     time_preference: TimePreference.ANYTIME,
   },
-]
+];

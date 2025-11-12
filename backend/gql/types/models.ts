@@ -1,33 +1,11 @@
 import { gql } from "apollo-server-express";
 
 const models = gql`
-  type Participant {
+  type AchievedBadgeLevel {
+    name: String!
+    level: Level!
     pid: Int!
-    password: String!
-    room: Int!
-    arrival: DateTime!
-    departure: DateTime
-    balance: Int!
-  }
-
-  type Transaction {
-    pid: Int!
-    date: DateTime!
-    amount: Int!
-    type: TransactionType!
-    reason: String!
-  }
-
-  type EarningGoal {
-    pid: Int!
-    action: GoalAction!
-    date: DateTime!
-    value: Int!
-  }
-
-  type LoginHistory {
-    pid: Int!
-    date: DateTime!
+    date: Date!
   }
 
   type Announcement {
@@ -37,11 +15,94 @@ const models = gql`
     priority: Priority!
   }
 
+  type AssignedTask {
+    aid: Int!
+    pid: Int!
+    name: String!
+    type: TaskType!
+    status: TaskStatus!
+    value: Int!
+    penalty: Int!
+    comment: String
+    start_date: DateTime!
+    end_date: DateTime!
+  }
+
+  type BadgeLevel {
+    name: String!
+    level: Level!
+    value: Int!
+    benchmark: Int!
+  }
+
+  type BadgeLevelProgress {
+    name: String!
+    level: Level!
+    pid: Int!
+    progress: Int!
+  }
+
+  type CustomBadge {
+    cid: Int!
+    name: String!
+    icon: Icon!
+    description: String!
+  }
+
+  type EarningGoal {
+    pid: Int!
+    action: GoalAction!
+    date: DateTime!
+    value: Int!
+  }
+
+  type EarnedCustomBadge {
+    eid: Int!
+    pid: Int!
+    name: String!
+    icon: Icon!
+    description: String!
+  }
+
+  type LoginHistory {
+    pid: Int!
+    date: DateTime!
+  }
+
+  type Note {
+    nid: Int!
+    message: String!
+    date: DateTime!
+  }
+
+  type Participant {
+    pid: Int!
+    password: String!
+    room: Int!
+    arrival: DateTime!
+    departure: DateTime
+    balance: Int!
+    total_earnings: Int!
+  }
+
   type ReceivedAnnouncement {
     aid: Int!
     pid: Int!
     read: Boolean!
     pinned: Boolean!
+  }
+
+  type ReportRecipient {
+    email: String!
+    weekly: Boolean!
+    monthly: Boolean!
+  }
+
+  type SystemBadge {
+    name: String!
+    icon: Icon!
+    description: String!
+    is_active: Boolean!
   }
 
   type Task {
@@ -58,67 +119,12 @@ const models = gql`
     end_time: Time
   }
 
-  type AssignedTask {
-    tid: Int!
+  type Transaction {
     pid: Int!
-    status: TaskStatus!
-    value: Int!
-    penalty: Int!
-    comment: String
-    start_date: DateTime!
-    end_date: DateTime!
-  }
-
-  type CustomBadge {
-    bid: Int!
-    name: String!
-    icon: Icon!
-    description: String!
-  }
-
-  type EarnedCustomBadge {
-    bid: Int!
-    pid: Int!
-  }
-
-  type SystemBadge {
-    name: String!
-    icon: Icon!
-    description: String!
-    is_active: Boolean!
-  }
-
-  type BadgeLevel {
-    name: String!
-    level: Level!
-    value: Int!
-    benchmark: Int!
-  }
-
-  type AchievedBadgeLevel {
-    name: String!
-    level: Level!
-    pid: Int!
-  }
-
-  type BadgeLevelProgress {
-    name: String!
-    level: Level!
-    pid: Int!
-    progress: Int!
-    lost_streak: Boolean!
-  }
-
-  type Note {
-    nid: Int!
-    message: String!
     date: DateTime!
-  }
-
-  type ReportRecipient {
-    email: String!
-    weekly: Boolean!
-    monthly: Boolean!
+    amount: Int!
+    type: TransactionType!
+    reason: String!
   }
 `;
 

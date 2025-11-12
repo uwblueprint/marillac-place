@@ -177,14 +177,14 @@ model Task {
   start_time      DateTime?      @db.Time
   end_time        DateTime?      @db.Time
 
-  AssignedTask AssignedTask[]
-
   @@map("task")
 }
 
 model AssignedTask {
-  tid        Int
+  aid        Int        @id @default(autoincrement())
   pid        Int
+  name       String
+  type       TaskType
   status     TaskStatus @default(ASSIGNED)
   value      Int
   penalty    Int
@@ -192,32 +192,29 @@ model AssignedTask {
   start_date DateTime
   end_date   DateTime
 
-  task        Task        @relation(fields: [tid], references: [tid], onDelete: Cascade, onUpdate: Cascade)
   participant Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id([tid, pid])
   @@map("assigned_task")
 }
 
 model CustomBadge {
-  bid         Int    @id @default(autoincrement())
+  cid         Int    @id @default(autoincrement())
   name        String @unique
   icon        Icon
   description String
-
-  EarnedCustomBadge EarnedCustomBadge[]
 
   @@map("custom_badge")
 }
 
 model EarnedCustomBadge {
-  bid Int
-  pid Int
+  eid         Int    @id @default(autoincrement())
+  pid         Int
+  name        String
+  icon        Icon
+  description String
 
-  participant  Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
-  custom_badge CustomBadge @relation(fields: [bid], references: [bid], onDelete: Cascade, onUpdate: Cascade)
+  participant Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id([bid, pid])
   @@map("earned_custom_badge")
 }
 
@@ -251,6 +248,7 @@ model AchievedBadgeLevel {
   name  String
   level Level
   pid   Int
+  date  DateTime @default(now())
 
   badge_level BadgeLevel  @relation(fields: [name, level], references: [name, level], onDelete: Cascade, onUpdate: Cascade)
   participant Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
@@ -260,11 +258,10 @@ model AchievedBadgeLevel {
 }
 
 model BadgeLevelProgress {
-  name        String
-  level       Level
-  pid         Int
-  progress    Int
-  lost_streak Boolean @default(false)
+  name     String
+  level    Level
+  pid      Int
+  progress Int
 
   badge_level BadgeLevel  @relation(fields: [name, level], references: [name, level], onDelete: Cascade, onUpdate: Cascade)
   participant Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)

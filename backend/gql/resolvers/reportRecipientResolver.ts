@@ -1,11 +1,10 @@
-
 import { ReportRecipient } from "@prisma/client";
 import db from "../../prisma";
 
 const reportRecipientResolver = {
   Query: {
     getReportRecipients: async (): Promise<ReportRecipient[]> => {
-      return await db.reportRecipient.findMany({
+      return db.reportRecipient.findMany({
         orderBy: { email: "asc" },
       });
     },
@@ -13,43 +12,53 @@ const reportRecipientResolver = {
   Mutation: {
     createReportRecipient: async (
       _parent: undefined,
-      { email, weekly, monthly }: { 
-        email: string; 
-        weekly: boolean; 
-        monthly: boolean 
+      {
+        email,
+        weekly,
+        monthly,
+      }: {
+        email: string;
+        weekly: boolean;
+        monthly: boolean;
       }
     ): Promise<ReportRecipient> => {
-      return await db.reportRecipient.create({
-        data: { email, weekly, monthly }
+      return db.reportRecipient.create({
+        data: { email, weekly, monthly },
       });
     },
     updateReportRecipient: async (
       _parent: undefined,
-      { email, weekly, monthly }: {
+      {
+        email,
+        weekly,
+        monthly,
+      }: {
         email: string;
         weekly?: boolean;
         monthly?: boolean;
       }
     ): Promise<ReportRecipient> => {
-      const updates: any = {};
+      const updates: Partial<ReportRecipient> = {};
       if (weekly !== undefined) updates.weekly = weekly;
       if (monthly !== undefined) updates.monthly = monthly;
 
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");
 
-      return await db.reportRecipient.update({
+      return db.reportRecipient.update({
         where: { email },
         data: updates,
       });
     },
     deleteReportRecipient: async (
       _parent: undefined,
-      { email }: { 
+      {
+        email,
+      }: {
         email: string;
       }
     ): Promise<ReportRecipient> => {
-      return await db.reportRecipient.delete({
+      return db.reportRecipient.delete({
         where: { email },
       });
     },
