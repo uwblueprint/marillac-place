@@ -6,14 +6,19 @@ const badgeLevelResolver = {
   Mutation: {
     updateBadgeLevel: async (
       _parent: undefined,
-      { name, level, value, benchmark }: {
+      {
+        name,
+        level,
+        value,
+        benchmark,
+      }: {
         name: string;
         level: Level;
         value?: number;
         benchmark?: number;
       }
     ): Promise<BadgeLevel> => {
-      const updates: any = {};
+      const updates: Partial<BadgeLevel> = {};
       if (value !== undefined) updates.value = value;
       if (benchmark !== undefined) updates.benchmark = benchmark;
 
@@ -22,11 +27,11 @@ const badgeLevelResolver = {
 
       await validateBadgeLevelProgress(name);
 
-      return await db.badgeLevel.update({
+      return db.badgeLevel.update({
         where: { name_level: { name, level } },
         data: updates,
       });
-    }
+    },
   },
 };
 

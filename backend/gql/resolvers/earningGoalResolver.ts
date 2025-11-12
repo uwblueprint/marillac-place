@@ -5,9 +5,9 @@ const earningGoalResolver = {
   Query: {
     getEarningGoal: async (
       _parent: undefined,
-      { pid }: { pid: number; }
+      { pid }: { pid: number }
     ): Promise<EarningGoal | null> => {
-      return await db.earningGoal.findFirst({
+      return db.earningGoal.findFirst({
         where: { pid },
         orderBy: [{ date: "desc" }],
       });
@@ -16,29 +16,37 @@ const earningGoalResolver = {
   Mutation: {
     createEarningGoal: async (
       _parent: undefined,
-      { pid, action, value }: {
+      {
+        pid,
+        action,
+        value,
+      }: {
         pid: number;
         action: GoalAction;
         value: number;
       }
     ): Promise<EarningGoal> => {
-      return await db.earningGoal.create({
+      return db.earningGoal.create({
         data: { pid, action, value },
       });
     },
     updateEarningGoal: async (
       _parent: undefined,
-      { pid, date, value }: {
+      {
+        pid,
+        date,
+        value,
+      }: {
         pid: number;
         date: Date;
         value: number;
       }
     ): Promise<EarningGoal> => {
-      return await db.earningGoal.update({
-        where: { 
-          pid_date: { pid, date } 
+      return db.earningGoal.update({
+        where: {
+          pid_date: { pid, date },
         },
-        data: { value }
+        data: { value },
       });
     },
   },

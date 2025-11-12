@@ -74,5 +74,6 @@
     "./**/*",
     "*.json",
     "./.eslintrc.js"
-  ]
+  ],
+  "exclude": ["prisma/seed/seed.ts"]
 }

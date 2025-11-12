@@ -1,13 +1,17 @@
-import { GoalAction, TransactionType } from "@prisma/client";
+import { GoalAction } from "@prisma/client";
 import db from "../prisma";
 import { updateBadgeLevelProgress } from "./badgeUtils";
 import { MONEY_EARNED } from "../constants/systemBadges";
 
-export default async function processEarning(pid: number, amount: number, reason: string) {
+export default async function processEarning(
+  pid: number,
+  amount: number,
+  reason: string
+) {
   if (amount <= 0) throw new Error("invalid amount");
 
   const participant = await db.participant.findUnique({
-    where: { pid }
+    where: { pid },
   });
   if (!participant) throw new Error("participant not found");
 
@@ -15,10 +19,10 @@ export default async function processEarning(pid: number, amount: number, reason
   const newEarnings = participant.total_earnings + amount;
   await db.participant.update({
     where: { pid },
-    data: { 
+    data: {
       balance: newBalance,
       total_earnings: newEarnings,
-    }
+    },
   });
 
   const earningGoal = await db.earningGoal.findFirst({
@@ -26,18 +30,18 @@ export default async function processEarning(pid: number, amount: number, reason
     orderBy: [{ date: "desc" }],
   });
   if (
-    earningGoal !== null && 
+    earningGoal !== null &&
     earningGoal.action !== GoalAction.REACHED &&
     earningGoal.value <= newEarnings
   ) {
     await db.earningGoal.create({
-      data: { pid, action: GoalAction.REACHED, value: earningGoal.value }
-    })
+      data: { pid, action: GoalAction.REACHED, value: earningGoal.value },
+    });
   }
 
   await db.transaction.create({
-    data: { pid, amount, reason }
-  })
+    data: { pid, amount, reason },
+  });
 
-  await updateBadgeLevelProgress(MONEY_EARNED, pid, amount)
+  await updateBadgeLevelProgress(MONEY_EARNED, pid, amount);
 }

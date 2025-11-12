@@ -1,58 +1,59 @@
-import { EarnedCustomBadge } from "@prisma/client";
+import { EarnedCustomBadge, Icon } from "@prisma/client";
 import db from "../../prisma";
 
 const earnedCustomBadgeResolver = {
   Query: {
     getEarnedCustomBadges: async (
       _parent: undefined,
-      { pid }: {
+      {
+        pid,
+      }: {
         pid: number;
       }
     ): Promise<EarnedCustomBadge[]> => {
-      return await db.earnedCustomBadge.findMany({
+      return db.earnedCustomBadge.findMany({
         where: { pid },
-        include: { custom_badge: true }
       });
-    },
-
-    getUnnotifiedEarnedCustomBadges: async (
-      _parent: undefined,
-      { pid }: {
-        pid: number;
-      }
-    ): Promise<EarnedCustomBadge[]> => {
-      const earned_badges = await db.earnedCustomBadge.findMany({
-        where: { 
-          pid,
-          notified: false
-        },
-        include: { custom_badge: true },
-      });
-
-      await db.earnedCustomBadge.updateMany({
-        where: { 
-          pid, 
-          notified: false
-        },
-        data: {
-          notified: true,
-        },
-      })
-
-      return earned_badges
     },
   },
   Mutation: {
+    fetchNewEarnedCustomBadges: async (
+      _parent: undefined,
+      { pid }: {
+        pid: number;
+      }
+    ): Promise<EarnedCustomBadge[]> => {
+      const earnedCustomBadges = await db.earnedCustomBadge.findMany({
+        where: { 
+          pid,
+          notified: false
+        }
+      });
+
+      await db.earnedCustomBadge.updateMany({
+        where: { pid, notified: false },
+        data: { notified: true },
+      })
+
+      return earnedCustomBadges
+    },
     createEarnedCustomBadge: async (
       _parent: undefined,
-      { pid, bid }: {
+      {
+        pid,
+        name,
+        icon,
+        description,
+      }: {
         pid: number;
-        bid: number;
+        name: string;
+        icon: Icon;
+        description: string;
       }
     ): Promise<EarnedCustomBadge> => {
       // procees earning here
-      return await db.earnedCustomBadge.create({
-        data: { pid, bid },
+      return db.earnedCustomBadge.create({
+        data: { pid, name, icon, description },
       });
     },
   },

@@ -6,7 +6,7 @@ const announcementResolver = {
   Query: {
     getAnnouncementsFromToday: async (): Promise<Announcement[]> => {
       const today = getToday();
-      return await db.announcement.findMany({
+      return db.announcement.findMany({
         where: {
           date: { gte: today },
         },
@@ -28,11 +28,13 @@ const announcementResolver = {
     },
     getAnnouncementsSentToParticipants: async (
       _parent: undefined,
-      { pids }: { 
-        pids: number[] 
+      {
+        pids,
+      }: {
+        pids: number[];
       }
     ): Promise<Announcement[]> => {
-      return await db.announcement.findMany({
+      return db.announcement.findMany({
         orderBy: { date: "desc" },
         where: {
           ReceivedAnnouncement: {
@@ -52,7 +54,11 @@ const announcementResolver = {
   Mutation: {
     createAnnouncement: async (
       _parent: undefined,
-      { priority, pids, message }: {
+      {
+        priority,
+        pids,
+        message,
+      }: {
         priority: Priority;
         pids: number[];
         message: string;
@@ -81,32 +87,38 @@ const announcementResolver = {
     },
     updateAnnouncement: async (
       _parent: undefined,
-      { aid, priority, message }: {
+      {
+        aid,
+        priority,
+        message,
+      }: {
         aid: number;
         priority?: Priority;
         message?: string;
       }
     ): Promise<Announcement> => {
-      const updates: any = {};
+      const updates: Partial<Announcement> = {};
       if (priority !== undefined) updates.priority = priority;
       if (message !== undefined) updates.message = message;
 
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");
 
-      return await db.announcement.update({
+      return db.announcement.update({
         where: { aid },
         data: updates,
       });
     },
     deleteAnnouncement: async (
       _parent: undefined,
-      { aid }: { 
-        aid: number 
+      {
+        aid,
+      }: {
+        aid: number;
       }
     ): Promise<Announcement> => {
-      return await db.announcement.delete({
-        where: { aid }
+      return db.announcement.delete({
+        where: { aid },
       });
     },
   },
