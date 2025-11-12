@@ -1,4 +1,4 @@
-import { getSee } from "@snaplet/seed";
+import { createSeedClient } from "@snaplet/seed";
 import { badgeLevels, systemBadges, tasks } from "./initialData";
 import db from "../index";
 import * as random from "./random";
