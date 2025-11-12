@@ -213,7 +213,8 @@ model CustomBadge {
 model EarnedCustomBadge {
   bid Int
   pid Int
-
+  notified Boolean @default(false)
+  
   participant  Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
   custom_badge CustomBadge @relation(fields: [bid], references: [bid], onDelete: Cascade, onUpdate: Cascade)
 

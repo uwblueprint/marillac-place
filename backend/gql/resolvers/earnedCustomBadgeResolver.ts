@@ -14,6 +14,33 @@ const earnedCustomBadgeResolver = {
         include: { custom_badge: true }
       });
     },
+
+    getUnnotifiedEarnedCustomBadges: async (
+      _parent: undefined,
+      { pid }: {
+        pid: number;
+      }
+    ): Promise<EarnedCustomBadge[]> => {
+      const earned_badges = await db.earnedCustomBadge.findMany({
+        where: { 
+          pid,
+          notified: false
+        },
+        include: { custom_badge: true },
+      });
+
+      await db.earnedCustomBadge.updateMany({
+        where: { 
+          pid, 
+          notified: false
+        },
+        data: {
+          notified: true,
+        },
+      })
+
+      return earned_badges
+    },
   },
   Mutation: {
     createEarnedCustomBadge: async (
