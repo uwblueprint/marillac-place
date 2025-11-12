@@ -29,6 +29,46 @@ const achievedBadgeLevelResolver = {
     },
   },
   Mutation: {
+    fetchAndMarkNotNotifiedAchievedBadgeLevels: async (
+      _parent: undefined,
+      { pid }: { 
+        pid: number 
+      }
+    ): Promise<AchievedBadgeLevel[]> => {
+      const achievedBadgeLevels = await db.achievedBadgeLevel.findMany({
+        where: {
+          pid,
+          notified: false,
+          badge_level: {
+            system_badge: {
+              is_active: true,
+            },
+          },
+        },
+        include: {
+          badge_level: {
+            select: {
+              system_badge: true,
+            },
+          },
+        },
+      });
+
+      const ids = achievedBadgeLevels.map((abl) => abl.id);
+
+      await db.achievedBadgeLevel.updateMany({
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+        data: {
+          notified: true,
+        },
+      });
+
+      return achievedBadgeLevels;
+    },
   },
 };
 
