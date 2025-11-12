@@ -1,4 +1,4 @@
-import { 
+import {
   DayOfWeek,
   DayPreference,
   Task,
@@ -11,11 +11,13 @@ const taskResolver = {
   Query: {
     getTasksByType: async (
       _parent: undefined,
-      { type }: { 
-        type: TaskType
+      {
+        type,
+      }: {
+        type: TaskType;
       }
     ): Promise<Task[]> => {
-      return await db.task.findMany({
+      return db.task.findMany({
         where: { type },
       });
     },
@@ -33,7 +35,7 @@ const taskResolver = {
         time_preference,
         start_time,
         end_time,
-        comment
+        comment,
       }: {
         type: TaskType;
         name: string;
@@ -47,18 +49,18 @@ const taskResolver = {
         comment?: string;
       }
     ): Promise<Task> => {
-      return await db.task.create({
-        data: { 
-          type, 
-          name, 
-          value, 
-          penalty, 
-          day_preference, 
-          days, 
-          time_preference, 
-          start_time, 
-          end_time, 
-          comment 
+      return db.task.create({
+        data: {
+          type,
+          name,
+          value,
+          penalty,
+          day_preference,
+          days,
+          time_preference,
+          start_time,
+          end_time,
+          comment,
         },
       });
     },
@@ -73,9 +75,9 @@ const taskResolver = {
         day_preference,
         days,
         time_preference,
-        start_time, 
+        start_time,
         end_time,
-        comment
+        comment,
       }: {
         tid: number;
         type?: TaskType;
@@ -90,14 +92,15 @@ const taskResolver = {
         comment?: string;
       }
     ): Promise<Task> => {
-      const updates: any = {};
+      const updates: Partial<Task> = {};
       if (type !== undefined) updates.type = type;
       if (name !== undefined) updates.name = name;
       if (value !== undefined) updates.value = value;
       if (penalty !== undefined) updates.penalty = penalty;
       if (day_preference !== undefined) updates.day_preference = day_preference;
       if (days !== undefined) updates.days = days;
-      if (time_preference !== undefined) updates.time_preference = time_preference;
+      if (time_preference !== undefined)
+        updates.time_preference = time_preference;
       if (start_time !== undefined) updates.start_time = start_time;
       if (end_time !== undefined) updates.end_time = end_time;
       if (comment !== undefined) updates.comment = comment;
@@ -105,18 +108,20 @@ const taskResolver = {
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");
 
-      return await db.task.update({
+      return db.task.update({
         where: { tid },
         data: updates,
       });
     },
     deleteTask: async (
       _parent: undefined,
-      { tid }: { 
-        tid: number 
+      {
+        tid,
+      }: {
+        tid: number;
       }
     ): Promise<Task> => {
-      return await db.task.delete({
+      return db.task.delete({
         where: { tid },
       });
     },

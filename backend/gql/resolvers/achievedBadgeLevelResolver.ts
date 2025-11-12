@@ -5,11 +5,13 @@ const achievedBadgeLevelResolver = {
   Query: {
     getAchievedBadgeLevels: async (
       _parent: undefined,
-      { pid }: { 
-        pid: number 
+      {
+        pid,
+      }: {
+        pid: number;
       }
     ): Promise<AchievedBadgeLevel[]> => {
-      return await db.achievedBadgeLevel.findMany({
+      return db.achievedBadgeLevel.findMany({
         where: {
           pid,
           badge_level: {
@@ -29,7 +31,7 @@ const achievedBadgeLevelResolver = {
     },
   },
   Mutation: {
-    fetchAndMarkNotNotifiedAchievedBadgeLevels: async (
+    fetchNewAchievedBadgeLevels: async (
       _parent: undefined,
       { pid }: { 
         pid: number 
@@ -54,19 +56,21 @@ const achievedBadgeLevelResolver = {
         },
       });
 
-      const ids = achievedBadgeLevels.map((abl) => abl.id);
-
-      await db.achievedBadgeLevel.updateMany({
-        where: {
-          id: {
-            in: ids,
-          },
-        },
-        data: {
-          notified: true,
-        },
-      });
-
+      await Promise.all(
+        achievedBadgeLevels.map((achievedBadgeLevel) =>
+          db.achievedBadgeLevel.update({
+            where: { 
+              name_level_pid: { 
+                name: achievedBadgeLevel.name,
+                level: achievedBadgeLevel.level,
+                pid: achievedBadgeLevel.pid
+              } 
+            },
+            data: { notified: true },
+          })
+        )
+      );
+      
       return achievedBadgeLevels;
     },
   },

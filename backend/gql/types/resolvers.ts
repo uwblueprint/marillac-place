@@ -20,7 +20,7 @@ const resolvers = gql`
 
     getTasksByType(type: TaskType!): [Task!]!
 
-    getCustomBadges: [Badge!]!
+    getCustomBadges: [CustomBadge!]!
     
     getWeeklyEarnings(pid: Int!): GetWeeklyEarningsResponse!
 
@@ -32,6 +32,7 @@ const resolvers = gql`
     getNumberOfAssignedTasksByRoom: [Int!]!
     getAssignedTasksForToday(pid: Int!): [AssignedTask!]!
     getAssignedTasksByWeek(pid: Int!, weekStart: Date!): [AssignedTask!]!
+    hasCompletedAllRequiredTasks(pid: Int!): Boolean!
 
     getEarnedCustomBadges(pid: Int!): [EarnedCustomBadge!]!
 
@@ -116,12 +117,12 @@ const resolvers = gql`
 
     createCustomBadge(name: String!, description: String!, icon: Icon!): CustomBadge!
     updateCustomBadge(
-      bid: Int!
+      cid: Int!
       name: String
       description: String
       icon: Icon
     ): CustomBadge!
-    deleteCustomBadge(bid: Int!): CustomBadge!
+    deleteCustomBadge(cid: Int!): CustomBadge!
 
     createParticipant(
       pid: Int!
@@ -130,7 +131,7 @@ const resolvers = gql`
       arrival: Date!
     ): Participant!
     updateParticipant(
-      pid: Int!;
+      pid: Int!
       password: String
       room: Int
       arrival: Date
@@ -139,7 +140,12 @@ const resolvers = gql`
 
     updateBalance(pid: Int!, amount: Int!, reason: String!): Transaction!
 
-    createEarnedCustomBadge(pid: Int!, bid: Int!): EarnedCustomBadge!
+    createEarnedCustomBadge(
+      pid: Int!
+      name: String!
+      icon: Icon!
+      description: String!
+    ): EarnedCustomBadge!
 
     updateSystemBadge(name: String!, description: String, is_active: Boolean): SystemBadge!
 
@@ -151,8 +157,9 @@ const resolvers = gql`
     ): BadgeLevel!
 
     createAssignedTask(
-      tid: Int!
       pid: Int!
+      name: String!
+      type: TaskType!
       value: Int!
       penalty: Int!
       start_date: Date!
@@ -160,8 +167,10 @@ const resolvers = gql`
       comment: String
     ): AssignedTask!
     updateAssignedTask(
-      tid: Int!
-      pid: Int!
+      aid: Int!
+      pid: Int
+      name: String
+      type: TaskType
       value: Int
       penalty: Int
       start_date: Date
@@ -169,11 +178,12 @@ const resolvers = gql`
       comment: String
     ): AssignedTask!
     updateAssignedTaskStatus(
-      tid: Int!
-      pid: Int!
+      aid: Int!
       status: TaskStatus!
     ): AssignedTask!
-    deleteAssignedTask(tid: Int!, pid: Int!): AssignedTask!
+    deleteAssignedTask(aid: Int!): AssignedTask!
+
+    fetchNewAchievedBadgeLevels(pid: Int!): [AchievedBadgeLevel!]!
   }
 `;
 

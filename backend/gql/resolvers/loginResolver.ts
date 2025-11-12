@@ -1,33 +1,37 @@
 import jwt from "jsonwebtoken";
 import { Participant } from "@prisma/client";
-import * as staffRole from "../../constants/staffRoles";
-import { LOGIN } from "../../constants/systemBadges"
+import * as ROLES from "../../constants/roles";
+import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { getToday } from "../../utils/dateUtils";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 
 type AdminLoginResponse = {
   token: string;
-}
+};
 
 type ParticipantLoginResponse = {
   token: string;
   participant: Participant;
-}
+};
 
 const loginResolver = {
   Mutation: {
     adminLogin: async (
       _parent: undefined,
-      { role, password }: {
+      {
+        role,
+        password,
+      }: {
         role: string;
         password: string;
       }
     ): Promise<AdminLoginResponse> => {
-      if (!staffRole.STAFF_ROLES.includes(role)) throw new Error("invalid role");
+      if (role !== ROLES.ADMIN && role !== ROLES.RELIEF)
+        throw new Error("invalid role");
 
       let expectedPassword: string = process.env.ADMIN_STAFF_PASSWORD ?? "";
-      if (role === staffRole.RELIEF) {
+      if (role === ROLES.RELIEF) {
         expectedPassword = process.env.RELIEF_STAFF_PASSWORD ?? "";
       }
       if (expectedPassword === "") throw new Error("password unset");
@@ -43,24 +47,24 @@ const loginResolver = {
     },
     participantLogin: async (
       _parent: undefined,
-      { pid, password }: {
+      {
+        pid,
+        password,
+      }: {
         pid: number;
         password: string;
       }
     ): Promise<ParticipantLoginResponse> => {
-      const today = getToday()
+      const today = getToday();
       const participant: Participant | null = await db.participant.findUnique({
         where: {
           pid,
-          OR: [
-            { departure: null },
-            { departure: { gt: today } },
-          ],
+          OR: [{ departure: null }, { departure: { gt: today } }],
         },
       });
 
-      if (!participant) throw new Error("participant not found")
-      
+      if (!participant) throw new Error("participant not found");
+
       const validPassword: boolean = password === participant.password;
       if (!validPassword) throw new Error("incorrect password");
 
@@ -68,13 +72,12 @@ const loginResolver = {
       if (!jwtSecretKey) throw new Error("jwt key missing");
 
       await db.loginHistory.create({ data: { pid } });
+      // only update if not already logged in today
       await updateBadgeLevelProgress(LOGIN, pid, 1);
 
-      const token = jwt.sign(
-        { role: "participant", pid },
-        jwtSecretKey,
-        { expiresIn: "12h" }
-      );
+      const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
+        expiresIn: "12h",
+      });
       return { token, participant };
     },
   },
