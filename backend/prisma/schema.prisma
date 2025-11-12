@@ -245,10 +245,11 @@ model BadgeLevel {
 }
 
 model AchievedBadgeLevel {
-  name  String
-  level Level
-  pid   Int
-  date  DateTime @default(now())
+  name     String
+  level    Level
+  pid      Int
+  notified Boolean  @default(false)
+  date     DateTime @default(now())
 
   badge_level BadgeLevel  @relation(fields: [name, level], references: [name, level], onDelete: Cascade, onUpdate: Cascade)
   participant Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)

@@ -135,6 +135,7 @@ export default function getMiddleware() {
       updateAssignedTask: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
       updateAssignedTaskStatus: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
       deleteAssignedTask: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
+      fetchNewAchievedBadgeLevels: verifyRole([ROLES.PARTICIPANT]),
     },
   };
 

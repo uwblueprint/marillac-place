@@ -176,6 +176,20 @@
           "maxLength": null
         },
         {
+          "id": "public.achieved_badge_level.notified",
+          "name": "notified",
+          "columnName": "notified",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "id": "public.achieved_badge_level.date",
           "name": "date",
           "columnName": "date",
