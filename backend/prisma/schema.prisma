@@ -207,11 +207,12 @@ model CustomBadge {
 }
 
 model EarnedCustomBadge {
-  eid         Int    @id @default(autoincrement())
+  eid         Int     @id @default(autoincrement())
   pid         Int
   name        String
   icon        Icon
   description String
+  notified    Boolean @default(false)
 
   participant Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
 

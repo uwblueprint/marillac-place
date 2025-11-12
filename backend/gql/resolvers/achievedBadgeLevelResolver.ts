@@ -56,20 +56,18 @@ const achievedBadgeLevelResolver = {
         },
       });
 
-      await Promise.all(
-        achievedBadgeLevels.map((achievedBadgeLevel) =>
-          db.achievedBadgeLevel.update({
-            where: { 
-              name_level_pid: { 
-                name: achievedBadgeLevel.name,
-                level: achievedBadgeLevel.level,
-                pid: achievedBadgeLevel.pid
-              } 
+      await db.achievedBadgeLevel.updateMany({
+        where: { 
+          pid, 
+          notified: false,
+          badge_level: {
+            system_badge: {
+              is_active: true,
             },
-            data: { notified: true },
-          })
-        )
-      );
+          },
+        },
+        data: { notified: true },
+      })
       
       return achievedBadgeLevels;
     },

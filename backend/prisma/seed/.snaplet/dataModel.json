@@ -916,6 +916,20 @@
           "maxLength": null
         },
         {
+          "id": "public.earned_custom_badge.notified",
+          "name": "notified",
+          "columnName": "notified",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "participant",
           "type": "participant",
           "isRequired": true,
