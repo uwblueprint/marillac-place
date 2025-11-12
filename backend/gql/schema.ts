@@ -5,15 +5,12 @@ import { merge } from "lodash";
 import {
   typeDefs as scalarTypeDefs,
   resolvers as scalarResolvers,
-  DateTimeResolver,
-  TimeResolver,
 } from "graphql-scalars";
 
 import models from "./types/models";
 import enums from "./types/enums";
 import resolvers from "./types/resolvers";
 import responses from "./types/responses";
-import scalars from "./types/scalars";
 
 import participantResolver from "./resolvers/participantResolver";
 import noteResolver from "./resolvers/noteResolver";
@@ -36,11 +33,9 @@ import getMiddleware from "./middleware";
 export default function getSchema() {
   const middleware = getMiddleware();
   const schema = makeExecutableSchema({
-    typeDefs: [...scalarTypeDefs, models, enums, resolvers, responses, scalars],
+    typeDefs: [...scalarTypeDefs, models, enums, resolvers, responses],
     resolvers: merge(
       scalarResolvers,
-      DateTimeResolver,
-      TimeResolver,
       loginResolver,
       noteResolver,
       announcementResolver,

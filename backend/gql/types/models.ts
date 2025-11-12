@@ -6,6 +6,9 @@ const models = gql`
     level: Level!
     pid: Int!
     date: Date!
+
+    badge_level: BadgeLevel
+    participant: Participant
   }
 
   type Announcement {
@@ -26,6 +29,8 @@ const models = gql`
     comment: String
     start_date: DateTime!
     end_date: DateTime!
+
+    participant: Participant
   }
 
   type BadgeLevel {
@@ -33,6 +38,8 @@ const models = gql`
     level: Level!
     value: Int!
     benchmark: Int!
+
+    system_badge: SystemBadge
   }
 
   type BadgeLevelProgress {
@@ -40,6 +47,9 @@ const models = gql`
     level: Level!
     pid: Int!
     progress: Int!
+
+    badge_level: BadgeLevel
+    participant: Participant
   }
 
   type CustomBadge {
@@ -54,6 +64,8 @@ const models = gql`
     action: GoalAction!
     date: DateTime!
     value: Int!
+
+    participant: Participant
   }
 
   type EarnedCustomBadge {
@@ -62,11 +74,15 @@ const models = gql`
     name: String!
     icon: Icon!
     description: String!
+
+    participant: Participant
   }
 
   type LoginHistory {
     pid: Int!
     date: DateTime!
+
+    participant: Participant
   }
 
   type Note {
@@ -90,6 +106,9 @@ const models = gql`
     pid: Int!
     read: Boolean!
     pinned: Boolean!
+
+    participant: Participant
+    announcement: Announcement
   }
 
   type ReportRecipient {
@@ -125,6 +144,8 @@ const models = gql`
     amount: Int!
     type: TransactionType!
     reason: String!
+
+    participant: Participant
   }
 `;
 

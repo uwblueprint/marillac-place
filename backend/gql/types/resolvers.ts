@@ -20,7 +20,7 @@ const resolvers = gql`
 
     getTasksByType(type: TaskType!): [Task!]!
 
-    getCustomBadges: [Badge!]!
+    getCustomBadges: [CustomBadge!]!
     
     getWeeklyEarnings(pid: Int!): GetWeeklyEarningsResponse!
 
@@ -37,6 +37,8 @@ const resolvers = gql`
     getEarnedCustomBadges(pid: Int!): [EarnedCustomBadge!]!
 
     getAchievedBadgeLevels(pid: Int!): [AchievedBadgeLevel!]!
+
+    
   }
 
   type Mutation {
@@ -131,7 +133,7 @@ const resolvers = gql`
       arrival: Date!
     ): Participant!
     updateParticipant(
-      pid: Int!;
+      pid: Int!
       password: String
       room: Int
       arrival: Date

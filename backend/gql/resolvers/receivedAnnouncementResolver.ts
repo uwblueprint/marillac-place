@@ -66,7 +66,7 @@ const receivedAnnouncementResolver = {
       });
     },
   },
-  UserAnnouncement: {
+  ReceivedAnnouncement: {
     participant: async (parent: { pid: number }) => {
       return db.participant.findUnique({
         where: { pid: parent.pid },
