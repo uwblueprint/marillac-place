@@ -13,7 +13,7 @@ interface AdminProviderProps {
   children: ReactNode;
 }
 
-export const ParticipantProvider: React.FC<AdminProviderProps> = ({ children }) => {
+export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
   const [role, setRole] = useState<string | null>(null);
   const [roomToParticipant, setRoomToParticipant] = useState<Record<number, number>>({});
 

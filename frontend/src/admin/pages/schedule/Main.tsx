@@ -9,7 +9,7 @@ import ScheduleListView from "./components/ScheduleListView";
 import MarillacBalanceModal from "./components/MarillacBalanceModal";
 import TaskDetailsModal from "./components/TaskDetailsModal";
 import { useScheduleData } from "./components/useScheduleData";
-import { getCurrentWeekRange } from "../../../utils/scheduleUtils";
+import { getCurrentWeekRange } from "../../../(ignore) refactor-in-progress/scheduleUtils";
 import { CalendarEvent, ScheduleView } from "./components/ScheduleTypes";
 import "./components/ScheduleCalendar.css";
 import OrangeButton from "../../common/buttons/OrangeButton";

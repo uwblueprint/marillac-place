@@ -9,14 +9,14 @@ import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-import AdminLoginPage from "./admin/pages/login/Main";
-import AdminHomePage from "./admin/pages/home/Main";
-import AdminSchedulePage from "./admin/pages/schedule/Main";
-import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
-import AdminParticipantsPage from "./admin/pages/participants/Main";
-import AdminTasksPage from "./admin/pages/tasks/Main";
-import AdminBadgesPage from "./admin/pages/badges/Main";
-import AdminReportsPage from "./admin/pages/reports/Main";
+import AdminLoginPage from "./(ignore) refactor-in-progress/admin/pages/login/Main";
+import AdminHomePage from "./(ignore) refactor-in-progress/admin/pages/home/Main";
+import AdminSchedulePage from "./(ignore) refactor-in-progress/admin/pages/schedule/Main";
+import AdminAnnouncementsPage from "./(ignore) refactor-in-progress/admin/pages/announcements/Main";
+import AdminParticipantsPage from "./(ignore) refactor-in-progress/admin/pages/participants/Main";
+import AdminTasksPage from "./(ignore) refactor-in-progress/admin/pages/tasks/Main";
+import AdminBadgesPage from "./(ignore) refactor-in-progress/admin/pages/badges/Main";
+import AdminReportsPage from "./(ignore) refactor-in-progress/admin/pages/reports/Main";
 
 import ParticipantLoginPage from "./participant/pages/login/Main";
 import ParticipantHomePage from "./participant/pages/home/Main";
@@ -29,7 +29,7 @@ import AdminRoute from "./admin/AdminRoute";
 import ParticipantRoute from "./participant/ParticipantRoute";
 import { AdminProvider } from "./admin/AdminContext";
 import { ParticipantProvider } from "./participant/ParticipantContext";
-import NotFound from "./status/NotFound";
+import NotFound from "./ui/screens/NotFoundScreen";
 
 import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";

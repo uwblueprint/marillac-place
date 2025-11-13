@@ -1,4 +1,4 @@
-// TODO: update & apply colors definition
+// TODO: update, apply & properly document colors definition
 const colors = {
   task_status: {
     complete: "#0D8312",
