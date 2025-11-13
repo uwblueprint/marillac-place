@@ -10,7 +10,7 @@ import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import AddTaskModal from "./components/AddTaskModal";
 import TasksTable from "./components/TasksTable";
-import { GET_TASKS_BY_TYPE } from "../../../gql/queries";
+import { GET_TASKS_BY_TYPE } from "../../../gql/example";
 import OrangeButton from "../../common/buttons/OrangeButton";
 import { TaskType } from "../../../types/task";
 

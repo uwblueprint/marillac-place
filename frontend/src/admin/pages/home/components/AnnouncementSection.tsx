@@ -2,7 +2,7 @@ import { Flex, Text, Link } from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { Link as RouterLink } from "react-router-dom";
-import { GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
+import { GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/example";
 import {
   AnnouncementDisplayInfo,
   AnnouncementData,

@@ -1,7 +1,7 @@
 import { Flex, Spinner, Text, Grid } from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { GET_CURRENT_PARTICIPANTS } from "../../../gql/queries";
+import { GET_CURRENT_PARTICIPANTS } from "../../../gql/example";
 import { ROOM_NUMBERS } from "../../../constants/rooms";
 import OccupiedRoomCard from "./components/OccupiedRoomCard";
 import EmptyRoomCard from "./components/EmptyRoomCard";

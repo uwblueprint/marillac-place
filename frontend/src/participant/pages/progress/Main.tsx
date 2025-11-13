@@ -7,7 +7,7 @@ import { SetGoal } from "./components/SetGoal";
 import {
   GET_PARTICIPANT_BY_ID,
   GET_WEEKLY_EARNINGS,
-} from "../../../gql/queries";
+} from "../../../gql/example";
 import WeeklyEarningsChart from "./components/EarningsWidget";
 import BucksGoalCard from "./elements/BucksGoalCard";
 import BadgeWidget from "./components/BadgeWidget";

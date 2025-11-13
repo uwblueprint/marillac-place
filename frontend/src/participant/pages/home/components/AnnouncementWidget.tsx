@@ -3,7 +3,7 @@ import { Divider, Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import WidgetContainer from "../../../common/WidgetContainer";
-import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID } from "../../../../gql/queries";
+import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID } from "../../../../gql/example";
 import { displayDate2 } from "../../../../utils/formatDateTime";
 import { ParticipantContext } from "../../../common/ParticipantContext";
 import * as ROUTES from "../../../../constants/routes";

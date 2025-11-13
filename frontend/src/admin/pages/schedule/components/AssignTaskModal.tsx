@@ -1,7 +1,7 @@
 import { Text, Flex, Spinner } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_TASKS_BY_TYPE } from "../../../../gql/queries";
+import { GET_TASKS_BY_TYPE } from "../../../../gql/example";
 import ModalContainer from "../../../common/form/ModalContainer";
 import SelectionInput from "../../../common/form/SelectionInput";
 import CoreInput from "../../../common/form/CoreInput";

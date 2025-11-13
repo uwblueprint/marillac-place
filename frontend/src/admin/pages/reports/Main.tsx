@@ -4,7 +4,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import ReportsTable from "./components/ReportsTable";
 import AddEmailModal from "./components/AddEmailModal";
 import EditEmailModal from "./components/EditEmailModal";
-import { GET_REPORT_RECIPIENTS } from "../../../gql/queries";
+import { GET_REPORT_RECIPIENTS } from "../../../gql/example";
 import {
   CREATE_REPORT_RECIPIENT,
   UPDATE_REPORT_RECIPIENT,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { CalendarEvent, AssignedTask } from "./ScheduleTypes";
-import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/queries";
+import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/example";
 import {
   formatDateFromDateString,
   getWeekBounds,

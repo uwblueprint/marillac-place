@@ -1,6 +1,6 @@
 import React from "react";
 import { FormControl, Input, Text } from "@chakra-ui/react";
-import { InputProps } from "../../../types/component";
+import { InputProps } from "../../../types";
 
 type CoreInputProps = InputProps & {
   type: "text" | "password" | "date" | "time" | "number";

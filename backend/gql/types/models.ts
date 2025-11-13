@@ -16,6 +16,8 @@ const models = gql`
     date: DateTime!
     message: String!
     priority: Priority!
+
+    ReceivedAnnouncement: [ReceivedAnnouncement!]
   }
 
   type AssignedTask {
@@ -38,6 +40,9 @@ const models = gql`
     level: Level!
     value: Int!
     benchmark: Int!
+
+    AchievedBadgeLevel: [AchievedBadgeLevel!]
+    BadgeLevelProgress: [BadgeLevelProgress!]
 
     system_badge: SystemBadge
   }
@@ -99,6 +104,15 @@ const models = gql`
     departure: DateTime
     balance: Int!
     total_earnings: Int!
+
+    Transaction: [Transaction!]
+    EarningGoal: [EarningGoal!]
+    LoginHistory: [LoginHistory!]
+    ReceivedAnnouncement: [ReceivedAnnouncement!]
+    AssignedTask: [AssignedTask!]
+    EarnedCustomBadge: [EarnedCustomBadge!]
+    AchievedBadgeLevel: [AchievedBadgeLevel!]
+    BadgeLevelProgress: [BadgeLevelProgress!]
   }
 
   type ReceivedAnnouncement {
@@ -122,6 +136,8 @@ const models = gql`
     icon: Icon!
     description: String!
     is_active: Boolean!
+
+    BadgeLevel: [BadgeLevel!]
   }
 
   type Task {

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Text, Spinner, Alert, AlertIcon, Flex } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { ParticipantContext } from "../../../common/ParticipantContext";
-import { GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE } from "../../../../gql/queries";
+import { GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE } from "../../../../gql/example";
 import { PARTICIPANTS_SCHEDULE_PAGE } from "../../../../constants/routes";
 import { formatTimeRange, getToday } from "../../../../utils/formatDateTime";
 import { TaskStatus } from "../../../../admin/pages/schedule/components/ScheduleTypes";

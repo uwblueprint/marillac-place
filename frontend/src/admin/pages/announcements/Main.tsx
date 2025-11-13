@@ -8,7 +8,7 @@ import {
   GET_ALL_ANNOUNCEMENTS,
   GET_ANNOUNCEMENTS_BY_PARTICIPANTS,
   GET_CURRENT_PARTICIPANTS,
-} from "../../../gql/queries";
+} from "../../../gql/example";
 import GreenButton from "../../common/buttons/GreenButton";
 import OrangeButton from "../../common/buttons/OrangeButton";
 

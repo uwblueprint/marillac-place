@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
-import { ButtonProps } from "../../types/component";
+import { ButtonProps } from "../../types";
 
 type GreenButtonProps = ButtonProps & {
   icon?: JSX.Element;

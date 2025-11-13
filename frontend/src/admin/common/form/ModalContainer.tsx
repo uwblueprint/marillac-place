@@ -6,7 +6,7 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import { ModalProps } from "../../../types/component";
+import { ModalProps } from "../../../types";
 import SimpleButton from "../buttons/SimpleButton";
 import OrangeButton from "../buttons/OrangeButton";
 

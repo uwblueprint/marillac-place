@@ -5,7 +5,7 @@ import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import {
   GET_PARTICIPANTS_BY_ROOMS,
   GET_CUSTOM_BADGES,
-} from "../../../../gql/queries";
+} from "../../../../gql/example";
 import { ASSIGN_CUSTOM_BADGE } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import GreenButton from "../../../common/buttons/GreenButton";

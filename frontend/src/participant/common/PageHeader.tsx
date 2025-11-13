@@ -5,7 +5,7 @@ import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/client";
 import TaskBar from "./TaskBar";
 import { ParticipantContext } from "./ParticipantContext";
-import { GET_MARILLAC_BUCKS } from "../../gql/queries";
+import { GET_MARILLAC_BUCKS } from "../../gql/example";
 import * as ROUTES from "../../constants/routes";
 
 function ParticipantPageHeader() {

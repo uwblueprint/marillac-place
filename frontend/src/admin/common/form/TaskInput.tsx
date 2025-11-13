@@ -4,7 +4,7 @@ import CoreInput from "./CoreInput";
 import TextInput from "./TextInput";
 import SelectionInput from "./SelectionInput";
 import GreenButton from "../buttons/GreenButton";
-import { toTitleCase } from "../../../utils/string_helpers";
+import { toTitleCase } from "../../../utils/stringUtils";
 import {
   DayOfWeek,
   RecurrenceFrequency,

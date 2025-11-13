@@ -1,7 +1,7 @@
 import { Flex, Text, Grid, Link } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
-import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/queries";
+import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/example";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 
 type RoomData = {

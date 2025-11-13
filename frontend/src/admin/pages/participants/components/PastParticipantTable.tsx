@@ -5,7 +5,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { GET_PAST_PARTICIPANTS } from "../../../../gql/queries";
+import { GET_PAST_PARTICIPANTS } from "../../../../gql/example";
 import EditPastParticipantCard from "./EditPastParticipantCard";
 import DataTable from "../../../common/misc/DataTable";
 

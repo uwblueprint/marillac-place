@@ -5,7 +5,7 @@ import { UPDATE_TASK } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";
 import TextInput from "../../../common/form/TextInput";
-import { toTitleCase } from "../../../../utils/string_helpers";
+import { toTitleCase } from "../../../../utils/stringUtils";
 import TaskInput from "../../../common/form/TaskInput";
 import {
   DayOfWeek,

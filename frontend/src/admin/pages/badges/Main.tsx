@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import CreateCustomBadgeModal from "./components/CreateCustomBadgeModal";
 import CustomBadgeTable from "./components/CustomBadgeTable";
 import SystemBadgeTable from "./components/SystemBadgeTable";
-import { GET_CUSTOM_BADGES, GET_SYSTEM_BADGES } from "../../../gql/queries";
+import { GET_CUSTOM_BADGES, GET_SYSTEM_BADGES } from "../../../gql/example";
 import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
 import GreenButton from "../../common/buttons/GreenButton";
 import OrangeButton from "../../common/buttons/OrangeButton";

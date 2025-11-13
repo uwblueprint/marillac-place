@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import SendIcon from "@mui/icons-material/Send";
 import { CREATE_NOTE, DELETE_NOTE } from "../../../../gql/mutations";
-import { GET_NOTES } from "../../../../gql/queries";
+import { GET_NOTES } from "../../../../gql/example";
 
 const NoteSection = () => {
   const [newNote, setNewNote] = useState("");

@@ -11,7 +11,7 @@ import { CalendarEvent, TaskStatus } from "./ScheduleTypes";
 import OrangeButton from "../../../common/buttons/OrangeButton";
 import SimpleButton from "../../../common/buttons/SimpleButton";
 import TextInput from "../../../common/form/TextInput";
-import { toTitleCase } from "../../../../utils/string_helpers";
+import { toTitleCase } from "../../../../utils/stringUtils";
 import { sendNotification } from "../../../../utils/sendNotification";
 import {
   DELETE_ASSIGNED_TASK,
