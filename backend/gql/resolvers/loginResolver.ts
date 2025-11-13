@@ -72,7 +72,7 @@ const loginResolver = {
       if (!jwtSecretKey) throw new Error("jwt key missing");
 
       await db.loginHistory.create({ data: { pid } });
-      // only update if not already logged in today
+      // TODO: only update badge level progress if not already logged in today
       await updateBadgeLevelProgress(LOGIN, pid, 1);
 
       const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {

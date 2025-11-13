@@ -19,23 +19,25 @@ const earnedCustomBadgeResolver = {
   Mutation: {
     fetchNewEarnedCustomBadges: async (
       _parent: undefined,
-      { pid }: {
+      {
+        pid,
+      }: {
         pid: number;
       }
     ): Promise<EarnedCustomBadge[]> => {
       const earnedCustomBadges = await db.earnedCustomBadge.findMany({
-        where: { 
+        where: {
           pid,
-          notified: false
-        }
+          notified: false,
+        },
       });
 
       await db.earnedCustomBadge.updateMany({
         where: { pid, notified: false },
         data: { notified: true },
-      })
+      });
 
-      return earnedCustomBadges
+      return earnedCustomBadges;
     },
     createEarnedCustomBadge: async (
       _parent: undefined,
@@ -51,7 +53,7 @@ const earnedCustomBadgeResolver = {
         description: string;
       }
     ): Promise<EarnedCustomBadge> => {
-      // procees earning here
+      // TODO: modify this endpoint to receive a value input field and process it as an earning
       return db.earnedCustomBadge.create({
         data: { pid, name, icon, description },
       });

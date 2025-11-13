@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { ReportType } from "./reportUtils";
 
+// TODO: get smtp env vars
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || "smtp.gmail.com",
   port: parseInt(process.env.SMTP_PORT || "587", 10),

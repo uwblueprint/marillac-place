@@ -33,8 +33,10 @@ const achievedBadgeLevelResolver = {
   Mutation: {
     fetchNewAchievedBadgeLevels: async (
       _parent: undefined,
-      { pid }: { 
-        pid: number 
+      {
+        pid,
+      }: {
+        pid: number;
       }
     ): Promise<AchievedBadgeLevel[]> => {
       const achievedBadgeLevels = await db.achievedBadgeLevel.findMany({
@@ -57,8 +59,8 @@ const achievedBadgeLevelResolver = {
       });
 
       await db.achievedBadgeLevel.updateMany({
-        where: { 
-          pid, 
+        where: {
+          pid,
           notified: false,
           badge_level: {
             system_badge: {
@@ -67,8 +69,8 @@ const achievedBadgeLevelResolver = {
           },
         },
         data: { notified: true },
-      })
-      
+      });
+
       return achievedBadgeLevels;
     },
   },

@@ -201,9 +201,10 @@ const assignedTaskResolver = {
       }
 
       if (status === TaskStatus.COMPLETE) {
+        // TODO:
         // get task object
         // process earning
-        // perfect score, jack of all trades, first goal, individual goal badge logic goes here
+        // execute perfect score (required & optional), jack of all trades, first goal, individual goal badge logic
       }
 
       return db.assignedTask.update({

@@ -49,7 +49,7 @@ export async function updateBadgeLevelProgress(
       data: { name, level: badgeLevelProgress.level, pid },
     });
 
-    // pr leader badge logic goes here
+    // TODO: implement pr leader badge logic
 
     await db.badgeLevelProgress.delete({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },

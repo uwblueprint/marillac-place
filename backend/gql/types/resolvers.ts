@@ -21,7 +21,7 @@ const resolvers = gql`
     getTasksByType(type: TaskType!): [Task!]!
 
     getCustomBadges: [CustomBadge!]!
-    
+
     getWeeklyEarnings(pid: Int!): GetWeeklyEarningsResponse!
 
     getCurrentParticipants: [Participant!]!
@@ -74,16 +74,8 @@ const resolvers = gql`
       read: Boolean
     ): ReceivedAnnouncement!
 
-    createEarningGoal(
-      pid: Int!
-      action: GoalAction!
-      value: Int!
-    ): EarningGoal!
-    updateEarningGoal(
-      pid: Int!
-      date: Date!
-      value: Int!
-    ): EarningGoal!
+    createEarningGoal(pid: Int!, action: GoalAction!, value: Int!): EarningGoal!
+    updateEarningGoal(pid: Int!, date: Date!, value: Int!): EarningGoal!
 
     createTask(
       type: TaskType!
@@ -115,7 +107,11 @@ const resolvers = gql`
     adminLogin(role: String!, password: String!): AdminLoginResponse!
     participantLogin(pid: Int!, password: String!): ParticipantLoginResponse!
 
-    createCustomBadge(name: String!, description: String!, icon: Icon!): CustomBadge!
+    createCustomBadge(
+      name: String!
+      description: String!
+      icon: Icon!
+    ): CustomBadge!
     updateCustomBadge(
       cid: Int!
       name: String
@@ -148,7 +144,11 @@ const resolvers = gql`
     ): EarnedCustomBadge!
     fetchNewEarnedCustomBadges(pid: Int!): [EarnedCustomBadge!]!
 
-    updateSystemBadge(name: String!, description: String, is_active: Boolean): SystemBadge!
+    updateSystemBadge(
+      name: String!
+      description: String
+      is_active: Boolean
+    ): SystemBadge!
 
     updateBadgeLevel(
       name: String!
@@ -178,10 +178,7 @@ const resolvers = gql`
       end_date: Date
       comment: String
     ): AssignedTask!
-    updateAssignedTaskStatus(
-      aid: Int!
-      status: TaskStatus!
-    ): AssignedTask!
+    updateAssignedTaskStatus(aid: Int!, status: TaskStatus!): AssignedTask!
     deleteAssignedTask(aid: Int!): AssignedTask!
 
     fetchNewAchievedBadgeLevels(pid: Int!): [AchievedBadgeLevel!]!

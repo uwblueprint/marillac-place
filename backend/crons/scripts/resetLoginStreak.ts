@@ -2,8 +2,7 @@ import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { getToday } from "../../utils/dateUtils";
 
-// checks whether or not a participant has logged in today and resets
-// their progress for the login badge if not
+// checks whether or not a participant has logged in today and resets their progress for the login badge if not
 async function resetLoginStreak() {
   try {
     const startOfDay = getToday();

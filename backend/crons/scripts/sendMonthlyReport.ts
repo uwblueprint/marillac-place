@@ -6,8 +6,7 @@ import {
   ReportType,
 } from "../../utils/reportUtils";
 
-// collects data from the past month, generates a csv report and sends
-// the report to marillac admin via email
+// collects data from the past month, generates a csv report and sends the report to marillac admin via email
 async function sendMonthlyReport() {
   try {
     const report = await generateDataReport(ReportType.MONTHLY);

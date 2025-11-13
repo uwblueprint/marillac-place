@@ -6,8 +6,7 @@ import {
   ReportType,
 } from "../../utils/reportUtils";
 
-// collects data from the past week, generates a csv report and sends
-// the report to marillac admin via email
+// collects data from the past week, generates a csv report and sends the report to marillac admin via email
 async function sendWeeklyReport() {
   try {
     const report = await generateDataReport(ReportType.WEEKLY);
