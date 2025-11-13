@@ -9,20 +9,20 @@ import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-import AdminLoginPage from "./(ignore) refactor-in-progress/admin/pages/login/Main";
-import AdminHomePage from "./(ignore) refactor-in-progress/admin/pages/home/Main";
-import AdminSchedulePage from "./(ignore) refactor-in-progress/admin/pages/schedule/Main";
-import AdminAnnouncementsPage from "./(ignore) refactor-in-progress/admin/pages/announcements/Main";
-import AdminParticipantsPage from "./(ignore) refactor-in-progress/admin/pages/participants/Main";
-import AdminTasksPage from "./(ignore) refactor-in-progress/admin/pages/tasks/Main";
-import AdminBadgesPage from "./(ignore) refactor-in-progress/admin/pages/badges/Main";
-import AdminReportsPage from "./(ignore) refactor-in-progress/admin/pages/reports/Main";
+import AdminLoginPage from "./admin/pages/login/Main";
+// import AdminHomePage from "./(ignore) refactor-in-progress/admin/pages/home/Main";
+// import AdminSchedulePage from "./(ignore) refactor-in-progress/admin/pages/schedule/Main";
+// import AdminAnnouncementsPage from "./(ignore) refactor-in-progress/admin/pages/announcements/Main";
+// import AdminParticipantsPage from "./(ignore) refactor-in-progress/admin/pages/participants/Main";
+// import AdminTasksPage from "./(ignore) refactor-in-progress/admin/pages/tasks/Main";
+// import AdminBadgesPage from "./(ignore) refactor-in-progress/admin/pages/badges/Main";
+// import AdminReportsPage from "./(ignore) refactor-in-progress/admin/pages/reports/Main";
 
 import ParticipantLoginPage from "./participant/pages/login/Main";
-import ParticipantHomePage from "./participant/pages/home/Main";
-import ParticipantSchedulePage from "./participant/pages/schedule/Main";
-import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
-import ParticipantProgressPage from "./participant/pages/progress/Main";
+// import ParticipantHomePage from "./(ignore) refactor-in-progress/participant/pages/home/Main";
+// import ParticipantSchedulePage from "./(ignore) refactor-in-progress/participant/pages/schedule/Main";
+// import ParticipantAnnouncementsPage from "./(ignore) refactor-in-progress/participant/pages/announcements/Main";
+// import ParticipantProgressPage from "./(ignore) refactor-in-progress/participant/pages/progress/Main";
 
 import * as ROUTES from "./constants/routes";
 import AdminRoute from "./admin/AdminRoute";
@@ -85,7 +85,7 @@ const App = (): React.ReactElement => {
                   <AdminLoginPage />
                 }
               />
-              <Route
+              {/* <Route
                 path={ROUTES.ADMIN_HOME_PAGE}
                 element={
                   <AdminRoute>
@@ -140,7 +140,7 @@ const App = (): React.ReactElement => {
                     <AdminReportsPage />
                   </AdminRoute>
                 }
-              />
+              /> */}
             </AdminProvider>
 
             <ParticipantProvider>
@@ -148,7 +148,7 @@ const App = (): React.ReactElement => {
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
                 element={<ParticipantLoginPage />}
               />
-              <Route
+              {/* <Route
                 path={ROUTES.PARTICIPANTS_HOME_PAGE}
                 element={
                   <ParticipantRoute>
@@ -179,7 +179,7 @@ const App = (): React.ReactElement => {
                     <ParticipantProgressPage />
                   </ParticipantRoute>
                 }
-              />
+              /> */}
             </ParticipantProvider>
 
             <Route path="*" element={<NotFound />} />

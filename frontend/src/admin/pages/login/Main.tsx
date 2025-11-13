@@ -9,12 +9,12 @@ import {
   Input,
   FormControl,
 } from "@chakra-ui/react";
-import { ADMIN_LOGIN } from "../../../../gql/loginRequests";
-import { ADMIN_HOME_PAGE } from "../../../../constants/routes";
-import Loading from "../../../../ui/screens/LoadingScreen";
-import { ADMIN, RELIEF } from "../../../../constants/roles";
-import { verifyRole } from "../../../../helpers/verifyRole";
-import Error from "../../../../ui/screens/ErrorScreen";
+import { ADMIN_LOGIN } from "../../../gql/loginRequests";
+import { ADMIN_HOME_PAGE } from "../../../constants/routes";
+import Loading from "../../../ui/screens/LoadingScreen";
+import { ADMIN, RELIEF } from "../../../constants/roles";
+import { verifyRole } from "../../../helpers/verifyRole";
+import Error from "../../../ui/screens/ErrorScreen";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();

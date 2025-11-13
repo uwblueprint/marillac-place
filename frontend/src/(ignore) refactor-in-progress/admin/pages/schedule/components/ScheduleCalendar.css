@@ -1,29 +1,31 @@
-/* Custom styles for React Big Calendar to match Chakra UI theme */
+/* TODO: Refactor in progress - ignore for now */
+/*
+/* Custom styles for React Big Calendar to match Chakra UI theme * /
 
 :root {
-  /* Color variables for consistency */
+  /* Color variables for consistency * /
   --border-color: #c5c8d8;
   
-  /* Status colors - these will be set from the theme */
+  /* Status colors - these will be set from the theme * /
   --status-complete: magenta;
   --status-assigned: magenta;
   --status-incomplete: magenta;
   --status-excused: magenta;
   
-  /* Status background colors - these will be set from the theme */
+  /* Status background colors - these will be set from the theme * /
   --status-complete-bg: magenta;
   --status-assigned-bg: magenta;
   --status-incomplete-bg: magenta;
   --status-excused-bg: magenta;
   
-  /* Status text colors - these will be set from the theme */
+  /* Status text colors - these will be set from the theme * /
   --status-complete-text: magenta;
   --status-assigned-text: magenta;
   --status-incomplete-text: magenta;
   --status-excused-text: magenta;
 }
 
-/* Base calendar styling */
+/* Base calendar styling * /
 .rbc-calendar {
   font-family: 'Nunito', sans-serif;
   border-radius: 8px;
@@ -34,12 +36,12 @@
   min-height: 0 !important;
 }
 
-/* Hide default toolbar */
+/* Hide default toolbar * /
 .rbc-toolbar {
   display: none !important;
 }
 
-/* Time view container */
+/* Time view container * /
 .rbc-time-view {
   border: none !important;
   background-color: white;
@@ -50,7 +52,7 @@
   min-height: 0 !important;
 }
 
-/* Header styling */
+/* Header styling * /
 .rbc-header {
   background-color: white;
   font-weight: 600;
@@ -70,15 +72,15 @@
   top: 0 !important;
   z-index: 10 !important;
   border: none !important;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; * /
 }
 
-/* Target only the row that contains day headers, not all-day events */
+/* Target only the row that contains day headers, not all-day events * /
 .rbc-time-header-cell {
   min-height: 80px !important;
 }
 
-/* Ensure individual day header cells have proper height */
+/* Ensure individual day header cells have proper height * /
 .rbc-time-header .rbc-row:first-child .rbc-header {
   border-left: 1px solid var(--border-color);
   border-bottom: 2px solid var(--border-color);
@@ -89,7 +91,7 @@
   border-left: none;
 }
 
-/* Fix React Big Calendar button wrapper centering */
+/* Fix React Big Calendar button wrapper centering * /
 .rbc-button-link {
   display: flex !important;
   align-items: center !important;
@@ -101,7 +103,7 @@
   margin: 0 !important;
 }
 
-/* Fix the inner CSS classes */
+/* Fix the inner CSS classes * /
 .css-1f58b5e {
   display: flex !important;
   align-items: center !important;
@@ -124,7 +126,7 @@
 }
 
 
-/* All-day event area */
+/* All-day event area * /
 .rbc-allday-cell {
   background-color: white;
   border: none !important;
@@ -137,7 +139,7 @@
   z-index: 9 !important;
 }
 
-/* Remove borders from row segments (all-day events) */
+/* Remove borders from row segments (all-day events) * /
 .rbc-row-segment {
   border: none !important;
 }
@@ -160,14 +162,14 @@
   margin: 0 !important;
 }
 
-/* Ensure all-day event rows can expand naturally */
+/* Ensure all-day event rows can expand naturally * /
 .rbc-time-header .rbc-row.rbc-row-segment {
   min-height: 24px !important;
 }
 
-/* Time content and columns */
+/* Time content and columns * /
 .rbc-time-content {
-  /* border-top: 1px solid var(--border-color); */
+  /* border-top: 1px solid var(--border-color); * /
   border: none !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
@@ -177,7 +179,7 @@
   max-height: none !important;
 }
 
-/* Ensure the calendar container has proper height constraints */
+/* Ensure the calendar container has proper height constraints * /
 #react-big-calendar-container {
   height: 100% !important;
   min-height: 0 !important;
@@ -208,7 +210,7 @@
   border-left: none;
 }
 
-/* Time gutter (left side with hours) */
+/* Time gutter (left side with hours) * /
 .rbc-time-view .rbc-time-gutter {
   border: none !important;
   position: sticky !important;
@@ -230,7 +232,7 @@
   border-left: 1px solid var(--border-color);
 }
 
-/* Remove all horizontal grid lines */
+/* Remove all horizontal grid lines * /
 .rbc-timeslot-group,
 .rbc-time-slot,
 .rbc-day-slot {
@@ -238,29 +240,29 @@
   border-bottom: none !important;
 }
 
-/* Current time indicator - hidden */
+/* Current time indicator - hidden * /
 .rbc-current-time-indicator {
   display: none !important;
 }
 
-/* Today highlighting */
+/* Today highlighting * /
 .rbc-today {
   background-color: transparent !important;
 }
 
-/* Ensure today's date text is white when it has orange background */
+/* Ensure today's date text is white when it has orange background * /
 .rbc-header [style*="background"] [style*="color: white"] {
   color: white !important;
 }
 
-/* Alternative approach - target any orange background */
+/* Alternative approach - target any orange background * /
 .rbc-header [style*="background: rgb(237, 137, 54)"] *,
 .rbc-header [style*="background: rgb(245, 130, 32)"] *,
 .rbc-header [style*="background: orange"] * {
   color: white !important;
 }
 
-/* Base event styling */
+/* Base event styling * /
 .rbc-event {
   border-radius: 6px !important;
   border: none !important;
@@ -275,7 +277,7 @@
   font-weight: 400;
 }
 
-/* All-day events base styling */
+/* All-day events base styling * /
 .rbc-event-allday,
 .rbc-event.rbc-event-allday {
   height: auto !important;
@@ -293,7 +295,7 @@
   z-index: 1 !important;
 }
 
-/* Status-specific colors for all events (both timed and all-day) */
+/* Status-specific colors for all events (both timed and all-day) * /
 .rbc-event.status-complete,
 .rbc-event-allday.status-complete {
   background-color: var(--status-complete-bg) !important;
@@ -322,7 +324,7 @@
   border-left: 4px solid var(--status-excused) !important;
 }
 
-/* All-day specific status colors (for cases where [data-allday="true"] is used) */
+/* All-day specific status colors (for cases where [data-allday="true"] is used) * /
 .rbc-event[data-allday="true"].status-complete {
   background-color: var(--status-complete) !important;
   color: white !important;
@@ -343,7 +345,7 @@
   color: white !important;
 }
 
-/* Event content text wrapping */
+/* Event content text wrapping * /
 .rbc-event-content,
 .rbc-event .chakra-text {
   white-space: normal !important;
@@ -352,7 +354,7 @@
   line-height: 1.2 !important;
 }
 
-/* Row segments for proper all-day event display */
+/* Row segments for proper all-day event display * /
 .rbc-row-segment,
 .rbc-row-content .rbc-row-segment {
   height: auto !important;
@@ -368,13 +370,13 @@
   margin: 1px 0 !important;
 }
 
-/* Selected event highlighting */
+/* Selected event highlighting * /
 .rbc-event.rbc-selected {
   box-shadow: 0 0 0 2px #e53e3e !important;
   opacity: 0.9;
 }
 
-/* Custom scrollbar styling */
+/* Custom scrollbar styling * /
 .rbc-time-content::-webkit-scrollbar {
   width: 8px;
 }
@@ -392,7 +394,7 @@
   background-color: #a0aec0;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments * /
 @media (max-width: 768px) {
   .rbc-toolbar {
     flex-direction: column;
@@ -413,3 +415,4 @@
     padding: 1px 4px !important;
   }
 } 
+*/
