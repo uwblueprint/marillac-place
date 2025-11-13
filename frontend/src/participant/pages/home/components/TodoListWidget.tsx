@@ -7,7 +7,7 @@ import { GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE } from "../../../../gql/q
 import { PARTICIPANTS_SCHEDULE_PAGE } from "../../../../constants/routes";
 import { formatTimeRange, getToday } from "../../../../utils/formatDateTime";
 import { TaskStatus } from "../../../../admin/pages/schedule/components/ScheduleTypes";
-import Icon from "../../../../icons/Icon";
+import Icon from "../../../common/Icon";
 import assigned from "../../../icons/status/assigned.svg";
 import complete from "../../../icons/status/complete.svg";
 import incomplete from "../../../icons/status/incomplete.svg";
