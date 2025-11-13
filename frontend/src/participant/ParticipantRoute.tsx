@@ -12,9 +12,9 @@ type ParticipantRouteProps = {
 };
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
-  // TODO: 
+  // TODO:
   // call api to get participant by id
-  // update room and balance properties in participant context 
+  // update room and balance properties in participant context
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
 

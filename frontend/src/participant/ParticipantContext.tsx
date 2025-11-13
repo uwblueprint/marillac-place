@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useState } from "react";
 
 type ParticipantContextType = {
   pid: number | null;
@@ -9,27 +9,33 @@ type ParticipantContextType = {
   setBalance: (balance: number) => void;
 };
 
-export const ParticipantContext = createContext<ParticipantContextType | null>(null);
+export const ParticipantContext = createContext<ParticipantContextType | null>(
+  null
+);
 
 interface ParticipantProviderProps {
   children: ReactNode;
 }
 
-export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({ children }) => {
+export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({
+  children,
+}) => {
   const [pid, setPid] = useState<number | null>(null);
   const [room, setRoom] = useState<number | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
 
   return (
-    <ParticipantContext.Provider value={{ 
-      pid, 
-      setPid, 
-      room, 
-      setRoom, 
-      balance, 
-      setBalance
-    }}>
+    <ParticipantContext.Provider
+      value={{
+        pid,
+        setPid,
+        room,
+        setRoom,
+        balance,
+        setBalance,
+      }}
+    >
       {children}
     </ParticipantContext.Provider>
   );
-}
+};

@@ -14,7 +14,7 @@ export async function verifyRole(validRoles: string[]): Promise<boolean> {
   } catch (err) {
     return false;
   }
-};
+}
 
 export async function getParticipantId() {
   const token = localStorage.getItem("token") ?? "";

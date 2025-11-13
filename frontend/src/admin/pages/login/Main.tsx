@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  
+
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
 
@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
     } else {
       login({ variables: { role, password } });
     }
-  };
+  }
 
   if (loading || loginLoading) {
     return <Loading />;

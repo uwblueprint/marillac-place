@@ -2,7 +2,7 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Routes as Switch,
+  Routes
 } from "react-router-dom";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
@@ -77,13 +77,11 @@ const App = (): React.ReactElement => {
     <ApolloProvider client={apolloClient}>
       <ChakraProvider theme={theme}>
         <Router>
-          <Switch>
-            <AdminProvider>
+          <AdminProvider>
+            <Routes>
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
-                element={
-                  <AdminLoginPage />
-                }
+                element={<AdminLoginPage />}
               />
               {/* <Route
                 path={ROUTES.ADMIN_HOME_PAGE}
@@ -141,9 +139,11 @@ const App = (): React.ReactElement => {
                   </AdminRoute>
                 }
               /> */}
-            </AdminProvider>
+            </Routes>
+          </AdminProvider>
 
-            <ParticipantProvider>
+          <ParticipantProvider>
+            <Routes>
               <Route
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
                 element={<ParticipantLoginPage />}
@@ -180,10 +180,12 @@ const App = (): React.ReactElement => {
                   </ParticipantRoute>
                 }
               /> */}
-            </ParticipantProvider>
+            </Routes>
+          </ParticipantProvider>
 
+          <Routes>
             <Route path="*" element={<NotFound />} />
-          </Switch>
+          </Routes>
         </Router>
       </ChakraProvider>
     </ApolloProvider>

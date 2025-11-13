@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useState } from "react";
 
 type AdminContextType = {
   role: string | null;
@@ -15,16 +15,20 @@ interface AdminProviderProps {
 
 export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
   const [role, setRole] = useState<string | null>(null);
-  const [roomToParticipant, setRoomToParticipant] = useState<Record<number, number>>({});
+  const [roomToParticipant, setRoomToParticipant] = useState<
+    Record<number, number>
+  >({});
 
   return (
-    <AdminContext.Provider value={{ 
-      role, 
-      setRole, 
-      roomToParticipant, 
-      setRoomToParticipant 
-    }}>
+    <AdminContext.Provider
+      value={{
+        role,
+        setRole,
+        roomToParticipant,
+        setRoomToParticipant,
+      }}
+    >
       {children}
     </AdminContext.Provider>
   );
-}
+};

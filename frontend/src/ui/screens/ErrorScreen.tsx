@@ -1,4 +1,4 @@
-// TODO: 
+// TODO:
 // Design and implement common error popup (mobile and web)
 // Accepts error message as a prop
 // Default error message is "Something went wrong. Please try again later."
