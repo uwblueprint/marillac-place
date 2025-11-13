@@ -10,7 +10,7 @@ import {
   RecurrenceFrequency,
   TimeOption,
 } from "../../../types/task";
-import { weekdays } from "../../../constants/misc";
+import { weekdays } from "../../../constants/rooms";
 
 type TaskInputProps = {
   set_recurrence: (e: any) => void;

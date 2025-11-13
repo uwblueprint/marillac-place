@@ -5,7 +5,7 @@ import TaskTableTop from "./TaskTableTop";
 import TaskTableBottom from "./TaskTableBottom";
 import { DayOfWeek } from "../../../../types/task";
 import { isSameDay } from "../../../../utils/formatDateTime";
-import { weekdays } from "../../../../constants/misc";
+import { weekdays } from "../../../../constants/rooms";
 import { toTitleCase } from "../../../../utils/string_helpers";
 
 interface ScheduleListViewProps {

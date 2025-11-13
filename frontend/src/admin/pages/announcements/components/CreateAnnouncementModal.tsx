@@ -3,7 +3,7 @@ import { Flex, Text } from "@chakra-ui/react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_ANNOUNCEMENT } from "../../../../gql/mutations";
 import { GET_CURRENT_PARTICIPANTS } from "../../../../gql/queries";
-import { ROOM_NUMBERS } from "../../../../constants/misc";
+import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import ModalContainer from "../../../common/form/ModalContainer";
 import GreenButton from "../../../common/buttons/GreenButton";
 import SelectionInput from "../../../common/form/SelectionInput";

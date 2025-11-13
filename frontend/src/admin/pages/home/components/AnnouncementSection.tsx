@@ -7,7 +7,7 @@ import {
   AnnouncementDisplayInfo,
   AnnouncementData,
 } from "../../../../types/AnnouncementTypes";
-import { ROOM_NUMBERS } from "../../../../constants/misc";
+import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import { getRecentDate } from "../../../../utils/formatDateTime";
 
 const getRoomString = (rooms: number[]) => {

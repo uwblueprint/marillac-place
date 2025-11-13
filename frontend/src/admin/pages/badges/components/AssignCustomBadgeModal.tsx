@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Grid, Text } from "@chakra-ui/react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { ROOM_NUMBERS } from "../../../../constants/misc";
+import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import {
   GET_PARTICIPANTS_BY_ROOMS,
   GET_CUSTOM_BADGES,

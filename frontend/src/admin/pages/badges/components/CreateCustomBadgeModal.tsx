@@ -8,7 +8,7 @@ import {
   Image as ChakraImage,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
-import { Icon, iconList } from "../../../../constants/icons";
+import { Icon, iconList } from "../../../../constants/badge";
 import { CREATE_CUSTOM_BADGE } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";

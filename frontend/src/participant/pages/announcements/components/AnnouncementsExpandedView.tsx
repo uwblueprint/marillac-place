@@ -2,7 +2,7 @@ import { Divider, Flex, Text } from "@chakra-ui/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { displayDate2 } from "../../../../utils/formatDateTime";
-import Icon from "../../../common/Icon";
+import Icon from "../../../../icons/Icon";
 import important from "../../../icons/announcements/important.svg";
 import orangepin from "../../../icons/announcements/orangepin.svg";
 import greenpin from "../../../icons/announcements/greenpin.svg";

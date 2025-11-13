@@ -1,7 +1,7 @@
 import { Flex, FormControl, Input, Text, Button } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { ROOM_NUMBERS } from "../../../../constants/misc";
+import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import { UPDATE_PARTICIPANT } from "../../../../gql/mutations";
 import ModalContainer from "../../../common/form/ModalContainer";
 import CoreInput from "../../../common/form/CoreInput";

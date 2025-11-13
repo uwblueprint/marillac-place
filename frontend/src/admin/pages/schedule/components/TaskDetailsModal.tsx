@@ -25,7 +25,7 @@ import {
   formatTimeString,
   isAnytime,
 } from "../../../../utils/formatDateTime";
-import { weekdays } from "../../../../constants/misc";
+import { weekdays } from "../../../../constants/rooms";
 import GreenButton from "../../../common/buttons/GreenButton";
 import SelectionInput from "../../../common/form/SelectionInput";
 import CoreInput from "../../../common/form/CoreInput";

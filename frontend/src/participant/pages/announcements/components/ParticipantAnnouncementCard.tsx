@@ -5,7 +5,7 @@ import group from "../../../icons/announcements/group.svg";
 import profile from "../../../icons/announcements/profile.svg";
 import important from "../../../icons/announcements/important.svg";
 import orangepin from "../../../icons/announcements/orangepin.svg";
-import Icon from "../../../common/Icon";
+import Icon from "../../../../icons/Icon";
 import { displayDate2 } from "../../../../utils/formatDateTime";
 
 type ParticipantAnnouncementCardProps = {
