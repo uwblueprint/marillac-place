@@ -1,8 +1,9 @@
 import React from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import * as ROUTES from "./constants/routes";
+import * as ROUTES from "../constants/routes";
 
+// TODO: verify this screen is for properly formatted on mobile and web + add contact support information
 export default function NotFound() {
   const navigate = useNavigate();
 

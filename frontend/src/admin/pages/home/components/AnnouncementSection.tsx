@@ -8,7 +8,7 @@ import {
   AnnouncementData,
 } from "../../../../types/AnnouncementTypes";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
-import { getRecentDate } from "../../../../utils/formatDateTime";
+import { getRecentDate } from "../../../../utils/formatDate";
 
 const getRoomString = (rooms: number[]) => {
   if (rooms.length === 1) {

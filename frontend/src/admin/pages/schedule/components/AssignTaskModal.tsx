@@ -14,7 +14,7 @@ import {
 import TaskInput from "../../../common/form/TaskInput";
 import { sendNotification } from "../../../../utils/sendNotification";
 import { CREATE_ASSIGNED_TASK } from "../../../../gql/mutations";
-import { formatDateFromString } from "../../../../utils/formatDateTime";
+import { formatDateFromString } from "../../../../utils/formatDate";
 
 type AssignTaskModalProps = {
   participantId: number;

@@ -9,72 +9,63 @@ import {
   Input,
   FormControl,
 } from "@chakra-ui/react";
-import { ADMIN_LOGIN } from "../../../gql/mutations";
-import { isAdmin, isRelief } from "../../../utils/checkRole";
-import * as ROUTES from "../../../constants/routes";
-// import Loading from "../../../Loading";
+import { ADMIN_LOGIN } from "../../../gql/loginRequests";
+import { ADMIN_HOME_PAGE } from "../../../constants/routes";
+import Loading from "../../../status/Loading";
+import { ADMIN, RELIEF } from "../../../constants/roles";
+import { verifyRole } from "../../../utils/verifyRole";
+import Error from "../../../status/Error";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [checkLoggedIn, setCheckLoggedIn] = useState(false);
-
+  
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
 
-  const [error, setError] = useState("");
-
-  const [login, { loading }] = useMutation(ADMIN_LOGIN, {
+  const [login, { loading: loginLoading }] = useMutation(ADMIN_LOGIN, {
     onCompleted: (data) => {
-      localStorage.setItem("admin_token", data.adminLogin.token);
-      navigate(ROUTES.ADMIN_HOME_PAGE);
+      localStorage.setItem("token", data.adminLogin.token);
+      // TODO: set role property in admin context
+      navigate(ADMIN_HOME_PAGE);
     },
     onError: (err: Error) => {
-      // Check if it's a network error (CORS, connection refused, etc.)
-      if (
-        err.message.includes("Failed to fetch") ||
-        err.message.includes("NetworkError") ||
-        err.message.includes("Network request failed")
-      ) {
-        setError(
-          "Unable to connect to server. Please check your internet connection and try again."
-        );
-      } else {
-        // Show the actual error message from the backend
-        setError(err.message);
-      }
+      setError(err.message);
     },
   });
 
   useEffect(() => {
-    const tokenCheck = async () => {
-      const adminUser = await isAdmin();
-      const reliefUser = await isRelief();
-      if (adminUser || reliefUser) {
+    const authorize = async () => {
+      const isStaff = await verifyRole([ADMIN, RELIEF]);
+      if (isStaff) {
         setLoggedIn(true);
       }
-      setCheckLoggedIn(true);
+      setLoading(false);
     };
-    tokenCheck();
+    authorize();
   }, []);
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     setError("");
-
     if (!role || !password) {
-      setError("Missing fields");
+      setError("missing fields");
     } else {
       login({ variables: { role, password } });
     }
   };
 
-  // if (!checkLoggedIn || loading) {
-  //   return <Loading />;
-  // }
+  if (loading || loginLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Error />;
+  }
 
   if (loggedIn) {
-    return <Navigate to={ROUTES.ADMIN_HOME_PAGE} replace />;
+    return <Navigate to={ADMIN_HOME_PAGE} replace />;
   }
 
   return (
@@ -125,8 +116,8 @@ export default function AdminLoginPage() {
                 onChange={(e) => setRole(e.target.value)}
                 placeholder="Role"
               >
-                <option value="admin">Administrative Staff</option>
-                <option value="relief">Relief Staff</option>
+                <option value={ADMIN}>Administrative Staff</option>
+                <option value={RELIEF}>Relief Staff</option>
               </Select>
             </FormControl>
 

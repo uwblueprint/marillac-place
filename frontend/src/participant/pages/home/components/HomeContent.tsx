@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import { ParticipantContext } from "../../../common/ParticipantContext";
+import { ParticipantContext } from "../../../ParticipantContext";
 import TasksCompletedWidget from "./TasksCompletedWidget";
 import { HAS_COMPLETED_ALL_REQUIRED_TASKS } from "../../../../gql/example";
 import BadgeRow from "./BadgeRow";

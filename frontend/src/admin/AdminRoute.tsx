@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
-import SideBar from "./SideBar";
-import Notification from "./Notification";
-import * as ROUTES from "../../../constants/routes";
-import { isAdmin, isRelief } from "../../../utils/checkRole";
-import Loading from "../../../Loading";
+import { verifyRole } from "../utils/verifyRole";
+import { ADMIN, RELIEF } from "../constants/roles";
+import Loading from "../status/Loading";
+import { ADMIN_LOGIN_PAGE } from "../constants/routes";
+import SideBar from "./common/misc/SideBar";
+import Notification from "./common/misc/Notification";
 
 type AdminRouteProps = {
   children: React.ReactElement;
 };
 
 export default function AdminRoute({ children }: AdminRouteProps) {
+  // TODO: 
+  // call api to get current participants
+  // update roomToParticipant propety in admin context 
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(
@@ -19,15 +23,14 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   );
 
   useEffect(() => {
-    const checkRole = async () => {
-      const adminUser = await isAdmin();
-      const reliefUser = await isRelief();
-      if (adminUser || reliefUser) {
+    const authorize = async () => {
+      const isStaff = await verifyRole([ADMIN, RELIEF]);
+      if (isStaff) {
         setAuthorized(true);
       }
       setLoading(false);
     };
-    checkRole();
+    authorize();
   }, []);
 
   if (loading) {
@@ -35,7 +38,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   }
 
   if (!authorized) {
-    return <Navigate to={ROUTES.ADMIN_LOGIN_PAGE} replace />;
+    return <Navigate to={ADMIN_LOGIN_PAGE} replace />;
   }
 
   if (notification) {

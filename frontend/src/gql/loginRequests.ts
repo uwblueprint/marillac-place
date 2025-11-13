@@ -9,17 +9,9 @@ export const ADMIN_LOGIN = gql`
 `;
 
 export const PARTICIPANT_LOGIN = gql`
-  mutation participantLogin($id: Int!, $password: String!) {
-    participantLogin(pid: $id, password: $password) {
+  mutation participantLogin($pid: Int!, $password: String!) {
+    participantLogin(pid: $pid, password: $password) {
       token
-      participant {
-        pid
-        room
-        arrival
-        departure
-        balance
-        total_earnings
-      }
     }
   }
 `;

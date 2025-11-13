@@ -5,7 +5,7 @@ import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/example";
 import {
   formatDateFromDateString,
   getWeekBounds,
-} from "../../../../utils/formatDateTime";
+} from "../../../../utils/formatDate";
 
 export const useScheduleData = (selectedRoom: number) => {
   const [participantId, setParticipantId] = useState<number | null>(null);

@@ -11,7 +11,7 @@ import { CalendarEvent, TaskStatus } from "./ScheduleTypes";
 import OrangeButton from "../../../common/buttons/OrangeButton";
 import SimpleButton from "../../../common/buttons/SimpleButton";
 import TextInput from "../../../common/form/TextInput";
-import { toTitleCase } from "../../../../utils/stringUtils";
+import { toTitleCase } from "../../../../utils/stringHelpers";
 import { sendNotification } from "../../../../utils/sendNotification";
 import {
   DELETE_ASSIGNED_TASK,
@@ -24,7 +24,7 @@ import {
   formatDateFromString,
   formatTimeString,
   isAnytime,
-} from "../../../../utils/formatDateTime";
+} from "../../../../utils/formatDate";
 import { weekdays } from "../../../../constants/rooms";
 import GreenButton from "../../../common/buttons/GreenButton";
 import SelectionInput from "../../../common/form/SelectionInput";

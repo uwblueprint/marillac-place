@@ -28,36 +28,46 @@ export const ICONS = {
   NOVICE_INDIVIDUAL_GOAL_BADGE: "badge/level/novice/individualGoal.svg",
   NOVICE_LOGIN_BADGE: "badge/level/novice/login.svg",
   NOVICE_MONEY_EARNED_BADGE: "badge/level/novice/moneyEarned.svg",
-  NOVICE_PERFECT_SCORE_OPTIONAL_BADGE: "badge/level/novice/perfectScoreOptional.svg",
-  NOVICE_PERFECT_SCORE_REQUIRED_BADGE: "badge/level/novice/perfectScoreRequired.svg",
+  NOVICE_PERFECT_SCORE_OPTIONAL_BADGE:
+    "badge/level/novice/perfectScoreOptional.svg",
+  NOVICE_PERFECT_SCORE_REQUIRED_BADGE:
+    "badge/level/novice/perfectScoreRequired.svg",
   NOVICE_PR_LEADER_BADGE: "badge/level/novice/prLeader.svg",
 
   BRONZE_INDIVIDUAL_GOAL_BADGE: "badge/level/bronze/individualGoal.svg",
   BRONZE_LOGIN_BADGE: "badge/level/bronze/login.svg",
   BRONZE_MONEY_EARNED_BADGE: "badge/level/bronze/moneyEarned.svg",
-  BRONZE_PERFECT_SCORE_OPTIONAL_BADGE: "badge/level/bronze/perfectScoreOptional.svg",
-  BRONZE_PERFECT_SCORE_REQUIRED_BADGE: "badge/level/bronze/perfectScoreRequired.svg",
+  BRONZE_PERFECT_SCORE_OPTIONAL_BADGE:
+    "badge/level/bronze/perfectScoreOptional.svg",
+  BRONZE_PERFECT_SCORE_REQUIRED_BADGE:
+    "badge/level/bronze/perfectScoreRequired.svg",
   BRONZE_PR_LEADER_BADGE: "badge/level/bronze/prLeader.svg",
 
   SILVER_INDIVIDUAL_GOAL_BADGE: "badge/level/silver/individualGoal.svg",
   SILVER_LOGIN_BADGE: "badge/level/silver/login.svg",
   SILVER_MONEY_EARNED_BADGE: "badge/level/silver/moneyEarned.svg",
-  SILVER_PERFECT_SCORE_OPTIONAL_BADGE: "badge/level/silver/perfectScoreOptional.svg",
-  SILVER_PERFECT_SCORE_REQUIRED_BADGE: "badge/level/silver/perfectScoreRequired.svg",
+  SILVER_PERFECT_SCORE_OPTIONAL_BADGE:
+    "badge/level/silver/perfectScoreOptional.svg",
+  SILVER_PERFECT_SCORE_REQUIRED_BADGE:
+    "badge/level/silver/perfectScoreRequired.svg",
   SILVER_PR_LEADER_BADGE: "badge/level/silver/prLeader.svg",
 
   GOLD_INDIVIDUAL_GOAL_BADGE: "badge/level/gold/individualGoal.svg",
   GOLD_LOGIN_BADGE: "badge/level/gold/login.svg",
   GOLD_MONEY_EARNED_BADGE: "badge/level/gold/moneyEarned.svg",
-  GOLD_PERFECT_SCORE_OPTIONAL_BADGE: "badge/level/gold/perfectScoreOptional.svg",
-  GOLD_PERFECT_SCORE_REQUIRED_BADGE: "badge/level/gold/perfectScoreRequired.svg",
+  GOLD_PERFECT_SCORE_OPTIONAL_BADGE:
+    "badge/level/gold/perfectScoreOptional.svg",
+  GOLD_PERFECT_SCORE_REQUIRED_BADGE:
+    "badge/level/gold/perfectScoreRequired.svg",
   GOLD_PR_LEADER_BADGE: "badge/level/gold/prLeader.svg",
 
   DIAMOND_INDIVIDUAL_GOAL_BADGE: "badge/level/diamond/individualGoal.svg",
   DIAMOND_LOGIN_BADGE: "badge/level/diamond/login.svg",
   DIAMOND_MONEY_EARNED_BADGE: "badge/level/diamond/moneyEarned.svg",
-  DIAMOND_PERFECT_SCORE_OPTIONAL_BADGE: "badge/level/diamond/perfectScoreOptional.svg",
-  DIAMOND_PERFECT_SCORE_REQUIRED_BADGE: "badge/level/diamond/perfectScoreRequired.svg",
+  DIAMOND_PERFECT_SCORE_OPTIONAL_BADGE:
+    "badge/level/diamond/perfectScoreOptional.svg",
+  DIAMOND_PERFECT_SCORE_REQUIRED_BADGE:
+    "badge/level/diamond/perfectScoreRequired.svg",
   DIAMOND_PR_LEADER_BADGE: "badge/level/diamond/prLeader.svg",
 
   ASSIGNED: "status/assigned.svg",
@@ -80,4 +90,4 @@ export const ICONS = {
   GROUP_PROFILE: "misc/groupProfile.svg",
   MARILLAC_BUCKS: "misc/marillacBucks.svg",
   TROPHY: "misc/trophy.svg",
-}
+};

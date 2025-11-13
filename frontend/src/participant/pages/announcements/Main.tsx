@@ -6,7 +6,7 @@ import {
   GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID,
   GET_PARTICIPANT_FILTERED_ANNOUNCEMENTS,
 } from "../../../gql/example";
-import { ParticipantContext } from "../../common/ParticipantContext";
+import { ParticipantContext } from "../../ParticipantContext";
 import { Priority } from "../../../types/AnnouncementTypes";
 import GreenButton from "../../common/GreenButton";
 import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";

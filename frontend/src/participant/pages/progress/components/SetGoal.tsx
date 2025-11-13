@@ -2,7 +2,7 @@ import { Flex, Image, Input, Text } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import ModalContainer from "../../../../admin/common/form/ModalContainer";
-import { ParticipantContext } from "../../../common/ParticipantContext";
+import { ParticipantContext } from "../../../ParticipantContext";
 import { SET_MARILLAC_BUCKS_GOAL } from "../../../../gql/mutations";
 
 interface SetGoalProps {

@@ -12,11 +12,7 @@ export const GET_EARNING_GOAL = gql`
 `;
 
 export const CREATE_EARNING_GOAL = gql`
-  mutation createEarningGoal(
-    $pid: Int!
-    $action: GoalAction!
-    $value: Int!
-  ) {
+  mutation createEarningGoal($pid: Int!, $action: GoalAction!, $value: Int!) {
     createEarningGoal(pid: $pid, action: $action, value: $value) {
       pid
       action

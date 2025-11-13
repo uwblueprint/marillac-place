@@ -4,8 +4,8 @@ import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import WidgetContainer from "../../../common/WidgetContainer";
 import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID } from "../../../../gql/example";
-import { displayDate2 } from "../../../../utils/formatDateTime";
-import { ParticipantContext } from "../../../common/ParticipantContext";
+import { displayDate2 } from "../../../../utils/formatDate";
+import { ParticipantContext } from "../../../ParticipantContext";
 import * as ROUTES from "../../../../constants/routes";
 
 export default function AnnouncementWidget() {

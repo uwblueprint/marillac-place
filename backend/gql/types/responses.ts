@@ -1,13 +1,8 @@
 import { gql } from "apollo-server-express";
 
 const responses = gql`
-  type AdminLoginResponse {
+  type LoginResponse {
     token: String!
-  }
-
-  type ParticipantLoginResponse {
-    token: String!
-    participant: Participant!
   }
 
   type GetWeeklyEarningsResponse {

@@ -6,13 +6,8 @@ import db from "../../prisma";
 import { getToday } from "../../utils/dateUtils";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 
-type AdminLoginResponse = {
+type LoginResponse = {
   token: string;
-};
-
-type ParticipantLoginResponse = {
-  token: string;
-  participant: Participant;
 };
 
 const loginResolver = {
@@ -26,7 +21,7 @@ const loginResolver = {
         role: string;
         password: string;
       }
-    ): Promise<AdminLoginResponse> => {
+    ): Promise<LoginResponse> => {
       if (role !== ROLES.ADMIN && role !== ROLES.RELIEF)
         throw new Error("invalid role");
 
@@ -54,7 +49,7 @@ const loginResolver = {
         pid: number;
         password: string;
       }
-    ): Promise<ParticipantLoginResponse> => {
+    ): Promise<LoginResponse> => {
       const today = getToday();
       const participant: Participant | null = await db.participant.findUnique({
         where: {
@@ -78,7 +73,7 @@ const loginResolver = {
       const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
         expiresIn: "12h",
       });
-      return { token, participant };
+      return { token };
     },
   },
 };

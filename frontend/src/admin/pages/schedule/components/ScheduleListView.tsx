@@ -4,9 +4,9 @@ import { CalendarEvent } from "./ScheduleTypes";
 import TaskTableTop from "./TaskTableTop";
 import TaskTableBottom from "./TaskTableBottom";
 import { DayOfWeek } from "../../../../types/task";
-import { isSameDay } from "../../../../utils/formatDateTime";
+import { isSameDay } from "../../../../utils/formatDate";
 import { weekdays } from "../../../../constants/rooms";
-import { toTitleCase } from "../../../../utils/stringUtils";
+import { toTitleCase } from "../../../../utils/stringHelpers";
 
 interface ScheduleListViewProps {
   specificTasks: CalendarEvent[];

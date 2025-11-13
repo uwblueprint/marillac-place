@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/client";
 import TaskBar from "./TaskBar";
-import { ParticipantContext } from "./ParticipantContext";
+import { ParticipantContext } from "../ParticipantContext";
 import { GET_MARILLAC_BUCKS } from "../../gql/example";
 import * as ROUTES from "../../constants/routes";
 

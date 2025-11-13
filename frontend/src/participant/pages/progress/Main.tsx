@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Box, Flex, Text, HStack } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import { ParticipantContext } from "../../common/ParticipantContext";
+import { ParticipantContext } from "../../ParticipantContext";
 import { EditGoal } from "./components/EditGoal";
 import { SetGoal } from "./components/SetGoal";
 import {

@@ -6,7 +6,7 @@ import profile from "../../../icons/announcements/profile.svg";
 import important from "../../../icons/announcements/important.svg";
 import orangepin from "../../../icons/announcements/orangepin.svg";
 import Icon from "../../../common/Icon";
-import { displayDate2 } from "../../../../utils/formatDateTime";
+import { displayDate2 } from "../../../../utils/formatDate";
 
 type ParticipantAnnouncementCardProps = {
   allRooms: boolean;

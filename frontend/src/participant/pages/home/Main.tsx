@@ -5,7 +5,7 @@ import { Flex, Text } from "@chakra-ui/react";
 // import BadgeRow from "./components/BadgeRow";
 // import { BadgeRarity } from "../../common/Badge";
 import TodoListWidget from "./components/TodoListWidget";
-import { getParticipantHomePageDateString } from "../../../utils/formatDateTime";
+import { getParticipantHomePageDateString } from "../../../utils/formatDate";
 import AnnouncementWidget from "./components/AnnouncementWidget";
 
 export default function ParticipantsHomePage() {

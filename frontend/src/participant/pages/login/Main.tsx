@@ -2,67 +2,59 @@ import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Button, Flex, Text, Input, FormControl } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
-import { isParticipant } from "../../../utils/checkRole";
-import { PARTICIPANT_LOGIN } from "../../../gql/mutations";
 import * as ROUTES from "../../../constants/routes";
-import Loading from "../../../Loading";
+import Loading from "../../../status/Loading";
+import { PARTICIPANT_LOGIN } from "../../../gql/loginRequests";
+import Error from "../../../status/Error";
+import { verifyRole } from "../../../utils/verifyRole";
+import { PARTICIPANT } from "../../../constants/roles";
 
 export default function ParticipantsLoginPage() {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [checkLoggedIn, setCheckLoggedIn] = useState(false);
 
-  const [id, setId] = useState("");
+  const [pid, setPid] = useState("");
   const [password, setPassword] = useState("");
 
-  const [error, setError] = useState("");
-
-  const [login, { loading }] = useMutation(PARTICIPANT_LOGIN, {
+  const [login, { loading: loginLoading }] = useMutation(PARTICIPANT_LOGIN, {
     onCompleted: (data) => {
-      localStorage.setItem("participant_token", data.participantLogin.token);
+      localStorage.setItem("token", data.participantLogin.token);
+      // TODO: update pid property in participant context
       navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
     },
     onError: (err: Error) => {
-      // Check if it's a network error (CORS, connection refused, etc.)
-      if (
-        err.message.includes("Failed to fetch") ||
-        err.message.includes("NetworkError") ||
-        err.message.includes("Network request failed")
-      ) {
-        setError(
-          "Unable to connect to server. Please check your internet connection and try again."
-        );
-      } else {
-        // Show the actual error message from the backend
-        setError(err.message);
-      }
+      setError(err.message);
     },
   });
 
   useEffect(() => {
-    const tokenCheck = async () => {
-      const participantUser = await isParticipant();
-      if (participantUser) {
+    const authorize = async () => {
+      const isParticipant = await verifyRole([PARTICIPANT]);
+      if (isParticipant) {
         setLoggedIn(true);
       }
-      setCheckLoggedIn(true);
+      setLoading(false);
     };
-    tokenCheck();
+    authorize();
   }, []);
 
   const handleSubmit = () => {
     setError("");
-
-    if (!id || !password) {
-      setError("Missing fields");
+    if (!pid || !password) {
+      setError("missing fields");
     } else {
-      login({ variables: { id: Number(id), password } });
+      login({ variables: { pid: Number(pid), password } });
     }
   };
 
-  if (!checkLoggedIn || loading) {
+  if (loading || loginLoading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return <Error />;
   }
 
   if (loggedIn) {
@@ -110,8 +102,8 @@ export default function ParticipantsLoginPage() {
             <Input
               variant="primary"
               type="id"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={pid}
+              onChange={(e) => setPid(e.target.value)}
               placeholder="ID #"
             />
           </FormControl>

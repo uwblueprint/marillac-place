@@ -12,7 +12,7 @@ import {
   TaskType,
   TimeOption,
 } from "../../../../types/task";
-import { toTitleCase } from "../../../../utils/stringUtils";
+import { toTitleCase } from "../../../../utils/stringHelpers";
 import { sendNotification } from "../../../../utils/sendNotification";
 
 type AddTaskModalProps = {

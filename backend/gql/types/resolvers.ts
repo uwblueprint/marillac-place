@@ -104,8 +104,8 @@ const resolvers = gql`
     ): Task!
     deleteTask(tid: Int!): Task!
 
-    adminLogin(role: String!, password: String!): AdminLoginResponse!
-    participantLogin(pid: Int!, password: String!): ParticipantLoginResponse!
+    adminLogin(role: String!, password: String!): LoginResponse!
+    participantLogin(pid: Int!, password: String!): LoginResponse!
 
     createCustomBadge(
       name: String!
