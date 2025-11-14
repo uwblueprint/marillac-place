@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import React, { useContext } from "react";
 // import { useNavigate } from "react-router-dom";
 // import { Text, Spinner, Alert, AlertIcon, Flex } from "@chakra-ui/react";

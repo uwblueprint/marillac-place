@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import { useState, useEffect } from "react";
 // import { useLazyQuery } from "@apollo/client";
 // import { CalendarEvent, AssignedTask } from "./ScheduleTypes";

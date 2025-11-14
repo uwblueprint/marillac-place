@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import React from "react";
 // import { Box } from "@chakra-ui/react";
 // import { useNavigate } from "react-router-dom";

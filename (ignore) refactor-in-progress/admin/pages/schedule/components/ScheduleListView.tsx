@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import React, { useState } from "react";
 // import { VStack, Box, Text, HStack, Button } from "@chakra-ui/react";
 // import { CalendarEvent } from "./ScheduleTypes";

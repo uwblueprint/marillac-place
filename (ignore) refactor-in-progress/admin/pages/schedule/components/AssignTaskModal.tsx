@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import { Text, Flex, Spinner } from "@chakra-ui/react";
 // import React, { useState, useEffect } from "react";
 // import { useMutation, useQuery } from "@apollo/client";

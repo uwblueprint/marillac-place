@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import React, { useEffect, useState } from "react";
 // import { Flex, Button, Text, Spinner, Box, HStack } from "@chakra-ui/react";
 // import EditIcon from "@mui/icons-material/Edit";

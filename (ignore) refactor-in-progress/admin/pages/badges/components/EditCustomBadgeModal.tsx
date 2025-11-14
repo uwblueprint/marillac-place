@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import React, { useState } from "react";
 // import { useMutation } from "@apollo/client";
 // import { EDIT_CUSTOM_BADGE } from "../../../../gql/mutations";

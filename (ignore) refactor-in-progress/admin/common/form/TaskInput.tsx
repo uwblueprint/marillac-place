@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import { Flex } from "@chakra-ui/react";
 // import React, { useEffect } from "react";
 // import CoreInput from "./CoreInput";

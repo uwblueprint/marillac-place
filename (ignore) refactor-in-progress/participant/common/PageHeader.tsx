@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import { Flex, Text, Image, Spinner } from "@chakra-ui/react";
 // import MenuIcon from "@mui/icons-material/Menu";
 // import CloseIcon from "@mui/icons-material/Close";

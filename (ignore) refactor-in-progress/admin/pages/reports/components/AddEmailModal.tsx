@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import React, { useState } from "react";
 // import { Switch, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
 // import ModalContainer from "../../../common/form/ModalContainer";

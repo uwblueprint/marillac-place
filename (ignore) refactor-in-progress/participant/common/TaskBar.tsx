@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import { Flex, Tab, TabList, Tabs, Text } from "@chakra-ui/react";
 // import React from "react";
 // import { useNavigate } from "react-router-dom";

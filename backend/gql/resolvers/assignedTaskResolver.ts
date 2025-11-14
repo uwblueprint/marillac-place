@@ -201,10 +201,15 @@ const assignedTaskResolver = {
       }
 
       if (status === TaskStatus.COMPLETE) {
-        // TODO:
-        // get task object
-        // process earning
-        // execute perfect score (required & optional), jack of all trades, first goal, individual goal badge logic
+        // TODO (mehul & victor):
+        // query the database and get the task object corresponding to the aid
+        // get how many marillac bucks the task is worth and call the process earning function with the reason being a task was completed
+        // execute perfect score required logic (check that all required tasks for this week have been completed)
+        // execute perfect score optional logic (check that 3+ optional tasks from this week have been completed)
+        // call updateBadgeLevelProgress function in the utils for the perfect score required and optional badges with inc set to 1 and pid
+        // of the participant who completed the task
+
+        // TODO: add jack of all trades, first goal, individual goal badge logic
       }
 
       return db.assignedTask.update({

@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // export interface AssignedTask {
 //   assigned_task_id: number;
 //   task_name: string;

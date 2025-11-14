@@ -1,4 +1,4 @@
-// TODO: Refactor in progress - ignore for now
+// Refactor in progress - ignore for now
 // import { Text, Flex, Image as ChakraImage } from "@chakra-ui/react";
 // import EditIcon from "@mui/icons-material/Edit";
 // import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
