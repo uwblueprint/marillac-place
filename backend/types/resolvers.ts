@@ -169,6 +169,12 @@ const resolvers = gql`
       monthly: Boolean
     ): Boolean
     deleteReportRecipient(report_recipient_id: Int!): Boolean
+    createEarningTransaction(
+      participant_id: Int!
+      transaction_date: String!
+      marillac_bucks: Int!
+      description: String
+    ): Boolean
   }
 `;
 
