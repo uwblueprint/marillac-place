@@ -61,7 +61,7 @@
 //       paddingY="15px"
 //       paddingX="20px"
 //       border="1px solid"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       borderRadius="8px"
 //       height="320px"
 //       marginRight="10px"
@@ -78,7 +78,7 @@
 //         px="2px"
 //         gap="20px"
 //       >
-//         <Text textStyle="web.h3" color="primary.700">
+//         <Text textStyle="web.h3" color="brand.teal">
 //           Rooms
 //         </Text>
 //         <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
@@ -109,7 +109,7 @@
 //               <Flex
 //                 key={room.roomNumber}
 //                 border="1px solid"
-//                 borderColor="neutral.300"
+//                 borderColor="background.border"
 //                 borderRadius="8px"
 //                 flexDir="column"
 //                 justifyContent="space-between"
@@ -119,12 +119,12 @@
 //               >
 //                 <Text
 //                   textStyle="web.s1"
-//                   bg="primary.100"
+//                   bg="background.header"
 //                   width="100%"
 //                   textAlign="center"
 //                   padding="8px"
 //                   borderBottom="1px solid"
-//                   borderColor="neutral.300"
+//                   borderColor="background.border"
 //                   borderTopRightRadius="8px"
 //                   borderTopLeftRadius="8px"
 //                 >

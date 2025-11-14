@@ -40,7 +40,7 @@
 //       width="100%"
 //       bg="neutral.100"
 //       border="1px solid"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       rounded="8px"
 //       paddingX="16px"
 //       paddingY="12px"
@@ -95,7 +95,7 @@
 //       paddingY="15px"
 //       paddingX="20px"
 //       border="1px solid"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       borderRadius="8px"
 //       flexDir="column"
 //       gap="10px"
@@ -111,7 +111,7 @@
 //         px="2px"
 //       >
 //         <Flex flexDir="row" gap="20px" alignItems="baseline">
-//           <Text textStyle="web.h3" color="primary.700">
+//           <Text textStyle="web.h3" color="brand.teal">
 //             Announcements
 //           </Text>
 //           <Text textStyle="web.b3" color="text.light.secondary">

@@ -55,7 +55,7 @@
 //         w="27px"
 //         h="27px"
 //         borderRadius="full"
-//         bg={isToday ? "secondary.700" : "transparent"}
+//         bg={isToday ? "brand.orange" : "transparent"}
 //         cursor="default"
 //         margin="0"
 //         padding="0"
@@ -143,15 +143,15 @@
 //       getTaskStatusColor(TaskStatus.EXCUSED)
 //     );
 //
-//     root.style.setProperty("--status-complete-bg", colors.actionsLight.green);
-//     root.style.setProperty("--status-assigned-bg", colors.actionsLight.blue);
-//     root.style.setProperty("--status-incomplete-bg", colors.actionsLight.red);
-//     root.style.setProperty("--status-excused-bg", colors.actionsLight.yellow);
+//     root.style.setProperty("--status-complete-bg", colors.scheduleDark.green);
+//     root.style.setProperty("--status-assigned-bg", colors.scheduleDark.blue);
+//     root.style.setProperty("--status-incomplete-bg", colors.scheduleDark.red);
+//     root.style.setProperty("--status-excused-bg", colors.scheduleDark.yellow);
 //
-//     root.style.setProperty("--status-complete-text", colors.actionsDark.green);
-//     root.style.setProperty("--status-assigned-text", colors.actionsDark.blue);
-//     root.style.setProperty("--status-incomplete-text", colors.actionsDark.red);
-//     root.style.setProperty("--status-excused-text", colors.actionsDark.yellow);
+//     root.style.setProperty("--status-complete-text", colors.scheduleDark.green);
+//     root.style.setProperty("--status-assigned-text", colors.scheduleDark.blue);
+//     root.style.setProperty("--status-incomplete-text", colors.scheduleDark.red);
+//     root.style.setProperty("--status-excused-text", colors.scheduleDark.yellow);
 //   }, []);
 //
 //   return (

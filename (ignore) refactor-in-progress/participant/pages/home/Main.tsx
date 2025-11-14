@@ -13,7 +13,7 @@
 //   return (
 //     <>
 //       <Flex w="100%" flexDir="column" mb="12px">
-//         <Text color="primary.700" textStyle="mobile.h1">
+//         <Text color="brand.teal" textStyle="mobile.h1">
 //           Welcome to Marillac Place
 //         </Text>
 //         <Text color="text.light.secondary" textStyle="mobile.h3">

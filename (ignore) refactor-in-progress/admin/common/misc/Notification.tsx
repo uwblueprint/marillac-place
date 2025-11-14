@@ -16,7 +16,7 @@
 //       transform="translateX(-50%)"
 //       border="3px solid"
 //       borderRadius="8px"
-//       borderColor="success.800"
+//       borderColor="indicate.brightGreen"
 //       zIndex="1000"
 //       paddingY="12px"
 //       paddingX="20px"
@@ -24,12 +24,12 @@
 //       alignItems="center"
 //       gap="10px"
 //       boxShadow="xl"
-//       bg="success.100"
+//       bg="indicate.lightGreen"
 //     >
-//       <Flex color="success.900">
+//       <Flex color="indicate.darkGreen">
 //         <TaskAltIcon fontSize="medium" color="inherit" />
 //       </Flex>
-//       <Text color="success.900" textStyle="web.b1" fontWeight="700">
+//       <Text color="indicate.darkGreen" textStyle="web.b1" fontWeight="700">
 //         {message}
 //       </Text>
 //     </Flex>

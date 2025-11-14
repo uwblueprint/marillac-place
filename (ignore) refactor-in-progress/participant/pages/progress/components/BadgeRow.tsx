@@ -37,7 +37,7 @@
 //         align="center"
 //         gap="14px"
 //         borderTop={isFirst ? "0" : "1px solid"}
-//         borderColor="neutral.300"
+//         borderColor="background.border"
 //         pt={isFirst ? "0" : "16px"}
 //         mb={isLast ? "0" : "16px"}
 //       >

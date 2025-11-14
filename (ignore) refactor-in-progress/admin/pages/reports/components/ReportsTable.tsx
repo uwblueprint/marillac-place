@@ -166,14 +166,14 @@
 //     <>
 //       <TableContainer
 //         border="1px solid"
-//         borderColor="neutral.300"
+//         borderColor="background.border"
 //         borderRadius="8px"
 //         mb="15px"
 //         w="100%"
 //       >
 //         <Table>
 //           <Thead>
-//             <Tr backgroundColor="neutral.200" w="100%">
+//             <Tr backgroundColor="background.tableBg" w="100%">
 //               {columns.map((col) => (
 //                 <Th width={col.width} key={col.header}>
 //                   <Flex alignItems="center" gap="8px">
@@ -194,7 +194,7 @@
 //               <Tr
 //                 key={index}
 //                 borderBottom="1px solid"
-//                 borderColor="neutral.200"
+//                 borderColor="background.tableBg"
 //                 backgroundColor={index % 2 === 0 ? "white" : "gray.50"}
 //               >
 //                 {row.map((cell, cellIndex) => (

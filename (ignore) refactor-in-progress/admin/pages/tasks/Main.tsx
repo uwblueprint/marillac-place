@@ -62,14 +62,14 @@
 //           textStyle="web.b1"
 //           fontWeight="700"
 //           color={
-//             selectedTaskType === TaskType.REQUIRED ? "primary.700" : "#000000"
+//             selectedTaskType === TaskType.REQUIRED ? "brand.teal" : "#000000"
 //           }
 //           cursor="pointer"
 //           onClick={() => setSelectedTaskType(TaskType.REQUIRED)}
 //           borderBottom={
 //             selectedTaskType === TaskType.REQUIRED ? "3px solid" : "0"
 //           }
-//           borderColor="primary.700"
+//           borderColor="brand.teal"
 //           px="12px"
 //           pb="12px"
 //         >
@@ -79,14 +79,14 @@
 //           textStyle="web.b1"
 //           fontWeight="700"
 //           color={
-//             selectedTaskType === TaskType.OPTIONAL ? "primary.700" : "#000000"
+//             selectedTaskType === TaskType.OPTIONAL ? "brand.teal" : "#000000"
 //           }
 //           cursor="pointer"
 //           onClick={() => setSelectedTaskType(TaskType.OPTIONAL)}
 //           borderBottom={
 //             selectedTaskType === TaskType.OPTIONAL ? "3px solid" : "0"
 //           }
-//           borderColor="primary.700"
+//           borderColor="brand.teal"
 //           px="12px"
 //           pb="12px"
 //         >

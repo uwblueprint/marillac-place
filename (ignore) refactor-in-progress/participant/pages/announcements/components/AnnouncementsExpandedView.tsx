@@ -166,7 +166,7 @@
 //         </Text>
 //       </Flex>
 //
-//       <Divider borderColor="neutral.300" />
+//       <Divider borderColor="background.border" />
 //
 //       <Text textStyle="mobile.b1">{announcement.message}</Text>
 //

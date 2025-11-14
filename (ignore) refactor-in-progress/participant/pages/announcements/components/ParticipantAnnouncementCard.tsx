@@ -32,7 +32,7 @@
 //     <Flex
 //       w="100%"
 //       borderTop="1px solid"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       paddingTop="12px"
 //       paddingLeft="25px"
 //       flexDir="column"

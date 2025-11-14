@@ -20,7 +20,7 @@
 //
 //   return (
 //     <Flex w="100%" flexDir="column" minHeight="fit-content">
-//       <Text textStyle="web.h2" color="primary.700" mb="10px">
+//       <Text textStyle="web.h2" color="brand.teal" mb="10px">
 //         Current Participants
 //       </Text>
 //
@@ -44,7 +44,7 @@
 //         </Grid>
 //       )}
 //
-//       <Text textStyle="web.h2" color="primary.700" mt="20px" mb="10px">
+//       <Text textStyle="web.h2" color="brand.teal" mt="20px" mb="10px">
 //         Past Participants
 //       </Text>
 //       <PastParticipantTable />

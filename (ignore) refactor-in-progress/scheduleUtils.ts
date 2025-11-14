@@ -7,13 +7,13 @@
 // export const getTaskStatusColor = (status: TaskStatus): string => {
 //   switch (status) {
 //     case TaskStatus.COMPLETE:
-//       return colors.actionsDark.green; // #0D8312
+//       return colors.scheduleDark.green; // #0D8312
 //     case TaskStatus.ASSIGNED:
-//       return colors.actionsDark.blue; // #255B9A
+//       return colors.scheduleDark.blue; // #255B9A
 //     case TaskStatus.INCOMPLETE:
-//       return colors.actionsDark.red; // #B21D2F
+//       return colors.scheduleDark.red; // #B21D2F
 //     case TaskStatus.EXCUSED:
-//       return colors.actionsDark.yellow; // #B07D18
+//       return colors.scheduleDark.yellow; // #B07D18
 //     default:
 //       return colors.text.light.disabled; // #6C707A
 //   }
@@ -23,13 +23,13 @@
 // export const getTaskStatusBgColor = (status: TaskStatus): string => {
 //   switch (status) {
 //     case TaskStatus.COMPLETE:
-//       return colors.actionsLight.green; // #CDEECE
+//       return colors.scheduleDark.green; // #CDEECE
 //     case TaskStatus.ASSIGNED:
-//       return colors.actionsLight.blue; // #C5DCF8
+//       return colors.scheduleDark.blue; // #C5DCF8
 //     case TaskStatus.INCOMPLETE:
-//       return colors.actionsLight.red; // #F8D7DB
+//       return colors.scheduleDark.red; // #F8D7DB
 //     case TaskStatus.EXCUSED:
-//       return colors.actionsLight.yellow; // #FFE5B2
+//       return colors.scheduleDark.yellow; // #FFE5B2
 //     default:
 //       return colors.neutral[100]; // #FAFAFA
 //   }

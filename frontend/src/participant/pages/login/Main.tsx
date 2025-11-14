@@ -67,7 +67,7 @@ export default function ParticipantsLoginPage() {
       h="100vh"
       alignItems="flex-start"
       justifyContent="center"
-      bg="primary.100"
+      bg="background.header"
     >
       <Flex
         width="350px"
@@ -84,11 +84,11 @@ export default function ParticipantsLoginPage() {
           width="100%"
           flexDir="column"
           gap="15px"
-          bg="neutral.0"
+          bg="background.white"
           padding="25px 15px"
           borderRadius="8px"
           border="1px"
-          borderColor="neutral.300"
+          borderColor="background.border"
         >
           <Flex flexDir="column">
             <Text textStyle="mobile.h1">Sign in</Text>

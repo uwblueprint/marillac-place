@@ -206,7 +206,7 @@
 //       </Flex>
 //
 //       {(endStay || swapParticipant) && (
-//         <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
+//         <Flex w="100%" h="1px" bg="background.border" mt="8px" />
 //       )}
 //
 //       {swapParticipant && (

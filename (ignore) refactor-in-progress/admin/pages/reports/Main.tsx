@@ -170,7 +170,7 @@
 //         justifyContent="space-between"
 //       >
 //         <Flex alignItems="center" gap="15px">
-//           <Text textStyle="web.h2" color="primary.700">
+//           <Text textStyle="web.h2" color="brand.teal">
 //             Reports
 //           </Text>
 //           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">

@@ -27,7 +27,7 @@ export default function NotFound() {
         padding="20px"
       >
         <img src="/assets/logo.png" alt="Marillac Place Logo" width="50%" />
-        <Text textStyle="web.h2" color="secondary.700" textAlign="center">
+        <Text textStyle="web.h2" color="brand.orange" textAlign="center">
           404 Page Not Found
         </Text>
         <Text textStyle="web.b2" color="text.light.primary" textAlign="center">

@@ -39,13 +39,13 @@
 //       alignItems="center"
 //       justifyContent="center"
 //       gap="10px"
-//       bg="neutral.0"
+//       bg="background.white"
 //       borderBottom="1px solid"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       flexDir="column"
 //       zIndex={100}
 //     >
-//       <Text textStyle="mobile.h2" color="primary.700">
+//       <Text textStyle="mobile.h2" color="brand.teal">
 //         ID #{participantId}
 //       </Text>
 //       <Tabs
@@ -72,8 +72,8 @@
 //               }}
 //               _selected={{
 //                 fontWeight: 700,
-//                 color: "neutral.0",
-//                 bg: "secondary.700",
+//                 color: "background.white",
+//                 bg: "brand.orange",
 //               }}
 //             >
 //               {page.label}
@@ -81,10 +81,10 @@
 //           ))}
 //         </TabList>
 //       </Tabs>
-//       <Flex w="100%" h="1px" bg="neutral.300" />
+//       <Flex w="100%" h="1px" bg="background.border" />
 //       <Text
 //         textStyle="mobile.h2"
-//         color="danger.900"
+//         color="indicate.signOut900"
 //         cursor="pointer"
 //         onClick={() => handleSignOut()}
 //       >

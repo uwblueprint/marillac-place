@@ -27,7 +27,7 @@
 //     <>
 //       <TableContainer
 //         border="1px solid"
-//         borderColor="neutral.300"
+//         borderColor="background.border"
 //         borderRadius="8px"
 //         mb="15px"
 //         w="100%"
@@ -35,7 +35,7 @@
 //         {edit && selected && editModal}
 //         <Table>
 //           <Thead>
-//             <Tr backgroundColor="neutral.200" w="100%">
+//             <Tr backgroundColor="background.tableBg" w="100%">
 //               {columns.map((col) => (
 //                 <Th width={col.width} key={col.header}>
 //                   <Flex alignItems="center" gap="8px">
@@ -54,13 +54,13 @@
 //           </Thead>
 //           <Tbody>
 //             {loading ? (
-//               <Tr outline="1px solid" outlineColor="neutral.300">
+//               <Tr outline="1px solid" outlineColor="background.border">
 //                 <Td colSpan={6} textAlign="center">
 //                   <Spinner />
 //                 </Td>
 //               </Tr>
 //             ) : error ? (
-//               <Tr outline="1px solid" outlineColor="neutral.300">
+//               <Tr outline="1px solid" outlineColor="background.border">
 //                 <Td colSpan={6}>
 //                   <Text textStyle="web.b3" color="#000000" textAlign="center">
 //                     {error.message}
@@ -72,7 +72,7 @@
 //                 <Tr
 //                   key={index}
 //                   outline={index % 2 ? "0px solid" : "1px solid"}
-//                   outlineColor="neutral.300"
+//                   outlineColor="background.border"
 //                 >
 //                   {row.map((cell, cellIndex) => (
 //                     <Td key={cellIndex}>{cell}</Td>

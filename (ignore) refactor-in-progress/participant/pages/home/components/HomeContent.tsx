@@ -70,7 +70,7 @@
 //           fontFamily="Nunito"
 //           fontWeight="700"
 //           fontSize="24px"
-//           color="primary.700"
+//           color="brand.teal"
 //         >
 //           Welcome to Marillac Place
 //         </Text>
@@ -90,7 +90,7 @@
 //         w="100%"
 //         bg="white"
 //         border="1px solid"
-//         borderColor="neutral.300"
+//         borderColor="background.border"
 //         borderRadius="8px"
 //         padding="16px"
 //         flexDir="column"

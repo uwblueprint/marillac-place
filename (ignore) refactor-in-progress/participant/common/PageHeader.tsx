@@ -43,7 +43,7 @@
 //     <Flex
 //       width="100%"
 //       height="75px"
-//       bg="primary.100"
+//       bg="background.header"
 //       padding="20px"
 //       alignItems="flex-end"
 //       justifyContent="space-between"

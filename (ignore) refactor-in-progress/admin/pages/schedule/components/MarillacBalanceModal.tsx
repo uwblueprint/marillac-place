@@ -83,7 +83,7 @@
 //           text={"$ " + currentBalance}
 //           action={() => {}}
 //           is_active
-//           text_color="primary.700"
+//           text_color="brand.teal"
 //         />
 //       </Flex>
 //

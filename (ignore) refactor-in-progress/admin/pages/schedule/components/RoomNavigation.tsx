@@ -28,11 +28,11 @@
 //           key={num}
 //           textStyle="web.b1"
 //           fontWeight="700"
-//           color={selectedRoom === num ? "primary.700" : "#000000"}
+//           color={selectedRoom === num ? "brand.teal" : "#000000"}
 //           cursor="pointer"
 //           onClick={() => onRoomChange(num)}
 //           borderBottom={selectedRoom === num ? "3px solid" : "0"}
-//           borderColor="primary.700"
+//           borderColor="brand.teal"
 //           px="12px"
 //           pb="12px"
 //         >

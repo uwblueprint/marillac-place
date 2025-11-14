@@ -50,7 +50,7 @@
 //               gap="6px"
 //               key={announcement.announcement_id}
 //             >
-//               <Divider borderColor="neutral.300" />
+//               <Divider borderColor="background.border" />
 //               <Text paddingTop="4px" textStyle="mobile.b1">
 //                 {announcement.announcement.message}
 //               </Text>

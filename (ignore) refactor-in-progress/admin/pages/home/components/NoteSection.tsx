@@ -63,7 +63,7 @@
 //       paddingX="20px"
 //       w="300px"
 //       border="1px solid"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       borderRadius="8px"
 //       flexDir="column"
 //     >
@@ -80,7 +80,7 @@
 //           alignItems="center"
 //           px="2px"
 //         >
-//           <Text textStyle="web.h3" color="primary.700">
+//           <Text textStyle="web.h3" color="brand.teal">
 //             Internal Notes
 //           </Text>
 //           <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
@@ -139,7 +139,7 @@
 //                     width="100%"
 //                     bg="neutral.100"
 //                     border="1px solid"
-//                     borderColor="neutral.300"
+//                     borderColor="background.border"
 //                     rounded="8px"
 //                     paddingX="12px"
 //                     paddingY="7px"
@@ -188,7 +188,7 @@
 //             value={newNote}
 //             onChange={(e) => setNewNote(e.target.value)}
 //             border="1px solid"
-//             borderColor="neutral.300"
+//             borderColor="background.border"
 //           />
 //
 //           <InputRightElement>

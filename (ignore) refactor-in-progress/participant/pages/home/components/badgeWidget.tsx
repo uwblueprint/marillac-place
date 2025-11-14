@@ -39,7 +39,7 @@
 //         bg="white"
 //         borderRadius="12px"
 //         border="1px solid"
-//         borderColor="neutral.300"
+//         borderColor="background.border"
 //         p="20px"
 //         mb="16px"
 //       >
@@ -63,7 +63,7 @@
 //       bg="white"
 //       borderRadius="12px"
 //       border="1px solid"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       p="20px"
 //       mb="16px"
 //       position="relative"

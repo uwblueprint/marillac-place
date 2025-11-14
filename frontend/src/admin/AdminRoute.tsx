@@ -60,9 +60,9 @@ export default function AdminRoute({ children }: AdminRouteProps) {
             left="0px"
             width="100%"
             height="55px"
-            bg="primary.100"
+            bg="background.header"
             borderBottom="1px solid"
-            borderColor="neutral.300"
+            borderColor="background.border"
             zIndex={5}
           />
           <Flex width="100%" padding="20px" mt="55px" overflow="scroll">

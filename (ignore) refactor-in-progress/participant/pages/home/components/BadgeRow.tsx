@@ -36,12 +36,12 @@
 //         {showButton && onProgressClick && (
 //           <Button
 //             variant="link"
-//             color="primary.700"
+//             color="brand.teal"
 //             textStyle="mobile.h3"
 //             textDecoration="underline"
 //             onClick={onProgressClick}
 //             _hover={{
-//               color: "primary.700",
+//               color: "brand.teal",
 //               opacity: 0.8,
 //             }}
 //           >

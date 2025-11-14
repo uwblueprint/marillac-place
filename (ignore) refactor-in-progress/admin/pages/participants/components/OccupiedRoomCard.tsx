@@ -21,7 +21,7 @@
 //     <Flex
 //       height="130px"
 //       border="1px"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       borderRadius="8px"
 //       flexDir="column"
 //       justifyContent="center"
@@ -40,8 +40,8 @@
 //         justifyContent="center"
 //         alignItems="center"
 //         borderBottom="1px"
-//         borderColor="neutral.300"
-//         bg="primary.100"
+//         borderColor="background.border"
+//         bg="background.header"
 //       >
 //         <Text textStyle="web.s1">Room {roomNumber}</Text>
 //       </Flex>

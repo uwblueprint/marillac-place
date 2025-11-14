@@ -37,7 +37,7 @@
 //   return (
 //     <VStack align="stretch" spacing={4}>
 //       <Box position="relative" width="100%">
-//         <Text textStyle="web.h3" color="primary.700" mb={2}>
+//         <Text textStyle="web.h3" color="brand.teal" mb={2}>
 //           Daily
 //         </Text>
 //         <HStack
@@ -83,7 +83,7 @@
 //       </Box>
 //
 //       <Box>
-//         <Text textStyle="web.h3" color="primary.700" mb={2}>
+//         <Text textStyle="web.h3" color="brand.teal" mb={2}>
 //           Any Day
 //         </Text>
 //

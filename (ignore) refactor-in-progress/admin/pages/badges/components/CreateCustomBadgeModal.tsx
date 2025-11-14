@@ -91,7 +91,7 @@
 //               p={2}
 //               borderRadius="8px"
 //               border="1px solid"
-//               borderColor={selectedIcon === icon ? "#3182CE" : "neutral.300"}
+//               borderColor={selectedIcon === icon ? "#3182CE" : "background.border"}
 //               bg="white"
 //               onClick={() => setSelectedIcon(icon)}
 //               _hover={{ borderColor: "#3182CE" }}

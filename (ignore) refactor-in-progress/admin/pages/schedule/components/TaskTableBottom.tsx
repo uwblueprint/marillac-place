@@ -35,14 +35,14 @@
 //     <Box overflow="hidden">
 //       <TableContainer
 //         border="1px solid"
-//         borderColor="neutral.300"
+//         borderColor="background.border"
 //         borderRadius="8px"
 //         mb="15px"
 //         w="100%"
 //       >
 //         <Table>
 //           <Thead>
-//             <Tr backgroundColor="neutral.200" w="100%">
+//             <Tr backgroundColor="background.tableBg" w="100%">
 //               <Th width="30%">
 //                 <Text textStyle="web.s1" color="#000000" textTransform="none">
 //                   Name
@@ -66,7 +66,7 @@
 //               <Tr
 //                 key={event.id}
 //                 outline={index % 2 ? "0px solid" : "1px solid"}
-//                 outlineColor="neutral.300"
+//                 outlineColor="background.border"
 //               >
 //                 <Td position="relative">
 //                   <Text textStyle="web.b3" color="#000000">

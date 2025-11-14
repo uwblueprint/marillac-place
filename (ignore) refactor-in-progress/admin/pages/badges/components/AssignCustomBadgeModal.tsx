@@ -133,7 +133,7 @@
 //         width="100%"
 //       />
 //
-//       <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
+//       <Flex w="100%" h="1px" bg="background.border" mt="8px" />
 //
 //       <Text textStyle="web.s1" color="text.light.secondary">
 //         Choose Room(s)

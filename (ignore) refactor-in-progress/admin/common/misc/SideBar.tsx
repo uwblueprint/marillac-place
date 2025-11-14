@@ -26,8 +26,8 @@
 //       onClick={handleClick}
 //       _selected={{
 //         fontWeight: 700,
-//         color: "neutral.0",
-//         bg: "secondary.700",
+//         color: "background.white",
+//         bg: "brand.orange",
 //       }}
 //     >
 //       {label}
@@ -86,8 +86,8 @@
 //       top={0}
 //       left={0}
 //       borderRight="1px"
-//       borderRightColor="neutral.300"
-//       bg="neutral.0"
+//       borderRightColor="background.border"
+//       bg="background.white"
 //       padding="25px 20px"
 //       display="flex"
 //       flexDirection="column"
@@ -119,7 +119,7 @@
 //         text="Sign Out"
 //         action={() => setSignOut(true)}
 //         is_active={signOut}
-//         text_color="danger.900"
+//         text_color="indicate.signOut900"
 //       />
 //
 //       {signOut && <SignOutPopUp cancel={() => setSignOut(false)} />}

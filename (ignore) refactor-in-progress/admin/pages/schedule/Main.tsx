@@ -61,7 +61,7 @@
 //       <Box w="100%" flex={1} display="flex" flexDirection="column">
 //         {loading ? (
 //           <Flex justify="center" align="center" h="400px">
-//             <Spinner color="primary.700" size="lg" />
+//             <Spinner color="brand.teal" size="lg" />
 //           </Flex>
 //         ) : error ? (
 //           <Flex justify="center" align="center" h="400px">
@@ -92,7 +92,7 @@
 //             {/* Top Header: Month, Week Navigation, M-Bucks */}
 //             <Flex justify="space-between" align="center" mb="15px">
 //               <Flex align="center" gap={4}>
-//                 <Text textStyle="web.h2" color="primary.700">
+//                 <Text textStyle="web.h2" color="brand.teal">
 //                   {moment(currentDate).format("MMMM YYYY").toUpperCase()}
 //                 </Text>
 //

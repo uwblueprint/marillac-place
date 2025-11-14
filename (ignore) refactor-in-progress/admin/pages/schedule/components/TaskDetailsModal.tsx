@@ -199,7 +199,7 @@
 //               </Text>
 //             </Flex>
 //
-//             <Flex w="100%" h="1px" bg="neutral.300" mt="3px" />
+//             <Flex w="100%" h="1px" bg="background.border" mt="3px" />
 //
 //             <Text textStyle="web.s1" color="text.light.secondary">
 //               Select Days

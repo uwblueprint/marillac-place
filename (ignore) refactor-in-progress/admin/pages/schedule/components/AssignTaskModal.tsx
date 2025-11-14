@@ -205,7 +205,7 @@
 //             )}
 //           </Flex>
 //
-//           <Flex w="100%" h="1px" bg="neutral.300" mt="3px" />
+//           <Flex w="100%" h="1px" bg="background.border" mt="3px" />
 //
 //           {taskType === TaskType.INDIVIDUAL_GOAL && (
 //             <>

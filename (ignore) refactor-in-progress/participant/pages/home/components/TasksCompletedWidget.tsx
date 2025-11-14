@@ -78,7 +78,7 @@
 //       w="100%"
 //       bg="white"
 //       border="1px solid"
-//       borderColor="neutral.300"
+//       borderColor="background.border"
 //       borderRadius="8px"
 //       padding="16px"
 //       flexDir="column"
