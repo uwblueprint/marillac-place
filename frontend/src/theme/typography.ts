@@ -1,5 +1,7 @@
+// TODO (calista): 
+// Go over Figma design update & categorize text styles
+
 import { defineStyleConfig } from "@chakra-ui/react";
-// TODO: update, apply & properly documenttext styles
 
 export const Text = defineStyleConfig({
   baseStyle: {

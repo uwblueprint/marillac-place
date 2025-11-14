@@ -1,1 +1,1 @@
-TODO: Import remaining SVGs from Figma
+TODO (calista): Import remaining SVGs from Figma

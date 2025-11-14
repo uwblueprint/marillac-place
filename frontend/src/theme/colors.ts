@@ -1,4 +1,6 @@
-// TODO: update, apply & properly document colors definition
+// TODO (calista): 
+// go over Figma design update & categorize colors definition
+
 const colors = {
   task_status: {
     complete: "#0D8312",
