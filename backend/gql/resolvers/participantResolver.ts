@@ -5,7 +5,7 @@ import { initBadgeLevelProgress } from "../../utils/badgeUtils";
 
 const participantResolver = {
   Query: {
-    // TODO: write query that gets participant by pid
+    // TODO (yan): write a query that gets participant by pid
     getCurrentParticipants: async (): Promise<Participant[]> => {
       const today = getToday();
       return db.participant.findMany({

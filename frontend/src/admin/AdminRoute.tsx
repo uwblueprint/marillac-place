@@ -13,9 +13,9 @@ type AdminRouteProps = {
 };
 
 export default function AdminRoute({ children }: AdminRouteProps) {
-  // TODO:
+  // TODO (yan):
   // call api to get current participants
-  // update roomToParticipant propety in admin context
+  // update roomToParticipant property in admin context by mapping each participant's pid to their room number
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(
