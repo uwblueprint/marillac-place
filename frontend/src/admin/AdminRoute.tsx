@@ -5,6 +5,11 @@ import { verifyRole } from "../helpers/verifyRole";
 import { ADMIN, RELIEF } from "../constants/roles";
 import Loading from "../ui/screens/LoadingScreen";
 import { ADMIN_LOGIN_PAGE } from "../constants/routes";
+import { GET_CURRENT_PARTICIPANTS } from "../gql/participantRequests";
+import { useLazyQuery } from "@apollo/client";
+import { AdminContext } from "./AdminContext";
+import { useContext } from "react";
+import Error from "../ui/screens/ErrorScreen";
 import NotificationContainer from "../ui/containers/NotificationContainer";
 import AdminMenu from "./AdminMenu";
 
@@ -13,14 +18,31 @@ type AdminRouteProps = {
 };
 
 export default function AdminRoute({ children }: AdminRouteProps) {
-  // TODO (yan):
-  // call api to get current participants
-  // update roomToParticipant property in admin context by mapping each participant's pid to their room number
+  const adminContext = useContext(AdminContext);
+
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [notification, setNotification] = useState(
     localStorage.getItem("notification")
   );
+  
+  const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
+    onCompleted: (data) => {
+      if (!data || !data.getCurrentParticipants || !adminContext) {
+        setError("error fetching participants for context");
+        return;
+      }
+      const roomToParticipantMap: Record<number, number> = {};
+      data.getCurrentParticipants.forEach((participant: any) => {
+        roomToParticipantMap[participant.room] = participant.pid;
+      });
+      adminContext.setRoomToParticipant(roomToParticipantMap);
+    },
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
 
   useEffect(() => {
     const authorize = async () => {
@@ -33,8 +55,20 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     authorize();
   }, []);
 
+  useEffect(() => {
+    if (authorized) {
+      setLoading(true);
+      getCurrentParticipants();
+      setLoading(false);
+    }
+  }, [authorized]);
+
   if (loading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return <Error />;
   }
 
   if (!authorized) {
