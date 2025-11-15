@@ -53,7 +53,9 @@ const earnedCustomBadgeResolver = {
         description: string;
       }
     ): Promise<EarnedCustomBadge> => {
-      // TODO: modify this endpoint to receive a value input field and process it as an earning
+      // TODO: 
+      // modify this endpoint to receive a value input field and process it as an earning (helper function exists in transactionUtils.ts)
+      // make sure to update the resolver types as well to include the value input field
       return db.earnedCustomBadge.create({
         data: { pid, name, icon, description },
       });

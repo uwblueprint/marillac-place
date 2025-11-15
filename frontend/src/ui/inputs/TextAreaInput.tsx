@@ -1,25 +1,13 @@
-// TODO: Refactor the dropdown to match the Figma design
-
 import React from "react";
-import {
-  FormControl,
-  Text,
-  Select,
-} from "@chakra-ui/react";
+import { FormControl, Text, Textarea } from "@chakra-ui/react";
 import { InputProps } from "../../types";
 
-type DropdownInputProps = InputProps & {
-  value_options: Record<string, string>;
-};
-
-export default function DropdownInput({
+export default function TextAreaInput({
   label,
   current_value,
   update_action,
   size,
-  placeholder = "Please Select",
-  value_options,
-}: DropdownInputProps) {
+}: InputProps) {
   const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
@@ -28,11 +16,13 @@ export default function DropdownInput({
           {label}
         </Text>
       )}
-      <Select
-        value={current_value ?? ""}
+      <Textarea
+        value={current_value}
         onChange={(e) => update_action(e.target.value)}
         width={width}
-        height="32px"
+        height="75px"
+        paddingX="12px"
+        paddingY="8px"
         border="1px"
         borderColor="#C5C8D8"
         borderRadius="8px"
@@ -44,14 +34,7 @@ export default function DropdownInput({
           borderColor: "#C5C8D8",
           boxShadow: "none",
         }}
-      >
-        <option value="">{placeholder}</option>
-        {Object.entries(value_options).map(([key, value], index) => (
-          <option key={index} value={value}>
-            {key}
-          </option>
-        ))}
-      </Select>
+      />
     </FormControl>
   );
 }

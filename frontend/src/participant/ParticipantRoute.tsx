@@ -10,7 +10,7 @@ import { useLazyQuery } from "@apollo/client";
 import { ParticipantContext } from "./ParticipantContext";
 import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
 import Error from "../ui/screens/ErrorScreen";
-// import ParticipantPageHeader from "../(ignore) refactor-in-progress/participant/common/PageHeader";
+import ParticipantMenu from "./ParticipantMenu";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
@@ -79,7 +79,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       bg="neutral.100"
     >
       <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column">
-        {/* <ParticipantPageHeader /> */}
+        <ParticipantMenu />
         <Flex
           flexDir="column"
           width="100%"

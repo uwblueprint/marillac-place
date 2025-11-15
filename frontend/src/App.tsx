@@ -1,6 +1,7 @@
 import React from "react";
 import {
   BrowserRouter as Router,
+  Outlet,
   Route,
   Routes
 } from "react-router-dom";
@@ -10,19 +11,19 @@ import { createUploadLink } from "apollo-upload-client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 import AdminLoginPage from "./admin/pages/login/Main";
-// import AdminHomePage from "./(ignore) refactor-in-progress/admin/pages/home/Main";
-// import AdminSchedulePage from "./(ignore) refactor-in-progress/admin/pages/schedule/Main";
-// import AdminAnnouncementsPage from "./(ignore) refactor-in-progress/admin/pages/announcements/Main";
-// import AdminParticipantsPage from "./(ignore) refactor-in-progress/admin/pages/participants/Main";
-// import AdminTasksPage from "./(ignore) refactor-in-progress/admin/pages/tasks/Main";
-// import AdminBadgesPage from "./(ignore) refactor-in-progress/admin/pages/badges/Main";
-// import AdminReportsPage from "./(ignore) refactor-in-progress/admin/pages/reports/Main";
+import AdminHomePage from "./admin/pages/home/Main";
+// import AdminSchedulePage from "./admin/pages/schedule/Main";
+// import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
+// import AdminParticipantsPage from "./admin/pages/participants/Main";
+// import AdminTasksPage from "./admin/pages/tasks/Main";
+// import AdminBadgesPage from "./admin/pages/badges/Main";
+// import AdminReportsPage from "./admin/pages/reports/Main";
 
 import ParticipantLoginPage from "./participant/pages/login/Main";
-// import ParticipantHomePage from "./(ignore) refactor-in-progress/participant/pages/home/Main";
-// import ParticipantSchedulePage from "./(ignore) refactor-in-progress/participant/pages/schedule/Main";
-// import ParticipantAnnouncementsPage from "./(ignore) refactor-in-progress/participant/pages/announcements/Main";
-// import ParticipantProgressPage from "./(ignore) refactor-in-progress/participant/pages/progress/Main";
+// import ParticipantHomePage from "./participant/pages/home/Main";
+// import ParticipantSchedulePage from "./participant/pages/schedule/Main";
+// import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
+// import ParticipantProgressPage from "./participant/pages/progress/Main";
 
 import * as ROUTES from "./constants/routes";
 import AdminRoute from "./admin/AdminRoute";
@@ -43,12 +44,7 @@ function initApolloClient() {
   const header = setContext(async (_, { headers }) => {
     const path = window.location.pathname.split("/");
     let token = null;
-    if (path.length >= 2 && path[1] === "admin") {
-      token = localStorage.getItem("admin_token");
-    } else {
-      token = localStorage.getItem("participant_token");
-    }
-
+    token = localStorage.getItem("token");
     return {
       headers: {
         ...headers,
@@ -65,6 +61,18 @@ function initApolloClient() {
   return apolloClient;
 }
 
+const AdminLayout = (): React.ReactElement => (
+  <AdminProvider>
+    <Outlet />
+  </AdminProvider>
+);
+
+const ParticipantLayout = (): React.ReactElement => (
+  <ParticipantProvider>
+    <Outlet />
+  </ParticipantProvider>
+);
+
 const App = (): React.ReactElement => {
   const theme = extendTheme({
     colors,
@@ -77,13 +85,13 @@ const App = (): React.ReactElement => {
     <ApolloProvider client={apolloClient}>
       <ChakraProvider theme={theme}>
         <Router>
-          <AdminProvider>
-            <Routes>
+          <Routes>
+            <Route element={<AdminLayout />}>
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
                 element={<AdminLoginPage />}
               />
-              {/* <Route
+              <Route
                 path={ROUTES.ADMIN_HOME_PAGE}
                 element={
                   <AdminRoute>
@@ -91,7 +99,7 @@ const App = (): React.ReactElement => {
                   </AdminRoute>
                 }
               />
-              <Route
+              {/* <Route
                 path={ROUTES.ADMIN_SCHEDULE_PAGE}
                 element={
                   <AdminRoute>
@@ -139,11 +147,9 @@ const App = (): React.ReactElement => {
                   </AdminRoute>
                 }
               /> */}
-            </Routes>
-          </AdminProvider>
+            </Route>
 
-          <ParticipantProvider>
-            <Routes>
+            <Route element={<ParticipantLayout />}>
               <Route
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
                 element={<ParticipantLoginPage />}
@@ -180,10 +186,8 @@ const App = (): React.ReactElement => {
                   </ParticipantRoute>
                 }
               /> */}
-            </Routes>
-          </ParticipantProvider>
+            </Route>
 
-          <Routes>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

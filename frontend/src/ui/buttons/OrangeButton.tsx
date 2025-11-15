@@ -1,8 +1,13 @@
 import React from "react";
-import { Button, Text } from "@chakra-ui/react";
+import { Button, Flex, Text } from "@chakra-ui/react";
 import { ButtonProps } from "../../types";
 
-export default function OrangeButton({ text, action, is_active }: ButtonProps) {
+export default function OrangeButton({ 
+  label, 
+  action, 
+  is_active,
+  icon,
+}: ButtonProps) {
   return (
     <Button
       onClick={action}
@@ -25,9 +30,12 @@ export default function OrangeButton({ text, action, is_active }: ButtonProps) {
         bg: "#D76A3B",
       }}
     >
-      <Text textStyle="web.s1" color="#FFFFFF">
-        {text}
-      </Text>
+      <Flex alignItems="center" gap="5px">
+        {icon}
+        <Text textStyle="web.s1" color="#FFFFFF">
+          {label}
+        </Text>
+      </Flex>
     </Button>
   );
 }
