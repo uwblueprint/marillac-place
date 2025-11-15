@@ -5,6 +5,11 @@ import { verifyRole } from "../helpers/verifyRole";
 import { PARTICIPANT } from "../constants/roles";
 import Loading from "../ui/screens/LoadingScreen";
 import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
+import { useContext } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { getParticipantId } from "../helpers/verifyRole";
+import { ParticipantContext } from "./ParticipantContext";
+import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
 // import ParticipantPageHeader from "../(ignore) refactor-in-progress/participant/common/PageHeader";
 
 type ParticipantRouteProps = {
@@ -12,12 +17,28 @@ type ParticipantRouteProps = {
 };
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
-  // TODO (yan):
-  // call api to get participant by id
-  // update room and balance properties in participant context for that participant
+  const participantContext = useContext(ParticipantContext);
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const [getParticipantByPid] = useLazyQuery(GET_PARTICIPANT_BY_PID, {
+    onCompleted: (data) => {
+      if (data?.getParticipantByPid && participantContext) {
+        participantContext.setPid(data.getParticipantByPid.pid);
+        participantContext.setRoom(data.getParticipantByPid.room);
+        participantContext.setBalance(data.getParticipantByPid.balance);
+      }
+      else { 
+        console.error("Error fetching participant");
+      }
+      setLoading(false);
+    },
+    onError: (error) => {
+      console.error("Error fetching participant:", error);
+      setLoading(false);
+    },
+  });
+  
   useEffect(() => {
     const authorize = async () => {
       const isParticipant = await verifyRole([PARTICIPANT]);
@@ -28,6 +49,19 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
     };
     authorize();
   }, []);
+
+  useEffect(() => {
+    const fetchParticipantData = async () => {
+      if (authorized) {
+        const pid = await getParticipantId();
+        if (pid) {
+          setLoading(true);
+          getParticipantByPid({ variables: { pid } });
+        }
+      }
+    };
+    fetchParticipantData();
+  }, [authorized, getParticipantByPid]);
 
   if (loading) {
     return <Loading />;

@@ -5,7 +5,16 @@ import { initBadgeLevelProgress } from "../../utils/badgeUtils";
 
 const participantResolver = {
   Query: {
-    // TODO (yan): write a query that gets participant by pid
+    getParticipantByPid: async (
+      _parent: undefined,
+      { pid }: { pid: number }
+    ): Promise<Participant> => {
+      const participant = await db.participant.findUnique({
+        where: { participant_id: pid },
+      });
+      if (!participant) throw new Error("participant not found");
+      return participant as Participant;
+    },
     getCurrentParticipants: async (): Promise<Participant[]> => {
       const today = getToday();
       return db.participant.findMany({
