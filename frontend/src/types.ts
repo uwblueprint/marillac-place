@@ -1,31 +1,13 @@
 export type ButtonProps = {
-  text: string;
+  label: string;
   action: () => void;
   is_active: boolean;
-};
-
-export type ModalProps = {
-  title: string;
-  submit_text: string;
-  submit_action: () => void;
-  cancel_action: () => void;
-  children: React.ReactNode;
-  error?: string;
+  icon?: JSX.Element;
 };
 
 export type InputProps = {
   label: string;
   current_value: any;
-  action: any;
-  width?: string;
-};
-
-export type TableProps = {
-  loading: boolean;
-  edit: boolean;
-  selected: any;
-  error: any;
-  columns: { header: string; width: string; sort?: JSX.Element }[];
-  rows: JSX.Element[][];
-  editModal: JSX.Element | null;
+  update_action: React.Dispatch<React.SetStateAction<any>>;
+  size: "small" | "medium" | "large";
 };

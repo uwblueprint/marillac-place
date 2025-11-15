@@ -21,7 +21,7 @@ export default function ParticipantsLoginPage() {
   const [login, { loading: loginLoading }] = useMutation(PARTICIPANT_LOGIN, {
     onCompleted: (data) => {
       localStorage.setItem("token", data.participantLogin.token);
-      // TODO: update pid property in participant context
+      // TODO: get pid from token and store it in participant context
       navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
     },
     onError: (err: Error) => {

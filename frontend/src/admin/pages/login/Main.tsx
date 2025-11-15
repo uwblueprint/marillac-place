@@ -15,6 +15,7 @@ import Loading from "../../../ui/screens/LoadingScreen";
 import { ADMIN, RELIEF } from "../../../constants/roles";
 import { verifyRole } from "../../../helpers/verifyRole";
 import Error from "../../../ui/screens/ErrorScreen";
+import FixedInput from "../../../ui/inputs/FixedInput";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function AdminLoginPage() {
   const [login, { loading: loginLoading }] = useMutation(ADMIN_LOGIN, {
     onCompleted: (data) => {
       localStorage.setItem("token", data.adminLogin.token);
-      // TODO: set role property in admin context
+      // TODO: get role from token and store it in admin context
       navigate(ADMIN_HOME_PAGE);
     },
     onError: (err: Error) => {
