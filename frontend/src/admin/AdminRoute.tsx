@@ -9,6 +9,7 @@ import { GET_CURRENT_PARTICIPANTS } from "../gql/participantRequests";
 import { useLazyQuery } from "@apollo/client";
 import { AdminContext } from "./AdminContext";
 import { useContext } from "react";
+import Error from "../ui/screens/ErrorScreen";
 // import SideBar from "../(ignore) refactor-in-progress/admin/common/misc/SideBar";
 // import Notification from "../(ignore) refactor-in-progress/admin/common/misc/Notification";
 
@@ -18,29 +19,30 @@ type AdminRouteProps = {
 
 export default function AdminRoute({ children }: AdminRouteProps) {
   const adminContext = useContext(AdminContext);
-  
-  const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
-    onCompleted: (data) => {
-      if (data?.getCurrentParticipants && adminContext) {
-        const roomToParticipantMap: Record<number, number> = {};
-        data.getCurrentParticipants.forEach((participant: any) => {
-          roomToParticipantMap[participant.room] = participant.pid;
-        });
-        adminContext.setRoomToParticipant(roomToParticipantMap);
-      }
-      setLoading(false);
-    },
-    onError: (error) => {
-      console.error("Error fetching participants:", error);
-      setLoading(false);
-    },
-  });
 
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [notification, setNotification] = useState(
     localStorage.getItem("notification")
   );
+  
+  const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
+    onCompleted: (data) => {
+      if (!data || !data.getCurrentParticipants || !adminContext) {
+        setError("error fetching participants for context");
+        return;
+      }
+      const roomToParticipantMap: Record<number, number> = {};
+      data.getCurrentParticipants.forEach((participant: any) => {
+        roomToParticipantMap[participant.room] = participant.pid;
+      });
+      adminContext.setRoomToParticipant(roomToParticipantMap);
+    },
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
 
   useEffect(() => {
     const authorize = async () => {
@@ -57,11 +59,16 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     if (authorized) {
       setLoading(true);
       getCurrentParticipants();
+      setLoading(false);
     }
-  }, [authorized, getCurrentParticipants]);
+  }, [authorized]);
 
   if (loading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return <Error />;
   }
 
   if (!authorized) {

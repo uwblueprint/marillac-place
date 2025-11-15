@@ -37,6 +37,7 @@ export const GET_PARTICIPANT_BY_PID = gql`
       total_earnings
       arrival
       departure
+      password
     }
   }
 `;

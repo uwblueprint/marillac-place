@@ -24,6 +24,7 @@ const resolvers = gql`
 
     getWeeklyEarnings(pid: Int!): GetWeeklyEarningsResponse!
 
+    getParticipantByPid(pid: Int!): Participant!
     getCurrentParticipants: [Participant!]!
     getPastParticipants: [Participant!]!
 
@@ -38,7 +39,6 @@ const resolvers = gql`
 
     getAchievedBadgeLevels(pid: Int!): [AchievedBadgeLevel!]!
 
-    getParticipantByPid(pid: Int!): Participant!
   }
 
   type Mutation {

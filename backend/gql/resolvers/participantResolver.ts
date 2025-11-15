@@ -10,10 +10,10 @@ const participantResolver = {
       { pid }: { pid: number }
     ): Promise<Participant> => {
       const participant = await db.participant.findUnique({
-        where: { participant_id: pid },
+        where: { pid },
       });
       if (!participant) throw new Error("participant not found");
-      return participant as Participant;
+      return participant;
     },
     getCurrentParticipants: async (): Promise<Participant[]> => {
       const today = getToday();
