@@ -1,6 +1,9 @@
 import { AssignedTask, TaskStatus, TaskType } from "@prisma/client";
+import { startOfWeek, endOfWeek } from "date-fns";
 import db from "../../prisma";
 import { getBeginningOfWeek, getToday } from "../../utils/dateUtils";
+import processEarning from "../../utils/transactionUtils";
+import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 
 const assignedTaskResolver = {
   Query: {
@@ -200,14 +203,75 @@ const assignedTaskResolver = {
         throw new Error("invalid status update");
       }
 
+      // query the database and get the task object corresponding to the aid
+      const assignedTask = await db.assignedTask.findUnique({
+        where: { assigned_task_id: aid },
+      });
+
+      if (assignedTask === null) {
+        throw new Error("assigned task not found");
+      }
+
       if (status === TaskStatus.COMPLETE) {
-        // TODO (mehul & victor):
-        // query the database and get the task object corresponding to the aid
         // get how many marillac bucks the task is worth and call the process earning function with the reason being a task was completed
+        await processEarning(
+          assignedTask.participant_id,
+          assignedTask.marillac_bucks_addition,
+          `Completed task: ${assignedTask.goal_name}`
+        );
+
+        const today = new Date();
+        const weekStart = startOfWeek(today);
+        const weekEnd = endOfWeek(today);
+
         // execute perfect score required logic (check that all required tasks for this week have been completed)
+        if (assignedTask.task_type === TaskType.REQUIRED) {
+          const weeklyRequiredTasks = await db.assignedTask.findMany({
+            where: {
+              participant_id: assignedTask.participant_id,
+              start_date: { lte: weekEnd },
+              end_date: { gte: weekStart },
+              task_type: TaskType.REQUIRED,
+            },
+          });
+
+          if (
+            weeklyRequiredTasks.length > 0 &&
+            weeklyRequiredTasks.every(
+              (task) => task.task_status === TaskStatus.COMPLETE
+            )
+          ) {
+            // call updateBadgeLevelProgress function in the utils for the perfect score required
+            await updateBadgeLevelProgress(
+              "Perfect Score Badge for Required Tasks",
+              assignedTask.participant_id,
+              1
+            );
+          }
+        }
         // execute perfect score optional logic (check that 3+ optional tasks from this week have been completed)
-        // call updateBadgeLevelProgress function in the utils for the perfect score required and optional badges with inc set to 1 and pid
-        // of the participant who completed the task
+        else if (assignedTask.task_type === TaskType.OPTIONAL) {
+          const numOfWeeklyCompletedOptionalTasks = await db.assignedTask.count(
+            {
+              where: {
+                participant_id: assignedTask.participant_id,
+                start_date: { lte: weekEnd },
+                end_date: { gte: weekStart },
+                task_type: TaskType.OPTIONAL,
+                task_status: TaskStatus.COMPLETE,
+              },
+            }
+          );
+
+          if (numOfWeeklyCompletedOptionalTasks === 2) {
+            // call updateBadgeLevelProgress function in the utils for optional badges
+            await updateBadgeLevelProgress(
+              "Perfect Score Badge for Optional Tasks",
+              assignedTask.participant_id,
+              1
+            );
+          }
+        }
 
         // TODO: add jack of all trades, first goal, individual goal badge logic
       }
