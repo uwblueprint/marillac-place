@@ -11,9 +11,11 @@ export default function TextInput({
   const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
-      <Text textStyle="web.s1" color="text.light.secondary">
-        {label}
-      </Text>
+      {label && (
+        <Text textStyle="web.s1" color="text.light.secondary">
+          {label}
+        </Text>
+      )}
       <Input
         type="text"
         value={current_value}

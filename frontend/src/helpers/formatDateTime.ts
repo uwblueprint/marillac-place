@@ -22,7 +22,7 @@ export function formatTimeInputValue(date: Date): string {
 }
 
 // Converts strings in the format "YYYY-MM-DD" and "HH:MM" from local timezone to a Date object in UTC
-export function parseDateTimeInputValue(date: string, time: string = "00:00"): Date {
+export function parseDateTimeInputValue(date: string, time = "00:00"): Date {
     const [yearStr, monthStr, dayStr] = date.split("-");
     const year = Number(yearStr);
     const month = Number(monthStr) - 1;
@@ -33,4 +33,13 @@ export function parseDateTimeInputValue(date: string, time: string = "00:00"): D
     const minute = Number(minuteStr);
   
     return new Date(year, month, day, hour, minute);
+}
+
+// Gets today's date in the format "January 1, 2025" in the local timezone
+export function getTodayDateString(): string {
+  return new Date().toLocaleDateString("en-CA", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }

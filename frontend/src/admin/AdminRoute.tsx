@@ -6,8 +6,7 @@ import { ADMIN, RELIEF } from "../constants/roles";
 import Loading from "../ui/screens/LoadingScreen";
 import { ADMIN_LOGIN_PAGE } from "../constants/routes";
 import NotificationContainer from "../ui/containers/NotificationContainer";
-// import SideBar from "../(ignore) refactor-in-progress/admin/common/misc/SideBar";
-// import Notification from "../(ignore) refactor-in-progress/admin/common/misc/Notification";
+import AdminMenu from "./AdminMenu";
 
 type AdminRouteProps = {
   children: React.ReactElement;
@@ -53,8 +52,8 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     <Flex alignItems="center" justifyContent="center">
       <Flex position="relative" width="100vw" maxWidth="1400px" height="100vh">
         {notification && <NotificationContainer message={notification} />}
-        {/* <SideBar /> */}
-        <Flex width="100%" height="100%" ml="250px" position="relative">
+        <AdminMenu />
+        <Flex width="calc(100% - 250px)" height="100%" ml="250px" position="relative">
           <Flex
             position="absolute"
             top="0px"
@@ -66,7 +65,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
             borderColor="neutral.300"
             zIndex={5}
           />
-          <Flex width="100%" padding="20px" mt="55px" overflow="scroll">
+          <Flex width="100%" height="calc(100% - 55px)" padding="20px" mt="55px" overflow="scroll">
             {children}
           </Flex>
         </Flex>

@@ -11,9 +11,11 @@ export default function TextAreaInput({
   const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
-      <Text textStyle="web.s1" color="text.light.secondary">
-        {label}
-      </Text>
+      {label && (
+        <Text textStyle="web.s1" color="text.light.secondary">
+          {label}
+        </Text>
+      )}
       <Textarea
         value={current_value}
         onChange={(e) => update_action(e.target.value)}

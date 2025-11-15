@@ -20,9 +20,11 @@ export default function SelectInput({
 }: SelectInputProps) {
   return (
     <FormControl>
-      <Text textStyle="web.s1" color="text.light.secondary">
-        {label}
-      </Text>
+      {label && (
+        <Text textStyle="web.s1" color="text.light.secondary">
+          {label}
+        </Text>
+      )}
       <RadioGroup value={current_value} onChange={(selected) => update_action(selected)}>
         <Stack direction="column" spacing={0.5}>
           {Object.entries(value_options).map(([key, value], index) => (

@@ -15,7 +15,10 @@ import Loading from "../../../ui/screens/LoadingScreen";
 import { ADMIN, RELIEF } from "../../../constants/roles";
 import { verifyRole } from "../../../helpers/verifyRole";
 import Error from "../../../ui/screens/ErrorScreen";
-import FixedInput from "../../../ui/inputs/FixedInput";
+import OrangeButton from "../../../ui/buttons/OrangeButton";
+import DropdownInput from "../../../ui/inputs/DropdownInput";
+import PasswordInput from "../../../ui/inputs/PasswordInput";
+import WidgetContainer from "../../../ui/containers/WidgetContainer";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
@@ -78,60 +81,47 @@ export default function AdminLoginPage() {
       bg="neutral.0"
     >
       <Flex
-        width="900px"
-        h="450px"
+        width="850px"
+        h="400px"
         bg="primary.100"
         borderRadius="8px"
         boxShadow="lg"
         flexDir="row"
         alignItems="center"
         justifyContent="space-around"
+        paddingX="16px"
       >
-        <Flex width="30%" marginLeft="3vw">
-          <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
-        </Flex>
+        <img width="30%" src="/assets/logo.png" alt="Marillac Place Logo" />
 
-        <Flex
-          width="400px"
-          p="40px"
-          borderRadius="8px"
-          border="1px"
-          borderColor="neutral.300"
-          bg="neutral.0"
-          flexDir="column"
-          alignItems="left"
-          justifyContent="center"
-          gap="20px"
+        <WidgetContainer
+          paddingX="24px"
+          paddingY="28px"
         >
           <Flex flexDir="column">
-            <Text textStyle="web.h1">Sign in</Text>
-
-            <Text textStyle="web.b1">Please enter your login information.</Text>
+            <Text textStyle="web.h2">Sign in</Text>
+            <Text textStyle="web.b2">Please enter your login information.</Text>
           </Flex>
 
-          <Flex flexDir="column" gap="10px">
-            <FormControl>
-              <Select
-                variant="primary"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                placeholder="Role"
-              >
-                <option value={ADMIN}>Administrative Staff</option>
-                <option value={RELIEF}>Relief Staff</option>
-              </Select>
-            </FormControl>
+          <Flex flexDir="column" gap="8px" marginY="16px">
+            <DropdownInput
+              current_value={role}
+              update_action={setRole}
+              size="large"
+              placeholder="Role"
+              value_options={{
+                "Administrative Staff": ADMIN,
+                "Relief Staff": RELIEF,
+              }}
+            />
 
-            <FormControl>
-              <Input
-                variant="primary"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-              />
-            </FormControl>
+            <PasswordInput
+              current_value={password}
+              update_action={setPassword}
+              size="large"
+              placeholder="Password"
+            />
 
+            {/* TODO: move error message closer to sign in button */}
             {error && (
               <Text textStyle="web.b2" fontWeight="600" color="#E30000">
                 {error}
@@ -139,18 +129,12 @@ export default function AdminLoginPage() {
             )}
           </Flex>
 
-          <Button
-            width="100%"
-            variant="primaryFilled"
-            borderRadius="full"
-            fontWeight="700"
-            fontSize="16px"
-            onClick={handleSubmit}
-            isLoading={loading}
-          >
-            Sign in
-          </Button>
-        </Flex>
+          <OrangeButton
+            label="Sign in"
+            action={handleSubmit}
+            is_active={false}
+          />
+        </WidgetContainer>
       </Flex>
     </Flex>
   );

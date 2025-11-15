@@ -5,19 +5,23 @@ import { InputProps } from "../../types";
 export default function NumberInput({
   label,
   current_value,
+  placeholder,
   update_action,
   size,
 }: InputProps) {
   const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
-      <Text textStyle="web.s1" color="text.light.secondary">
-        {label}
-      </Text>
+      {label && (
+        <Text textStyle="web.s1" color="text.light.secondary">
+          {label}
+        </Text>
+      )}
       <Input
         type="number"
-        value={current_value}
-        onChange={(e) => update_action(Number(e.target.value))}
+        value={current_value ? String(current_value) : ""}
+        placeholder={placeholder}
+        onChange={(e) => update_action(e.target.value ? Number(e.target.value) : undefined)}
         width={width}
         height="fit-content"
         paddingX="12px"

@@ -5,6 +5,7 @@ import { InputProps } from "../../types";
 export default function PasswordInput({
   label,
   current_value,
+  placeholder = "Password",
   update_action,
   size,
 }: InputProps) {
@@ -12,12 +13,15 @@ export default function PasswordInput({
   const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
-      <Text textStyle="web.s1" color="text.light.secondary">
-        {label}
-      </Text>
+      {label && (
+        <Text textStyle="web.s1" color="text.light.secondary">
+          {label}
+        </Text>
+      )}
       <Input
         type="password"
         value={current_value}
+        placeholder={placeholder}
         onChange={(e) => update_action(e.target.value)}
         width={width}
         height="fit-content"

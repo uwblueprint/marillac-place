@@ -11,6 +11,7 @@ import OrangeButton from "../buttons/OrangeButton";
 
 type PopupContainerProps = {
   title: string;
+  submit_text?: string;
   submit_action?: () => void;
   cancel_action: () => void;
   children: React.ReactNode;
@@ -19,6 +20,7 @@ type PopupContainerProps = {
 
 export default function PopupContainer({
   title,
+  submit_text = "Save",
   submit_action,
   cancel_action,
   children,
@@ -66,7 +68,7 @@ export default function PopupContainer({
           />
           {submit_action && (
             <OrangeButton
-              label="Submit"
+              label={submit_text}
               action={submit_action}
               is_active={false}
             />

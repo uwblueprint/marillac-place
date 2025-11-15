@@ -6,7 +6,8 @@ export type ButtonProps = {
 };
 
 export type InputProps = {
-  label: string;
+  label?: string;
+  placeholder?: string;
   current_value: any;
   update_action: React.Dispatch<React.SetStateAction<any>>;
   size: "small" | "medium" | "large";

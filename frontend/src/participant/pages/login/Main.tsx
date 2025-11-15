@@ -8,6 +8,10 @@ import { PARTICIPANT_LOGIN } from "../../../gql/loginRequests";
 import Error from "../../../ui/screens/ErrorScreen";
 import { verifyRole } from "../../../helpers/verifyRole";
 import { PARTICIPANT } from "../../../constants/roles";
+import WidgetContainer from "../../../ui/containers/WidgetContainer";
+import PasswordInput from "../../../ui/inputs/PasswordInput";
+import NumberInput from "../../../ui/inputs/NumberInput";
+import OrangeButton from "../../../ui/buttons/OrangeButton";
 
 export default function ParticipantsLoginPage() {
   const navigate = useNavigate();
@@ -15,7 +19,7 @@ export default function ParticipantsLoginPage() {
   const [error, setError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const [pid, setPid] = useState("");
+  const [pid, setPid] = useState<number | undefined>(undefined);
   const [password, setPassword] = useState("");
 
   const [login, { loading: loginLoading }] = useMutation(PARTICIPANT_LOGIN, {
@@ -74,69 +78,51 @@ export default function ParticipantsLoginPage() {
         flexDir="column"
         alignItems="center"
         justifyContent="center"
-        gap="45px"
-        padding="35px 15px"
+        gap="25px"
+        paddingTop="50px"
       >
-        <Flex width="75%">
-          <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
-        </Flex>
-        <Flex
-          width="100%"
-          flexDir="column"
-          gap="15px"
-          bg="neutral.0"
-          padding="25px 15px"
-          borderRadius="8px"
-          border="1px"
-          borderColor="neutral.300"
+        <img width="50%" src="/assets/logo.png" alt="Marillac Place Logo" />
+        <WidgetContainer
+          paddingX="20px"
+          paddingY="20px"
         >
           <Flex flexDir="column">
-            <Text textStyle="mobile.h1">Sign in</Text>
-
-            <Text textStyle="mobile.b1">
+            <Text textStyle="mobile.h2">Sign in</Text>
+            <Text textStyle="mobile.b2">
               Please enter your login information.
             </Text>
           </Flex>
 
-          <FormControl>
-            <Input
-              variant="primary"
-              type="id"
-              value={pid}
-              onChange={(e) => setPid(e.target.value)}
+          <Flex flexDir="column" gap="4px" marginY="8px">
+            <NumberInput
               placeholder="ID #"
+              current_value={pid}
+              update_action={setPid}
+              size="medium"
             />
-          </FormControl>
 
-          <FormControl>
-            <Input
-              variant="primary"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+            <PasswordInput
+              current_value={password}
+              update_action={setPassword}
+              size="medium"
               placeholder="Password"
             />
-          </FormControl>
 
-          {error && (
-            <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">
-              {error}
-            </Text>
-          )}
+            {/* TODO: move error message closer to sign in button */}
+            {error && (
+              <Text textStyle="web.b2" fontWeight="600" color="#E30000">
+                {error}
+              </Text>
+            )}
+          </Flex>
 
-          <Button
-            width="full"
-            variant="primaryFilled"
-            borderRadius="full"
-            fontWeight="700"
-            fontSize="16px"
-            onClick={handleSubmit}
-            isLoading={loading}
-          >
-            Sign in
-          </Button>
-        </Flex>
+          <OrangeButton
+            label="Sign in"
+            action={handleSubmit}
+            is_active={false}
+          />
+        </WidgetContainer>
       </Flex>
     </Flex>
   );
-}
+};

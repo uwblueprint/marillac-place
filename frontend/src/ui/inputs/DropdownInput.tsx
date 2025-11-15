@@ -17,14 +17,17 @@ export default function DropdownInput({
   current_value,
   update_action,
   size,
+  placeholder = "Please Select",
   value_options,
 }: DropdownInputProps) {
   const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
-      <Text textStyle="web.s1" color="text.light.secondary">
-        {label}
-      </Text>
+      {label && (
+        <Text textStyle="web.s1" color="text.light.secondary">
+          {label}
+        </Text>
+      )}
       <Select
         value={current_value ?? ""}
         onChange={(e) => update_action(e.target.value)}
@@ -42,7 +45,7 @@ export default function DropdownInput({
           boxShadow: "none",
         }}
       >
-        <option value="">Please Select</option>
+        <option value="">{placeholder}</option>
         {Object.entries(value_options).map(([key, value], index) => (
           <option key={index} value={value}>
             {key}

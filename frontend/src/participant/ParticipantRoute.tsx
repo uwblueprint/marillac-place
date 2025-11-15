@@ -5,7 +5,7 @@ import { verifyRole } from "../helpers/verifyRole";
 import { PARTICIPANT } from "../constants/roles";
 import Loading from "../ui/screens/LoadingScreen";
 import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
-// import ParticipantPageHeader from "../(ignore) refactor-in-progress/participant/common/PageHeader";
+import ParticipantMenu from "./ParticipantMenu";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
@@ -46,7 +46,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       bg="neutral.100"
     >
       <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column">
-        {/* <ParticipantPageHeader /> */}
+        <ParticipantMenu />
         <Flex
           flexDir="column"
           width="100%"
