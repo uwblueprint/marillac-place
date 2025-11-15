@@ -5,6 +5,10 @@ import { verifyRole } from "../helpers/verifyRole";
 import { ADMIN, RELIEF } from "../constants/roles";
 import Loading from "../ui/screens/LoadingScreen";
 import { ADMIN_LOGIN_PAGE } from "../constants/routes";
+import { GET_CURRENT_PARTICIPANTS } from "../gql/participantRequests";
+import { useLazyQuery } from "@apollo/client";
+import { AdminContext } from "./AdminContext";
+import { useContext } from "react";
 // import SideBar from "../(ignore) refactor-in-progress/admin/common/misc/SideBar";
 // import Notification from "../(ignore) refactor-in-progress/admin/common/misc/Notification";
 
@@ -13,9 +17,25 @@ type AdminRouteProps = {
 };
 
 export default function AdminRoute({ children }: AdminRouteProps) {
-  // TODO (yan):
-  // call api to get current participants
-  // update roomToParticipant property in admin context by mapping each participant's pid to their room number
+  const adminContext = useContext(AdminContext);
+  
+  const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
+    onCompleted: (data) => {
+      if (data?.getCurrentParticipants && adminContext) {
+        const roomToParticipantMap: Record<number, number> = {};
+        data.getCurrentParticipants.forEach((participant: any) => {
+          roomToParticipantMap[participant.room] = participant.pid;
+        });
+        adminContext.setRoomToParticipant(roomToParticipantMap);
+      }
+      setLoading(false);
+    },
+    onError: (error) => {
+      console.error("Error fetching participants:", error);
+      setLoading(false);
+    },
+  });
+
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(
@@ -32,6 +52,13 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     };
     authorize();
   }, []);
+
+  useEffect(() => {
+    if (authorized) {
+      setLoading(true);
+      getCurrentParticipants();
+    }
+  }, [authorized, getCurrentParticipants]);
 
   if (loading) {
     return <Loading />;
