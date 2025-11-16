@@ -5,6 +5,7 @@ import resetLoginStreak from "./scripts/resetLoginStreak";
 import assignRequiredTasks from "./scripts/assignRequiredTasks";
 import sendMonthlyReport from "./scripts/sendMonthlyReport";
 import sendWeeklyReport from "./scripts/sendWeeklyReport";
+import { isLastDayOfMonth } from "date-fns";
 
 cron.schedule("0 0 * * * *", async () => {
   await expireNotes();
@@ -27,8 +28,7 @@ cron.schedule("0 0 23 * * 6", async () => {
 });
 
 cron.schedule("0 0 23 * * *", async () => {
-  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  if (tomorrow.getDate() === 1) {
+  if (isLastDayOfMonth(new Date())) {
     await sendMonthlyReport();
   }
 });

@@ -1,17 +1,14 @@
 import { TaskType, DayPreference, TimePreference } from "@prisma/client";
 import db from "../../prisma";
-import { getBeginningOfWeek, getToday } from "../../utils/dateUtils";
 import { orderedDays } from "../../constants/days";
+import { addDays, endOfDay, set, startOfDay, startOfWeek } from "date-fns";
 
 // assigns all required tasks to each participant for the current week
 async function assignRequiredTasks() {
   try {
-    const today = getToday();
-    const beginningOfWeek = getBeginningOfWeek();
-
     const participants = await db.participant.findMany({
       where: {
-        OR: [{ departure: null }, { departure: { gt: today } }],
+        OR: [{ departure: null }, { departure: { gt: new Date() } }],
       },
       select: { pid: true },
     });
@@ -36,11 +33,7 @@ async function assignRequiredTasks() {
             if (requiredTask.day_preference === DayPreference.DAILY) {
               await Promise.all(
                 orderedDays.map(async (day) => {
-                  const base = new Date(beginningOfWeek);
-                  base.setDate(
-                    beginningOfWeek.getDate() + orderedDays.indexOf(day)
-                  );
-
+                  const baseDate = addDays(startOfWeek(new Date()), orderedDays.indexOf(day));
                   if (
                     requiredTask.time_preference === TimePreference.SPECIFIC
                   ) {
@@ -53,21 +46,19 @@ async function assignRequiredTasks() {
                       );
                     }
 
-                    const startDate = new Date(base);
-                    startDate.setHours(
-                      requiredTask.start_time.getHours(),
-                      requiredTask.start_time.getMinutes(),
-                      requiredTask.start_time.getSeconds(),
-                      requiredTask.start_time.getMilliseconds()
-                    );
+                    const startDate = set(baseDate, {
+                      hours: requiredTask.start_time.getHours(),
+                      minutes: requiredTask.start_time.getMinutes(),
+                      seconds: requiredTask.start_time.getSeconds(),
+                      milliseconds: requiredTask.start_time.getMilliseconds(),
+                    })
 
-                    const endDate = new Date(base);
-                    endDate.setHours(
-                      requiredTask.end_time.getHours(),
-                      requiredTask.end_time.getMinutes(),
-                      requiredTask.end_time.getSeconds(),
-                      requiredTask.end_time.getMilliseconds()
-                    );
+                    const endDate = set(baseDate, {
+                      hours: requiredTask.end_time.getHours(),
+                      minutes: requiredTask.end_time.getMinutes(),
+                      seconds: requiredTask.end_time.getSeconds(),
+                      milliseconds: requiredTask.end_time.getMilliseconds(),
+                    })
 
                     await db.assignedTask.create({
                       data: {
@@ -84,9 +75,8 @@ async function assignRequiredTasks() {
                   } else if (
                     requiredTask.time_preference === TimePreference.ANYTIME
                   ) {
-                    const startDate = new Date(base);
-                    const endDate = new Date(base);
-                    endDate.setDate(endDate.getDate() + 1);
+                    const startDate = startOfDay(baseDate);
+                    const endDate = addDays(startDate, 1);
 
                     await db.assignedTask.create({
                       data: {
@@ -108,11 +98,7 @@ async function assignRequiredTasks() {
             ) {
               await Promise.all(
                 requiredTask.days.map(async (day) => {
-                  const base = new Date(beginningOfWeek);
-                  base.setDate(
-                    beginningOfWeek.getDate() + orderedDays.indexOf(day)
-                  );
-
+                  const baseDate = addDays(startOfWeek(new Date()), orderedDays.indexOf(day));
                   if (
                     requiredTask.time_preference === TimePreference.SPECIFIC
                   ) {
@@ -125,21 +111,19 @@ async function assignRequiredTasks() {
                       );
                     }
 
-                    const startDate = new Date(base);
-                    startDate.setHours(
-                      requiredTask.start_time.getHours(),
-                      requiredTask.start_time.getMinutes(),
-                      requiredTask.start_time.getSeconds(),
-                      requiredTask.start_time.getMilliseconds()
-                    );
+                    const startDate = set(baseDate, {
+                      hours: requiredTask.start_time.getHours(),
+                      minutes: requiredTask.start_time.getMinutes(),
+                      seconds: requiredTask.start_time.getSeconds(),
+                      milliseconds: requiredTask.start_time.getMilliseconds(),
+                    })
 
-                    const endDate = new Date(base);
-                    endDate.setHours(
-                      requiredTask.end_time.getHours(),
-                      requiredTask.end_time.getMinutes(),
-                      requiredTask.end_time.getSeconds(),
-                      requiredTask.end_time.getMilliseconds()
-                    );
+                    const endDate = set(baseDate, {
+                      hours: requiredTask.end_time.getHours(),
+                      minutes: requiredTask.end_time.getMinutes(),
+                      seconds: requiredTask.end_time.getSeconds(),
+                      milliseconds: requiredTask.end_time.getMilliseconds(),
+                    })
 
                     await db.assignedTask.create({
                       data: {
@@ -156,9 +140,8 @@ async function assignRequiredTasks() {
                   } else if (
                     requiredTask.time_preference === TimePreference.ANYTIME
                   ) {
-                    const startDate = new Date(base);
-                    const endDate = new Date(base);
-                    endDate.setDate(endDate.getDate() + 1);
+                    const startDate = startOfDay(baseDate);
+                    const endDate = addDays(startDate, 1);
 
                     await db.assignedTask.create({
                       data: {
@@ -180,18 +163,8 @@ async function assignRequiredTasks() {
             ) {
               if (requiredTask.days.length !== 2)
                 throw new Error("day range must contain exactly two elements");
-              const startDate = new Date(beginningOfWeek);
-              startDate.setDate(
-                beginningOfWeek.getDate() +
-                  orderedDays.indexOf(requiredTask.days[0])
-              );
-
-              const endDate = new Date(beginningOfWeek);
-              endDate.setDate(
-                beginningOfWeek.getDate() +
-                  orderedDays.indexOf(requiredTask.days[1]) +
-                  1
-              );
+              const startDate = addDays(startOfWeek(new Date()), orderedDays.indexOf(requiredTask.days[0]));
+              const endDate = addDays(startOfWeek(new Date()), orderedDays.indexOf(requiredTask.days[1]) + 1);
 
               await db.assignedTask.create({
                 data: {

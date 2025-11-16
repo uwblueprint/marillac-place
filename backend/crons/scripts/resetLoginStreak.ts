@@ -1,17 +1,13 @@
+import { startOfDay, endOfDay } from "date-fns";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
-import { getToday } from "../../utils/dateUtils";
 
 // checks whether or not a participant has logged in today and resets their progress for the login badge if not
 async function resetLoginStreak() {
   try {
-    const startOfDay = getToday();
-    const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999);
-
     const participants = await db.participant.findMany({
       where: {
-        OR: [{ departure: null }, { departure: { gt: startOfDay } }],
+        OR: [{ departure: null }, { departure: { gt: startOfDay(new Date()) } }],
       },
       select: { pid: true },
     });
@@ -21,8 +17,8 @@ async function resetLoginStreak() {
         where: {
           pid,
           date: {
-            gte: startOfDay,
-            lte: endOfDay,
+            gte: startOfDay(new Date()),
+            lte: endOfDay(new Date()),
           },
         },
       });

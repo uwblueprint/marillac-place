@@ -1,8 +1,9 @@
+import { sub, subHours } from "date-fns";
 import prisma from "../../prisma";
 
 // deletes notes that are older than 48 hours ago
 async function expireNotes() {
-  const limit = new Date(Date.now() - 48 * 60 * 60 * 1000);
+  const limit = subHours(new Date(), 48);
   try {
     await prisma.note.deleteMany({
       where: { date: { lt: limit } },
