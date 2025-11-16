@@ -1,14 +1,19 @@
 import React from "react";
 import { FormControl, Input, Text } from "@chakra-ui/react";
 import { InputProps } from "../../types";
+import { formatDateInputValue, formatTimeInputValue, parseDateTimeInputValue } from "../../helpers/formatDateTime";
 
-export default function NumberInput({
+type DateTimeInputProps = InputProps & {
+  type: "date" | "time";
+}
+
+export default function DateTimeInput({
   label,
   current_value,
-  placeholder,
   update_action,
   size,
-}: InputProps) {
+  type,
+}: DateTimeInputProps) {
   const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
@@ -18,10 +23,9 @@ export default function NumberInput({
         </Text>
       )}
       <Input
-        type="number"
-        value={current_value ? String(current_value) : ""}
-        placeholder={placeholder}
-        onChange={(e) => update_action(e.target.value ? Number(e.target.value) : undefined)}
+        type={type}
+        value={type === "date" ? formatDateInputValue(current_value) : formatTimeInputValue(current_value)} 
+        onChange={(e) => update_action(parseDateTimeInputValue(e.target.value))} 
         width={width}
         height="fit-content"
         paddingX="12px"

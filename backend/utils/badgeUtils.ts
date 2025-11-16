@@ -17,6 +17,8 @@ function getNextBadgeLevel(level: Level) {
 }
 
 export async function initBadgeLevelProgress(pid: number) {
+  // TODO: modify this function to separately create badge level progress for the pr leader badge
+  // where it is initialized for every level (NOVICE, BRONZE, SILVER, GOLD, DIAMOND)
   await Promise.all(
     SYSTEM_BADGES.map(async (name) => {
       const level = name !== JACK_OF_ALL_TRADES ? Level.NOVICE : Level.SILVER;
@@ -49,6 +51,10 @@ export async function updateBadgeLevelProgress(
     });
 
     // TODO: implement pr leader badge logic
+    // query badge level progress for the participant and pr leader badge for that level
+    // if the query does not return anything, then continue
+    // if progress + 1 has reached the benchmark, then create a new achieved badge level for the pr leader badge and delete the badge level progress
+    // if progress + 1 has not reached the benchmark, then update badge level progress with progress + 1
 
     await db.badgeLevelProgress.delete({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },

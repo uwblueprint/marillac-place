@@ -1,8 +1,13 @@
 import React from "react";
-import { Button, Text } from "@chakra-ui/react";
+import { Button, Flex, Text } from "@chakra-ui/react";
 import { ButtonProps } from "../../types";
 
-export default function GreenButton({ text, action, is_active }: ButtonProps) {
+export default function GreenOutlineButton({ 
+  label, 
+  action, 
+  is_active,
+  icon,
+}: ButtonProps) {
   return (
     <Button
       onClick={action}
@@ -26,9 +31,12 @@ export default function GreenButton({ text, action, is_active }: ButtonProps) {
         bg: "#0C727E",
       }}
     >
-      <Text textStyle="web.s1" color="inherit">
-        {text}
-      </Text>
+      <Flex alignItems="center" gap="5px">
+        {icon}
+        <Text textStyle="web.s1" color="inherit">
+          {label}
+        </Text>
+      </Flex>
     </Button>
   );
 }

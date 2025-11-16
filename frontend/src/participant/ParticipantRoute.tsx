@@ -5,19 +5,37 @@ import { verifyRole } from "../helpers/verifyRole";
 import { PARTICIPANT } from "../constants/roles";
 import Loading from "../ui/screens/LoadingScreen";
 import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
-// import ParticipantPageHeader from "../(ignore) refactor-in-progress/participant/common/PageHeader";
+import { useContext } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { ParticipantContext } from "./ParticipantContext";
+import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
+import Error from "../ui/screens/ErrorScreen";
+import ParticipantMenu from "./ParticipantMenu";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
 };
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
-  // TODO (yan):
-  // call api to get participant by id
-  // update room and balance properties in participant context for that participant
+  const participantContext = useContext(ParticipantContext);
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
+  const [getParticipantByPid] = useLazyQuery(GET_PARTICIPANT_BY_PID, {
+    onCompleted: (data) => {
+      if (!data || !data.getParticipantByPid || !participantContext) {
+        setError("error fetching participant for context");
+        return;
+      }
+      participantContext.setRoom(data.getParticipantByPid.room);
+      participantContext.setBalance(data.getParticipantByPid.balance);
+    },
+    onError: (error) => {
+      console.error("Error fetching participant:", error);
+    },
+  });
+  
   useEffect(() => {
     const authorize = async () => {
       const isParticipant = await verifyRole([PARTICIPANT]);
@@ -29,8 +47,23 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
     authorize();
   }, []);
 
+  useEffect(() => {
+    const fetchParticipantData = async () => {
+      if (authorized && participantContext) {
+        setLoading(true);
+        getParticipantByPid({ variables: { pid: participantContext.pid } });
+        setLoading(false);
+      }
+    };
+    fetchParticipantData();
+  }, [authorized, participantContext]);
+
   if (loading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return <Error />;
   }
 
   if (!authorized) {
@@ -46,7 +79,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       bg="neutral.100"
     >
       <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column">
-        {/* <ParticipantPageHeader /> */}
+        <ParticipantMenu />
         <Flex
           flexDir="column"
           width="100%"
