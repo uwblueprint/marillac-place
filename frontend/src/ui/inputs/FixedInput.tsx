@@ -1,7 +1,7 @@
 import { Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import { toTitleCase } from "../../helpers/stringUtils";
-import { InputProps } from "../../types";
+import { InputProps } from "../../types/component";
 
 type FixedInputProps = Omit<InputProps, "update_action" | "size"> & {
   orientation: "horizontal" | "vertical";

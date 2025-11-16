@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
+import { useLazyQuery } from "@apollo/client";
 import { verifyRole } from "../helpers/verifyRole";
 import { ADMIN, RELIEF } from "../constants/roles";
 import Loading from "../ui/screens/LoadingScreen";
 import { ADMIN_LOGIN_PAGE } from "../constants/routes";
 import { GET_CURRENT_PARTICIPANTS } from "../gql/participantRequests";
-import { useLazyQuery } from "@apollo/client";
 import { AdminContext } from "./AdminContext";
-import { useContext } from "react";
 import Error from "../ui/screens/ErrorScreen";
-import NotificationContainer from "../ui/containers/NotificationContainer";
 import AdminMenu from "./AdminMenu";
 
 type AdminRouteProps = {
@@ -23,9 +21,6 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [notification, setNotification] = useState(
-    localStorage.getItem("notification")
-  );
   
   const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
     onCompleted: (data) => {
@@ -39,8 +34,8 @@ export default function AdminRoute({ children }: AdminRouteProps) {
       });
       adminContext.setRoomToParticipant(roomToParticipantMap);
     },
-    onError: (error) => {
-      setError(error.message);
+    onError: (err: Error) => {
+      setError(err.message);
     },
   });
 
@@ -75,17 +70,9 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     return <Navigate to={ADMIN_LOGIN_PAGE} replace />;
   }
 
-  if (notification) {
-    setTimeout(() => {
-      localStorage.setItem("notification", "");
-      setNotification("");
-    }, 3000);
-  }
-
   return (
     <Flex alignItems="center" justifyContent="center">
       <Flex position="relative" width="100vw" maxWidth="1400px" height="100vh">
-        {notification && <NotificationContainer message={notification} />}
         <AdminMenu />
         <Flex width="calc(100% - 250px)" height="100%" ml="250px" position="relative">
           <Flex

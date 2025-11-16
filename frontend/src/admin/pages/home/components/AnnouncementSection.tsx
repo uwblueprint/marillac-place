@@ -1,10 +1,14 @@
-import { Flex, Text, Link } from "@chakra-ui/react";
-import React from "react";
+import { Flex, Text } from "@chakra-ui/react";
+import React, { useMemo } from "react";
 import { useQuery } from "@apollo/client";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GET_ANNOUNCEMENTS_FROM_TODAY } from "../../../../gql/announcementRequests";
 
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
+import WidgetContainer from "../../../../ui/containers/WidgetContainer";
+import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
+import { ADMIN_ANNOUNCEMENTS_PAGE } from "../../../../constants/routes";
+import { Announcement } from "../../../../types/models";
 
 type AnnouncementDisplayInfo = {
   announcement_id: number;
@@ -70,97 +74,85 @@ const AnnouncementSection = () => {
     loading: getAnnouncementsLoading,
     error: getAnnouncementsError,
     data: getAnnouncementsData,
-  } = useQuery(GET_ANNOUNCEMENTS_FROM_TODAY);
+  } = useQuery<{ getAnnouncementsFromToday: Announcement[] }>(GET_ANNOUNCEMENTS_FROM_TODAY);
 
-  // Get the display info for the announcements
-  const data: AnnouncementDisplayInfo[] =
-    getAnnouncementsData?.getAnnouncementsFromToday?.map((announcement: any) => {
-      const receivedAnnouncements = (announcement?.ReceivedAnnouncement ??
-        []) as any[];
+  const navigate = useNavigate();
+  const announcements: AnnouncementDisplayInfo[] = useMemo(() => {
+    const todaysAnnouncements = getAnnouncementsData?.getAnnouncementsFromToday ?? [];
+
+    return todaysAnnouncements.map((announcement: Announcement) => {
+      const receivedAnnouncements = announcement.ReceivedAnnouncement ?? [];
       const roomNumbers = receivedAnnouncements
         .map((received) => received?.participant?.room)
         .filter((room): room is number => typeof room === "number");
       const rooms = Array.from(new Set(roomNumbers)).sort((a, b) => a - b);
 
-      const parsedDate = new Date(announcement?.date ?? new Date().toISOString());
-      const creationDate =
-        parsedDate.toString() === "Invalid Date" ? new Date() : parsedDate;
+      const parsedDate = new Date(announcement.date);
+      const creationDate = Number.isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 
       return {
-        announcement_id: announcement?.aid,
+        announcement_id: announcement.aid,
         rooms,
         creation_date: creationDate,
-        message: announcement?.message,
+        message: announcement.message,
       };
-    }) || [];
+    });
+  }, [getAnnouncementsData]);
 
   return (
-    <Flex
-      flexGrow={1}
-      height="calc(100% - 330px)"
-      paddingY="15px"
-      paddingX="20px"
-      border="1px solid"
-      borderColor="neutral.300"
-      borderRadius="8px"
-      flexDir="column"
-      gap="10px"
-      justifyContent="flex-start"
-      marginRight="10px"
+    <WidgetContainer 
+      width="100%"
+      height="calc(100% - 320px)"
+      paddingX="16px" 
+      paddingY="16px"
+      loading={getAnnouncementsLoading}
+      error={getAnnouncementsError?.message}
     >
-      {/* Title Row */}
       <Flex
         w="100%"
         flexDir="row"
         justifyContent="space-between"
         alignItems="center"
-        px="2px"
       >
-        <Flex flexDir="row" gap="20px" alignItems="baseline">
+        <Flex
+          w="100%"
+          flexDir="row"
+          justifyContent="flex-start"
+          alignItems="center"
+          pl="2px"
+          pb="4px"
+          gap="12px"
+        >
           <Text textStyle="web.h3" color="primary.700">
             Announcements
           </Text>
-          <Text textStyle="web.b3" color="text.light.secondary">
-            {data.length} new post{data.length === 1 ? "" : "s"} today
+          <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
+            {announcements.length} new post{announcements.length === 1 ? "" : "s"} today
           </Text>
         </Flex>
-        <Link
-          as={RouterLink}
-          to="/admin/announcements"
-          textStyle="web.b3"
-          fontFamily="Nunito"
-          fontWeight={600}
-          color="black"
-          textDecoration="underline"
-          _hover={{
-            textDecoration: "none",
-          }}
-        >
-          View All
-        </Link>
+
+        <UnderlineButton
+          label="View All"
+          action={() => navigate(ADMIN_ANNOUNCEMENTS_PAGE)}
+        />
       </Flex>
       <Flex
+        w="100%"
+        flexGrow={1}
+        flexDir="column"
+        gap="8px"
+        overflowY="auto"
         alignItems="center"
-        overflow="scroll"
-        height="100%"
-        justifyContent="center"
+        justifyContent="top"
         sx={{
           "&::-webkit-scrollbar": {
             display: "none",
           },
         }}
       >
-        {getAnnouncementsLoading ? (
-          <Text textStyle="web.b2" color="text.light.secondary">
-            Loading...
-          </Text>
-        ) : getAnnouncementsError ? (
-          <Text textStyle="web.b2" color="text.light.secondary">
-            {getAnnouncementsError?.message || "An error occurred"}
-          </Text>
-        ) : data.length === 0 ? (
-          <Text textStyle="web.b2" color="text.light.secondary">
-            No Announcements Yet
+        {announcements.length === 0 ? (
+          <Text textStyle="web.b2" color="text.light.secondary" mt="75px">
+            No Announcements
           </Text>
         ) : (
           <Flex
@@ -170,7 +162,7 @@ const AnnouncementSection = () => {
             justifyContent="flex-start"
             gap="10px"
           >
-            {data.map((announcement: AnnouncementDisplayInfo) => {
+            {announcements.map((announcement: AnnouncementDisplayInfo) => {
               return (
                 <AnnouncementCard
                   key={announcement.announcement_id}
@@ -181,7 +173,7 @@ const AnnouncementSection = () => {
           </Flex>
         )}
       </Flex>
-    </Flex>
+    </WidgetContainer>
   );
 };
 

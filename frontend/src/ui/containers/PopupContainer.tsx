@@ -5,6 +5,7 @@ import {
   ModalContent,
   Flex,
   Text,
+  Spinner,
 } from "@chakra-ui/react";
 import BlackOutlineButton from "../buttons/BlackOutlineButton";
 import OrangeButton from "../buttons/OrangeButton";
@@ -16,6 +17,7 @@ type PopupContainerProps = {
   cancel_action: () => void;
   children: React.ReactNode;
   error_message?: string;
+  loading?: boolean;
 };
 
 export default function PopupContainer({
@@ -24,7 +26,8 @@ export default function PopupContainer({
   submit_action,
   cancel_action,
   children,
-  error_message,
+  error_message = "",
+  loading = false,
 }: PopupContainerProps) {
   return (
     <Modal
@@ -47,14 +50,22 @@ export default function PopupContainer({
         <Text textStyle="web.h3" mb="10px">
           {title}
         </Text>
-        <Flex flexDir="column" gap="8px">
-          {children}
-          {error_message && (
-            <Text textStyle="web.s1" color="#E30000">
-              {error_message}
-            </Text>
-          )}
-        </Flex>
+
+        { loading ? (
+          <Flex width="100%" height="100%" justifyContent="center" alignItems="center">
+            <Spinner size="md" color="primary.700" />
+          </Flex>
+        ): (
+          <Flex flexDir="column" gap="8px">
+            {children}
+            {error_message !== "" && (
+              <Text textStyle="web.s1" color="#E30000">
+                {error_message}
+              </Text>
+            )}
+          </Flex>
+        )}
+          
         <Flex
           alignItems="center"
           justifyContent="flex-end"

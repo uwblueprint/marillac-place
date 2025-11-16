@@ -6,7 +6,7 @@ import {
   Radio,
   Text,
 } from "@chakra-ui/react";
-import { InputProps } from "../../types";
+import { InputProps } from "../../types/component";
 
 type SelectInputProps = Omit<InputProps, "size"> & {
   value_options: Record<string, string>;

@@ -3,6 +3,7 @@
 // For each format, implement a function that converts a Date object to the local timezone and formats it accordingly
 // Additionally, for each React input type that accepts a date or time, implement a function that converts the input (usually React processes it as a formatted string) to a Date object
 // If date / time does not matter, set the date or time to something standard (e.g. midnight, or January 1, 1970)
+// Try to see if we can use the date-fns library to help with this
 
 // Converts UTC Date object to a string in the format "YYYY-MM-DD" in local timezone
 export function formatDateInputValue(date: Date): string {
@@ -35,11 +36,23 @@ export function parseDateTimeInputValue(date: string, time = "00:00"): Date {
     return new Date(year, month, day, hour, minute);
 }
 
-// Gets today's date in the format "January 1, 2025" in the local timezone
+// Converts today's date into the format "January 1, 2025" in the local timezone
 export function getTodayDateString(): string {
   return new Date().toLocaleDateString("en-CA", {
     year: "numeric",
     month: "long",
+    day: "numeric",
+  });
+}
+
+// Converts a UTC string date from a GraphQL response into the format "Jan 1, 12:00 AM"
+export function formatDateTimeString(date: string): string {
+  const dateObj = new Date(date);
+  return dateObj.toLocaleString("en-CA", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    month: "short",
     day: "numeric",
   });
 }

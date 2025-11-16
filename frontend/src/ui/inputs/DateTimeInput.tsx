@@ -1,6 +1,6 @@
 import React from "react";
 import { FormControl, Input, Text } from "@chakra-ui/react";
-import { InputProps } from "../../types";
+import { InputProps } from "../../types/component";
 import { formatDateInputValue, formatTimeInputValue, parseDateTimeInputValue } from "../../helpers/formatDateTime";
 
 type DateTimeInputProps = InputProps & {

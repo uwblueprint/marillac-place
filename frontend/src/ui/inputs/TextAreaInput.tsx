@@ -1,6 +1,6 @@
 import React from "react";
 import { FormControl, Text, Textarea } from "@chakra-ui/react";
-import { InputProps } from "../../types";
+import { InputProps } from "../../types/component";
 
 export default function TextAreaInput({
   label,

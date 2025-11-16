@@ -36,11 +36,11 @@ const AdminHomePage = (): React.ReactElement => {
         h="100%"
         flexDir="row"
       >
-        <Flex flexDir="column" flexGrow={1} width="100%" height="100%">
+        <Flex flexDir="column" marginRight="12px" gap="12px" width="calc(100% - 300px)">
           <RoomsOverview />
           <AnnouncementSection />
         </Flex>
-        {/* <NoteSection /> */}
+        <NoteSection />
       </Flex>
     </>
   );

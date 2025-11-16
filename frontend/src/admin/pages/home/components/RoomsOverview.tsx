@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Flex, Grid, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
@@ -11,85 +11,72 @@ import { GET_NUMBER_OF_ASSIGNED_TASKS_BY_ROOM } from "../../../../gql/assignedTa
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import { ADMIN_PARTICIPANTS_PAGE, ADMIN_SCHEDULE_PAGE, ADMIN_ANNOUNCEMENTS_PAGE } from "../../../../constants/routes";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
+import { Participant } from "../../../../types/models";
+import { ParticipantContext } from "../../../../participant/ParticipantContext";
+import { AdminContext } from "../../../AdminContext";
 
-type GetCurrentParticipantsResponse = {
-  getCurrentParticipants: {
-    pid: number;
-    room: number;
-  }[];
-};
-
-type GetNumberOfAssignedTasksResponse = {
-  getNumberOfAssignedTasksByRoom: number[];
-};
-
-type RoomOverviewCard = {
-  roomNumber: number;
-  participantPid: number | null;
-  assignedTasks: number;
+type RoomOverviewInfo = {
+  room: number;
+  participant: number | null;
+  assignedTaskCount: number;
 };
 
 export default function RoomsOverview() {
   const navigate = useNavigate();
-
-  const {
-    data: participantsData,
-    loading: participantsLoading,
-    error: participantsError,
-  } = useQuery<GetCurrentParticipantsResponse>(GET_CURRENT_PARTICIPANTS);
+  const adminContext = useContext(AdminContext);
+  const [error, setError] = useState("");
 
   const {
     data: assignedTasksData,
     loading: assignedTasksLoading,
     error: assignedTasksError,
-  } = useQuery<GetNumberOfAssignedTasksResponse>(
-    GET_NUMBER_OF_ASSIGNED_TASKS_BY_ROOM
-  );
+  } = useQuery<{ getNumberOfAssignedTasksByRoom: number[] }>(GET_NUMBER_OF_ASSIGNED_TASKS_BY_ROOM);
 
-  const roomCards: RoomOverviewCard[] = useMemo(() => {
-    const participantByRoom = new Map<number, number>();
-    participantsData?.getCurrentParticipants.forEach(({ pid, room }) => {
-      if (room) {
-        participantByRoom.set(room, pid);
-      }
-    });
+  const roomOverviewInfo: RoomOverviewInfo[] = useMemo(() => {
+    if (!adminContext) {
+      setError("error fetching admin context");
+      return [];
+    }
+    const participantByRoom = adminContext?.roomToParticipant;
 
     const assignedTaskCounts =
       assignedTasksData?.getNumberOfAssignedTasksByRoom ?? [];
 
-    return ROOM_NUMBERS.map((roomNumber) => ({
-      roomNumber,
-      participantPid: participantByRoom.get(roomNumber) ?? null,
-      assignedTasks: assignedTaskCounts[roomNumber - 1] ?? 0,
+    return ROOM_NUMBERS.map((room) => ({
+      room,
+      participant: participantByRoom?.[room],
+      assignedTaskCount: assignedTaskCounts[room - 1] ?? 0,
     }));
-  }, [participantsData, assignedTasksData]);
+  }, [adminContext, assignedTasksData]);
 
-  const isLoading = participantsLoading || assignedTasksLoading;
-  const errorMessage = participantsError?.message || assignedTasksError?.message;
+  const isLoading = assignedTasksLoading;
+  const errorMessage = error || assignedTasksError?.message || "";
 
   return (
-    <Flex flexGrow={1}>
-      <WidgetContainer
-        width="100%"
-        height="320px"
-        paddingX="20px"
-        paddingY="12px"
+    <WidgetContainer 
+      width="100%" 
+      height="320px" 
+      paddingX="16px" 
+      paddingY="16px"
+      loading={isLoading}
+      error={errorMessage}
+    >
+      <Flex
+        w="100%"
+        flexDir="row"
+        justifyContent="flex-start"
+        alignItems="center"
+        pl="2px"
+        pb="4px"
+        gap="12px"
       >
-        <Flex
-          w="100%"
-          flexDir="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          px="2px"
-          gap="12px"
-        >
-          <Text textStyle="web.h3" color="primary.700">
-            Rooms
-          </Text>
-          <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
-            Showing assigned tasks for current residents
-          </Text>
-        </Flex>
+        <Text textStyle="web.h3" color="primary.700">
+          Rooms
+        </Text>
+        <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
+          Showing assigned tasks for current participants
+        </Text>
+      </Flex>
         <Flex
           flex="1"
           overflowY="auto"
@@ -110,9 +97,9 @@ export default function RoomsOverview() {
             </Text>
           ) : (
             <Grid w="100%" h="100%" templateColumns="repeat(5, 1fr)" gap="10px">
-              {roomCards.map((room) => (
+              {roomOverviewInfo.map((room) => (
                 <Flex
-                  key={room.roomNumber}
+                  key={room.room}
                   border="1px solid"
                   borderColor="neutral.300"
                   borderRadius="8px"
@@ -128,32 +115,31 @@ export default function RoomsOverview() {
                     bg="primary.100"
                     width="100%"
                     textAlign="center"
-                    padding="10px"
+                    padding="8px"
                     borderBottom="1px solid"
                     borderColor="neutral.300"
                     borderTopRightRadius="8px"
                     borderTopLeftRadius="8px"
                   >
-                    Room {room.roomNumber}
+                    Room {room.room}
                   </Text>
 
-                  {room.participantPid ? (
+                  {room.participant ? (
                     <>
                       <Flex flexDir="column" alignItems="center" gap="4px">
                         <Text textStyle="web.b3" textAlign="center">
                           Resident ID{" "}
                           <Text as="span" textStyle="web.s1">
-                            #{room.participantPid}
+                            #{room.participant}
                           </Text>
                         </Text>
                         <Text textStyle="web.b3" textAlign="center">
-                          {room.assignedTasks} assigned task
-                          {room.assignedTasks === 1 ? "" : "s"}
+                          {room.assignedTaskCount} assigned task{room.assignedTaskCount === 1 ? "" : "s"}
                         </Text>
                       </Flex>
                       <UnderlineButton
                         label="View Schedule"
-                        href={ADMIN_SCHEDULE_PAGE}
+                        action={() => navigate(ADMIN_SCHEDULE_PAGE)}
                       />
                     </>
                   ) : (
@@ -163,7 +149,7 @@ export default function RoomsOverview() {
                       </Text>
                       <UnderlineButton
                         label="View Participants"
-                        href={ADMIN_PARTICIPANTS_PAGE}
+                        action={() => navigate(ADMIN_PARTICIPANTS_PAGE)}
                       />
                     </>
                   )}
@@ -173,6 +159,5 @@ export default function RoomsOverview() {
           )}
         </Flex>
       </WidgetContainer>
-    </Flex>
   );
 }

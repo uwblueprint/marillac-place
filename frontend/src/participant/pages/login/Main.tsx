@@ -108,7 +108,6 @@ export default function ParticipantsLoginPage() {
               placeholder="Password"
             />
 
-            {/* TODO: move error message closer to sign in button */}
             {error && (
               <Text textStyle="web.b2" fontWeight="600" color="#E30000">
                 {error}

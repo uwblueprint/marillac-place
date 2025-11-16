@@ -6,7 +6,7 @@ import {
   Text,
   Select,
 } from "@chakra-ui/react";
-import { InputProps } from "../../types";
+import { InputProps } from "../../types/component";
 
 type DropdownInputProps = InputProps & {
   value_options: Record<string, string>;

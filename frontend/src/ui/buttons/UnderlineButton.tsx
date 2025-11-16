@@ -1,30 +1,36 @@
 import React from "react";
-import { Button, Flex, Link, Text } from "@chakra-ui/react";
-import { ButtonProps } from "../../types";
+import { Button, Text } from "@chakra-ui/react";
+import { ButtonProps } from "../../types/component";
 
-type UnderlineButtonProps = Omit<ButtonProps, "is_active" | "action" | "icon"> & {
-  href: string;
-};
+type UnderlineButtonProps = Omit<ButtonProps, "is_active" | "icon">;
 
-export default function UnderlineButton({ 
-  label, 
-  href,
+export default function UnderlineButton({
+  label,
+  action,
 }: UnderlineButtonProps) {
   return (
-    <Link
-      href={href}
+    <Button
+      onClick={action}
+      width="fit-content"
+      height="fit-content"
+      padding="0px"
       cursor="pointer"
-      textDecoration="underline"
-      textAlign="center"
-      textStyle="web.b3"
-      fontFamily="Nunito"
-      fontWeight={600}
-      color="black"
+      background="transparent"
       _hover={{
-        textDecoration: "none",
+        background: "transparent" 
       }}
     >
-      {label}
-    </Link>
+      <Text 
+        textStyle="web.s1" 
+        color="black" 
+        textDecoration="underline" 
+        fontWeight={600}
+        _hover={{
+          textDecoration: "none"
+        }}
+      >
+        {label}
+      </Text>
+    </Button>
   );
 }
