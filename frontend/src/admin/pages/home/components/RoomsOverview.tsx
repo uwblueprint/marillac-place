@@ -96,7 +96,7 @@ export default function RoomsOverview() {
               {errorMessage}
             </Text>
           ) : (
-            <Grid w="100%" h="100%" templateColumns="repeat(5, 1fr)" gap="10px">
+            <Grid w="100%" templateColumns="repeat(5, 1fr)" gap="8px" alignItems="stretch" gridAutoRows="1fr">
               {roomOverviewInfo.map((room) => (
                 <Flex
                   key={room.room}
@@ -107,7 +107,6 @@ export default function RoomsOverview() {
                   justifyContent="space-between"
                   alignItems="center"
                   paddingBottom="12px"
-                  gap="12px"
                   bg="neutral.0"
                 >
                   <Text
@@ -128,13 +127,13 @@ export default function RoomsOverview() {
                     <>
                       <Flex flexDir="column" alignItems="center" gap="4px">
                         <Text textStyle="web.b3" textAlign="center">
-                          Resident ID{" "}
+                          ID Number: {" "}
                           <Text as="span" textStyle="web.s1">
                             #{room.participant}
                           </Text>
                         </Text>
                         <Text textStyle="web.b3" textAlign="center">
-                          {room.assignedTaskCount} assigned task{room.assignedTaskCount === 1 ? "" : "s"}
+                          {room.assignedTaskCount} Assigned Task{room.assignedTaskCount === 1 ? "" : "s"}
                         </Text>
                       </Flex>
                       <UnderlineButton

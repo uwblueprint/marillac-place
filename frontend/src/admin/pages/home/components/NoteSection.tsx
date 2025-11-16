@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Flex, Input, InputGroup, InputRightElement, Spinner, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, InputGroup, InputRightElement, Spinner, Text } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@apollo/client";
 import SendIcon from "@mui/icons-material/Send";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
@@ -55,21 +55,24 @@ export default function NoteSection() {
     }
   };
 
+  const notes = getNotesData?.getNotes ?? [];
+  const hasNotes = notes.length > 0;
+
   return (
-      <WidgetContainer 
-        width="300px" 
-        height="100%" 
-        paddingX="16px" 
-        paddingY="16px"
-        loading={getNotesLoading}
-        error={getNotesError?.message}
-      >
+    <WidgetContainer
+      width="275px"
+      height="100%"
+      paddingX="16px"
+      paddingY="12px"
+      loading={getNotesLoading}
+      error={getNotesError?.message}
+    >
+      <Flex w="100%" h="100%" flexDir="column" gap="8px" minH={0}>
         <Flex
           w="100%"
           flexDir="row"
           justifyContent="flex-start"
           alignItems="center"
-          pl="2px"
           pb="4px"
           gap="12px"
         >
@@ -81,65 +84,67 @@ export default function NoteSection() {
           </Text>
         </Flex>
 
-        { error && (
-          <Text textStyle="web.b2" color="#E30000" pl="2px">
+        {error && (
+          <Text textStyle="web.b2" color="#E30000">
             {error}
           </Text>
         )}
 
         <Flex
           w="100%"
-          flexGrow={1}
+          flex="1"
           flexDir="column"
           gap="8px"
+          alignItems={hasNotes ? "stretch" : "center"}
+          justifyContent={hasNotes ? "flex-start" : "center"}
           overflowY="auto"
-          alignItems="center"
-          justifyContent="top"
+          minH={0}
           sx={{
             "&::-webkit-scrollbar": {
               display: "none",
             },
           }}
         >
-          { getNotesData?.getNotes.length === 0 ? (
-            <Text textStyle="web.b2" color="text.light.secondary" mt="200px">
+          {hasNotes ? (
+            notes.map((note: Note) => (
+              <WidgetContainer
+                key={note.nid}
+                width="100%"
+                paddingX="12px"
+                paddingY="8px"
+                bg_color="neutral.100"
+              >
+                <Text
+                  textStyle="web.b2"
+                  color="#000000"
+                  whiteSpace="pre-wrap"
+                  wordBreak="break-word"
+                >
+                  {note.message}
+                </Text>
+                <Flex
+                  width="100%"
+                  justifyContent="space-between"
+                  alignItems="flex-end"
+                  pt="4px"
+                >
+                  <Text textStyle="web.b3" color="text.light.secondary">
+                    {formatDateTimeString(note.date)}
+                  </Text>
+                  <UnderlineButton
+                    label="Dismiss"
+                    action={() => dismissNote(note.nid)}
+                  />
+                </Flex>
+              </WidgetContainer>
+            ))
+          ) : (
+            <Text textStyle="web.b2" color="text.light.secondary">
               No Admin Notes
             </Text>
-          ) : (
-            getNotesData?.getNotes.map((note: Note) => {
-              return (
-                <WidgetContainer
-                  key={note.nid}
-                  width="100%"
-                  paddingX="12px"
-                  paddingY="10px"
-                  bg_color="neutral.100"
-                >
-                  <Flex width="100%" flexWrap="wrap" overflow="hidden">
-                    <Text textStyle="web.b2" color="#000000">
-                      {note.message}
-                    </Text>
-                  </Flex>
-                  <Flex
-                    width="100%"
-                    justifyContent="space-between"
-                    alignItems="flex-end"
-                    mt="4px"
-                  >
-                    <Text textStyle="web.b3" color="text.light.secondary">
-                      {formatDateTimeString(note.date)}
-                    </Text>
-                    <UnderlineButton
-                      label="Dismiss"
-                      action={() => dismissNote(note.nid)}
-                    />
-                  </Flex>
-                </WidgetContainer>
-              );
-            })
           )}
         </Flex>
-        
+
         <InputGroup pt="4px">
           <Input
             type="text"
@@ -162,29 +167,32 @@ export default function NoteSection() {
               boxShadow: "none",
             }}
           />
-          <InputRightElement
-            height="100%"
-            alignItems="center"   
-          >
-            { createNoteLoading ? (
+          <InputRightElement>
+            {createNoteLoading ? (
               <Spinner size="sm" color="primary.700" />
-            ): (
+            ) : (
               <Button
                 onClick={() => sendNote()}
-                bg="transparent"
                 padding="0px"
-                _hover={{ scale: 1.1 }}
+                bg="transparent"
+                _hover={{ bg: "transparent" }}
+                _active={{ bg: "transparent" }}
               >
                 {/* TODO: Replace with custom icon component */}
-                <SendIcon style={{ 
-                  color: "#0C727E",
-                  width: "16px",
-                  height: "16px",
-                }} />
+                <SendIcon
+                  style={{
+                    color: "#0C727E",
+                    width: "16px",
+                    height: "16px",
+                    marginTop: "8px",
+                    backgroundColor: "transparent",
+                  }}
+                />
               </Button>
             )}
           </InputRightElement>
         </InputGroup>
-      </WidgetContainer>
+      </Flex>
+    </WidgetContainer>
   );
 };

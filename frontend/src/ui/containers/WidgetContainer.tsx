@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Spinner, Text } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
 
 type WidgetContainerProps = {
   bg_color?: string;
@@ -23,20 +23,15 @@ export default function WidgetContainer({
   error = "",
 }: WidgetContainerProps) {
   return (
-    <Flex
-      flexDir="column"
+    <Box
       width={width}
       height={height}
+      paddingX={paddingX}
+      paddingY={paddingY}
       bg={bg_color}
       border="1px solid"
       borderColor="neutral.300"
       rounded="8px"
-      paddingX={paddingX}
-      paddingY={paddingY}
-      gap="4px"
-      flexWrap="wrap"
-      overflow="hidden"
-      position="relative"
     >
       {loading ? (
         <Flex width="100%" height="100%" justifyContent="center" alignItems="center">
@@ -49,6 +44,6 @@ export default function WidgetContainer({
       ): (
         children
       )}
-    </Flex>
+    </Box>
   );
 }

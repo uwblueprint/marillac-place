@@ -4,6 +4,7 @@ import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
+import { endOfDay } from "date-fns";
 
 type LoginResponse = {
   token: string;
@@ -52,7 +53,7 @@ const loginResolver = {
       const participant: Participant | null = await db.participant.findUnique({
         where: {
           pid,
-          OR: [{ departure: null }, { departure: { gt: new Date() } }],
+          OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
         },
       });
 

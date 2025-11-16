@@ -1,5 +1,6 @@
 // TODO (calista): 
 // Go over Figma design update & categorize text styles
+// standardize text style for error messages
 
 import { defineStyleConfig } from "@chakra-ui/react";
 

@@ -8,7 +8,7 @@ async function assignRequiredTasks() {
   try {
     const participants = await db.participant.findMany({
       where: {
-        OR: [{ departure: null }, { departure: { gt: new Date() } }],
+        OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
       },
       select: { pid: true },
     });

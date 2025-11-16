@@ -27,9 +27,7 @@ const getRoomString = (rooms: number[]) => {
   return `Rooms ${rooms.join(", ")}`;
 };
 
-const AnnouncementCard: React.FC<{ announcement: AnnouncementDisplayInfo }> = ({
-  announcement,
-}) => {
+const AnnouncementCard: React.FC<{ announcement: AnnouncementDisplayInfo }> = ({ announcement }) => {
   const formatDate = (date: Date) => {
     return date
       .toLocaleString("en-ca", {
@@ -41,31 +39,31 @@ const AnnouncementCard: React.FC<{ announcement: AnnouncementDisplayInfo }> = ({
   };
 
   return (
-    <Flex
-      flexDir="column"
+    <WidgetContainer
       width="100%"
-      bg="neutral.100"
-      border="1px solid"
-      borderColor="neutral.300"
-      rounded="8px"
       paddingX="16px"
       paddingY="12px"
-      gap="5px"
+      bg_color="neutral.100"
     >
-      <Flex width="100%" alignItems="baseline">
-        <Text textStyle="web.b2" fontWeight={600} color="black">
-          {getRoomString(announcement.rooms)}
-        </Text>
-        <Text textStyle="web.b3" color="text.light.secondary" marginLeft="20px">
-          posted at {formatDate(announcement.creation_date)}
-        </Text>
-      </Flex>
-      <Flex width="100%">
-        <Text textStyle="web.b2" color="black">
+      <Flex flexDir="column" gap="6px" width="100%">
+        <Flex width="100%" alignItems="baseline" flexWrap="wrap" gap="8px">
+          <Text textStyle="web.b2" fontWeight={600} color="black">
+            {getRoomString(announcement.rooms)}
+          </Text>
+          <Text textStyle="web.b3" color="text.light.secondary">
+            posted at {formatDate(announcement.creation_date)}
+          </Text>
+        </Flex>
+        <Text
+          textStyle="web.b2"
+          color="black"
+          whiteSpace="pre-wrap"
+          wordBreak="break-word"
+        >
           {announcement.message}
         </Text>
       </Flex>
-    </Flex>
+    </WidgetContainer>
   );
 };
 
@@ -100,78 +98,58 @@ const AnnouncementSection = () => {
   }, [getAnnouncementsData]);
 
   return (
-    <WidgetContainer 
+    <WidgetContainer
       width="100%"
       height="calc(100% - 325px)"
-      paddingX="16px" 
-      paddingY="16px"
+      paddingX="20px"
+      paddingY="12px"
       loading={getAnnouncementsLoading}
       error={getAnnouncementsError?.message}
     >
-      <Flex
-        w="100%"
-        flexDir="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Flex
-          w="100%"
-          flexDir="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          pl="2px"
-          pb="4px"
-          gap="12px"
-        >
-          <Text textStyle="web.h3" color="primary.700">
-            Announcements
-          </Text>
-          <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
-            {announcements.length} new post{announcements.length === 1 ? "" : "s"} today
-          </Text>
+      <Flex w="100%" h="100%" flexDir="column" gap="12px" minH={0}>
+        <Flex w="100%" justifyContent="space-between" alignItems="center" pb="4px">
+          <Flex flexDir="row" alignItems="center" gap="12px">
+            <Text textStyle="web.h3" color="primary.700">
+              Announcements
+            </Text>
+            <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
+              {announcements.length} new post{announcements.length === 1 ? "" : "s"} today
+            </Text>
+          </Flex>
+          <UnderlineButton
+            label="View All"
+            action={() => navigate(ADMIN_ANNOUNCEMENTS_PAGE)}
+          />
         </Flex>
 
-        <UnderlineButton
-          label="View All"
-          action={() => navigate(ADMIN_ANNOUNCEMENTS_PAGE)}
-        />
-      </Flex>
-      <Flex
-        w="100%"
-        flexGrow={1}
-        flexDir="column"
-        gap="8px"
-        overflowY="auto"
-        alignItems="center"
-        justifyContent="top"
-        sx={{
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
-      >
-        {announcements.length === 0 ? (
-          <Text textStyle="web.b2" color="text.light.secondary" mt="75px">
-            No Announcements
-          </Text>
-        ) : (
-          <Flex
-            width="100%"
-            height="100%"
-            flexDir="column"
-            justifyContent="flex-start"
-            gap="10px"
-          >
-            {announcements.map((announcement: AnnouncementDisplayInfo) => {
-              return (
-                <AnnouncementCard
-                  key={announcement.announcement_id}
-                  announcement={announcement}
-                />
-              );
-            })}
-          </Flex>
-        )}
+        <Flex
+          w="100%"
+          flex="1"
+          flexDir="column"
+          gap="10px"
+          overflowY="auto"
+          alignItems={announcements.length === 0 ? "center" : "stretch"}
+          justifyContent={announcements.length === 0 ? "center" : "flex-start"}
+          minH={0}
+          sx={{
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
+          {announcements.length === 0 ? (
+            <Text textStyle="web.b2" color="text.light.secondary">
+              No Announcements
+            </Text>
+          ) : (
+            announcements.map((announcement: AnnouncementDisplayInfo) => (
+              <AnnouncementCard
+                key={announcement.announcement_id}
+                announcement={announcement}
+              />
+            ))
+          )}
+        </Flex>
       </Flex>
     </WidgetContainer>
   );

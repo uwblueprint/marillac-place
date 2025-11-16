@@ -11,9 +11,9 @@ const AdminHomePage = (): React.ReactElement => {
       <Text
         textStyle="web.h2"
         color="#000000"
-        zIndex="10"
         position="absolute"
         px="20px"
+        zIndex={10}
         top="10px"
         left="0px"
       >
@@ -33,10 +33,10 @@ const AdminHomePage = (): React.ReactElement => {
 
       <Flex
         w="100%"
-        h="100%"
+        h="calc(100% - 55px)"
         flexDir="row"
       >
-        <Flex flexDir="column" marginRight="12px" gap="12px" width="calc(100% - 300px)">
+        <Flex flexGrow={1} flexDir="column" marginRight="12px" gap="12px">
           <RoomsOverview />
           <AnnouncementSection />
         </Flex>
