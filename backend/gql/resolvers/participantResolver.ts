@@ -1,27 +1,24 @@
 import { Participant } from "@prisma/client";
 import db from "../../prisma";
-import { getToday } from "../../utils/dateUtils";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
 
 const participantResolver = {
   Query: {
     // TODO (yan): write a query that gets participant by pid
     getCurrentParticipants: async (): Promise<Participant[]> => {
-      const today = getToday();
       return db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: today } }],
+          OR: [{ departure: null }, { departure: { gt: new Date() } }],
         },
         orderBy: [{ room: "asc" }],
       });
     },
     getPastParticipants: async (): Promise<Participant[]> => {
-      const today = getToday();
       return db.participant.findMany({
         where: {
           departure: {
             not: null,
-            lte: today,
+            lte: new Date(),
           },
         },
         orderBy: [{ departure: "desc" }],
@@ -48,14 +45,13 @@ const participantResolver = {
       });
       if (existingParticipant) throw new Error("participant id already exists");
 
-      const today = getToday();
-      const validArrival = arrival <= today;
+      const validArrival = arrival <= (new Date());
       if (!validArrival) throw new Error("arrival is in the future");
 
       const occupiedRoom = await db.participant.findFirst({
         where: {
           room,
-          OR: [{ departure: null }, { departure: { gt: today } }],
+          OR: [{ departure: null }, { departure: { gt: new Date() } }],
         },
       });
       if (occupiedRoom) throw new Error("room is occupied");

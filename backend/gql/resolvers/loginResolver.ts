@@ -3,7 +3,6 @@ import { Participant } from "@prisma/client";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
-import { getToday } from "../../utils/dateUtils";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 
 type LoginResponse = {
@@ -50,11 +49,10 @@ const loginResolver = {
         password: string;
       }
     ): Promise<LoginResponse> => {
-      const today = getToday();
       const participant: Participant | null = await db.participant.findUnique({
         where: {
           pid,
-          OR: [{ departure: null }, { departure: { gt: today } }],
+          OR: [{ departure: null }, { departure: { gt: new Date() } }],
         },
       });
 

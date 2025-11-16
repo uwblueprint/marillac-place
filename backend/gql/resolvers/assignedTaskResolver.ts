@@ -1,17 +1,16 @@
 import { AssignedTask, TaskStatus, TaskType } from "@prisma/client";
-import { startOfWeek, endOfWeek } from "date-fns";
+import { startOfWeek, endOfWeek, endOfDay, startOfDay } from "date-fns";
 import db from "../../prisma";
-import { getBeginningOfWeek, getToday } from "../../utils/dateUtils";
 import processEarning from "../../utils/transactionUtils";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
+import { PERFECT_SCORE_OPTIONAL, PERFECT_SCORE_REQUIRED } from "../../constants/systemBadges";
 
 const assignedTaskResolver = {
   Query: {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
-      const today = getToday();
       const currentParticipants = await db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: today } }],
+          OR: [{ departure: null }, { departure: { gt: new Date() } }],
         },
         select: {
           pid: true,
@@ -51,15 +50,11 @@ const assignedTaskResolver = {
         pid: number;
       }
     ): Promise<AssignedTask[]> => {
-      const startOfDay = getToday();
-      const endOfDay = new Date();
-      endOfDay.setHours(23, 59, 59, 999);
-
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfDay },
-          end_date: { gte: startOfDay },
+          start_date: { lte: endOfDay(new Date()) },
+          end_date: { gte: startOfDay(new Date()) },
         },
       });
     },
@@ -73,14 +68,10 @@ const assignedTaskResolver = {
         weekStart: Date;
       }
     ): Promise<AssignedTask[]> => {
-      const weekEnd = new Date(weekStart);
-      weekEnd.setDate(weekStart.getDate() + 6);
-      weekEnd.setHours(23, 59, 59, 999);
-
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: weekEnd },
+          start_date: { lte: endOfWeek(weekStart) },
           end_date: { gte: weekStart },
         },
       });
@@ -93,18 +84,13 @@ const assignedTaskResolver = {
         pid: number;
       }
     ): Promise<boolean> => {
-      const weekStart = getBeginningOfWeek();
-      const weekEnd = new Date(weekStart);
-      weekEnd.setDate(weekStart.getDate() + 6);
-      weekEnd.setHours(23, 59, 59, 999);
-
       const requiredTasksNotComplete = await db.assignedTask.findMany({
         where: {
           pid,
           type: TaskType.REQUIRED,
           status: { not: TaskStatus.COMPLETE },
-          start_date: { lte: weekEnd },
-          end_date: { gte: weekStart },
+          start_date: { lte: endOfWeek(new Date()) },
+          end_date: { gte: startOfWeek(new Date()) },
         },
       });
 
@@ -201,73 +187,52 @@ const assignedTaskResolver = {
     ): Promise<AssignedTask> => {
       if (status === TaskStatus.ASSIGNED) {
         throw new Error("invalid status update");
-      }
+      } else if (status === TaskStatus.COMPLETE) {
+        const assignedTask = await db.assignedTask.findUnique({
+          where: { aid },
+        });
+        if (assignedTask === null) throw new Error("assigned task not found");
 
-      // query the database and get the task object corresponding to the aid
-      const assignedTask = await db.assignedTask.findUnique({
-        where: { assigned_task_id: aid },
-      });
-
-      if (assignedTask === null) {
-        throw new Error("assigned task not found");
-      }
-
-      if (status === TaskStatus.COMPLETE) {
-        // get how many marillac bucks the task is worth and call the process earning function with the reason being a task was completed
+        const reasonForEarning = `Required task ${assignedTask.name} completed!`;
         await processEarning(
-          assignedTask.participant_id,
-          assignedTask.marillac_bucks_addition,
-          `Completed task: ${assignedTask.goal_name}`
+          assignedTask.pid,
+          assignedTask.value,
+          reasonForEarning
         );
 
-        const today = new Date();
-        const weekStart = startOfWeek(today);
-        const weekEnd = endOfWeek(today);
-
-        // execute perfect score required logic (check that all required tasks for this week have been completed)
-        if (assignedTask.task_type === TaskType.REQUIRED) {
+        if (assignedTask.type === TaskType.REQUIRED) {
           const weeklyRequiredTasks = await db.assignedTask.findMany({
             where: {
-              participant_id: assignedTask.participant_id,
-              start_date: { lte: weekEnd },
-              end_date: { gte: weekStart },
-              task_type: TaskType.REQUIRED,
+              pid: assignedTask.pid,
+              status: { not: TaskStatus.COMPLETE },
+              start_date: { lte: endOfWeek(new Date()) },
+              end_date: { gte: startOfWeek(new Date()) },
+              type: TaskType.REQUIRED,
             },
           });
 
-          if (
-            weeklyRequiredTasks.length > 0 &&
-            weeklyRequiredTasks.every(
-              (task) => task.task_status === TaskStatus.COMPLETE
-            )
-          ) {
-            // call updateBadgeLevelProgress function in the utils for the perfect score required
+          if (weeklyRequiredTasks.length === 0) {
             await updateBadgeLevelProgress(
-              "Perfect Score Badge for Required Tasks",
-              assignedTask.participant_id,
+              PERFECT_SCORE_REQUIRED,
+              assignedTask.pid,
               1
             );
           }
-        }
-        // execute perfect score optional logic (check that 3+ optional tasks from this week have been completed)
-        else if (assignedTask.task_type === TaskType.OPTIONAL) {
-          const numOfWeeklyCompletedOptionalTasks = await db.assignedTask.count(
-            {
-              where: {
-                participant_id: assignedTask.participant_id,
-                start_date: { lte: weekEnd },
-                end_date: { gte: weekStart },
-                task_type: TaskType.OPTIONAL,
-                task_status: TaskStatus.COMPLETE,
-              },
-            }
-          );
+        } else if (assignedTask.type === TaskType.OPTIONAL) {
+          const countCompletedOptionalTasks = await db.assignedTask.count({
+            where: {
+              pid: assignedTask.pid,
+              start_date: { lte: endOfWeek(new Date()) },
+              end_date: { gte: startOfWeek(new Date()) },
+              type: TaskType.OPTIONAL,
+              status: TaskStatus.COMPLETE,
+            },
+          });
 
-          if (numOfWeeklyCompletedOptionalTasks === 2) {
-            // call updateBadgeLevelProgress function in the utils for optional badges
+          if (countCompletedOptionalTasks === 2) {
             await updateBadgeLevelProgress(
-              "Perfect Score Badge for Optional Tasks",
-              assignedTask.participant_id,
+              PERFECT_SCORE_OPTIONAL,
+              assignedTask.pid,
               1
             );
           }

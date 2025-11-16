@@ -1,7 +1,6 @@
 import { Level } from "@prisma/client";
 import db from "../prisma";
 import { SYSTEM_BADGES, JACK_OF_ALL_TRADES } from "../constants/systemBadges";
-import { getToday } from "./dateUtils";
 import processEarning from "./transactionUtils";
 
 function getNextBadgeLevel(level: Level) {
@@ -76,10 +75,9 @@ export async function updateBadgeLevelProgress(
 }
 
 export async function validateBadgeLevelProgress(name: string) {
-  const today = getToday();
   const currentParticipants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: today } }],
+      OR: [{ departure: null }, { departure: { gt: new Date() } }],
     },
   });
 
