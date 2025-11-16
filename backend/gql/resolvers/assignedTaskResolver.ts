@@ -238,7 +238,24 @@ const assignedTaskResolver = {
           }
         }
 
-        // TODO: add jack of all trades, first goal, individual goal badge logic
+        // TODO (victor): add jack of all trades, first goal, individual goal badge logic
+
+        // Jack of All Trades:
+        // If the task that's just been completed has not been completed before, update badge level progress for the JACK_OF_ALL_TRADES badge by 1
+        // For this badge, you might need to add tid to the AssignedTask table (not as a FK referencing the Task table, just as an attribute, since if the referenced Task is deleted we still want to preserve the state of the AssignedTask)
+        // Places you might need to update with this new property include (types/models.ts, types/resolvers.ts, prisma/schema.prisma, createAssignedTask resolver)
+        // To process new schema changes, you'll need to run the following commands:
+        // npx prisma migrate reset
+        // npx prisma migrate dev
+        // npx @snaplet/seed sync
+        // Also ensure that the mp_db container is running and you've set DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mp after the container is setup
+
+        // First Goal: 
+        // No condition needs to be checked, just call updateBadgeLevelProgress for the FIRST_GOAL badge with inc = 1
+
+        // Individual Goal:
+        // Check if all assigned tasks of type INDIVIDUAL_GOAL have been completed for the week, if so, update badge level progress for the INDIVIDUAL_GOAL badge by 1
+
       }
 
       return db.assignedTask.update({

@@ -50,11 +50,17 @@ export async function updateBadgeLevelProgress(
       data: { name, level: badgeLevelProgress.level, pid },
     });
 
-    // TODO: implement pr leader badge logic
-    // query badge level progress for the participant and pr leader badge for that level
-    // if the query does not return anything, then continue
-    // if progress + 1 has reached the benchmark, then create a new achieved badge level for the pr leader badge and delete the badge level progress
-    // if progress + 1 has not reached the benchmark, then update badge level progress with progress + 1
+    // TODO (yan): implement pr leader badge logic 
+    // (e.g. the idea is, using the NOVICE level as an example, is that we award the PR_LEADER_BADGE for the NOVICE level 
+    // when the participant has earned x amount of NOVICE level badges. Here, in the code above,
+    // we have just awarded some new badge so we need to execute the logic for the PR_LEADER_BADGE)
+
+    // Flow:
+    // 1. query BadgeLevelProgress based on pid for the PR_LEADER_BADGE for that level
+    // 2. if the query does not return anything, then you can skip the remaining steps
+    // 3. if 1 + the progress attribute on BadgeLevelProgress has reached the benchmark attribute, 
+    // 4. then create a new achieved badge level for the PR_LEADER_BADGE for the relevant level and delete the BadgeLevelProgress you just queried
+    // 5. if the benchmark has not been achieved, then simply update BadgeLevelProgress to progress + 1
 
     await db.badgeLevelProgress.delete({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },

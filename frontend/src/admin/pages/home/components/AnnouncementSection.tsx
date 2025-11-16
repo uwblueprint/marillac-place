@@ -102,7 +102,7 @@ const AnnouncementSection = () => {
   return (
     <WidgetContainer 
       width="100%"
-      height="calc(100% - 320px)"
+      height="calc(100% - 325px)"
       paddingX="16px" 
       paddingY="16px"
       loading={getAnnouncementsLoading}

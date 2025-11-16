@@ -4,9 +4,9 @@
   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDc3MTc5NDF9.8Z7MEw0o7fgIpFTnw82kv0yTW8tG2i7TrcuXPY-i0l4"
 }
 
-# GraphQL operations for Marillac Place backend.
-# Copy/paste queries and mutations in this file and supply variable values as needed.
-# Date/DateTime/Time scalars expect ISO-8601 strings (e.g. "2025-01-01T12:00:00Z").
+# GraphQL operations for Marillac Place backend
+# Copy / paste queries and mutations in this file and supply variable values as needed
+# Date, DateTime, Time types expect ISO-8601 strings (e.g. "2025-01-01T12:00:00Z").
 
 query GetNotes {
   getNotes {

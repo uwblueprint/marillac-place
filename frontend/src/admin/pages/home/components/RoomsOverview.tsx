@@ -55,7 +55,7 @@ export default function RoomsOverview() {
   return (
     <WidgetContainer 
       width="100%" 
-      height="320px" 
+      height="325px" 
       paddingX="16px" 
       paddingY="16px"
       loading={isLoading}

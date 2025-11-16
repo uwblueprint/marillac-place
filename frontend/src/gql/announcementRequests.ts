@@ -8,6 +8,7 @@ export const GET_ANNOUNCEMENTS_FROM_TODAY = gql`
       message
       priority
       ReceivedAnnouncement {
+        pid
         participant {
           room
         }
@@ -24,10 +25,10 @@ export const GET_ANNOUNCEMENTS_SENT_TO_PARTICIPANTS = gql`
       message
       priority
       ReceivedAnnouncement {
-        aid
         pid
-        read
-        pinned
+        participant {
+          room
+        }
       }
     }
   }
