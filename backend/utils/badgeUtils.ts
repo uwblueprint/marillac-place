@@ -67,6 +67,7 @@ export async function updateBadgeLevelProgress(
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },
     });
 
+    // TODO: Process the earning only upon notifying the participant
     const reasonForEarning = `${badgeLevelProgress.level} ${name} badge achieved!`;
     await processEarning(
       pid,
