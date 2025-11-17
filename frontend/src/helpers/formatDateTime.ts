@@ -7,33 +7,32 @@
 
 // Converts UTC Date object to a string in the format "YYYY-MM-DD" in local timezone
 export function formatDateInputValue(date: Date): string {
-  return date.toLocaleDateString("en-CA", { 
-    year: "numeric", 
-    month: "2-digit", 
-    day: "2-digit" 
+  return date.toLocaleDateString("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   });
 }
 
-// Converts UTC Date object to a string in the format "HH:MM" in local timezone
+// Converts UTC Date object to a string in the format "HH:mm" in local timezone
 export function formatTimeInputValue(date: Date): string {
   return date.toLocaleTimeString("en-CA", {
     hour: "2-digit",
     minute: "2-digit",
+    hour12: false,
   });
 }
 
-// Converts strings in the format "YYYY-MM-DD" and "HH:MM" from local timezone to a Date object in UTC
-export function parseDateTimeInputValue(date: string, time = "00:00"): Date {
-    const [yearStr, monthStr, dayStr] = date.split("-");
-    const year = Number(yearStr);
-    const month = Number(monthStr) - 1;
-    const day = Number(dayStr);
+// Converts strings in the format "YYYY-MM-DD" from local timezone to a Date object in UTC
+export function parseDateInputValue(date: string): Date {
+  const [year, month, day] = date.split("-");
+  return new Date(Number(year), Number(month) - 1, Number(day));
+}
 
-    const [hourStr, minuteStr] = time.split(":");
-    const hour = Number(hourStr);
-    const minute = Number(minuteStr);
-  
-    return new Date(year, month, day, hour, minute);
+// Converts strings in the format "HH:mm" from local timezone to a Date object in UTC
+export function parseTimeInputValue(time: string): Date {
+  const [hour, minute] = time.split(":");
+  return new Date(0, 0, 0, Number(hour), Number(minute));
 }
 
 // Converts today's date into the format "January 1, 2025" in the local timezone
@@ -54,5 +53,15 @@ export function formatDateTimeString(date: string): string {
     hour12: true,
     month: "short",
     day: "numeric",
+  });
+}
+
+// Converts a UTC string date from a GraphQL response into the format "12:00 AM"
+export function formatTimeString(date: string): string {
+  const dateObj = new Date(date);
+  return dateObj.toLocaleTimeString("en-CA", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
   });
 }

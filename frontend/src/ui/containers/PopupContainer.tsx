@@ -44,33 +44,42 @@ export default function PopupContainer({
         height="fit-content"
         boxShadow="xl"
         borderRadius="8px"
-        paddingX="25px"
-        paddingY="15px"
+        paddingX="30px"
+        paddingY="20px"
+        gap="8px"
       >
-        <Text textStyle="web.h3" mb="10px">
+        <Text textStyle="web.h3" mb="4px">
           {title}
         </Text>
 
-        { loading ? (
-          <Flex width="100%" height="100%" justifyContent="center" alignItems="center">
+        {loading ? (
+          <Flex
+            width="100%"
+            height="100%"
+            justifyContent="center"
+            alignItems="center"
+            paddingY="10px"
+          >
             <Spinner size="md" color="primary.700" />
           </Flex>
-        ): (
-          <Flex flexDir="column" gap="8px">
-            {children}
-            {error_message !== "" && (
-              <Text textStyle="web.s1" color="#E30000">
-                {error_message}
-              </Text>
-            )}
+        ) : error_message !== "" ? (
+          <Flex flexDir="column" gap="2px" paddingY="10px">
+            <Text textStyle="web.b2" color="#E30000" textAlign="center">
+              ERROR
+            </Text>
+            <Text textStyle="web.b2" color="text.light.secondary" textAlign="center">
+              {error_message}
+            </Text>
           </Flex>
+        ) : (
+          children
         )}
-          
+
         <Flex
           alignItems="center"
           justifyContent="flex-end"
           gap="12px"
-          mt="15px"
+          mt="8px"
         >
           <BlackOutlineButton
             label="Cancel"

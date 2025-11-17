@@ -1,6 +1,6 @@
 import { GoalAction, Level, TaskStatus, TransactionType } from "@prisma/client";
-import db from "../prisma";
 import { endOfMonth, endOfWeek, startOfMonth, startOfWeek } from "date-fns";
+import db from "../prisma";
 
 export enum ReportType {
   WEEKLY = "Weekly",

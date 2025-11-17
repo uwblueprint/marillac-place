@@ -1,11 +1,7 @@
 // TODO: Refactor the dropdown to match the Figma design
 
 import React from "react";
-import {
-  FormControl,
-  Text,
-  Select,
-} from "@chakra-ui/react";
+import { FormControl, Text, Select } from "@chakra-ui/react";
 import { InputProps } from "../../types/component";
 
 type DropdownInputProps = InputProps & {
@@ -20,11 +16,12 @@ export default function DropdownInput({
   placeholder = "Please Select",
   value_options,
 }: DropdownInputProps) {
-  const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
+  const width =
+    size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.light.secondary">
+        <Text textStyle="web.s1" color="text.light.secondary" mb="4px">
           {label}
         </Text>
       )}

@@ -2,9 +2,9 @@ import React from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { ButtonProps } from "../../types/component";
 
-export default function OrangeButton({ 
-  label, 
-  action, 
+export default function OrangeButton({
+  label,
+  action,
   is_active,
   icon,
 }: ButtonProps) {

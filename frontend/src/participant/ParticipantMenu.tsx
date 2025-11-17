@@ -3,7 +3,7 @@
 import { Flex, Text, Image, Tab, TabList, Tabs } from "@chakra-ui/react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ParticipantContext } from "./ParticipantContext";
 import * as ROUTES from "../constants/routes";
@@ -117,8 +117,10 @@ export default function ParticipantMenu() {
   const balance = participant?.balance;
 
   const error = !participant || !room || !balance;
-  if (error ) {
-    return <ErrorScreen message="Unable to retrieve participant information." />;
+  if (error) {
+    return (
+      <ErrorScreen message="Unable to retrieve participant information." />
+    );
   }
 
   return (
@@ -159,9 +161,7 @@ export default function ParticipantMenu() {
           objectFit="cover"
           borderRadius="100%"
         />
-        <Text textStyle="mobile.h2">
-          {balance}
-        </Text>
+        <Text textStyle="mobile.h2">{balance}</Text>
       </Flex>
     </Flex>
   );

@@ -2,11 +2,12 @@ import React from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { ButtonProps } from "../../types/component";
 
-export default function GreenOutlineButton({ 
-  label, 
-  action, 
+type GreenOutlineButtonProps = Omit<ButtonProps,  "icon">;
+
+export default function GreenOutlineButton({
+  label,
+  action,
   is_active,
-  icon,
 }: ButtonProps) {
   return (
     <Button
@@ -31,12 +32,9 @@ export default function GreenOutlineButton({
         bg: "#0C727E",
       }}
     >
-      <Flex alignItems="center" gap="5px">
-        {icon}
-        <Text textStyle="web.s1" color="inherit">
-          {label}
-        </Text>
-      </Flex>
+      <Text textStyle="web.s1" color="inherit">
+        {label}
+      </Text>
     </Button>
   );
 }

@@ -34,6 +34,7 @@ export enum Icon {
   PENCIL = "PENCIL",
   TOOL = "TOOL",
   WINGS = "WINGS",
+  PLANT = "PLANT",
 }
 
 export enum Level {

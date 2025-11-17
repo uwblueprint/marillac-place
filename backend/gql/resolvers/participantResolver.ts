@@ -1,7 +1,7 @@
 import { Participant } from "@prisma/client";
+import { endOfDay, startOfDay } from "date-fns";
 import db from "../../prisma";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
-import { endOfDay, startOfDay } from "date-fns";
 
 const participantResolver = {
   Query: {
@@ -18,7 +18,10 @@ const participantResolver = {
     getCurrentParticipants: async (): Promise<Participant[]> => {
       return db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: endOfDay(new Date()) } },
+          ],
         },
         orderBy: [{ room: "asc" }],
       });
@@ -55,13 +58,16 @@ const participantResolver = {
       });
       if (existingParticipant) throw new Error("participant id already exists");
 
-      const validArrival = arrival <= (new Date());
+      const validArrival = arrival <= new Date();
       if (!validArrival) throw new Error("arrival is in the future");
 
       const occupiedRoom = await db.participant.findFirst({
         where: {
           room,
-          OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: endOfDay(new Date()) } },
+          ],
         },
       });
       if (occupiedRoom) throw new Error("room is occupied");

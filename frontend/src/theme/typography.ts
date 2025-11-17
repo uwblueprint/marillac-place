@@ -1,4 +1,4 @@
-// TODO (calista): 
+// TODO (calista):
 // Go over Figma design update & categorize text styles
 // standardize text style for error messages
 

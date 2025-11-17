@@ -10,11 +10,12 @@ export default function PasswordInput({
   size,
 }: InputProps) {
   // TODO: add icon for password visibility toggle and handle click event (i.e. input type is text if visible, password if not)
-  const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
+  const width =
+    size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.light.secondary">
+        <Text textStyle="web.s1" color="text.light.secondary" mb="4px">
           {label}
         </Text>
       )}

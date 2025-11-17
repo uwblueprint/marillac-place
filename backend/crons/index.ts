@@ -1,11 +1,11 @@
 import cron from "node-cron";
+import { isLastDayOfMonth } from "date-fns";
 import expireNotes from "./scripts/expireNotes";
 import expireAnnouncements from "./scripts/expireAnnouncements";
 import resetLoginStreak from "./scripts/resetLoginStreak";
 import assignRequiredTasks from "./scripts/assignRequiredTasks";
 import sendMonthlyReport from "./scripts/sendMonthlyReport";
 import sendWeeklyReport from "./scripts/sendWeeklyReport";
-import { isLastDayOfMonth } from "date-fns";
 
 cron.schedule("0 0 * * * *", async () => {
   await expireNotes();

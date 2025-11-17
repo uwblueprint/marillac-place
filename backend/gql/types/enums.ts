@@ -37,6 +37,7 @@ const enums = gql`
     PENCIL
     TOOL
     WINGS
+    PLANT
   }
 
   enum Level {

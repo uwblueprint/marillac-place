@@ -3,14 +3,20 @@ import { startOfWeek, endOfWeek, endOfDay, startOfDay } from "date-fns";
 import db from "../../prisma";
 import processEarning from "../../utils/transactionUtils";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
-import { PERFECT_SCORE_OPTIONAL, PERFECT_SCORE_REQUIRED } from "../../constants/systemBadges";
+import {
+  PERFECT_SCORE_OPTIONAL,
+  PERFECT_SCORE_REQUIRED,
+} from "../../constants/systemBadges";
 
 const assignedTaskResolver = {
   Query: {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
       const currentParticipants = await db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: endOfDay(new Date()) } },
+          ],
         },
         select: {
           pid: true,
@@ -250,12 +256,11 @@ const assignedTaskResolver = {
         // npx @snaplet/seed sync
         // Also ensure that the mp_db container is running and you've set DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mp after the container is setup
 
-        // First Goal: 
+        // First Goal:
         // No condition needs to be checked, just call updateBadgeLevelProgress for the FIRST_GOAL badge with inc = 1
 
         // Individual Goal:
         // Check if all assigned tasks of type INDIVIDUAL_GOAL have been completed for the week, if so, update badge level progress for the INDIVIDUAL_GOAL badge by 1
-
       }
 
       return db.assignedTask.update({

@@ -1,6 +1,6 @@
 import { Announcement, Priority } from "@prisma/client";
-import db from "../../prisma";
 import { startOfDay } from "date-fns";
+import db from "../../prisma";
 
 const announcementResolver = {
   Query: {

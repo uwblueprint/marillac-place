@@ -5,7 +5,8 @@ import * as ROUTES from "../../constants/routes";
 import GreenOutlineButton from "../buttons/GreenOutlineButton";
 
 // TODO: verify this screen is for properly formatted on mobile and web + add contact support information
-export default function NotFound() {
+// Add to UI page
+export default function NotFoundScreen() {
   const navigate = useNavigate();
 
   function handleClick() {
