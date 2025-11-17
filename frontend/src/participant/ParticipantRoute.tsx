@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
+import { useLazyQuery } from "@apollo/client";
 import { verifyRole } from "../helpers/verifyRole";
 import { PARTICIPANT } from "../constants/roles";
 import Loading from "../ui/screens/LoadingScreen";
 import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
-import { useContext } from "react";
-import { useLazyQuery } from "@apollo/client";
 import { ParticipantContext } from "./ParticipantContext";
 import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
-import Error from "../ui/screens/ErrorScreen";
+import ErrorScreen from "../ui/screens/ErrorScreen";
 import ParticipantMenu from "./ParticipantMenu";
 
 type ParticipantRouteProps = {
@@ -31,11 +30,11 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       participantContext.setRoom(data.getParticipantByPid.room);
       participantContext.setBalance(data.getParticipantByPid.balance);
     },
-    onError: (error) => {
-      console.error("Error fetching participant:", error);
+    onError: (err: Error) => {
+      console.error(err.message);
     },
   });
-  
+
   useEffect(() => {
     const authorize = async () => {
       const isParticipant = await verifyRole([PARTICIPANT]);
@@ -63,7 +62,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   }
 
   if (error) {
-    return <Error />;
+    return <ErrorScreen message={error} />;
   }
 
   if (!authorized) {

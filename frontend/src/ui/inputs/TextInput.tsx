@@ -8,11 +8,12 @@ export default function TextInput({
   update_action,
   size,
 }: InputProps) {
-  const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
+  const width =
+    size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.light.secondary">
+        <Text textStyle="web.s1" color="text.light.secondary" mb="4px">
           {label}
         </Text>
       )}

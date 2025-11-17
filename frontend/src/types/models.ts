@@ -1,14 +1,14 @@
-import { 
-  Level, 
-  Priority, 
-  TaskType, 
-  TaskStatus, 
-  Icon, 
-  GoalAction, 
-  DayPreference, 
-  DayOfWeek, 
-  TimePreference, 
-  TransactionType 
+import {
+  Level,
+  Priority,
+  TaskType,
+  TaskStatus,
+  Icon,
+  GoalAction,
+  DayPreference,
+  DayOfWeek,
+  TimePreference,
+  TransactionType,
 } from "./enums";
 
 export interface AchievedBadgeLevel {

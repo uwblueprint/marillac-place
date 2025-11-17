@@ -1,4 +1,4 @@
-// TODO (calista): 
+// TODO (calista):
 // go over Figma design update & categorize colors definition
 
 const colors = {

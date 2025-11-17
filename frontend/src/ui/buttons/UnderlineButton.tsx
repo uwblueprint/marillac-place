@@ -17,16 +17,16 @@ export default function UnderlineButton({
       cursor="pointer"
       background="transparent"
       _hover={{
-        background: "transparent" 
+        background: "transparent",
       }}
     >
-      <Text 
-        textStyle="web.s1" 
-        color="black" 
-        textDecoration="underline" 
+      <Text
+        textStyle="web.s1"
+        color="black"
+        textDecoration="underline"
         fontWeight={600}
         _hover={{
-          textDecoration: "none"
+          textDecoration: "none",
         }}
       >
         {label}

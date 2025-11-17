@@ -12,3 +12,8 @@ export type InputProps = {
   update_action: React.Dispatch<React.SetStateAction<any>>;
   size: "small" | "medium" | "large";
 };
+
+export type IconProps = {
+  size?: number;
+  color?: string;
+};

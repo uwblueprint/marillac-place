@@ -7,7 +7,7 @@ async function resetLoginStreak() {
   try {
     const participants = await db.participant.findMany({
       where: {
-        OR: [{ departure: null }, { departure: { gt: startOfDay(new Date()) } }],
+        OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
       },
       select: { pid: true },
     });

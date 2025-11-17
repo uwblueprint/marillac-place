@@ -9,11 +9,12 @@ export default function NumberInput({
   update_action,
   size,
 }: InputProps) {
-  const width = size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
+  const width =
+    size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.light.secondary">
+        <Text textStyle="web.s1" color="text.light.secondary" mb="4px">
           {label}
         </Text>
       )}
@@ -21,7 +22,9 @@ export default function NumberInput({
         type="number"
         value={current_value ? String(current_value) : ""}
         placeholder={placeholder}
-        onChange={(e) => update_action(e.target.value ? Number(e.target.value) : undefined)}
+        onChange={(e) =>
+          update_action(e.target.value ? Number(e.target.value) : undefined)
+        }
         width={width}
         height="fit-content"
         paddingX="12px"

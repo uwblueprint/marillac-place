@@ -124,4 +124,4 @@ export default function AdminMenu() {
       {signOut && <SignOutPopUp cancel={() => setSignOut(false)} />}
     </Box>
   );
-};
+}

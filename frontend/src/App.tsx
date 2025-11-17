@@ -3,23 +3,23 @@ import {
   BrowserRouter as Router,
   Outlet,
   Route,
-  Routes
+  Routes,
 } from "react-router-dom";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-import AdminLoginPage from "./admin/pages/login/Main";
-import AdminHomePage from "./admin/pages/home/Main";
+// import AdminLoginPage from "./admin/pages/login/Main";
+// import AdminHomePage from "./admin/pages/home/Main";
 // import AdminSchedulePage from "./admin/pages/schedule/Main";
-import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
-import AdminParticipantsPage from "./admin/pages/participants/Main";
+// import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
+// import AdminParticipantsPage from "./admin/pages/participants/Main";
 // import AdminTasksPage from "./admin/pages/tasks/Main";
 // import AdminBadgesPage from "./admin/pages/badges/Main";
 // import AdminReportsPage from "./admin/pages/reports/Main";
 
-import ParticipantLoginPage from "./participant/pages/login/Main";
+// import ParticipantLoginPage from "./participant/pages/login/Main";
 // import ParticipantHomePage from "./participant/pages/home/Main";
 // import ParticipantSchedulePage from "./participant/pages/schedule/Main";
 // import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
@@ -35,6 +35,8 @@ import NotFound from "./ui/screens/NotFoundScreen";
 import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
 
+import UI from "./ui/UI";
+
 function initApolloClient() {
   const endpoint = createUploadLink({
     uri: `${process.env.REACT_APP_BACKEND_URL}/graphql`,
@@ -42,7 +44,6 @@ function initApolloClient() {
   });
 
   const header = setContext(async (_, { headers }) => {
-    const path = window.location.pathname.split("/");
     let token = null;
     token = localStorage.getItem("token");
     return {
@@ -86,7 +87,7 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Routes>
-            <Route element={<AdminLayout />}>
+            {/* <Route element={<AdminLayout />}>
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
                 element={<AdminLoginPage />}
@@ -115,7 +116,7 @@ const App = (): React.ReactElement => {
                   </AdminRoute>
                 }
               />
-              {/* <Route
+              <Route
                 path={ROUTES.ADMIN_SCHEDULE_PAGE}
                 element={
                   <AdminRoute>
@@ -146,7 +147,7 @@ const App = (): React.ReactElement => {
                     <AdminReportsPage />
                   </AdminRoute>
                 }
-              /> */}
+              />
             </Route>
 
             <Route element={<ParticipantLayout />}>
@@ -154,7 +155,7 @@ const App = (): React.ReactElement => {
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
                 element={<ParticipantLoginPage />}
               />
-              {/* <Route
+              <Route
                 path={ROUTES.PARTICIPANTS_HOME_PAGE}
                 element={
                   <ParticipantRoute>
@@ -185,9 +186,10 @@ const App = (): React.ReactElement => {
                     <ParticipantProgressPage />
                   </ParticipantRoute>
                 }
-              /> */}
-            </Route>
+              />
+            </Route> */}
 
+            <Route path="/ui" element={<UI />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

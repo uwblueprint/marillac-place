@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  FormControl,
-  RadioGroup,
-  Stack,
-  Radio,
-  Text,
-} from "@chakra-ui/react";
+import { FormControl, RadioGroup, Stack, Radio, Text } from "@chakra-ui/react";
 import { InputProps } from "../../types/component";
 
 type SelectInputProps = Omit<InputProps, "size"> & {
@@ -21,12 +15,15 @@ export default function SelectInput({
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.light.secondary">
+        <Text textStyle="web.s1" color="text.light.secondary" mb="4px">
           {label}
         </Text>
       )}
-      <RadioGroup value={current_value} onChange={(selected) => update_action(selected)}>
-        <Stack direction="column" spacing={0.5}>
+      <RadioGroup
+        value={current_value}
+        onChange={(selected) => update_action(selected)}
+      >
+        <Stack direction="column" spacing={0.5} width="fit-content">
           {Object.entries(value_options).map(([key, value], index) => (
             <Radio
               key={index}

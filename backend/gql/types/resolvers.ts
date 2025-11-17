@@ -38,7 +38,6 @@ const resolvers = gql`
     getEarnedCustomBadges(pid: Int!): [EarnedCustomBadge!]!
 
     getAchievedBadgeLevels(pid: Int!): [AchievedBadgeLevel!]!
-
   }
 
   type Mutation {

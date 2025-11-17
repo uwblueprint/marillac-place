@@ -1,4 +1,5 @@
 import { Level } from "@prisma/client";
+import { endOfDay } from "date-fns";
 import db from "../prisma";
 import { SYSTEM_BADGES, JACK_OF_ALL_TRADES } from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
@@ -102,6 +103,7 @@ export async function updateBadgeLevelProgress(
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },
     });
 
+    // TODO: Process the earning only upon notifying the participant
     const reasonForEarning = `${badgeLevelProgress.level} ${name} badge achieved!`;
     await processEarning(
       pid,
@@ -125,7 +127,7 @@ export async function updateBadgeLevelProgress(
 export async function validateBadgeLevelProgress(name: string) {
   const currentParticipants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: new Date() } }],
+      OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
     },
   });
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Spinner, Text } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
 
 type WidgetContainerProps = {
   bg_color?: string;
@@ -12,9 +12,9 @@ type WidgetContainerProps = {
   error?: string;
 };
 
-export default function WidgetContainer({ 
-  bg_color = "white", 
-  children, 
+export default function WidgetContainer({
+  bg_color = "white",
+  children,
   width = "fit-content",
   height = "fit-content",
   paddingX = "12px",
@@ -23,32 +23,44 @@ export default function WidgetContainer({
   error = "",
 }: WidgetContainerProps) {
   return (
-    <Flex
-      flexDir="column"
+    <Box
       width={width}
       height={height}
+      paddingX={paddingX}
+      paddingY={paddingY}
       bg={bg_color}
       border="1px solid"
       borderColor="neutral.300"
       rounded="8px"
-      paddingX={paddingX}
-      paddingY={paddingY}
-      gap="4px"
-      flexWrap="wrap"
-      overflow="hidden"
-      position="relative"
     >
       {loading ? (
-        <Flex width="100%" height="100%" justifyContent="center" alignItems="center">
+        <Flex
+          width="100%"
+          height="100%"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Spinner size="md" color="primary.700" />
         </Flex>
-      ): error !== "" ? (
-        <Flex width="100%" height="100%" justifyContent="center" alignItems="center">
-          <Text textStyle="web.b2" color="text.light.secondary">Error: {error}</Text>
+      ) : error !== "" ? (
+        <Flex
+          width="100%"
+          height="100%"
+          justifyContent="center"
+          alignItems="center"
+          flexDir="column"
+          gap="2px"
+        >
+          <Text textStyle="web.b2" color="#E30000" textAlign="center">
+            ERROR
+          </Text>
+          <Text textStyle="web.b2" color="text.light.secondary" textAlign="center">
+            {error}
+          </Text>
         </Flex>
-      ): (
+      ) : (
         children
       )}
-    </Flex>
+    </Box>
   );
 }

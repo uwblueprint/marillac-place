@@ -1,7 +1,7 @@
 import { Transaction, TransactionType, DayOfWeek } from "@prisma/client";
+import { endOfWeek, startOfWeek } from "date-fns";
 import db from "../../prisma";
 import { orderedDays } from "../../constants/days";
-import { endOfWeek, startOfWeek } from "date-fns";
 
 type GetWeeklyEarningsResponse = Record<DayOfWeek, number>;
 
@@ -15,7 +15,6 @@ const transactionResolver = {
         pid: number;
       }
     ): Promise<GetWeeklyEarningsResponse> => {
-
       const transactions = await db.transaction.findMany({
         where: {
           pid,
