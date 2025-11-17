@@ -1,7 +1,7 @@
 import { Level } from "@prisma/client";
 import { endOfDay } from "date-fns";
 import db from "../prisma";
-import { SYSTEM_BADGES, JACK_OF_ALL_TRADES } from "../constants/systemBadges";
+import { SYSTEM_BADGES, JACK_OF_ALL_TRADES, PR_LEADER } from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
 
 function getNextBadgeLevel(level: Level) {
@@ -62,41 +62,39 @@ export async function updateBadgeLevelProgress(
       },
     });
 
-    if (!prLeaderProgress) return;
-
-    const newPrLeaderAmount = prLeaderProgress.progress + 1;
-    const reachedPrLeaderBenchmark =
-      newPrLeaderAmount >= prLeaderProgress.badge_level.benchmark;
-
-    if (reachedPrLeaderBenchmark) {
-      await db.achievedBadgeLevel.create({
-        data: {
-          name: "PR_LEADER_BADGE", 
-          level: prLeaderProgress.level,
-          pid,
-        },
-      });
-
-      await db.badgeLevelProgress.delete({
-        where: {
-          name_level_pid: { 
-            name: "PR_LEADER_BADGE",
+    if (prLeaderProgress) {
+      const newPrLeaderAmount = prLeaderProgress.progress + 1;
+      const reachedPrLeaderBenchmark = newPrLeaderAmount >= prLeaderProgress.badge_level.benchmark;
+      if (reachedPrLeaderBenchmark) {
+        await db.achievedBadgeLevel.create({
+          data: {
+            name: PR_LEADER, 
             level: prLeaderProgress.level,
             pid,
           },
-        },
-      });
-    } else {
-      await db.badgeLevelProgress.update({ 
-        where: {
-          name_level_pid: {
-            name: "PR_LEADER_BADGE",
-            level: prLeaderProgress.level,
-            pid,
+        });
+
+        await db.badgeLevelProgress.delete({
+          where: {
+            name_level_pid: { 
+              name: PR_LEADER,
+              level: prLeaderProgress.level,
+              pid,
+            },
           },
-        },
-        data: { progress: newPrLeaderAmount },
-      });
+        });
+      } else {
+        await db.badgeLevelProgress.update({ 
+          where: {
+            name_level_pid: {
+              name: PR_LEADER,
+              level: prLeaderProgress.level,
+              pid,
+            },
+          },
+          data: { progress: newPrLeaderAmount },
+        });
+      }
     }
     
     await db.badgeLevelProgress.delete({
