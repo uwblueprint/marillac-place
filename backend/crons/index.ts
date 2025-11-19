@@ -1,4 +1,5 @@
 import cron from "node-cron";
+import { isLastDayOfMonth } from "date-fns";
 import expireNotes from "./scripts/expireNotes";
 import expireAnnouncements from "./scripts/expireAnnouncements";
 import resetLoginStreak from "./scripts/resetLoginStreak";
@@ -27,8 +28,7 @@ cron.schedule("0 0 23 * * 6", async () => {
 });
 
 cron.schedule("0 0 23 * * *", async () => {
-  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  if (tomorrow.getDate() === 1) {
+  if (isLastDayOfMonth(new Date())) {
     await sendMonthlyReport();
   }
 });

@@ -28,6 +28,20 @@ export const GET_PAST_PARTICIPANTS = gql`
   }
 `;
 
+export const GET_PARTICIPANT_BY_PID = gql`
+  query getParticipantByPid($pid: Int!) {
+    getParticipantByPid(pid: $pid) {
+      pid
+      room
+      balance
+      total_earnings
+      arrival
+      departure
+      password
+    }
+  }
+`;
+
 export const CREATE_PARTICIPANT = gql`
   mutation createParticipant(
     $pid: Int!

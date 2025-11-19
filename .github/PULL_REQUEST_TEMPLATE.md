@@ -19,3 +19,4 @@
 - [ ] All of my containers are healthy and not producing any error messages
 - [ ] The frontend and backend ports are set to 3000 & 5000, respectively
 - [ ] If new packages were installed, I ran yarn install, and there is no package-lock.json file present in the codebase
+- [ ] I took note of any changes made outside of my ticket (e.g. refactored common ui component, updated an endpoint, changed the schema, etc.)

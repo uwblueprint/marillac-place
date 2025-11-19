@@ -1,14 +1,22 @@
 import { AssignedTask, TaskStatus, TaskType } from "@prisma/client";
+import { startOfWeek, endOfWeek, endOfDay, startOfDay } from "date-fns";
 import db from "../../prisma";
-import { getBeginningOfWeek, getToday } from "../../utils/dateUtils";
+import processEarning from "../../utils/transactionUtils";
+import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
+import {
+  PERFECT_SCORE_OPTIONAL,
+  PERFECT_SCORE_REQUIRED,
+} from "../../constants/systemBadges";
 
 const assignedTaskResolver = {
   Query: {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
-      const today = getToday();
       const currentParticipants = await db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: today } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: endOfDay(new Date()) } },
+          ],
         },
         select: {
           pid: true,
@@ -48,15 +56,11 @@ const assignedTaskResolver = {
         pid: number;
       }
     ): Promise<AssignedTask[]> => {
-      const startOfDay = getToday();
-      const endOfDay = new Date();
-      endOfDay.setHours(23, 59, 59, 999);
-
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfDay },
-          end_date: { gte: startOfDay },
+          start_date: { lte: endOfDay(new Date()) },
+          end_date: { gte: startOfDay(new Date()) },
         },
       });
     },
@@ -70,14 +74,10 @@ const assignedTaskResolver = {
         weekStart: Date;
       }
     ): Promise<AssignedTask[]> => {
-      const weekEnd = new Date(weekStart);
-      weekEnd.setDate(weekStart.getDate() + 6);
-      weekEnd.setHours(23, 59, 59, 999);
-
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: weekEnd },
+          start_date: { lte: endOfWeek(weekStart) },
           end_date: { gte: weekStart },
         },
       });
@@ -90,18 +90,13 @@ const assignedTaskResolver = {
         pid: number;
       }
     ): Promise<boolean> => {
-      const weekStart = getBeginningOfWeek();
-      const weekEnd = new Date(weekStart);
-      weekEnd.setDate(weekStart.getDate() + 6);
-      weekEnd.setHours(23, 59, 59, 999);
-
       const requiredTasksNotComplete = await db.assignedTask.findMany({
         where: {
           pid,
           type: TaskType.REQUIRED,
           status: { not: TaskStatus.COMPLETE },
-          start_date: { lte: weekEnd },
-          end_date: { gte: weekStart },
+          start_date: { lte: endOfWeek(new Date()) },
+          end_date: { gte: startOfWeek(new Date()) },
         },
       });
 
@@ -198,18 +193,74 @@ const assignedTaskResolver = {
     ): Promise<AssignedTask> => {
       if (status === TaskStatus.ASSIGNED) {
         throw new Error("invalid status update");
-      }
+      } else if (status === TaskStatus.COMPLETE) {
+        const assignedTask = await db.assignedTask.findUnique({
+          where: { aid },
+        });
+        if (assignedTask === null) throw new Error("assigned task not found");
 
-      if (status === TaskStatus.COMPLETE) {
-        // TODO (mehul & victor):
-        // query the database and get the task object corresponding to the aid
-        // get how many marillac bucks the task is worth and call the process earning function with the reason being a task was completed
-        // execute perfect score required logic (check that all required tasks for this week have been completed)
-        // execute perfect score optional logic (check that 3+ optional tasks from this week have been completed)
-        // call updateBadgeLevelProgress function in the utils for the perfect score required and optional badges with inc set to 1 and pid
-        // of the participant who completed the task
+        const reasonForEarning = `Required task ${assignedTask.name} completed!`;
+        await processEarning(
+          assignedTask.pid,
+          assignedTask.value,
+          reasonForEarning
+        );
 
-        // TODO: add jack of all trades, first goal, individual goal badge logic
+        if (assignedTask.type === TaskType.REQUIRED) {
+          const weeklyRequiredTasks = await db.assignedTask.findMany({
+            where: {
+              pid: assignedTask.pid,
+              status: { not: TaskStatus.COMPLETE },
+              start_date: { lte: endOfWeek(new Date()) },
+              end_date: { gte: startOfWeek(new Date()) },
+              type: TaskType.REQUIRED,
+            },
+          });
+
+          if (weeklyRequiredTasks.length === 0) {
+            await updateBadgeLevelProgress(
+              PERFECT_SCORE_REQUIRED,
+              assignedTask.pid,
+              1
+            );
+          }
+        } else if (assignedTask.type === TaskType.OPTIONAL) {
+          const countCompletedOptionalTasks = await db.assignedTask.count({
+            where: {
+              pid: assignedTask.pid,
+              start_date: { lte: endOfWeek(new Date()) },
+              end_date: { gte: startOfWeek(new Date()) },
+              type: TaskType.OPTIONAL,
+              status: TaskStatus.COMPLETE,
+            },
+          });
+
+          if (countCompletedOptionalTasks === 2) {
+            await updateBadgeLevelProgress(
+              PERFECT_SCORE_OPTIONAL,
+              assignedTask.pid,
+              1
+            );
+          }
+        }
+
+        // TODO (victor): add jack of all trades, first goal, individual goal badge logic
+
+        // Jack of All Trades:
+        // If the task that's just been completed has not been completed before, update badge level progress for the JACK_OF_ALL_TRADES badge by 1
+        // For this badge, you might need to add tid to the AssignedTask table (not as a FK referencing the Task table, just as an attribute, since if the referenced Task is deleted we still want to preserve the state of the AssignedTask)
+        // Places you might need to update with this new property include (types/models.ts, types/resolvers.ts, prisma/schema.prisma, createAssignedTask resolver)
+        // To process new schema changes, you'll need to run the following commands:
+        // npx prisma migrate reset
+        // npx prisma migrate dev
+        // npx @snaplet/seed sync
+        // Also ensure that the mp_db container is running and you've set DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mp after the container is setup
+
+        // First Goal:
+        // No condition needs to be checked, just call updateBadgeLevelProgress for the FIRST_GOAL badge with inc = 1
+
+        // Individual Goal:
+        // Check if all assigned tasks of type INDIVIDUAL_GOAL have been completed for the week, if so, update badge level progress for the INDIVIDUAL_GOAL badge by 1
       }
 
       return db.assignedTask.update({

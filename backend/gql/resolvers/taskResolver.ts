@@ -49,6 +49,10 @@ const taskResolver = {
         comment?: string;
       }
     ): Promise<Task> => {
+      // TODO: Create an assigned task based on the current task template for each active participant
+      // Only create the assigned task for the relevant week (implementation will be similar to the 
+      // assignRequiredTasks cron job)
+
       return db.task.create({
         data: {
           type,

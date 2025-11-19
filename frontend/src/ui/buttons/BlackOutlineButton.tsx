@@ -1,19 +1,18 @@
 import React from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
-import { ButtonProps } from "../../types";
+import { ButtonProps } from "../../types/component";
 
-type SimpleButtonProps = ButtonProps & {
-  text_color: string;
-  icon?: JSX.Element;
+type BlackOutlineButtonProps = ButtonProps & {
+  text_color?: string;
 };
 
-export default function SimpleButton({
-  text,
+export default function BlackOutlineButton({
+  label,
   action,
   is_active,
-  text_color,
+  text_color = "#000000",
   icon,
-}: SimpleButtonProps) {
+}: BlackOutlineButtonProps) {
   return (
     <Button
       onClick={action}
@@ -35,18 +34,9 @@ export default function SimpleButton({
       }}
     >
       <Flex alignItems="center" gap="5px">
-        {icon && (
-          <Flex
-            width="12px"
-            height="12px"
-            alignItems="center"
-            justifyContent="center"
-          >
-            {icon}
-          </Flex>
-        )}
+        {icon}
         <Text textStyle="web.s1" color={text_color}>
-          {text}
+          {label}
         </Text>
       </Flex>
     </Button>

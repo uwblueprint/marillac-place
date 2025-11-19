@@ -24,6 +24,7 @@ const resolvers = gql`
 
     getWeeklyEarnings(pid: Int!): GetWeeklyEarningsResponse!
 
+    getParticipantByPid(pid: Int!): Participant!
     getCurrentParticipants: [Participant!]!
     getPastParticipants: [Participant!]!
 

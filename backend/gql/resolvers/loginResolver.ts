@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { Participant } from "@prisma/client";
+import { endOfDay } from "date-fns";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
-import { getToday } from "../../utils/dateUtils";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 
 type LoginResponse = {
@@ -50,11 +50,13 @@ const loginResolver = {
         password: string;
       }
     ): Promise<LoginResponse> => {
-      const today = getToday();
       const participant: Participant | null = await db.participant.findUnique({
         where: {
           pid,
-          OR: [{ departure: null }, { departure: { gt: today } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: endOfDay(new Date()) } },
+          ],
         },
       });
 
@@ -66,9 +68,12 @@ const loginResolver = {
       const jwtSecretKey = process.env.JWT_SECRET ?? "";
       if (!jwtSecretKey) throw new Error("jwt key missing");
 
-      await db.loginHistory.create({ data: { pid } });
-      // TODO: only update badge level progress if not already logged in today
+      // TODO:
+      // get lastest login date for the participant
+      // only update badge level progress (the next line) if not already logged in today
       await updateBadgeLevelProgress(LOGIN, pid, 1);
+
+      await db.loginHistory.create({ data: { pid } });
 
       const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
         expiresIn: "12h",

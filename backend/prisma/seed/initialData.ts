@@ -348,4 +348,13 @@ export const tasks = [
     days: [],
     time_preference: TimePreference.ANYTIME,
   },
+  {
+    name: "Individual Goal",
+    type: TaskType.INDIVIDUAL_GOAL,
+    value: 10,
+    day_preference: DayPreference.PARTICIPANT_PREFERENCE,
+    days: [],
+    time_preference: TimePreference.PARTICIPANT_PREFERENCE,
+  }
 ];
+

@@ -1,7 +1,7 @@
 import { Level } from "@prisma/client";
+import { endOfDay } from "date-fns";
 import db from "../prisma";
-import { SYSTEM_BADGES, JACK_OF_ALL_TRADES } from "../constants/systemBadges";
-import { getToday } from "./dateUtils";
+import { SYSTEM_BADGES, JACK_OF_ALL_TRADES, PR_LEADER } from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
 
 function getNextBadgeLevel(level: Level) {
@@ -18,6 +18,8 @@ function getNextBadgeLevel(level: Level) {
 }
 
 export async function initBadgeLevelProgress(pid: number) {
+  // TODO: modify this function to separately create badge level progress for the pr leader badge
+  // where it is initialized for every level (NOVICE, BRONZE, SILVER, GOLD, DIAMOND)
   await Promise.all(
     SYSTEM_BADGES.map(async (name) => {
       const level = name !== JACK_OF_ALL_TRADES ? Level.NOVICE : Level.SILVER;
@@ -49,12 +51,57 @@ export async function updateBadgeLevelProgress(
       data: { name, level: badgeLevelProgress.level, pid },
     });
 
-    // TODO: implement pr leader badge logic
+    const prLeaderProgress = await db.badgeLevelProgress.findFirst({
+      where: {
+        pid,
+        name: "PR_LEADER_BADGE",
+        level: badgeLevelProgress.level,
+      },
+      include: {
+        badge_level: true,
+      },
+    });
 
+    if (prLeaderProgress) {
+      const newPrLeaderAmount = prLeaderProgress.progress + 1;
+      const reachedPrLeaderBenchmark = newPrLeaderAmount >= prLeaderProgress.badge_level.benchmark;
+      if (reachedPrLeaderBenchmark) {
+        await db.achievedBadgeLevel.create({
+          data: {
+            name: PR_LEADER, 
+            level: prLeaderProgress.level,
+            pid,
+          },
+        });
+
+        await db.badgeLevelProgress.delete({
+          where: {
+            name_level_pid: { 
+              name: PR_LEADER,
+              level: prLeaderProgress.level,
+              pid,
+            },
+          },
+        });
+      } else {
+        await db.badgeLevelProgress.update({ 
+          where: {
+            name_level_pid: {
+              name: PR_LEADER,
+              level: prLeaderProgress.level,
+              pid,
+            },
+          },
+          data: { progress: newPrLeaderAmount },
+        });
+      }
+    }
+    
     await db.badgeLevelProgress.delete({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },
     });
 
+    // TODO: Process the earning only upon notifying the participant
     const reasonForEarning = `${badgeLevelProgress.level} ${name} badge achieved!`;
     await processEarning(
       pid,
@@ -76,10 +123,9 @@ export async function updateBadgeLevelProgress(
 }
 
 export async function validateBadgeLevelProgress(name: string) {
-  const today = getToday();
   const currentParticipants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: today } }],
+      OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
     },
   });
 

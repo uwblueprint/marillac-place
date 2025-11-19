@@ -2,9 +2,11 @@ import React from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
+import GreenOutlineButton from "../buttons/GreenOutlineButton";
 
 // TODO: verify this screen is for properly formatted on mobile and web + add contact support information
-export default function NotFound() {
+// Add to UI page
+export default function NotFoundScreen() {
   const navigate = useNavigate();
 
   function handleClick() {
@@ -34,13 +36,11 @@ export default function NotFound() {
           Sorry! The page you are looking for does not exist. If you think
           something is broken, please report a problem.
         </Text>
-        <Button
-          variant="primaryOutline"
-          borderRadius="full"
-          onClick={() => handleClick()}
-        >
-          Return to Login
-        </Button>
+        <GreenOutlineButton
+          label="Return to Login"
+          action={() => handleClick()}
+          is_active={false}
+        />
       </Flex>
     </Flex>
   );
