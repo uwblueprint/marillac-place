@@ -28,7 +28,7 @@ import DateOptions from "./misc/DateOptions";
 import { AssignedTask } from "../types/models";
 import { Level, TaskStatus, TaskType, Icon, DayPreference, TimePreference, DayOfWeek } from "../types/enums";
 import Badge from "./misc/BadgeProgress";
-import Toggle from "./buttons/Toggle";
+import ToggleButton from "./buttons/ToggleButton";
 
 export default function UI() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -208,7 +208,6 @@ export default function UI() {
           is_active={false} 
           text_color="red"
         />
-        <Toggle active={toggleActive} setActive={setToggleActive} />
       </Flex>
       <Flex flexDir="row" gap="10px">
         <OrangeButton
@@ -244,6 +243,7 @@ export default function UI() {
         label="UnderlineButton"
         action={() => { console.log("clicked"); }}
       />
+      <ToggleButton active={toggleActive} setActive={setToggleActive} />
 
       <Text textStyle="web.h3">Containers</Text>
       <Flex flexDir="row" gap="10px">
