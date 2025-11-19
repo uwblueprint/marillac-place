@@ -66,7 +66,7 @@ export {};
 //           </Flex>
 //         ) : error ? (
 //           <Flex justify="center" align="center" h="400px">
-//             <Text color="red.500">{error.message}</Text>
+//             <Text textStyle="web.error">{error.message}</Text>
 //           </Flex>
 //         ) : !participantId ? (
 //           <Flex

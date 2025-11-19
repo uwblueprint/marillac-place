@@ -91,13 +91,13 @@ export {};
 //                   ) : (
 //                     <Icon icon={excused} width="20px" height="20px" />
 //                   )}
-//                   <Text textStyle="mobile.b1">{assigned_task.task_name}</Text>
+//                   <Text textStyle="mobile.b2">{assigned_task.task_name}</Text>
 //                   {assigned_task.comment && (
 //                     <Icon icon={comment} width="12px" height="12px" />
 //                   )}
 //                 </Flex>
 // 
-//                 <Text color="text.grey" textStyle="mobile.b1">
+//                 <Text color="text.grey" textStyle="mobile.b2">
 //                   {formatTimeRange(
 //                     assigned_task.start_date,
 //                     assigned_task.end_date

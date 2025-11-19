@@ -51,7 +51,7 @@ export default function WidgetContainer({
           flexDir="column"
           gap="2px"
         >
-          <Text textStyle="web.b2" color="#E30000" textAlign="center">
+          <Text textStyle="web.error" textAlign="center">
             ERROR
           </Text>
           <Text textStyle="web.b2" color="text.grey" textAlign="center">

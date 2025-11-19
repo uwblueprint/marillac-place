@@ -131,7 +131,7 @@ export {};
 //         </Text>
 //         <Text
 //           onClick={() => window.location.reload()}
-//           textStyle="mobile.b1"
+//           textStyle="mobile.b2"
 //           textDecoration="underline"
 //           cursor="pointer"
 //           _hover={{
@@ -147,7 +147,7 @@ export {};
 //           {announcement.importance !== 0 && (
 //             <Flex gap="8px">
 //               <Icon icon={important} width="3px" height="3px" />
-//               <Text textStyle="mobile.b1" color="#D34C5C">
+//               <Text textStyle="mobile.b2" color="#D34C5C">
 //                 Priority
 //               </Text>
 //             </Flex>
@@ -156,20 +156,20 @@ export {};
 //           {pinned && (
 //             <Flex gap="8px">
 //               <Icon icon={orangepin} width="8px" height="8px" />
-//               <Text textStyle="mobile.b1" color="#E67D4F">
+//               <Text textStyle="mobile.b2" color="#E67D4F">
 //                 Pinned
 //               </Text>
 //             </Flex>
 //           )}
 //         </Flex>
-//         <Text textStyle="mobile.b1" color="text.grey">
+//         <Text textStyle="mobile.b2" color="text.grey">
 //           {displayDate2(new Date(announcement.date))}
 //         </Text>
 //       </Flex>
 //
 //       <Divider borderColor="background.border" />
 //
-//       <Text textStyle="mobile.b1">{announcement.message}</Text>
+//       <Text textStyle="mobile.b2">{announcement.message}</Text>
 // 
 //       <Flex marginTop="8px" gap="12px">
 //         <GreenButton

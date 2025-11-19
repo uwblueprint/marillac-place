@@ -103,7 +103,7 @@ export {};
 //           <Flex flexDir="column">
 //             <Text textStyle="mobile.h1">Sign in</Text>
 // 
-//             <Text textStyle="mobile.b1">
+//             <Text textStyle="mobile.b2">
 //               Please enter your login information.
 //             </Text>
 //           </Flex>
@@ -129,7 +129,7 @@ export {};
 //           </FormControl>
 // 
 //           {error && (
-//             <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">
+//             <Text textStyle="mobile.error">
 //               {error}
 //             </Text>
 //           )}

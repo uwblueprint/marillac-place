@@ -101,7 +101,7 @@ export {};
 //             Loading...
 //           </Text>
 //         ) : error ? (
-//           <Text textStyle="web.b2" color="text.grey">
+//           <Text textStyle="web.error">
 //             {error?.message || "An error occured."}
 //           </Text>
 //         ) : (

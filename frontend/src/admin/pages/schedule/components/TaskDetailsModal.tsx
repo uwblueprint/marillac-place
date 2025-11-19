@@ -410,7 +410,7 @@ export {};
 //         )}
 // 
 //         {error && (
-//           <Text textStyle="web.s1" color="#E30000" mt="8px">
+//           <Text textStyle="web.error" mt="8px">
 //             {error}
 //           </Text>
 //         )}

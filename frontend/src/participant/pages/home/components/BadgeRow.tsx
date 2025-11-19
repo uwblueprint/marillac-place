@@ -69,7 +69,7 @@ export {};
 //             {title}
 //           </Text>
 //           <Text
-//             textStyle="mobile.b1"
+//             textStyle="mobile.b2"
 //             color="text.grey"
 //             lineHeight="1.3"
 //           >

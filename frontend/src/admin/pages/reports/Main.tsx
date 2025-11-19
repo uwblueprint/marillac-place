@@ -157,7 +157,7 @@ export {};
 //         justifyContent="center"
 //         padding="20px"
 //       >
-//         <Text color="red">Error loading reports: {error.message}</Text>
+//         <Text textStyle="web.error">Error loading reports: {error.message}</Text>
 //       </Flex>
 //     );
 //   }

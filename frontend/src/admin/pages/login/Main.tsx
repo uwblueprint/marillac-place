@@ -143,7 +143,7 @@ export {};
 //             </FormControl>
 // 
 //             {error && (
-//               <Text textStyle="web.b2" fontWeight="600" color="#E30000">
+//               <Text textStyle="web.error">
 //                 {error}
 //               </Text>
 //             )}

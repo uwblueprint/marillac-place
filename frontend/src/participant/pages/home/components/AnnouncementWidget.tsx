@@ -34,7 +34,7 @@ export {};
 //         <Flex flexDir="row" justifyContent="space-between">
 //           <Text textStyle="mobile.h2">Announcements</Text>
 //           <Text
-//             textStyle="mobile.b1"
+//             textStyle="mobile.b2"
 //             onClick={() => navigate(ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE)}
 //             textDecoration="underline"
 //             cursor="pointer"
@@ -52,10 +52,10 @@ export {};
 //               key={announcement.announcement_id}
 //             >
 //               <Divider borderColor="background.border" />
-//               <Text paddingTop="4px" textStyle="mobile.b1">
+//               <Text paddingTop="4px" textStyle="mobile.b2">
 //                 {announcement.announcement.message}
 //               </Text>
-//               <Text textStyle="mobile.b1" color="text.grey">
+//               <Text textStyle="mobile.b2" color="text.grey">
 //                 {displayDate2(
 //                   new Date(announcement.announcement.creation_date)
 //                 )}

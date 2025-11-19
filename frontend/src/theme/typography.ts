@@ -1,7 +1,10 @@
-// TODO (calista):
-// Go over Figma design update & categorize text styles
-// standardize text style for error messages
-
+/**
+ * Typography Structure
+ * 
+ * - h: heading
+ * - s: subtitle
+ * - b: body
+ */
 import { defineStyleConfig } from "@chakra-ui/react";
 
 export const Text = defineStyleConfig({
@@ -15,11 +18,11 @@ export const Text = defineStyleConfig({
 
 export const textStyles = {
   web: {
-    h1: {
+    h1: { // for sign in
       fontWeight: "700",
       fontSize: "32px",
     },
-    h2: {
+    h2: { // page titles, ex. Current Participants
       fontWeight: "700",
       fontSize: "24px",
     },
@@ -43,7 +46,7 @@ export const textStyles = {
       fontWeight: "400",
       fontSize: "12px",
     },
-    c1: {
+    caption: {
       color: "#808080",
       fontWeight: "400",
       fontSize: "14px",
@@ -52,6 +55,11 @@ export const textStyles = {
       fontWeight: "500",
       fontSize: "16px",
       textTransform: "uppercase",
+    },
+    error: {
+      color: "#E30000",
+      fontWeight: "700",
+      fontSize: "12px",
     },
   },
   mobile: {
@@ -72,23 +80,19 @@ export const textStyles = {
       fontWeight: "600",
       fontSize: "12px",
     },
-    b0: {
-      fontWeight: "600",
-      fontSize: "14px",
-    },
     b1: {
-      fontWeight: "400",
+      fontWeight: "600",
       fontSize: "14px",
     },
     b2: {
       fontWeight: "400",
-      fontSize: "10px",
+      fontSize: "14px",
     },
     b3: {
       fontWeight: "400",
-      fontSize: "12px",
+      fontSize: "10px",
     },
-    c1: {
+    caption: {
       color: "#808080",
       fontWeight: "400",
       fontSize: "12px",
@@ -97,6 +101,11 @@ export const textStyles = {
       fontWeight: "500",
       fontSize: "14px",
       textTransform: "uppercase",
+    },
+    error: {
+      color: "#E30000",
+      fontWeight: "400",
+      fontSize: "14px",
     },
   },
 };

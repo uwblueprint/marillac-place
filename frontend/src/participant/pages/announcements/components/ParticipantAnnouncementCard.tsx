@@ -50,15 +50,15 @@ export {};
 //           {allRooms ? (
 //             <>
 //               <Icon icon={group} width="15px" height="15px" />
-//               <Text textStyle="mobile.b0">All Rooms</Text>
+//               <Text textStyle="mobile.b1">All Rooms</Text>
 //             </>
 //           ) : (
 //             <>
 //               <Icon icon={profile} width="12px" height="12px" />
-//               <Text textStyle="mobile.b0">Your Room</Text>
+//               <Text textStyle="mobile.b1">Your Room</Text>
 //             </>
 //           )}
-//           <Text textStyle="mobile.b1" color="text.grey">
+//           <Text textStyle="mobile.b2" color="text.grey">
 //             {displayDate2(new Date(time))}
 //           </Text>
 //         </Flex>
@@ -72,7 +72,7 @@ export {};
 //       </Flex>
 // 
 //       <Text
-//         textStyle="mobile.b1"
+//         textStyle="mobile.b2"
 //         marginTop="5px"
 //         minH="25px"
 //         maxH="45px"

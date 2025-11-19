@@ -67,7 +67,7 @@ export {};
 //       <Flex direction="row" justify="space-between" align="center" gap="10px">
 //         <Flex direction="column" flex="1">
 //           <Flex align="center" gap={1}>
-//             <Text textStyle="web.c1" fontWeight={700}>
+//             <Text textStyle="web.caption" fontWeight={700}>
 //               {room}
 //             </Text>
 //             {Array.from({ length: importance }).map((_, i) => (
