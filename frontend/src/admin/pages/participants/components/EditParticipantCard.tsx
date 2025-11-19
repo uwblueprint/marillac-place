@@ -125,7 +125,7 @@ export {};
 //       error={error}
 //     >
 //       <FormControl>
-//         <Text textStyle="web.s1" color="text.light.secondary">
+//         <Text textStyle="web.s1" color="text.grey">
 //           ID Number
 //         </Text>
 //         <Input
@@ -212,7 +212,7 @@ export {};
 // 
 //       {swapParticipant && (
 //         <Flex flexDir="column">
-//           <Text textStyle="web.s1" color="text.light.secondary" mb="3px">
+//           <Text textStyle="web.s1" color="text.grey" mb="3px">
 //             Available Rooms
 //           </Text>
 //           <Flex wrap="wrap" gap="5px" width="400px">

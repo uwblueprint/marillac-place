@@ -102,7 +102,7 @@ export {};
 //         <Flex>No announcements.</Flex>
 //       ) : (
 //         <>
-//           <Text textStyle="mobile.s1" color="text.light.secondary">
+//           <Text textStyle="mobile.s1" color="text.grey">
 //             Most Recent
 //           </Text>
 //           {data.map((a: any, i: number) => {

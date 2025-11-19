@@ -192,7 +192,7 @@ export {};
 //       ) : (
 //         <>
 //           <Flex gap="5px" align="flex-end">
-//             <Text textStyle="web.s1" color="text.light.secondary">
+//             <Text textStyle="web.s1" color="text.grey">
 //               Task Name
 //             </Text>
 //             {taskType === TaskType.INDIVIDUAL_GOAL ? (

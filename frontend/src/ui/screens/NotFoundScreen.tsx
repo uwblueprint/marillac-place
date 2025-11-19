@@ -32,7 +32,7 @@ export default function NotFoundScreen() {
         <Text textStyle="web.h2" color="brand.orange" textAlign="center">
           404 Page Not Found
         </Text>
-        <Text textStyle="web.b2" color="text.light.primary" textAlign="center">
+        <Text textStyle="web.b2" color="text.black" textAlign="center">
           Sorry! The page you are looking for does not exist. If you think
           something is broken, please report a problem.
         </Text>

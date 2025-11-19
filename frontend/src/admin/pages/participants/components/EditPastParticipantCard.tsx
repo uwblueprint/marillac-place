@@ -71,7 +71,7 @@ export {};
 //       error={error}
 //     >
 //       <FormControl>
-//         <Text textStyle="web.s1" color="text.light.secondary">
+//         <Text textStyle="web.s1" color="text.grey">
 //           ID Number
 //         </Text>
 //         <Input

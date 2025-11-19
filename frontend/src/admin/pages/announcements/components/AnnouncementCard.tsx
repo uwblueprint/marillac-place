@@ -92,7 +92,7 @@ export {};
 //             {message}
 //           </Text>
 // 
-//           <Text textStyle="web.b3" color="text.light.secondary" mt={2}>
+//           <Text textStyle="web.b3" color="text.grey" mt={2}>
 //             {timestamp}
 //           </Text>
 //         </Flex>

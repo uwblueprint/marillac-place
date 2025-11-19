@@ -82,7 +82,7 @@ export {};
 //         <Text textStyle="web.h3" color="brand.teal">
 //           Rooms
 //         </Text>
-//         <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
+//         <Text textStyle="web.b3" color="text.grey" mt="5px">
 //           Showing pending tasks for today
 //         </Text>
 //       </Flex>
@@ -97,11 +97,11 @@ export {};
 //         }}
 //       >
 //         {loading ? (
-//           <Text textStyle="web.b2" color="text.light.secondary">
+//           <Text textStyle="web.b2" color="text.grey">
 //             Loading...
 //           </Text>
 //         ) : error ? (
-//           <Text textStyle="web.b2" color="text.light.secondary">
+//           <Text textStyle="web.b2" color="text.grey">
 //             {error?.message || "An error occured."}
 //           </Text>
 //         ) : (

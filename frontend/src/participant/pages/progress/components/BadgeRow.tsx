@@ -52,7 +52,7 @@ export {};
 //           {!achieved && (
 //             <Text
 //               textStyle="mobile.b1"
-//               color="text.light.secondary"
+//               color="text.grey"
 //               lineHeight="1.3"
 //             >
 //               {badge.percentComplete}%
@@ -62,7 +62,7 @@ export {};
 //         <Box flex="1">
 //           <Text
 //             textStyle="mobile.h3"
-//             color="text.light.primary"
+//             color="text.black"
 //             fontWeight="600"
 //             mb="2px"
 //           >
@@ -70,7 +70,7 @@ export {};
 //           </Text>
 //           <Text
 //             textStyle="mobile.b1"
-//             color="text.light.secondary"
+//             color="text.grey"
 //             lineHeight="1.3"
 //           >
 //             {subtitle}

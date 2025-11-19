@@ -53,7 +53,7 @@
 //       submit_action={handleSignOut}
 //       cancel_action={cancel}
 //     >
-//       <Text textStyle="web.b2" color="text.light.secondary">
+//       <Text textStyle="web.b2" color="text.grey">
 //         Are you sure you want to sign out?
 //       </Text>
 //     </ModalContainer>

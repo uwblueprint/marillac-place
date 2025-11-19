@@ -121,7 +121,7 @@ export {};
 //       error={error}
 //     >
 //       <Flex gap="5px" align="flex-end">
-//         <Text textStyle="web.s1" color="text.light.secondary">
+//         <Text textStyle="web.s1" color="text.grey">
 //           Badge Name
 //         </Text>
 //         <Text textStyle="web.b3" color="#000000">
@@ -141,14 +141,14 @@ export {};
 //         <FormControl>
 //           <Flex justifyContent="space-between" mb="5px">
 //             <FormLabel m="0">
-//               <Text textStyle="web.s1" color="text.light.secondary">
+//               <Text textStyle="web.s1" color="text.grey">
 //                 Set Badge Levels
 //               </Text>
 //             </FormLabel>
 //             <FormLabel m="0">
 //               <Text
 //                 textStyle="web.s1"
-//                 color="text.light.secondary"
+//                 color="text.grey"
 //                 textAlign="right"
 //               >
 //                 Set Marillac Bucks

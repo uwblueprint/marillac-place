@@ -84,7 +84,7 @@ export {};
 //           <Text textStyle="web.h3" color="brand.teal">
 //             Internal Notes
 //           </Text>
-//           <Text textStyle="web.b3" color="text.light.secondary" mt="5px">
+//           <Text textStyle="web.b3" color="text.grey" mt="5px">
 //             Expires in 48h
 //           </Text>
 //         </Flex>
@@ -100,15 +100,15 @@ export {};
 //           }}
 //         >
 //           {getNotesLoading ? (
-//             <Text textStyle="web.b2" color="text.light.secondary">
+//             <Text textStyle="web.b2" color="text.grey">
 //               Loading...
 //             </Text>
 //           ) : getNotesError ? (
-//             <Text textStyle="web.b2" color="text.light.secondary">
+//             <Text textStyle="web.b2" color="text.grey">
 //               {getNotesError.message}
 //             </Text>
 //           ) : getNotesData.getNotes.length === 0 ? (
-//             <Text textStyle="web.b2" color="text.light.secondary">
+//             <Text textStyle="web.b2" color="text.grey">
 //               No Admin Notes Yet
 //             </Text>
 //           ) : (
@@ -156,7 +156,7 @@ export {};
 //                       justifyContent="space-between"
 //                       alignItems="flex-end"
 //                     >
-//                       <Text textStyle="web.b3" color="text.light.secondary">
+//                       <Text textStyle="web.b3" color="text.grey">
 //                         {creation}
 //                       </Text>
 //                       <Text
@@ -182,7 +182,7 @@ export {};
 //         <InputGroup>
 //           <Input
 //             textStyle="web.b3"
-//             color="text.light.secondary"
+//             color="text.grey"
 //             variant="primary"
 //             placeholder="Write a note"
 //             type="text"

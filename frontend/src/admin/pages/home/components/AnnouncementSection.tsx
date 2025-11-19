@@ -51,7 +51,7 @@ export {};
 //         <Text textStyle="web.b2" fontWeight={600} color="black">
 //           {getRoomString(announcement.rooms)}
 //         </Text>
-//         <Text textStyle="web.b3" color="text.light.secondary" marginLeft="20px">
+//         <Text textStyle="web.b3" color="text.grey" marginLeft="20px">
 //           posted at {formatDate(announcement.creation_date)}
 //         </Text>
 //       </Flex>
@@ -115,7 +115,7 @@ export {};
 //           <Text textStyle="web.h3" color="brand.teal">
 //             Announcements
 //           </Text>
-//           <Text textStyle="web.b3" color="text.light.secondary">
+//           <Text textStyle="web.b3" color="text.grey">
 //             {data.length} new post{data.length === 1 ? "" : "s"} today
 //           </Text>
 //         </Flex>
@@ -146,15 +146,15 @@ export {};
 //         }}
 //       >
 //         {getAnnouncementsLoading ? (
-//           <Text textStyle="web.b2" color="text.light.secondary">
+//           <Text textStyle="web.b2" color="text.grey">
 //             Loading...
 //           </Text>
 //         ) : getAnnouncementsError ? (
-//           <Text textStyle="web.b2" color="text.light.secondary">
+//           <Text textStyle="web.b2" color="text.grey">
 //             {getAnnouncementsError?.message || "An error occurred"}
 //           </Text>
 //         ) : data.length === 0 ? (
-//           <Text textStyle="web.b2" color="text.light.secondary">
+//           <Text textStyle="web.b2" color="text.grey">
 //             No Announcements Yet
 //           </Text>
 //         ) : (

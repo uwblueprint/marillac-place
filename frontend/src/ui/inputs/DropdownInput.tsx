@@ -21,7 +21,7 @@ export default function DropdownInput({
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.light.secondary" mb="4px">
+        <Text textStyle="web.s1" color="text.grey" mb="4px">
           {label}
         </Text>
       )}

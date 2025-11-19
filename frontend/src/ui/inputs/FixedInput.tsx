@@ -19,10 +19,10 @@ export default function FixedInput({
       flexDir={orientation === "horizontal" ? "row" : "column"}
       mb="4px"
     >
-      <Text textStyle="web.s1" color="text.light.secondary">
+      <Text textStyle="web.s1" color="text.grey">
         {label}
       </Text>
-      <Text textStyle="web.b3" color="text.light.secondary">
+      <Text textStyle="web.b3" color="text.grey">
         {toTitleCase(current_value as string)}
       </Text>
     </Flex>

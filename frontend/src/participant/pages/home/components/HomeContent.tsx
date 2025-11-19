@@ -79,7 +79,7 @@ export {};
 //           fontFamily="Nunito"
 //           fontWeight="400"
 //           fontSize="16px"
-//           color="text.light.secondary"
+//           color="text.grey"
 //         >
 //           {formattedDate}
 //         </Text>

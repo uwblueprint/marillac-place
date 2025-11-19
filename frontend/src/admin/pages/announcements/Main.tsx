@@ -111,7 +111,7 @@ export {};
 //           <Text textStyle="web.h2" color="brand.teal">
 //             Announcements
 //           </Text>
-//           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
+//           <Text textStyle="web.b3" color="text.grey" marginTop="7px">
 //             Expires in 48h
 //           </Text>
 //         </Flex>
@@ -165,7 +165,7 @@ export {};
 //         </Text>
 //       </Flex>
 // 
-//       <Text textStyle="web.b3" color="text.light.secondary">
+//       <Text textStyle="web.b3" color="text.grey">
 //         Most Recent
 //       </Text>
 // 

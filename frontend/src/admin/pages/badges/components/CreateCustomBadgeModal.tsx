@@ -76,7 +76,7 @@ export {};
 // 
 //       <FormControl mb={4}>
 //         <FormLabel>
-//           <Text textStyle="web.s1" color="text.light.secondary">
+//           <Text textStyle="web.s1" color="text.grey">
 //             Choose Badge Icon
 //           </Text>
 //         </FormLabel>

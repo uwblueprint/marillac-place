@@ -77,7 +77,7 @@ export {};
 //       error={error}
 //     >
 //       <Flex w="100%" alignItems="center" justifyContent="space-between">
-//         <Text textStyle="web.s1" color="text.light.secondary">
+//         <Text textStyle="web.s1" color="text.grey">
 //           Current Balance
 //         </Text>
 //         <SimpleButton

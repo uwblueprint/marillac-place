@@ -174,7 +174,7 @@ export {};
 //           <Text textStyle="web.h2" color="brand.teal">
 //             Reports
 //           </Text>
-//           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
+//           <Text textStyle="web.b3" color="text.grey" marginTop="7px">
 //             Reports will be automatically generated and emailed. Edit and select
 //             frequency of emails in the list below.
 //           </Text>

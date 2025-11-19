@@ -54,7 +54,7 @@ export {};
 //           <Text textStyle="web.h2" color="brand.teal">
 //             System Badges
 //           </Text>
-//           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
+//           <Text textStyle="web.b3" color="text.grey" marginTop="7px">
 //             System badges will be granted to participants automatically.
 //           </Text>
 //         </Flex>
@@ -74,7 +74,7 @@ export {};
 //           <Text textStyle="web.h2" color="brand.teal">
 //             Custom Badges
 //           </Text>
-//           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
+//           <Text textStyle="web.b3" color="text.grey" marginTop="7px">
 //             You can create new and reward participants custom badges.
 //           </Text>
 //         </Flex>

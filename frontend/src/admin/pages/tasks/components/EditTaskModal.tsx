@@ -103,7 +103,7 @@ export {};
 //       error={error}
 //     >
 //       <Flex gap="5px" alignItems="flex-end">
-//         <Text textStyle="web.s1" color="text.light.secondary">
+//         <Text textStyle="web.s1" color="text.grey">
 //           Task Type
 //         </Text>
 //         <Text textStyle="web.b3" color="#000000">

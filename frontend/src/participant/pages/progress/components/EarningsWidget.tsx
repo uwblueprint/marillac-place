@@ -68,7 +68,7 @@ export {};
 //     >
 //       <h2
 //         style={{
-//           color: colors.text.light.primary,
+//           color: colors.text.black,
 //           fontSize: 18,
 //           fontWeight: "600",
 //           marginBottom: 16,
@@ -95,13 +95,13 @@ export {};
 //               dataKey="day"
 //               axisLine={false}
 //               tickLine={false}
-//               tick={{ fill: colors.text.light.secondary, fontSize: 12 }}
+//               tick={{ fill: colors.text.grey, fontSize: 12 }}
 //             />
 //             <YAxis
 //               domain={[0, upperBound]}
 //               axisLine={false}
 //               tickLine={false}
-//               tick={{ fill: colors.text.light.secondary, fontSize: 12 }}
+//               tick={{ fill: colors.text.grey, fontSize: 12 }}
 //               tickFormatter={(value) => `$${value}`}
 //               width={30}
 //             />
@@ -136,7 +136,7 @@ export {};
 //                       <text
 //                         x={Number(x) + 15}
 //                         y={Number(y) - 10}
-//                         fill={colors.text.light.primary}
+//                         fill={colors.text.black}
 //                         textAnchor="middle"
 //                         dominantBaseline="middle"
 //                         style={{ fontWeight: "bold", fontSize: 14 }}

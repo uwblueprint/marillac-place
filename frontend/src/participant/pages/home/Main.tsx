@@ -17,7 +17,7 @@ export {};
 //         <Text color="brand.teal" textStyle="mobile.h1">
 //           Welcome to Marillac Place
 //         </Text>
-//         <Text color="text.light.secondary" textStyle="mobile.h3">
+//         <Text color="text.grey" textStyle="mobile.h3">
 //           {getParticipantHomePageDateString()}
 //         </Text>
 //       </Flex>

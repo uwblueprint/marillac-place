@@ -15,7 +15,7 @@
 //     case TaskStatus.EXCUSED:
 //       return colors.scheduleDark.yellow; // #B07D18
 //     default:
-//       return colors.text.light.disabled; // #6C707A
+//       return colors.text.grey; // #6C707A
 //   }
 // };
 //

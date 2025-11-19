@@ -117,7 +117,7 @@ export {};
 //       error={error}
 //     >
 //       <Flex gap="5px" wrap="wrap" alignItems="center" maxWidth="450px">
-//         <Text textStyle="web.s1" color="text.light.secondary">
+//         <Text textStyle="web.s1" color="text.grey">
 //           Send To:
 //         </Text>
 //         {[[0], ...ROOM_NUMBERS].flat().map((room: number) => {

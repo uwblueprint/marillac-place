@@ -55,7 +55,7 @@ export {};
 //               <Text paddingTop="4px" textStyle="mobile.b1">
 //                 {announcement.announcement.message}
 //               </Text>
-//               <Text textStyle="mobile.b1" color="text.light.secondary">
+//               <Text textStyle="mobile.b1" color="text.grey">
 //                 {displayDate2(
 //                   new Date(announcement.announcement.creation_date)
 //                 )}

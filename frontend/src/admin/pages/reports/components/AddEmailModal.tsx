@@ -38,7 +38,7 @@ export {};
 //       cancel_action={onClose}
 //     >
 //       <FormControl>
-//         <Text textStyle="web.s1" color="text.light.secondary">
+//         <Text textStyle="web.s1" color="text.grey">
 //           Email Address
 //         </Text>
 //         <Input
@@ -63,7 +63,7 @@ export {};
 //       </FormControl>
 // 
 //       <FormControl mt="20px">
-//         <FormLabel textStyle="web.s1" color="text.light.secondary">
+//         <FormLabel textStyle="web.s1" color="text.grey">
 //           Report Frequency
 //         </FormLabel>
 //         <FormControl

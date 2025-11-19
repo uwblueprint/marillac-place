@@ -74,7 +74,7 @@ export {};
 //       error={error}
 //     >
 //       <Flex gap="5px" align="flex-end">
-//         <Text textStyle="web.s1" color="text.light.secondary">
+//         <Text textStyle="web.s1" color="text.grey">
 //           Sent To
 //         </Text>
 //         <Text textStyle="web.b3" color="#000000">

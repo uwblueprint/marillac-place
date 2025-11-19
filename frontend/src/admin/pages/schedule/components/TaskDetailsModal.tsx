@@ -190,7 +190,7 @@ export {};
 //         {editDetails ? (
 //           <Flex flexDir="column" gap="8px">
 //             <Flex gap="5px" align="flex-end">
-//               <Text textStyle="web.s1" color="text.light.secondary">
+//               <Text textStyle="web.s1" color="text.grey">
 //                 Task Name
 //               </Text>
 //               <Text textStyle="web.b3" color="#000000">
@@ -202,7 +202,7 @@ export {};
 //
 //             <Flex w="100%" h="1px" bg="background.border" mt="3px" />
 //
-//             <Text textStyle="web.s1" color="text.light.secondary">
+//             <Text textStyle="web.s1" color="text.grey">
 //               Select Days
 //             </Text>
 //             <Flex gap="5px">
@@ -286,7 +286,7 @@ export {};
 //         ) : (
 //           <Flex flexDir="column" gap="8px">
 //             <Flex gap="5px" align="flex-end">
-//               <Text textStyle="web.s1" color="text.light.secondary">
+//               <Text textStyle="web.s1" color="text.grey">
 //                 Task Type
 //               </Text>
 //               <Text textStyle="web.b3" color="#000000">
@@ -294,7 +294,7 @@ export {};
 //               </Text>
 //             </Flex>
 //             <Flex gap="5px" align="flex-end">
-//               <Text textStyle="web.s1" color="text.light.secondary">
+//               <Text textStyle="web.s1" color="text.grey">
 //                 Date
 //               </Text>
 //               <Text textStyle="web.b3" color="#000000">
@@ -309,7 +309,7 @@ export {};
 //               </Text>
 //             </Flex>
 //             <Flex gap="5px" align="flex-end">
-//               <Text textStyle="web.s1" color="text.light.secondary">
+//               <Text textStyle="web.s1" color="text.grey">
 //                 Marillac Bucks
 //               </Text>
 //               <Text textStyle="web.b3" color="#000000">
@@ -317,7 +317,7 @@ export {};
 //               </Text>
 //             </Flex>
 //             <Flex gap="5px" align="flex-end">
-//               <Text textStyle="web.s1" color="text.light.secondary">
+//               <Text textStyle="web.s1" color="text.grey">
 //                 Marillac Bucks Deduction
 //               </Text>
 //               <Text textStyle="web.b3" color="#000000">
@@ -326,7 +326,7 @@ export {};
 //             </Flex>
 // 
 //             <Flex flexDir="column">
-//               <Text textStyle="web.s1" color="text.light.secondary">
+//               <Text textStyle="web.s1" color="text.grey">
 //                 Status
 //               </Text>
 //               <Flex flexDir="row" gap="8px">

@@ -77,7 +77,7 @@ export {};
 //             direction="column"
 //             gap={4}
 //           >
-//             <Text textStyle="web.h2" color="text.light.disabled">
+//             <Text textStyle="web.h2" color="text.grey">
 //               This room is empty
 //             </Text>
 //             <OrangeButton

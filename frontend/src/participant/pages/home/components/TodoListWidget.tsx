@@ -47,7 +47,7 @@ export {};
 //       <Flex direction="row" justify="space-between" align="center">
 //         <Text textStyle="mobile.h2">To-Do List</Text>
 //         <Text
-//           color="text.light.primary"
+//           color="text.black"
 //           textStyle="mobile.h3"
 //           textDecoration="underline"
 //           cursor="pointer"
@@ -97,7 +97,7 @@ export {};
 //                   )}
 //                 </Flex>
 // 
-//                 <Text color="text.light.secondary" textStyle="mobile.b1">
+//                 <Text color="text.grey" textStyle="mobile.b1">
 //                   {formatTimeRange(
 //                     assigned_task.start_date,
 //                     assigned_task.end_date

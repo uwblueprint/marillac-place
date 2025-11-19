@@ -136,7 +136,7 @@ export {};
 //
 //       <Flex w="100%" h="1px" bg="background.border" mt="8px" />
 //
-//       <Text textStyle="web.s1" color="text.light.secondary">
+//       <Text textStyle="web.s1" color="text.grey">
 //         Choose Room(s)
 //       </Text>
 //       <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">

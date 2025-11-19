@@ -75,7 +75,7 @@ const DataTable = ({
                   <Text textStyle="web.b2" color="#E30000" textAlign="center">
                     ERROR
                   </Text>
-                  <Text textStyle="web.b2" color="text.light.secondary" textAlign="center">
+                  <Text textStyle="web.b2" color="text.grey" textAlign="center">
                     {error}
                   </Text>
                 </Flex>
@@ -105,7 +105,7 @@ const DataTable = ({
                         </Button>
                       </Flex>
                     ) : (
-                      <Text textStyle="web.b3" color="text.light.primary" textAlign="left">{cell.element}</Text>
+                      <Text textStyle="web.b3" color="text.black" textAlign="left">{cell.element}</Text>
                     )}
                   </Td>
                 ))}

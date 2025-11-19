@@ -58,7 +58,7 @@ export {};
 //               <Text textStyle="mobile.b0">Your Room</Text>
 //             </>
 //           )}
-//           <Text textStyle="mobile.b1" color="text.light.secondary">
+//           <Text textStyle="mobile.b1" color="text.grey">
 //             {displayDate2(new Date(time))}
 //           </Text>
 //         </Flex>

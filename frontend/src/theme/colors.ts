@@ -2,9 +2,10 @@
  * Color Structure
  * 
  * - brand: Marillac's main colors.
- * - background: the greys.
+ * - background: the whites and greys for background of popups, tables, etc.
  * - indicate: colors for success/error/warning/informational UI.
- * - schedule dark/light: all of the colors that are used within the calendar
+ * - schedule dark/light: all of the colors that are used within the schedule
+ * - text: standard font colors
  */
 const colors = {
   brand: {
@@ -20,7 +21,7 @@ const colors = {
   },
   indicate: {
     signOut: "#B21D2F",
-    darkGreen: "#0D8312",
+    darkGreen: "#0D8312", // the greens are used for notifications
     brightGreen: "#1BB421",
     lightGreen: "#EAFFEB",
   },
@@ -37,16 +38,8 @@ const colors = {
     red: "#F8D7DB",
   },
   text: {
-    light: {
-      primary: "#1D2433",
-      secondary: "#595D67",
-      disabled: "#6C707A",
-    },
-    dark: {
-      primary: "#FFFFFF",
-      secondary: "#B5B5B8",
-      disabled: "#8B8C8F",
-    },
+    black: "#1D2433",
+    grey: "#595D67",
   },
 };
 

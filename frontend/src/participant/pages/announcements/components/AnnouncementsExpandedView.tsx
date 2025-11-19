@@ -162,7 +162,7 @@ export {};
 //             </Flex>
 //           )}
 //         </Flex>
-//         <Text textStyle="mobile.b1" color="text.light.secondary">
+//         <Text textStyle="mobile.b1" color="text.grey">
 //           {displayDate2(new Date(announcement.date))}
 //         </Text>
 //       </Flex>
