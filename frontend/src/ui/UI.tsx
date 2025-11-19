@@ -28,6 +28,7 @@ import DateOptions from "./misc/DateOptions";
 import { AssignedTask } from "../types/models";
 import { Level, TaskStatus, TaskType, Icon, DayPreference, TimePreference, DayOfWeek } from "../types/enums";
 import Badge from "./misc/BadgeProgress";
+import TaskStatusDisplay from "./misc/TaskStatusDisplay";
 
 export default function UI() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -501,6 +502,14 @@ export default function UI() {
           />
         </PopupContainer>
       )}
+
+      <Text textStyle="web.h3">Task Status Display</Text>
+      <Flex flexDir="row" gap="10px">
+        <TaskStatusDisplay status={TaskStatus.ASSIGNED} />
+        <TaskStatusDisplay status={TaskStatus.EXCUSED} />
+        <TaskStatusDisplay status={TaskStatus.INCOMPLETE} />
+        <TaskStatusDisplay status={TaskStatus.COMPLETE} />
+      </Flex>
 
       <Text textStyle="web.h3">Calendar (Web)</Text>
       <Box width="1000px">
