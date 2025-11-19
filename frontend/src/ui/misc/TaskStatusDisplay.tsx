@@ -51,13 +51,13 @@ export default function TaskStatusDisplay({ status }: TaskStatusDisplayProps) {
       bg={TaskStatusConfig[status].bgColor}
       color={TaskStatusConfig[status].textColor}
       px={8}
-      py={2}
+      py={1.5}
       borderRadius="lg"
       fontWeight="bold"
       fontSize="sm"
       width="fit-content"
     >
-      <Icon />
+      <Icon size={26}/>
       <Text color={TaskStatusConfig[status].textColor}>{TaskStatusConfig[status].text}</Text>
     </Flex>
   );
