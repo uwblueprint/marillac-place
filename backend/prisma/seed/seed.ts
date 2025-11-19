@@ -41,6 +41,7 @@ async function generateMockData(seed: any) {
       password: random.password(),
       room: ret.index + 1,
       arrival: random.date(),
+      departure: null,
       balance: random.number(0, 2500),
     }))
   );

@@ -23,6 +23,7 @@ const models = gql`
   type AssignedTask {
     aid: Int!
     pid: Int!
+    tid: Int!
     name: String!
     type: TaskType!
     status: TaskStatus!

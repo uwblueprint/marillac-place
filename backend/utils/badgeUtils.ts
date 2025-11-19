@@ -4,7 +4,7 @@ import db from "../prisma";
 import { SYSTEM_BADGES, JACK_OF_ALL_TRADES, PR_LEADER } from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
 
-function getNextBadgeLevel(level: Level) {
+async function getNextBadgeLevel(name: string, level: Level) {
   const levels = [
     Level.NOVICE,
     Level.BRONZE,
@@ -13,8 +13,12 @@ function getNextBadgeLevel(level: Level) {
     Level.DIAMOND,
   ];
   const index = levels.indexOf(level);
-  if (index === 4) return null;
-  return levels[index + 1];
+  if (index === levels.length - 1) return null;
+  const nextLevel = levels[index + 1];
+  const nextBadgeLevel = await db.badgeLevel.findUnique({
+    where: { name_level: { name, level: nextLevel } },
+  });
+  return nextBadgeLevel?.level;
 }
 
 export async function initBadgeLevelProgress(pid: number) {
@@ -122,7 +126,10 @@ export async function updateBadgeLevelProgress(
       reasonForEarning
     );
 
-    const nextBadgeLevel = getNextBadgeLevel(badgeLevelProgress.level);
+    const nextBadgeLevel = await getNextBadgeLevel(
+      name,
+      badgeLevelProgress.level
+    );
     if (!nextBadgeLevel) return;
     await db.badgeLevelProgress.create({
       data: { name, level: nextBadgeLevel, pid, progress: newAmount },
