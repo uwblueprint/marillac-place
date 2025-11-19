@@ -25,7 +25,7 @@ export const Complete: React.FC<IconProps> = ({ size = 20 }) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <rect width="26" height="26" rx="13" fill="#A2E3A4" />
+    <rect width="26" height="26" rx="13"  />
     <path
       d="M12 15.707L9.5 13.2065L10.2065 12.5L12 14.293L15.7925 10.5L16.5 11.2075L12 15.707Z"
       fill="#0D8312"
