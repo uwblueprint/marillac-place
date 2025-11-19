@@ -256,6 +256,17 @@ export default function UI() {
           <Text textStyle="web.b2">WidgetContainer</Text>
         </WidgetContainer>
         <WidgetContainer
+          bg_color="primary.100"
+          width="200px"
+          height="100px"
+          paddingX="12px"
+          paddingY="8px"
+          loading={false}
+          error=""
+        >
+          <Text textStyle="web.b2">WidgetContainer (bg color)</Text>
+        </WidgetContainer>
+        <WidgetContainer
           bg_color="neutral.100"
           width="200px"
           height="100px"
