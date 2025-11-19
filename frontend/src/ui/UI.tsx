@@ -28,6 +28,7 @@ import DateOptions from "./misc/DateOptions";
 import { AssignedTask } from "../types/models";
 import { Level, TaskStatus, TaskType, Icon, DayPreference, TimePreference, DayOfWeek } from "../types/enums";
 import Badge from "./misc/BadgeProgress";
+import ToggleButton from "./buttons/ToggleButton";
 
 export default function UI() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -54,6 +55,7 @@ export default function UI() {
   const [dateOptionStartTime, setDateOptionStartTime] = useState<Date | null>(null);
   const [dateOptionEndTime, setDateOptionEndTime] = useState<Date | null>(null);
   const [showDateOptions, setShowDateOptions] = useState<boolean>(false);
+  const [toggleActive, setToggleActive] = useState<boolean>(false);
   const dataTableColumns = [
     { header: "Column 1", width: "30%" },
     { header: "Column 2", width: "20%" },
@@ -241,6 +243,7 @@ export default function UI() {
         label="UnderlineButton"
         action={() => { console.log("clicked"); }}
       />
+      <ToggleButton active={toggleActive} setActive={setToggleActive} />
 
       <Text textStyle="web.h3">Containers</Text>
       <Flex flexDir="row" gap="10px">
