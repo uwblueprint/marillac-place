@@ -3,8 +3,7 @@ import { Flex, Text } from "@chakra-ui/react";
 import { useQuery, useMutation } from "@apollo/client";
 
 import ReportsTable from "./components/ReportsTable";
-import AddEmailModal from "./components/AddEmailModal";
-import EditEmailModal from "./components/EditEmailModal";
+import EmailModal from "./components/EmailModal";
 
 import {
   GET_REPORT_RECIPIENTS,
@@ -20,7 +19,6 @@ type Report = {
 };
 
 export default function AdminReportsPage() {
-
   const [addEmail, setAddEmail] = useState(false);
   const [editEmail, setEditEmail] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<Report | null>(null);
@@ -165,20 +163,15 @@ export default function AdminReportsPage() {
         onDeleteEmail={handleDeleteEmail}
       />
 
-      {addEmail && (
-        <AddEmailModal
-          onClose={() => setAddEmail(false)}
-          onSubmit={handleAddEmail}
-        />
-      )}
-      {editEmail && selectedEmail && (
-        <EditEmailModal
-          email={selectedEmail}
+      {(addEmail || (editEmail && selectedEmail)) && (
+        <EmailModal
+          initialData={editEmail && selectedEmail ? selectedEmail : undefined}
           onClose={() => {
+            setAddEmail(false);
             setEditEmail(false);
             setSelectedEmail(null);
           }}
-          onSubmit={handleEditEmail}
+          onSubmit={editEmail ? handleEditEmail : handleAddEmail}
         />
       )}
     </Flex>
