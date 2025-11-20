@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, Spinner } from "@chakra-ui/react";
 import { useQuery, useMutation } from "@apollo/client";
 
 import ReportsTable from "./components/ReportsTable";
@@ -44,7 +44,7 @@ export default function AdminReportsPage() {
         },
       });
       refetch();
-      setAddEmail(false); 
+      setAddEmail(false);
     } catch (err) {
       console.error("Error creating report recipient:", err);
     }
@@ -96,9 +96,10 @@ export default function AdminReportsPage() {
         width="100%"
         height="fit-content"
         justifyContent="center"
+        alignItems="center"
         padding="20px"
       >
-        <Text>Loading...</Text>
+        <Spinner size="lg" color="primary.700" />
       </Flex>
     );
   }
@@ -114,9 +115,7 @@ export default function AdminReportsPage() {
     if (error.networkError) {
       errorMessage = error.networkError.message || error.message;
     } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-      errorMessage = error.graphQLErrors
-        .map((err) => err.message)
-        .join(", ");
+      errorMessage = error.graphQLErrors.map((err) => err.message).join(", ");
     }
 
     return (
@@ -128,11 +127,13 @@ export default function AdminReportsPage() {
         flexDir="column"
         gap="10px"
       >
-        <Text color="red" fontWeight="bold">
+        <Text color="danger.900" fontWeight="bold" textStyle="web.b2">
           Error loading reports
         </Text>
-        <Text color="red">{errorMessage}</Text>
-        <Text color="red" fontSize="sm">
+        <Text color="danger.800" textStyle="web.b3">
+          {errorMessage}
+        </Text>
+        <Text color="text.light.secondary" fontSize="sm" textStyle="web.b3">
           Check the browser console for more details.
         </Text>
       </Flex>
@@ -152,7 +153,8 @@ export default function AdminReportsPage() {
             Reports
           </Text>
           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
-            Reports will be automatically generated and emailed. Edit frequency of reports below.
+            Reports will be automatically generated and emailed. Edit frequency
+            of reports below.
           </Text>
         </Flex>
       </Flex>
