@@ -160,6 +160,7 @@ const resolvers = gql`
 
     createAssignedTask(
       pid: Int!
+      tid: Int!
       name: String!
       type: TaskType!
       value: Int!

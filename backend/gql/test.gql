@@ -607,6 +607,7 @@ mutation UpdateBadgeLevel(
 
 mutation CreateAssignedTask(
   $pid: Int!
+  $tid: Int!
   $name: String!
   $type: TaskType!
   $value: Int!
@@ -617,6 +618,7 @@ mutation CreateAssignedTask(
 ) {
   createAssignedTask(
     pid: $pid
+    tid: $tid
     name: $name
     type: $type
     value: $value
@@ -626,6 +628,7 @@ mutation CreateAssignedTask(
     comment: $comment
   ) {
     aid
+    tid
     pid
     name
     type

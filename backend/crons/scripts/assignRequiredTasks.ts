@@ -66,6 +66,7 @@ async function assignRequiredTasks() {
                     await db.assignedTask.create({
                       data: {
                         pid: participant.pid,
+                        tid: requiredTask.tid,
                         name: requiredTask.name,
                         type: requiredTask.type,
                         value: requiredTask.value,
@@ -84,6 +85,7 @@ async function assignRequiredTasks() {
                     await db.assignedTask.create({
                       data: {
                         pid: participant.pid,
+                        tid: requiredTask.tid,
                         name: requiredTask.name,
                         type: requiredTask.type,
                         value: requiredTask.value,
@@ -134,6 +136,7 @@ async function assignRequiredTasks() {
                     await db.assignedTask.create({
                       data: {
                         pid: participant.pid,
+                        tid: requiredTask.tid,
                         name: requiredTask.name,
                         type: requiredTask.type,
                         value: requiredTask.value,
@@ -152,6 +155,7 @@ async function assignRequiredTasks() {
                     await db.assignedTask.create({
                       data: {
                         pid: participant.pid,
+                        tid: requiredTask.tid,
                         name: requiredTask.name,
                         type: requiredTask.type,
                         value: requiredTask.value,
@@ -181,6 +185,7 @@ async function assignRequiredTasks() {
               await db.assignedTask.create({
                 data: {
                   pid: participant.pid,
+                  tid: requiredTask.tid,
                   name: requiredTask.name,
                   type: requiredTask.type,
                   value: requiredTask.value,

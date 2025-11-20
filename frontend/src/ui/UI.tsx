@@ -113,6 +113,7 @@ export default function UI() {
   const assignedTasks: AssignedTask[] = [
     {
       aid: 1,
+      tid: 1,
       pid: 1,
       name: "Task 1",
       type: TaskType.REQUIRED,
@@ -125,6 +126,7 @@ export default function UI() {
     },
     {
       aid: 2,
+      tid: 2,
       pid: 1,
       name: "Task 2",
       type: TaskType.OPTIONAL,
@@ -137,6 +139,7 @@ export default function UI() {
     },
     {
       aid: 3,
+      tid: 3,
       pid: 1,
       name: "Task 3",
       type: TaskType.OPTIONAL,
@@ -159,6 +162,7 @@ export default function UI() {
     },
     {
       aid: 4,
+      tid: 4,
       pid: 1,
       name: "Task 4",
       type: TaskType.INDIVIDUAL_GOAL,
