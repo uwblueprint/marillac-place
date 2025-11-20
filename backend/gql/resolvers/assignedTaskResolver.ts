@@ -121,7 +121,7 @@ const assignedTaskResolver = {
         comment,
       }: {
         pid: number;
-        tid?: number;
+        tid: number;
         name: string;
         type: TaskType;
         value: number;
@@ -213,7 +213,7 @@ const assignedTaskResolver = {
         );
 
         if (assignedTask.type === TaskType.REQUIRED) {
-          const weeklyRequiredTasks = await db.assignedTask.findMany({
+          const weeklyRequiredTasksNotComplete = await db.assignedTask.findMany({
             where: {
               pid: assignedTask.pid,
               status: { not: TaskStatus.COMPLETE },
@@ -223,7 +223,7 @@ const assignedTaskResolver = {
             },
           });
 
-          if (weeklyRequiredTasks.length === 0) {
+          if (weeklyRequiredTasksNotComplete.length === 1) {
             await updateBadgeLevelProgress(
               PERFECT_SCORE_REQUIRED,
               assignedTask.pid,
@@ -248,10 +248,23 @@ const assignedTaskResolver = {
               1
             );
           }
-        }
+        } else if (assignedTask.type === TaskType.INDIVIDUAL_GOAL) {
+          const individualGoalTasksNotComplete = await db.assignedTask.findMany({
+            where: {
+              pid: assignedTask.pid,
+              type: TaskType.INDIVIDUAL_GOAL,
+              status: { not: TaskStatus.COMPLETE },
+              start_date: { lte: endOfWeek(new Date()) },
+              end_date: { gte: startOfWeek(new Date()) },
+            },
+          });
+  
+          if (individualGoalTasksNotComplete.length === 1) {
+            await updateBadgeLevelProgress(INDIVIDUAL_GOAL, assignedTask.pid, 1);
+          }
 
-        // Jack of All Trades:
-        // If the task that's just been completed has not been completed before, update badge level progress for the JACK_OF_ALL_TRADES badge by 1
+          await updateBadgeLevelProgress(FIRST_GOAL, assignedTask.pid, 1);
+        }
 
         const hasPreviouslyCompleted = await db.assignedTask
           .findFirst({
@@ -262,36 +275,12 @@ const assignedTaskResolver = {
             },
           })
           .then((task) => task !== null);
-
-        if (!hasPreviouslyCompleted && assignedTask.tid !== null) {
+        if (!hasPreviouslyCompleted) {
           await updateBadgeLevelProgress(
             JACK_OF_ALL_TRADES,
             assignedTask.pid,
             1
           );
-        }
-
-        // First Goal:
-        // No condition needs to be checked, just call updateBadgeLevelProgress for the FIRST_GOAL badge with inc = 1
-        await updateBadgeLevelProgress(FIRST_GOAL, assignedTask.pid, 1);
-
-        // Individual Goal
-        // Check if all assigned tasks of type INDIVIDUAL_GOAL have been completed for the week, if so, update badge level progress for the INDIVIDUAL_GOAL badge by 1
-        const individualGoalTasksNotComplete = await db.assignedTask.findMany({
-          where: {
-            pid: assignedTask.pid,
-            type: TaskType.INDIVIDUAL_GOAL,
-            status: { not: TaskStatus.COMPLETE },
-            start_date: { lte: endOfWeek(new Date()) },
-            end_date: { gte: startOfWeek(new Date()) },
-          },
-        });
-
-        if (
-          individualGoalTasksNotComplete.length === 1 &&
-          individualGoalTasksNotComplete[0].aid === aid
-        ) {
-          await updateBadgeLevelProgress(INDIVIDUAL_GOAL, assignedTask.pid, 1);
         }
       }
 
