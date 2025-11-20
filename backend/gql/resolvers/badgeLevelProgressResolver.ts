@@ -2,8 +2,26 @@ import { BadgeLevelProgress } from "@prisma/client";
 import db from "../../prisma";
 
 const badgeLevelProgressResolver = {
-  Mutation: {
-    // TODO: Get all badge levels in progress for a participant (include badge level and system badge information in the return statement)
+  Query: {
+    getBadgeLevelProgress: async (
+      _parent: undefined,
+      {
+        pid,
+      }: {
+        pid: number;
+      }
+    ): Promise<BadgeLevelProgress[]> => {
+      return db.badgeLevelProgress.findMany({
+        where: { pid, badge_level: { system_badge: { is_active: true } } },
+        include: {
+          badge_level: {
+            include: {
+              system_badge: true,
+            },
+          }
+        },
+      });
+    },
   },
 };
 

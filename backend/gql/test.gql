@@ -226,6 +226,24 @@ query GetAchievedBadgeLevels($pid: Int!) {
   }
 }
 
+query GetBadgeLevelProgress($pid: Int!) {
+  getBadgeLevelProgress(pid: $pid) {
+    name
+    level
+    pid
+    progress
+    badge_level {
+      value
+      benchmark
+      system_badge {
+        icon
+        description
+        is_active
+      }
+    }
+  }
+}
+
 mutation CreateNote($message: String!) {
   createNote(message: $message) {
     nid
