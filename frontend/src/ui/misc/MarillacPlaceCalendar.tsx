@@ -19,7 +19,7 @@ import {
   setHours,
   startOfDay,
 } from "date-fns";
-import { enCA } from "date-fns/locale";
+import { enCA } from "date-fns/locale/en-CA";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AssignedTask } from "../../types/models";
 import { formatTimeString } from "../../helpers/formatDateTime";

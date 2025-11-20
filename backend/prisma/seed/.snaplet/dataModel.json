@@ -128,148 +128,22 @@
         }
       ]
     },
-    "achieved_badge_level": {
-      "id": "public.achieved_badge_level",
-      "schemaName": "public",
-      "tableName": "achieved_badge_level",
-      "fields": [
-        {
-          "id": "public.achieved_badge_level.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.achieved_badge_level.level",
-          "name": "level",
-          "columnName": "level",
-          "type": "Level",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.achieved_badge_level.pid",
-          "name": "pid",
-          "columnName": "pid",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.achieved_badge_level.notified",
-          "name": "notified",
-          "columnName": "notified",
-          "type": "bool",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.achieved_badge_level.date",
-          "name": "date",
-          "columnName": "date",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "badge_level",
-          "type": "badge_level",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "achieved_badge_levelTobadge_level",
-          "relationFromFields": [
-            "name",
-            "level"
-          ],
-          "relationToFields": [
-            "name",
-            "level"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "participant",
-          "type": "participant",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "achieved_badge_levelToparticipant",
-          "relationFromFields": [
-            "pid"
-          ],
-          "relationToFields": [
-            "pid"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "achieved_badge_level_pkey",
-          "fields": [
-            "level",
-            "name",
-            "pid"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
-    },
     "announcement": {
       "id": "public.announcement",
       "schemaName": "public",
       "tableName": "announcement",
       "fields": [
         {
-          "id": "public.announcement.aid",
-          "name": "aid",
-          "columnName": "aid",
+          "id": "public.announcement.announcement_id",
+          "name": "announcement_id",
+          "columnName": "announcement_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": {
-            "identifier": "\"public\".\"announcement_aid_seq\"",
+            "identifier": "\"public\".\"announcement_announcement_id_seq\"",
             "increment": 1,
             "start": 1
           },
@@ -278,16 +152,30 @@
           "maxLength": null
         },
         {
-          "id": "public.announcement.date",
-          "name": "date",
-          "columnName": "date",
-          "type": "timestamp",
+          "id": "public.announcement.priority",
+          "name": "priority",
+          "columnName": "priority",
+          "type": "Priority",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.announcement.creation_date",
+          "name": "creation_date",
+          "columnName": "creation_date",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
@@ -306,25 +194,11 @@
           "maxLength": null
         },
         {
-          "id": "public.announcement.priority",
-          "name": "priority",
-          "columnName": "priority",
-          "type": "Priority",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "received_announcement",
-          "type": "received_announcement",
+          "name": "user_announcement",
+          "type": "user_announcement",
           "isRequired": false,
           "kind": "object",
-          "relationName": "received_announcementToannouncement",
+          "relationName": "user_announcementToannouncement",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -338,7 +212,7 @@
         {
           "name": "announcement_pkey",
           "fields": [
-            "aid"
+            "announcement_id"
           ],
           "nullNotDistinct": false
         }
@@ -350,16 +224,16 @@
       "tableName": "assigned_task",
       "fields": [
         {
-          "id": "public.assigned_task.aid",
-          "name": "aid",
-          "columnName": "aid",
+          "id": "public.assigned_task.assigned_task_id",
+          "name": "assigned_task_id",
+          "columnName": "assigned_task_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": {
-            "identifier": "\"public\".\"assigned_task_aid_seq\"",
+            "identifier": "\"public\".\"assigned_task_assigned_task_id_seq\"",
             "increment": 1,
             "start": 1
           },
@@ -368,9 +242,9 @@
           "maxLength": null
         },
         {
-          "id": "public.assigned_task.pid",
-          "name": "pid",
-          "columnName": "pid",
+          "id": "public.assigned_task.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -382,9 +256,9 @@
           "maxLength": null
         },
         {
-          "id": "public.assigned_task.name",
-          "name": "name",
-          "columnName": "name",
+          "id": "public.assigned_task.task_name",
+          "name": "task_name",
+          "columnName": "task_name",
           "type": "text",
           "isRequired": true,
           "kind": "scalar",
@@ -396,9 +270,23 @@
           "maxLength": null
         },
         {
-          "id": "public.assigned_task.type",
-          "name": "type",
-          "columnName": "type",
+          "id": "public.assigned_task.task_status",
+          "name": "task_status",
+          "columnName": "task_status",
+          "type": "Status",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.assigned_task.task_type",
+          "name": "task_type",
+          "columnName": "task_type",
           "type": "TaskType",
           "isRequired": true,
           "kind": "scalar",
@@ -410,23 +298,65 @@
           "maxLength": null
         },
         {
-          "id": "public.assigned_task.status",
-          "name": "status",
-          "columnName": "status",
-          "type": "TaskStatus",
+          "id": "public.assigned_task.goal_name",
+          "name": "goal_name",
+          "columnName": "goal_name",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.assigned_task.goal_description",
+          "name": "goal_description",
+          "columnName": "goal_description",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.assigned_task.start_date",
+          "name": "start_date",
+          "columnName": "start_date",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
         {
-          "id": "public.assigned_task.value",
-          "name": "value",
-          "columnName": "value",
+          "id": "public.assigned_task.end_date",
+          "name": "end_date",
+          "columnName": "end_date",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.assigned_task.marillac_bucks_addition",
+          "name": "marillac_bucks_addition",
+          "columnName": "marillac_bucks_addition",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -438,9 +368,9 @@
           "maxLength": null
         },
         {
-          "id": "public.assigned_task.penalty",
-          "name": "penalty",
-          "columnName": "penalty",
+          "id": "public.assigned_task.marillac_bucks_deduction",
+          "name": "marillac_bucks_deduction",
+          "columnName": "marillac_bucks_deduction",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -466,44 +396,16 @@
           "maxLength": null
         },
         {
-          "id": "public.assigned_task.start_date",
-          "name": "start_date",
-          "columnName": "start_date",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.assigned_task.end_date",
-          "name": "end_date",
-          "columnName": "end_date",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "name": "participant",
           "type": "participant",
           "isRequired": true,
           "kind": "object",
           "relationName": "assigned_taskToparticipant",
           "relationFromFields": [
-            "pid"
+            "participant_id"
           ],
           "relationToFields": [
-            "pid"
+            "participant_id"
           ],
           "isList": false,
           "isId": false,
@@ -516,7 +418,160 @@
         {
           "name": "assigned_task_pkey",
           "fields": [
-            "aid"
+            "assigned_task_id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "badge": {
+      "id": "public.badge",
+      "schemaName": "public",
+      "tableName": "badge",
+      "fields": [
+        {
+          "id": "public.badge.badge_id",
+          "name": "badge_id",
+          "columnName": "badge_id",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"badge_badge_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.badge.badge_type",
+          "name": "badge_type",
+          "columnName": "badge_type",
+          "type": "BadgeType",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.badge.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.badge.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.badge.is_active",
+          "name": "is_active",
+          "columnName": "is_active",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.badge.is_consecutive",
+          "name": "is_consecutive",
+          "columnName": "is_consecutive",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.badge.icon",
+          "name": "icon",
+          "columnName": "icon",
+          "type": "Icon",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "badge_level",
+          "type": "badge_level",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "badge_levelTobadge",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "earned_badge",
+          "type": "earned_badge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "earned_badgeTobadge",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "badge_pkey",
+          "fields": [
+            "badge_id"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "badge_name_key",
+          "fields": [
+            "name"
           ],
           "nullNotDistinct": false
         }
@@ -528,10 +583,10 @@
       "tableName": "badge_level",
       "fields": [
         {
-          "id": "public.badge_level.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
+          "id": "public.badge_level.badge_id",
+          "name": "badge_id",
+          "columnName": "badge_id",
+          "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -545,20 +600,6 @@
           "id": "public.badge_level.level",
           "name": "level",
           "columnName": "level",
-          "type": "Level",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.badge_level.value",
-          "name": "value",
-          "columnName": "value",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -566,7 +607,7 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false,
-          "isId": false,
+          "isId": true,
           "maxLength": null
         },
         {
@@ -584,46 +625,32 @@
           "maxLength": null
         },
         {
-          "name": "system_badge",
-          "type": "system_badge",
+          "id": "public.badge_level.marillac_bucks",
+          "name": "marillac_bucks",
+          "columnName": "marillac_bucks",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "badge",
+          "type": "badge",
           "isRequired": true,
           "kind": "object",
-          "relationName": "badge_levelTosystem_badge",
+          "relationName": "badge_levelTobadge",
           "relationFromFields": [
-            "name"
+            "badge_id"
           ],
           "relationToFields": [
-            "name"
+            "badge_id"
           ],
           "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "achieved_badge_level",
-          "type": "achieved_badge_level",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "achieved_badge_levelTobadge_level",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "badge_level_progress",
-          "type": "badge_level_progress",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "badge_level_progressTobadge_level",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
           "isId": false,
           "isGenerated": false,
           "sequence": false,
@@ -634,20 +661,80 @@
         {
           "name": "badge_level_pkey",
           "fields": [
-            "level",
-            "name"
+            "badge_id",
+            "level"
           ],
           "nullNotDistinct": false
         }
       ]
     },
-    "badge_level_progress": {
-      "id": "public.badge_level_progress",
+    "earned_badge": {
+      "id": "public.earned_badge",
       "schemaName": "public",
-      "tableName": "badge_level_progress",
+      "tableName": "earned_badge",
       "fields": [
         {
-          "id": "public.badge_level_progress.name",
+          "id": "public.earned_badge.earned_badge_id",
+          "name": "earned_badge_id",
+          "columnName": "earned_badge_id",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"earned_badge_earned_badge_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.earned_badge.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.earned_badge.badge_id",
+          "name": "badge_id",
+          "columnName": "badge_id",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.earned_badge.date_received",
+          "name": "date_received",
+          "columnName": "date_received",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.earned_badge.name",
           "name": "name",
           "columnName": "name",
           "type": "text",
@@ -657,41 +744,41 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false,
-          "isId": true,
+          "isId": false,
           "maxLength": null
         },
         {
-          "id": "public.badge_level_progress.level",
+          "id": "public.earned_badge.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.earned_badge.badge_icon",
+          "name": "badge_icon",
+          "columnName": "badge_icon",
+          "type": "Icon",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.earned_badge.level",
           "name": "level",
           "columnName": "level",
-          "type": "Level",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.badge_level_progress.pid",
-          "name": "pid",
-          "columnName": "pid",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.badge_level_progress.progress",
-          "name": "progress",
-          "columnName": "progress",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -703,18 +790,16 @@
           "maxLength": null
         },
         {
-          "name": "badge_level",
-          "type": "badge_level",
+          "name": "badge",
+          "type": "badge",
           "isRequired": true,
           "kind": "object",
-          "relationName": "badge_level_progressTobadge_level",
+          "relationName": "earned_badgeTobadge",
           "relationFromFields": [
-            "name",
-            "level"
+            "badge_id"
           ],
           "relationToFields": [
-            "name",
-            "level"
+            "badge_id"
           ],
           "isList": false,
           "isId": false,
@@ -727,12 +812,12 @@
           "type": "participant",
           "isRequired": true,
           "kind": "object",
-          "relationName": "badge_level_progressToparticipant",
+          "relationName": "earned_badgeToparticipant",
           "relationFromFields": [
-            "pid"
+            "participant_id"
           ],
           "relationToFields": [
-            "pid"
+            "participant_id"
           ],
           "isList": false,
           "isId": false,
@@ -743,32 +828,30 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "badge_level_progress_pkey",
+          "name": "earned_badge_pkey",
           "fields": [
-            "level",
-            "name",
-            "pid"
+            "earned_badge_id"
           ],
           "nullNotDistinct": false
         }
       ]
     },
-    "custom_badge": {
-      "id": "public.custom_badge",
+    "goal_history": {
+      "id": "public.goal_history",
       "schemaName": "public",
-      "tableName": "custom_badge",
+      "tableName": "goal_history",
       "fields": [
         {
-          "id": "public.custom_badge.cid",
-          "name": "cid",
-          "columnName": "cid",
+          "id": "public.goal_history.goal_history_id",
+          "name": "goal_history_id",
+          "columnName": "goal_history_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": {
-            "identifier": "\"public\".\"custom_badge_cid_seq\"",
+            "identifier": "\"public\".\"goal_history_goal_history_id_seq\"",
             "increment": 1,
             "start": 1
           },
@@ -777,92 +860,9 @@
           "maxLength": null
         },
         {
-          "id": "public.custom_badge.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.custom_badge.icon",
-          "name": "icon",
-          "columnName": "icon",
-          "type": "Icon",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.custom_badge.description",
-          "name": "description",
-          "columnName": "description",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "custom_badge_pkey",
-          "fields": [
-            "cid"
-          ],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "custom_badge_name_key",
-          "fields": [
-            "name"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "earned_custom_badge": {
-      "id": "public.earned_custom_badge",
-      "schemaName": "public",
-      "tableName": "earned_custom_badge",
-      "fields": [
-        {
-          "id": "public.earned_custom_badge.eid",
-          "name": "eid",
-          "columnName": "eid",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": {
-            "identifier": "\"public\".\"earned_custom_badge_eid_seq\"",
-            "increment": 1,
-            "start": 1
-          },
-          "hasDefaultValue": true,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.earned_custom_badge.pid",
-          "name": "pid",
-          "columnName": "pid",
+          "id": "public.goal_history.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -874,99 +874,9 @@
           "maxLength": null
         },
         {
-          "id": "public.earned_custom_badge.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.earned_custom_badge.icon",
-          "name": "icon",
-          "columnName": "icon",
-          "type": "Icon",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.earned_custom_badge.description",
-          "name": "description",
-          "columnName": "description",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.earned_custom_badge.notified",
-          "name": "notified",
-          "columnName": "notified",
-          "type": "bool",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "participant",
-          "type": "participant",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "earned_custom_badgeToparticipant",
-          "relationFromFields": [
-            "pid"
-          ],
-          "relationToFields": [
-            "pid"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "earned_custom_badge_pkey",
-          "fields": [
-            "eid"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "earning_goal": {
-      "id": "public.earning_goal",
-      "schemaName": "public",
-      "tableName": "earning_goal",
-      "fields": [
-        {
-          "id": "public.earning_goal.pid",
-          "name": "pid",
-          "columnName": "pid",
+          "id": "public.goal_history.goal_value",
+          "name": "goal_value",
+          "columnName": "goal_value",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -974,13 +884,27 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false,
-          "isId": true,
+          "isId": false,
           "maxLength": null
         },
         {
-          "id": "public.earning_goal.action",
-          "name": "action",
-          "columnName": "action",
+          "id": "public.goal_history.action_date",
+          "name": "action_date",
+          "columnName": "action_date",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.goal_history.goal_action",
+          "name": "goal_action",
+          "columnName": "goal_action",
           "type": "GoalAction",
           "isRequired": true,
           "kind": "scalar",
@@ -992,44 +916,16 @@
           "maxLength": null
         },
         {
-          "id": "public.earning_goal.date",
-          "name": "date",
-          "columnName": "date",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.earning_goal.value",
-          "name": "value",
-          "columnName": "value",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "name": "participant",
           "type": "participant",
           "isRequired": true,
           "kind": "object",
-          "relationName": "earning_goalToparticipant",
+          "relationName": "goal_historyToparticipant",
           "relationFromFields": [
-            "pid"
+            "participant_id"
           ],
           "relationToFields": [
-            "pid"
+            "participant_id"
           ],
           "isList": false,
           "isId": false,
@@ -1040,24 +936,23 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "earning_goal_pkey",
+          "name": "goal_history_pkey",
           "fields": [
-            "date",
-            "pid"
+            "goal_history_id"
           ],
           "nullNotDistinct": false
         }
       ]
     },
-    "login_history": {
-      "id": "public.login_history",
+    "login": {
+      "id": "public.login",
       "schemaName": "public",
-      "tableName": "login_history",
+      "tableName": "login",
       "fields": [
         {
-          "id": "public.login_history.pid",
-          "name": "pid",
-          "columnName": "pid",
+          "id": "public.login.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -1069,16 +964,16 @@
           "maxLength": null
         },
         {
-          "id": "public.login_history.date",
-          "name": "date",
-          "columnName": "date",
-          "type": "timestamp",
+          "id": "public.login.login_date",
+          "name": "login_date",
+          "columnName": "login_date",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": true,
           "maxLength": null
         },
@@ -1087,12 +982,12 @@
           "type": "participant",
           "isRequired": true,
           "kind": "object",
-          "relationName": "login_historyToparticipant",
+          "relationName": "loginToparticipant",
           "relationFromFields": [
-            "pid"
+            "participant_id"
           ],
           "relationToFields": [
-            "pid"
+            "participant_id"
           ],
           "isList": false,
           "isId": false,
@@ -1103,10 +998,10 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "login_history_pkey",
+          "name": "login_pkey",
           "fields": [
-            "date",
-            "pid"
+            "login_date",
+            "participant_id"
           ],
           "nullNotDistinct": false
         }
@@ -1118,16 +1013,16 @@
       "tableName": "note",
       "fields": [
         {
-          "id": "public.note.nid",
-          "name": "nid",
-          "columnName": "nid",
+          "id": "public.note.note_id",
+          "name": "note_id",
+          "columnName": "note_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": {
-            "identifier": "\"public\".\"note_nid_seq\"",
+            "identifier": "\"public\".\"note_note_id_seq\"",
             "increment": 1,
             "start": 1
           },
@@ -1150,16 +1045,16 @@
           "maxLength": null
         },
         {
-          "id": "public.note.date",
-          "name": "date",
-          "columnName": "date",
-          "type": "timestamp",
+          "id": "public.note.creation_date",
+          "name": "creation_date",
+          "columnName": "creation_date",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         }
@@ -1168,7 +1063,7 @@
         {
           "name": "note_pkey",
           "fields": [
-            "nid"
+            "note_id"
           ],
           "nullNotDistinct": false
         }
@@ -1180,9 +1075,9 @@
       "tableName": "participant",
       "fields": [
         {
-          "id": "public.participant.pid",
-          "name": "pid",
-          "columnName": "pid",
+          "id": "public.participant.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -1208,9 +1103,9 @@
           "maxLength": null
         },
         {
-          "id": "public.participant.room",
-          "name": "room",
-          "columnName": "room",
+          "id": "public.participant.room_number",
+          "name": "room_number",
+          "columnName": "room_number",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -1222,24 +1117,24 @@
           "maxLength": null
         },
         {
-          "id": "public.participant.arrival",
-          "name": "arrival",
-          "columnName": "arrival",
-          "type": "timestamp",
+          "id": "public.participant.arrival_date",
+          "name": "arrival_date",
+          "columnName": "arrival_date",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
         {
-          "id": "public.participant.departure",
-          "name": "departure",
-          "columnName": "departure",
-          "type": "timestamp",
+          "id": "public.participant.departure_date",
+          "name": "departure_date",
+          "columnName": "departure_date",
+          "type": "text",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,
@@ -1250,46 +1145,60 @@
           "maxLength": null
         },
         {
-          "id": "public.participant.balance",
-          "name": "balance",
-          "columnName": "balance",
-          "type": "int4",
+          "id": "public.participant.account_creation_date",
+          "name": "account_creation_date",
+          "columnName": "account_creation_date",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
         {
-          "id": "public.participant.total_earnings",
-          "name": "total_earnings",
-          "columnName": "total_earnings",
-          "type": "int4",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "achieved_badge_level",
-          "type": "achieved_badge_level",
+          "id": "public.participant.account_removal_date",
+          "name": "account_removal_date",
+          "columnName": "account_removal_date",
+          "type": "text",
           "isRequired": false,
-          "kind": "object",
-          "relationName": "achieved_badge_levelToparticipant",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
+          "kind": "scalar",
+          "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": false
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.participant.marillac_bucks",
+          "name": "marillac_bucks",
+          "columnName": "marillac_bucks",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.participant.marillac_bucks_goal",
+          "name": "marillac_bucks_goal",
+          "columnName": "marillac_bucks_goal",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
         },
         {
           "name": "assigned_task",
@@ -1306,11 +1215,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "badge_level_progress",
-          "type": "badge_level_progress",
+          "name": "earned_badge",
+          "type": "earned_badge",
           "isRequired": false,
           "kind": "object",
-          "relationName": "badge_level_progressToparticipant",
+          "relationName": "earned_badgeToparticipant",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -1320,11 +1229,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "earned_custom_badge",
-          "type": "earned_custom_badge",
+          "name": "goal_history",
+          "type": "goal_history",
           "isRequired": false,
           "kind": "object",
-          "relationName": "earned_custom_badgeToparticipant",
+          "relationName": "goal_historyToparticipant",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -1334,11 +1243,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "earning_goal",
-          "type": "earning_goal",
+          "name": "login",
+          "type": "login",
           "isRequired": false,
           "kind": "object",
-          "relationName": "earning_goalToparticipant",
+          "relationName": "loginToparticipant",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -1348,25 +1257,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "login_history",
-          "type": "login_history",
+          "name": "participant_progress",
+          "type": "participant_progress",
           "isRequired": false,
           "kind": "object",
-          "relationName": "login_historyToparticipant",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "received_announcement",
-          "type": "received_announcement",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "received_announcementToparticipant",
+          "relationName": "participant_progressToparticipant",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -1388,27 +1283,41 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "user_announcement",
+          "type": "user_announcement",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "user_announcementToparticipant",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
         {
           "name": "participant_pkey",
           "fields": [
-            "pid"
+            "participant_id"
           ],
           "nullNotDistinct": false
         }
       ]
     },
-    "received_announcement": {
-      "id": "public.received_announcement",
+    "participant_progress": {
+      "id": "public.participant_progress",
       "schemaName": "public",
-      "tableName": "received_announcement",
+      "tableName": "participant_progress",
       "fields": [
         {
-          "id": "public.received_announcement.aid",
-          "name": "aid",
-          "columnName": "aid",
+          "id": "public.participant_progress.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -1420,24 +1329,24 @@
           "maxLength": null
         },
         {
-          "id": "public.received_announcement.pid",
-          "name": "pid",
-          "columnName": "pid",
+          "id": "public.participant_progress.optional_tasks_completed",
+          "name": "optional_tasks_completed",
+          "columnName": "optional_tasks_completed",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
+          "hasDefaultValue": true,
+          "isId": false,
           "maxLength": null
         },
         {
-          "id": "public.received_announcement.read",
-          "name": "read",
-          "columnName": "read",
-          "type": "bool",
+          "id": "public.participant_progress.weeks_optional_tasks_complete",
+          "name": "weeks_optional_tasks_complete",
+          "columnName": "weeks_optional_tasks_complete",
+          "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -1448,10 +1357,10 @@
           "maxLength": null
         },
         {
-          "id": "public.received_announcement.pinned",
-          "name": "pinned",
-          "columnName": "pinned",
-          "type": "bool",
+          "id": "public.participant_progress.weeks_mandatory_tasks_complete",
+          "name": "weeks_mandatory_tasks_complete",
+          "columnName": "weeks_mandatory_tasks_complete",
+          "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -1462,34 +1371,86 @@
           "maxLength": null
         },
         {
-          "name": "announcement",
-          "type": "announcement",
+          "id": "public.participant_progress.weeks_individual_goal_complete",
+          "name": "weeks_individual_goal_complete",
+          "columnName": "weeks_individual_goal_complete",
+          "type": "int4",
           "isRequired": true,
-          "kind": "object",
-          "relationName": "received_announcementToannouncement",
-          "relationFromFields": [
-            "aid"
-          ],
-          "relationToFields": [
-            "aid"
-          ],
+          "kind": "scalar",
           "isList": false,
-          "isId": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": false
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.participant_progress.days_logged_in",
+          "name": "days_logged_in",
+          "columnName": "days_logged_in",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.participant_progress.total_earnings",
+          "name": "total_earnings",
+          "columnName": "total_earnings",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.participant_progress.badges_achieved",
+          "name": "badges_achieved",
+          "columnName": "badges_achieved",
+          "type": "int4[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.participant_progress.task_types_tried",
+          "name": "task_types_tried",
+          "columnName": "task_types_tried",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
         },
         {
           "name": "participant",
           "type": "participant",
           "isRequired": true,
           "kind": "object",
-          "relationName": "received_announcementToparticipant",
+          "relationName": "participant_progressToparticipant",
           "relationFromFields": [
-            "pid"
+            "participant_id"
           ],
           "relationToFields": [
-            "pid"
+            "participant_id"
           ],
           "isList": false,
           "isId": false,
@@ -1500,10 +1461,9 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "received_announcement_pkey",
+          "name": "participant_progress_pkey",
           "fields": [
-            "aid",
-            "pid"
+            "participant_id"
           ],
           "nullNotDistinct": false
         }
@@ -1515,6 +1475,24 @@
       "tableName": "report_recipient",
       "fields": [
         {
+          "id": "public.report_recipient.report_recipient_id",
+          "name": "report_recipient_id",
+          "columnName": "report_recipient_id",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"report_recipient_report_recipient_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
           "id": "public.report_recipient.email",
           "name": "email",
           "columnName": "email",
@@ -1525,7 +1503,7 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false,
-          "isId": true,
+          "isId": false,
           "maxLength": null
         },
         {
@@ -1555,99 +1533,27 @@
           "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "id": "public.report_recipient.last_report_sent",
+          "name": "last_report_sent",
+          "columnName": "last_report_sent",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
         }
       ],
       "uniqueConstraints": [
         {
           "name": "report_recipient_pkey",
           "fields": [
-            "email"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "system_badge": {
-      "id": "public.system_badge",
-      "schemaName": "public",
-      "tableName": "system_badge",
-      "fields": [
-        {
-          "id": "public.system_badge.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.system_badge.icon",
-          "name": "icon",
-          "columnName": "icon",
-          "type": "Icon",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.system_badge.description",
-          "name": "description",
-          "columnName": "description",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.system_badge.is_active",
-          "name": "is_active",
-          "columnName": "is_active",
-          "type": "bool",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "badge_level",
-          "type": "badge_level",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "badge_levelTosystem_badge",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "system_badge_pkey",
-          "fields": [
-            "name"
+            "report_recipient_id"
           ],
           "nullNotDistinct": false
         }
@@ -1659,16 +1565,16 @@
       "tableName": "task",
       "fields": [
         {
-          "id": "public.task.tid",
-          "name": "tid",
-          "columnName": "tid",
+          "id": "public.task.task_id",
+          "name": "task_id",
+          "columnName": "task_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": {
-            "identifier": "\"public\".\"task_tid_seq\"",
+            "identifier": "\"public\".\"task_task_id_seq\"",
             "increment": 1,
             "start": 1
           },
@@ -1677,9 +1583,9 @@
           "maxLength": null
         },
         {
-          "id": "public.task.name",
-          "name": "name",
-          "columnName": "name",
+          "id": "public.task.task_name",
+          "name": "task_name",
+          "columnName": "task_name",
           "type": "text",
           "isRequired": true,
           "kind": "scalar",
@@ -1691,9 +1597,9 @@
           "maxLength": null
         },
         {
-          "id": "public.task.type",
-          "name": "type",
-          "columnName": "type",
+          "id": "public.task.task_type",
+          "name": "task_type",
+          "columnName": "task_type",
           "type": "TaskType",
           "isRequired": true,
           "kind": "scalar",
@@ -1705,9 +1611,79 @@
           "maxLength": null
         },
         {
-          "id": "public.task.value",
-          "name": "value",
-          "columnName": "value",
+          "id": "public.task.recurrence_preference",
+          "name": "recurrence_preference",
+          "columnName": "recurrence_preference",
+          "type": "RecurrenceFrequency",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.task.repeat_days",
+          "name": "repeat_days",
+          "columnName": "repeat_days",
+          "type": "DayOfWeek[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.task.time_preference",
+          "name": "time_preference",
+          "columnName": "time_preference",
+          "type": "TimeOption",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.task.start_time",
+          "name": "start_time",
+          "columnName": "start_time",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.task.end_time",
+          "name": "end_time",
+          "columnName": "end_time",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.task.marillac_bucks_addition",
+          "name": "marillac_bucks_addition",
+          "columnName": "marillac_bucks_addition",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -1719,16 +1695,16 @@
           "maxLength": null
         },
         {
-          "id": "public.task.penalty",
-          "name": "penalty",
-          "columnName": "penalty",
+          "id": "public.task.marillac_bucks_deduction",
+          "name": "marillac_bucks_deduction",
+          "columnName": "marillac_bucks_deduction",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
@@ -1745,90 +1721,20 @@
           "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
-        },
-        {
-          "id": "public.task.day_preference",
-          "name": "day_preference",
-          "columnName": "day_preference",
-          "type": "DayPreference",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.task.days",
-          "name": "days",
-          "columnName": "days",
-          "type": "DayOfWeek[]",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.task.time_preference",
-          "name": "time_preference",
-          "columnName": "time_preference",
-          "type": "TimePreference",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.task.start_time",
-          "name": "start_time",
-          "columnName": "start_time",
-          "type": "time",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.task.end_time",
-          "name": "end_time",
-          "columnName": "end_time",
-          "type": "time",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
         }
       ],
       "uniqueConstraints": [
         {
           "name": "task_pkey",
           "fields": [
-            "tid"
+            "task_id"
           ],
           "nullNotDistinct": false
         },
         {
-          "name": "task_name_key",
+          "name": "task_task_name_key",
           "fields": [
-            "name"
+            "task_name"
           ],
           "nullNotDistinct": false
         }
@@ -1840,37 +1746,27 @@
       "tableName": "transaction",
       "fields": [
         {
-          "id": "public.transaction.pid",
-          "name": "pid",
-          "columnName": "pid",
+          "id": "public.transaction.transaction_id",
+          "name": "transaction_id",
+          "columnName": "transaction_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.transaction.date",
-          "name": "date",
-          "columnName": "date",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
+          "sequence": {
+            "identifier": "\"public\".\"transaction_transaction_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
           "hasDefaultValue": true,
           "isId": true,
           "maxLength": null
         },
         {
-          "id": "public.transaction.amount",
-          "name": "amount",
-          "columnName": "amount",
+          "id": "public.transaction.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
           "type": "int4",
           "isRequired": true,
           "kind": "scalar",
@@ -1882,24 +1778,52 @@
           "maxLength": null
         },
         {
-          "id": "public.transaction.type",
-          "name": "type",
-          "columnName": "type",
+          "id": "public.transaction.transaction_date",
+          "name": "transaction_date",
+          "columnName": "transaction_date",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.transaction.transaction_type",
+          "name": "transaction_type",
+          "columnName": "transaction_type",
           "type": "TransactionType",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
         {
-          "id": "public.transaction.reason",
-          "name": "reason",
-          "columnName": "reason",
+          "id": "public.transaction.description",
+          "name": "description",
+          "columnName": "description",
           "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.transaction.marillac_bucks",
+          "name": "marillac_bucks",
+          "columnName": "marillac_bucks",
+          "type": "int4",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -1916,10 +1840,10 @@
           "kind": "object",
           "relationName": "transactionToparticipant",
           "relationFromFields": [
-            "pid"
+            "participant_id"
           ],
           "relationToFields": [
-            "pid"
+            "participant_id"
           ],
           "isList": false,
           "isId": false,
@@ -1932,8 +1856,116 @@
         {
           "name": "transaction_pkey",
           "fields": [
-            "date",
-            "pid"
+            "transaction_id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "user_announcement": {
+      "id": "public.user_announcement",
+      "schemaName": "public",
+      "tableName": "user_announcement",
+      "fields": [
+        {
+          "id": "public.user_announcement.read",
+          "name": "read",
+          "columnName": "read",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.user_announcement.pinned",
+          "name": "pinned",
+          "columnName": "pinned",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.user_announcement.announcement_id",
+          "name": "announcement_id",
+          "columnName": "announcement_id",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.user_announcement.participant_id",
+          "name": "participant_id",
+          "columnName": "participant_id",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "name": "announcement",
+          "type": "announcement",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "user_announcementToannouncement",
+          "relationFromFields": [
+            "announcement_id"
+          ],
+          "relationToFields": [
+            "announcement_id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "participant",
+          "type": "participant",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "user_announcementToparticipant",
+          "relationFromFields": [
+            "participant_id"
+          ],
+          "relationToFields": [
+            "participant_id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "user_announcement_pkey",
+          "fields": [
+            "announcement_id",
+            "participant_id"
           ],
           "nullNotDistinct": false
         }
@@ -1941,6 +1973,17 @@
     }
   },
   "enums": {
+    "BadgeType": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "CUSTOM"
+        },
+        {
+          "name": "SYSTEM"
+        }
+      ]
+    },
     "DayOfWeek": {
       "schemaName": "public",
       "values": [
@@ -1964,23 +2007,6 @@
         },
         {
           "name": "WEDNESDAY"
-        }
-      ]
-    },
-    "DayPreference": {
-      "schemaName": "public",
-      "values": [
-        {
-          "name": "DAILY"
-        },
-        {
-          "name": "DAY_RANGE"
-        },
-        {
-          "name": "EVERY_SELECTED_DAYS"
-        },
-        {
-          "name": "PARTICIPANT_PREFERENCE"
         }
       ]
     },
@@ -2039,26 +2065,6 @@
         }
       ]
     },
-    "Level": {
-      "schemaName": "public",
-      "values": [
-        {
-          "name": "BRONZE"
-        },
-        {
-          "name": "DIAMOND"
-        },
-        {
-          "name": "GOLD"
-        },
-        {
-          "name": "NOVICE"
-        },
-        {
-          "name": "SILVER"
-        }
-      ]
-    },
     "Priority": {
       "schemaName": "public",
       "values": [
@@ -2073,7 +2079,24 @@
         }
       ]
     },
-    "TaskStatus": {
+    "RecurrenceFrequency": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "ANY_SELECTED_DAYS"
+        },
+        {
+          "name": "DAILY"
+        },
+        {
+          "name": "EVERY_SELECTED_DAYS"
+        },
+        {
+          "name": "PARTICIPANT_PREFERENCE"
+        }
+      ]
+    },
+    "Status": {
       "schemaName": "public",
       "values": [
         {
@@ -2104,7 +2127,7 @@
         }
       ]
     },
-    "TimePreference": {
+    "TimeOption": {
       "schemaName": "public",
       "values": [
         {
