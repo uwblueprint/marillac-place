@@ -5,6 +5,7 @@ const models = gql`
     name: String!
     level: Level!
     pid: Int!
+    notified: Boolean!
     date: Date!
 
     badge_level: BadgeLevel
@@ -80,6 +81,7 @@ const models = gql`
     name: String!
     icon: Icon!
     description: String!
+    notified: Boolean!
 
     participant: Participant
   }

@@ -144,6 +144,7 @@ const resolvers = gql`
       name: String!
       icon: Icon!
       description: String!
+      value: Int!
     ): EarnedCustomBadge!
     fetchNewEarnedCustomBadges(pid: Int!): [EarnedCustomBadge!]!
 

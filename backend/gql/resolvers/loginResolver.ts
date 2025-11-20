@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Participant } from "@prisma/client";
-import { endOfDay } from "date-fns";
+import { endOfDay, startOfDay } from "date-fns";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
@@ -68,10 +68,18 @@ const loginResolver = {
       const jwtSecretKey = process.env.JWT_SECRET ?? "";
       if (!jwtSecretKey) throw new Error("jwt key missing");
 
-      // TODO:
-      // get lastest login date for the participant
-      // only update badge level progress (the next line) if not already logged in today
-      await updateBadgeLevelProgress(LOGIN, pid, 1);
+      const loggedInToday = await db.loginHistory.findFirst({
+        where: {
+          pid,
+          date: {
+            gte: startOfDay(new Date()),
+            lte: endOfDay(new Date()),
+          },
+        },
+      });
+      if (!loggedInToday) {
+        await updateBadgeLevelProgress(LOGIN, pid, 1);
+      }
 
       await db.loginHistory.create({ data: { pid } });
 
