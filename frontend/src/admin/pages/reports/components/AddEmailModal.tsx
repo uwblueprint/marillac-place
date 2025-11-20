@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { Switch, FormControl, FormLabel, Input, Text, Flex } from "@chakra-ui/react";
+import { Switch, FormControl, FormLabel, Flex } from "@chakra-ui/react";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
+import TextInput from "../../../../ui/inputs/TextInput";
 
 type AddEmailModalProps = {
   onClose: () => void;
-  onSubmit: (emailData: { email: string; weekly: boolean; monthly: boolean }) => void;
+  onSubmit: (emailData: {
+    email: string;
+    weekly: boolean;
+    monthly: boolean;
+  }) => void;
 };
 
 export default function AddEmailModal({
@@ -46,30 +51,12 @@ export default function AddEmailModal({
       error_message={error}
     >
       <Flex flexDir="column" gap="20px">
-        <FormControl>
-          <Text textStyle="web.s1" color="text.light.secondary" mb="8px">
-            Email Address
-          </Text>
-          <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            width="100%"
-            height="32px"
-            paddingX="12px"
-            paddingY="8px"
-            border="1px"
-            borderColor="#C5C8D8"
-            borderRadius="8px"
-            fontFamily="Nunito"
-            fontWeight="400"
-            fontSize="12px"
-            color="#000000"
-            _focus={{
-              borderColor: "#C5C8D8",
-              boxShadow: "none",
-            }}
-          />
-        </FormControl>
+        <TextInput
+          label="Email Address"
+          current_value={email}
+          update_action={setEmail}
+          size="full"
+        />
 
         <FormControl>
           <FormLabel textStyle="web.s1" color="text.light.secondary" mb="10px">
@@ -81,7 +68,7 @@ export default function AddEmailModal({
             justifyContent="space-between"
             mt="10px"
           >
-            <FormLabel textStyle="web.b3" color="#000000" mb="0">
+            <FormLabel textStyle="web.b3" color="text.light.primary" mb="0">
               Weekly Reports
             </FormLabel>
             <Switch
@@ -96,7 +83,7 @@ export default function AddEmailModal({
             justifyContent="space-between"
             mt="10px"
           >
-            <FormLabel textStyle="web.b3" color="#000000" mb="0">
+            <FormLabel textStyle="web.b3" color="text.light.primary" mb="0">
               Monthly Reports
             </FormLabel>
             <Switch
