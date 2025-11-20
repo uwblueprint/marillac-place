@@ -97,7 +97,7 @@ export default function ReportsTable({
   return (
     <>
       <DataTable
-        loading={false} // You can pass loading state from Main.tsx if needed
+        loading={false} // pass loading state from Main.tsx if needed
         columns={columns}
         rows={reports.length === 0 ? [] : rows}
       />
