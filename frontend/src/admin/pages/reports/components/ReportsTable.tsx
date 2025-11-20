@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Flex, Button } from "@chakra-ui/react";
+import { Text, Flex, Button, IconButton, HStack } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
@@ -35,66 +35,61 @@ export default function ReportsTable({
   const rows = reports.map((report: Report) => [
     {
       element: (
-        <Text
-          textStyle="web.b3"
-          color="#000000"
-          whiteSpace="normal"
-        >
+        <Text textStyle="web.b3" color="text.light.primary" whiteSpace="normal">
           {report.email}
         </Text>
       ),
     },
     {
       element: (
-        <Text textStyle="web.b3" color={report.weekly ? "green" : "gray"} fontWeight="bold">
+        <Text
+          textStyle="web.b3"
+          color={report.weekly ? "success.900" : "text.light.secondary"}
+          fontWeight="bold"
+        >
           {report.weekly ? "Yes" : "No"}
         </Text>
       ),
     },
     {
       element: (
-        <Text textStyle="web.b3" color={report.monthly ? "green" : "gray"} fontWeight="bold">
+        <Text
+          textStyle="web.b3"
+          color={report.monthly ? "success.900" : "text.light.secondary"}
+          fontWeight="bold"
+        >
           {report.monthly ? "Yes" : "No"}
         </Text>
       ),
     },
     {
       element: (
-        <Flex
-          alignItems="center"
-          gap="8px"
-        >
-          <Flex
-            cursor="pointer"
+        <HStack spacing="8px">
+          <IconButton
+            aria-label="Edit email"
+            icon={<EditIcon sx={{ fontSize: "1.2rem" }} />}
+            size="sm"
+            variant="ghost"
+            colorScheme="gray"
             onClick={() => onEditEmail(report)}
-            padding="4px"
-            borderRadius="4px"
-            _hover={{ backgroundColor: "gray.100" }}
-          >
-            <EditIcon
-              style={{
-                width: "1.2rem",
-                height: "1.2rem",
-                color: "#666666",
-              }}
-            />
-          </Flex>
-          <Flex
-            cursor="pointer"
+            color="text.light.secondary"
+            _hover={{
+              backgroundColor: "neutral.200",
+            }}
+          />
+          <IconButton
+            aria-label="Delete email"
+            icon={<DeleteOutlineIcon sx={{ fontSize: "1.3rem" }} />}
+            size="sm"
+            variant="ghost"
+            colorScheme="red"
             onClick={() => onDeleteEmail(report.email)}
-            padding="4px"
-            borderRadius="4px"
-            _hover={{ backgroundColor: "gray.100" }}
-          >
-            <DeleteOutlineIcon
-              style={{
-                width: "1.3rem",
-                height: "1.3rem",
-                color: "#D34C5C",
-              }}
-            />
-          </Flex>
-        </Flex>
+            color="danger.800"
+            _hover={{
+              backgroundColor: "danger.100",
+            }}
+          />
+        </HStack>
       ),
     },
   ]);
@@ -109,7 +104,11 @@ export default function ReportsTable({
 
       {reports.length === 0 && (
         <Flex justifyContent="center" padding="20px">
-          <Text textStyle="web.b3" color="#999999" fontStyle="italic">
+          <Text
+            textStyle="web.b3"
+            color="text.light.disabled"
+            fontStyle="italic"
+          >
             No report recipients added yet
           </Text>
         </Flex>
