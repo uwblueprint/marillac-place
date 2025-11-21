@@ -16,6 +16,10 @@ import Error from "../../../ui/screens/ErrorScreen";
 import Loading from "../../../ui/screens/LoadingScreen";
 import { ADMIN, RELIEF } from "../../../constants/roles";
 import { AdminContext } from "../../AdminContext";
+import WidgetContainer from "../../../ui/containers/WidgetContainer";
+import DropdownInput from "../../../ui/inputs/DropdownInput";
+import PasswordInput from "../../../ui/inputs/PasswordInput";
+import OrangeButton from "../../../ui/buttons/OrangeButton";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
@@ -63,12 +67,8 @@ export default function AdminLoginPage() {
     }
   };
 
-  if (loading || adminLoginLoading) {
+  if (loading) {
     return <Loading />;
-  }
-
-  if (error) {
-    return <Error message={error} />;
   }
 
   if (loggedIn) {
@@ -84,8 +84,8 @@ export default function AdminLoginPage() {
       bg="neutral.0"
     >
       <Flex
-        width="900px"
-        h="450px"
+        width="850px"
+        h="400px"
         bg="primary.100"
         borderRadius="8px"
         boxShadow="lg"
@@ -93,50 +93,38 @@ export default function AdminLoginPage() {
         alignItems="center"
         justifyContent="space-around"
       >
-        <Flex width="30%" marginLeft="3vw">
+        <Flex width="25%" marginLeft="3vw">
           <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
         </Flex>
 
-        <Flex
-          width="400px"
-          p="40px"
-          borderRadius="8px"
-          border="1px"
-          borderColor="neutral.300"
-          bg="neutral.0"
-          flexDir="column"
-          alignItems="left"
-          justifyContent="center"
-          gap="20px"
+        <WidgetContainer
+          loading={adminLoginLoading}
+          error=""
+          width="fit-content"
+          height="fit-content"
+          paddingX="25px"
+          paddingY="25px"
         >
           <Flex flexDir="column">
-            <Text textStyle="web.h1">Sign in</Text>
-
-            <Text textStyle="web.b1">Please enter your login information.</Text>
+            <Text textStyle="web.h2">Sign in</Text>
+            <Text textStyle="web.b2">Please enter your login information.</Text>
           </Flex>
 
-          <Flex flexDir="column" gap="10px">
-            <FormControl>
-              <Select
-                variant="primary"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                placeholder="Role"
-              >
-                <option value="admin">Administrative Staff</option>
-                <option value="relief">Relief Staff</option>
-              </Select>
-            </FormControl>
+          <Flex flexDir="column" gap="10px" my="20px">
+            <DropdownInput
+              size="large"
+              label="Role"
+              current_value={role}
+              update_action={setRole}
+              value_options={{ "Administrative Staff": ADMIN, "Relief Staff": RELIEF }}
+            />
 
-            <FormControl>
-              <Input
-                variant="primary"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-              />
-            </FormControl>
+            <PasswordInput
+              size="large"
+              label="Password"
+              current_value={password}
+              update_action={setPassword}
+            />
 
             {error && (
               <Text textStyle="web.b2" fontWeight="600" color="#E30000">
@@ -145,18 +133,12 @@ export default function AdminLoginPage() {
             )}
           </Flex>
 
-          <Button
-            width="100%"
-            variant="primaryFilled"
-            borderRadius="full"
-            fontWeight="700"
-            fontSize="16px"
-            onClick={handleSubmit}
-            isLoading={loading}
-          >
-            Sign in
-          </Button>
-        </Flex>
+          <OrangeButton
+            label="Sign in"
+            action={handleSubmit}
+            is_active={false}
+          />
+        </WidgetContainer>
       </Flex>
     </Flex>
   );
