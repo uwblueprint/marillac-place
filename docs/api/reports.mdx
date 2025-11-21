@@ -1,0 +1,255 @@
+---
+title: Reports
+description: API documentation for managing report recipients and report generation
+---
+
+# Reports
+
+The Reports API allows you to manage report recipients who receive automated weekly and monthly reports. All report recipient operations require admin authentication.
+
+## ReportRecipient Type
+
+<ParamField body="email" type="String!" required>
+  The email address of the report recipient
+</ParamField>
+
+<ParamField body="weekly" type="Boolean!" required>
+  Whether the recipient should receive weekly reports
+</ParamField>
+
+<ParamField body="monthly" type="Boolean!" required>
+  Whether the recipient should receive monthly reports
+</ParamField>
+
+---
+
+## getReportRecipients
+
+Get a list of all report recipients.
+
+<RequestExample>
+
+```graphql
+query getReportRecipients {
+  getReportRecipients {
+    email
+    weekly
+    monthly
+  }
+}
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "getReportRecipients": [
+      {
+        "email": "admin@example.com",
+        "weekly": true,
+        "monthly": true
+      },
+      {
+        "email": "manager@example.com",
+        "weekly": false,
+        "monthly": true
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>
+
+---
+
+## createReportRecipient
+
+Create a new report recipient.
+
+<ParamField body="email" type="String!" required>
+  The email address of the report recipient
+</ParamField>
+
+<ParamField body="weekly" type="Boolean!" required>
+  Whether the recipient should receive weekly reports
+</ParamField>
+
+<ParamField body="monthly" type="Boolean!" required>
+  Whether the recipient should receive monthly reports
+</ParamField>
+
+<RequestExample>
+
+```graphql
+mutation createReportRecipient(
+  $email: String!
+  $weekly: Boolean!
+  $monthly: Boolean!
+) {
+  createReportRecipient(
+    email: $email
+    weekly: $weekly
+    monthly: $monthly
+  ) {
+    email
+    weekly
+    monthly
+  }
+}
+```
+
+</RequestExample>
+
+<RequestVariables>
+
+```json
+{
+  "email": "newrecipient@example.com",
+  "weekly": true,
+  "monthly": true
+}
+```
+
+</RequestVariables>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "createReportRecipient": {
+      "email": "newrecipient@example.com",
+      "weekly": true,
+      "monthly": true
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+---
+
+## updateReportRecipient
+
+Update an existing report recipient's preferences.
+
+<ParamField body="email" type="String!" required>
+  The email address of the report recipient to update
+</ParamField>
+
+<ParamField body="weekly" type="Boolean">
+  Whether the recipient should receive weekly reports (optional)
+</ParamField>
+
+<ParamField body="monthly" type="Boolean">
+  Whether the recipient should receive monthly reports (optional)
+</ParamField>
+
+<RequestExample>
+
+```graphql
+mutation updateReportRecipient(
+  $email: String!
+  $weekly: Boolean
+  $monthly: Boolean
+) {
+  updateReportRecipient(
+    email: $email
+    weekly: $weekly
+    monthly: $monthly
+  ) {
+    email
+    weekly
+    monthly
+  }
+}
+```
+
+</RequestExample>
+
+<RequestVariables>
+
+```json
+{
+  "email": "admin@example.com",
+  "weekly": false,
+  "monthly": true
+}
+```
+
+</RequestVariables>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "updateReportRecipient": {
+      "email": "admin@example.com",
+      "weekly": false,
+      "monthly": true
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+<Warning>
+At least one of `weekly` or `monthly` must be provided. If both are omitted, the mutation will return an error.
+</Warning>
+
+---
+
+## deleteReportRecipient
+
+Delete a report recipient.
+
+<ParamField body="email" type="String!" required>
+  The email address of the report recipient to delete
+</ParamField>
+
+<RequestExample>
+
+```graphql
+mutation deleteReportRecipient($email: String!) {
+  deleteReportRecipient(email: $email) {
+    email
+    weekly
+    monthly
+  }
+}
+```
+
+</RequestExample>
+
+<RequestVariables>
+
+```json
+{
+  "email": "oldrecipient@example.com"
+}
+```
+
+</RequestVariables>
+
+<ResponseExample>
+
+```json
+{
+  "data": {
+    "deleteReportRecipient": {
+      "email": "oldrecipient@example.com",
+      "weekly": true,
+      "monthly": false
+    }
+  }
+}
+```
+
+</ResponseExample>

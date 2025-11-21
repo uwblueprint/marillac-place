@@ -11,14 +11,14 @@
       "group": "Getting Started",
       "pages": [
         "introduction",
-        "database"
+        "database",
+        "authentication"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "api-overview",
-        "reports"
+        "api/reports"
       ]
     }
   ]
