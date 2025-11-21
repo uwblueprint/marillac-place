@@ -33,6 +33,7 @@ export interface Announcement {
 export interface AssignedTask {
   aid: number;
   pid: number;
+  tid: number;
   name: string;
   type: TaskType;
   status: TaskStatus;

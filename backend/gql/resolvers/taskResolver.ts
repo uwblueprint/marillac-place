@@ -6,6 +6,7 @@ import {
   TimePreference,
 } from "@prisma/client";
 import db from "../../prisma";
+import { assignTasksToAllParticipants } from "../../utils/taskUtils";
 
 const taskResolver = {
   Query: {
@@ -49,11 +50,7 @@ const taskResolver = {
         comment?: string;
       }
     ): Promise<Task> => {
-      // TODO: Create an assigned task based on the current task template for each active participant
-      // Only create the assigned task for the relevant week (implementation will be similar to the 
-      // assignRequiredTasks cron job)
-
-      return db.task.create({
+      const newTask = await db.task.create({
         data: {
           type,
           name,
@@ -67,6 +64,10 @@ const taskResolver = {
           comment,
         },
       });
+      if (type === TaskType.REQUIRED) {
+        await assignTasksToAllParticipants([newTask]);
+      }
+      return newTask;
     },
     updateTask: async (
       _parent: undefined,

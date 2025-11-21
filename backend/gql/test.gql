@@ -208,6 +208,7 @@ query GetEarnedCustomBadges($pid: Int!) {
     name
     icon
     description
+    notified
   }
 }
 
@@ -217,10 +218,31 @@ query GetAchievedBadgeLevels($pid: Int!) {
     level
     pid
     date
+    notified
     badge_level {
       system_badge {
         name
         icon
+        description
+        is_active
+      }
+    }
+  }
+}
+
+query GetBadgeLevelProgress($pid: Int!) {
+  getBadgeLevelProgress(pid: $pid) {
+    name
+    level
+    pid
+    progress
+    badge_level {
+      value
+      benchmark
+      system_badge {
+        icon
+        description
+        is_active
       }
     }
   }
@@ -545,18 +567,21 @@ mutation CreateEarnedCustomBadge(
   $name: String!
   $icon: Icon!
   $description: String!
+  $value: Int!
 ) {
   createEarnedCustomBadge(
     pid: $pid
     name: $name
     icon: $icon
     description: $description
+    value: $value
   ) {
     eid
     pid
     name
     icon
     description
+    notified
   }
 }
 
@@ -567,6 +592,7 @@ mutation FetchNewEarnedCustomBadges($pid: Int!) {
     name
     icon
     description
+    notified
   }
 }
 
@@ -607,6 +633,7 @@ mutation UpdateBadgeLevel(
 
 mutation CreateAssignedTask(
   $pid: Int!
+  $tid: Int!
   $name: String!
   $type: TaskType!
   $value: Int!
@@ -617,6 +644,7 @@ mutation CreateAssignedTask(
 ) {
   createAssignedTask(
     pid: $pid
+    tid: $tid
     name: $name
     type: $type
     value: $value
@@ -626,6 +654,7 @@ mutation CreateAssignedTask(
     comment: $comment
   ) {
     aid
+    tid
     pid
     name
     type
@@ -693,6 +722,7 @@ mutation FetchNewAchievedBadgeLevels($pid: Int!) {
     level
     pid
     date
+    notified
   }
 }
 

@@ -32,12 +32,14 @@ export const CREATE_EARNED_CUSTOM_BADGE = gql`
     $name: String!
     $icon: Icon!
     $description: String!
+    $value: Int!
   ) {
     createEarnedCustomBadge(
       pid: $pid
       name: $name
       icon: $icon
       description: $description
+      value: $value
     ) {
       eid
       pid

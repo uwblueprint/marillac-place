@@ -49,6 +49,7 @@ export const HAS_COMPLETED_ALL_REQUIRED_TASKS = gql`
 export const CREATE_ASSIGNED_TASK = gql`
   mutation createAssignedTask(
     $pid: Int!
+    $tid: Int!
     $name: String!
     $type: TaskType!
     $value: Int!
@@ -59,6 +60,7 @@ export const CREATE_ASSIGNED_TASK = gql`
   ) {
     createAssignedTask(
       pid: $pid
+      tid: $tid
       name: $name
       type: $type
       value: $value
@@ -68,6 +70,7 @@ export const CREATE_ASSIGNED_TASK = gql`
       comment: $comment
     ) {
       aid
+      tid
       pid
       name
       type

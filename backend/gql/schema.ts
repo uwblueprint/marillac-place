@@ -23,6 +23,7 @@ import reportRecipientResolver from "./resolvers/reportRecipientResolver";
 import achievedBadgeLevelResolver from "./resolvers/achievedBadgeLevelResolver";
 import badgeLevelResolver from "./resolvers/badgeLevelResolver";
 import earnedCustomBadgeResolver from "./resolvers/earnedCustomBadgeResolver";
+import badgeLevelProgressResolver from "./resolvers/badgeLevelProgressResolver";
 import earningGoalResolver from "./resolvers/earningGoalResolver";
 import receivedAnnouncementResolver from "./resolvers/receivedAnnouncementResolver";
 import systemBadgeResolver from "./resolvers/systemBadgeResolver";
@@ -43,6 +44,7 @@ export default function getSchema() {
       achievedBadgeLevelResolver,
       badgeLevelResolver,
       earnedCustomBadgeResolver,
+      badgeLevelProgressResolver,
       earningGoalResolver,
       receivedAnnouncementResolver,
       systemBadgeResolver,

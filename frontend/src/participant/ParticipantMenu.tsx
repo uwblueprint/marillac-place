@@ -1,5 +1,3 @@
-// TODO: Replace MenuIcon and CloseIcon with custom imported icons from the public folder
-
 import { Flex, Text, Image, Tab, TabList, Tabs } from "@chakra-ui/react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
