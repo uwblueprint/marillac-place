@@ -5,13 +5,13 @@ import BlackOutlineButton from "./buttons/BlackOutlineButton";
 import OrangeButton from "./buttons/OrangeButton";
 import GreenOutlineButton from "./buttons/GreenOutlineButton";
 import UnderlineButton from "./buttons/UnderlineButton";
-import { Comment, Marker, Pin, PlusSign, Trash } from "./icons/ActionIcons";
+import { Comment, Marker, TealPin, OrangePin, PlusSign, Send, Download, Trash } from "./icons/ActionIcons";
 import WidgetContainer from "./containers/WidgetContainer";
 import PopupContainer from "./containers/PopupContainer";
-import { Baby, FourStar, Group, Flower, Diamond, DollarSign, FiveStar, Heart, Hexagon, Home, Pencil, Plant, Tools, Wings } from "./icons/BadgeIcons";
+import { Baby, FourStar, Group, Flower, Diamond, DollarSign, FiveStar, Heart, Hexagon, Home, Pencil, Plant, Tools, Wings, Muscles } from "./icons/BadgeIcons";
 import { Gold, Bronze, Silver, Novice, Diamond as DiamondFrame } from "./icons/BadgeLevelFrameIcons";
-import { MarillacCoin, Profile, Trophy } from "./icons/MiscIcons";
-import { Dot, ExclamationMark, Mail } from "./icons/NotificationIcons";
+import { MarillacCoin, Profile, Trophy, List, Calendar, EndStay, Swap } from "./icons/MiscIcons";
+import { Dot, ExclamationMark, Mail, Success } from "./icons/NotificationIcons";
 import { Assigned, Complete, Excused, Incomplete } from "./icons/StatusIcons";
 import DateInput from "./inputs/DateInput";
 import FixedInput from "./inputs/FixedInput";
@@ -380,9 +380,12 @@ export default function UI() {
       <Text textStyle="web.h3">Icons</Text>
       <Flex width="fit-content" height="fit-content" maxW="100vw" flexWrap="wrap" maxH="100vh" flexDir="row" gap="10px" padding="10px" bg="neutral.300" rounded="8px" alignItems="center" justifyContent="center">
         <Comment />
-        <Pin />
+        <TealPin />
+        <OrangePin />
         <Marker />
         <PlusSign />
+        <Send />
+        <Download />
         <Trash />
         <Baby />
         <Diamond />
@@ -398,6 +401,7 @@ export default function UI() {
         <Plant />
         <Tools />
         <Wings />
+        <Muscles />
         <Novice />
         <Bronze />
         <Silver />
@@ -406,9 +410,14 @@ export default function UI() {
         <Trophy />
         <MarillacCoin />
         <Profile />
+        <List />
+        <Swap />
+        <Calendar />
+        <EndStay />
         <Mail />
         <Dot />
         <ExclamationMark />
+        <Success />
         <Assigned />
         <Complete />
         <Excused />

@@ -45,3 +45,24 @@ export const ExclamationMark: React.FC<IconProps> = ({
     />
   </svg>
 );
+
+export const Success: React.FC<IconProps> = ({
+  size = 18,
+  color = "#259E29",
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 18 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M3.375 9L6.74143 12L15.75 4" 
+      stroke={color}
+      strokeWidth="3" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);

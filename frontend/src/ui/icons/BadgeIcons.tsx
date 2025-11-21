@@ -300,3 +300,18 @@ export const Wings: React.FC<IconProps> = ({
     />
   </svg>
 );
+
+export const Muscles: React.FC<IconProps> = ({
+  size = 16,
+  color = "#808080",
+}) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 30 30" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0 25.5667C0 25.5667 1.66667 6.81667 6.66667 0L15 1.66667L13.3333 6.81667H10V18.75H11.6667C15 13.6333 21.9 11.7667 26.0667 13.6333C31.5667 16.1833 31.0667 23.8667 26.0667 27.2667C22.0667 30 10 32.3833 0 25.5667Z" fill={color}/>
+</svg>
+);

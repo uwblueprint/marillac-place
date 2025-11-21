@@ -130,3 +130,70 @@ export const Trophy: React.FC<IconProps> = ({ size = 16 }) => (
     </defs>
   </svg>
 );
+
+export const List: React.FC<IconProps> = ({ size = 16 }) => (
+  <svg 
+    width={size}
+    height={size}
+    viewBox="0 0 15 14" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M13.9999 6.99927H5.09082H13.9999Z" fill="#E67D4F"/>
+    <path d="M13.9999 6.99927H5.09082" stroke="#E67D4F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M13.9999 12.5996H5.09082H13.9999Z" fill="#E67D4F"/>
+    <path d="M13.9999 12.5996H5.09082" stroke="#E67D4F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M13.9999 1.39893H5.09082H13.9999Z" fill="#E67D4F"/>
+    <path d="M13.9999 1.39893H5.09082" stroke="#E67D4F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M1.27125 2.8C1.90762 2.8 2.54398 2.1 2.54398 1.4C2.54398 0.7 1.90762 0 1.27125 0C0.634888 0 0 0.7 0 1.4C0 2.1 0.634888 2.8 1.27125 2.8ZM1.27125 8.4C1.90762 8.4 2.54398 7.7 2.54398 7C2.54398 6.3 1.90762 5.6 1.27125 5.6C0.634888 5.6 0 6.3 0 7C0 7.7 0.634888 8.4 1.27125 8.4ZM1.27125 14C1.90762 14 2.54398 13.3 2.54398 12.6C2.54398 11.9 1.90762 11.2 1.27125 11.2C0.634888 11.2 0 11.9 0 12.6C0 13.3 0.634888 14 1.27125 14Z" fill="#E67D4F"/>
+</svg>
+);
+
+export const Swap: React.FC<IconProps> = ({
+  size = 14,
+  color = "#0C727E",
+}) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 14 14" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+  <path d="M9.33366 6.41667L11.667 4.08333M11.667 4.08333L9.33366 1.75M11.667 4.08333H2.33366M4.66699 7.58333L2.33366 9.91667M2.33366 9.91667L4.66699 12.25M2.33366 9.91667H11.667" stroke={color} strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+export const EndStay: React.FC<IconProps> = ({
+  size = 16,
+  color = "#E30000",
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg" 
+  >
+    <path 
+      d="M8.66634 2.66647H10.6663C11.02 2.66647 11.3591 2.80695 11.6091 3.057C11.8592 3.30705 11.9997 3.64618 11.9997 3.99981V13.3331M1.33301 13.3331H3.33301M3.33301 13.3331L7.83834 14.4591C7.9366 14.4836 8.03914 14.4854 8.1382 14.4644C8.23725 14.4434 8.33021 14.4 8.41002 14.3377C8.48983 14.2754 8.55439 14.1957 8.5988 14.1047C8.64322 14.0137 8.66631 13.9137 8.66634 13.8125V3.04114C8.66621 2.83859 8.61993 2.63807 8.53103 2.45608C8.44212 2.27409 8.31292 2.11475 8.15323 1.99015C7.99355 1.86555 7.80757 1.77897 7.60943 1.73698C7.41128 1.69498 7.20617 1.69869 7.00967 1.74781L4.34301 2.41447C4.05456 2.48657 3.79848 2.65302 3.61548 2.88736C3.43248 3.1217 3.33305 3.41048 3.33301 3.70781V13.3331ZM8.66634 13.3331H14.6663M6.66634 7.99981V8.00647" 
+      stroke={color} 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      strokeWidth="1.5"
+    />
+  </svg>
+);
+
+export const Calendar: React.FC<IconProps> = ({
+  size = 15,
+  color = "white",
+}) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 15 16"
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path fillRule="evenodd" clipRule="evenodd" d="M4.125 0C4.53921 0 4.875 0.335786 4.875 0.75V1.5H10.125V0.75C10.125 0.335786 10.4608 0 10.875 0C11.2892 0 11.625 0.335786 11.625 0.75V1.51852C13.52 1.70666 15 3.30549 15 5.25V12C15 14.0711 13.3211 15.75 11.25 15.75H3.75C1.67893 15.75 0 14.0711 0 12V5.25C0 3.30549 1.48 1.70666 3.375 1.51852V0.75C3.375 0.335786 3.71079 0 4.125 0ZM1.62803 4.5H13.372C13.0631 3.62611 12.2297 3 11.25 3H3.75C2.77034 3 1.93691 3.62611 1.62803 4.5ZM13.5 6H1.5V12C1.5 13.2426 2.50736 14.25 3.75 14.25H11.25C12.4926 14.25 13.5 13.2426 13.5 12V6ZM3 8.25C3 7.83579 3.33579 7.5 3.75 7.5H11.25C11.6642 7.5 12 7.83579 12 8.25C12 8.66421 11.6642 9 11.25 9H3.75C3.33579 9 3 8.66421 3 8.25Z" fill={color}/>
+</svg>
+);

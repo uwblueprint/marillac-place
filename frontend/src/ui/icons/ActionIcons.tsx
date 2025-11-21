@@ -19,12 +19,26 @@ export const Comment: React.FC<IconProps> = ({
   </svg>
 );
 
-export const Pin: React.FC<IconProps> = ({ size = 16, color = "#0C727E" }) => (
+export const TealPin: React.FC<IconProps> = ({ size = 16, color = "#0C727E" }) => (
   <svg
     width={size}
     height={size}
     viewBox="0 0 10 14"
     fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M6 1.33333V4.66667C6 5.41333 6.24667 6.10667 6.66667 6.66667H2.66667C3.1 6.09333 3.33333 5.4 3.33333 4.66667V1.33333H6ZM8 0H1.33333C0.966667 0 0.666667 0.3 0.666667 0.666667C0.666667 1.03333 0.966667 1.33333 1.33333 1.33333H2V4.66667C2 5.77333 1.10667 6.66667 0 6.66667V8H3.98V12.6667L4.64667 13.3333L5.31333 12.6667V8H9.33333V6.66667C8.22667 6.66667 7.33333 5.77333 7.33333 4.66667V1.33333H8C8.36667 1.33333 8.66667 1.03333 8.66667 0.666667C8.66667 0.3 8.36667 0 8 0Z"
+      fill={color}
+    />
+  </svg>
+);
+
+export const OrangePin: React.FC<IconProps> = ({ size = 16, color = "#E67D4F" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 10 14"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
@@ -62,6 +76,36 @@ export const PlusSign: React.FC<IconProps> = ({
   >
     <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill={color} />
   </svg>
+);
+
+export const Send: React.FC<IconProps> = ({
+  size = 14,
+  color = "#0C727E",
+}) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 18 16" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M16.8 8.43148L1.4 14.9315C1.06667 15.0648 0.75 15.0355 0.45 14.8435C0.15 14.6515 0 14.3725 0 14.0065V1.00648C0 0.639817 0.15 0.360817 0.45 0.169484C0.75 -0.0218496 1.06667 -0.0511832 1.4 0.0814834L16.8 6.58148C17.2167 6.76482 17.425 7.07315 17.425 7.50648C17.425 7.93982 17.2167 8.24815 16.8 8.43148ZM2 12.5065L13.85 7.50648L2 2.50648V6.00648L8 7.50648L2 9.00648V12.5065Z" fill={color}/>
+</svg>
+);
+
+export const Download: React.FC<IconProps> = ({
+  size = 16,
+  color = "black",
+}) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M18 15V18H6V15H4V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V15H18ZM17 11L15.59 9.59L13 12.17V4H11V12.17L8.41 9.59L7 11L12 16L17 11Z" fill={color}/>
+</svg>
 );
 
 export const Trash: React.FC<IconProps> = ({
