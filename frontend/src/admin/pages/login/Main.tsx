@@ -84,8 +84,8 @@ export default function AdminLoginPage() {
       bg="neutral.0"
     >
       <Flex
-        width="850px"
-        h="400px"
+        width="700px"
+        h="350px"
         bg="primary.100"
         borderRadius="8px"
         boxShadow="lg"
@@ -93,7 +93,7 @@ export default function AdminLoginPage() {
         alignItems="center"
         justifyContent="space-around"
       >
-        <Flex width="25%" marginLeft="3vw">
+        <Flex width="30%" marginLeft="3vw">
           <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
         </Flex>
 
@@ -112,16 +112,15 @@ export default function AdminLoginPage() {
 
           <Flex flexDir="column" gap="10px" my="20px">
             <DropdownInput
-              size="large"
-              label="Role"
+              size="medium"
+              placeholder="Select Role"
               current_value={role}
               update_action={setRole}
               value_options={{ "Administrative Staff": ADMIN, "Relief Staff": RELIEF }}
             />
 
             <PasswordInput
-              size="large"
-              label="Password"
+              size="medium"
               current_value={password}
               update_action={setPassword}
             />
