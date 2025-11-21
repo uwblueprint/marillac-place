@@ -23,7 +23,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 // import ParticipantHomePage from "./participant/pages/home/Main";
 // import ParticipantSchedulePage from "./participant/pages/schedule/Main";
 // import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
-// import ParticipantProgressPage from "./participant/pages/progress/Main";
+import ParticipantProgressPage from "./participant/pages/progress/Main";
 
 import * as ROUTES from "./constants/routes";
 import AdminRoute from "./admin/AdminRoute";
@@ -188,6 +188,17 @@ const App = (): React.ReactElement => {
                 }
               />
             </Route> */}
+
+            <Route element={<ParticipantLayout />}>
+              <Route
+                path={ROUTES.PARTICIPANTS_HOME_PAGE}
+                element={
+                  <ParticipantRoute>
+                    <ParticipantProgressPage />
+                  </ParticipantRoute>
+                }
+              />
+            </Route>
 
             <Route path="/ui" element={<UI />} />
             <Route path="*" element={<NotFound />} />
