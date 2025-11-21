@@ -36,6 +36,7 @@ import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
 
 import UI from "./ui/UI";
+import AdminHomePage from "./admin/pages/home/Main";
 
 function initApolloClient() {
   const endpoint = createUploadLink({
@@ -190,7 +191,7 @@ const App = (): React.ReactElement => {
             </Route> */}
 
             <Route path="/ui" element={<UI />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<AdminHomePage />} />
           </Routes>
         </Router>
       </ChakraProvider>
