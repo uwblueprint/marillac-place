@@ -1,21 +1,21 @@
 export {};
-// TODO: Refactor this component
+// TODO: Refactor in progress
 // import React, { useContext } from "react";
 // import { useNavigate } from "react-router-dom";
 // import { Text, Spinner, Alert, AlertIcon, Flex } from "@chakra-ui/react";
 // import { useQuery } from "@apollo/client";
 // import { ParticipantContext } from "../../../common/ParticipantContext";
-// import { GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE } from "../../../../gql/queries";
+// import { GET_ASSIGNED_TASKS_FOR_TODAY } from "../../../../gql/queries";
 // import { PARTICIPANTS_SCHEDULE_PAGE } from "../../../../constants/routes";
-// import { formatTimeRange, getToday } from "../../../../utils/formatDateTime";
-// import { TaskStatus } from "../../../../admin/pages/schedule/components/ScheduleTypes";
-// import Icon from "../../../common/Icon";
+// import { formatTimeString, getTodayDateString } from "../../../../helpers/formatDateTime";
+// import { TaskStatus, Icon } from "../../../../types/enums";
 // import assigned from "../../../icons/status/assigned.svg";
 // import complete from "../../../icons/status/complete.svg";
 // import incomplete from "../../../icons/status/incomplete.svg";
 // import excused from "../../../icons/status/excused.svg";
 // import comment from "../../../icons/misc/comment.svg";
-// 
+// import TaskStatusDisplay from "../../../../ui/misc/TaskStatusDisplay";
+
 // interface AssignedTask {
 //   assigned_task_id: number;
 //   task_name: string;
@@ -24,24 +24,23 @@ export {};
 //   end_date: string;
 //   comment: string;
 // }
-// 
+
 // const TodoListWidget = () => {
 //   const participant = useContext(ParticipantContext) as
 //     | { id: number }
 //     | undefined;
 //   const participantId = participant?.id;
-// 
+
 //   const navigate = useNavigate();
-//   const date = getToday();
-// 
+
 //   const { data, loading, error } = useQuery(
-//     GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE,
+//     GET_ASSIGNED_TASKS_FOR_TODAY),
 //     {
-//       variables: { participantId, date },
+//       variables: { pid : participantId},
 //       skip: !participantId,
 //     }
 //   );
-// 
+
 //   return (
 //     <>
 //       <Flex direction="row" justify="space-between" align="center">
@@ -59,16 +58,16 @@ export {};
 //           Schedule
 //         </Text>
 //       </Flex>
-// 
+
 //       {loading && <Spinner />}
-// 
+
 //       {error && (
 //         <Alert status="error" mb={4}>
 //           <AlertIcon />
 //           Error loading tasks.
 //         </Alert>
 //       )}
-// 
+
 //       {!loading &&
 //         !error &&
 //         data &&
@@ -82,7 +81,8 @@ export {};
 //                 align="center"
 //               >
 //                 <Flex gap="8px">
-//                   {assigned_task.task_status === TaskStatus.ASSIGNED ? (
+//                     <TaskStatusDisplay status={assigned_task.task_status}/>
+//                   {/* {assigned_task.task_status === TaskStatus.ASSIGNED ? (
 //                     <Icon icon={assigned} width="20px" height="20px" />
 //                   ) : assigned_task.task_status === TaskStatus.COMPLETE ? (
 //                     <Icon icon={complete} width="20px" height="20px" />
@@ -94,14 +94,13 @@ export {};
 //                   <Text textStyle="mobile.b1">{assigned_task.task_name}</Text>
 //                   {assigned_task.comment && (
 //                     <Icon icon={comment} width="12px" height="12px" />
-//                   )}
+//                   )} */}
 //                 </Flex>
-// 
+
 //                 <Text color="text.light.secondary" textStyle="mobile.b1">
-//                   {formatTimeRange(
-//                     assigned_task.start_date,
-//                     assigned_task.end_date
-//                   )}
+//                   {formatTimeString(
+//                 assigned_task.start_date)}-      {formatTimeString(assigned_task.end_date)
+//                   }
 //                 </Text>
 //               </Flex>
 //             );
@@ -110,5 +109,5 @@ export {};
 //     </>
 //   );
 // };
-// 
+
 // export default TodoListWidget;

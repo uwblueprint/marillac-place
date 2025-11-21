@@ -1,18 +1,19 @@
 export {};
-// TODO: Refactor this component
+// TODO: Refactor in progress
 // import React, { useContext } from "react";
 // import { Flex, Text } from "@chakra-ui/react";
 // import { useQuery } from "@apollo/client";
 // import { ParticipantContext } from "../../../common/ParticipantContext";
 // import TasksCompletedWidget from "./TasksCompletedWidget";
-// import { HAS_COMPLETED_ALL_REQUIRED_TASKS } from "../../../../gql/queries";
+// import { HAS_COMPLETED_ALL_REQUIRED_TASKS } from "../../../../gql/assignedTaskRequests";
 // import BadgeRow from "./BadgeRow";
-// import { BadgeRarity } from "../../../common/Badge";
-// 
+// import { Icon, Level } from "../../../../types/enums";
+
+
 // export default function HomeContent() {
 //   const participant = useContext(ParticipantContext);
 //   const participantId = participant?.id;
-// 
+
 //   // Get current date
 //   const currentDate = new Date();
 //   const dayNames = [
@@ -38,14 +39,14 @@ export {};
 //     "November",
 //     "December",
 //   ];
-// 
+
 //   const dayName = dayNames[currentDate.getDay()];
 //   const monthName = monthNames[currentDate.getMonth()];
 //   const date = currentDate.getDate();
 //   const year = currentDate.getFullYear();
-// 
+
 //   const formattedDate = `${dayName} - ${monthName} ${date}, ${year}`;
-// 
+
 //   // Query to check if participant has completed all required tasks
 //   const { data: tasksData, loading: tasksLoading } = useQuery(
 //     HAS_COMPLETED_ALL_REQUIRED_TASKS,
@@ -54,15 +55,15 @@ export {};
 //       skip: !participantId,
 //     }
 //   );
-// 
+
 //   const hasCompletedAllTasks = tasksData?.hasCompletedAllRequiredTasks || false;
-// 
+
 //   const badge = {
-//     icon: "heart",
-//     rarity: "silver" as BadgeRarity,
-//     percentComplete: 20,
+//     icon: Icon.HEART,
+//     level: Level.SILVER,
+//     percentageComplete: 20,
 //   };
-// 
+
 //   return (
 //     <Flex w="100%" flexDir="column" gap="16px" padding="20px">
 //       {/* Welcome Section */}
@@ -84,7 +85,7 @@ export {};
 //           {formattedDate}
 //         </Text>
 //       </Flex>
-// 
+
 //       {/* Tasks Completed Widget - Only show if all required tasks are completed */}
 //       {!tasksLoading && hasCompletedAllTasks && <TasksCompletedWidget />}
 //       <Flex

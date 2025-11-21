@@ -1,5 +1,5 @@
 export {};
-// TODO: Refactor this component
+// TODO: Refactor in progress
 // import React from "react";
 // import { Flex, Text } from "@chakra-ui/react";
 // // import HomeContent from "./components/HomeContent";
@@ -7,9 +7,9 @@ export {};
 // // import BadgeRow from "./components/BadgeRow";
 // // import { BadgeRarity } from "../../common/Badge";
 // import TodoListWidget from "./components/TodoListWidget";
-// import { getParticipantHomePageDateString } from "../../../utils/formatDateTime";
+// import { getTodayDateString } from "../../../helpers/formatDateTime";
 // import AnnouncementWidget from "./components/AnnouncementWidget";
-// 
+
 // export default function ParticipantsHomePage() {
 //   return (
 //     <>
@@ -18,10 +18,10 @@ export {};
 //           Welcome to Marillac Place
 //         </Text>
 //         <Text color="text.light.secondary" textStyle="mobile.h3">
-//           {getParticipantHomePageDateString()}
+//           {getTodayDateString()}
 //         </Text>
 //       </Flex>
-// 
+
 //       <TodoListWidget />
 //       <AnnouncementWidget />
 //     </>

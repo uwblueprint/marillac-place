@@ -1,33 +1,34 @@
 export {};
-// TODO: Refactor this component
+// TODO: Refactor in progress
 // import React, { useContext } from "react";
 // import { Divider, Flex, Text } from "@chakra-ui/react";
 // import { useQuery } from "@apollo/client";
 // import { useNavigate } from "react-router-dom";
 // import WidgetContainer from "../../../common/WidgetContainer";
-// import { GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID } from "../../../../gql/queries";
+// import { GET_RECEIVED_ANNOUNCEMENTS } from "../../../../gql/receivedAnnouncementRequests";
 // import { displayDate2 } from "../../../../utils/formatDateTime";
 // import { ParticipantContext } from "../../../common/ParticipantContext";
 // import * as ROUTES from "../../../../constants/routes";
-// 
+
+
 // export default function AnnouncementWidget() {
 //   const participant = useContext(ParticipantContext);
 //   const participantId = participant?.id ?? "";
 //   const navigate = useNavigate();
-// 
+
 //   const {
 //     data: announcementData,
 //     loading: announcementLoading,
 //     error: announcementError,
-//   } = useQuery(GET_ANNOUNCEMENTS_BY_PARTICIPANT_ID, {
+//   } = useQuery(GET_RECEIVED_ANNOUNCEMENTS, {
 //     variables: {
-//       participant_id: participantId,
+//       pid: pid,
 //     },
 //   });
-// 
+
 //   if (announcementLoading) return <Text>Loading announcements.</Text>;
 //   if (announcementError) return <Text>Error fetching announcements.</Text>;
-// 
+
 //   return (
 //     <WidgetContainer>
 //       <>
@@ -42,7 +43,7 @@ export {};
 //             Announcements
 //           </Text>
 //         </Flex>
-// 
+
 //         {announcementData.getAnnouncementsByParticipantId.map(
 //           (announcement: any) => (
 //             <Flex
