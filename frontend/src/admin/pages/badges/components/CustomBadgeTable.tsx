@@ -1,8 +1,8 @@
 export {};
-//TODO: Refactor this component
+// TODO: Refactor this component
 import { Text, Flex, Image as ChakraImage } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { Trash } from "../../../../ui/icons/ActionIcons";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { DELETE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
@@ -21,7 +21,7 @@ const CustomBadgeTable = ({
   badges,
 }: CustomBadgeTableProps) => {
   const [edit, setEdit] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<any | null>(null);
 
   const [deleteCustomBadge] = useMutation(DELETE_CUSTOM_BADGE);
 
@@ -45,83 +45,77 @@ const CustomBadgeTable = ({
     { header: "Actions", width: "5%" },
   ];
 
-  const rows: JSX.Element[][] = badges.length
-    ? badges.map((badge: any) => {
-        const cells: JSX.Element[] = [
-          <ChakraImage
-            key={`icon-${badge.badge_id}`}
-            src={`/badges/${badge.icon.toLowerCase()}.svg`}
-            alt={badge.name}
-            style={{ width: "1.5rem", height: "1.5rem" }}
-            opacity={0.5}
-          />,
-          <Text
-            key={`name-${badge.badge_id}`}
-            textStyle="web.b3"
-            color="#000000"
-            whiteSpace="normal"
-          >
-            {badge.name}
-          </Text>,
-          <Text
-            key={`desc-${badge.badge_id}`}
-            textStyle="web.b3"
-            color="#000000"
-            whiteSpace="normal"
-          >
-            {badge.description}
-          </Text>,
-          <Flex
-            key={`actions-${badge.badge_id}`}
-            alignItems="center"
-            justifyContent="center"
-            gap="15px"
-          >
-            <Flex
-              cursor="pointer"
-              onClick={() => {
-                setSelected(badge);
-                setEdit(true);
-              }}
-            >
-              <EditIcon
-                style={{
-                  width: "1.2rem",
-                  height: "1.2rem",
-                  color: "#000000",
-                  cursor: "pointer",
+  const rows = badges.length
+    ? badges.map((badge: any) => [
+        {
+          element: (
+            <ChakraImage
+              src={`/badges/${badge.icon.toLowerCase()}.svg`}
+              alt={badge.name}
+              style={{ width: "1.5rem", height: "1.5rem" }}
+              opacity={0.5}
+            />
+          ),
+        },
+        {
+          element: (
+            <Text textStyle="web.b3" color="#000000" whiteSpace="normal">
+              {badge.name}
+            </Text>
+          ),
+        },
+        {
+          element: (
+            <Text textStyle="web.b3" color="#000000" whiteSpace="normal">
+              {badge.description}
+            </Text>
+          ),
+        },
+        {
+          element: (
+            <Flex alignItems="center" justifyContent="center" gap="15px">
+              <Flex
+                cursor="pointer"
+                onClick={() => {
+                  setSelected(badge);
+                  setEdit(true);
                 }}
-              />
+              >
+                <EditIcon
+                  style={{
+                    width: "1.2rem",
+                    height: "1.2rem",
+                    color: "#000000",
+                  }}
+                />
+              </Flex>
+
+              <Flex
+                cursor="pointer"
+                onClick={() => handleDelete(badge.badge_id)}
+              >
+                <Trash size={16} />
+              </Flex>
             </Flex>
-            <Flex cursor="pointer" onClick={() => handleDelete(badge.badge_id)}>
-              <DeleteOutlineIcon
-                style={{
-                  width: "1.3rem",
-                  height: "1.3rem",
-                  color: "#D34C5C",
-                }}
-              />
-            </Flex>
-          </Flex>,
-        ];
-        return cells;
-      })
+          ),
+        },
+      ])
     : [];
 
-  const editModal = (
+  const editModal = selected && edit && (
     <EditCustomBadgeModal onClose={() => setEdit(false)} selected={selected} />
   );
 
   return (
-    <DataTable
-      loading={loading}
-      error={error}
-      columns={columns}
-      rows={rows}
-      editModal={editModal}
-      selected={selected}
-      edit={edit}
-    />
+    <>
+      <DataTable
+        loading={loading}
+        error={error}
+        columns={columns}
+        rows={rows}
+      />
+      {editModal}
+    </>
   );
 };
 

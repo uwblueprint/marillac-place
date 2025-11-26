@@ -2,13 +2,13 @@ export {};
 // TODO: Refactor this component
 import React, { useEffect, useState, useContext } from "react";
 import { Flex, Grid, Text } from "@chakra-ui/react";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import {
   GET_CUSTOM_BADGES,
   CREATE_CUSTOM_BADGE,
 } from "../../../../gql/customBadgeRequests";
-//import { GET_PARTICIPANTS_BY_ROOMS } from "../../../../gql/participantRequests";
+import { GET_CURRENT_PARTICIPANTS } from "../../../../gql/participantRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import GreenOutlineButton from "../../../../ui/buttons/GreenOutlineButton";
 import NumberInput from "../../../../ui/inputs/NumberInput";
@@ -39,7 +39,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
     }
   }, [badgeData]);
 
-  const [getParticipantsByRooms] = useLazyQuery(GET_PARTICIPANTS_BY_ROOMS);
+  const { data: currentParticipantsData } = useQuery(GET_CURRENT_PARTICIPANTS);
   const [assignCustomBadge] = useMutation(CREATE_CUSTOM_BADGE, {
     onCompleted: () => {
       localStorage.setItem(
@@ -67,17 +67,24 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       return;
     }
     try {
-      const res = await getParticipantsByRooms({
-        variables: { room_numbers: selectedRooms },
-      });
-      const participants = res?.data?.getParticipantsByRooms;
-      if (!participants || participants.length !== selectedRooms.length) {
-        setError("No participants found for some selected rooms");
+      const allParticipants =
+        currentParticipantsData?.getCurrentParticipants ?? [];
+
+      // filter participants by selected rooms
+      const participants = allParticipants.filter((p: any) =>
+        selectedRooms.includes(p.room)
+      );
+
+      if (participants.length === 0) {
+        setError("No participants found for selected rooms");
         return;
       }
-      const participantIds = participants.map((p: any) => p.participant_id);
+
+      const participantIds = participants.map((p: any) => p.pid);
+
       const selectedBadge = badges.find((badge) => badge.name === badgeName);
       const badgeId = selectedBadge?.badge_id;
+
       await assignCustomBadge({
         variables: {
           badge_id: badgeId,

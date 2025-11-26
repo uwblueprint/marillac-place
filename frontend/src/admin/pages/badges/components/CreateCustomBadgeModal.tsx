@@ -10,7 +10,8 @@ import {
   Image as ChakraImage,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
-import { Icon, iconList } from "../../../../constants/icons";
+import { Icon } from "../../../../types/enums";
+import * as BadgeIconSet from "../../../../ui/icons/BadgeIcons";
 import { CREATE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
@@ -19,13 +20,32 @@ interface Props {
   onClose: () => void;
 }
 
+const badgeIconComponents: Record<Icon, React.FC<any>> = {
+  [Icon.BABY]: BadgeIconSet.Baby,
+  [Icon.DIAMOND]: BadgeIconSet.Diamond,
+  [Icon.MONEY]: BadgeIconSet.DollarSign,
+  [Icon.FIVE_STAR]: BadgeIconSet.FiveStar,
+  [Icon.FLOWER]: BadgeIconSet.Flower,
+  [Icon.FOUR_STAR]: BadgeIconSet.FourStar,
+  [Icon.GROUP]: BadgeIconSet.Group,
+  [Icon.HEART]: BadgeIconSet.Heart,
+  [Icon.GEMSTONE]: BadgeIconSet.Hexagon,
+  [Icon.HOME]: BadgeIconSet.Home,
+  [Icon.PENCIL]: BadgeIconSet.Pencil,
+  [Icon.PLANT]: BadgeIconSet.Plant,
+  [Icon.TOOL]: BadgeIconSet.Tools,
+  [Icon.WINGS]: BadgeIconSet.Wings,
+};
+
+const iconList = Object.values(Icon);
+
 const CreateCustomBadgeModal = ({ onClose }: Props) => {
   const [name, setName] = useState("");
   const [criteria, setCriteria] = useState("");
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [error, setError] = useState("");
 
-  const [createCustomBadge, { loading }] = useMutation(CREATE_CUSTOM_BADGE, {
+  const [createCustomBadge] = useMutation(CREATE_CUSTOM_BADGE, {
     onCompleted: () => {
       localStorage.setItem("notification", "Created Custom Badge: " + name);
       window.location.reload();
@@ -37,17 +57,19 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
 
   const handleSave = () => {
     setError("");
+
     if (!name || !criteria || !selectedIcon) {
       setError("Missing fields");
-    } else {
-      createCustomBadge({
-        variables: {
-          name,
-          description: criteria,
-          icon: selectedIcon.toUpperCase(),
-        },
-      });
+      return;
     }
+
+    createCustomBadge({
+      variables: {
+        name,
+        description: criteria,
+        icon: selectedIcon.toUpperCase(),
+      },
+    });
   };
 
   return (
@@ -67,6 +89,7 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
         update_action={(e: any) => setName(e.target.value)}
         size="small"
       />
+
       <TextInput
         label="Badge Criteria"
         current_value={criteria}
@@ -80,31 +103,34 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
             Choose Badge Icon
           </Text>
         </FormLabel>
+
         <Grid templateColumns="repeat(6, 1fr)" gap={3}>
-          {iconList.map((icon) => (
-            <Flex
-              key={icon}
-              as="button"
-              align="center"
-              justify="center"
-              width="64px"
-              height="64px"
-              p={2}
-              borderRadius="8px"
-              border="1px solid"
-              borderColor={selectedIcon === icon ? "#3182CE" : "neutral.300"}
-              bg="white"
-              onClick={() => setSelectedIcon(icon)}
-              _hover={{ borderColor: "#3182CE" }}
-            >
-              <ChakraImage
-                src={`/badges/${icon}.svg`}
-                alt={icon}
-                boxSize={icon === Icon.WINGS ? "55px" : "32px"}
-                opacity={selectedIcon === icon ? 1 : 0.5}
-              />
-            </Flex>
-          ))}
+          {iconList.map((icon) => {
+            const IconComponent = badgeIconComponents[icon];
+
+            return (
+              <Flex
+                key={icon}
+                as="button"
+                align="center"
+                justify="center"
+                width="64px"
+                height="64px"
+                p={2}
+                borderRadius="8px"
+                border="1px solid"
+                borderColor={selectedIcon === icon ? "#3182CE" : "neutral.300"}
+                bg="white"
+                onClick={() => setSelectedIcon(icon)}
+                _hover={{ borderColor: "#3182CE" }}
+              >
+                <IconComponent
+                  size={icon === Icon.WINGS ? 55 : 32}
+                  opacity={selectedIcon === icon ? 1 : 0.5}
+                />
+              </Flex>
+            );
+          })}
         </Grid>
       </FormControl>
     </PopupContainer>

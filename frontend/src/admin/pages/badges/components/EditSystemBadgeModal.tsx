@@ -1,5 +1,4 @@
 export {};
-TODO: Refactor this component
 import React, { useState } from "react";
 import { Flex, Input, FormLabel, FormControl, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
@@ -133,8 +132,8 @@ const EditSystemBadgeModal = ({
       <TextInput
         label="Badge Criteria"
         current_value={badgeCriteria}
-        action={(e: any) => setBadgeCriteria(e.target.value)}
-        size = "medium"
+        update_action={(e: any) => setBadgeCriteria(e.target.value)}
+        size="medium"
       />
 
       <Flex flexDir="column">

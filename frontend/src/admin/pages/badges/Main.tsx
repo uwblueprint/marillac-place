@@ -8,7 +8,6 @@ import CustomBadgeTable from "./components/CustomBadgeTable";
 import SystemBadgeTable from "./components/SystemBadgeTable";
 import { GET_CUSTOM_BADGES } from "../../../gql/customBadgeRequests";
 import { GET_SYSTEM_BADGES } from "../../../gql/systemBadgeRequests";
-import resolvers from "../../backend/gql/resolvers";
 import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
