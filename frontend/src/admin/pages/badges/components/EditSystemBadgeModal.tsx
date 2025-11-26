@@ -1,4 +1,3 @@
-export {};
 import React, { useState } from "react";
 import { Flex, Input, FormLabel, FormControl, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";

@@ -1,5 +1,3 @@
-export {};
-//TODO: Refactor this component
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
@@ -63,7 +61,7 @@ export default function AdminBadgesPage() {
       </Flex>
       <SystemBadgeTable
         loading={systemBadgesLoading}
-        error={systemBadgesError}
+        error={systemBadgesError ? systemBadgesError.message : null}
         badges={systemBadges}
       />
       <Flex
@@ -95,7 +93,7 @@ export default function AdminBadgesPage() {
       </Flex>
       <CustomBadgeTable
         loading={customBadgesLoading}
-        error={customBadgesError}
+        error={customBadgesError?.message}
         badges={customBadges}
       />
 

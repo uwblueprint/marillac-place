@@ -1,5 +1,3 @@
-export {};
-// //TODO: Refactor this component
 import React, { useState } from "react";
 import {
   FormControl,
@@ -43,7 +41,7 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
   const [name, setName] = useState("");
   const [criteria, setCriteria] = useState("");
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
 
   const [createCustomBadge] = useMutation(CREATE_CUSTOM_BADGE, {
     onCompleted: () => {

@@ -1,5 +1,3 @@
-export {};
-// TODO: Refactor this component
 import { Text, Flex, Image as ChakraImage, Switch } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
 import React, { useEffect, useState } from "react";
@@ -10,15 +8,11 @@ import DataTable from "../../../../ui/misc/DataTable";
 
 type SystemBadgeTableProps = {
   loading: boolean;
-  error: any;
+  error: string | null;
   badges: any[];
 };
 
-const SystemBadgeTable = ({
-  loading,
-  error,
-  badges,
-}: SystemBadgeTableProps) => {
+const SystemBadgeTable = ({ loading, error, badges }: SystemBadgeTableProps) => {
   const levels = ["N", "B", "S", "G", "D"];
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState<any | null>(null);
@@ -35,7 +29,7 @@ const SystemBadgeTable = ({
     );
   }, [badges]);
 
-  async function changeActivityStatus(badge_id: number, is_active: boolean) {
+  const changeActivityStatus = async (badge_id: number, is_active: boolean) => {
     try {
       await updateBadgeStatus({
         variables: {
@@ -47,10 +41,10 @@ const SystemBadgeTable = ({
         ...prev,
         [badge_id]: is_active,
       }));
-    } catch (err: any) {
-      console.log(err.message);
+    } catch (err: unknown) {
+      console.log(err instanceof Error ? err.message : String(err));
     }
-  }
+  };
 
   const columns = [
     { header: "Icon", width: "5%" },
@@ -94,14 +88,18 @@ const SystemBadgeTable = ({
         },
         {
           element: (
-            <EditIcon
-              style={{ width: "1.2rem", height: "1.2rem", cursor: "pointer" }}
-            />
+            <Flex
+              align="center"
+              justify="center"
+              cursor="pointer"
+              onClick={() => {
+                setSelected(badge);
+                setEdit(true);
+              }}
+            >
+              <EditIcon style={{ width: "1.2rem", height: "1.2rem" }} />
+            </Flex>
           ),
-          action: () => {
-            setSelected(badge);
-            setEdit(true);
-          },
         },
       ])
     : [];
@@ -115,7 +113,15 @@ const SystemBadgeTable = ({
   );
 
   return (
-    <DataTable loading={loading} error={error} columns={columns} rows={rows} />
+    <>
+      <DataTable
+        loading={loading}
+        error={error || undefined}
+        columns={columns}
+        rows={rows}
+      />
+      {editModal}
+    </>
   );
 };
 

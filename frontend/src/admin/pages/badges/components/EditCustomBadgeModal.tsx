@@ -1,5 +1,3 @@
-export {};
-// TODO: Refactor this component
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
@@ -39,7 +37,7 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
       localStorage.setItem("notification", "Custom badge updated");
       window.location.reload();
     } catch (err: any) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 

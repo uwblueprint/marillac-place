@@ -1,6 +1,4 @@
-export {};
-// TODO: Refactor this component
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Grid, Text } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@apollo/client";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
@@ -14,8 +12,6 @@ import GreenOutlineButton from "../../../../ui/buttons/GreenOutlineButton";
 import NumberInput from "../../../../ui/inputs/NumberInput";
 import SelectInput from "../../../../ui/inputs/SelectInput";
 import { AdminContext } from "../../../AdminContext";
-
-const admin = useContext(AdminContext);
 
 interface AssignCustomBadgeModalProps {
   onClose: () => void;
@@ -93,7 +89,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
         },
       });
     } catch (err: any) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 

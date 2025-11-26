@@ -1,17 +1,15 @@
-export {};
-// TODO: Refactor this component
 import { Text, Flex, Image as ChakraImage } from "@chakra-ui/react";
 import EditIcon from "@mui/icons-material/Edit";
-import { Trash } from "../../../../ui/icons/ActionIcons";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { Trash } from "../../../../ui/icons/ActionIcons";
 import { DELETE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
 import EditCustomBadgeModal from "./EditCustomBadgeModal";
 import DataTable from "../../../../ui/misc/DataTable";
 
 type CustomBadgeTableProps = {
   loading: boolean;
-  error: any;
+  error?: string;
   badges: any[];
 };
 
@@ -110,7 +108,7 @@ const CustomBadgeTable = ({
     <>
       <DataTable
         loading={loading}
-        error={error}
+        error={error?.toString()}
         columns={columns}
         rows={rows}
       />
