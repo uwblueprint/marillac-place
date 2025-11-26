@@ -1,212 +1,214 @@
-import React, { useContext, useState } from "react";
-import { Box, Flex, Text, HStack } from "@chakra-ui/react";
-import { useQuery } from "@apollo/client";
-import { ParticipantContext } from "../../common/ParticipantContext";
-import { EditGoal } from "./components/EditGoal";
-import { SetGoal } from "./components/SetGoal";
-import {
-  GET_PARTICIPANT_BY_ID,
-  GET_WEEKLY_EARNINGS,
-} from "../../../gql/queries";
-import WeeklyEarningsChart from "./components/EarningsWidget";
-import BucksGoalCard from "./elements/BucksGoalCard";
-import BadgeWidget from "./components/BadgeWidget";
-
-export default function ParticipantsProgressPage() {
-  const [editGoal, setEditGoal] = useState(false);
-  const [setGoal, setSetGoal] = useState(false);
-  const [activeTab, setActiveTab] = useState("badges");
-  const participantContext = useContext(ParticipantContext);
-
-  // Fetch participant data
-  const {
-    data: participantData,
-    loading: loadingParticipant,
-    refetch: refetchParticipant,
-  } = useQuery(GET_PARTICIPANT_BY_ID, {
-    variables: { participantId: participantContext?.id },
-    skip: !participantContext?.id,
-  });
-
-  // Fetch earnings data
-  const {
-    data: earningsData,
-    loading: loadingEarnings,
-    refetch: refetchEarnings,
-  } = useQuery(GET_WEEKLY_EARNINGS, {
-    variables: { participant_id: participantContext?.id },
-    skip: !participantContext?.id,
-  });
-
-  const weeklyEarnings = earningsData?.getWeeklyEarnings || [
-    0, 0, 0, 0, 0, 0, 0,
-  ];
-  const participant = participantData?.getParticipantById;
-  const currentGoal = participant?.marillac_bucks_goal;
-  const currentBalance = participant?.marillac_bucks || 0;
-
-  const loading = loadingParticipant || loadingEarnings;
-
-  const handleClose = () => {
-    setSetGoal(false);
-    setEditGoal(false);
-  };
-
-  const handleGoalSet = async () => {
-    await refetchParticipant();
-    handleClose();
-  };
-
-  const handleGoalUpdated = async () => {
-    await refetchParticipant();
-    handleClose();
-  };
-  if (loading) {
-    return null;
-  }
-
-  const handleGoalClick = () => {
-    if (currentGoal) {
-      setEditGoal(true);
-    } else {
-      setSetGoal(true);
-    }
-  };
-
-  return (
-    <>
-      <BucksGoalCard
-        value={currentBalance}
-        goal={currentGoal}
-        onEditGoalClick={handleGoalClick}
-      />
-      {setGoal && (
-        <SetGoal handleClose={handleClose} onGoalSet={handleGoalSet} />
-      )}
-      {editGoal && currentGoal && (
-        <EditGoal
-          handleClose={handleClose}
-          onGoalUpdated={handleGoalUpdated}
-          currentGoal={currentGoal}
-          currentBalance={currentBalance}
-        />
-      )}
-      <div style={{ padding: "10px 20px" }}>
-        <WeeklyEarningsChart weeklyEarnings={weeklyEarnings} />
-      </div>
-
-      <Flex justifyContent="center" alignItems="center">
-        <Box
-          bg="white"
-          borderRadius="12px"
-          p="20px"
-          position="relative"
-          border="2px solid"
-          borderColor="#f0f0f0"
-          width="92%"
-        >
-          <HStack spacing={6} mb={4}>
-            {["badges", "achieved"].map((tab) => (
-              <Text
-                key={tab}
-                fontWeight={activeTab === tab ? "bold" : "medium"}
-                color={activeTab === tab ? "black" : "grey"}
-                textDecoration={activeTab === tab ? "underline" : "none"}
-                cursor="pointer"
-                _hover={{ color: "gray.700" }}
-                onClick={() => setActiveTab(tab)}
-                transition="all 0.2s ease"
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </Text>
-            ))}
-          </HStack>
-
-          {activeTab === "badges" ? (
-            <BadgeWidget
-              allBadges={[
-                {
-                  title: "Beginner Log In Badge",
-                  subtitle: "Completed 7 days in a row",
-                  bucks: 5,
-                  badge: {
-                    icon: "five_star",
-                    rarity: "gold",
-                    percentComplete: 100,
-                  },
-                },
-                {
-                  title: "Super Awesome Badge",
-                  subtitle: "Completed 7 days in a row",
-                  bucks: 5,
-                  badge: {
-                    icon: "five_star",
-                    rarity: "gold",
-                    percentComplete: 20,
-                  },
-                },
-                {
-                  title: "Beginner Perfect Score Badge",
-                  subtitle: "Completed 7 days in a row",
-                  bucks: 5,
-                  badge: {
-                    icon: "diamond",
-                    rarity: "diamond",
-                    percentComplete: 50,
-                  },
-                },
-                {
-                  title: "Hello world",
-                  subtitle: "Completed 7 days in a row",
-                  bucks: 5,
-                  badge: {
-                    icon: "tool",
-                    rarity: "green",
-                    percentComplete: 100,
-                  },
-                },
-              ]}
-              achieved={false}
-            />
-          ) : (
-            <BadgeWidget
-              allBadges={[
-                {
-                  title: "Beginner Log In Badge",
-                  subtitle: "Completed 7 days in a row",
-                  bucks: 5,
-                  badge: {
-                    icon: "five_star",
-                    rarity: "gold",
-                    percentComplete: 100,
-                  },
-                },
-                {
-                  title: "Beginner Perfect Score Badge",
-                  subtitle: "Completed 7 days in a row",
-                  bucks: 5,
-                  badge: {
-                    icon: "diamond",
-                    rarity: "diamond",
-                    percentComplete: 50,
-                  },
-                },
-                {
-                  title: "Hello world",
-                  subtitle: "Completed 7 days in a row",
-                  bucks: 5,
-                  badge: {
-                    icon: "tool",
-                    rarity: "green",
-                    percentComplete: 100,
-                  },
-                },
-              ]}
-              achieved
-            />
-          )}
-        </Box>
-      </Flex>
-    </>
-  );
-}
+export {};
+// TODO: Refactor this component
+// import React, { useContext, useState } from "react";
+// import { Box, Flex, Text, HStack } from "@chakra-ui/react";
+// import { useQuery } from "@apollo/client";
+// import { ParticipantContext } from "../../common/ParticipantContext";
+// import { EditGoal } from "./components/EditGoal";
+// import { SetGoal } from "./components/SetGoal";
+// import {
+//   GET_PARTICIPANT_BY_ID,
+//   GET_WEEKLY_EARNINGS,
+// } from "../../../gql/queries";
+// import WeeklyEarningsChart from "./components/EarningsWidget";
+// import BucksGoalCard from "./elements/BucksGoalCard";
+// import BadgeWidget from "./components/BadgeWidget";
+// 
+// export default function ParticipantsProgressPage() {
+//   const [editGoal, setEditGoal] = useState(false);
+//   const [setGoal, setSetGoal] = useState(false);
+//   const [activeTab, setActiveTab] = useState("badges");
+//   const participantContext = useContext(ParticipantContext);
+// 
+//   // Fetch participant data
+//   const {
+//     data: participantData,
+//     loading: loadingParticipant,
+//     refetch: refetchParticipant,
+//   } = useQuery(GET_PARTICIPANT_BY_ID, {
+//     variables: { participantId: participantContext?.id },
+//     skip: !participantContext?.id,
+//   });
+// 
+//   // Fetch earnings data
+//   const {
+//     data: earningsData,
+//     loading: loadingEarnings,
+//     refetch: refetchEarnings,
+//   } = useQuery(GET_WEEKLY_EARNINGS, {
+//     variables: { participant_id: participantContext?.id },
+//     skip: !participantContext?.id,
+//   });
+// 
+//   const weeklyEarnings = earningsData?.getWeeklyEarnings || [
+//     0, 0, 0, 0, 0, 0, 0,
+//   ];
+//   const participant = participantData?.getParticipantById;
+//   const currentGoal = participant?.marillac_bucks_goal;
+//   const currentBalance = participant?.marillac_bucks || 0;
+// 
+//   const loading = loadingParticipant || loadingEarnings;
+// 
+//   const handleClose = () => {
+//     setSetGoal(false);
+//     setEditGoal(false);
+//   };
+// 
+//   const handleGoalSet = async () => {
+//     await refetchParticipant();
+//     handleClose();
+//   };
+// 
+//   const handleGoalUpdated = async () => {
+//     await refetchParticipant();
+//     handleClose();
+//   };
+//   if (loading) {
+//     return null;
+//   }
+// 
+//   const handleGoalClick = () => {
+//     if (currentGoal) {
+//       setEditGoal(true);
+//     } else {
+//       setSetGoal(true);
+//     }
+//   };
+// 
+//   return (
+//     <>
+//       <BucksGoalCard
+//         value={currentBalance}
+//         goal={currentGoal}
+//         onEditGoalClick={handleGoalClick}
+//       />
+//       {setGoal && (
+//         <SetGoal handleClose={handleClose} onGoalSet={handleGoalSet} />
+//       )}
+//       {editGoal && currentGoal && (
+//         <EditGoal
+//           handleClose={handleClose}
+//           onGoalUpdated={handleGoalUpdated}
+//           currentGoal={currentGoal}
+//           currentBalance={currentBalance}
+//         />
+//       )}
+//       <div style={{ padding: "10px 20px" }}>
+//         <WeeklyEarningsChart weeklyEarnings={weeklyEarnings} />
+//       </div>
+// 
+//       <Flex justifyContent="center" alignItems="center">
+//         <Box
+//           bg="white"
+//           borderRadius="12px"
+//           p="20px"
+//           position="relative"
+//           border="2px solid"
+//           borderColor="#f0f0f0"
+//           width="92%"
+//         >
+//           <HStack spacing={6} mb={4}>
+//             {["badges", "achieved"].map((tab) => (
+//               <Text
+//                 key={tab}
+//                 fontWeight={activeTab === tab ? "bold" : "medium"}
+//                 color={activeTab === tab ? "black" : "grey"}
+//                 textDecoration={activeTab === tab ? "underline" : "none"}
+//                 cursor="pointer"
+//                 _hover={{ color: "gray.700" }}
+//                 onClick={() => setActiveTab(tab)}
+//                 transition="all 0.2s ease"
+//               >
+//                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
+//               </Text>
+//             ))}
+//           </HStack>
+// 
+//           {activeTab === "badges" ? (
+//             <BadgeWidget
+//               allBadges={[
+//                 {
+//                   title: "Beginner Log In Badge",
+//                   subtitle: "Completed 7 days in a row",
+//                   bucks: 5,
+//                   badge: {
+//                     icon: "five_star",
+//                     rarity: "gold",
+//                     percentComplete: 100,
+//                   },
+//                 },
+//                 {
+//                   title: "Super Awesome Badge",
+//                   subtitle: "Completed 7 days in a row",
+//                   bucks: 5,
+//                   badge: {
+//                     icon: "five_star",
+//                     rarity: "gold",
+//                     percentComplete: 20,
+//                   },
+//                 },
+//                 {
+//                   title: "Beginner Perfect Score Badge",
+//                   subtitle: "Completed 7 days in a row",
+//                   bucks: 5,
+//                   badge: {
+//                     icon: "diamond",
+//                     rarity: "diamond",
+//                     percentComplete: 50,
+//                   },
+//                 },
+//                 {
+//                   title: "Hello world",
+//                   subtitle: "Completed 7 days in a row",
+//                   bucks: 5,
+//                   badge: {
+//                     icon: "tool",
+//                     rarity: "green",
+//                     percentComplete: 100,
+//                   },
+//                 },
+//               ]}
+//               achieved={false}
+//             />
+//           ) : (
+//             <BadgeWidget
+//               allBadges={[
+//                 {
+//                   title: "Beginner Log In Badge",
+//                   subtitle: "Completed 7 days in a row",
+//                   bucks: 5,
+//                   badge: {
+//                     icon: "five_star",
+//                     rarity: "gold",
+//                     percentComplete: 100,
+//                   },
+//                 },
+//                 {
+//                   title: "Beginner Perfect Score Badge",
+//                   subtitle: "Completed 7 days in a row",
+//                   bucks: 5,
+//                   badge: {
+//                     icon: "diamond",
+//                     rarity: "diamond",
+//                     percentComplete: 50,
+//                   },
+//                 },
+//                 {
+//                   title: "Hello world",
+//                   subtitle: "Completed 7 days in a row",
+//                   bucks: 5,
+//                   badge: {
+//                     icon: "tool",
+//                     rarity: "green",
+//                     percentComplete: 100,
+//                   },
+//                 },
+//               ]}
+//               achieved
+//             />
+//           )}
+//         </Box>
+//       </Flex>
+//     </>
+//   );
+// }

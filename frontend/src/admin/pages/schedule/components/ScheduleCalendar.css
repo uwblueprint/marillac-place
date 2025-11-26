@@ -1,415 +1,416 @@
-/* Custom styles for React Big Calendar to match Chakra UI theme */
-
-:root {
-  /* Color variables for consistency */
-  --border-color: #c5c8d8;
-  
-  /* Status colors - these will be set from the theme */
-  --status-complete: magenta;
-  --status-assigned: magenta;
-  --status-incomplete: magenta;
-  --status-excused: magenta;
-  
-  /* Status background colors - these will be set from the theme */
-  --status-complete-bg: magenta;
-  --status-assigned-bg: magenta;
-  --status-incomplete-bg: magenta;
-  --status-excused-bg: magenta;
-  
-  /* Status text colors - these will be set from the theme */
-  --status-complete-text: magenta;
-  --status-assigned-text: magenta;
-  --status-incomplete-text: magenta;
-  --status-excused-text: magenta;
-}
-
-/* Base calendar styling */
-.rbc-calendar {
-  font-family: 'Nunito', sans-serif;
-  border-radius: 8px;
-  display: flex !important;
-  flex-direction: column !important;
-  flex: 1 !important;
-  height: 100% !important;
-  min-height: 0 !important;
-}
-
-/* Hide default toolbar */
-.rbc-toolbar {
-  display: none !important;
-}
-
-/* Time view container */
-.rbc-time-view {
-  border: none !important;
-  background-color: white;
-  display: flex !important;
-  flex-direction: column !important;
-  flex: 1 !important;
-  height: 100% !important;
-  min-height: 0 !important;
-}
-
-/* Header styling */
-.rbc-header {
-  background-color: white;
-  font-weight: 600;
-  border: none !important;
-}
-
-.rbc-day-bg {
-  border: none !important;
-}
-
-.rbc-time-header {
-  background-color: white;
-  flex-shrink: 0;
-  margin: 0 !important;
-  padding: 0 !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 10 !important;
-  border: none !important;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; */
-}
-
-/* Target only the row that contains day headers, not all-day events */
-.rbc-time-header-cell {
-  min-height: 80px !important;
-}
-
-/* Ensure individual day header cells have proper height */
-.rbc-time-header .rbc-row:first-child .rbc-header {
-  border-left: 1px solid var(--border-color);
-  border-bottom: 2px solid var(--border-color);
-  min-height: 80px !important;
-}
-
-.rbc-time-header .rbc-row:first-child .rbc-header:first-child {
-  border-left: none;
-}
-
-/* Fix React Big Calendar button wrapper centering */
-.rbc-button-link {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  height: 100% !important;
-  text-align: center !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* Fix the inner CSS classes */
-.css-1f58b5e {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.css-sjh3h1 {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.rbc-time-header-gutter {
-  background-color: white;
-  border-bottom: 1px solid var(--border-color);
-  flex-shrink: 0;
-  border: none !important;
-}
-
-
-/* All-day event area */
-.rbc-allday-cell {
-  background-color: white;
-  border: none !important;
-  padding: 2px 0;
-  min-height: 24px;
-  display: flex;
-  flex-direction: column;
-  position: sticky !important;
-  top: 80px !important;
-  z-index: 9 !important;
-}
-
-/* Remove borders from row segments (all-day events) */
-.rbc-row-segment {
-  border: none !important;
-}
-
-.rbc-row-segment * {
-  border: none !important;
-}
-
-.rbc-row-content {
-  padding: 2px 0;
-  min-height: 24px;
-}
-
-.rbc-row-content:empty {
-  min-height: 0;
-  padding: 0;
-}
-
-.rbc-row {
-  margin: 0 !important;
-}
-
-/* Ensure all-day event rows can expand naturally */
-.rbc-time-header .rbc-row.rbc-row-segment {
-  min-height: 24px !important;
-}
-
-/* Time content and columns */
-.rbc-time-content {
-  /* border-top: 1px solid var(--border-color); */
-  border: none !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  flex: 1 !important;
-  height: 0 !important;
-  min-height: 0 !important;
-  max-height: none !important;
-}
-
-/* Ensure the calendar container has proper height constraints */
-#react-big-calendar-container {
-  height: 100% !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
-
-#react-big-calendar-container .rbc-calendar {
-  height: 100% !important;
-  min-height: 0 !important;
-}
-
-.rbc-time-header-content {
-  border-bottom: 1px solid var(--border-color) !important;
-  border-left: none !important;
-  position: sticky !important;
-  top: 80px !important;
-  z-index: 9 !important;
-  background-color: white !important;
-}
-
-.rbc-time-column {
-  height: auto !important;
-  overflow: visible !important;
-  border-left: 1px solid var(--border-color);
-}
-
-.rbc-time-column:first-child {
-  border-left: none;
-}
-
-/* Time gutter (left side with hours) */
-.rbc-time-view .rbc-time-gutter {
-  border: none !important;
-  position: sticky !important;
-  left: 0 !important;
-  z-index: 8 !important;
-}
-
-.rbc-time-view .rbc-day-slot {
-  border: none !important;
-}
-
-.rbc-time-view .rbc-time-gutter .rbc-time-slot {
-  font-size: 12px;
-  text-align: right;
-  padding-right: 8px;
-}
-
-.rbc-events-container {
-  border-left: 1px solid var(--border-color);
-}
-
-/* Remove all horizontal grid lines */
-.rbc-timeslot-group,
-.rbc-time-slot,
-.rbc-day-slot {
-  border-top: none !important;
-  border-bottom: none !important;
-}
-
-/* Current time indicator - hidden */
-.rbc-current-time-indicator {
-  display: none !important;
-}
-
-/* Today highlighting */
-.rbc-today {
-  background-color: transparent !important;
-}
-
-/* Ensure today's date text is white when it has orange background */
-.rbc-header [style*="background"] [style*="color: white"] {
-  color: white !important;
-}
-
-/* Alternative approach - target any orange background */
-.rbc-header [style*="background: rgb(237, 137, 54)"] *,
-.rbc-header [style*="background: rgb(245, 130, 32)"] *,
-.rbc-header [style*="background: orange"] * {
-  color: white !important;
-}
-
-/* Base event styling */
-.rbc-event {
-  border-radius: 6px !important;
-  border: none !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 6px !important;
-}
-
-.rbc-event-label {
-  font-size: 10px;
-  font-weight: 400;
-}
-
-/* All-day events base styling */
-.rbc-event-allday,
-.rbc-event.rbc-event-allday {
-  height: auto !important;
-  min-height: 20px !important;
-  margin: 1px 0 !important;
-  padding: 2px 6px !important;
-  border-radius: 4px !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  white-space: normal !important;
-  overflow: visible !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-/* Status-specific colors for all events (both timed and all-day) */
-.rbc-event.status-complete,
-.rbc-event-allday.status-complete {
-  background-color: var(--status-complete-bg) !important;
-  color: var(--status-complete-text) !important;
-  border-left: 4px solid var(--status-complete) !important;
-}
-
-.rbc-event.status-assigned,
-.rbc-event-allday.status-assigned {
-  background-color: var(--status-assigned-bg) !important;
-  color: var(--status-assigned-text) !important;
-  border-left: 4px solid var(--status-assigned) !important;
-}
-
-.rbc-event.status-incomplete,
-.rbc-event-allday.status-incomplete {
-  background-color: var(--status-incomplete-bg) !important;
-  color: var(--status-incomplete-text) !important;
-  border-left: 4px solid var(--status-incomplete) !important;
-}
-
-.rbc-event.status-excused,
-.rbc-event-allday.status-excused {
-  background-color: var(--status-excused-bg) !important;
-  color: var(--status-excused-text) !important;
-  border-left: 4px solid var(--status-excused) !important;
-}
-
-/* All-day specific status colors (for cases where [data-allday="true"] is used) */
-.rbc-event[data-allday="true"].status-complete {
-  background-color: var(--status-complete) !important;
-  color: white !important;
-}
-
-.rbc-event[data-allday="true"].status-assigned {
-  background-color: var(--status-assigned) !important;
-  color: white !important;
-}
-
-.rbc-event[data-allday="true"].status-incomplete {
-  background-color: var(--status-incomplete) !important;
-  color: white !important;
-}
-
-.rbc-event[data-allday="true"].status-excused {
-  background-color: var(--status-excused) !important;
-  color: white !important;
-}
-
-/* Event content text wrapping */
-.rbc-event-content,
-.rbc-event .chakra-text {
-  white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: none !important;
-  line-height: 1.2 !important;
-}
-
-/* Row segments for proper all-day event display */
-.rbc-row-segment,
-.rbc-row-content .rbc-row-segment {
-  height: auto !important;
-  min-height: 22px !important;
-  max-height: none !important;
-  display: flex;
-  align-items: flex-start;
-}
-
-.rbc-row-content .rbc-row {
-  height: auto !important;
-  min-height: 22px !important;
-  margin: 1px 0 !important;
-}
-
-/* Selected event highlighting */
-.rbc-event.rbc-selected {
-  box-shadow: 0 0 0 2px #e53e3e !important;
-  opacity: 0.9;
-}
-
-/* Custom scrollbar styling */
-.rbc-time-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.rbc-time-content::-webkit-scrollbar-track {
-  background-color: var(--bg-light);
-}
-
-.rbc-time-content::-webkit-scrollbar-thumb {
-  background-color: #cbd5e0;
-  border-radius: 4px;
-}
-
-.rbc-time-content::-webkit-scrollbar-thumb:hover {
-  background-color: #a0aec0;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .rbc-toolbar {
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .rbc-toolbar-label {
-    order: -1;
-    margin-bottom: 8px;
-  }
-  
-  .rbc-btn-group {
-    justify-content: center;
-  }
-  
-  .rbc-event {
-    font-size: 10px;
-    padding: 1px 4px !important;
-  }
-} 
+/* TODO: Refactor this component */
+/* /* Custom styles for React Big Calendar to match Chakra UI theme */ */
+/* */
+/* :root { */
+/*   /* Color variables for consistency */ */
+/*   --border-color: #c5c8d8; */
+/*    */
+/*   /* Status colors - these will be set from the theme */ */
+/*   --status-complete: magenta; */
+/*   --status-assigned: magenta; */
+/*   --status-incomplete: magenta; */
+/*   --status-excused: magenta; */
+/*    */
+/*   /* Status background colors - these will be set from the theme */ */
+/*   --status-complete-bg: magenta; */
+/*   --status-assigned-bg: magenta; */
+/*   --status-incomplete-bg: magenta; */
+/*   --status-excused-bg: magenta; */
+/*    */
+/*   /* Status text colors - these will be set from the theme */ */
+/*   --status-complete-text: magenta; */
+/*   --status-assigned-text: magenta; */
+/*   --status-incomplete-text: magenta; */
+/*   --status-excused-text: magenta; */
+/* } */
+/* */
+/* /* Base calendar styling */ */
+/* .rbc-calendar { */
+/*   font-family: 'Nunito', sans-serif; */
+/*   border-radius: 8px; */
+/*   display: flex !important; */
+/*   flex-direction: column !important; */
+/*   flex: 1 !important; */
+/*   height: 100% !important; */
+/*   min-height: 0 !important; */
+/* } */
+/* */
+/* /* Hide default toolbar */ */
+/* .rbc-toolbar { */
+/*   display: none !important; */
+/* } */
+/* */
+/* /* Time view container */ */
+/* .rbc-time-view { */
+/*   border: none !important; */
+/*   background-color: white; */
+/*   display: flex !important; */
+/*   flex-direction: column !important; */
+/*   flex: 1 !important; */
+/*   height: 100% !important; */
+/*   min-height: 0 !important; */
+/* } */
+/* */
+/* /* Header styling */ */
+/* .rbc-header { */
+/*   background-color: white; */
+/*   font-weight: 600; */
+/*   border: none !important; */
+/* } */
+/* */
+/* .rbc-day-bg { */
+/*   border: none !important; */
+/* } */
+/* */
+/* .rbc-time-header { */
+/*   background-color: white; */
+/*   flex-shrink: 0; */
+/*   margin: 0 !important; */
+/*   padding: 0 !important; */
+/*   position: sticky !important; */
+/*   top: 0 !important; */
+/*   z-index: 10 !important; */
+/*   border: none !important; */
+/*   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; */ */
+/* } */
+/* */
+/* /* Target only the row that contains day headers, not all-day events */ */
+/* .rbc-time-header-cell { */
+/*   min-height: 80px !important; */
+/* } */
+/* */
+/* /* Ensure individual day header cells have proper height */ */
+/* .rbc-time-header .rbc-row:first-child .rbc-header { */
+/*   border-left: 1px solid var(--border-color); */
+/*   border-bottom: 2px solid var(--border-color); */
+/*   min-height: 80px !important; */
+/* } */
+/* */
+/* .rbc-time-header .rbc-row:first-child .rbc-header:first-child { */
+/*   border-left: none; */
+/* } */
+/* */
+/* /* Fix React Big Calendar button wrapper centering */ */
+/* .rbc-button-link { */
+/*   display: flex !important; */
+/*   align-items: center !important; */
+/*   justify-content: center !important; */
+/*   width: 100% !important; */
+/*   height: 100% !important; */
+/*   text-align: center !important; */
+/*   padding: 0 !important; */
+/*   margin: 0 !important; */
+/* } */
+/* */
+/* /* Fix the inner CSS classes */ */
+/* .css-1f58b5e { */
+/*   display: flex !important; */
+/*   align-items: center !important; */
+/*   justify-content: center !important; */
+/*   width: 100% !important; */
+/*   height: 100% !important; */
+/* } */
+/* */
+/* .css-sjh3h1 { */
+/*   display: flex !important; */
+/*   align-items: center !important; */
+/*   justify-content: center !important; */
+/* } */
+/* */
+/* .rbc-time-header-gutter { */
+/*   background-color: white; */
+/*   border-bottom: 1px solid var(--border-color); */
+/*   flex-shrink: 0; */
+/*   border: none !important; */
+/* } */
+/* */
+/* */
+/* /* All-day event area */ */
+/* .rbc-allday-cell { */
+/*   background-color: white; */
+/*   border: none !important; */
+/*   padding: 2px 0; */
+/*   min-height: 24px; */
+/*   display: flex; */
+/*   flex-direction: column; */
+/*   position: sticky !important; */
+/*   top: 80px !important; */
+/*   z-index: 9 !important; */
+/* } */
+/* */
+/* /* Remove borders from row segments (all-day events) */ */
+/* .rbc-row-segment { */
+/*   border: none !important; */
+/* } */
+/* */
+/* .rbc-row-segment * { */
+/*   border: none !important; */
+/* } */
+/* */
+/* .rbc-row-content { */
+/*   padding: 2px 0; */
+/*   min-height: 24px; */
+/* } */
+/* */
+/* .rbc-row-content:empty { */
+/*   min-height: 0; */
+/*   padding: 0; */
+/* } */
+/* */
+/* .rbc-row { */
+/*   margin: 0 !important; */
+/* } */
+/* */
+/* /* Ensure all-day event rows can expand naturally */ */
+/* .rbc-time-header .rbc-row.rbc-row-segment { */
+/*   min-height: 24px !important; */
+/* } */
+/* */
+/* /* Time content and columns */ */
+/* .rbc-time-content { */
+/*   /* border-top: 1px solid var(--border-color); */ */
+/*   border: none !important; */
+/*   overflow-y: auto !important; */
+/*   overflow-x: hidden !important; */
+/*   flex: 1 !important; */
+/*   height: 0 !important; */
+/*   min-height: 0 !important; */
+/*   max-height: none !important; */
+/* } */
+/* */
+/* /* Ensure the calendar container has proper height constraints */ */
+/* #react-big-calendar-container { */
+/*   height: 100% !important; */
+/*   min-height: 0 !important; */
+/*   overflow: hidden !important; */
+/* } */
+/* */
+/* #react-big-calendar-container .rbc-calendar { */
+/*   height: 100% !important; */
+/*   min-height: 0 !important; */
+/* } */
+/* */
+/* .rbc-time-header-content { */
+/*   border-bottom: 1px solid var(--border-color) !important; */
+/*   border-left: none !important; */
+/*   position: sticky !important; */
+/*   top: 80px !important; */
+/*   z-index: 9 !important; */
+/*   background-color: white !important; */
+/* } */
+/* */
+/* .rbc-time-column { */
+/*   height: auto !important; */
+/*   overflow: visible !important; */
+/*   border-left: 1px solid var(--border-color); */
+/* } */
+/* */
+/* .rbc-time-column:first-child { */
+/*   border-left: none; */
+/* } */
+/* */
+/* /* Time gutter (left side with hours) */ */
+/* .rbc-time-view .rbc-time-gutter { */
+/*   border: none !important; */
+/*   position: sticky !important; */
+/*   left: 0 !important; */
+/*   z-index: 8 !important; */
+/* } */
+/* */
+/* .rbc-time-view .rbc-day-slot { */
+/*   border: none !important; */
+/* } */
+/* */
+/* .rbc-time-view .rbc-time-gutter .rbc-time-slot { */
+/*   font-size: 12px; */
+/*   text-align: right; */
+/*   padding-right: 8px; */
+/* } */
+/* */
+/* .rbc-events-container { */
+/*   border-left: 1px solid var(--border-color); */
+/* } */
+/* */
+/* /* Remove all horizontal grid lines */ */
+/* .rbc-timeslot-group, */
+/* .rbc-time-slot, */
+/* .rbc-day-slot { */
+/*   border-top: none !important; */
+/*   border-bottom: none !important; */
+/* } */
+/* */
+/* /* Current time indicator - hidden */ */
+/* .rbc-current-time-indicator { */
+/*   display: none !important; */
+/* } */
+/* */
+/* /* Today highlighting */ */
+/* .rbc-today { */
+/*   background-color: transparent !important; */
+/* } */
+/* */
+/* /* Ensure today's date text is white when it has orange background */ */
+/* .rbc-header [style*="background"] [style*="color: white"] { */
+/*   color: white !important; */
+/* } */
+/* */
+/* /* Alternative approach - target any orange background */ */
+/* .rbc-header [style*="background: rgb(237, 137, 54)"] *, */
+/* .rbc-header [style*="background: rgb(245, 130, 32)"] *, */
+/* .rbc-header [style*="background: orange"] * { */
+/*   color: white !important; */
+/* } */
+/* */
+/* /* Base event styling */ */
+/* .rbc-event { */
+/*   border-radius: 6px !important; */
+/*   border: none !important; */
+/*   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
+/*   font-size: 12px; */
+/*   font-weight: 600; */
+/*   padding: 2px 6px !important; */
+/* } */
+/* */
+/* .rbc-event-label { */
+/*   font-size: 10px; */
+/*   font-weight: 400; */
+/* } */
+/* */
+/* /* All-day events base styling */ */
+/* .rbc-event-allday, */
+/* .rbc-event.rbc-event-allday { */
+/*   height: auto !important; */
+/*   min-height: 20px !important; */
+/*   margin: 1px 0 !important; */
+/*   padding: 2px 6px !important; */
+/*   border-radius: 4px !important; */
+/*   font-size: 11px !important; */
+/*   font-weight: 600 !important; */
+/*   white-space: normal !important; */
+/*   overflow: visible !important; */
+/*   opacity: 1 !important; */
+/*   visibility: visible !important; */
+/*   position: relative !important; */
+/*   z-index: 1 !important; */
+/* } */
+/* */
+/* /* Status-specific colors for all events (both timed and all-day) */ */
+/* .rbc-event.status-complete, */
+/* .rbc-event-allday.status-complete { */
+/*   background-color: var(--status-complete-bg) !important; */
+/*   color: var(--status-complete-text) !important; */
+/*   border-left: 4px solid var(--status-complete) !important; */
+/* } */
+/* */
+/* .rbc-event.status-assigned, */
+/* .rbc-event-allday.status-assigned { */
+/*   background-color: var(--status-assigned-bg) !important; */
+/*   color: var(--status-assigned-text) !important; */
+/*   border-left: 4px solid var(--status-assigned) !important; */
+/* } */
+/* */
+/* .rbc-event.status-incomplete, */
+/* .rbc-event-allday.status-incomplete { */
+/*   background-color: var(--status-incomplete-bg) !important; */
+/*   color: var(--status-incomplete-text) !important; */
+/*   border-left: 4px solid var(--status-incomplete) !important; */
+/* } */
+/* */
+/* .rbc-event.status-excused, */
+/* .rbc-event-allday.status-excused { */
+/*   background-color: var(--status-excused-bg) !important; */
+/*   color: var(--status-excused-text) !important; */
+/*   border-left: 4px solid var(--status-excused) !important; */
+/* } */
+/* */
+/* /* All-day specific status colors (for cases where [data-allday="true"] is used) */ */
+/* .rbc-event[data-allday="true"].status-complete { */
+/*   background-color: var(--status-complete) !important; */
+/*   color: white !important; */
+/* } */
+/* */
+/* .rbc-event[data-allday="true"].status-assigned { */
+/*   background-color: var(--status-assigned) !important; */
+/*   color: white !important; */
+/* } */
+/* */
+/* .rbc-event[data-allday="true"].status-incomplete { */
+/*   background-color: var(--status-incomplete) !important; */
+/*   color: white !important; */
+/* } */
+/* */
+/* .rbc-event[data-allday="true"].status-excused { */
+/*   background-color: var(--status-excused) !important; */
+/*   color: white !important; */
+/* } */
+/* */
+/* /* Event content text wrapping */ */
+/* .rbc-event-content, */
+/* .rbc-event .chakra-text { */
+/*   white-space: normal !important; */
+/*   overflow: visible !important; */
+/*   text-overflow: none !important; */
+/*   line-height: 1.2 !important; */
+/* } */
+/* */
+/* /* Row segments for proper all-day event display */ */
+/* .rbc-row-segment, */
+/* .rbc-row-content .rbc-row-segment { */
+/*   height: auto !important; */
+/*   min-height: 22px !important; */
+/*   max-height: none !important; */
+/*   display: flex; */
+/*   align-items: flex-start; */
+/* } */
+/* */
+/* .rbc-row-content .rbc-row { */
+/*   height: auto !important; */
+/*   min-height: 22px !important; */
+/*   margin: 1px 0 !important; */
+/* } */
+/* */
+/* /* Selected event highlighting */ */
+/* .rbc-event.rbc-selected { */
+/*   box-shadow: 0 0 0 2px #e53e3e !important; */
+/*   opacity: 0.9; */
+/* } */
+/* */
+/* /* Custom scrollbar styling */ */
+/* .rbc-time-content::-webkit-scrollbar { */
+/*   width: 8px; */
+/* } */
+/* */
+/* .rbc-time-content::-webkit-scrollbar-track { */
+/*   background-color: var(--bg-light); */
+/* } */
+/* */
+/* .rbc-time-content::-webkit-scrollbar-thumb { */
+/*   background-color: #cbd5e0; */
+/*   border-radius: 4px; */
+/* } */
+/* */
+/* .rbc-time-content::-webkit-scrollbar-thumb:hover { */
+/*   background-color: #a0aec0; */
+/* } */
+/* */
+/* /* Responsive adjustments */ */
+/* @media (max-width: 768px) { */
+/*   .rbc-toolbar { */
+/*     flex-direction: column; */
+/*     gap: 12px; */
+/*   } */
+/*    */
+/*   .rbc-toolbar-label { */
+/*     order: -1; */
+/*     margin-bottom: 8px; */
+/*   } */
+/*    */
+/*   .rbc-btn-group { */
+/*     justify-content: center; */
+/*   } */
+/*    */
+/*   .rbc-event { */
+/*     font-size: 10px; */
+/*     padding: 1px 4px !important; */
+/*   } */
+/* }  */

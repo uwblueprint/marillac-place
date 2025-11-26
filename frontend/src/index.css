@@ -3,3 +3,399 @@
   margin: 0;
   padding: 0;
 }
+
+:root {
+  --border-color: #C5C8D8;
+
+  --status-complete: #0D8312;
+  --status-assigned: #255B9A;
+  --status-excused: #B07D18;
+  --status-incomplete: #B21D2F;
+  
+  --status-complete-bg: #CDEECE;
+  --status-incomplete-bg: #F8D7DB;
+  --status-assigned-bg: #C5DCF8;
+  --status-excused-bg: #FFE5B2;
+  
+  --status-complete-text: #0D8312;
+  --status-assigned-text: #255B9A;
+  --status-excused-text: #B07D18;
+  --status-incomplete-text: #B21D2F;
+}
+
+.rbc-calendar {
+  font-family: 'Nunito', sans-serif;
+  border-radius: 8px;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.rbc-toolbar {
+  display: none !important;
+}
+
+.rbc-time-view {
+  border: none !important;
+  background-color: white;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.rbc-header {
+  background-color: white;
+  font-weight: 600;
+  border: none !important;
+}
+
+.rbc-day-bg {
+  border: none !important;
+}
+
+.rbc-time-header {
+  background-color: white;
+  flex-shrink: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+  border: none !important;
+}
+
+.rbc-time-gutter .rbc-label {
+  font-family: "Nunito", sans-serif !important;
+  font-weight: 400 !important;
+  color: black !important;
+}
+
+.rbc-time-gutter .rbc-time-column {
+  background-color: transparent !important;
+}
+
+.rbc-events-container {
+  margin-right: 0 !important;
+}
+
+.rbc-time-header-cell {
+  min-height: 80px !important;
+}
+
+.rbc-events-container {
+  border-bottom: 1px solid var(--border-color);
+}
+
+
+.rbc-time-header .rbc-row:first-child .rbc-header {
+  min-height: 80px !important;
+}
+
+.rbc-time-header .rbc-row:first-child .rbc-header:first-child {
+  border-left: none;
+}
+
+.rbc-time-content {
+  border-right: 1px solid var(--border-color) !important;
+  border-top: none !important;
+}
+
+.rbc-button-link {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  text-align: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.css-1f58b5e {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.css-sjh3h1 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.rbc-time-header-gutter {
+  background-color: white;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  border: none !important;
+}
+
+.rbc-allday-cell {
+  background-color: white;
+  border: none !important;
+  padding: 2px 0;
+  min-height: 24px;
+  display: flex;
+  flex-direction: column;
+  position: sticky !important;
+  top: 80px !important;
+  z-index: 9 !important;
+}
+
+.rbc-row-segment {
+  border: none;
+}
+
+.rbc-row-content {
+  padding: 2px 0;
+  min-height: 24px;
+}
+
+.rbc-row-content:empty {
+  min-height: 0;
+  padding: 0;
+}
+
+.rbc-row {
+  margin: 0 !important;
+}
+
+.rbc-time-header .rbc-row.rbc-row-segment {
+  min-height: 24px !important;
+}
+
+.rbc-time-content {
+  border: none;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  flex: 1 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+
+#react-big-calendar-container {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+#react-big-calendar-container .rbc-calendar {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.rbc-time-header-content {
+  border-bottom: 1px solid var(--border-color) !important;
+  border-left: none !important;
+  position: sticky !important;
+
+  z-index: 9 !important;
+  background-color: white !important;
+}
+
+.rbc-time-column {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.rbc-time-column:first-child {
+  border-left: none;
+}
+
+.rbc-time-view .rbc-time-gutter {
+  border: none !important;
+  position: sticky !important;
+  left: 0 !important;
+  z-index: 8 !important;
+}
+
+.rbc-time-view .rbc-day-slot {
+  border: none !important;
+}
+
+.rbc-time-view .rbc-time-gutter .rbc-time-slot {
+  font-size: 12px;
+  text-align: right;
+  padding-right: 8px;
+}
+
+.rbc-events-container {
+  border-left: 1px solid var(--border-color);
+}
+
+.rbc-timeslot-group,
+.rbc-time-slot,
+.rbc-day-slot {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.rbc-current-time-indicator {
+  display: none !important;
+}
+
+.rbc-today {
+  background-color: transparent !important;
+}
+
+.rbc-header [style*="background"] [style*="color: white"] {
+  color: white !important;
+}
+
+.rbc-header [style*="background: rgb(237, 137, 54)"] *,
+.rbc-header [style*="background: rgb(245, 130, 32)"] *,
+.rbc-header [style*="background: orange"] * {
+  color: white !important;
+}
+
+.rbc-event {
+  border-radius: 6px !important;
+  border: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 6px !important;
+}
+
+.rbc-event-label {
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.rbc-event-allday,
+.rbc-event.rbc-event-allday {
+  height: auto !important;
+  min-height: 20px !important;
+  margin: 1px 0 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.rbc-event.status-complete,
+.rbc-event-allday.status-complete {
+  background-color: var(--status-complete-bg) !important;
+  color: var(--status-complete-text) !important;
+  border-left: 4px solid var(--status-complete) !important;
+}
+
+.rbc-event.status-assigned,
+.rbc-event-allday.status-assigned {
+  background-color: var(--status-assigned-bg) !important;
+  color: var(--status-assigned-text) !important;
+  border-left: 4px solid var(--status-assigned) !important;
+}
+
+.rbc-event.status-incomplete,
+.rbc-event-allday.status-incomplete {
+  background-color: var(--status-incomplete-bg) !important;
+  color: var(--status-incomplete-text) !important;
+  border-left: 4px solid var(--status-incomplete) !important;
+}
+
+.rbc-event.status-excused,
+.rbc-event-allday.status-excused {
+  background-color: var(--status-excused-bg) !important;
+  color: var(--status-excused-text) !important;
+  border-left: 4px solid var(--status-excused) !important;
+}
+
+.rbc-event[data-allday="true"].status-complete {
+  background-color: var(--status-complete) !important;
+  color: white !important;
+}
+
+.rbc-event[data-allday="true"].status-assigned {
+  background-color: var(--status-assigned) !important;
+  color: white !important;
+}
+
+.rbc-event[data-allday="true"].status-incomplete {
+  background-color: var(--status-incomplete) !important;
+  color: white !important;
+}
+
+.rbc-event[data-allday="true"].status-excused {
+  background-color: var(--status-excused) !important;
+  color: white !important;
+}
+
+.rbc-event-content,
+.rbc-event .chakra-text {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: none !important;
+  line-height: 1.2 !important;
+}
+
+.rbc-row-segment,
+.rbc-row-content .rbc-row-segment {
+  height: auto !important;
+  min-height: 22px !important;
+  max-height: none !important;
+  display: flex;
+  align-items: flex-start;
+}
+
+.rbc-row-content .rbc-row {
+  height: auto !important;
+  min-height: 22px !important;
+  margin: 1px 0 !important;
+}
+
+.rbc-event.rbc-selected {
+  box-shadow: 0 0 0 2px #e53e3e !important;
+  opacity: 0.9;
+}
+
+.rbc-time-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.rbc-time-content::-webkit-scrollbar-track {
+  background-color: var(--bg-light);
+}
+
+.rbc-time-content::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 4px;
+}
+
+.rbc-time-content::-webkit-scrollbar-thumb:hover {
+  background-color: #a0aec0;
+}
+
+@media (max-width: 768px) {
+  .rbc-toolbar {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .rbc-toolbar-label {
+    order: -1;
+    margin-bottom: 8px;
+  }
+  
+  .rbc-btn-group {
+    justify-content: center;
+  }
+  
+  .rbc-event {
+    font-size: 10px;
+    padding: 1px 4px !important;
+  }
+} 

@@ -38,6 +38,7 @@ module.exports = {
     "react/jsx-no-bind": "off",
     "no-lonely-if": "off",
     "no-restricted-syntax": "off",
+    "@typescript-eslint/no-explicit-any": "off",
   },
   ignorePatterns: ["build/*"],
 };

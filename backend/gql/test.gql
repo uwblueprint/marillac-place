@@ -1,0 +1,728 @@
+# HTTP required headers 
+
+{
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDc3MTc5NDF9.8Z7MEw0o7fgIpFTnw82kv0yTW8tG2i7TrcuXPY-i0l4"
+}
+
+# GraphQL operations for Marillac Place backend
+# Copy / paste queries and mutations in this file and supply variable values as needed
+# Date, DateTime, Time types expect ISO-8601 strings (e.g. "2025-01-01T12:00:00Z").
+
+query GetNotes {
+  getNotes {
+    nid
+    message
+    date
+  }
+}
+
+query GetReportRecipients {
+  getReportRecipients {
+    email
+    weekly
+    monthly
+  }
+}
+
+query GetAnnouncementsFromToday {
+  getAnnouncementsFromToday {
+    aid
+    date
+    message
+    priority
+    ReceivedAnnouncement {
+      pid
+      participant {
+        room
+      }
+    }
+  }
+}
+
+query GetAnnouncementsSentToParticipants($pids: [Int!]!) {
+  getAnnouncementsSentToParticipants(pids: $pids) {
+    aid
+    date
+    message
+    priority
+    ReceivedAnnouncement {
+      pid
+    }
+  }
+}
+
+query GetReceivedAnnouncements(
+  $pid: Int!
+  $unread: Boolean
+  $pinned: Boolean
+  $important: Boolean
+) {
+  getReceivedAnnouncements(
+    pid: $pid
+    unread: $unread
+    pinned: $pinned
+    important: $important
+  ) {
+    aid
+    pid
+    read
+    pinned
+    announcement {
+      aid
+      message
+      priority
+      date
+    }
+  }
+}
+
+query GetEarningGoal($pid: Int!) {
+  getEarningGoal(pid: $pid) {
+    pid
+    action
+    value
+    date
+  }
+}
+
+query GetTasksByType($type: TaskType!) {
+  getTasksByType(type: $type) {
+    tid
+    name
+    type
+    value
+    penalty
+    comment
+    day_preference
+    days
+    time_preference
+    start_time
+    end_time
+  }
+}
+
+query GetCustomBadges {
+  getCustomBadges {
+    cid
+    name
+    icon
+    description
+  }
+}
+
+query GetWeeklyEarnings($pid: Int!) {
+  getWeeklyEarnings(pid: $pid) {
+    SUNDAY
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+  }
+}
+
+query GetParticipantByPid($pid: Int!) {
+  getParticipantByPid(pid: $pid) {
+    pid
+    room
+    arrival
+    departure
+    balance
+    total_earnings
+  }
+}
+
+query GetCurrentParticipants {
+  getCurrentParticipants {
+    pid
+    room
+    arrival
+    departure
+    balance
+  }
+}
+
+query GetPastParticipants {
+  getPastParticipants {
+    pid
+    room
+    arrival
+    departure
+  }
+}
+
+query GetSystemBadges {
+  getSystemBadges {
+    name
+    icon
+    description
+    is_active
+    BadgeLevel {
+      level
+      benchmark
+      value
+    }
+  }
+}
+
+query GetNumberOfAssignedTasksByRoom {
+  getNumberOfAssignedTasksByRoom
+}
+
+query GetAssignedTasksForToday($pid: Int!) {
+  getAssignedTasksForToday(pid: $pid) {
+    aid
+    pid
+    name
+    type
+    status
+    start_date
+    end_date
+    value
+    penalty
+    comment
+  }
+}
+
+query GetAssignedTasksByWeek($pid: Int!, $weekStart: Date!) {
+  getAssignedTasksByWeek(pid: $pid, weekStart: $weekStart) {
+    aid
+    pid
+    name
+    type
+    status
+    start_date
+    end_date
+  }
+}
+
+query HasCompletedAllRequiredTasks($pid: Int!) {
+  hasCompletedAllRequiredTasks(pid: $pid)
+}
+
+query GetEarnedCustomBadges($pid: Int!) {
+  getEarnedCustomBadges(pid: $pid) {
+    eid
+    pid
+    name
+    icon
+    description
+    notified
+  }
+}
+
+query GetAchievedBadgeLevels($pid: Int!) {
+  getAchievedBadgeLevels(pid: $pid) {
+    name
+    level
+    pid
+    date
+    notified
+    badge_level {
+      system_badge {
+        name
+        icon
+        description
+        is_active
+      }
+    }
+  }
+}
+
+query GetBadgeLevelProgress($pid: Int!) {
+  getBadgeLevelProgress(pid: $pid) {
+    name
+    level
+    pid
+    progress
+    badge_level {
+      value
+      benchmark
+      system_badge {
+        icon
+        description
+        is_active
+      }
+    }
+  }
+}
+
+mutation CreateNote($message: String!) {
+  createNote(message: $message) {
+    nid
+    message
+    date
+  }
+}
+
+mutation DeleteNote($nid: Int!) {
+  deleteNote(nid: $nid) {
+    nid
+    message
+  }
+}
+
+mutation CreateReportRecipient(
+  $email: String!
+  $weekly: Boolean!
+  $monthly: Boolean!
+) {
+  createReportRecipient(
+    email: $email
+    weekly: $weekly
+    monthly: $monthly
+  ) {
+    email
+    weekly
+    monthly
+  }
+}
+
+mutation UpdateReportRecipient(
+  $email: String!
+  $weekly: Boolean
+  $monthly: Boolean
+) {
+  updateReportRecipient(email: $email, weekly: $weekly, monthly: $monthly) {
+    email
+    weekly
+    monthly
+  }
+}
+
+mutation DeleteReportRecipient($email: String!) {
+  deleteReportRecipient(email: $email) {
+    email
+    weekly
+    monthly
+  }
+}
+
+mutation CreateAnnouncement(
+  $priority: Priority!
+  $pids: [Int!]!
+  $message: String!
+) {
+  createAnnouncement(priority: $priority, pids: $pids, message: $message) {
+    aid
+    message
+    date
+    priority
+  }
+}
+
+mutation UpdateAnnouncement(
+  $aid: Int!
+  $priority: Priority
+  $message: String
+) {
+  updateAnnouncement(aid: $aid, priority: $priority, message: $message) {
+    aid
+    message
+    priority
+  }
+}
+
+mutation DeleteAnnouncement($aid: Int!) {
+  deleteAnnouncement(aid: $aid) {
+    aid
+    message
+  }
+}
+
+mutation UpdateReceivedAnnouncement(
+  $aid: Int!
+  $pid: Int!
+  $pinned: Boolean
+  $read: Boolean
+) {
+  updateReceivedAnnouncement(
+    aid: $aid
+    pid: $pid
+    pinned: $pinned
+    read: $read
+  ) {
+    aid
+    pid
+    pinned
+    read
+  }
+}
+
+mutation CreateEarningGoal(
+  $pid: Int!
+  $action: GoalAction!
+  $value: Int!
+) {
+  createEarningGoal(pid: $pid, action: $action, value: $value) {
+    pid
+    action
+    value
+    date
+  }
+}
+
+mutation UpdateEarningGoal(
+  $pid: Int!
+  $date: Date!
+  $value: Int!
+) {
+  updateEarningGoal(pid: $pid, date: $date, value: $value) {
+    pid
+    action
+    value
+    date
+  }
+}
+
+mutation CreateTask(
+  $type: TaskType!
+  $name: String!
+  $value: Int!
+  $penalty: Int!
+  $dayPreference: DayPreference!
+  $days: [DayOfWeek!]!
+  $timePreference: TimePreference!
+  $startTime: Date
+  $endTime: Date
+  $comment: String
+) {
+  createTask(
+    type: $type
+    name: $name
+    value: $value
+    penalty: $penalty
+    day_preference: $dayPreference
+    days: $days
+    time_preference: $timePreference
+    start_time: $startTime
+    end_time: $endTime
+    comment: $comment
+  ) {
+    tid
+    name
+    type
+    value
+    penalty
+    day_preference
+    days
+    time_preference
+    start_time
+    end_time
+    comment
+  }
+}
+
+mutation UpdateTask(
+  $tid: Int!
+  $type: TaskType
+  $name: String
+  $value: Int
+  $penalty: Int
+  $dayPreference: DayPreference
+  $days: [DayOfWeek!]
+  $timePreference: TimePreference
+  $startTime: Date
+  $endTime: Date
+  $comment: String
+) {
+  updateTask(
+    tid: $tid
+    type: $type
+    name: $name
+    value: $value
+    penalty: $penalty
+    day_preference: $dayPreference
+    days: $days
+    time_preference: $timePreference
+    start_time: $startTime
+    end_time: $endTime
+    comment: $comment
+  ) {
+    tid
+    name
+    type
+    value
+    penalty
+    day_preference
+    days
+    time_preference
+    start_time
+    end_time
+    comment
+  }
+}
+
+mutation DeleteTask($tid: Int!) {
+  deleteTask(tid: $tid) {
+    tid
+    name
+  }
+}
+
+mutation AdminLogin($role: String!, $password: String!) {
+  adminLogin(role: $role, password: $password) {
+    token
+  }
+}
+
+mutation ParticipantLogin($pid: Int!, $password: String!) {
+  participantLogin(pid: $pid, password: $password) {
+    token
+  }
+}
+
+mutation CreateCustomBadge(
+  $name: String!
+  $description: String!
+  $icon: Icon!
+) {
+  createCustomBadge(name: $name, description: $description, icon: $icon) {
+    cid
+    name
+    description
+    icon
+  }
+}
+
+mutation UpdateCustomBadge(
+  $cid: Int!
+  $name: String
+  $description: String
+  $icon: Icon
+) {
+  updateCustomBadge(
+    cid: $cid
+    name: $name
+    description: $description
+    icon: $icon
+  ) {
+    cid
+    name
+    description
+    icon
+  }
+}
+
+mutation DeleteCustomBadge($cid: Int!) {
+  deleteCustomBadge(cid: $cid) {
+    cid
+    name
+  }
+}
+
+mutation CreateParticipant(
+  $pid: Int!
+  $password: String!
+  $room: Int!
+  $arrival: Date!
+) {
+  createParticipant(
+    pid: $pid
+    password: $password
+    room: $room
+    arrival: $arrival
+  ) {
+    pid
+    room
+    arrival
+    balance
+  }
+}
+
+mutation UpdateParticipant(
+  $pid: Int!
+  $password: String
+  $room: Int
+  $arrival: Date
+  $departure: String
+) {
+  updateParticipant(
+    pid: $pid
+    password: $password
+    room: $room
+    arrival: $arrival
+    departure: $departure
+  ) {
+    pid
+    room
+    arrival
+    departure
+  }
+}
+
+mutation UpdateBalance($pid: Int!, $amount: Int!, $reason: String!) {
+  updateBalance(pid: $pid, amount: $amount, reason: $reason) {
+    pid
+    amount
+    type
+    reason
+    date
+  }
+}
+
+mutation CreateEarnedCustomBadge(
+  $pid: Int!
+  $name: String!
+  $icon: Icon!
+  $description: String!
+  $value: Int!
+) {
+  createEarnedCustomBadge(
+    pid: $pid
+    name: $name
+    icon: $icon
+    description: $description
+    value: $value
+  ) {
+    eid
+    pid
+    name
+    icon
+    description
+    notified
+  }
+}
+
+mutation FetchNewEarnedCustomBadges($pid: Int!) {
+  fetchNewEarnedCustomBadges(pid: $pid) {
+    eid
+    pid
+    name
+    icon
+    description
+    notified
+  }
+}
+
+mutation UpdateSystemBadge(
+  $name: String!
+  $description: String
+  $isActive: Boolean
+) {
+  updateSystemBadge(
+    name: $name
+    description: $description
+    is_active: $isActive
+  ) {
+    name
+    description
+    is_active
+  }
+}
+
+mutation UpdateBadgeLevel(
+  $name: String!
+  $level: Level!
+  $benchmark: Int
+  $value: Int
+) {
+  updateBadgeLevel(
+    name: $name
+    level: $level
+    benchmark: $benchmark
+    value: $value
+  ) {
+    name
+    level
+    benchmark
+    value
+  }
+}
+
+mutation CreateAssignedTask(
+  $pid: Int!
+  $tid: Int!
+  $name: String!
+  $type: TaskType!
+  $value: Int!
+  $penalty: Int!
+  $startDate: Date!
+  $endDate: Date!
+  $comment: String
+) {
+  createAssignedTask(
+    pid: $pid
+    tid: $tid
+    name: $name
+    type: $type
+    value: $value
+    penalty: $penalty
+    start_date: $startDate
+    end_date: $endDate
+    comment: $comment
+  ) {
+    aid
+    tid
+    pid
+    name
+    type
+    value
+    penalty
+    start_date
+    end_date
+    comment
+  }
+}
+
+mutation UpdateAssignedTask(
+  $aid: Int!
+  $pid: Int
+  $name: String
+  $type: TaskType
+  $value: Int
+  $penalty: Int
+  $startDate: Date
+  $endDate: Date
+  $comment: String
+) {
+  updateAssignedTask(
+    aid: $aid
+    pid: $pid
+    name: $name
+    type: $type
+    value: $value
+    penalty: $penalty
+    start_date: $startDate
+    end_date: $endDate
+    comment: $comment
+  ) {
+    aid
+    pid
+    name
+    type
+    value
+    penalty
+    start_date
+    end_date
+    comment
+  }
+}
+
+mutation UpdateAssignedTaskStatus($aid: Int!, $status: TaskStatus!) {
+  updateAssignedTaskStatus(aid: $aid, status: $status) {
+    aid
+    pid
+    name
+    status
+  }
+}
+
+mutation DeleteAssignedTask($aid: Int!) {
+  deleteAssignedTask(aid: $aid) {
+    aid
+    name
+  }
+}
+
+mutation FetchNewAchievedBadgeLevels($pid: Int!) {
+  fetchNewAchievedBadgeLevels(pid: $pid) {
+    name
+    level
+    pid
+    date
+    notified
+  }
+}
+
