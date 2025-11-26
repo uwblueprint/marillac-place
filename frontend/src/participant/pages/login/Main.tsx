@@ -1,152 +1,137 @@
-export {};
-// TODO: Refactor this component
-// import React, { useState, useEffect } from "react";
-// import { Navigate, useNavigate } from "react-router-dom";
-// import { Button, Flex, Text, Input, FormControl } from "@chakra-ui/react";
-// import { useMutation } from "@apollo/client";
-// import { isParticipant } from "../../../utils/checkRole";
-// import { PARTICIPANT_LOGIN } from "../../../gql/mutations";
-// import * as ROUTES from "../../../constants/routes";
-// import Loading from "../../../Loading";
-// 
-// export default function ParticipantsLoginPage() {
-//   const navigate = useNavigate();
-// 
-//   const [loggedIn, setLoggedIn] = useState(false);
-//   const [checkLoggedIn, setCheckLoggedIn] = useState(false);
-// 
-//   const [id, setId] = useState("");
-//   const [password, setPassword] = useState("");
-// 
-//   const [error, setError] = useState("");
-// 
-//   const [login, { loading }] = useMutation(PARTICIPANT_LOGIN, {
-//     onCompleted: (data) => {
-//       localStorage.setItem("participant_token", data.participantLogin.token);
-//       navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
-//     },
-//     onError: (err: Error) => {
-//       // Check if it's a network error (CORS, connection refused, etc.)
-//       if (
-//         err.message.includes("Failed to fetch") ||
-//         err.message.includes("NetworkError") ||
-//         err.message.includes("Network request failed")
-//       ) {
-//         setError(
-//           "Unable to connect to server. Please check your internet connection and try again."
-//         );
-//       } else {
-//         // Show the actual error message from the backend
-//         setError(err.message);
-//       }
-//     },
-//   });
-// 
-//   useEffect(() => {
-//     const tokenCheck = async () => {
-//       const participantUser = await isParticipant();
-//       if (participantUser) {
-//         setLoggedIn(true);
-//       }
-//       setCheckLoggedIn(true);
-//     };
-//     tokenCheck();
-//   }, []);
-// 
-//   const handleSubmit = () => {
-//     setError("");
-// 
-//     if (!id || !password) {
-//       setError("Missing fields");
-//     } else {
-//       login({ variables: { id: Number(id), password } });
-//     }
-//   };
-// 
-//   if (!checkLoggedIn || loading) {
-//     return <Loading />;
-//   }
-// 
-//   if (loggedIn) {
-//     return <Navigate to={ROUTES.PARTICIPANTS_HOME_PAGE} replace />;
-//   }
-// 
-//   return (
-//     <Flex
-//       w="100vw"
-//       h="100vh"
-//       alignItems="flex-start"
-//       justifyContent="center"
-//       bg="primary.100"
-//     >
-//       <Flex
-//         width="350px"
-//         flexDir="column"
-//         alignItems="center"
-//         justifyContent="center"
-//         gap="45px"
-//         padding="35px 15px"
-//       >
-//         <Flex width="75%">
-//           <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
-//         </Flex>
-//         <Flex
-//           width="100%"
-//           flexDir="column"
-//           gap="15px"
-//           bg="neutral.0"
-//           padding="25px 15px"
-//           borderRadius="8px"
-//           border="1px"
-//           borderColor="neutral.300"
-//         >
-//           <Flex flexDir="column">
-//             <Text textStyle="mobile.h1">Sign in</Text>
-// 
-//             <Text textStyle="mobile.b1">
-//               Please enter your login information.
-//             </Text>
-//           </Flex>
-// 
-//           <FormControl>
-//             <Input
-//               variant="primary"
-//               type="id"
-//               value={id}
-//               onChange={(e) => setId(e.target.value)}
-//               placeholder="ID #"
-//             />
-//           </FormControl>
-// 
-//           <FormControl>
-//             <Input
-//               variant="primary"
-//               type="password"
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//               placeholder="Password"
-//             />
-//           </FormControl>
-// 
-//           {error && (
-//             <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">
-//               {error}
-//             </Text>
-//           )}
-// 
-//           <Button
-//             width="full"
-//             variant="primaryFilled"
-//             borderRadius="full"
-//             fontWeight="700"
-//             fontSize="16px"
-//             onClick={handleSubmit}
-//             isLoading={loading}
-//           >
-//             Sign in
-//           </Button>
-//         </Flex>
-//       </Flex>
-//     </Flex>
-//   );
-// }
+import React, { useState, useEffect, useContext } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { Button, Flex, Text, Input, FormControl } from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
+import { verifyRole } from "../../../helpers/verifyRole";
+import { PARTICIPANT } from "../../../constants/roles";
+import { PARTICIPANT_LOGIN } from "../../../gql/loginRequests";
+import * as ROUTES from "../../../constants/routes";
+import Loading from "../../../ui/screens/LoadingScreen";
+import Error from "../../../ui/screens/ErrorScreen";
+import { ParticipantContext } from "../../ParticipantContext";
+import WidgetContainer from "../../../ui/containers/WidgetContainer";
+import NumberInput from "../../../ui/inputs/NumberInput";
+import PasswordInput from "../../../ui/inputs/PasswordInput";
+import OrangeButton from "../../../ui/buttons/OrangeButton";
+
+export default function ParticipantsLoginPage() {
+  const navigate = useNavigate();
+  const participantContext = useContext(ParticipantContext);
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const [id, setId] = useState<number | null>(null);
+  const [password, setPassword] = useState("");
+
+  const [participantLogin, { loading: participantLoginLoading }] = useMutation(PARTICIPANT_LOGIN, {
+    onCompleted: (data) => {
+      localStorage.setItem("token", data.participantLogin.token);
+      if (!participantContext) {
+        setError("participant context not found");
+        return;
+      }
+      participantContext.setPid(data.participantLogin.pid);
+      navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
+    },
+    onError: (err: Error) => {
+      setError(err.message);
+    },
+  });
+
+  useEffect(() => {
+    const authenticate = async () => {
+      const isAuthenticated = await verifyRole([PARTICIPANT]);
+      if (isAuthenticated) {
+        setLoggedIn(true);
+      }
+      setLoading(false);
+    };
+    authenticate();
+  }, []);
+
+  const handleSubmit = () => {
+    setError("");
+    if (!id || !password) {
+      setError("missing required fields");
+    } else {
+      participantLogin({ variables: { id: Number(id), password } });
+    }
+  };
+
+  if (loading || participantLoginLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Error message={error} />;
+  }
+
+  if (loggedIn) {
+    return <Navigate to={ROUTES.PARTICIPANTS_HOME_PAGE} replace />;
+  }
+
+  return (
+    <Flex
+      w="100vw"
+      h="100vh"
+      alignItems="flex-start"
+      justifyContent="center"
+      bg="primary.100"
+    >
+      <Flex
+        width="350px"
+        flexDir="column"
+        alignItems="center"
+        justifyContent="center"
+        gap="45px"
+        paddingTop="50px"
+      >
+        <Flex width="65%">
+          <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
+        </Flex>
+        <WidgetContainer
+          width="fit-content"
+          height="fit-content"
+          paddingX="25px"
+          paddingY="25px"
+        >
+          <Flex flexDir="column">
+            <Text textStyle="mobile.h1">Sign in</Text>
+            <Text textStyle="mobile.b1">
+              Please enter your login information.
+            </Text>
+          </Flex>
+          <Flex flexDir="column" gap="10px" my="20px">
+            <NumberInput
+              placeholder="ID #"
+              current_value={id}
+              update_action={setId}
+              size="medium"
+            />
+
+            <PasswordInput
+              placeholder="Password"
+              current_value={password}
+              update_action={setPassword}
+              size="medium"
+            />
+          </Flex>
+
+          {error && (
+            <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">
+              {error}
+            </Text>
+          )}
+
+          <OrangeButton
+            label="Sign in"
+            action={handleSubmit}
+            is_active={false}
+          />
+        </WidgetContainer>
+      </Flex>
+    </Flex>
+  );
+}
