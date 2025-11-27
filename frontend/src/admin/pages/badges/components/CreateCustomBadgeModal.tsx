@@ -84,14 +84,14 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
       <TextInput
         label="Badge Name"
         current_value={name}
-        update_action={(e: any) => setName(e.target.value)}
+        update_action={(value: string) => setName(value)}
         size="small"
       />
 
       <TextInput
         label="Badge Criteria"
         current_value={criteria}
-        update_action={(e: any) => setCriteria(e.target.value)}
+        update_action={(value: string) => setCriteria(value)}
         size="small"
       />
 

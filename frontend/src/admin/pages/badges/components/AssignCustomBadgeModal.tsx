@@ -123,15 +123,11 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       <NumberInput
         label="Badge Value"
         current_value={badgeValue}
-        update_action={(e: any) => {
-          const val = e.target.value;
-          if (val === "") {
+        update_action={(value: number | undefined) => {
+          if (value === undefined) {
             setBadgeValue("");
           } else {
-            const num = parseFloat(val);
-            if (!Number.isNaN(num)) {
-              setBadgeValue(val);
-            }
+            setBadgeValue(String(value));
           }
         }}
         size="small"
