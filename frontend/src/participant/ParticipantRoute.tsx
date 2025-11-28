@@ -10,6 +10,8 @@ import { ParticipantContext } from "./ParticipantContext";
 import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
 import ErrorScreen from "../ui/screens/ErrorScreen";
 import ParticipantMenu from "./ParticipantMenu";
+import { Home } from "../ui/icons/BadgeIcons";
+import ParticipantsHomePage from "./pages/home/Main";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
@@ -62,7 +64,8 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   }
 
   if (error) {
-    return <ErrorScreen message={error} />;
+    return <ParticipantsHomePage/>
+    // return <ErrorScreen message={error} />;
   }
 
   if (!authorized) {
