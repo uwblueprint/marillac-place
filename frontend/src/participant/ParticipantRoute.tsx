@@ -64,8 +64,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   }
 
   if (error) {
-    return <ParticipantsHomePage/>
-    // return <ErrorScreen message={error} />;
+    return <ErrorScreen message={error} />;
   }
 
   if (!authorized) {
