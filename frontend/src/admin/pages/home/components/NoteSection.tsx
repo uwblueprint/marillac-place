@@ -19,8 +19,14 @@ import {
 const NoteSection = () => {
   const [newNote, setNewNote] = useState("");
 
-  const [createNote] = useMutation(CREATE_NOTE);
-  const [deleteNote] = useMutation(DELETE_NOTE);
+  const [createNote] = useMutation(CREATE_NOTE, {
+    refetchQueries: [{ query: GET_NOTES }],
+    awaitRefetchQueries: true,
+  });
+  const [deleteNote] = useMutation(DELETE_NOTE, {
+    refetchQueries: [{ query: GET_NOTES }],
+    awaitRefetchQueries: true,
+  });
   const {
     loading: getNotesLoading,
     error: getNotesError,
@@ -31,34 +37,24 @@ const NoteSection = () => {
     if (newNote === "") {
       return;
     }
-    try {
-      await createNote({
-        variables: {
-          message: newNote,
-        },
-      });
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
+    await createNote({
+      variables: {
+        message: newNote,
+      },
+    });
+    setNewNote("");
   }
 
-  async function dismissNote(noteId: string) {
-    try {
-      await deleteNote({
-        variables: {
-          note_id: noteId,
-        },
-      });
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
+  async function dismissNote(nid: string) {
+    await deleteNote({
+      variables: {
+        nid,
+      },
+    });
   }
 
   return (
     <Flex
-      position="absolute"
       right={0}
       top={0}
       height="100%"
@@ -137,7 +133,7 @@ const NoteSection = () => {
 
                 return (
                   <Flex
-                    key={note.note_id}
+                    key={note.nid}
                     flexDir="column"
                     width="100%"
                     bg="neutral.100"
@@ -162,7 +158,7 @@ const NoteSection = () => {
                         {creation}
                       </Text>
                       <Text
-                        onClick={() => dismissNote(note.note_id)}
+                        onClick={() => dismissNote(note.nid)}
                         _hover={{ textDecoration: "none" }}
                         textStyle="web.b3"
                         color="#000000"

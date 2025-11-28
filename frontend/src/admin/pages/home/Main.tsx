@@ -1,6 +1,6 @@
 // TODO: Refactor this component
 import React from "react";
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Stack, Text } from "@chakra-ui/react";
 import RoomsOverview from "./components/RoomsOverview";
 import NoteSection from "./components/NoteSection";
 import AnnouncementSection from "./components/AnnouncementSection";
@@ -17,40 +17,51 @@ const AdminHomePage = (): React.ReactElement => {
 
   return (
     <>
-      <Text
-        textStyle="web.h2"
-        color="#000000"
-        zIndex="10"
-        position="absolute"
+      <Flex
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        backgroundColor="primary.100"
         px="20px"
-        top="10px"
-        left="0px"
+        paddingTop="10px"
+        paddingBottom="10px"
+        mb="20px"
       >
-        Marillac Place Overview
-      </Text>
-      <Text
-        textStyle="web.h3"
-        color="#000000"
-        zIndex="10"
-        position="absolute"
-        px="20px"
-        top="14px"
-        right="0px"
-      >
-        {getDate()}
-      </Text>
+        <Text
+          textStyle="web.h2"
+          color="#000000"
+          px="20px"
+          top="10px"
+          left="0px"
+        >
+          Marillac Place Overview
+        </Text>
+        <Text
+          textStyle="web.h3"
+          color="#000000"
+          px="20px"
+          top="14px"
+          right="0px"
+        >
+          {getDate()}
+        </Text>
+      </Flex>
       <Flex
         w="100%"
-        h="100%"
-        flexDir="column"
-        minHeight="fit-content"
+        minH="calc(100vh - 70px)"
+        paddingLeft="20px"
+        paddingBottom="20px"
+        flexDir="row"
+        gap="20px"
         position="relative"
       >
-        <Flex flexDir="column" w="calc(100% - 300px)" height="100%">
+        <Flex flexDir="column" flex="1" minW="0">
           <RoomsOverview />
           <AnnouncementSection />
         </Flex>
-        <NoteSection />
+        <Flex w="300px" flexShrink={0} mr="20px">
+          <NoteSection />
+        </Flex>
       </Flex>
     </>
   );
