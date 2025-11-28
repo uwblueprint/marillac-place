@@ -167,14 +167,16 @@ const App = (): React.ReactElement => {
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
                 element={<ParticipantLoginPage />}
               />
+              */}
               <Route
                 path={ROUTES.PARTICIPANTS_HOME_PAGE}
                 element={
                   <ParticipantRoute>
-                    <ParticipantHomePage />
+                    <ParticipantsHomePage />
                   </ParticipantRoute>
                 }
               />
+              {/*
               <Route
                 path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE}
                 element={
