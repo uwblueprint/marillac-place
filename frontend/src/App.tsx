@@ -201,7 +201,12 @@ const App = (): React.ReactElement => {
             </Route> */}
 
             <Route path="/ui" element={<UI />} />
-            <Route path="*" element={<ParticipantAnnouncementsPage />} />
+            <Route path="*" element={<ParticipantLayout />}>
+              <Route
+                path="*"
+                element={<ParticipantAnnouncementsPage />}
+              />
+            </Route>
           </Routes>
         </Router>
       </ChakraProvider>

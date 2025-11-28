@@ -1,5 +1,3 @@
-export {};
-
 import React, { useContext, useState } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
@@ -7,22 +5,22 @@ import ParticipantAnnouncementCard from "./components/ParticipantAnnouncementCar
 import {
   GET_RECEIVED_ANNOUNCEMENTS,
 } from "../../../gql/receivedAnnouncementRequests";
-import { ParticipantContext } from "../../common/ParticipantContext";
-import { Priority } from "../../../types/AnnouncementTypes";
-import GreenButton from "../../common/GreenButton";
+import { ParticipantContext } from "../../ParticipantContext";
+import { Priority } from "../../../types/enums";
+import GreenButton from "../../../ui/buttons/GreenOutlineButton";
 import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";
 
 const FILTER_LABELS = ["ALL", "UNREAD", "PINNED", "IMPORTANT"] as const;
 
 export default function ParticipantsAnnouncementsPage() {
   const participant = useContext(ParticipantContext);
-  const participantId = participant?.id;
+  const participantId = participant?.pid;
 
   const [expandedView, setExpandedView] = useState(false);
   const [selected, setSelected] = useState({
     uaid: -1,
     allRooms: false,
-    message: "",
+    message: "Your Room",
     importance: -1,
     read: false,
     pinned: false,
@@ -78,22 +76,22 @@ export default function ParticipantsAnnouncementsPage() {
     <>
       <Flex w="100%" alignItems="center" justifyContent="center" gap="8px">
         <GreenButton
-          text="All"
+          label="All"
           action={() => setFilter(0)}
           is_active={filter === 0}
         />
         <GreenButton
-          text="Unread"
+          label="Unread"
           action={() => setFilter(1)}
           is_active={filter === 1}
         />
         <GreenButton
-          text="Pinned"
+          label="Pinned"
           action={() => setFilter(2)}
           is_active={filter === 2}
         />
         <GreenButton
-          text="Important"
+          label="Important"
           action={() => setFilter(3)}
           is_active={filter === 3}
         />
