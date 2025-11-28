@@ -6,6 +6,7 @@ import { Trash } from "../../../../ui/icons/ActionIcons";
 import { DELETE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
 import EditCustomBadgeModal from "./EditCustomBadgeModal";
 import DataTable from "../../../../ui/misc/DataTable";
+import { useLocalStorage } from "../../../../hooks/useLocalStorage";
 
 type CustomBadgeTableProps = {
   loading: boolean;
@@ -22,6 +23,10 @@ const CustomBadgeTable = ({
   const [selected, setSelected] = useState<any | null>(null);
 
   const [deleteCustomBadge] = useMutation(DELETE_CUSTOM_BADGE);
+  const [notification, setNotification] = useLocalStorage<string>(
+    "notification",
+    ""
+  );
 
   async function handleDelete(id: number) {
     try {
@@ -30,10 +35,13 @@ const CustomBadgeTable = ({
           badge_id: id,
         },
       });
+      // store a notification in local storage
+      setNotification(`Deleted Custom Badge: ${id}`);
+      window.location.reload()
     } catch (err: any) {
       console.log(err);
+      setNotification(`Failed to delete badge: ${id}`);
     }
-    window.location.reload();
   }
 
   const columns = [

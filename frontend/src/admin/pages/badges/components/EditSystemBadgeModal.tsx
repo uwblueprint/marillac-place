@@ -5,6 +5,7 @@ import { UPDATE_SYSTEM_BADGE } from "../../../../gql/systemBadgeRequests";
 import { UPDATE_BADGE_LEVEL } from "../../../../gql/badgeLevelRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
+import useNotification from "../../../../hooks/useNotification";
 
 interface EditSystemBadgeModalProps {
   isOpen: boolean;
@@ -34,6 +35,8 @@ const EditSystemBadgeModal = ({
 
   const [editBadgeLevel] = useMutation(UPDATE_BADGE_LEVEL);
   const [editSystemBadge] = useMutation(UPDATE_SYSTEM_BADGE);
+
+  const { sendNotification } = useNotification();
 
   const handleSave = async () => {
     console.log("getting to save");
@@ -103,11 +106,12 @@ const EditSystemBadgeModal = ({
     // batched update
     try {
       await Promise.all(mutationPromises);
-      localStorage.setItem("notification", "System badge updated");
+      sendNotification("System badge updated");
+      onClose();
       window.location.reload();
     } catch (err: any) {
       console.error(`Failed to update badge levels`, err);
-      setError("one or more badge levels failed to update");
+      setError("One or more badge levels failed to update");
     }
   };
 

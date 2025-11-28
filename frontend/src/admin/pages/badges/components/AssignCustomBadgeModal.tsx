@@ -11,7 +11,7 @@ import PopupContainer from "../../../../ui/containers/PopupContainer";
 import GreenOutlineButton from "../../../../ui/buttons/GreenOutlineButton";
 import NumberInput from "../../../../ui/inputs/NumberInput";
 import SelectInput from "../../../../ui/inputs/SelectInput";
-import { AdminContext } from "../../../AdminContext";
+import useNotification from "../../../../hooks/useNotification";
 
 interface AssignCustomBadgeModalProps {
   onClose: () => void;
@@ -27,7 +27,8 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
   const [badges, setBadges] = useState<{ badge_id: number; name: string }[]>(
     []
   );
-  const { data: badgeData } = useQuery(GET_CUSTOM_BADGES);
+
+  const { data: badgeData } = useQuery<{ getCustomBadges: { badge_id: number; name: string }[] }>(GET_CUSTOM_BADGES);
 
   useEffect(() => {
     if (badgeData?.getCustomBadges) {
@@ -35,15 +36,13 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
     }
   }, [badgeData]);
 
-  const { data: currentParticipantsData } = useQuery(GET_CURRENT_PARTICIPANTS);
+  const { data: currentParticipantsData } = useQuery<{ getCurrentParticipants: { pid: number; room: number }[] }>(GET_CURRENT_PARTICIPANTS);
+  const { sendNotification } = useNotification();
+
   const [assignCustomBadge] = useMutation(CREATE_CUSTOM_BADGE, {
     onCompleted: () => {
-      localStorage.setItem(
-        "notification",
-        `Assigned Custom Badge: ${badgeName}`
-      );
+      sendNotification(`Assigned Custom Badge: ${badgeName}`);
       onClose();
-      window.location.reload();
     },
     onError: (err) => {
       setError(err.message);

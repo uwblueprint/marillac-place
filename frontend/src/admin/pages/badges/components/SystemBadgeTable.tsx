@@ -5,6 +5,7 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_SYSTEM_BADGE } from "../../../../gql/systemBadgeRequests";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
 import DataTable from "../../../../ui/misc/DataTable";
+import useNotification from "../../../../hooks/useNotification";
 
 type SystemBadgeTableProps = {
   loading: boolean;
@@ -16,9 +17,9 @@ const SystemBadgeTable = ({ loading, error, badges }: SystemBadgeTableProps) => 
   const levels = ["N", "B", "S", "G", "D"];
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState<any | null>(null);
-
   const [statuses, setStatuses] = useState<Record<number, boolean>>({});
   const [updateBadgeStatus] = useMutation(UPDATE_SYSTEM_BADGE);
+  const { sendNotification } = useNotification();
 
   useEffect(() => {
     setStatuses(
@@ -30,10 +31,11 @@ const SystemBadgeTable = ({ loading, error, badges }: SystemBadgeTableProps) => 
   }, [badges]);
 
   const changeActivityStatus = async (badge_id: number, is_active: boolean) => {
+    const badgeName = badges.find((b) => b.badge_id === badge_id)?.name;
     try {
       await updateBadgeStatus({
         variables: {
-          name: badges.find((b) => b.badge_id === badge_id)?.name,
+          name: badgeName,
           isActive: is_active,
         },
       });
@@ -41,8 +43,12 @@ const SystemBadgeTable = ({ loading, error, badges }: SystemBadgeTableProps) => 
         ...prev,
         [badge_id]: is_active,
       }));
+      sendNotification(`System badge ${badgeName} ${is_active ? "activated" : "deactivated"}`);
+      // optional: reload page to fully match other components
+      window.location.reload();
     } catch (err: unknown) {
       console.log(err instanceof Error ? err.message : String(err));
+      sendNotification(`Failed to update status for ${badgeName}`);
     }
   };
 

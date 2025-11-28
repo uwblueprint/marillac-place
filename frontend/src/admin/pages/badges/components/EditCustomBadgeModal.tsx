@@ -3,10 +3,15 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
+import useNotification from "../../../../hooks/useNotification";
 
 interface EditCustomBadgeModalProps {
   onClose: () => void;
-  selected: any;
+  selected: {
+    badge_id: number;
+    name: string;
+    description: string;
+  };
 }
 
 const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
@@ -17,28 +22,33 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
   const [error, setError] = useState("");
 
-  const [editCustomBadge] = useMutation(UPDATE_CUSTOM_BADGE);
+  const { sendNotification } = useNotification();
 
-  const handleSave = async () => {
+  const [editCustomBadge] = useMutation(UPDATE_CUSTOM_BADGE, {
+    onCompleted: () => {
+      sendNotification("Custom badge updated");
+      onClose();
+      window.location.reload();
+    },
+    onError: (err) => {
+      setError(err.message);
+    },
+  });
+
+  const handleSave = () => {
     setError("");
-    if (!badgeName || !badgeCriteria) {
+    if (!badgeName.trim() || !badgeCriteria.trim()) {
       setError("All fields are required.");
       return;
     }
 
-    try {
-      await editCustomBadge({
-        variables: {
-          custom_badge_id: selected.badge_id,
-          new_custom_badge_name: badgeName,
-          new_custom_badge_description: badgeCriteria,
-        },
-      });
-      localStorage.setItem("notification", "Custom badge updated");
-      window.location.reload();
-    } catch (err: any) {
-      setError(err instanceof Error ? err.message : String(err));
-    }
+    editCustomBadge({
+      variables: {
+        custom_badge_id: selected.badge_id,
+        new_custom_badge_name: badgeName,
+        new_custom_badge_description: badgeCriteria,
+      },
+    });
   };
 
   return (

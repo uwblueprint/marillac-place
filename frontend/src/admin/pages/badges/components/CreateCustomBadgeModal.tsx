@@ -13,6 +13,7 @@ import * as BadgeIconSet from "../../../../ui/icons/BadgeIcons";
 import { CREATE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
+import useNotification from "../../../../hooks/useNotification";
 
 interface Props {
   onClose: () => void;
@@ -43,10 +44,12 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [error, setError] = useState<string>("");
 
+  const { sendNotification } = useNotification();
+
   const [createCustomBadge] = useMutation(CREATE_CUSTOM_BADGE, {
     onCompleted: () => {
-      localStorage.setItem("notification", "Created Custom Badge: " + name);
-      window.location.reload();
+      sendNotification(`Created Custom Badge: ${name}`);
+      onClose();
     },
     onError: (err) => {
       setError(err.message);
