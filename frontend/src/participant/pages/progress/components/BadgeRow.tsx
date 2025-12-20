@@ -3,7 +3,7 @@ export {};
 // import React from "react";
 // import { Box, Flex, Text, Image } from "@chakra-ui/react";
 // import Badge, { BadgeRarity } from "../../../common/Badge";
-// 
+//
 // interface BadgeRowProps {
 //   title: string;
 //   subtitle: string;
@@ -19,7 +19,7 @@ export {};
 //   achieved?: boolean;
 //   onProgressClick?: () => void;
 // }
-// 
+//
 // const BadgeRow: React.FC<BadgeRowProps> = ({
 //   title,
 //   subtitle,
@@ -86,5 +86,5 @@ export {};
 //     </Box>
 //   );
 // };
-// 
+//
 // export default BadgeRow;

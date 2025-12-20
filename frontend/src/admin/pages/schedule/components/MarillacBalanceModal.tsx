@@ -9,14 +9,14 @@ export {};
 // import CoreInput from "../../../common/form/CoreInput";
 // import SelectionInput from "../../../common/form/SelectionInput";
 // import TextInput from "../../../common/form/TextInput";
-// 
+//
 // type MarillacBalanceModalProps = {
 //   currentBalance: number;
 //   participantId: number;
 //   roomNumber: number;
 //   close: () => void;
 // };
-// 
+//
 // export default function MarillacBalanceModal({
 //   currentBalance,
 //   participantId,
@@ -27,9 +27,9 @@ export {};
 //   const [amount, setAmount] = useState("");
 //   const [reason, setReason] = useState("");
 //   const [error, setError] = useState("");
-// 
+//
 //   const [updateMarillacBucks] = useMutation(UPDATE_MARILLAC_BUCKS);
-// 
+//
 //   async function handleSubmit() {
 //     setError("");
 //     if (!reason || !amount || !action) {
@@ -59,7 +59,7 @@ export {};
 //       } catch (err: any) {
 //         setError(err.message);
 //       }
-// 
+//
 //       localStorage.setItem(
 //         "notification",
 //         "Updated Balance: $" + newBalance + " for Room " + roomNumber
@@ -67,7 +67,7 @@ export {};
 //       window.location.reload();
 //     }
 //   }
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Marillac Balance"
@@ -87,7 +87,7 @@ export {};
 //           text_color="primary.700"
 //         />
 //       </Flex>
-// 
+//
 //       <Flex w="100%" alignItems="flex-end" justifyContent="center" gap="16px">
 //         <CoreInput
 //           label="Enter Amount"
@@ -107,7 +107,7 @@ export {};
 //           }}
 //         />
 //       </Flex>
-// 
+//
 //       <TextInput
 //         label="Reason"
 //         current_value={reason}

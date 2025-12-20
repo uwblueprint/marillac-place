@@ -6,44 +6,44 @@ export {};
 // import ModalContainer from "../../../../admin/common/form/ModalContainer";
 // import { ParticipantContext } from "../../../common/ParticipantContext";
 // import { SET_MARILLAC_BUCKS_GOAL } from "../../../../gql/mutations";
-// 
+//
 // interface SetGoalProps {
 //   handleClose: () => void;
 //   onGoalSet: () => void;
 // }
-// 
+//
 // export const SetGoal: React.FC<SetGoalProps> = ({ handleClose, onGoalSet }) => {
 //   const [goal, setGoal] = useState("");
 //   const [error, setError] = useState("");
 //   const participantContext = useContext(ParticipantContext);
-// 
+//
 //   const [setGoalMutation] = useMutation(SET_MARILLAC_BUCKS_GOAL);
-// 
+//
 //   const handleSave = async () => {
 //     console.log("🎯 SetGoal: Starting save process");
 //     console.log("📝 Goal value entered:", goal);
 //     console.log("👤 Participant context:", participantContext);
-// 
+//
 //     if (!participantContext) {
 //       console.error("❌ No participant context found");
 //       setError("Not logged in");
 //       return;
 //     }
-// 
+//
 //     const goalValue = parseInt(goal, 10);
 //     console.log("🔢 Parsed goal value:", goalValue);
-// 
+//
 //     if (Number.isNaN(goalValue) || goalValue <= 0) {
 //       console.error("❌ Invalid goal value");
 //       setError("Goal must be greater than 0");
 //       return;
 //     }
-// 
+//
 //     console.log("✅ Calling mutation with:", {
 //       participant_id: participantContext.id,
 //       goal_value: goalValue,
 //     });
-// 
+//
 //     try {
 //       const result = await setGoalMutation({
 //         variables: {
@@ -51,13 +51,13 @@ export {};
 //           goal_value: goalValue,
 //         },
 //       });
-// 
+//
 //       console.log("✅ Mutation success:", result);
 //       console.log("🎯 Goal saved successfully!");
 //       console.log(
 //         `✅ GOAL SAVED: ${goalValue} Marillac Bucks for participant ${participantContext.id}`
 //       );
-// 
+//
 //       onGoalSet();
 //       handleClose();
 //     } catch (err: any) {
@@ -66,7 +66,7 @@ export {};
 //       setError(err.message || "Failed to save goal — please try again.");
 //     }
 //   };
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Set a Goal"

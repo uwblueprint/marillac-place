@@ -31,12 +31,12 @@ export {};
 // import GreenButton from "../../../common/buttons/GreenButton";
 // import SelectionInput from "../../../common/form/SelectionInput";
 // import CoreInput from "../../../common/form/CoreInput";
-// 
+//
 // interface TaskDetailsModalProps {
 //   task: CalendarEvent;
 //   onClose: () => void;
 // }
-// 
+//
 // export default function TaskDetailsModal({
 //   task,
 //   onClose,
@@ -55,10 +55,10 @@ export {};
 //   const [addition, setAddition] = useState(task.marillacBucksAddition);
 //   const [deduction, setDeduction] = useState(task.marillac_bucks_deduction);
 //   const [comments, setComments] = useState<string>(task.comment ?? "");
-// 
+//
 //   const [editDetails, setEditDetails] = useState<boolean>(false);
 //   const [error, setError] = useState<string>("");
-// 
+//
 //   const [deleteAssignedTask] = useMutation(DELETE_ASSIGNED_TASK, {
 //     onCompleted: () => {
 //       sendNotification(`Task ${task.title} deleted.`);
@@ -67,7 +67,7 @@ export {};
 //       setError(err.message);
 //     },
 //   });
-// 
+//
 //   const [updateAssignedTask] = useMutation(UPDATE_ASSIGNED_TASK, {
 //     onCompleted: () => {
 //       sendNotification(`Task ${task.title} edited.`);
@@ -76,7 +76,7 @@ export {};
 //       setError(err.message);
 //     },
 //   });
-// 
+//
 //   const handleDelete = () => {
 //     deleteAssignedTask({
 //       variables: {
@@ -84,7 +84,7 @@ export {};
 //       },
 //     });
 //   };
-// 
+//
 //   const handleSave = () => {
 //     setError("");
 //     if (
@@ -108,7 +108,7 @@ export {};
 //         startDate = formatDateFromString(days[0] as DayOfWeek, startTime);
 //         endDate = formatDateFromString(days[0] as DayOfWeek, endTime);
 //       }
-// 
+//
 //       updateAssignedTask({
 //         variables: {
 //           id: task.id,
@@ -122,7 +122,7 @@ export {};
 //       });
 //     }
 //   };
-// 
+//
 //   function handleSelectDay(day: DayOfWeek) {
 //     if (days.length === 0) {
 //       setDays([day]);
@@ -141,7 +141,7 @@ export {};
 //       setDays([day]);
 //     }
 //   }
-// 
+//
 //   return (
 //     <Modal isOpen isCentered onClose={onClose} closeOnOverlayClick={false}>
 //       <ModalOverlay />
@@ -186,7 +186,7 @@ export {};
 //             />
 //           </Flex>
 //         </Flex>
-// 
+//
 //         {editDetails ? (
 //           <Flex flexDir="column" gap="8px">
 //             <Flex gap="5px" align="flex-end">
@@ -199,9 +199,9 @@ export {};
 //                   : task.title}
 //               </Text>
 //             </Flex>
-// 
+//
 //             <Flex w="100%" h="1px" bg="neutral.300" mt="3px" />
-// 
+//
 //             <Text textStyle="web.s1" color="text.light.secondary">
 //               Select Days
 //             </Text>
@@ -215,7 +215,7 @@ export {};
 //                 />
 //               ))}
 //             </Flex>
-// 
+//
 //             <SelectionInput
 //               label="Time"
 //               current_value={time}
@@ -232,7 +232,7 @@ export {};
 //                 "Select Time": TimeOption.SPECIFIC,
 //               }}
 //             />
-// 
+//
 //             {time === TimeOption.SPECIFIC && (
 //               <Flex
 //                 width="100%"
@@ -255,7 +255,7 @@ export {};
 //                 />
 //               </Flex>
 //             )}
-// 
+//
 //             <Flex
 //               width="100%"
 //               alignItems="center"
@@ -276,7 +276,7 @@ export {};
 //                 width="50%"
 //               />
 //             </Flex>
-// 
+//
 //             <TextInput
 //               label="Comments"
 //               current_value={comments}
@@ -324,7 +324,7 @@ export {};
 //                 ${task.marillac_bucks_deduction}
 //               </Text>
 //             </Flex>
-// 
+//
 //             <Flex flexDir="column">
 //               <Text textStyle="web.s1" color="text.light.secondary">
 //                 Status
@@ -400,7 +400,7 @@ export {};
 //                 />
 //               </Flex>
 //             </Flex>
-// 
+//
 //             <TextInput
 //               label="Comments"
 //               current_value={comments}
@@ -408,13 +408,13 @@ export {};
 //             />
 //           </Flex>
 //         )}
-// 
+//
 //         {error && (
 //           <Text textStyle="web.s1" color="#E30000" mt="8px">
 //             {error}
 //           </Text>
 //         )}
-// 
+//
 //         <Flex
 //           alignItems="center"
 //           justifyContent="flex-end"

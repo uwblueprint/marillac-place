@@ -54,7 +54,11 @@ export default function WidgetContainer({
           <Text textStyle="web.b2" color="#E30000" textAlign="center">
             ERROR
           </Text>
-          <Text textStyle="web.b2" color="text.light.secondary" textAlign="center">
+          <Text
+            textStyle="web.b2"
+            color="text.light.secondary"
+            textAlign="center"
+          >
             {error}
           </Text>
         </Flex>

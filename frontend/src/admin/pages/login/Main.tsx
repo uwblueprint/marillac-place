@@ -12,8 +12,7 @@ import {
 import { ADMIN_LOGIN } from "../../../gql/loginRequests";
 import { verifyRole } from "../../../helpers/verifyRole";
 import * as ROUTES from "../../../constants/routes";
-import Error from "../../../ui/screens/ErrorScreen";
-import Loading from "../../../ui/screens/LoadingScreen";
+import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import { ADMIN, RELIEF } from "../../../constants/roles";
 import { AdminContext } from "../../AdminContext";
 import WidgetContainer from "../../../ui/containers/WidgetContainer";
@@ -68,7 +67,7 @@ export default function AdminLoginPage() {
   };
 
   if (loading) {
-    return <Loading />;
+    return <LoadingScreen />;
   }
 
   if (loggedIn) {

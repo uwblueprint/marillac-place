@@ -29,6 +29,7 @@ export default function NumberInput({
         height="fit-content"
         paddingX="12px"
         paddingY="6px"
+        margin="0px"
         border="1px"
         borderColor="#C5C8D8"
         borderRadius="8px"

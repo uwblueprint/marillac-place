@@ -8,13 +8,13 @@ export {};
 // import ModalContainer from "../../../common/form/ModalContainer";
 // import CoreInput from "../../../common/form/CoreInput";
 // import GreenButton from "../../../common/buttons/GreenButton";
-// 
+//
 // type EditParticipantCardProps = {
 //   roomNumber: number;
 //   participants: Record<number, any>;
 //   close: () => void;
 // };
-// 
+//
 // export default function EditParticipantCard({
 //   roomNumber,
 //   participants,
@@ -24,19 +24,19 @@ export {};
 //   const today = new Date().toLocaleDateString("en-ca");
 //   const currentArrivalDate = participants[roomNumber].arrival_date;
 //   const currentPassword = participants[roomNumber].password;
-// 
+//
 //   const [arrivalDate, setArrivalDate] = useState(currentArrivalDate);
 //   const [password, setPassword] = useState(currentPassword);
 //   const [departureDate, setDepartureDate] = useState("");
-// 
+//
 //   const [swapParticipant, setSwapParticipant] = useState(false);
 //   const [endStay, setEndStay] = useState(false);
-// 
+//
 //   const [error, setError] = useState("");
 //   const [selectedSwap, setSelectedSwap] = useState(-1);
-// 
+//
 //   const [updateParticipant] = useMutation(UPDATE_PARTICIPANT);
-// 
+//
 //   async function handleSubmit() {
 //     setError("");
 //     if (
@@ -76,7 +76,7 @@ export {};
 //               password,
 //             },
 //           });
-// 
+//
 //           if (swapParticipant && selectedSwap in participants) {
 //             await updateParticipant({
 //               variables: {
@@ -85,7 +85,7 @@ export {};
 //               },
 //             });
 //           }
-// 
+//
 //           if (swapParticipant) {
 //             let message =
 //               "Participant #" + id + " moved to Room " + selectedSwap;
@@ -115,7 +115,7 @@ export {};
 //       }
 //     }
 //   }
-// 
+//
 //   return (
 //     <ModalContainer
 //       title={"Edit Participant in Room " + roomNumber}
@@ -145,7 +145,7 @@ export {};
 //           color="#000000"
 //         />
 //       </FormControl>
-// 
+//
 //       <CoreInput
 //         label="Arrival Date"
 //         current_value={arrivalDate}
@@ -153,7 +153,7 @@ export {};
 //         type="date"
 //         width="400px"
 //       />
-// 
+//
 //       <CoreInput
 //         label="Password"
 //         current_value={password}
@@ -161,7 +161,7 @@ export {};
 //         type="password"
 //         width="400px"
 //       />
-// 
+//
 //       <Flex alignItems="center" justifyContent="flex-start" gap="8px">
 //         <GreenButton
 //           text="Swap Participant"
@@ -205,11 +205,11 @@ export {};
 //           </Text>
 //         </Button>
 //       </Flex>
-// 
+//
 //       {(endStay || swapParticipant) && (
 //         <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
 //       )}
-// 
+//
 //       {swapParticipant && (
 //         <Flex flexDir="column">
 //           <Text textStyle="web.s1" color="text.light.secondary" mb="3px">
@@ -227,7 +227,7 @@ export {};
 //           </Flex>
 //         </Flex>
 //       )}
-// 
+//
 //       {selectedSwap !== -1 &&
 //         (selectedSwap === roomNumber ? (
 //           <Text textStyle="web.b3">
@@ -248,7 +248,7 @@ export {};
 //             )}
 //           </Flex>
 //         ))}
-// 
+//
 //       {endStay && (
 //         <CoreInput
 //           label="Departure Date"

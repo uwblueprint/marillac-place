@@ -8,21 +8,21 @@ export {};
 // import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 // import { DELETE_ANNOUNCEMENT } from "../../../../gql/mutations";
 // import EditAnnouncementModal from "./EditAnnouncementModal";
-// 
+//
 // const useDeleteAnnouncement = () => {
 //   const [deleteAnnouncementMutation] = useMutation(DELETE_ANNOUNCEMENT);
-// 
+//
 //   const handleDeleteAnnouncement = async (announcement_id: number) => {
 //     if (typeof announcement_id !== "number" || Number.isNaN(announcement_id)) {
 //       console.log("Unable to delete announcement, invalid announcement id.");
 //       return;
 //     }
-// 
+//
 //     try {
 //       const { data } = await deleteAnnouncementMutation({
 //         variables: { announcement_id },
 //       });
-// 
+//
 //       if (data?.deleteAnnouncement) {
 //         localStorage.setItem("notification", "Announcement deleted");
 //         window.location.reload();
@@ -33,10 +33,10 @@ export {};
 //       console.error("ERROR: Error in deleting announcement. ", error);
 //     }
 //   };
-// 
+//
 //   return { handleDeleteAnnouncement };
 // };
-// 
+//
 // type AnnouncementCardProps = {
 //   announcement_id: any;
 //   room: string;
@@ -44,7 +44,7 @@ export {};
 //   timestamp: string;
 //   importance?: 0 | 1 | 2;
 // };
-// 
+//
 // export default function AnnouncementCard({
 //   announcement_id,
 //   room,
@@ -54,7 +54,7 @@ export {};
 // }: AnnouncementCardProps) {
 //   const { handleDeleteAnnouncement } = useDeleteAnnouncement();
 //   const [edit, setEdit] = useState(false);
-// 
+//
 //   return (
 //     <Box
 //       borderWidth="1px"
@@ -81,7 +81,7 @@ export {};
 //               />
 //             ))}
 //           </Flex>
-// 
+//
 //           <Text
 //             textStyle="web.s1"
 //             fontWeight={600}
@@ -91,12 +91,12 @@ export {};
 //           >
 //             {message}
 //           </Text>
-// 
+//
 //           <Text textStyle="web.b3" color="text.light.secondary" mt={2}>
 //             {timestamp}
 //           </Text>
 //         </Flex>
-// 
+//
 //         <Flex align="center" gap={1} ml={4}>
 //           <IconButton
 //             aria-label="Edit"

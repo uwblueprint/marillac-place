@@ -11,7 +11,7 @@ export {};
 // } from "../../../../types/AnnouncementTypes";
 // import { ROOM_NUMBERS } from "../../../../constants/misc";
 // import { getRecentDate } from "../../../../utils/formatDateTime";
-// 
+//
 // const getRoomString = (rooms: number[]) => {
 //   if (rooms.length === 1) {
 //     return `Room ${rooms[0]}`;
@@ -21,7 +21,7 @@ export {};
 //   }
 //   return `Rooms ${rooms.join(", ")}`;
 // };
-// 
+//
 // const AnnouncementCard: React.FC<{ announcement: AnnouncementDisplayInfo }> = ({
 //   announcement,
 // }) => {
@@ -34,7 +34,7 @@ export {};
 //       })
 //       .toLowerCase();
 //   };
-// 
+//
 //   return (
 //     <Flex
 //       flexDir="column"
@@ -63,7 +63,7 @@ export {};
 //     </Flex>
 //   );
 // };
-// 
+//
 // const AnnouncementSection = () => {
 //   const {
 //     loading: getAnnouncementsLoading,
@@ -75,7 +75,7 @@ export {};
 //       end: getRecentDate(-1, true),
 //     },
 //   });
-// 
+//
 //   // Get the display info for the announcements
 //   const data: AnnouncementDisplayInfo[] =
 //     getAnnouncementsData?.getAnnouncementsInDateRange?.map(
@@ -88,7 +88,7 @@ export {};
 //         message: announcement.message,
 //       })
 //     ) || [];
-// 
+//
 //   return (
 //     <Flex
 //       flexGrow={1}
@@ -179,5 +179,5 @@ export {};
 //     </Flex>
 //   );
 // };
-// 
+//
 // export default AnnouncementSection;

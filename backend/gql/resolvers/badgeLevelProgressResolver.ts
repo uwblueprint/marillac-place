@@ -18,7 +18,7 @@ const badgeLevelProgressResolver = {
             include: {
               system_badge: true,
             },
-          }
+          },
         },
       });
     },

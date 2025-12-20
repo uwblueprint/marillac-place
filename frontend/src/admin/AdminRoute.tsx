@@ -4,11 +4,11 @@ import { Flex } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
 import { verifyRole } from "../helpers/verifyRole";
 import { ADMIN, RELIEF } from "../constants/roles";
-import Loading from "../ui/screens/LoadingScreen";
+import LoadingScreen from "../ui/screens/LoadingScreen";
 import { ADMIN_LOGIN_PAGE } from "../constants/routes";
 import { GET_CURRENT_PARTICIPANTS } from "../gql/participantRequests";
 import { AdminContext } from "./AdminContext";
-import Error from "../ui/screens/ErrorScreen";
+import ErrorScreen from "../ui/screens/ErrorScreen";
 import AdminMenu from "./AdminMenu";
 
 type AdminRouteProps = {
@@ -59,11 +59,11 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   }, [authorized]);
 
   if (loading) {
-    return <Loading />;
+    return <LoadingScreen />;
   }
 
   if (error) {
-    return <Error />;
+    return <ErrorScreen message={error} />;
   }
 
   if (!authorized) {

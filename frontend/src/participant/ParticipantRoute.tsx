@@ -4,7 +4,7 @@ import { Flex } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
 import { verifyRole } from "../helpers/verifyRole";
 import { PARTICIPANT } from "../constants/roles";
-import Loading from "../ui/screens/LoadingScreen";
+import LoadingScreen from "../ui/screens/LoadingScreen";
 import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
 import { ParticipantContext } from "./ParticipantContext";
 import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
@@ -58,7 +58,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   }, [authorized, participantContext]);
 
   if (loading) {
-    return <Loading />;
+    return <LoadingScreen />;
   }
 
   if (error) {

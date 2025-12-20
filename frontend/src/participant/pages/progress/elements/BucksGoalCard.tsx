@@ -12,13 +12,13 @@ export {};
 //   Button,
 //   Box,
 // } from "@chakra-ui/react";
-// 
+//
 // type BucksGoalCardProps = {
 //   value: number;
 //   goal: number | null;
 //   onEditGoalClick?: () => void;
 // };
-// 
+//
 // export default function BucksGoalCard({
 //   value,
 //   goal,
@@ -26,13 +26,13 @@ export {};
 // }: BucksGoalCardProps) {
 //   const metGoal = value >= (goal ?? -1);
 //   const goalExists = !!goal;
-// 
+//
 //   const editGoalText = () => {
 //     if (!goalExists) return "Set Goal";
 //     if (!metGoal) return "Change Goal";
 //     return "Set another";
 //   };
-// 
+//
 //   return (
 //     <Card m="15px" borderRadius="md">
 //       <CardHeader pb="10px">

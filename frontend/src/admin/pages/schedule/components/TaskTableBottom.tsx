@@ -22,12 +22,12 @@ export {};
 //   getTaskStatusText,
 // } from "../../../../utils/scheduleUtils";
 // import { TaskType } from "../../../../types/task";
-// 
+//
 // interface TaskTableProps {
 //   tasks: CalendarEvent[];
 //   onTaskSelect: (event: CalendarEvent) => void;
 // }
-// 
+//
 // export default function TaskTableBottom({
 //   tasks,
 //   onTaskSelect,
