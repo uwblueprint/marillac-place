@@ -22,7 +22,7 @@ const CreateCustomBadgeModal = ({
   const [error, setError] = useState("");
 
   const availableIcons = [
-    Icon.FIVE_STAR,
+    Icon.PLANT,
     Icon.GROUP,
     Icon.HEART,
     Icon.HOME,
@@ -46,8 +46,8 @@ const CreateCustomBadgeModal = ({
             icon: selectedIcon,
           },
         });
-        await refetch();
         onClose();
+        await refetch();
       } catch (err: any) {
         setError(err.message);
       }
@@ -63,8 +63,8 @@ const CreateCustomBadgeModal = ({
         setError("");
         onClose();
       }}
-      error_message={error}
       loading={createCustomBadgeLoading}
+      error_message={error}
     >
       <TextInput
         label="Badge Name"
@@ -92,7 +92,8 @@ const CreateCustomBadgeModal = ({
               key={icon}
               align="center"
               justify="center"
-              p="8px"
+              py="12px"
+              px="8px"
               border="1px solid"
               borderColor={isSelected ? "primary.700" : "neutral.300"}
               borderRadius="8px"
@@ -100,8 +101,8 @@ const CreateCustomBadgeModal = ({
               onClick={() => setSelectedIcon(icon)}
             >
               <IconComponent
-                size={32}
-                color={isSelected ? "primary.700" : "neutral.300"}
+                size={24}
+                color={isSelected ? "primary.700" : "text.light.secondary"}
               />
             </Flex>
           );

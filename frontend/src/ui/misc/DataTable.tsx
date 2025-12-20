@@ -16,6 +16,7 @@ import {
 export type Column = {
   header: string;
   width: string;
+  center?: boolean;
 };
 
 export type Row = {
@@ -47,7 +48,7 @@ const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
                   textStyle="web.s1"
                   color="#000000"
                   textTransform="none"
-                  textAlign="left"
+                  textAlign={col.center ? "center" : "left"}
                 >
                   {col.header}
                 </Text>
@@ -102,6 +103,8 @@ const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
                           border="none"
                           height="fit-content"
                           lineHeight={1}
+                          margin="0px"
+                          padding="0px"
                           _hover={{
                             backgroundColor: "transparent",
                             border: "none",

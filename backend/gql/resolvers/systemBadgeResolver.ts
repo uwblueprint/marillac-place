@@ -6,6 +6,7 @@ const systemBadgeResolver = {
     getSystemBadges: async (): Promise<SystemBadge[]> => {
       return db.systemBadge.findMany({
         include: { BadgeLevel: true },
+        orderBy: { name: "asc" },
       });
     },
   },

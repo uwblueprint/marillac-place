@@ -3,40 +3,31 @@ import { Flex, Grid, Text } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@apollo/client";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import { CREATE_EARNED_CUSTOM_BADGE } from "../../../../gql/earnedCustomBadgeRequests";
-import { GET_CUSTOM_BADGES } from "../../../../gql/customBadgeRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import GreenOutlineButton from "../../../../ui/buttons/GreenOutlineButton";
 import NumberInput from "../../../../ui/inputs/NumberInput";
-import SelectInput from "../../../../ui/inputs/SelectInput";
-import ErrorScreen from "../../../../ui/screens/ErrorScreen";
 import { AdminContext } from "../../../AdminContext";
 import { toTitleCase } from "../../../../helpers/stringUtils";
-import LoadingScreen from "../../../../ui/screens/LoadingScreen";
 import { CustomBadge } from "../../../../types/models";
+import DropdownInput from "../../../../ui/inputs/DropdownInput";
 
 interface AssignCustomBadgeModalProps {
   onClose: () => void;
+  customBadges: CustomBadge[];
 }
 
 const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
   onClose,
+  customBadges,
 }) => {
-  const admin = useContext(AdminContext);
-  const roomToParticipant = admin?.roomToParticipant;
+  const { roomToParticipant } = useContext(AdminContext);
 
-  const [badge, setBadge] = useState<CustomBadge | null>(null);
+  const [selectedBadgeId, setSelectedBadgeId] = useState<string>("");
   const [badgeValue, setBadgeValue] = useState<number | null>(null);
-  const [selectedParticipants, setSelectedParticipants] = useState<number[]>(
-    []
-  );
+  const [selectedParticipants, setSelectedParticipants] = useState<number[]>([]);
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [error, setError] = useState("");
 
-  const {
-    data: badgeData,
-    loading: badgeLoading,
-    error: badgeError,
-  } = useQuery(GET_CUSTOM_BADGES);
   const [assignCustomBadge, { loading: assignCustomBadgeLoading }] =
     useMutation(CREATE_EARNED_CUSTOM_BADGE);
 
@@ -59,20 +50,27 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
 
   const assignBadge = async () => {
     setError("");
-    if (!badge || !badgeValue || selectedParticipants.length === 0) {
+    if (!selectedBadgeId || !badgeValue || selectedParticipants.length === 0) {
       setError("Missing fields");
     } else if (badgeValue < 0) {
       setError("Badge value must be greater than 0");
     } else {
+      const selectedBadge = customBadges.find((customBadge: CustomBadge) =>
+        String(customBadge.cid) === selectedBadgeId
+      ) ?? null;
+      if (!selectedBadge) {
+        setError("Invalid badge");
+        return;
+      }
       try {
         await Promise.all(
           selectedParticipants.map((pid) =>
             assignCustomBadge({
               variables: {
                 pid,
-                name: badge.name,
-                icon: badge.icon,
-                description: badge.description,
+                name: selectedBadge.name,
+                icon: selectedBadge.icon,
+                description: selectedBadge.description,
                 value: badgeValue,
               },
             })
@@ -85,35 +83,35 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
     }
   };
 
-  if (!roomToParticipant || badgeError) {
-    return <ErrorScreen />;
-  }
-
   return (
     <PopupContainer
       title="Assign Custom Badge"
       submit_text="Assign Badge"
       submit_action={assignBadge}
       cancel_action={() => {
-        setBadge(null);
         setBadgeValue(null);
         setError("");
         setSelectedParticipants([]);
         setSelectedRooms([]);
+        setSelectedBadgeId("");
         onClose();
       }}
-      loading={assignCustomBadgeLoading || badgeLoading}
+      loading={assignCustomBadgeLoading}
       error_message={error}
     >
-      <SelectInput
+      <DropdownInput
         label="Badge Name"
-        current_value={badge ? toTitleCase(badge.name) : ""}
-        update_action={setBadge}
+        current_value={selectedBadgeId}
+        update_action={(badgeId: string) => {
+          setSelectedBadgeId(badgeId);
+        }}
+        size="large"
+        placeholder="Select Badge"
         value_options={Object.fromEntries(
-          badgeData?.getCustomBadges?.map((customBadge: CustomBadge) => [
+          customBadges.map((customBadge: CustomBadge) => [
             toTitleCase(customBadge.name),
-            customBadge,
-          ]) ?? []
+            String(customBadge.cid),
+          ])
         )}
       />
 
@@ -129,7 +127,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       <Text textStyle="web.s1" color="text.light.secondary">
         Choose Room(s)
       </Text>
-      <Grid w="100%" templateColumns="repeat(4, 1fr)" gap="5px">
+      <Grid templateColumns="repeat(5, 1fr)" gap="5px">
         {ROOM_NUMBERS.map((num: number) => (
           <GreenOutlineButton
             key={num}

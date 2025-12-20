@@ -16,6 +16,7 @@ type PopupContainerProps = {
   submit_action?: () => void;
   cancel_action: () => void;
   children: React.ReactNode;
+  system_error?: boolean;
   error_message?: string;
   loading?: boolean;
 };
@@ -26,6 +27,7 @@ export default function PopupContainer({
   submit_action,
   cancel_action,
   children,
+  system_error = false,
   error_message = "",
   loading = false,
 }: PopupContainerProps) {
@@ -62,7 +64,7 @@ export default function PopupContainer({
           >
             <Spinner size="md" color="primary.700" />
           </Flex>
-        ) : error_message !== "" ? (
+        ) : system_error ? (
           <Flex flexDir="column" gap="2px" paddingY="10px">
             <Text textStyle="web.b2" color="#E30000" textAlign="center">
               ERROR
@@ -72,11 +74,17 @@ export default function PopupContainer({
               color="text.light.secondary"
               textAlign="center"
             >
-              {error_message}
+              Something went wrong.
             </Text>
           </Flex>
         ) : (
           children
+        )}
+
+        {error_message && (
+          <Text textStyle="web.b2" color="#E30000">
+            {error_message}
+          </Text>
         )}
 
         <Flex alignItems="center" justifyContent="flex-end" gap="12px" mt="8px">

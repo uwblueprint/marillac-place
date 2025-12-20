@@ -45,18 +45,18 @@ const CustomBadgeTable = ({
   }
 
   const columns: Column[] = [
-    { header: "Icon", width: "5%" },
+    { header: "Icon", width: "5%", center: true },
     { header: "Badge Name", width: "25%" },
-    { header: "Description", width: "60%" },
-    { header: "", width: "5%" },
-    { header: "", width: "5%" },
+    { header: "Description", width: "68%" },
+    { header: "", width: "1%" },
+    { header: "", width: "1%" },
   ];
 
   const rows: Row[][] = badges.length
     ? badges.map((badge: CustomBadge) => {
         const IconComponent = ICON_MAP[badge.icon];
         return [
-          { element: <IconComponent size={20} color="black" /> },
+          { element: <IconComponent size={20} /> },
           { element: badge.name },
           { element: badge.description },
           {

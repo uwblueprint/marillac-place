@@ -32,7 +32,7 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
     try {
       await updateCustomBadge({
         variables: {
-          cid: selected.badge_id,
+          cid: selected.cid,
           name: badgeName,
           description: badgeCriteria,
           icon: selected.icon,
@@ -57,14 +57,14 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
       <TextInput
         label="Badge Name"
         current_value={badgeName}
-        update_action={(e: any) => setBadgeName(e.target.value)}
-        size="medium"
+        update_action={setBadgeName}
+        size="large"
       />
       <TextInput
         label="Badge Criteria"
         current_value={badgeCriteria}
-        update_action={(e: any) => setBadgeCriteria(e.target.value)}
-        size="medium"
+        update_action={setBadgeCriteria}
+        size="large"
       />
     </PopupContainer>
   );

@@ -8,6 +8,9 @@ import TextInput from "../../../../ui/inputs/TextInput";
 import { Level } from "../../../../types/enums";
 import { BadgeLevel } from "../../../../types/models";
 import FixedInput from "../../../../ui/inputs/FixedInput";
+import { LEVEL_ORDER } from "../../../../constants/levels";
+import { toTitleCase } from "../../../../helpers/stringUtils";
+import NumberInput from "../../../../ui/inputs/NumberInput";
 
 interface EditSystemBadgeModalProps {
   isOpen: boolean;
@@ -80,19 +83,19 @@ const EditSystemBadgeModal = ({
     const benchmarksAreIncreasing =
       (!(Level.NOVICE in badgeLevels) ||
         !(Level.BRONZE in badgeLevels) ||
-        badgeLevels[Level.NOVICE].benchmark <
+        badgeLevels[Level.NOVICE].benchmark <=
           badgeLevels[Level.BRONZE].benchmark) &&
       (!(Level.BRONZE in badgeLevels) ||
         !(Level.SILVER in badgeLevels) ||
-        badgeLevels[Level.BRONZE].benchmark <
+        badgeLevels[Level.BRONZE].benchmark <=
           badgeLevels[Level.SILVER].benchmark) &&
       (!(Level.SILVER in badgeLevels) ||
         !(Level.GOLD in badgeLevels) ||
-        badgeLevels[Level.SILVER].benchmark <
+        badgeLevels[Level.SILVER].benchmark <=
           badgeLevels[Level.GOLD].benchmark) &&
       (!(Level.GOLD in badgeLevels) ||
         !(Level.DIAMOND in badgeLevels) ||
-        badgeLevels[Level.GOLD].benchmark <
+        badgeLevels[Level.GOLD].benchmark <=
           badgeLevels[Level.DIAMOND].benchmark);
     if (!benchmarksAreIncreasing) {
       setError("Invalid benchmark values (must be increasing)");
@@ -154,97 +157,62 @@ const EditSystemBadgeModal = ({
         label="Badge Criteria"
         current_value={badgeCriteria}
         update_action={setBadgeCriteria}
-        size="medium"
+        size="large"
       />
 
-      {/* revise */}
-      <Flex flexDir="column">
-        <FormControl>
-          <Flex justifyContent="space-between" mb="5px">
-            <FormLabel m="0">
-              <Text textStyle="web.s1" color="text.light.secondary">
-                Set Badge Levels
-              </Text>
-            </FormLabel>
-            <FormLabel m="0">
-              <Text
-                textStyle="web.s1"
-                color="text.light.secondary"
-                textAlign="right"
-              >
-                Set Marillac Bucks
-              </Text>
-            </FormLabel>
-          </Flex>
-
-          {Object.entries(badgeLevels).map(([level, data]) => {
+      <Flex justifyContent="space-between" alignItems="center" w="100%">
+        <Flex flexDir="column" gap="5px">
+          <Text textStyle="web.s1" color="text.light.secondary">
+            Set Badge Levels
+          </Text>
+          {LEVEL_ORDER.map((level: Level) => {
+            if (!badgeLevels[level]) return null;
+            const data = badgeLevels[level];
             return (
-              <Flex
-                key={level}
-                justify="space-between"
-                alignItems="center"
-                w="100%"
-                mb="5px"
-              >
-                <Flex alignItems="center" gap="10px">
-                  <Text textStyle="web.b3">{level}:</Text>
-
-                  {level === "Novice" ? (
-                    <Input
-                      value="First Time"
-                      variant="primary"
-                      width="100px"
-                      textAlign="center"
-                      isDisabled
-                    />
-                  ) : (
-                    <>
-                      <Input
-                        variant="primary"
-                        textAlign="center"
-                        value={data.benchmark}
-                        onChange={(e) =>
-                          setBadgeLevels((prev: any) => {
-                            const newBenchmark = Number(e.target.value);
-                            if (Number.isNaN(newBenchmark)) return prev;
-                            return {
-                              ...prev,
-                              [level]: {
-                                ...prev[level],
-                                benchmark: newBenchmark,
-                              },
-                            };
-                          })
-                        }
-                        w="75px"
-                        min={0}
-                      />
-                      <Text textStyle="web.b3">days</Text>
-                    </>
-                  )}
-                </Flex>
-
-                <Input
-                  variant="primary"
-                  textAlign="center"
-                  width="75px"
-                  value={data.value}
-                  onChange={(e) =>
+              <Flex key={level} alignItems="center" justifyContent="center" width="90%">
+                <Text textStyle="web.b3" width="100px">{toTitleCase(level)}:</Text>
+                <NumberInput
+                  key={level}
+                  current_value={data.benchmark}
+                  update_action={(value: number) =>
                     setBadgeLevels((prev: any) => {
-                      const newValue = Number(e.target.value);
-                      if (Number.isNaN(newValue)) return prev;
                       return {
                         ...prev,
-                        [level]: { ...prev[level], value: newValue },
+                        [level]: { ...prev[level], benchmark: value },
                       };
                     })
                   }
-                  min={1}
+                  size="small"
                 />
+                <Text textStyle="web.b3">times</Text>
               </Flex>
             );
           })}
-        </FormControl>
+        </Flex>
+        <Flex flexDir="column" gap="5px">
+          <Text textStyle="web.s1" color="text.light.secondary" textAlign="right">
+            Marillac Bucks
+          </Text>
+          {LEVEL_ORDER.map((level: Level) => {
+            if (!badgeLevels[level]) return null;
+            const data = badgeLevels[level];
+            return (
+              <NumberInput
+                key={level}
+                current_value={data.value}
+                update_action={(value: number) =>
+                  setBadgeLevels((prev: any) => {
+                    return {
+                      ...prev,
+                      [level]: { ...prev[level], value },
+                    };
+                  })
+                }
+                size="small"
+              />
+            );
+          })}
+        </Flex>
       </Flex>
     </PopupContainer>
   );

@@ -1,6 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CreateCustomBadgeModal from "./components/CreateCustomBadgeModal";
 import CustomBadgeTable from "./components/CustomBadgeTable";
 import SystemBadgeTable from "./components/SystemBadgeTable";
@@ -9,14 +9,10 @@ import { GET_SYSTEM_BADGES } from "../../../gql/systemBadgeRequests";
 import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
-import { SystemBadge, CustomBadge } from "../../../types/models";
 
 export default function AdminBadgesPage() {
   const [create, setCreate] = useState(false);
   const [assign, setAssign] = useState(false);
-
-  const [customBadges, setCustomBadges] = useState<CustomBadge[]>([]);
-  const [systemBadges, setSystemBadges] = useState<SystemBadge[]>([]);
 
   const {
     loading: customBadgesLoading,
@@ -31,18 +27,6 @@ export default function AdminBadgesPage() {
     data: systemBadgesData,
     refetch: refetchSystemBadges,
   } = useQuery(GET_SYSTEM_BADGES);
-
-  useEffect(() => {
-    if (!systemBadgesLoading && !systemBadgesError && systemBadgesData) {
-      setSystemBadges(systemBadgesData.getSystemBadges);
-    }
-  }, [systemBadgesLoading, systemBadgesError, systemBadgesData]);
-
-  useEffect(() => {
-    if (!customBadgesLoading && !customBadgesError && customBadgesData) {
-      setCustomBadges(customBadgesData.getCustomBadges);
-    }
-  }, [customBadgesLoading, customBadgesError, customBadgesData]);
 
   return (
     <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
@@ -63,8 +47,8 @@ export default function AdminBadgesPage() {
       </Flex>
       <SystemBadgeTable
         loading={systemBadgesLoading}
-        error={systemBadgesError}
-        badges={systemBadges}
+        error={systemBadgesError?.message ?? ""}
+        badges={systemBadgesData?.getSystemBadges ?? []}
         refetch={refetchSystemBadges}
       />
       <Flex
@@ -96,8 +80,8 @@ export default function AdminBadgesPage() {
       </Flex>
       <CustomBadgeTable
         loading={customBadgesLoading}
-        error={customBadgesError}
-        badges={customBadges}
+        error={customBadgesError?.message ?? ""}
+        badges={customBadgesData?.getCustomBadges ?? []}
         refetch={refetchCustomBadges}
       />
 
@@ -107,7 +91,7 @@ export default function AdminBadgesPage() {
           refetch={refetchCustomBadges}
         />
       )}
-      {assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} />}
+      {assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} customBadges={customBadgesData?.getCustomBadges ?? []} />}
     </Flex>
   );
 }

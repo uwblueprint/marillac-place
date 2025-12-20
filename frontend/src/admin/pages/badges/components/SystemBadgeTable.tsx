@@ -44,11 +44,11 @@ const SystemBadgeTable = ({
     }
   }
   const columns: Column[] = [
-    { header: "Icon", width: "5%" },
+    { header: "Icon", width: "5%", center: true },
     { header: "Badge Name", width: "35%" },
     { header: "Description", width: "40%" },
     { header: "Offered Levels", width: "10%" },
-    { header: "Status", width: "5%" },
+    { header: "Status", width: "5%", center: true },
     { header: "", width: "5%" },
   ];
 
@@ -61,7 +61,7 @@ const SystemBadgeTable = ({
           .map((level) => LEVEL_ABBREVIATION[level])
           .join(", ");
         return [
-          { element: <IconComponent size={20} color="black" /> },
+          { element: <IconComponent size={20} /> },
           { element: badge.name },
           { element: badge.description },
           { element: offeredLevels },
@@ -84,27 +84,26 @@ const SystemBadgeTable = ({
       })
     : [];
 
-  if (edit && selected) {
-    return (
-      <EditSystemBadgeModal
-        isOpen={edit}
-        onClose={() => {
-          setEdit(false);
-          setSelected(null);
-        }}
-        selected={selected}
-        refetch={refetch}
-      />
-    );
-  }
-
   return (
-    <DataTable
-      loading={loading}
-      error={error + updateError}
-      columns={columns}
-      rows={rows}
-    />
+    <>
+      <DataTable
+        loading={loading}
+        error={error + updateError}
+        columns={columns}
+        rows={rows}
+      />
+      { edit && selected && (
+        <EditSystemBadgeModal
+          isOpen={edit}
+          onClose={() => {
+            setEdit(false);
+            setSelected(null);
+          }}
+          selected={selected}
+          refetch={refetch}
+        />
+      )}
+    </>
   );
 };
 

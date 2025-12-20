@@ -6,8 +6,8 @@ import { verifyRole } from "../../../helpers/verifyRole";
 import { PARTICIPANT } from "../../../constants/roles";
 import { PARTICIPANT_LOGIN } from "../../../gql/loginRequests";
 import * as ROUTES from "../../../constants/routes";
-import Loading from "../../../ui/screens/LoadingScreen";
-import Error from "../../../ui/screens/ErrorScreen";
+import LoadingScreen from "../../../ui/screens/LoadingScreen";
+import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import { ParticipantContext } from "../../ParticipantContext";
 import WidgetContainer from "../../../ui/containers/WidgetContainer";
 import NumberInput from "../../../ui/inputs/NumberInput";
@@ -61,11 +61,11 @@ export default function ParticipantsLoginPage() {
   };
 
   if (loading || participantLoginLoading) {
-    return <Loading />;
+    return <LoadingScreen />;
   }
 
   if (error) {
-    return <Error message={error} />;
+    return <ErrorScreen message={error} />;
   }
 
   if (loggedIn) {
