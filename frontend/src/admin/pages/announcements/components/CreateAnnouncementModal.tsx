@@ -10,7 +10,7 @@ export {};
 // import GreenButton from "../../../common/buttons/GreenButton";
 // import SelectionInput from "../../../common/form/SelectionInput";
 // import TextInput from "../../../common/form/TextInput";
-// 
+//
 // const CreateAnnouncementModal = ({
 //   isOpen,
 //   onClose,
@@ -22,7 +22,7 @@ export {};
 //   const [priority, setPriority] = useState("");
 //   const [message, setMessage] = useState("");
 //   const [error, setError] = useState("");
-// 
+//
 //   const [createAnnouncement] = useMutation(CREATE_ANNOUNCEMENT, {
 //     onCompleted: () => {
 //       let listOfRooms = "";
@@ -44,29 +44,29 @@ export {};
 //       setError(err.message);
 //     },
 //   });
-// 
+//
 //   const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS);
-// 
+//
 //   const handleSend = async () => {
 //     if (selectedRooms.length === 0 || priority === "" || message === "") {
 //       setError("Missing fields.");
 //       return;
 //     }
-// 
+//
 //     try {
 //       const { data, error: dataError } = await getCurrentParticipants();
-// 
+//
 //       if (dataError || !data || !data.getCurrentParticipants) {
 //         setError("Failed to fetch participants.");
 //         return;
 //       }
-// 
+//
 //       const roomToParticipantMap: any = {};
 //       for (const participant of data.getCurrentParticipants) {
 //         roomToParticipantMap[participant.room_number] =
 //           participant.participant_id;
 //       }
-// 
+//
 //       const participantIds: number[] = [];
 //       for (const room of selectedRooms) {
 //         const participantId = roomToParticipantMap[room];
@@ -76,7 +76,7 @@ export {};
 //         }
 //         participantIds.push(participantId);
 //       }
-// 
+//
 //       createAnnouncement({
 //         variables: {
 //           priority,
@@ -89,7 +89,7 @@ export {};
 //       setError("Unable to create announcement");
 //     }
 //   };
-// 
+//
 //   const toggleRoom = (room: number) => {
 //     if (room === 0) {
 //       if (selectedRooms.length === ROOM_NUMBERS.length) {
@@ -107,7 +107,7 @@ export {};
 //       });
 //     }
 //   };
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Create Announcement"
@@ -134,7 +134,7 @@ export {};
 //           );
 //         })}
 //       </Flex>
-// 
+//
 //       <SelectionInput
 //         label="Priority Level"
 //         current_value={priority}
@@ -146,7 +146,7 @@ export {};
 //           Critical: "CRITICAL",
 //         }}
 //       />
-// 
+//
 //       <TextInput
 //         label="Message"
 //         current_value={message}
@@ -155,5 +155,5 @@ export {};
 //     </ModalContainer>
 //   );
 // };
-// 
+//
 // export default CreateAnnouncementModal;

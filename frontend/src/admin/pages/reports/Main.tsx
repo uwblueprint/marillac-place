@@ -12,7 +12,7 @@ export {};
 //   UPDATE_REPORT_RECIPIENT,
 //   DELETE_REPORT_RECIPIENT,
 // } from "../../../gql/mutations";
-// 
+//
 // type ReportRecipient = {
 //   report_recipient_id: number;
 //   email: string;
@@ -20,7 +20,7 @@ export {};
 //   monthly: boolean;
 //   last_report_sent: string | null;
 // };
-// 
+//
 // type Report = {
 //   id: number;
 //   email: string;
@@ -28,18 +28,18 @@ export {};
 //   monthly: boolean;
 //   lastReportSent: string;
 // };
-// 
+//
 // export default function AdminReportsPage() {
 //   const [addEmail, setAddEmail] = useState(false);
 //   const [editEmail, setEditEmail] = useState(false);
 //   const [selectedEmail, setSelectedEmail] = useState<any>(null);
 //   const [reports, setReports] = useState<Report[]>([]);
-// 
+//
 //   const { loading, error, data, refetch } = useQuery(GET_REPORT_RECIPIENTS);
 //   const [createReportRecipient] = useMutation(CREATE_REPORT_RECIPIENT);
 //   const [updateReportRecipient] = useMutation(UPDATE_REPORT_RECIPIENT);
 //   const [deleteReportRecipient] = useMutation(DELETE_REPORT_RECIPIENT);
-// 
+//
 //   // Transform backend data to frontend format
 //   useEffect(() => {
 //     if (data?.getReportRecipients) {
@@ -55,7 +55,7 @@ export {};
 //       setReports(transformed);
 //     }
 //   }, [data]);
-// 
+//
 //   const handleAddEmail = async (emailData: any) => {
 //     try {
 //       await createReportRecipient({
@@ -71,7 +71,7 @@ export {};
 //       console.error("Error creating report recipient:", err);
 //     }
 //   };
-// 
+//
 //   const handleEditEmail = async (emailData: any) => {
 //     try {
 //       await updateReportRecipient({
@@ -89,7 +89,7 @@ export {};
 //       console.error("Error updating report recipient:", err);
 //     }
 //   };
-// 
+//
 //   const handleDeleteEmail = async (id: number) => {
 //     try {
 //       await deleteReportRecipient({
@@ -102,7 +102,7 @@ export {};
 //       console.error("Error deleting report recipient:", err);
 //     }
 //   };
-// 
+//
 //   const handleToggleWeekly = async (id: number, weekly: boolean) => {
 //     try {
 //       await updateReportRecipient({
@@ -116,7 +116,7 @@ export {};
 //       console.error("Error toggling weekly:", err);
 //     }
 //   };
-// 
+//
 //   const handleToggleMonthly = async (id: number, monthly: boolean) => {
 //     try {
 //       await updateReportRecipient({
@@ -130,12 +130,12 @@ export {};
 //       console.error("Error toggling monthly:", err);
 //     }
 //   };
-// 
+//
 //   const handleEditClick = (email: any) => {
 //     setSelectedEmail(email);
 //     setEditEmail(true);
 //   };
-// 
+//
 //   if (loading) {
 //     return (
 //       <Flex
@@ -148,7 +148,7 @@ export {};
 //       </Flex>
 //     );
 //   }
-// 
+//
 //   if (error) {
 //     return (
 //       <Flex
@@ -161,7 +161,7 @@ export {};
 //       </Flex>
 //     );
 //   }
-// 
+//
 //   return (
 //     <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
 //       <Flex
@@ -188,7 +188,7 @@ export {};
 //         onToggleWeekly={handleToggleWeekly}
 //         onToggleMonthly={handleToggleMonthly}
 //       />
-// 
+//
 //       {addEmail && (
 //         <AddEmailModal
 //           onClose={() => setAddEmail(false)}

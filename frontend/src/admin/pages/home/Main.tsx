@@ -5,7 +5,7 @@ export {};
 // import NoteSection from "./components/NoteSection";
 // import RoomsOverview from "./components/RoomsOverview";
 // import AnnouncementSection from "./components/AnnouncementSection";
-// 
+//
 // const AdminHomePage = (): React.ReactElement => {
 //   const getDate = () => {
 //     const options: Intl.DateTimeFormatOptions = {
@@ -15,7 +15,7 @@ export {};
 //     };
 //     return new Date().toLocaleDateString("en-US", options);
 //   };
-// 
+//
 //   return (
 //     <>
 //       <Text
@@ -56,5 +56,5 @@ export {};
 //     </>
 //   );
 // };
-// 
+//
 // export default AdminHomePage;

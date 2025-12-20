@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import GreenOutlineButton from "../buttons/GreenOutlineButton";

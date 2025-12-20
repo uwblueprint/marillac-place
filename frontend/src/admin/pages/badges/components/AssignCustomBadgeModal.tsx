@@ -1,21 +1,18 @@
-export {};
-// TODO: Refactor this component
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Flex, Grid, Text } from "@chakra-ui/react";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
-import {
-  GET_CUSTOM_BADGES,
-  CREATE_CUSTOM_BADGE,
-} from "../../../../gql/customBadgeRequests";
-//import { GET_PARTICIPANTS_BY_ROOMS } from "../../../../gql/participantRequests";
+import { CREATE_EARNED_CUSTOM_BADGE } from "../../../../gql/earnedCustomBadgeRequests";
+import { GET_CUSTOM_BADGES } from "../../../../gql/customBadgeRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import GreenOutlineButton from "../../../../ui/buttons/GreenOutlineButton";
 import NumberInput from "../../../../ui/inputs/NumberInput";
 import SelectInput from "../../../../ui/inputs/SelectInput";
+import ErrorScreen from "../../../../ui/screens/ErrorScreen";
 import { AdminContext } from "../../../AdminContext";
-
-const admin = useContext(AdminContext);
+import { toTitleCase } from "../../../../helpers/stringUtils";
+import LoadingScreen from "../../../../ui/screens/LoadingScreen";
+import { CustomBadge } from "../../../../types/models";
 
 interface AssignCustomBadgeModalProps {
   onClose: () => void;
@@ -24,71 +21,73 @@ interface AssignCustomBadgeModalProps {
 const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
   onClose,
 }) => {
-  const [badgeName, setBadgeName] = useState("");
-  const [badgeValue, setBadgeValue] = useState<string>("");
-  const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
-  const [error, setError] = useState("");
-  const [badges, setBadges] = useState<{ badge_id: number; name: string }[]>(
+  const admin = useContext(AdminContext);
+  const roomToParticipant = admin?.roomToParticipant;
+
+  const [badge, setBadge] = useState<CustomBadge | null>(null);
+  const [badgeValue, setBadgeValue] = useState<number | null>(null);
+  const [selectedParticipants, setSelectedParticipants] = useState<number[]>(
     []
   );
-  const { data: badgeData } = useQuery(GET_CUSTOM_BADGES);
+  const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (badgeData?.getCustomBadges) {
-      setBadges(badgeData.getCustomBadges);
-    }
-  }, [badgeData]);
-
-  const [getParticipantsByRooms] = useLazyQuery(GET_PARTICIPANTS_BY_ROOMS);
-  const [assignCustomBadge] = useMutation(CREATE_CUSTOM_BADGE, {
-    onCompleted: () => {
-      localStorage.setItem(
-        "notification",
-        `Assigned Custom Badge: ${badgeName}`
-      );
-      onClose();
-      window.location.reload();
-    },
-    onError: (err) => {
-      setError(err.message);
-    },
-  });
+  const {
+    data: badgeData,
+    loading: badgeLoading,
+    error: badgeError,
+  } = useQuery(GET_CUSTOM_BADGES);
+  const [assignCustomBadge, { loading: assignCustomBadgeLoading }] =
+    useMutation(CREATE_EARNED_CUSTOM_BADGE);
 
   const toggleRoomSelection = (room: number) => {
-    setSelectedRooms((prev) =>
-      prev.includes(room) ? prev.filter((r) => r !== room) : [...prev, room]
-    );
+    if (!roomToParticipant || !(room in roomToParticipant)) {
+      setError("No participant assigned to this room");
+    } else {
+      const participantId = roomToParticipant[room];
+      setSelectedParticipants((prev) =>
+        prev.includes(participantId)
+          ? prev.filter((p) => p !== participantId)
+          : [...prev, participantId]
+      );
+      setSelectedRooms((prev) =>
+        prev.includes(room) ? prev.filter((r) => r !== room) : [...prev, room]
+      );
+      setError("");
+    }
   };
 
   const assignBadge = async () => {
     setError("");
-    if (!badgeName.trim() || !badgeValue.trim() || selectedRooms.length === 0) {
+    if (!badge || !badgeValue || selectedParticipants.length === 0) {
       setError("Missing fields");
-      return;
-    }
-    try {
-      const res = await getParticipantsByRooms({
-        variables: { room_numbers: selectedRooms },
-      });
-      const participants = res?.data?.getParticipantsByRooms;
-      if (!participants || participants.length !== selectedRooms.length) {
-        setError("No participants found for some selected rooms");
-        return;
+    } else if (badgeValue < 0) {
+      setError("Badge value must be greater than 0");
+    } else {
+      try {
+        await Promise.all(
+          selectedParticipants.map((pid) =>
+            assignCustomBadge({
+              variables: {
+                pid,
+                name: badge.name,
+                icon: badge.icon,
+                description: badge.description,
+                value: badgeValue,
+              },
+            })
+          )
+        );
+        onClose();
+      } catch (err: any) {
+        setError(err.message);
       }
-      const participantIds = participants.map((p: any) => p.participant_id);
-      const selectedBadge = badges.find((badge) => badge.name === badgeName);
-      const badgeId = selectedBadge?.badge_id;
-      await assignCustomBadge({
-        variables: {
-          badge_id: badgeId,
-          marillac_bucks: Number(badgeValue),
-          participant_ids: participantIds,
-        },
-      });
-    } catch (err: any) {
-      setError(err.message);
     }
   };
+
+  if (!roomToParticipant || badgeError) {
+    return <ErrorScreen />;
+  }
 
   return (
     <PopupContainer
@@ -96,23 +95,24 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       submit_text="Assign Badge"
       submit_action={assignBadge}
       cancel_action={() => {
-        setBadgeName("");
-        setBadgeValue("");
-        setSelectedRooms([]);
+        setBadge(null);
+        setBadgeValue(null);
         setError("");
-        setBadges([]);
+        setSelectedParticipants([]);
+        setSelectedRooms([]);
         onClose();
       }}
+      loading={assignCustomBadgeLoading || badgeLoading}
       error_message={error}
     >
       <SelectInput
         label="Badge Name"
-        current_value={badgeName}
-        update_action={(e: any) => setBadgeName(e.target.value)}
+        current_value={badge ? toTitleCase(badge.name) : ""}
+        update_action={setBadge}
         value_options={Object.fromEntries(
-          badgeData?.getCustomBadges?.map((badge: any) => [
-            badge.name,
-            badge.name,
+          badgeData?.getCustomBadges?.map((customBadge: CustomBadge) => [
+            toTitleCase(customBadge.name),
+            customBadge,
           ]) ?? []
         )}
       />
@@ -120,17 +120,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
       <NumberInput
         label="Badge Value"
         current_value={badgeValue}
-        update_action={(e: any) => {
-          const val = e.target.value;
-          if (val === "") {
-            setBadgeValue("");
-          } else {
-            const num = parseFloat(val);
-            if (!Number.isNaN(num)) {
-              setBadgeValue(val);
-            }
-          }
-        }}
+        update_action={setBadgeValue}
         size="small"
       />
 

@@ -13,27 +13,27 @@ export {};
 // } from "../../../gql/queries";
 // import GreenButton from "../../common/buttons/GreenButton";
 // import OrangeButton from "../../common/buttons/OrangeButton";
-// 
+//
 // export default function AdminAnnouncementsPage() {
 //   const [create, setCreate] = useState(false);
 //   const [selectedButtons, setSelectedButtons] = useState<boolean[]>(
 //     new Array(10).fill(false)
 //   );
 //   const [filter, setFilter] = useState(false);
-// 
+//
 //   const {
 //     data: participantData,
 //     loading: participantLoading,
 //     error: participantError,
 //   } = useQuery(GET_CURRENT_PARTICIPANTS);
-// 
+//
 //   const [getAnnouncementsByParticipants, announcementsByParticipantsResult] =
 //     useLazyQuery(GET_ANNOUNCEMENTS_BY_PARTICIPANTS);
-// 
+//
 //   const [getAllAnnouncements, allAnnouncementsResult] = useLazyQuery(
 //     GET_ALL_ANNOUNCEMENTS
 //   );
-// 
+//
 //   const participantToRoomMap: Record<number, number> = {};
 //   const roomToParticipantMap: Record<number, number> = {};
 //   if (participantData?.getCurrentParticipants) {
@@ -44,7 +44,7 @@ export {};
 //         participant.room_number;
 //     }
 //   }
-// 
+//
 //   useEffect(() => {
 //     const trueCount = selectedButtons.filter(Boolean).length;
 //     if (participantLoading || trueCount === 0 || trueCount === 10) {
@@ -52,7 +52,7 @@ export {};
 //       getAllAnnouncements();
 //       return;
 //     }
-// 
+//
 //     setFilter(true);
 //     const selectedRoomNumbers = selectedButtons
 //       .map((selected, index) => (selected ? index + 1 : null))
@@ -60,14 +60,14 @@ export {};
 //     const selectedParticipantIds = selectedRoomNumbers
 //       .map((roomNumber) => roomToParticipantMap[roomNumber])
 //       .filter(Boolean);
-// 
+//
 //     console.log(selectedParticipantIds);
-// 
+//
 //     getAnnouncementsByParticipants({
 //       variables: { participant_ids: selectedParticipantIds },
 //     });
 //   }, [selectedButtons, participantLoading]);
-// 
+//
 //   const handleButtonClick = (id: number) => {
 //     setSelectedButtons((prevSelected: any) => {
 //       const newSelected = [...prevSelected];
@@ -75,15 +75,15 @@ export {};
 //       return newSelected;
 //     });
 //   };
-// 
+//
 //   const handleSelectAll = () => {
 //     setSelectedButtons(new Array(10).fill(true));
 //   };
-// 
+//
 //   const handleDeselectAll = () => {
 //     setSelectedButtons(new Array(10).fill(false));
 //   };
-// 
+//
 //   const announcementLoading =
 //     (!filter && allAnnouncementsResult.loading) ||
 //     (filter && announcementsByParticipantsResult.loading);
@@ -93,12 +93,12 @@ export {};
 //   const announcementData = filter
 //     ? announcementsByParticipantsResult.data?.getAnnouncementsByParticipants
 //     : allAnnouncementsResult.data?.getAllAnnouncements ?? [];
-// 
+//
 //   if (announcementLoading || participantLoading)
 //     return <Text>Loading announcements...</Text>;
 //   if (announcementError || participantError)
 //     return <Text color="red.500">Error loading announcements</Text>;
-// 
+//
 //   return (
 //     <Flex width="100%" flexDir="column" gap="15px">
 //       <Flex
@@ -115,14 +115,14 @@ export {};
 //             Expires in 48h
 //           </Text>
 //         </Flex>
-// 
+//
 //         <OrangeButton
 //           text="Create Announcement"
 //           action={() => setCreate(true)}
 //           is_active={create}
 //         />
 //       </Flex>
-// 
+//
 //       <Flex alignItems="center" gap="10px">
 //         <Text
 //           textStyle="web.s1"
@@ -164,11 +164,11 @@ export {};
 //           Deselect All
 //         </Text>
 //       </Flex>
-// 
+//
 //       <Text textStyle="web.b3" color="text.light.secondary">
 //         Most Recent
 //       </Text>
-// 
+//
 //       <VStack spacing={4} align="stretch" paddingBottom="20px">
 //         {announcementData.length === 0 && <Text>No announcements found.</Text>}
 //         {announcementData.map((announcement: any) => (
@@ -200,7 +200,7 @@ export {};
 //           />
 //         ))}
 //       </VStack>
-// 
+//
 //       {create && (
 //         <CreateAnnouncementModal
 //           isOpen={create}

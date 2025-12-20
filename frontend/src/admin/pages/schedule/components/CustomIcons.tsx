@@ -1,12 +1,12 @@
 export {};
 // TODO: Refactor this component
 // import React from "react";
-// 
+//
 // interface IconProps {
 //   size?: number;
 //   color?: string;
 // }
-// 
+//
 // export const CalendarIcon: React.FC<IconProps> = ({
 //   size = 14,
 //   color = "white",
@@ -26,7 +26,7 @@ export {};
 //     />
 //   </svg>
 // );
-// 
+//
 // export const ListIcon: React.FC<IconProps> = ({
 //   size = 10,
 //   color = "#E67D4F",
@@ -85,7 +85,7 @@ export {};
 //     />
 //   </svg>
 // );
-// 
+//
 // export const CommentIcon: React.FC<IconProps> = ({
 //   size = 16,
 //   color = "#255B9A",

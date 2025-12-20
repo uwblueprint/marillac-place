@@ -15,18 +15,18 @@ export {};
 // import { isAdmin, isRelief } from "../../../utils/checkRole";
 // import * as ROUTES from "../../../constants/routes";
 // // import Loading from "../../../Loading";
-// 
+//
 // export default function AdminLoginPage() {
 //   const navigate = useNavigate();
-// 
+//
 //   const [loggedIn, setLoggedIn] = useState(false);
 //   const [checkLoggedIn, setCheckLoggedIn] = useState(false);
-// 
+//
 //   const [role, setRole] = useState("");
 //   const [password, setPassword] = useState("");
-// 
+//
 //   const [error, setError] = useState("");
-// 
+//
 //   const [login, { loading }] = useMutation(ADMIN_LOGIN, {
 //     onCompleted: (data) => {
 //       localStorage.setItem("admin_token", data.adminLogin.token);
@@ -48,7 +48,7 @@ export {};
 //       }
 //     },
 //   });
-// 
+//
 //   useEffect(() => {
 //     const tokenCheck = async () => {
 //       const adminUser = await isAdmin();
@@ -60,25 +60,25 @@ export {};
 //     };
 //     tokenCheck();
 //   }, []);
-// 
+//
 //   const handleSubmit = () => {
 //     setError("");
-// 
+//
 //     if (!role || !password) {
 //       setError("Missing fields");
 //     } else {
 //       login({ variables: { role, password } });
 //     }
 //   };
-// 
+//
 //   // if (!checkLoggedIn || loading) {
 //   //   return <Loading />;
 //   // }
-// 
+//
 //   if (loggedIn) {
 //     return <Navigate to={ROUTES.ADMIN_HOME_PAGE} replace />;
 //   }
-// 
+//
 //   return (
 //     <Flex
 //       w="100vw"
@@ -100,7 +100,7 @@ export {};
 //         <Flex width="30%" marginLeft="3vw">
 //           <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
 //         </Flex>
-// 
+//
 //         <Flex
 //           width="400px"
 //           p="40px"
@@ -115,10 +115,10 @@ export {};
 //         >
 //           <Flex flexDir="column">
 //             <Text textStyle="web.h1">Sign in</Text>
-// 
+//
 //             <Text textStyle="web.b1">Please enter your login information.</Text>
 //           </Flex>
-// 
+//
 //           <Flex flexDir="column" gap="10px">
 //             <FormControl>
 //               <Select
@@ -131,7 +131,7 @@ export {};
 //                 <option value="relief">Relief Staff</option>
 //               </Select>
 //             </FormControl>
-// 
+//
 //             <FormControl>
 //               <Input
 //                 variant="primary"
@@ -141,14 +141,14 @@ export {};
 //                 placeholder="Password"
 //               />
 //             </FormControl>
-// 
+//
 //             {error && (
 //               <Text textStyle="web.b2" fontWeight="600" color="#E30000">
 //                 {error}
 //               </Text>
 //             )}
 //           </Flex>
-// 
+//
 //           <Button
 //             width="100%"
 //             variant="primaryFilled"

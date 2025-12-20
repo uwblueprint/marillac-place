@@ -67,7 +67,11 @@ export default function PopupContainer({
             <Text textStyle="web.b2" color="#E30000" textAlign="center">
               ERROR
             </Text>
-            <Text textStyle="web.b2" color="text.light.secondary" textAlign="center">
+            <Text
+              textStyle="web.b2"
+              color="text.light.secondary"
+              textAlign="center"
+            >
               {error_message}
             </Text>
           </Flex>
@@ -75,12 +79,7 @@ export default function PopupContainer({
           children
         )}
 
-        <Flex
-          alignItems="center"
-          justifyContent="flex-end"
-          gap="12px"
-          mt="8px"
-        >
+        <Flex alignItems="center" justifyContent="flex-end" gap="12px" mt="8px">
           <BlackOutlineButton
             label="Cancel"
             action={cancel_action}

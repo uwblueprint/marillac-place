@@ -5,13 +5,13 @@ export {};
 // import React, { useEffect, useState } from "react";
 // import { GET_PARTICIPANT_BY_ROOM } from "../../../../gql/queries";
 // import { ROOM_NUMBERS } from "../../../../constants/misc";
-// 
+//
 // type RoomData = {
 //   roomNumber: number;
 //   participantId: number;
 //   taskAssigned: number;
 // };
-// 
+//
 // enum Status {
 //   PENDING_APPROVAL = "PENDING_APPROVAL",
 //   ASSIGNED = "ASSIGNED",
@@ -19,17 +19,17 @@ export {};
 //   COMPLETE = "COMPLETE",
 //   EXCUSED = "EXCUSED",
 // }
-// 
+//
 // export default function RoomsOverview() {
 //   const [roomData, setRoomData] = useState<RoomData[]>([]);
 //   const [getRoomData, { loading, error }] = useLazyQuery(
 //     GET_PARTICIPANT_BY_ROOM
 //   );
-// 
+//
 //   const handleViewSchedule = (roomNumber: number) => {
 //     localStorage.setItem("scheduleSelectedRoom", roomNumber.toString());
 //   };
-// 
+//
 //   useEffect(() => {
 //     const fetchAllRooms = async () => {
 //       const results: RoomData[] = await Promise.all(
@@ -37,7 +37,7 @@ export {};
 //           const { data } = await getRoomData({
 //             variables: { room_number: roomNumber },
 //           });
-// 
+//
 //           return {
 //             roomNumber,
 //             participantId: data?.getParticipantByRoom?.participant_id || null,
@@ -50,13 +50,13 @@ export {};
 //           };
 //         })
 //       );
-// 
+//
 //       setRoomData(results);
 //     };
-// 
+//
 //     fetchAllRooms();
 //   }, [getRoomData]);
-// 
+//
 //   return (
 //     <Flex
 //       paddingY="15px"
@@ -131,7 +131,7 @@ export {};
 //                 >
 //                   Room {room.roomNumber}
 //                 </Text>
-// 
+//
 //                 {room.participantId ? (
 //                   <>
 //                     <Text textStyle="web.b3" textAlign="center">

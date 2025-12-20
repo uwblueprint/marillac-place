@@ -9,7 +9,7 @@ export {};
 // import TodoListWidget from "./components/TodoListWidget";
 // import { getParticipantHomePageDateString } from "../../../utils/formatDateTime";
 // import AnnouncementWidget from "./components/AnnouncementWidget";
-// 
+//
 // export default function ParticipantsHomePage() {
 //   return (
 //     <>
@@ -21,7 +21,7 @@ export {};
 //           {getParticipantHomePageDateString()}
 //         </Text>
 //       </Flex>
-// 
+//
 //       <TodoListWidget />
 //       <AnnouncementWidget />
 //     </>

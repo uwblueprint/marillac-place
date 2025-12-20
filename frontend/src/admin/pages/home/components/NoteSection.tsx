@@ -13,10 +13,10 @@ export {};
 // import SendIcon from "@mui/icons-material/Send";
 // import { CREATE_NOTE, DELETE_NOTE } from "../../../../gql/mutations";
 // import { GET_NOTES } from "../../../../gql/queries";
-// 
+//
 // const NoteSection = () => {
 //   const [newNote, setNewNote] = useState("");
-// 
+//
 //   const [createNote] = useMutation(CREATE_NOTE);
 //   const [deleteNote] = useMutation(DELETE_NOTE);
 //   const {
@@ -24,7 +24,7 @@ export {};
 //     error: getNotesError,
 //     data: getNotesData,
 //   } = useQuery(GET_NOTES);
-// 
+//
 //   async function sendNote() {
 //     if (newNote === "") {
 //       return;
@@ -40,7 +40,7 @@ export {};
 //       console.log(err);
 //     }
 //   }
-// 
+//
 //   async function dismissNote(noteId: string) {
 //     try {
 //       await deleteNote({
@@ -53,7 +53,7 @@ export {};
 //       console.log(err);
 //     }
 //   }
-// 
+//
 //   return (
 //     <Flex
 //       position="absolute"
@@ -132,7 +132,7 @@ export {};
 //                   })
 //                   .replace("p.m.", "PM")
 //                   .replace("a.m.", "AM");
-// 
+//
 //                 return (
 //                   <Flex
 //                     key={note.note_id}
@@ -191,7 +191,7 @@ export {};
 //             border="1px solid"
 //             borderColor="neutral.300"
 //           />
-// 
+//
 //           <InputRightElement>
 //             <Button
 //               onClick={() => sendNote()}
@@ -207,5 +207,5 @@ export {};
 //     </Flex>
 //   );
 // };
-// 
+//
 // export default NoteSection;

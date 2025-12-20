@@ -6,9 +6,9 @@ export {};
 // import { PARTICIPANTS_PROGRESS_PAGE } from "../../../../constants/routes";
 // import { BadgeRarity } from "../../../common/Badge";
 // import BadgeRow from "./BadgeRow";
-// 
+//
 // export type BadgeRowType = "congratulations" | "lostStreak" | "progress";
-// 
+//
 // export interface BadgeToDisplay {
 //   messageText: string;
 //   title: string;
@@ -19,20 +19,20 @@ export {};
 //     percentComplete?: number;
 //   };
 // }
-// 
+//
 // interface BadgeWidgetProps {
 //   badgesToDisplayInWidget: BadgeToDisplay[];
 // }
-// 
+//
 // const BadgeWidget: React.FC<BadgeWidgetProps> = ({
 //   badgesToDisplayInWidget,
 // }) => {
 //   const navigate = useNavigate();
-// 
+//
 //   const handleProgressClick = () => {
 //     navigate(PARTICIPANTS_PROGRESS_PAGE);
 //   };
-// 
+//
 //   // fallback if no badges are provided
 //   if (!badgesToDisplayInWidget || badgesToDisplayInWidget.length === 0) {
 //     return (
@@ -58,7 +58,7 @@ export {};
 //       </Box>
 //     );
 //   }
-// 
+//
 //   return (
 //     <Box
 //       bg="white"
@@ -73,7 +73,7 @@ export {};
 //         const key = `badge-${index}`;
 //         const isLast = index === badgesToDisplayInWidget.length - 1;
 //         const isFirst = index === 0;
-// 
+//
 //         const {
 //           messageText = "Badge Progress",
 //           title,
@@ -84,7 +84,7 @@ export {};
 //             percentComplete: 0,
 //           },
 //         } = badgeData;
-// 
+//
 //         return (
 //           <BadgeRow
 //             key={key}
@@ -101,5 +101,5 @@ export {};
 //     </Box>
 //   );
 // };
-// 
+//
 // export default BadgeWidget;

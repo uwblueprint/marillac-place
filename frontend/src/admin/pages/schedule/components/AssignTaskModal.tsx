@@ -17,13 +17,13 @@ export {};
 // import { sendNotification } from "../../../../utils/sendNotification";
 // import { CREATE_ASSIGNED_TASK } from "../../../../gql/mutations";
 // import { formatDateFromString } from "../../../../utils/formatDateTime";
-// 
+//
 // type AssignTaskModalProps = {
 //   participantId: number;
 //   isOpen: boolean;
 //   onClose: () => void;
 // };
-// 
+//
 // export default function AssignTaskModal({
 //   participantId,
 //   isOpen,
@@ -44,7 +44,7 @@ export {};
 //   const [deduction, setDeduction] = useState<number>(0);
 //   const [comments, setComments] = useState<string>("");
 //   const [error, setError] = useState("");
-// 
+//
 //   const {
 //     loading,
 //     error: queryError,
@@ -52,7 +52,7 @@ export {};
 //   } = useQuery(GET_TASKS_BY_TYPE, {
 //     variables: { type: [TaskType.OPTIONAL, TaskType.INDIVIDUAL_GOAL] },
 //   });
-// 
+//
 //   const [createAssignedTask] = useMutation(CREATE_ASSIGNED_TASK, {
 //     onCompleted: () => {
 //       sendNotification(`Task ${taskName} assigned.`);
@@ -61,7 +61,7 @@ export {};
 //       setError(err.message);
 //     },
 //   });
-// 
+//
 //   useEffect(() => {
 //     if (!loading && !error && data && selectedTaskId !== null) {
 //       const selectedTask = data.getTasksByType.find(
@@ -84,7 +84,7 @@ export {};
 //       }
 //     }
 //   }, [loading, error, data, selectedTaskId]);
-// 
+//
 //   function handleSave() {
 //     if (
 //       !taskName ||
@@ -118,7 +118,7 @@ export {};
 //       if (recurrence === RecurrenceFrequency.ANY_SELECTED_DAYS) {
 //         const startDate = formatDateFromString(days[0]);
 //         const endDate = formatDateFromString(days[days.length - 1], "", true);
-// 
+//
 //         createAssignedTask({
 //           variables: {
 //             participantId,
@@ -144,7 +144,7 @@ export {};
 //             startDate = formatDateFromString(day as DayOfWeek, startTime);
 //             endDate = formatDateFromString(day as DayOfWeek, endTime);
 //           }
-// 
+//
 //           createAssignedTask({
 //             variables: {
 //               participantId,
@@ -163,7 +163,7 @@ export {};
 //       }
 //     }
 //   }
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Assign Task"
@@ -205,9 +205,9 @@ export {};
 //               </Text>
 //             )}
 //           </Flex>
-// 
+//
 //           <Flex w="100%" h="1px" bg="neutral.300" mt="3px" />
-// 
+//
 //           {taskType === TaskType.INDIVIDUAL_GOAL && (
 //             <>
 //               <CoreInput
@@ -224,7 +224,7 @@ export {};
 //               />
 //             </>
 //           )}
-// 
+//
 //           <TaskInput
 //             set_recurrence={setRecurrence}
 //             set_days={setDays}

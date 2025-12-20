@@ -16,12 +16,12 @@ export {};
 // } from "../../../../types/task";
 // import { toTitleCase } from "../../../../utils/string_helpers";
 // import { sendNotification } from "../../../../utils/sendNotification";
-// 
+//
 // type AddTaskModalProps = {
 //   taskType: TaskType;
 //   close: () => void;
 // };
-// 
+//
 // export default function AddTaskModal({ taskType, close }: AddTaskModalProps) {
 //   const [taskName, setTaskName] = useState<string>("");
 //   const [participantPreference, setParticipantPreference] = useState(false);
@@ -34,7 +34,7 @@ export {};
 //   const [deduction, setDeduction] = useState<number>(0);
 //   const [comments, setComments] = useState<string>("");
 //   const [error, setError] = useState<string>("");
-// 
+//
 //   const [createTask] = useMutation(CREATE_TASK, {
 //     onCompleted: () => {
 //       sendNotification(`Task ${taskName} added.`);
@@ -43,7 +43,7 @@ export {};
 //       setError(err.message);
 //     },
 //   });
-// 
+//
 //   function handleSubmit() {
 //     if (
 //       !taskName ||
@@ -88,7 +88,7 @@ export {};
 //       });
 //     }
 //   }
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Add Task"
@@ -105,14 +105,14 @@ export {};
 //           {toTitleCase(taskType as string)}
 //         </Text>
 //       </Flex>
-// 
+//
 //       <CoreInput
 //         label="Task Name"
 //         current_value={taskName}
 //         action={(e: any) => setTaskName(e.target.value)}
 //         type="text"
 //       />
-// 
+//
 //       {taskType !== TaskType.REQUIRED && (
 //         <Checkbox
 //           isChecked={participantPreference}
@@ -130,7 +130,7 @@ export {};
 //           </Text>
 //         </Checkbox>
 //       )}
-// 
+//
 //       {participantPreference ? (
 //         <>
 //           <Flex width="100%" alignItems="center" justifyContent="space-between">
@@ -149,7 +149,7 @@ export {};
 //               width="50%"
 //             />
 //           </Flex>
-// 
+//
 //           <TextInput
 //             label="Comments"
 //             current_value={comments}

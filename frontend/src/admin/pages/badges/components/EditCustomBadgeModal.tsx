@@ -1,5 +1,3 @@
-export {};
-// TODO: Refactor this component
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
@@ -8,18 +6,21 @@ import TextInput from "../../../../ui/inputs/TextInput";
 
 interface EditCustomBadgeModalProps {
   onClose: () => void;
+  refetch: () => void;
   selected: any;
 }
 
 const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
   onClose,
   selected,
+  refetch,
 }) => {
   const [badgeName, setBadgeName] = useState(selected.name);
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
   const [error, setError] = useState("");
 
-  const [editCustomBadge] = useMutation(UPDATE_CUSTOM_BADGE);
+  const [updateCustomBadge, { loading: updateCustomBadgeLoading }] =
+    useMutation(UPDATE_CUSTOM_BADGE);
 
   const handleSave = async () => {
     setError("");
@@ -29,15 +30,16 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
     }
 
     try {
-      await editCustomBadge({
+      await updateCustomBadge({
         variables: {
-          custom_badge_id: selected.badge_id,
-          new_custom_badge_name: badgeName,
-          new_custom_badge_description: badgeCriteria,
+          cid: selected.badge_id,
+          name: badgeName,
+          description: badgeCriteria,
+          icon: selected.icon,
         },
       });
-      localStorage.setItem("notification", "Custom badge updated");
-      window.location.reload();
+      await refetch();
+      onClose();
     } catch (err: any) {
       setError(err.message);
     }
@@ -50,6 +52,7 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
       submit_action={handleSave}
       cancel_action={onClose}
       error_message={error}
+      loading={updateCustomBadgeLoading}
     >
       <TextInput
         label="Badge Name"

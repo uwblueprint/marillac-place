@@ -10,11 +10,11 @@ export {};
 // import { GET_PAST_PARTICIPANTS } from "../../../../gql/queries";
 // import EditPastParticipantCard from "./EditPastParticipantCard";
 // import DataTable from "../../../common/misc/DataTable";
-// 
+//
 // type SortIconProps = {
 //   state: number;
 // };
-// 
+//
 // function SortIcon({ state }: SortIconProps) {
 //   return (
 //     <Flex
@@ -42,30 +42,30 @@ export {};
 //     </Flex>
 //   );
 // }
-// 
+//
 // const PastParticipantTable = () => {
 //   const [pastParticipants, setPastParticipants] = useState([]);
 //   const { loading, error, data } = useQuery(GET_PAST_PARTICIPANTS);
-// 
+//
 //   useEffect(() => {
 //     if (!loading && !error && data) {
 //       setPastParticipants(data.getPastParticipants);
 //     }
 //   }, [loading, error, data]);
-// 
+//
 //   const [edit, setEdit] = useState(false);
 //   const [selectedId, setSelectedId] = useState(-1);
 //   const [selectedArrival, setSelectedArrival] = useState("");
 //   const [selectedDeparture, setSelectedDeparture] = useState("");
-// 
+//
 //   const [idState, setIdState] = useState(0);
 //   const [arrivalState, setArrivalState] = useState(0);
 //   const [departureState, setDepartureState] = useState(0);
-// 
+//
 //   function handleIdStateChange() {
 //     setArrivalState(0);
 //     setDepartureState(0);
-// 
+//
 //     const newState = (idState + 1) % 3;
 //     let sorted: any;
 //     if (newState === 1) {
@@ -77,15 +77,15 @@ export {};
 //         (a: any, b: any) => b.participant_id - a.participant_id
 //       );
 //     }
-// 
+//
 //     setPastParticipants(sorted);
 //     setIdState(newState);
 //   }
-// 
+//
 //   function handleArrivalStateChange() {
 //     setIdState(0);
 //     setDepartureState(0);
-// 
+//
 //     const newState = (arrivalState + 1) % 3;
 //     let sorted: any;
 //     if (newState === 1) {
@@ -97,15 +97,15 @@ export {};
 //         b.arrival_date.localeCompare(a.arrival_date)
 //       );
 //     }
-// 
+//
 //     setPastParticipants(sorted);
 //     setArrivalState(newState);
 //   }
-// 
+//
 //   function handleDepartureStateChange() {
 //     setIdState(0);
 //     setArrivalState(0);
-// 
+//
 //     const newState = (departureState + 1) % 3;
 //     let sorted: any;
 //     if (newState === 1) {
@@ -117,11 +117,11 @@ export {};
 //         b.departure_date.localeCompare(a.departure_date)
 //       );
 //     }
-// 
+//
 //     setPastParticipants(sorted);
 //     setDepartureState(newState);
 //   }
-// 
+//
 //   const columns = [
 //     {
 //       header: "ID Number",
@@ -152,7 +152,7 @@ export {};
 //     },
 //     { header: "", width: "10%" },
 //   ];
-// 
+//
 //   const rows: JSX.Element[][] = pastParticipants.length
 //     ? pastParticipants.map((participant: any, index: number) => {
 //         const cells: JSX.Element[] = [
@@ -212,7 +212,7 @@ export {};
 //         return cells;
 //       })
 //     : [];
-// 
+//
 //   const editModal = (
 //     <EditPastParticipantCard
 //       id={selectedId}
@@ -221,7 +221,7 @@ export {};
 //       close={() => setEdit(false)}
 //     />
 //   );
-// 
+//
 //   return (
 //     <>
 //       <DataTable
@@ -236,5 +236,5 @@ export {};
 //     </>
 //   );
 // };
-// 
+//
 // export default PastParticipantTable;

@@ -16,7 +16,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 // import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
 // import AdminParticipantsPage from "./admin/pages/participants/Main";
 // import AdminTasksPage from "./admin/pages/tasks/Main";
-// import AdminBadgesPage from "./admin/pages/badges/Main";
+import AdminBadgesPage from "./admin/pages/badges/Main";
 // import AdminReportsPage from "./admin/pages/reports/Main";
 
 // import ParticipantLoginPage from "./participant/pages/login/Main";
@@ -87,6 +87,14 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Routes>
+            <Route
+              path={ROUTES.ADMIN_BADGES_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminBadgesPage />
+                </AdminRoute>
+              }
+            />
             {/* <Route element={<AdminLayout />}>
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
@@ -129,14 +137,6 @@ const App = (): React.ReactElement => {
                 element={
                   <AdminRoute>
                     <AdminTasksPage />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={ROUTES.ADMIN_BADGES_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminBadgesPage />
                   </AdminRoute>
                 }
               />

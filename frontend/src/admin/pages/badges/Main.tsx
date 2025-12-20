@@ -1,5 +1,3 @@
-export {};
-//TODO: Refactor this component
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
@@ -8,7 +6,6 @@ import CustomBadgeTable from "./components/CustomBadgeTable";
 import SystemBadgeTable from "./components/SystemBadgeTable";
 import { GET_CUSTOM_BADGES } from "../../../gql/customBadgeRequests";
 import { GET_SYSTEM_BADGES } from "../../../gql/systemBadgeRequests";
-import resolvers from "../../backend/gql/resolvers";
 import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
@@ -25,12 +22,14 @@ export default function AdminBadgesPage() {
     loading: customBadgesLoading,
     error: customBadgesError,
     data: customBadgesData,
+    refetch: refetchCustomBadges,
   } = useQuery(GET_CUSTOM_BADGES);
 
   const {
     loading: systemBadgesLoading,
     error: systemBadgesError,
     data: systemBadgesData,
+    refetch: refetchSystemBadges,
   } = useQuery(GET_SYSTEM_BADGES);
 
   useEffect(() => {
@@ -66,6 +65,7 @@ export default function AdminBadgesPage() {
         loading={systemBadgesLoading}
         error={systemBadgesError}
         badges={systemBadges}
+        refetch={refetchSystemBadges}
       />
       <Flex
         width="100%"
@@ -98,9 +98,15 @@ export default function AdminBadgesPage() {
         loading={customBadgesLoading}
         error={customBadgesError}
         badges={customBadges}
+        refetch={refetchCustomBadges}
       />
 
-      {create && <CreateCustomBadgeModal onClose={() => setCreate(false)} />}
+      {create && (
+        <CreateCustomBadgeModal
+          onClose={() => setCreate(false)}
+          refetch={refetchCustomBadges}
+        />
+      )}
       {assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} />}
     </Flex>
   );

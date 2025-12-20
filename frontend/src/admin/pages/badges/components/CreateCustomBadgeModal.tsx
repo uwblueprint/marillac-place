@@ -1,52 +1,56 @@
-export {};
-// //TODO: Refactor this component
 import React, { useState } from "react";
-import {
-  FormControl,
-  FormLabel,
-  Flex,
-  Text,
-  Grid,
-  Image as ChakraImage,
-} from "@chakra-ui/react";
+import { Flex, Text, Grid } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
-import { Icon, iconList } from "../../../../constants/icons";
 import { CREATE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
+import { Icon } from "../../../../types/enums";
+import { ICON_MAP } from "../../../../constants/icons";
 
-interface Props {
+interface CreateCustomBadgeModalProps {
   onClose: () => void;
+  refetch: () => void;
 }
 
-const CreateCustomBadgeModal = ({ onClose }: Props) => {
+const CreateCustomBadgeModal = ({
+  onClose,
+  refetch,
+}: CreateCustomBadgeModalProps) => {
   const [name, setName] = useState("");
   const [criteria, setCriteria] = useState("");
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [error, setError] = useState("");
 
-  const [createCustomBadge, { loading }] = useMutation(CREATE_CUSTOM_BADGE, {
-    onCompleted: () => {
-      localStorage.setItem("notification", "Created Custom Badge: " + name);
-      window.location.reload();
-    },
-    onError: (err) => {
-      setError(err.message);
-    },
-  });
+  const availableIcons = [
+    Icon.FIVE_STAR,
+    Icon.GROUP,
+    Icon.HEART,
+    Icon.HOME,
+    Icon.BABY,
+    Icon.WINGS,
+  ];
 
-  const handleSave = () => {
+  const [createCustomBadge, { loading: createCustomBadgeLoading }] =
+    useMutation(CREATE_CUSTOM_BADGE);
+
+  const handleSave = async () => {
     setError("");
     if (!name || !criteria || !selectedIcon) {
       setError("Missing fields");
     } else {
-      createCustomBadge({
-        variables: {
-          name,
-          description: criteria,
-          icon: selectedIcon.toUpperCase(),
-        },
-      });
+      try {
+        createCustomBadge({
+          variables: {
+            name,
+            description: criteria,
+            icon: selectedIcon,
+          },
+        });
+        await refetch();
+        onClose();
+      } catch (err: any) {
+        setError(err.message);
+      }
     }
   };
 
@@ -60,53 +64,49 @@ const CreateCustomBadgeModal = ({ onClose }: Props) => {
         onClose();
       }}
       error_message={error}
+      loading={createCustomBadgeLoading}
     >
       <TextInput
         label="Badge Name"
         current_value={name}
-        update_action={(e: any) => setName(e.target.value)}
-        size="small"
+        update_action={setName}
+        size="large"
       />
       <TextInput
         label="Badge Criteria"
         current_value={criteria}
-        update_action={(e: any) => setCriteria(e.target.value)}
-        size="small"
+        update_action={setCriteria}
+        size="large"
       />
 
-      <FormControl mb={4}>
-        <FormLabel>
-          <Text textStyle="web.s1" color="text.light.secondary">
-            Choose Badge Icon
-          </Text>
-        </FormLabel>
-        <Grid templateColumns="repeat(6, 1fr)" gap={3}>
-          {iconList.map((icon) => (
+      <Text textStyle="web.s1" color="text.light.secondary">
+        Choose Badge Icon
+      </Text>
+      <Grid templateColumns="repeat(6, 1fr)" gap={3}>
+        {availableIcons.map((icon) => {
+          const IconComponent = ICON_MAP[icon];
+          const isSelected = selectedIcon === icon;
+
+          return (
             <Flex
               key={icon}
-              as="button"
               align="center"
               justify="center"
-              width="64px"
-              height="64px"
-              p={2}
-              borderRadius="8px"
+              p="8px"
               border="1px solid"
-              borderColor={selectedIcon === icon ? "#3182CE" : "neutral.300"}
-              bg="white"
+              borderColor={isSelected ? "primary.700" : "neutral.300"}
+              borderRadius="8px"
+              cursor="pointer"
               onClick={() => setSelectedIcon(icon)}
-              _hover={{ borderColor: "#3182CE" }}
             >
-              <ChakraImage
-                src={`/badges/${icon}.svg`}
-                alt={icon}
-                boxSize={icon === Icon.WINGS ? "55px" : "32px"}
-                opacity={selectedIcon === icon ? 1 : 0.5}
+              <IconComponent
+                size={32}
+                color={isSelected ? "primary.700" : "neutral.300"}
               />
             </Flex>
-          ))}
-        </Grid>
-      </FormControl>
+          );
+        })}
+      </Grid>
     </PopupContainer>
   );
 };

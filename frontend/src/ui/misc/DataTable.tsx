@@ -13,15 +13,15 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-type Column = {
+export type Column = {
   header: string;
   width: string;
 };
 
-type Row = {
+export type Row = {
   element: string | ReactNode;
   action?: () => void;
-}
+};
 
 type DataTableProps = {
   loading: boolean;
@@ -30,12 +30,7 @@ type DataTableProps = {
   rows: Row[][];
 };
 
-const DataTable = ({
-  loading,
-  error,
-  columns,
-  rows,
-}: DataTableProps) => {
+const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
   return (
     <TableContainer
       border="1px solid"
@@ -48,26 +43,25 @@ const DataTable = ({
           <Tr backgroundColor="neutral.200" w="100%">
             {columns.map((col: Column, index: number) => (
               <Th width={col.width} key={index}>
-                  <Text
-                    textStyle="web.s1"
-                    color="#000000"
-                    textTransform="none"
-                    textAlign="left"
-                  >
-                    {col.header}
-                  </Text>
+                <Text
+                  textStyle="web.s1"
+                  color="#000000"
+                  textTransform="none"
+                  textAlign="left"
+                >
+                  {col.header}
+                </Text>
               </Th>
             ))}
           </Tr>
         </Thead>
         <Tbody>
-          { loading ? (
+          {loading ? (
             <Tr outline="1px solid" outlineColor="neutral.300">
               <Td colSpan={6} textAlign="center" paddingY="50px">
                 <Spinner size="md" color="primary.700" />
               </Td>
             </Tr>
-            
           ) : error ? (
             <Tr outline="1px solid" outlineColor="neutral.300">
               <Td colSpan={6} paddingY="50px">
@@ -75,7 +69,11 @@ const DataTable = ({
                   <Text textStyle="web.b2" color="#E30000" textAlign="center">
                     ERROR
                   </Text>
-                  <Text textStyle="web.b2" color="text.light.secondary" textAlign="center">
+                  <Text
+                    textStyle="web.b2"
+                    color="text.light.secondary"
+                    textAlign="center"
+                  >
                     {error}
                   </Text>
                 </Flex>
@@ -90,22 +88,36 @@ const DataTable = ({
               >
                 {row.map((cell: Row, cellIndex: number) => (
                   <Td key={cellIndex}>
-                    { cell.action ? (
-                      <Flex w="100%" h="100%" alignItems="center" justifyContent="center">
-                        <Button 
-                          onClick={cell.action} 
-                          cursor="pointer" 
-                          backgroundColor="transparent"  
+                    {cell.action ? (
+                      <Flex
+                        w="100%"
+                        h="100%"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Button
+                          onClick={cell.action}
+                          cursor="pointer"
+                          backgroundColor="transparent"
                           border="none"
                           height="fit-content"
                           lineHeight={1}
-                          _hover={{ backgroundColor: "transparent", border: "none" }}
+                          _hover={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
                         >
                           {cell.element}
                         </Button>
                       </Flex>
                     ) : (
-                      <Text textStyle="web.b3" color="text.light.primary" textAlign="left">{cell.element}</Text>
+                      <Text
+                        textStyle="web.b3"
+                        color="text.light.primary"
+                        textAlign="left"
+                      >
+                        {cell.element}
+                      </Text>
                     )}
                   </Td>
                 ))}

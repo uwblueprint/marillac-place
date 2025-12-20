@@ -1,5 +1,3 @@
-export {};
-TODO: Refactor this component
 import React, { useState } from "react";
 import { Flex, Input, FormLabel, FormControl, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
@@ -7,109 +5,133 @@ import { UPDATE_SYSTEM_BADGE } from "../../../../gql/systemBadgeRequests";
 import { UPDATE_BADGE_LEVEL } from "../../../../gql/badgeLevelRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
+import { Level } from "../../../../types/enums";
+import { BadgeLevel } from "../../../../types/models";
+import FixedInput from "../../../../ui/inputs/FixedInput";
 
 interface EditSystemBadgeModalProps {
   isOpen: boolean;
   onClose: () => void;
   selected: any;
+  refetch: () => void;
 }
 
 const EditSystemBadgeModal = ({
   isOpen,
   onClose,
+  refetch,
   selected,
 }: EditSystemBadgeModalProps) => {
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
-  const badgeLevels = ["Novice", "Bronze", "Silver", "Gold", "Diamond"];
-
-  const originalData: Record<string, { benchmark: number; bucks: number }> = {};
-  for (const bl of selected.badge_level) {
-    const name = badgeLevels[bl.level];
-    originalData[name] = {
-      benchmark: bl.benchmark,
-      bucks: bl.marillac_bucks,
-    };
-  }
-  const [badgeData, setBadgeData] = useState(originalData);
-
+  const [badgeLevels, setBadgeLevels] = useState<
+    Record<
+      Level,
+      {
+        benchmark: number;
+        value: number;
+        originalBenchmark: number;
+        originalValue: number;
+      }
+    >
+  >(
+    selected.BadgeLevel.reduce(
+      (
+        obj: Record<
+          Level,
+          {
+            benchmark: number;
+            value: number;
+            originalBenchmark: number;
+            originalValue: number;
+          }
+        >,
+        bl: BadgeLevel
+      ) => ({
+        ...obj,
+        [bl.level]: {
+          benchmark: bl.benchmark,
+          value: bl.value,
+          originalBenchmark: bl.benchmark,
+          originalValue: bl.value,
+        },
+      }),
+      {}
+    )
+  );
   const [error, setError] = useState("");
 
-  const [editBadgeLevel] = useMutation(UPDATE_BADGE_LEVEL);
-  const [editSystemBadge] = useMutation(UPDATE_SYSTEM_BADGE);
+  const [updateBadgeLevel, { loading: updateBadgeLevelLoading }] =
+    useMutation(UPDATE_BADGE_LEVEL);
+  const [updateSystemBadge, { loading: updateSystemBadgeLoading }] =
+    useMutation(UPDATE_SYSTEM_BADGE);
 
   const handleSave = async () => {
-    console.log("getting to save");
     setError("");
 
-    if (!badgeCriteria) {
+    const noBadgeLevels = Object.keys(badgeLevels).length === 0;
+    const badgeLevelsHaveEmptyFields = Object.values(badgeLevels).some(
+      ({ benchmark, value }) => !benchmark || !value
+    );
+    if (!badgeCriteria || noBadgeLevels || badgeLevelsHaveEmptyFields) {
       setError("Missing fields");
       return;
     }
 
-    let prevBenchmark = 0;
-    let prevBucks = 0;
-    for (const bl of selected.badge_level) {
-      const data = badgeData[badgeLevels[bl.level]];
-      const { benchmark, bucks } = data;
-
-      if (benchmark <= 0 || bucks <= 0) {
-        setError("Missing fields");
-        return;
-      }
-
-      if (benchmark <= prevBenchmark || bucks <= prevBucks) {
-        setError("Levels must be increasing");
-        return;
-      }
-
-      prevBenchmark = benchmark;
-      prevBucks = bucks;
+    const benchmarksAreIncreasing =
+      (!(Level.NOVICE in badgeLevels) ||
+        !(Level.BRONZE in badgeLevels) ||
+        badgeLevels[Level.NOVICE].benchmark <
+          badgeLevels[Level.BRONZE].benchmark) &&
+      (!(Level.BRONZE in badgeLevels) ||
+        !(Level.SILVER in badgeLevels) ||
+        badgeLevels[Level.BRONZE].benchmark <
+          badgeLevels[Level.SILVER].benchmark) &&
+      (!(Level.SILVER in badgeLevels) ||
+        !(Level.GOLD in badgeLevels) ||
+        badgeLevels[Level.SILVER].benchmark <
+          badgeLevels[Level.GOLD].benchmark) &&
+      (!(Level.GOLD in badgeLevels) ||
+        !(Level.DIAMOND in badgeLevels) ||
+        badgeLevels[Level.GOLD].benchmark <
+          badgeLevels[Level.DIAMOND].benchmark);
+    if (!benchmarksAreIncreasing) {
+      setError("Invalid benchmark values (must be increasing)");
+      return;
     }
 
-    try {
-      await editSystemBadge({
+    const requests: Promise<any>[] = [];
+    requests.push(
+      updateSystemBadge({
         variables: {
-          system_badge_id: selected.badge_id,
-          system_badge_name: selected.name,
-          system_badge_criteria: badgeCriteria,
+          name: selected.name,
+          description: badgeCriteria,
         },
-      });
-    } catch (err: any) {
-      setError("Failed to edit system badge");
-    }
-
-    // list of promises for batch update
-    const mutationPromises: Promise<any>[] = [];
-
-    for (const bl of selected.badge_level) {
-      const { benchmark: originalBenchmark, bucks: originalBucks } =
-        originalData[badgeLevels[bl.level]];
-      const { benchmark, bucks } = badgeData[badgeLevels[bl.level]];
-
-      const hasChanged =
-        originalBenchmark !== benchmark || originalBucks !== bucks;
-      if (hasChanged) {
-        mutationPromises.push(
-          editBadgeLevel({
+      })
+    );
+    for (const [level, data] of Object.entries(badgeLevels)) {
+      if (
+        data.originalBenchmark !== data.benchmark ||
+        data.originalValue !== data.value
+      ) {
+        requests.push(
+          updateBadgeLevel({
             variables: {
-              badge_id: selected.badge_id,
-              badge_level: bl.level,
-              benchmark,
-              marillac_bucks: bucks,
+              name: selected.name,
+              level: level as Level,
+              benchmark: data.benchmark,
+              value: data.value,
             },
           })
         );
       }
     }
 
-    // batched update
     try {
-      await Promise.all(mutationPromises);
-      localStorage.setItem("notification", "System badge updated");
-      window.location.reload();
+      await Promise.all(requests);
+      await refetch();
+      onClose();
     } catch (err: any) {
-      console.error(`Failed to update badge levels`, err);
-      setError("one or more badge levels failed to update");
+      setError("Failed to edit system badge");
     }
   };
 
@@ -120,23 +142,22 @@ const EditSystemBadgeModal = ({
       submit_action={handleSave}
       cancel_action={onClose}
       error_message={error}
+      loading={updateSystemBadgeLoading || updateBadgeLevelLoading}
     >
-      <Flex gap="5px" align="flex-end">
-        <Text textStyle="web.s1" color="text.light.secondary">
-          Badge Name
-        </Text>
-        <Text textStyle="web.b3" color="#000000">
-          {selected.name}
-        </Text>
-      </Flex>
+      <FixedInput
+        label="Badge Name"
+        current_value={selected.name}
+        orientation="horizontal"
+      />
 
       <TextInput
         label="Badge Criteria"
         current_value={badgeCriteria}
-        action={(e: any) => setBadgeCriteria(e.target.value)}
-        size = "medium"
+        update_action={setBadgeCriteria}
+        size="medium"
       />
 
+      {/* revise */}
       <Flex flexDir="column">
         <FormControl>
           <Flex justifyContent="space-between" mb="5px">
@@ -156,7 +177,7 @@ const EditSystemBadgeModal = ({
             </FormLabel>
           </Flex>
 
-          {Object.entries(badgeData).map(([level, data]) => {
+          {Object.entries(badgeLevels).map(([level, data]) => {
             return (
               <Flex
                 key={level}
@@ -181,9 +202,9 @@ const EditSystemBadgeModal = ({
                       <Input
                         variant="primary"
                         textAlign="center"
-                        value={badgeData[level].benchmark}
+                        value={data.benchmark}
                         onChange={(e) =>
-                          setBadgeData((prev: any) => {
+                          setBadgeLevels((prev: any) => {
                             const newBenchmark = Number(e.target.value);
                             if (Number.isNaN(newBenchmark)) return prev;
                             return {
@@ -207,21 +228,18 @@ const EditSystemBadgeModal = ({
                   variant="primary"
                   textAlign="center"
                   width="75px"
-                  value={badgeData[level].bucks}
+                  value={data.value}
                   onChange={(e) =>
-                    setBadgeData((prev: any) => {
-                      const newBucks = Number(e.target.value);
-                      if (Number.isNaN(newBucks)) return prev;
+                    setBadgeLevels((prev: any) => {
+                      const newValue = Number(e.target.value);
+                      if (Number.isNaN(newValue)) return prev;
                       return {
                         ...prev,
-                        [level]: {
-                          ...prev[level],
-                          bucks: newBucks,
-                        },
+                        [level]: { ...prev[level], value: newValue },
                       };
                     })
                   }
-                  min={0}
+                  min={1}
                 />
               </Flex>
             );

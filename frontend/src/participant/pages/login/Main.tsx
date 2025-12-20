@@ -8,18 +8,18 @@ export {};
 // import { PARTICIPANT_LOGIN } from "../../../gql/mutations";
 // import * as ROUTES from "../../../constants/routes";
 // import Loading from "../../../Loading";
-// 
+//
 // export default function ParticipantsLoginPage() {
 //   const navigate = useNavigate();
-// 
+//
 //   const [loggedIn, setLoggedIn] = useState(false);
 //   const [checkLoggedIn, setCheckLoggedIn] = useState(false);
-// 
+//
 //   const [id, setId] = useState("");
 //   const [password, setPassword] = useState("");
-// 
+//
 //   const [error, setError] = useState("");
-// 
+//
 //   const [login, { loading }] = useMutation(PARTICIPANT_LOGIN, {
 //     onCompleted: (data) => {
 //       localStorage.setItem("participant_token", data.participantLogin.token);
@@ -41,7 +41,7 @@ export {};
 //       }
 //     },
 //   });
-// 
+//
 //   useEffect(() => {
 //     const tokenCheck = async () => {
 //       const participantUser = await isParticipant();
@@ -52,25 +52,25 @@ export {};
 //     };
 //     tokenCheck();
 //   }, []);
-// 
+//
 //   const handleSubmit = () => {
 //     setError("");
-// 
+//
 //     if (!id || !password) {
 //       setError("Missing fields");
 //     } else {
 //       login({ variables: { id: Number(id), password } });
 //     }
 //   };
-// 
+//
 //   if (!checkLoggedIn || loading) {
 //     return <Loading />;
 //   }
-// 
+//
 //   if (loggedIn) {
 //     return <Navigate to={ROUTES.PARTICIPANTS_HOME_PAGE} replace />;
 //   }
-// 
+//
 //   return (
 //     <Flex
 //       w="100vw"
@@ -102,12 +102,12 @@ export {};
 //         >
 //           <Flex flexDir="column">
 //             <Text textStyle="mobile.h1">Sign in</Text>
-// 
+//
 //             <Text textStyle="mobile.b1">
 //               Please enter your login information.
 //             </Text>
 //           </Flex>
-// 
+//
 //           <FormControl>
 //             <Input
 //               variant="primary"
@@ -117,7 +117,7 @@ export {};
 //               placeholder="ID #"
 //             />
 //           </FormControl>
-// 
+//
 //           <FormControl>
 //             <Input
 //               variant="primary"
@@ -127,13 +127,13 @@ export {};
 //               placeholder="Password"
 //             />
 //           </FormControl>
-// 
+//
 //           {error && (
 //             <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">
 //               {error}
 //             </Text>
 //           )}
-// 
+//
 //           <Button
 //             width="full"
 //             variant="primaryFilled"

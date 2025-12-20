@@ -7,7 +7,7 @@ export {};
 // import ModalContainer from "../../../common/form/ModalContainer";
 // import SelectionInput from "../../../common/form/SelectionInput";
 // import TextInput from "../../../common/form/TextInput";
-// 
+//
 // type EditAnnouncementModalProps = {
 //   isOpen: boolean;
 //   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,7 +16,7 @@ export {};
 //   initialMessage: string;
 //   initialPriority: string;
 // };
-// 
+//
 // const EditAnnouncementModal = ({
 //   isOpen,
 //   setIsOpen,
@@ -27,18 +27,18 @@ export {};
 // }: EditAnnouncementModalProps): React.ReactElement => {
 //   const [priority, setPriority] = useState(initialPriority);
 //   const [message, setMessage] = useState(initialMessage);
-// 
+//
 //   const [error, setError] = useState("");
-// 
+//
 //   const [editAnnouncement] = useMutation(EDIT_ANNOUNCEMENT);
-// 
+//
 //   const handleSave = async () => {
 //     setError("");
 //     if (!announcementId || !priority || !message.trim()) {
 //       setError("Missing fields");
 //       return;
 //     }
-// 
+//
 //     try {
 //       await editAnnouncement({
 //         variables: {
@@ -47,9 +47,9 @@ export {};
 //           message,
 //         },
 //       });
-// 
+//
 //       localStorage.setItem("notification", "Announcement updated!");
-// 
+//
 //       setIsOpen(false);
 //       window.location.reload();
 //     } catch (err: any) {
@@ -59,12 +59,12 @@ export {};
 //       setError("Unable to update announcement");
 //     }
 //   };
-// 
+//
 //   const handleCancel = () => {
 //     setError("");
 //     setIsOpen(false);
 //   };
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Edit Announcement"
@@ -81,7 +81,7 @@ export {};
 //           {sendTo}
 //         </Text>
 //       </Flex>
-// 
+//
 //       <SelectionInput
 //         label="Priority Level"
 //         current_value={priority}
@@ -93,7 +93,7 @@ export {};
 //           Critical: "CRITICAL",
 //         }}
 //       />
-// 
+//
 //       <TextInput
 //         label="Message"
 //         current_value={message}
@@ -103,5 +103,5 @@ export {};
 //     </ModalContainer>
 //   );
 // };
-// 
+//
 // export default EditAnnouncementModal;
