@@ -1,167 +1,144 @@
-export {};
-// TODO: Refactor this component
-// import React, { useState, useEffect } from "react";
-// import { Navigate, useNavigate } from "react-router-dom";
-// import { useMutation } from "@apollo/client";
-// import {
-//   Select,
-//   Button,
-//   Flex,
-//   Text,
-//   Input,
-//   FormControl,
-// } from "@chakra-ui/react";
-// import { ADMIN_LOGIN } from "../../../gql/mutations";
-// import { isAdmin, isRelief } from "../../../utils/checkRole";
-// import * as ROUTES from "../../../constants/routes";
-// // import Loading from "../../../Loading";
-//
-// export default function AdminLoginPage() {
-//   const navigate = useNavigate();
-//
-//   const [loggedIn, setLoggedIn] = useState(false);
-//   const [checkLoggedIn, setCheckLoggedIn] = useState(false);
-//
-//   const [role, setRole] = useState("");
-//   const [password, setPassword] = useState("");
-//
-//   const [error, setError] = useState("");
-//
-//   const [login, { loading }] = useMutation(ADMIN_LOGIN, {
-//     onCompleted: (data) => {
-//       localStorage.setItem("admin_token", data.adminLogin.token);
-//       navigate(ROUTES.ADMIN_HOME_PAGE);
-//     },
-//     onError: (err: Error) => {
-//       // Check if it's a network error (CORS, connection refused, etc.)
-//       if (
-//         err.message.includes("Failed to fetch") ||
-//         err.message.includes("NetworkError") ||
-//         err.message.includes("Network request failed")
-//       ) {
-//         setError(
-//           "Unable to connect to server. Please check your internet connection and try again."
-//         );
-//       } else {
-//         // Show the actual error message from the backend
-//         setError(err.message);
-//       }
-//     },
-//   });
-//
-//   useEffect(() => {
-//     const tokenCheck = async () => {
-//       const adminUser = await isAdmin();
-//       const reliefUser = await isRelief();
-//       if (adminUser || reliefUser) {
-//         setLoggedIn(true);
-//       }
-//       setCheckLoggedIn(true);
-//     };
-//     tokenCheck();
-//   }, []);
-//
-//   const handleSubmit = () => {
-//     setError("");
-//
-//     if (!role || !password) {
-//       setError("Missing fields");
-//     } else {
-//       login({ variables: { role, password } });
-//     }
-//   };
-//
-//   // if (!checkLoggedIn || loading) {
-//   //   return <Loading />;
-//   // }
-//
-//   if (loggedIn) {
-//     return <Navigate to={ROUTES.ADMIN_HOME_PAGE} replace />;
-//   }
-//
-//   return (
-//     <Flex
-//       w="100vw"
-//       h="100vh"
-//       alignItems="center"
-//       justifyContent="center"
-//       bg="neutral.0"
-//     >
-//       <Flex
-//         width="900px"
-//         h="450px"
-//         bg="primary.100"
-//         borderRadius="8px"
-//         boxShadow="lg"
-//         flexDir="row"
-//         alignItems="center"
-//         justifyContent="space-around"
-//       >
-//         <Flex width="30%" marginLeft="3vw">
-//           <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
-//         </Flex>
-//
-//         <Flex
-//           width="400px"
-//           p="40px"
-//           borderRadius="8px"
-//           border="1px"
-//           borderColor="neutral.300"
-//           bg="neutral.0"
-//           flexDir="column"
-//           alignItems="left"
-//           justifyContent="center"
-//           gap="20px"
-//         >
-//           <Flex flexDir="column">
-//             <Text textStyle="web.h1">Sign in</Text>
-//
-//             <Text textStyle="web.b1">Please enter your login information.</Text>
-//           </Flex>
-//
-//           <Flex flexDir="column" gap="10px">
-//             <FormControl>
-//               <Select
-//                 variant="primary"
-//                 value={role}
-//                 onChange={(e) => setRole(e.target.value)}
-//                 placeholder="Role"
-//               >
-//                 <option value="admin">Administrative Staff</option>
-//                 <option value="relief">Relief Staff</option>
-//               </Select>
-//             </FormControl>
-//
-//             <FormControl>
-//               <Input
-//                 variant="primary"
-//                 type="password"
-//                 value={password}
-//                 onChange={(e) => setPassword(e.target.value)}
-//                 placeholder="Password"
-//               />
-//             </FormControl>
-//
-//             {error && (
-//               <Text textStyle="web.b2" fontWeight="600" color="#E30000">
-//                 {error}
-//               </Text>
-//             )}
-//           </Flex>
-//
-//           <Button
-//             width="100%"
-//             variant="primaryFilled"
-//             borderRadius="full"
-//             fontWeight="700"
-//             fontSize="16px"
-//             onClick={handleSubmit}
-//             isLoading={loading}
-//           >
-//             Sign in
-//           </Button>
-//         </Flex>
-//       </Flex>
-//     </Flex>
-//   );
-// }
+import React, { useState, useEffect, useContext } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import {
+  Select,
+  Button,
+  Flex,
+  Text,
+  Input,
+  FormControl,
+} from "@chakra-ui/react";
+import { ADMIN_LOGIN } from "../../../gql/loginRequests";
+import { verifyRole } from "../../../helpers/verifyRole";
+import * as ROUTES from "../../../constants/routes";
+import Error from "../../../ui/screens/ErrorScreen";
+import Loading from "../../../ui/screens/LoadingScreen";
+import { ADMIN, RELIEF } from "../../../constants/roles";
+import { AdminContext } from "../../AdminContext";
+import WidgetContainer from "../../../ui/containers/WidgetContainer";
+import DropdownInput from "../../../ui/inputs/DropdownInput";
+import PasswordInput from "../../../ui/inputs/PasswordInput";
+import OrangeButton from "../../../ui/buttons/OrangeButton";
+
+export default function AdminLoginPage() {
+  const navigate = useNavigate();
+  const adminContext = useContext(AdminContext);
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const [role, setRole] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [adminLogin, { loading: adminLoginLoading }] = useMutation(ADMIN_LOGIN, {
+    onCompleted: (data) => {
+      localStorage.setItem("token", data.adminLogin.token);
+      if (!adminContext) {
+        setError("admin context not found");
+        return;
+      }
+      adminContext.setRole(role);
+      navigate(ROUTES.ADMIN_HOME_PAGE);
+    },
+    onError: (err: Error) => {
+      setError(err.message);
+    },
+  });
+
+  useEffect(() => {
+    const authenticate = async () => {
+      const isAuthenticated = await verifyRole([ADMIN, RELIEF]);
+      if (isAuthenticated) {
+        setLoggedIn(true);
+      }
+      setLoading(false);
+    };
+    authenticate();
+  }, []);
+
+  const handleSubmit = () => {
+    setError("");
+    if (!role || !password) {
+      setError("missing required fields");
+    } else {
+      adminLogin({ variables: { role, password } });
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (loggedIn) {
+    return <Navigate to={ROUTES.ADMIN_HOME_PAGE} replace />;
+  }
+
+  return (
+    <Flex
+      w="100vw"
+      h="100vh"
+      alignItems="center"
+      justifyContent="center"
+      bg="neutral.0"
+    >
+      <Flex
+        width="700px"
+        h="350px"
+        bg="primary.100"
+        borderRadius="8px"
+        boxShadow="lg"
+        flexDir="row"
+        alignItems="center"
+        justifyContent="space-around"
+      >
+        <Flex width="30%" marginLeft="3vw">
+          <img width="100%" src="/assets/logo.png" alt="Marillac Place Logo" />
+        </Flex>
+
+        <WidgetContainer
+          loading={adminLoginLoading}
+          error=""
+          width="fit-content"
+          height="fit-content"
+          paddingX="25px"
+          paddingY="25px"
+        >
+          <Flex flexDir="column">
+            <Text textStyle="web.h2">Sign in</Text>
+            <Text textStyle="web.b2">Please enter your login information.</Text>
+          </Flex>
+
+          <Flex flexDir="column" gap="10px" my="20px">
+            <DropdownInput
+              size="medium"
+              placeholder="Select Role"
+              current_value={role}
+              update_action={setRole}
+              value_options={{ "Administrative Staff": ADMIN, "Relief Staff": RELIEF }}
+            />
+
+            <PasswordInput
+              size="medium"
+              current_value={password}
+              update_action={setPassword}
+            />
+
+            {error && (
+              <Text textStyle="web.b2" fontWeight="600" color="#E30000">
+                {error}
+              </Text>
+            )}
+          </Flex>
+
+          <OrangeButton
+            label="Sign in"
+            action={handleSubmit}
+            is_active={false}
+          />
+        </WidgetContainer>
+      </Flex>
+    </Flex>
+  );
+}
