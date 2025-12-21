@@ -9,12 +9,12 @@ export {};
 // import { displayDate2 } from "../../../../utils/formatDateTime";
 // import { ParticipantContext } from "../../../common/ParticipantContext";
 // import * as ROUTES from "../../../../constants/routes";
-// 
+//
 // export default function AnnouncementWidget() {
 //   const participant = useContext(ParticipantContext);
 //   const participantId = participant?.id ?? "";
 //   const navigate = useNavigate();
-// 
+//
 //   const {
 //     data: announcementData,
 //     loading: announcementLoading,
@@ -24,10 +24,10 @@ export {};
 //       participant_id: participantId,
 //     },
 //   });
-// 
+//
 //   if (announcementLoading) return <Text>Loading announcements.</Text>;
 //   if (announcementError) return <Text>Error fetching announcements.</Text>;
-// 
+//
 //   return (
 //     <WidgetContainer>
 //       <>
@@ -42,7 +42,7 @@ export {};
 //             Announcements
 //           </Text>
 //         </Flex>
-// 
+//
 //         {announcementData.getAnnouncementsByParticipantId.map(
 //           (announcement: any) => (
 //             <Flex

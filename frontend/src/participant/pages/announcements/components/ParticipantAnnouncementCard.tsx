@@ -9,7 +9,7 @@ export {};
 // import orangepin from "../../../icons/announcements/orangepin.svg";
 // import Icon from "../../../common/Icon";
 // import { displayDate2 } from "../../../../utils/formatDateTime";
-// 
+//
 // type ParticipantAnnouncementCardProps = {
 //   allRooms: boolean;
 //   message: string;
@@ -19,7 +19,7 @@ export {};
 //   time: string;
 //   userAnnouncementId: number;
 // };
-// 
+//
 // export default function ParticipantAnnouncementCard({
 //   userAnnouncementId,
 //   allRooms,
@@ -44,7 +44,7 @@ export {};
 //           <Icon icon={notification} width="12px" height="12px" />
 //         </Flex>
 //       )}
-// 
+//
 //       <Flex alignItems="center" justifyContent="space-between">
 //         <Flex alignItems="center" gap="10px">
 //           {allRooms ? (
@@ -62,7 +62,7 @@ export {};
 //             {displayDate2(new Date(time))}
 //           </Text>
 //         </Flex>
-// 
+//
 //         <Flex gap="12px" paddingRight="4px">
 //           {importance !== 0 && (
 //             <Icon icon={important} width="3.8px" height="3.8px" />
@@ -70,7 +70,7 @@ export {};
 //           {isPinned && <Icon icon={orangepin} width="10px" height="10px" />}
 //         </Flex>
 //       </Flex>
-// 
+//
 //       <Text
 //         textStyle="mobile.b1"
 //         marginTop="5px"

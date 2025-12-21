@@ -8,13 +8,13 @@ export {};
 // import { DELETE_TASK } from "../../../../gql/mutations";
 // import EditTaskModal from "./EditTaskModal";
 // import DataTable from "../../../common/misc/DataTable";
-// 
+//
 // type TasksTableProps = {
 //   loading: boolean;
 //   error: any;
 //   tasks: any[];
 // };
-// 
+//
 // const TasksTable = ({ loading, error, tasks }: TasksTableProps) => {
 //   const days: Record<string, string> = {
 //     MONDAY: "M",
@@ -25,18 +25,18 @@ export {};
 //     SATURDAY: "Sa",
 //     SUNDAY: "Su",
 //   };
-// 
+//
 //   const [edit, setEdit] = useState(false);
 //   const [selected, setSelected] = useState(null);
-// 
+//
 //   const [deleteTask] = useMutation(DELETE_TASK);
-// 
+//
 //   function formatTime(t: string) {
 //     // const [h, m] = t.split(":").map(Number);
 //     // return `${(h % 12 || 12)}:${m.toString().padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
 //     return t;
 //   }
-// 
+//
 //   async function handleDeleteTask(id: number) {
 //     try {
 //       await deleteTask({
@@ -49,7 +49,7 @@ export {};
 //     }
 //     window.location.reload();
 //   }
-// 
+//
 //   const columns = [
 //     { header: "Name", width: "22%" },
 //     { header: "Assigned Days", width: "22%" },
@@ -57,7 +57,7 @@ export {};
 //     { header: "Marillac Bucks", width: "22%" },
 //     { header: "Actions", width: "12%" },
 //   ];
-// 
+//
 //   const rows: JSX.Element[][] = tasks.length
 //     ? tasks.map((task: any) => {
 //         const cells: JSX.Element[] = [
@@ -138,15 +138,15 @@ export {};
 //             </Flex>
 //           </Flex>,
 //         ];
-// 
+//
 //         return cells;
 //       })
 //     : [];
-// 
+//
 //   const editModal = selected && (
 //     <EditTaskModal selected={selected} close={() => setEdit(false)} />
 //   );
-// 
+//
 //   return (
 //     <>
 //       <DataTable
@@ -161,5 +161,5 @@ export {};
 //     </>
 //   );
 // };
-// 
+//
 // export default TasksTable;

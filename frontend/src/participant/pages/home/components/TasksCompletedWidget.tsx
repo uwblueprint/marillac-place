@@ -2,7 +2,7 @@ export {};
 // TODO: Refactor this component
 // import React from "react";
 // import { Flex, Text, Link } from "@chakra-ui/react";
-// 
+//
 // const TrophyIcon = () => (
 //   <svg
 //     width="36"
@@ -72,7 +72,7 @@ export {};
 //     </defs>
 //   </svg>
 // );
-// 
+//
 // export default function TasksCompletedWidget() {
 //   return (
 //     <Flex
@@ -109,14 +109,14 @@ export {};
 //           Tasks
 //         </Link>
 //       </Flex>
-// 
+//
 //       {/* Body - Trophy and Message */}
 //       <Flex w="100%" alignItems="center" gap="12px">
 //         {/* Trophy Icon */}
 //         <Flex>
 //           <TrophyIcon />
 //         </Flex>
-// 
+//
 //         {/* Message */}
 //         <Text
 //           fontFamily="Nunito"

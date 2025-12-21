@@ -17,12 +17,12 @@ export {};
 //   TimeOption,
 // } from "../../../../types/task";
 // import { sendNotification } from "../../../../utils/sendNotification";
-// 
+//
 // type EditTaskModalProps = {
 //   selected: TaskInfo;
 //   close: () => void;
 // };
-// 
+//
 // export default function EditTaskModal({ selected, close }: EditTaskModalProps) {
 //   console.info(selected);
 //   const [taskName, setTaskName] = useState(selected.task_name);
@@ -40,7 +40,7 @@ export {};
 //   const [deduction, setDeduction] = useState(selected.marillac_bucks_deduction);
 //   const [comments, setComments] = useState(selected.comment ?? "");
 //   const [error, setError] = useState("");
-// 
+//
 //   const [updateTask] = useMutation(UPDATE_TASK, {
 //     onCompleted: () => {
 //       sendNotification(`Task ${taskName} updated.`);
@@ -49,7 +49,7 @@ export {};
 //       setError(err.message);
 //     },
 //   });
-// 
+//
 //   function handleSubmit() {
 //     if (
 //       !taskName ||
@@ -93,7 +93,7 @@ export {};
 //       });
 //     }
 //   }
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Edit Task"
@@ -110,14 +110,14 @@ export {};
 //           {toTitleCase(selected.task_type as string)}
 //         </Text>
 //       </Flex>
-// 
+//
 //       <CoreInput
 //         label="Task Name"
 //         current_value={taskName}
 //         action={(e: any) => setTaskName(e.target.value)}
 //         type="text"
 //       />
-// 
+//
 //       {selected.task_type !== TaskType.REQUIRED && (
 //         <Checkbox
 //           isChecked={participantPreference}
@@ -135,7 +135,7 @@ export {};
 //           </Text>
 //         </Checkbox>
 //       )}
-// 
+//
 //       {participantPreference ? (
 //         <>
 //           <Flex width="100%" alignItems="center" justifyContent="space-between">
@@ -154,7 +154,7 @@ export {};
 //               width="50%"
 //             />
 //           </Flex>
-// 
+//
 //           <TextInput
 //             label="Comments"
 //             current_value={comments}

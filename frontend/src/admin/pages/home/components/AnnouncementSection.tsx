@@ -1,10 +1,14 @@
 import { Flex, Text, Link } from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GET_ANNOUNCEMENTS_FROM_TODAY } from "../../../../gql/announcementRequests";
 import { Announcement, ReceivedAnnouncement } from "../../../../types/models";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
+import { formatTimeString } from "../../../../helpers/formatDateTime";
+import WidgetContainer from "../../../../ui/containers/WidgetContainer";
+import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
+import { ADMIN_ANNOUNCEMENTS_PAGE } from "../../../../constants/routes";
 
 const getRoomString = (announcements: Announcement) => {
   const rooms = (
@@ -26,46 +30,35 @@ const getRoomString = (announcements: Announcement) => {
 const AnnouncementCard: React.FC<{ announcement: Announcement }> = ({
   announcement,
 }) => {
-  const formatDate = (date: Date) => {
-    return date
-      .toLocaleString("en-ca", {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      })
-      .toLowerCase();
-  };
-
   return (
-    <Flex
-      flexDir="column"
+    <WidgetContainer
+      bg_color="neutral.100"
       width="100%"
-      bg="neutral.100"
-      border="1px solid"
-      borderColor="neutral.300"
-      rounded="8px"
-      paddingX="16px"
+      paddingX="20px"
       paddingY="12px"
-      gap="5px"
     >
-      <Flex width="100%" alignItems="baseline">
-        <Text textStyle="web.b2" fontWeight={600} color="black">
-          {getRoomString(announcement)}
-        </Text>
-        <Text textStyle="web.b3" color="text.light.secondary" marginLeft="20px">
-          posted at {formatDate(new Date(announcement.date))}
-        </Text>
+      <Flex flexDir="column" width="100%" gap="5px">
+        <Flex width="100%" alignItems="baseline">
+          <Text textStyle="web.b2" fontWeight={600} color="black">
+            {getRoomString(announcement)}
+          </Text>
+          <Text textStyle="web.b3" color="text.light.secondary" marginLeft="10px">
+            posted at {formatTimeString(announcement.date)}
+          </Text>
+        </Flex>
+        <Flex width="100%">
+          <Text textStyle="web.b2" color="black">
+            {announcement.message}
+          </Text>
+        </Flex>
       </Flex>
-      <Flex width="100%">
-        <Text textStyle="web.b2" color="black">
-          {announcement.message}
-        </Text>
-      </Flex>
-    </Flex>
+    </WidgetContainer>
   );
 };
 
 const AnnouncementSection = () => {
+  const navigate = useNavigate();
+
   const {
     loading: getAnnouncementsLoading,
     error: getAnnouncementsError,
@@ -75,94 +68,60 @@ const AnnouncementSection = () => {
   const announcements: Announcement[] = data?.getAnnouncementsFromToday || [];
 
   return (
-    <Flex
-      flexGrow={1}
+    <WidgetContainer
+      bg_color="transparent"
+      width="100%"
       height="calc(100% - 330px)"
-      paddingY="15px"
+      paddingY="12px"
       paddingX="20px"
-      border="1px solid"
-      borderColor="neutral.300"
-      borderRadius="8px"
-      flexDir="column"
-      gap="10px"
-      justifyContent="flex-start"
-      marginRight="10px"
+      loading={getAnnouncementsLoading}
+      error={getAnnouncementsError?.message}
     >
-      {/* Title Row */}
       <Flex
         w="100%"
+        h="40px"
         flexDir="row"
         justifyContent="space-between"
-        alignItems="center"
-        px="2px"
+        alignItems="baseline"
+        paddingBottom="10px"
       >
-        <Flex flexDir="row" gap="20px" alignItems="baseline">
-          <Text textStyle="web.h3" color="primary.700">
+        <Flex gap="10px" alignItems="baseline">
+          <Text textStyle="web.h3" color="primary.700" pl="5px">
             Announcements
           </Text>
           <Text textStyle="web.b3" color="text.light.secondary">
-            {announcements.length} new post
-            {announcements.length === 1 ? "" : "s"} today
+            {announcements.length} new post{announcements.length === 1 ? "" : "s"} today
           </Text>
         </Flex>
-        <Link
-          as={RouterLink}
-          to="/admin/announcements"
-          textStyle="web.b3"
-          fontFamily="Nunito"
-          fontWeight={600}
-          color="black"
-          textDecoration="underline"
-          _hover={{
-            textDecoration: "none",
-          }}
-        >
-          View All
-        </Link>
+        <UnderlineButton
+          label="View All"
+          action={() => navigate(ADMIN_ANNOUNCEMENTS_PAGE)}
+        />
       </Flex>
-      <Flex
+      <Flex 
+        gap="10px"
+        flexDir="column"
         alignItems="center"
+        justifyContent={announcements.length > 0 ? "flex-start" : "center"}
+        height="calc(100% - 42px)"
         overflow="scroll"
-        height="100%"
-        justifyContent="center"
         sx={{
           "&::-webkit-scrollbar": {
             display: "none",
           },
         }}
       >
-        {getAnnouncementsLoading ? (
-          <Text textStyle="web.b2" color="text.light.secondary">
-            Loading...
-          </Text>
-        ) : getAnnouncementsError ? (
-          <Text textStyle="web.b2" color="text.light.secondary">
-            {getAnnouncementsError?.message || "An error occurred"}
-          </Text>
-        ) : announcements.length === 0 ? (
+        {announcements.length > 0 ? (
+          announcements.map((announcement: Announcement) => (
+            <AnnouncementCard key={announcement.aid} announcement={announcement} />
+          ))
+        ) : (
           <Text textStyle="web.b2" color="text.light.secondary">
             No Announcements Yet
           </Text>
-        ) : (
-          <Flex
-            width="100%"
-            height="100%"
-            flexDir="column"
-            justifyContent="flex-start"
-            gap="10px"
-          >
-            {announcements.map((announcement: Announcement) => {
-              return (
-                <AnnouncementCard
-                  key={announcement.aid}
-                  announcement={announcement}
-                />
-              );
-            })}
-          </Flex>
         )}
       </Flex>
-    </Flex>
+    </WidgetContainer>
   );
 };
 

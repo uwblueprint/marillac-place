@@ -213,15 +213,17 @@ const assignedTaskResolver = {
         );
 
         if (assignedTask.type === TaskType.REQUIRED) {
-          const weeklyRequiredTasksNotComplete = await db.assignedTask.findMany({
-            where: {
-              pid: assignedTask.pid,
-              status: { not: TaskStatus.COMPLETE },
-              start_date: { lte: endOfWeek(new Date()) },
-              end_date: { gte: startOfWeek(new Date()) },
-              type: TaskType.REQUIRED,
-            },
-          });
+          const weeklyRequiredTasksNotComplete = await db.assignedTask.findMany(
+            {
+              where: {
+                pid: assignedTask.pid,
+                status: { not: TaskStatus.COMPLETE },
+                start_date: { lte: endOfWeek(new Date()) },
+                end_date: { gte: startOfWeek(new Date()) },
+                type: TaskType.REQUIRED,
+              },
+            }
+          );
 
           if (weeklyRequiredTasksNotComplete.length === 1) {
             await updateBadgeLevelProgress(
@@ -249,18 +251,24 @@ const assignedTaskResolver = {
             );
           }
         } else if (assignedTask.type === TaskType.INDIVIDUAL_GOAL) {
-          const individualGoalTasksNotComplete = await db.assignedTask.findMany({
-            where: {
-              pid: assignedTask.pid,
-              type: TaskType.INDIVIDUAL_GOAL,
-              status: { not: TaskStatus.COMPLETE },
-              start_date: { lte: endOfWeek(new Date()) },
-              end_date: { gte: startOfWeek(new Date()) },
-            },
-          });
-  
+          const individualGoalTasksNotComplete = await db.assignedTask.findMany(
+            {
+              where: {
+                pid: assignedTask.pid,
+                type: TaskType.INDIVIDUAL_GOAL,
+                status: { not: TaskStatus.COMPLETE },
+                start_date: { lte: endOfWeek(new Date()) },
+                end_date: { gte: startOfWeek(new Date()) },
+              },
+            }
+          );
+
           if (individualGoalTasksNotComplete.length === 1) {
-            await updateBadgeLevelProgress(INDIVIDUAL_GOAL, assignedTask.pid, 1);
+            await updateBadgeLevelProgress(
+              INDIVIDUAL_GOAL,
+              assignedTask.pid,
+              1
+            );
           }
 
           await updateBadgeLevelProgress(FIRST_GOAL, assignedTask.pid, 1);

@@ -4,9 +4,9 @@ export {};
 // import { Box } from "@chakra-ui/react";
 // import { BadgeRarity } from "../../../common/Badge";
 // import BadgeRow from "./BadgeRow";
-// 
+//
 // export type BadgeRowType = "congratulations" | "lostStreak" | "progress";
-// 
+//
 // export interface BadgeToDisplay {
 //   title: string;
 //   subtitle: string;
@@ -17,12 +17,12 @@ export {};
 //     percentComplete?: number;
 //   };
 // }
-// 
+//
 // interface BadgeWidgetProps {
 //   allBadges: BadgeToDisplay[];
 //   achieved: boolean;
 // }
-// 
+//
 // const BadgeWidget: React.FC<BadgeWidgetProps> = ({ allBadges, achieved }) => {
 //   const filteredBadges = (
 //     badgesToDisplayInWidget: BadgeToDisplay[],
@@ -36,7 +36,7 @@ export {};
 //     });
 //   };
 //   const badgesToDisplayInWidget = filteredBadges(allBadges, achieved);
-// 
+//
 //   // fallback if no badges are provided
 //   if (!badgesToDisplayInWidget || badgesToDisplayInWidget.length === 0) {
 //     return (
@@ -55,14 +55,14 @@ export {};
 //       </Box>
 //     );
 //   }
-// 
+//
 //   return (
 //     <Box>
 //       {badgesToDisplayInWidget.map((badgeData, index) => {
 //         const key = `badge-${index}`;
 //         const isLast = index === badgesToDisplayInWidget.length - 1;
 //         const isFirst = index === 0;
-// 
+//
 //         const {
 //           title,
 //           subtitle = "",
@@ -73,7 +73,7 @@ export {};
 //             percentComplete: 0,
 //           },
 //         } = badgeData;
-// 
+//
 //         return (
 //           <BadgeRow
 //             key={key}
@@ -91,5 +91,5 @@ export {};
 //     </Box>
 //   );
 // };
-// 
+//
 // export default BadgeWidget;

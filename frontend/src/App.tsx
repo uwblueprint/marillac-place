@@ -10,16 +10,16 @@ import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-// import AdminLoginPage from "./admin/pages/login/Main";
-// import AdminHomePage from "./admin/pages/home/Main";
+import AdminLoginPage from "./admin/pages/login/Main";
+import AdminHomePage from "./admin/pages/home/Main";
 // import AdminSchedulePage from "./admin/pages/schedule/Main";
 // import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
 // import AdminParticipantsPage from "./admin/pages/participants/Main";
 // import AdminTasksPage from "./admin/pages/tasks/Main";
-// import AdminBadgesPage from "./admin/pages/badges/Main";
+import AdminBadgesPage from "./admin/pages/badges/Main";
 // import AdminReportsPage from "./admin/pages/reports/Main";
 
-// import ParticipantLoginPage from "./participant/pages/login/Main";
+import ParticipantLoginPage from "./participant/pages/login/Main";
 // import ParticipantHomePage from "./participant/pages/home/Main";
 // import ParticipantSchedulePage from "./participant/pages/schedule/Main";
 // import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
@@ -30,13 +30,11 @@ import AdminRoute from "./admin/AdminRoute";
 import ParticipantRoute from "./participant/ParticipantRoute";
 import { AdminProvider } from "./admin/AdminContext";
 import { ParticipantProvider } from "./participant/ParticipantContext";
-import NotFound from "./ui/screens/NotFoundScreen";
 
+import NotFoundScreen from "./ui/screens/NotFoundScreen";
+import UI from "./ui/UI";
 import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
-
-import UI from "./ui/UI";
-import AdminHomePage from "./admin/pages/home/Main";
 
 function initApolloClient() {
   const endpoint = createUploadLink({
@@ -88,7 +86,7 @@ const App = (): React.ReactElement => {
       <ChakraProvider theme={theme}>
         <Router>
           <Routes>
-            {/* <Route element={<AdminLayout />}>
+            <Route element={<AdminLayout />}>
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
                 element={<AdminLoginPage />}
@@ -100,6 +98,27 @@ const App = (): React.ReactElement => {
                     <AdminHomePage />
                   </AdminRoute>
                 }
+              />
+              <Route
+                path={ROUTES.ADMIN_BADGES_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminBadgesPage />
+                  </AdminRoute>
+                }
+              />
+            </Route>
+            
+            <Route element={<ParticipantLayout />}>
+              <Route
+                path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
+                element={<ParticipantLoginPage />}
+              />
+            </Route>
+            {/* <Route element={<AdminLayout />}>
+              <Route
+                path={ROUTES.ADMIN_LOGIN_PAGE}
+                element={<AdminLoginPage />}
               />
               <Route
                 path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
@@ -134,14 +153,6 @@ const App = (): React.ReactElement => {
                 }
               />
               <Route
-                path={ROUTES.ADMIN_BADGES_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminBadgesPage />
-                  </AdminRoute>
-                }
-              />
-              <Route
                 path={ROUTES.ADMIN_REPORTS_PAGE}
                 element={
                   <AdminRoute>
@@ -150,7 +161,6 @@ const App = (): React.ReactElement => {
                 }
               />
             </Route>
-
             <Route element={<ParticipantLayout />}>
               <Route
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
@@ -191,7 +201,7 @@ const App = (): React.ReactElement => {
             </Route> */}
 
             <Route path="/ui" element={<UI />} />
-            <Route path="*" element={<AdminHomePage />} />
+            <Route path="*" element={<NotFoundScreen />} />
           </Routes>
         </Router>
       </ChakraProvider>

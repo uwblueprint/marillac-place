@@ -6,14 +6,14 @@ export {};
 // import ModalContainer from "../../../../admin/common/form/ModalContainer";
 // import { ParticipantContext } from "../../../common/ParticipantContext";
 // import { UPDATE_MARILLAC_BUCKS_GOAL } from "../../../../gql/mutations";
-// 
+//
 // interface EditGoalProps {
 //   handleClose: () => void;
 //   onGoalUpdated: () => void;
 //   currentGoal: number;
 //   currentBalance: number;
 // }
-// 
+//
 // export const EditGoal: React.FC<EditGoalProps> = ({
 //   handleClose,
 //   onGoalUpdated,
@@ -23,26 +23,26 @@ export {};
 //   const [goal, setGoal] = useState("");
 //   const [error, setError] = useState("");
 //   const participantContext = useContext(ParticipantContext);
-// 
+//
 //   const [updateGoalMutation] = useMutation(UPDATE_MARILLAC_BUCKS_GOAL);
-// 
+//
 //   const handleSave = async () => {
 //     if (!participantContext) {
 //       setError("Not logged in");
 //       return;
 //     }
-// 
+//
 //     const goalValue = parseInt(goal, 10);
 //     if (Number.isNaN(goalValue)) {
 //       setError("Please enter a valid number");
 //       return;
 //     }
-// 
+//
 //     if (goalValue <= currentBalance) {
 //       setError("Goals must be greater than current Marillac Bucks Balance");
 //       return;
 //     }
-// 
+//
 //     try {
 //       await updateGoalMutation({
 //         variables: {
@@ -50,7 +50,7 @@ export {};
 //           new_goal_value: goalValue,
 //         },
 //       });
-// 
+//
 //       onGoalUpdated();
 //       handleClose();
 //     } catch (err: any) {
@@ -58,12 +58,12 @@ export {};
 //       setError(err.message || "Failed to update goal — please try again.");
 //     }
 //   };
-// 
+//
 //   // Show previous goal value
 //   React.useEffect(() => {
 //     setGoal(currentGoal.toString());
 //   }, [currentGoal]);
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Edit Goal"
@@ -85,7 +85,7 @@ export {};
 //             </Text>
 //           </Flex>
 //         </Flex>
-// 
+//
 //         {/* New Goal */}
 //         <Flex justify="space-between">
 //           <Text textStyle="web.b1">New goal:</Text>

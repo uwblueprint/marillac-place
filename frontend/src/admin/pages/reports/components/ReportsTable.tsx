@@ -17,7 +17,7 @@ export {};
 // import EditIcon from "@mui/icons-material/Edit";
 // import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 // import AddIcon from "@mui/icons-material/Add";
-// 
+//
 // type Report = {
 //   id: number;
 //   email: string;
@@ -25,7 +25,7 @@ export {};
 //   monthly: boolean;
 //   lastReportSent: string;
 // };
-// 
+//
 // type ReportsTableProps = {
 //   reports: Report[];
 //   onAddEmail: () => void;
@@ -34,7 +34,7 @@ export {};
 //   onToggleWeekly: (id: number, weekly: boolean) => void;
 //   onToggleMonthly: (id: number, monthly: boolean) => void;
 // };
-// 
+//
 // export default function ReportsTable({
 //   reports,
 //   onAddEmail,
@@ -50,7 +50,7 @@ export {};
 //     { header: "Last Report Sent", width: "20%" },
 //     { header: "Actions", width: "20%" },
 //   ];
-// 
+//
 //   const rows: JSX.Element[][] = reports.map((report: Report) => {
 //     const cells: JSX.Element[] = [
 //       <Text
@@ -118,10 +118,10 @@ export {};
 //         </Flex>
 //       </Flex>,
 //     ];
-// 
+//
 //     return cells;
 //   });
-// 
+//
 //   // Add empty row for new entry
 //   const emptyRow: JSX.Element[] = [
 //     <Text
@@ -160,9 +160,9 @@ export {};
 //       -
 //     </Text>,
 //   ];
-// 
+//
 //   const allRows = [...rows, emptyRow];
-// 
+//
 //   return (
 //     <>
 //       <TableContainer
@@ -208,7 +208,7 @@ export {};
 //           </Tbody>
 //         </Table>
 //       </TableContainer>
-// 
+//
 //       <Flex justifyContent="flex-end" width="100%">
 //         <Button
 //           leftIcon={<AddIcon />}

@@ -12,7 +12,7 @@ export {};
 // import GreenButton from "../../../common/GreenButton";
 // import { UPDATE_PIN_READ_ANNOUNCEMENTS } from "../../../../gql/mutations";
 // import { ParticipantContext } from "../../../common/ParticipantContext";
-// 
+//
 // type AnnouncementInfo = {
 //   uaid: number;
 //   allRooms: boolean;
@@ -22,34 +22,34 @@ export {};
 //   pinned: boolean;
 //   date: string;
 // };
-// 
+//
 // type AnnouncementsExpandedViewProps = {
 //   announcement: AnnouncementInfo;
 // };
-// 
+//
 // export default function AnnouncementsExpandedView({
 //   announcement,
 // }: AnnouncementsExpandedViewProps) {
 //   const participant = useContext(ParticipantContext);
 //   const participantId = participant?.id;
-// 
+//
 //   const [pinned, setPinned] = useState<boolean>(announcement.pinned);
 //   const prevPinnedRef = useRef<boolean>(announcement.pinned);
 //   const [updating, setUpdating] = useState(false);
 //   const [error, setError] = useState("");
-// 
+//
 //   const [updatePinRead] = useMutation(UPDATE_PIN_READ_ANNOUNCEMENTS);
-// 
+//
 //   useEffect(() => {
 //     let active = true;
 //     const cleanup = () => {
 //       active = false;
 //     };
-// 
+//
 //     if (!participantId || pinned === prevPinnedRef.current) {
 //       return cleanup;
 //     }
-// 
+//
 //     setUpdating(true);
 //     (async () => {
 //       try {
@@ -60,7 +60,7 @@ export {};
 //             pinned,
 //           },
 //         });
-// 
+//
 //         if (active) {
 //           prevPinnedRef.current = pinned;
 //         }
@@ -70,20 +70,20 @@ export {};
 //         if (active) setUpdating(false);
 //       }
 //     })();
-// 
+//
 //     return cleanup;
 //   }, [announcement.uaid, participantId, pinned, updatePinRead]);
-// 
+//
 //   useEffect(() => {
 //     let active = true;
 //     const cleanup = () => {
 //       active = false;
 //     };
-// 
+//
 //     if (!participantId || announcement.read) {
 //       return cleanup;
 //     }
-// 
+//
 //     setUpdating(true);
 //     (async () => {
 //       try {
@@ -100,10 +100,10 @@ export {};
 //         if (active) setUpdating(false);
 //       }
 //     })();
-// 
+//
 //     return cleanup;
 //   }, []);
-// 
+//
 //   const handleMarkAsUnread = async () => {
 //     if (!participantId || updating) return;
 //     try {
@@ -122,7 +122,7 @@ export {};
 //       window.location.reload();
 //     }
 //   };
-// 
+//
 //   return (
 //     <>
 //       <Flex alignItems="center" justify="space-between">
@@ -141,7 +141,7 @@ export {};
 //           Back to Announcements
 //         </Text>
 //       </Flex>
-// 
+//
 //       <Flex alignItems="center" justify="space-between">
 //         <Flex gap="12px">
 //           {announcement.importance !== 0 && (
@@ -152,7 +152,7 @@ export {};
 //               </Text>
 //             </Flex>
 //           )}
-// 
+//
 //           {pinned && (
 //             <Flex gap="8px">
 //               <Icon icon={orangepin} width="8px" height="8px" />
@@ -166,11 +166,11 @@ export {};
 //           {displayDate2(new Date(announcement.date))}
 //         </Text>
 //       </Flex>
-// 
+//
 //       <Divider borderColor="neutral.300" />
-// 
+//
 //       <Text textStyle="mobile.b1">{announcement.message}</Text>
-// 
+//
 //       <Flex marginTop="8px" gap="12px">
 //         <GreenButton
 //           text="Mark as Unread"

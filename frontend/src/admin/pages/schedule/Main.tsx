@@ -17,7 +17,7 @@ export {};
 // import OrangeButton from "../../common/buttons/OrangeButton";
 // import SimpleButton from "../../common/buttons/SimpleButton";
 // import AssignTaskModal from "./components/AssignTaskModal";
-// 
+//
 // export default function AdminSchedulePage() {
 //   const [editMarillacBucks, setEditMarillacBucks] = useState(false);
 //   const [assignTask, setAssignTask] = useState(false);
@@ -33,15 +33,15 @@ export {};
 //     if (!room) return 1;
 //     return parseInt(room, 10);
 //   });
-// 
+//
 //   useEffect(() => {
 //     localStorage.setItem("scheduleSelectedRoom", selectedRoom.toString());
 //   }, [selectedRoom]);
-// 
+//
 //   useEffect(() => {
 //     localStorage.setItem("scheduleView", currentView);
 //   }, [currentView]);
-// 
+//
 //   const {
 //     loading,
 //     error,
@@ -51,14 +51,14 @@ export {};
 //     anydayTasks,
 //     anytimeTasks,
 //   } = useScheduleData(selectedRoom);
-// 
+//
 //   return (
 //     <Flex direction="column" h="100%" w="100%">
 //       <RoomNavigation
 //         selectedRoom={selectedRoom}
 //         onRoomChange={setSelectedRoom}
 //       />
-// 
+//
 //       <Box w="100%" flex={1} display="flex" flexDirection="column">
 //         {loading ? (
 //           <Flex justify="center" align="center" h="400px">
@@ -96,7 +96,7 @@ export {};
 //                 <Text textStyle="web.h2" color="primary.700">
 //                   {moment(currentDate).format("MMMM YYYY").toUpperCase()}
 //                 </Text>
-// 
+//
 //                 <SimpleButton
 //                   text={getCurrentWeekRange(currentDate)}
 //                   action={() => {}}
@@ -104,7 +104,7 @@ export {};
 //                   text_color="#0C727E"
 //                 />
 //               </Flex>
-// 
+//
 //               <Button
 //                 padding="0px 15px"
 //                 color="#0D8312"
@@ -127,7 +127,7 @@ export {};
 //                 />
 //               </Button>
 //             </Flex>
-// 
+//
 //             {/* Second Header: View Toggle and Assign Task Button */}
 //             <Flex justify="space-between" align="center" mb={5}>
 //               <HStack spacing={0}>
@@ -174,14 +174,14 @@ export {};
 //                   Calendar
 //                 </Button>
 //               </HStack>
-// 
+//
 //               <OrangeButton
 //                 text="Assign Task"
 //                 action={() => setAssignTask(true)}
 //                 is_active={assignTask}
 //               />
 //             </Flex>
-// 
+//
 //             {/* Content based on current view */}
 //             <Box flex={1} display="flex" flexDirection="column" minH={0}>
 //               {currentView === ScheduleView.LIST ? (
@@ -205,7 +205,7 @@ export {};
 //           </Flex>
 //         )}
 //       </Box>
-// 
+//
 //       {editMarillacBucks && participantId && (
 //         <MarillacBalanceModal
 //           close={() => setEditMarillacBucks(false)}
@@ -214,7 +214,7 @@ export {};
 //           roomNumber={selectedRoom}
 //         />
 //       )}
-// 
+//
 //       {assignTask && participantId && (
 //         <AssignTaskModal
 //           participantId={participantId}
@@ -222,7 +222,7 @@ export {};
 //           onClose={() => setAssignTask(false)}
 //         />
 //       )}
-// 
+//
 //       {selectedTask && (
 //         <TaskDetailsModal
 //           task={selectedTask}

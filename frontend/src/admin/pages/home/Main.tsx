@@ -1,65 +1,44 @@
-// TODO: Refactor this component
 import React from "react";
 import { Flex, Stack, Text } from "@chakra-ui/react";
 import RoomsOverview from "./components/RoomsOverview";
 import NoteSection from "./components/NoteSection";
 import AnnouncementSection from "./components/AnnouncementSection";
+import { getTodayDateString } from "../../../helpers/formatDateTime";
 
 const AdminHomePage = (): React.ReactElement => {
-  const getDate = () => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date().toLocaleDateString("en-US", options);
-  };
-
   return (
     <>
       <Flex
+        position="absolute"
+        top="12px"
+        left="0px"
+        zIndex="100"
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        backgroundColor="primary.100"
         px="20px"
-        paddingTop="10px"
-        paddingBottom="10px"
-        mb="20px"
+        width="100%"
       >
-        <Text
-          textStyle="web.h2"
-          color="#000000"
-          px="20px"
-          top="10px"
-          left="0px"
-        >
+        <Text textStyle="web.h2" color="#000000">
           Marillac Place Overview
         </Text>
-        <Text
-          textStyle="web.h3"
-          color="#000000"
-          px="20px"
-          top="14px"
-          right="0px"
-        >
-          {getDate()}
+        <Text textStyle="web.h3" color="#000000">
+          {getTodayDateString()}
         </Text>
       </Flex>
+
       <Flex
         w="100%"
-        minH="calc(100vh - 70px)"
-        paddingLeft="20px"
-        paddingBottom="20px"
+        h="100%"
         flexDir="row"
-        gap="20px"
         position="relative"
+        gap="10px"
       >
-        <Flex flexDir="column" flex="1" minW="0">
+        <Flex flexDir="column" flex="1" gap="10px">
           <RoomsOverview />
           <AnnouncementSection />
         </Flex>
-        <Flex w="300px" flexShrink={0} mr="20px">
+        <Flex w="275px" flexShrink={0}>
           <NoteSection />
         </Flex>
       </Flex>

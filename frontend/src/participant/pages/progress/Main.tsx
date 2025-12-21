@@ -13,13 +13,13 @@ export {};
 // import WeeklyEarningsChart from "./components/EarningsWidget";
 // import BucksGoalCard from "./elements/BucksGoalCard";
 // import BadgeWidget from "./components/BadgeWidget";
-// 
+//
 // export default function ParticipantsProgressPage() {
 //   const [editGoal, setEditGoal] = useState(false);
 //   const [setGoal, setSetGoal] = useState(false);
 //   const [activeTab, setActiveTab] = useState("badges");
 //   const participantContext = useContext(ParticipantContext);
-// 
+//
 //   // Fetch participant data
 //   const {
 //     data: participantData,
@@ -29,7 +29,7 @@ export {};
 //     variables: { participantId: participantContext?.id },
 //     skip: !participantContext?.id,
 //   });
-// 
+//
 //   // Fetch earnings data
 //   const {
 //     data: earningsData,
@@ -39,26 +39,26 @@ export {};
 //     variables: { participant_id: participantContext?.id },
 //     skip: !participantContext?.id,
 //   });
-// 
+//
 //   const weeklyEarnings = earningsData?.getWeeklyEarnings || [
 //     0, 0, 0, 0, 0, 0, 0,
 //   ];
 //   const participant = participantData?.getParticipantById;
 //   const currentGoal = participant?.marillac_bucks_goal;
 //   const currentBalance = participant?.marillac_bucks || 0;
-// 
+//
 //   const loading = loadingParticipant || loadingEarnings;
-// 
+//
 //   const handleClose = () => {
 //     setSetGoal(false);
 //     setEditGoal(false);
 //   };
-// 
+//
 //   const handleGoalSet = async () => {
 //     await refetchParticipant();
 //     handleClose();
 //   };
-// 
+//
 //   const handleGoalUpdated = async () => {
 //     await refetchParticipant();
 //     handleClose();
@@ -66,7 +66,7 @@ export {};
 //   if (loading) {
 //     return null;
 //   }
-// 
+//
 //   const handleGoalClick = () => {
 //     if (currentGoal) {
 //       setEditGoal(true);
@@ -74,7 +74,7 @@ export {};
 //       setSetGoal(true);
 //     }
 //   };
-// 
+//
 //   return (
 //     <>
 //       <BucksGoalCard
@@ -96,7 +96,7 @@ export {};
 //       <div style={{ padding: "10px 20px" }}>
 //         <WeeklyEarningsChart weeklyEarnings={weeklyEarnings} />
 //       </div>
-// 
+//
 //       <Flex justifyContent="center" alignItems="center">
 //         <Box
 //           bg="white"
@@ -123,7 +123,7 @@ export {};
 //               </Text>
 //             ))}
 //           </HStack>
-// 
+//
 //           {activeTab === "badges" ? (
 //             <BadgeWidget
 //               allBadges={[

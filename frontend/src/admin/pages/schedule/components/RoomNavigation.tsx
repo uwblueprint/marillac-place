@@ -3,12 +3,12 @@ export {};
 // import React from "react";
 // import { Flex, Text } from "@chakra-ui/react";
 // import { ROOM_NUMBERS } from "../../../../constants/misc";
-// 
+//
 // interface RoomNavigationProps {
 //   selectedRoom: number;
 //   onRoomChange: (room: number) => void;
 // }
-// 
+//
 // export default function RoomNavigation({
 //   selectedRoom,
 //   onRoomChange,
