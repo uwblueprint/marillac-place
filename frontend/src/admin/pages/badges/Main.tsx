@@ -29,14 +29,14 @@ export default function AdminBadgesPage() {
   } = useQuery(GET_SYSTEM_BADGES);
 
   return (
-    <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
+    <Flex width="100%" height="fit-content" flexDir="column" gap="10px">
       <Flex
         width="100%"
         height="fit-content"
         alignItems="center"
         justifyContent="space-between"
       >
-        <Flex alignItems="center" gap="15px">
+        <Flex alignItems="center" gap="15px" pl="5px">
           <Text textStyle="web.h2" color="primary.700">
             System Badges
           </Text>
@@ -56,9 +56,10 @@ export default function AdminBadgesPage() {
         height="fit-content"
         alignItems="center"
         justifyContent="space-between"
+        mt="10px"
       >
         <Flex alignItems="center" gap="15px">
-          <Text textStyle="web.h2" color="primary.700">
+          <Text textStyle="web.h2" color="primary.700" pl="5px">
             Custom Badges
           </Text>
           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">

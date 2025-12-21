@@ -45,8 +45,8 @@ const SystemBadgeTable = ({
   }
   const columns: Column[] = [
     { header: "Icon", width: "5%", center: true },
-    { header: "Badge Name", width: "35%" },
-    { header: "Description", width: "40%" },
+    { header: "Badge Name", width: "25%" },
+    { header: "Description", width: "50%" },
     { header: "Offered Levels", width: "10%" },
     { header: "Status", width: "5%", center: true },
     { header: "", width: "5%" },

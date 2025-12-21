@@ -11,7 +11,7 @@ import { createUploadLink } from "apollo-upload-client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 import AdminLoginPage from "./admin/pages/login/Main";
-// import AdminHomePage from "./admin/pages/home/Main";
+import AdminHomePage from "./admin/pages/home/Main";
 // import AdminSchedulePage from "./admin/pages/schedule/Main";
 // import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
 // import AdminParticipantsPage from "./admin/pages/participants/Main";
@@ -30,12 +30,11 @@ import AdminRoute from "./admin/AdminRoute";
 import ParticipantRoute from "./participant/ParticipantRoute";
 import { AdminProvider } from "./admin/AdminContext";
 import { ParticipantProvider } from "./participant/ParticipantContext";
-import NotFound from "./ui/screens/NotFoundScreen";
 
+import NotFoundScreen from "./ui/screens/NotFoundScreen";
+import UI from "./ui/UI";
 import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
-
-import UI from "./ui/UI";
 
 function initApolloClient() {
   const endpoint = createUploadLink({
@@ -92,15 +91,23 @@ const App = (): React.ReactElement => {
                 path={ROUTES.ADMIN_LOGIN_PAGE}
                 element={<AdminLoginPage />}
               />
+              <Route
+                path={ROUTES.ADMIN_HOME_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminHomePage />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path={ROUTES.ADMIN_BADGES_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminBadgesPage />
+                  </AdminRoute>
+                }
+              />
             </Route>
-            <Route
-              path={ROUTES.ADMIN_BADGES_PAGE}
-              element={
-                <AdminRoute>
-                  <AdminBadgesPage />
-                </AdminRoute>
-              }
-            />
             
             <Route element={<ParticipantLayout />}>
               <Route
@@ -112,14 +119,6 @@ const App = (): React.ReactElement => {
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
                 element={<AdminLoginPage />}
-              />
-              <Route
-                path={ROUTES.ADMIN_HOME_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminHomePage />
-                  </AdminRoute>
-                }
               />
               <Route
                 path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
@@ -202,7 +201,7 @@ const App = (): React.ReactElement => {
             </Route> */}
 
             <Route path="/ui" element={<UI />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<NotFoundScreen />} />
           </Routes>
         </Router>
       </ChakraProvider>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import * as ROUTES from "../../constants/routes";
+import { ADMIN_HOME_PAGE, PARTICIPANTS_HOME_PAGE } from "../../constants/routes";
 import GreenOutlineButton from "../buttons/GreenOutlineButton";
 
 // TODO: verify this screen is for properly formatted on mobile and web + add contact support information
@@ -12,9 +12,9 @@ export default function NotFoundScreen() {
   function handleClick() {
     const path = window.location.pathname.split("/");
     if (path.length >= 2 && path[1] === "admin") {
-      navigate(ROUTES.ADMIN_LOGIN_PAGE);
+      navigate(ADMIN_HOME_PAGE);
     } else {
-      navigate(ROUTES.PARTICIPANTS_LOGIN_PAGE);
+      navigate(PARTICIPANTS_HOME_PAGE);
     }
   }
 
@@ -37,7 +37,7 @@ export default function NotFoundScreen() {
           something is broken, please report a problem.
         </Text>
         <GreenOutlineButton
-          label="Return to Login"
+          label="Return to Home"
           action={() => handleClick()}
           is_active={false}
         />

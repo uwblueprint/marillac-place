@@ -24,6 +24,7 @@ export default function WidgetContainer({
 }: WidgetContainerProps) {
   return (
     <Box
+      position="relative"
       width={width}
       height={height}
       paddingX={paddingX}

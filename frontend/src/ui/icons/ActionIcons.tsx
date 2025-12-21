@@ -77,6 +77,18 @@ export const PlusSign: React.FC<IconProps> = ({
   );
 };
 
+export const Airplane: React.FC<IconProps> = ({ size = 16, color = "black" }) => {
+  const iconColor = useChakraColor(color);
+  return (
+    <svg width={size} height={size} viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path 
+      d="M16.8 8.43148L1.4 14.9315C1.06667 15.0648 0.75 15.0355 0.45 14.8435C0.15 14.6515 0 14.3725 0 14.0065V1.00648C0 0.639817 0.15 0.360817 0.45 0.169484C0.75 -0.0218496 1.06667 -0.0511832 1.4 0.0814834L16.8 6.58148C17.2167 6.76482 17.425 7.07315 17.425 7.50648C17.425 7.93982 17.2167 8.24815 16.8 8.43148ZM2 12.5065L13.85 7.50648L2 2.50648V6.00648L8 7.50648L2 9.00648V12.5065Z" 
+      fill={iconColor}
+    />
+    </svg>
+  );
+};
+
 export const Trash: React.FC<IconProps> = ({
   size = 16,
   color = "#E30000",

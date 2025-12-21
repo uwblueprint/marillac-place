@@ -71,33 +71,41 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   }
 
   return (
-    <Flex position="relative" width="100vw" maxWidth="1400px" height="100vh">
-      <AdminMenu />
-      <Flex
-        width="calc(100% - 250px)"
-        height="100%"
-        ml="250px"
-        position="relative"
+    <Flex alignItems="center" justifyContent="center">
+      <Flex 
+        position="relative" 
+        width="100vw" 
+        height="100vh"
+        maxWidth="1400px" 
+        overflow="hidden"
       >
+        <AdminMenu />
         <Flex
-          position="absolute"
-          top="0px"
-          left="0px"
-          width="100%"
-          height="55px"
-          bg="primary.100"
-          borderBottom="1px solid"
-          borderColor="neutral.300"
-          zIndex={5}
-        />
-        <Flex
-          width="100%"
-          height="calc(100% - 55px)"
-          padding="16px"
-          mt="55px"
-          overflow="scroll"
+          width="calc(100% - 250px)"
+          height="100%"
+          ml="250px"
+          position="relative"
         >
-          {children}
+          <Flex
+            position="absolute"
+            top="0px"
+            left="0px"
+            width="100%"
+            height="55px"
+            bg="primary.100"
+            borderBottom="1px solid"
+            borderColor="neutral.300"
+            zIndex={5}
+          />
+          <Flex
+            width="100%"
+            height="calc(100% - 55px)"
+            padding="20px"
+            mt="55px"
+            overflow="scroll"
+          >
+            {children}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
