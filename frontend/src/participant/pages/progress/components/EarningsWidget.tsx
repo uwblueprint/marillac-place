@@ -1,5 +1,4 @@
 export {};
-// TODO: Refactor this component
 // import React, { useState } from "react";
 // import {
 //   BarChart,
@@ -11,37 +10,37 @@ export {};
 //   CartesianGrid,
 //   LabelList,
 // } from "recharts";
-//
+
 // const colors = {
 //   text: { light: { primary: "#1D2433", secondary: "#595D67" } },
 //   neutral: { 300: "#C5C8D8" },
 //   primary: { 700: "#0C727E" },
 //   success: { 900: "#0D8312" },
 // };
-//
+
 // interface WeeklyEarningsChartProps {
 //   weeklyEarnings?: number[];
 // }
-//
+
 // interface ChartDataItem {
 //   amount: number;
 //   day: string;
 //   isToday: boolean;
 // }
-//
+
 // const WeeklyEarningsChart = ({
 //   weeklyEarnings = [],
 // }: WeeklyEarningsChartProps) => {
 //   const [selectedBarIndex, setSelectedBarIndex] = useState<number | null>(null);
-//
+
 //   // Day labels for the week (Monday = index 0, Sunday = index 6)
 //   const allDayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-//
+
 //   // Calculate which day of the week today is (0 = Monday, 6 = Sunday)
 //   const today = new Date();
 //   const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
 //   const todayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Convert to 0 = Monday
-//
+
 //   // Only show days from Monday up to today
 //   const chartData: ChartDataItem[] = weeklyEarnings
 //     .slice(0, todayIndex + 1) // Only include Monday through today
@@ -50,12 +49,12 @@ export {};
 //       day: allDayLabels[index] || "",
 //       isToday: index === todayIndex,
 //     }));
-//
+
 //   // Calculate max earnings from only the days we're showing
 //   const visibleEarnings = weeklyEarnings.slice(0, todayIndex + 1);
 //   const maxEarnings = Math.max(...visibleEarnings.filter((val) => val != null), 0);
 //   const upperBound = Math.ceil(maxEarnings * 1.2) || 10;
-//
+
 //   return (
 //     <div
 //       style={{
@@ -78,7 +77,7 @@ export {};
 //       >
 //         Weekly Earnings
 //       </h2>
-//
+
 //       <div style={{ height: 200, width: "100%", marginBottom: 16 }}>
 //         <ResponsiveContainer width="100%" height="100%">
 //           <BarChart
@@ -155,5 +154,5 @@ export {};
 //     </div>
 //   );
 // };
-//
+
 // export default WeeklyEarningsChart;
