@@ -1,54 +1,42 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CreateCustomBadgeModal from "./components/CreateCustomBadgeModal";
 import CustomBadgeTable from "./components/CustomBadgeTable";
 import SystemBadgeTable from "./components/SystemBadgeTable";
-import { GET_CUSTOM_BADGES, GET_SYSTEM_BADGES } from "../../../gql/queries";
+import { GET_CUSTOM_BADGES } from "../../../gql/customBadgeRequests";
+import { GET_SYSTEM_BADGES } from "../../../gql/systemBadgeRequests";
 import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
-import GreenButton from "../../common/buttons/GreenButton";
-import OrangeButton from "../../common/buttons/OrangeButton";
+import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
+import OrangeButton from "../../../ui/buttons/OrangeButton";
 
 export default function AdminBadgesPage() {
   const [create, setCreate] = useState(false);
   const [assign, setAssign] = useState(false);
 
-  const [customBadges, setCustomBadges] = useState([]);
-  const [systemBadges, setSystemBadges] = useState([]);
-
   const {
     loading: customBadgesLoading,
     error: customBadgesError,
     data: customBadgesData,
+    refetch: refetchCustomBadges,
   } = useQuery(GET_CUSTOM_BADGES);
 
   const {
     loading: systemBadgesLoading,
     error: systemBadgesError,
     data: systemBadgesData,
+    refetch: refetchSystemBadges,
   } = useQuery(GET_SYSTEM_BADGES);
 
-  useEffect(() => {
-    if (!systemBadgesLoading && !systemBadgesError && systemBadgesData) {
-      setSystemBadges(systemBadgesData.getSystemBadges);
-    }
-  }, [systemBadgesLoading, systemBadgesError, systemBadgesData]);
-
-  useEffect(() => {
-    if (!customBadgesLoading && !customBadgesError && customBadgesData) {
-      setCustomBadges(customBadgesData.getCustomBadges);
-    }
-  }, [customBadgesLoading, customBadgesError, customBadgesData]);
-
   return (
-    <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
+    <Flex width="100%" height="fit-content" flexDir="column" gap="10px">
       <Flex
         width="100%"
         height="fit-content"
         alignItems="center"
         justifyContent="space-between"
       >
-        <Flex alignItems="center" gap="15px">
+        <Flex alignItems="center" gap="15px" pl="5px">
           <Text textStyle="web.h2" color="primary.700">
             System Badges
           </Text>
@@ -59,17 +47,19 @@ export default function AdminBadgesPage() {
       </Flex>
       <SystemBadgeTable
         loading={systemBadgesLoading}
-        error={systemBadgesError}
-        badges={systemBadges}
+        error={systemBadgesError?.message ?? ""}
+        badges={systemBadgesData?.getSystemBadges ?? []}
+        refetch={refetchSystemBadges}
       />
       <Flex
         width="100%"
         height="fit-content"
         alignItems="center"
         justifyContent="space-between"
+        mt="10px"
       >
         <Flex alignItems="center" gap="15px">
-          <Text textStyle="web.h2" color="primary.700">
+          <Text textStyle="web.h2" color="primary.700" pl="5px">
             Custom Badges
           </Text>
           <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
@@ -77,13 +67,13 @@ export default function AdminBadgesPage() {
           </Text>
         </Flex>
         <Flex alignItems="center" gap="15px">
-          <GreenButton
-            text="Assign Custom Badge"
+          <GreenOutlineButton
+            label="Assign Custom Badge"
             action={() => setAssign(true)}
             is_active={assign}
           />
           <OrangeButton
-            text="Create New"
+            label="Create New"
             action={() => setCreate(true)}
             is_active={create}
           />
@@ -91,12 +81,18 @@ export default function AdminBadgesPage() {
       </Flex>
       <CustomBadgeTable
         loading={customBadgesLoading}
-        error={customBadgesError}
-        badges={customBadges}
+        error={customBadgesError?.message ?? ""}
+        badges={customBadgesData?.getCustomBadges ?? []}
+        refetch={refetchCustomBadges}
       />
 
-      {create && <CreateCustomBadgeModal onClose={() => setCreate(false)} />}
-      {assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} />}
+      {create && (
+        <CreateCustomBadgeModal
+          onClose={() => setCreate(false)}
+          refetch={refetchCustomBadges}
+        />
+      )}
+      {assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} customBadges={customBadgesData?.getCustomBadges ?? []} />}
     </Flex>
   );
 }

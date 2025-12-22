@@ -1,23 +1,26 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { EDIT_CUSTOM_BADGE } from "../../../../gql/mutations";
-import ModalContainer from "../../../common/form/ModalContainer";
-import CoreInput from "../../../common/form/CoreInput";
+import { UPDATE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
+import PopupContainer from "../../../../ui/containers/PopupContainer";
+import TextInput from "../../../../ui/inputs/TextInput";
 
 interface EditCustomBadgeModalProps {
   onClose: () => void;
+  refetch: () => void;
   selected: any;
 }
 
 const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
   onClose,
   selected,
+  refetch,
 }) => {
   const [badgeName, setBadgeName] = useState(selected.name);
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
   const [error, setError] = useState("");
 
-  const [editCustomBadge] = useMutation(EDIT_CUSTOM_BADGE);
+  const [updateCustomBadge, { loading: updateCustomBadgeLoading }] =
+    useMutation(UPDATE_CUSTOM_BADGE);
 
   const handleSave = async () => {
     setError("");
@@ -27,43 +30,43 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
     }
 
     try {
-      await editCustomBadge({
+      await updateCustomBadge({
         variables: {
-          custom_badge_id: selected.badge_id,
-          new_custom_badge_name: badgeName,
-          new_custom_badge_description: badgeCriteria,
+          cid: selected.cid,
+          name: badgeName,
+          description: badgeCriteria,
+          icon: selected.icon,
         },
       });
-      localStorage.setItem("notification", "Custom badge updated");
-      window.location.reload();
+      await refetch();
+      onClose();
     } catch (err: any) {
       setError(err.message);
     }
   };
 
   return (
-    <ModalContainer
+    <PopupContainer
       title="Edit Custom Badge"
       submit_text="Save Changes"
       submit_action={handleSave}
       cancel_action={onClose}
-      error={error}
+      error_message={error}
+      loading={updateCustomBadgeLoading}
     >
-      <CoreInput
+      <TextInput
         label="Badge Name"
         current_value={badgeName}
-        action={(e: any) => setBadgeName(e.target.value)}
-        type="text"
-        width="350px"
+        update_action={setBadgeName}
+        size="large"
       />
-      <CoreInput
+      <TextInput
         label="Badge Criteria"
         current_value={badgeCriteria}
-        action={(e: any) => setBadgeCriteria(e.target.value)}
-        type="text"
-        width="350px"
+        update_action={setBadgeCriteria}
+        size="large"
       />
-    </ModalContainer>
+    </PopupContainer>
   );
 };
 

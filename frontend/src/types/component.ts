@@ -1,32 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type ButtonProps = {
-  text: string;
+  label: string;
   action: () => void;
   is_active: boolean;
-};
-
-export type ModalProps = {
-  title: string;
-  submit_text: string;
-  submit_action: () => void;
-  cancel_action: () => void;
-  children: React.ReactNode;
-  error?: string;
+  icon?: JSX.Element;
 };
 
 export type InputProps = {
-  label: string;
+  label?: string;
+  placeholder?: string;
   current_value: any;
-  action: any;
-  width?: string;
+  update_action: React.Dispatch<React.SetStateAction<any>>;
+  size: "small" | "medium" | "large";
 };
 
-export type TableProps = {
-  loading: boolean;
-  edit: boolean;
-  selected: any;
-  error: any;
-  columns: { header: string; width: string; sort?: JSX.Element }[];
-  rows: JSX.Element[][];
-  editModal: JSX.Element | null;
+export type IconProps = {
+  size?: number;
+  color?: string;
 };

@@ -1,25 +1,36 @@
-// Enum for badge icon options
-export enum Icon {
-  FIVE_STAR = "five_star",
-  FOUR_STAR = "four_star",
-  GROUP = "group",
-  HEART = "heart",
-  HOME = "home",
-  BABY = "baby",
-  WINGS = "wings",
-  FLOWER = "flower",
-  MONEY = "money",
-  GEMSTONE = "gemstone",
-  DIAMOND = "diamond",
-  PENCIL = "pencil",
-  TOOL = "tool",
-}
+import { ComponentType } from "react";
+import { Icon } from "../types/enums";
+import { IconProps } from "../types/component";
+import {
+  Baby,
+  Diamond,
+  DollarSign,
+  FiveStar,
+  Flower,
+  FourStar,
+  Group,
+  Heart,
+  Hexagon,
+  Home,
+  Pencil,
+  Plant,
+  Tools,
+  Wings,
+} from "../ui/icons/BadgeIcons";
 
-export const iconList = [
-  Icon.FIVE_STAR,
-  Icon.GROUP,
-  Icon.HEART,
-  Icon.HOME,
-  Icon.BABY,
-  Icon.WINGS,
-];
+export const ICON_MAP: Record<Icon, ComponentType<IconProps>> = {
+  [Icon.BABY]: Baby,
+  [Icon.DIAMOND]: Diamond,
+  [Icon.FIVE_STAR]: FiveStar,
+  [Icon.FLOWER]: Flower,
+  [Icon.FOUR_STAR]: FourStar,
+  [Icon.GEMSTONE]: Hexagon,
+  [Icon.GROUP]: Group,
+  [Icon.HEART]: Heart,
+  [Icon.HOME]: Home,
+  [Icon.MONEY]: DollarSign,
+  [Icon.PENCIL]: Pencil,
+  [Icon.TOOL]: Tools,
+  [Icon.WINGS]: Wings,
+  [Icon.PLANT]: Plant,
+};

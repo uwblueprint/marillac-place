@@ -20,6 +20,8 @@ module.exports = {
     "class-methods-use-this": 0,
     "import/prefer-default-export": "off",
     "no-console": "off",
+    "import/no-cycle": "off",
+    "@typescript-eslint/no-explicit-any": "off",
   },
   ignorePatterns: ["build/*"],
 };
