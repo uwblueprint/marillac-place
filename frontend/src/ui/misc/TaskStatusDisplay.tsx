@@ -12,32 +12,32 @@ const TaskStatusConfig = {
     icon: Assigned,
     bgColor: "#C5DCF8",
     textColor: "#255B9A",
-    text: "Assigned"
+    text: "Assigned",
   },
   [TaskStatus.COMPLETE]: {
     icon: Complete,
     bgColor: "#CDEECE",
     textColor: "#0D8312",
-    text: "Complete"
+    text: "Complete",
   },
-  [TaskStatus.EXCUSED]: { 
+  [TaskStatus.EXCUSED]: {
     icon: Excused,
     bgColor: "#FFE5B2",
     textColor: "#B07D18",
-    text: "Excused"
+    text: "Excused",
   },
   [TaskStatus.INCOMPLETE]: {
     icon: Incomplete,
     bgColor: "#F8D7DB",
     textColor: "#B21D2F",
-    text: "Incomplete"
+    text: "Incomplete",
   },
-  } 
+};
 
 export default function TaskStatusDisplay({ status }: TaskStatusDisplayProps) {
   const Icon = TaskStatusConfig[status].icon;
   return (
-    <Flex 
+    <Flex
       align="center"
       justify="center"
       gap={1}
@@ -47,8 +47,10 @@ export default function TaskStatusDisplay({ status }: TaskStatusDisplayProps) {
       width="120px"
       height="30px"
     >
-      <Icon size={20}/>
-      <Text textStyle="web.s1" color={TaskStatusConfig[status].textColor}>{TaskStatusConfig[status].text}</Text>
+      <Icon size={20} />
+      <Text textStyle="web.s1" color={TaskStatusConfig[status].textColor}>
+        {TaskStatusConfig[status].text}
+      </Text>
     </Flex>
   );
 }

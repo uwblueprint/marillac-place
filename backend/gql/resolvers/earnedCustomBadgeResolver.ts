@@ -47,7 +47,7 @@ const earnedCustomBadgeResolver = {
         name,
         icon,
         description,
-        value
+        value,
       }: {
         pid: number;
         name: string;

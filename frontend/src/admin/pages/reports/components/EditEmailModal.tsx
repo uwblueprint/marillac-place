@@ -3,7 +3,7 @@ export {};
 // import React, { useState, useEffect } from "react";
 // import { Switch, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
 // import ModalContainer from "../../../common/form/ModalContainer";
-// 
+//
 // type Report = {
 //   id: number;
 //   email: string;
@@ -11,13 +11,13 @@ export {};
 //   monthly: boolean;
 //   lastReportSent: string;
 // };
-// 
+//
 // type EditEmailModalProps = {
 //   email: Report;
 //   onClose: () => void;
 //   onSubmit: (emailData: any) => void;
 // };
-// 
+//
 // export default function EditEmailModal({
 //   email,
 //   onClose,
@@ -26,25 +26,25 @@ export {};
 //   const [emailAddress, setEmailAddress] = useState(email.email);
 //   const [weekly, setWeekly] = useState(email.weekly);
 //   const [monthly, setMonthly] = useState(email.monthly);
-// 
+//
 //   useEffect(() => {
 //     setEmailAddress(email.email);
 //     setWeekly(email.weekly);
 //     setMonthly(email.monthly);
 //   }, [email]);
-// 
+//
 //   const handleSubmit = () => {
 //     if (!emailAddress.trim()) {
 //       return; // Basic validation
 //     }
-// 
+//
 //     onSubmit({
 //       email: emailAddress.trim(),
 //       weekly,
 //       monthly,
 //     });
 //   };
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Edit Email Address"
@@ -76,7 +76,7 @@ export {};
 //           }}
 //         />
 //       </FormControl>
-// 
+//
 //       <FormControl mt="20px">
 //         <FormLabel textStyle="web.s1" color="text.light.secondary">
 //           Report Frequency

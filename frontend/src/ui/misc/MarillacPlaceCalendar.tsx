@@ -79,7 +79,10 @@ function AssignedTaskEvent({
   assignedTask,
   viewTaskDetails,
 }: AssignedTaskEventProps) {
-  const displayDate = isSameDay(new Date(assignedTask.start_date), new Date(assignedTask.end_date))
+  const displayDate = isSameDay(
+    new Date(assignedTask.start_date),
+    new Date(assignedTask.end_date)
+  );
   return (
     <Flex
       padding="4px"
@@ -88,10 +91,13 @@ function AssignedTaskEvent({
       direction="column"
       gap="2px"
     >
-      <Text textStyle="web.s1" color="inherit">{assignedTask.name}</Text>
-      { displayDate && (
+      <Text textStyle="web.s1" color="inherit">
+        {assignedTask.name}
+      </Text>
+      {displayDate && (
         <Text fontSize="10px" color="inherit">
-          {formatTimeString(assignedTask.start_date)} - {formatTimeString(assignedTask.end_date)}
+          {formatTimeString(assignedTask.start_date)} -{" "}
+          {formatTimeString(assignedTask.end_date)}
         </Text>
       )}
     </Flex>
@@ -116,12 +122,8 @@ export default function MarillacPlaceCalendar({
   const calendarView = view === "mobile" ? Views.DAY : Views.WEEK;
   return (
     <>
-      { view === "mobile" && (
-        <Text
-          textStyle="web.b1"
-          mb="12px"
-          textAlign="center"
-        >
+      {view === "mobile" && (
+        <Text textStyle="web.b1" mb="12px" textAlign="center">
           {format(startDate, "EEEE d").toUpperCase()}
         </Text>
       )}
@@ -154,7 +156,7 @@ export default function MarillacPlaceCalendar({
               />
             );
           },
-          week: { header: CustomHeader }
+          week: { header: CustomHeader },
         }}
         eventPropGetter={(event: AssignedTask) => {
           const statusClass = `status-${event.status.toLowerCase()}`;

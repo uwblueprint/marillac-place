@@ -75,13 +75,14 @@ export function getTodayDateString(): string {
  */
 export function formatDateTimeString(date: string): string {
   const dateObj = new Date(date);
-  return dateObj.toLocaleString("en-CA", {
+  const formatted = dateObj.toLocaleString("en-CA", {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
     month: "short",
     day: "numeric",
   });
+  return formatted.replace("a.m.", "AM").replace("p.m.", "PM");
 }
 
 /**

@@ -4,12 +4,12 @@ export {};
 // import React, { useState } from "react";
 // import EditParticipantCard from "./EditParticipantCard";
 // import OrangeButton from "../../../common/buttons/OrangeButton";
-// 
+//
 // type OccupiedRoomCardProps = {
 //   roomNumber: number;
 //   participants: Record<number, any>;
 // };
-// 
+//
 // const OccupiedRoomCard = ({
 //   roomNumber,
 //   participants,
@@ -17,7 +17,7 @@ export {};
 //   const [editParticipant, setEditParticipant] = useState(false);
 //   const id = participants[roomNumber].participant_id;
 //   const arrival = participants[roomNumber].arrival_date;
-// 
+//
 //   return (
 //     <Flex
 //       height="130px"
@@ -46,7 +46,7 @@ export {};
 //       >
 //         <Text textStyle="web.s1">Room {roomNumber}</Text>
 //       </Flex>
-// 
+//
 //       <Text textStyle="web.b3">
 //         ID Number:&nbsp;
 //         <Text as="span" fontWeight="700">
@@ -59,7 +59,7 @@ export {};
 //           {arrival}
 //         </Text>
 //       </Text>
-// 
+//
 //       <Flex position="absolute" bottom="12px">
 //         <OrangeButton
 //           text="Edit Participant"
@@ -67,7 +67,7 @@ export {};
 //           is_active={editParticipant}
 //         />
 //       </Flex>
-// 
+//
 //       {editParticipant && (
 //         <EditParticipantCard
 //           roomNumber={roomNumber}
@@ -78,5 +78,5 @@ export {};
 //     </Flex>
 //   );
 // };
-// 
+//
 // export default OccupiedRoomCard;

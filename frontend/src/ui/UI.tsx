@@ -426,6 +426,7 @@ export default function UI() {
               setShowErrorPopup(false);
             }}
             error_message="Something went wrong."
+            system_error
             loading={false}
           >
             <Text textStyle="web.b2">PopupContainer (error)</Text>

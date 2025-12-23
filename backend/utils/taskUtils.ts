@@ -1,7 +1,6 @@
 import { addDays, endOfDay, startOfWeek, set, startOfDay } from "date-fns";
+import { Task, DayPreference, TimePreference } from "@prisma/client";
 import db from "../prisma";
-import { Task } from "@prisma/client";
-import { DayPreference, TimePreference } from "@prisma/client";
 import { orderedDays } from "../constants/days";
 
 export async function assignTasksToAllParticipants(tasks: Task[]) {
@@ -11,16 +10,14 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
     },
     select: { pid: true },
   });
-  
+
   await Promise.all(
     participants.map(async (participant) => {
       await Promise.all(
         tasks.map(async (task) => {
           if (
-            task.day_preference ===
-              DayPreference.PARTICIPANT_PREFERENCE ||
-              task.time_preference ===
-              TimePreference.PARTICIPANT_PREFERENCE
+            task.day_preference === DayPreference.PARTICIPANT_PREFERENCE ||
+            task.time_preference === TimePreference.PARTICIPANT_PREFERENCE
           ) {
             throw new Error("required task must be strictly defined");
           }
@@ -32,13 +29,8 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
                   startOfWeek(new Date()),
                   orderedDays.indexOf(day)
                 );
-                if (
-                  task.time_preference === TimePreference.SPECIFIC
-                ) {
-                  if (
-                    task.start_time === null ||
-                    task.end_time == null
-                  ) {
+                if (task.time_preference === TimePreference.SPECIFIC) {
+                  if (task.start_time === null || task.end_time == null) {
                     throw new Error(
                       "required task is missing time information"
                     );
@@ -71,9 +63,7 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
                       end_date: endDate,
                     },
                   });
-                } else if (
-                  task.time_preference === TimePreference.ANYTIME
-                ) {
+                } else if (task.time_preference === TimePreference.ANYTIME) {
                   const startDate = startOfDay(baseDate);
                   const endDate = addDays(startDate, 1);
 
@@ -102,13 +92,8 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
                   startOfWeek(new Date()),
                   orderedDays.indexOf(day)
                 );
-                if (
-                  task.time_preference === TimePreference.SPECIFIC
-                ) {
-                  if (
-                    task.start_time === null ||
-                    task.end_time == null
-                  ) {
+                if (task.time_preference === TimePreference.SPECIFIC) {
+                  if (task.start_time === null || task.end_time == null) {
                     throw new Error(
                       "required task is missing time information"
                     );
@@ -141,9 +126,7 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
                       end_date: endDate,
                     },
                   });
-                } else if (
-                  task.time_preference === TimePreference.ANYTIME
-                ) {
+                } else if (task.time_preference === TimePreference.ANYTIME) {
                   const startDate = startOfDay(baseDate);
                   const endDate = addDays(startDate, 1);
 
@@ -163,9 +146,7 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
                 }
               })
             );
-          } else if (
-            task.day_preference === DayPreference.DAY_RANGE
-          ) {
+          } else if (task.day_preference === DayPreference.DAY_RANGE) {
             if (task.days.length !== 2)
               throw new Error("day range must contain exactly two elements");
             const startDate = addDays(
