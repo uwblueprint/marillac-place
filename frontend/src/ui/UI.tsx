@@ -425,6 +425,7 @@ export default function UI() {
             cancel_action={() => {
               setShowErrorPopup(false);
             }}
+            error_message="Something went wrong."
             system_error
             loading={false}
           >

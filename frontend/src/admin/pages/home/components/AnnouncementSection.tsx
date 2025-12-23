@@ -9,23 +9,7 @@ import { formatTimeString } from "../../../../helpers/formatDateTime";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 import { ADMIN_ANNOUNCEMENTS_PAGE } from "../../../../constants/routes";
-
-const getRoomString = (announcements: Announcement) => {
-  const rooms = (
-    announcements.ReceivedAnnouncement?.map(
-      (ra: ReceivedAnnouncement) => ra.participant?.room
-    ).filter((room) => room !== undefined) ?? []
-  ).sort();
-
-  if (announcements.ReceivedAnnouncement?.length === 1) {
-    return `Room ${rooms[0]}`;
-  }
-
-  if (rooms.length === ROOM_NUMBERS.length) {
-    return "All Rooms";
-  }
-  return `Rooms ${rooms.join(", ")}`;
-};
+import { getRoomString } from "../../../../helpers/stringUtils";
 
 const AnnouncementCard: React.FC<{ announcement: Announcement }> = ({
   announcement,
