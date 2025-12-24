@@ -13,7 +13,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import AdminLoginPage from "./admin/pages/login/Main";
 import AdminHomePage from "./admin/pages/home/Main";
 // import AdminSchedulePage from "./admin/pages/schedule/Main";
-// import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
+import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
 // import AdminParticipantsPage from "./admin/pages/participants/Main";
 // import AdminTasksPage from "./admin/pages/tasks/Main";
 import AdminBadgesPage from "./admin/pages/badges/Main";
@@ -108,13 +108,20 @@ const App = (): React.ReactElement => {
                 }
               />
             </Route>
-            
             <Route element={<ParticipantLayout />}>
               <Route
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
                 element={<ParticipantLoginPage />}
               />
             </Route>
+            <Route
+              path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE}
+              element={
+                <AdminRoute>
+                  <AdminAnnouncementsPage />
+                </AdminRoute>
+              }
+            />
             {/* <Route element={<AdminLayout />}>
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
@@ -128,14 +135,7 @@ const App = (): React.ReactElement => {
                   </AdminRoute>
                 }
               />
-              <Route
-                path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminAnnouncementsPage />
-                  </AdminRoute>
-                }
-              />
+             
               <Route
                 path={ROUTES.ADMIN_SCHEDULE_PAGE}
                 element={
