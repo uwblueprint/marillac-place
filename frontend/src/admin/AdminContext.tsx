@@ -7,7 +7,12 @@ type AdminContextType = {
   setRoomToParticipant: (roomToParticipant: Record<number, number>) => void;
 };
 
-export const AdminContext = createContext<AdminContextType | null>(null);
+export const AdminContext = createContext<AdminContextType>({
+  role: null,
+  setRole: () => {},
+  roomToParticipant: {},
+  setRoomToParticipant: () => {},
+});
 
 interface AdminProviderProps {
   children: ReactNode;

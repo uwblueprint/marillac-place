@@ -1,5 +1,5 @@
-import db from "../../prisma";
 import { Task, TaskType } from "@prisma/client";
+import db from "../../prisma";
 import { assignTasksToAllParticipants } from "../../utils/taskUtils";
 
 // assigns all required tasks to each participant for the current week

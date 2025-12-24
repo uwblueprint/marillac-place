@@ -355,6 +355,5 @@ export const tasks = [
     day_preference: DayPreference.PARTICIPANT_PREFERENCE,
     days: [],
     time_preference: TimePreference.PARTICIPANT_PREFERENCE,
-  }
+  },
 ];
-

@@ -15,9 +15,9 @@ export {};
 // import { CommentIcon } from "./CustomIcons";
 // import colors from "../../../../theme/colors";
 // import { TaskType } from "../../../../types/task";
-// 
+//
 // const localizer = momentLocalizer(moment);
-// 
+//
 // interface ScheduleCalendarProps {
 //   events: CalendarEvent[];
 //   allDayEvents: CalendarEvent[];
@@ -26,16 +26,16 @@ export {};
 //   onSelectEvent?: (event: CalendarEvent) => void;
 //   scrollToTime?: Date;
 // }
-// 
+//
 // // Custom header component for calendar
 // const CustomHeader: React.FC<{ date: Date }> = ({ date }) => {
 //   const dayNames = getDayNameMapping();
-// 
+//
 //   const dayAbbr = moment(date).format("ddd").toUpperCase();
 //   const dayName = dayNames[dayAbbr] || dayAbbr;
 //   const dayNumber = moment(date).format("D");
 //   const isToday = moment(date).isSame(moment(), "day");
-// 
+//
 //   return (
 //     <Box
 //       textAlign="center"
@@ -72,7 +72,7 @@ export {};
 //     </Box>
 //   );
 // };
-// 
+//
 // // Custom event component for calendar
 // const EventComponent: React.FC<{
 //   event: CalendarEvent;
@@ -88,7 +88,7 @@ export {};
 //       </Text>
 //     );
 //   }
-// 
+//
 //   // For timed events, show name on top and time underneath
 //   return (
 //     <Flex
@@ -112,7 +112,7 @@ export {};
 //     </Flex>
 //   );
 // };
-// 
+//
 // export default function ScheduleCalendar({
 //   events,
 //   allDayEvents,
@@ -123,7 +123,7 @@ export {};
 // }: ScheduleCalendarProps) {
 //   // Combine regular events with all-day events
 //   const allEvents = [...events, ...allDayEvents];
-// 
+//
 //   // Set CSS custom properties from theme colors
 //   React.useEffect(() => {
 //     const root = document.documentElement;
@@ -143,18 +143,18 @@ export {};
 //       "--status-excused",
 //       getTaskStatusColor(TaskStatus.EXCUSED)
 //     );
-// 
+//
 //     root.style.setProperty("--status-complete-bg", colors.actionsLight.green);
 //     root.style.setProperty("--status-assigned-bg", colors.actionsLight.blue);
 //     root.style.setProperty("--status-incomplete-bg", colors.actionsLight.red);
 //     root.style.setProperty("--status-excused-bg", colors.actionsLight.yellow);
-// 
+//
 //     root.style.setProperty("--status-complete-text", colors.actionsDark.green);
 //     root.style.setProperty("--status-assigned-text", colors.actionsDark.blue);
 //     root.style.setProperty("--status-incomplete-text", colors.actionsDark.red);
 //     root.style.setProperty("--status-excused-text", colors.actionsDark.yellow);
 //   }, []);
-// 
+//
 //   return (
 //     <Box
 //       w="100%"
@@ -208,7 +208,7 @@ export {};
 //         }}
 //         eventPropGetter={(event) => {
 //           const statusClass = `status-${event.task_status.toLowerCase()}`;
-// 
+//
 //           if (event.allDay) {
 //             return {
 //               className: statusClass,
@@ -219,7 +219,7 @@ export {};
 //               },
 //             };
 //           }
-// 
+//
 //           return {
 //             className: statusClass,
 //             style: {

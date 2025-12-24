@@ -1,0 +1,25 @@
+{
+  "name": "Marillac Place Developer Docs",
+  "favicon": "/favicon.ico",
+  "colors": {
+    "primary": "#1890ff",
+    "light": "#ffffff",
+    "dark": "#020817"
+  },
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction",
+        "database",
+        "authentication"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api/reports"
+      ]
+    }
+  ]
+}

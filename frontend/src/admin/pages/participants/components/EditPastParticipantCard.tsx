@@ -6,14 +6,14 @@ export {};
 // import { UPDATE_PARTICIPANT } from "../../../../gql/mutations";
 // import ModalContainer from "../../../common/form/ModalContainer";
 // import CoreInput from "../../../common/form/CoreInput";
-// 
+//
 // type EditPastParticipantCardProps = {
 //   id: number;
 //   arrival: string;
 //   departure: string;
 //   close: () => void;
 // };
-// 
+//
 // export default function EditPastParticipantCard({
 //   id,
 //   arrival,
@@ -22,11 +22,11 @@ export {};
 // }: EditPastParticipantCardProps) {
 //   const [arrivalDate, setArrivalDate] = useState(arrival);
 //   const [departureDate, setDepartureDate] = useState(departure);
-// 
+//
 //   const [error, setError] = useState("");
-// 
+//
 //   const [updateParticipant] = useMutation(UPDATE_PARTICIPANT);
-// 
+//
 //   async function handleSubmit() {
 //     setError("");
 //     if (!arrivalDate || !departureDate) {
@@ -61,7 +61,7 @@ export {};
 //       }
 //     }
 //   }
-// 
+//
 //   return (
 //     <ModalContainer
 //       title="Edit Past Participant"
@@ -91,7 +91,7 @@ export {};
 //           color="#000000"
 //         />
 //       </FormControl>
-// 
+//
 //       <Flex gap="8px">
 //         <CoreInput
 //           label="Arrival Date"

@@ -22,7 +22,10 @@ const badgeIconComponents: Record<Icon, React.FC<IconProps>> = {
   [Icon.WINGS]: BadgeIconSet.Wings,
 };
 
-const levelConfig: Record<Level, { FrameIcon: React.FC<IconProps>; color: string }> = {
+const levelConfig: Record<
+  Level,
+  { FrameIcon: React.FC<IconProps>; color: string }
+> = {
   [Level.NOVICE]: {
     FrameIcon: BadgeLevelFrameSet.Novice,
     color: "#008905",
@@ -45,7 +48,8 @@ const levelConfig: Record<Level, { FrameIcon: React.FC<IconProps>; color: string
   },
 };
 
-const normalizePercentage = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
+const normalizePercentage = (value: number) =>
+  Math.max(0, Math.min(100, Math.round(value)));
 
 interface BadgeProps {
   icon: Icon;
@@ -59,7 +63,8 @@ const Badge: React.FC<BadgeProps> = ({
   percentageComplete = 100,
 }) => {
   const IconComponent = badgeIconComponents[icon] ?? BadgeIconSet.FiveStar;
-  const { FrameIcon: LevelComponent, color: iconColor } = levelConfig[level] ?? levelConfig[Level.NOVICE];
+  const { FrameIcon: LevelComponent, color: iconColor } =
+    levelConfig[level] ?? levelConfig[Level.NOVICE];
   const normalizedPercentage = normalizePercentage(percentageComplete) / 100;
 
   const angle = normalizedPercentage * 360;

@@ -15,7 +15,7 @@ export {};
 // import { GET_TASKS_BY_TYPE } from "../../../gql/queries";
 // import OrangeButton from "../../common/buttons/OrangeButton";
 // import { TaskType } from "../../../types/task";
-// 
+//
 // export default function AdminTasksPage() {
 //   const [addTask, setAddTask] = useState(false);
 //   const [selectedTaskType, setSelectedTaskType] = useState(() => {
@@ -25,11 +25,11 @@ export {};
 //   });
 //   const [taskFilter, setTaskFilter] = useState("");
 //   const [tasks, setTasks] = useState([]);
-// 
+//
 //   const { loading, error, data } = useQuery(GET_TASKS_BY_TYPE, {
 //     variables: { type: selectedTaskType.toUpperCase() },
 //   });
-// 
+//
 //   useEffect(() => {
 //     if (!loading && !error && data) {
 //       setTasks(
@@ -41,11 +41,11 @@ export {};
 //       );
 //     }
 //   }, [taskFilter, loading, error, data]);
-// 
+//
 //   useEffect(() => {
 //     localStorage.setItem("tasksSelectedType", selectedTaskType);
 //   }, [selectedTaskType]);
-// 
+//
 //   return (
 //     <>
 //       <Flex
@@ -114,7 +114,7 @@ export {};
 //               onChange={(e: any) => setTaskFilter(e.target.value)}
 //             />
 //           </InputGroup>
-// 
+//
 //           <OrangeButton
 //             text="Add Task"
 //             action={() => setAddTask(true)}

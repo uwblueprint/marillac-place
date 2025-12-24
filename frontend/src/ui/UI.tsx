@@ -8,8 +8,29 @@ import UnderlineButton from "./buttons/UnderlineButton";
 import { Comment, Marker, Pin, PlusSign, Trash } from "./icons/ActionIcons";
 import WidgetContainer from "./containers/WidgetContainer";
 import PopupContainer from "./containers/PopupContainer";
-import { Baby, FourStar, Group, Flower, Diamond, DollarSign, FiveStar, Heart, Hexagon, Home, Pencil, Plant, Tools, Wings } from "./icons/BadgeIcons";
-import { Gold, Bronze, Silver, Novice, Diamond as DiamondFrame } from "./icons/BadgeLevelFrameIcons";
+import {
+  Baby,
+  FourStar,
+  Group,
+  Flower,
+  Diamond,
+  DollarSign,
+  FiveStar,
+  Heart,
+  Hexagon,
+  Home,
+  Pencil,
+  Plant,
+  Tools,
+  Wings,
+} from "./icons/BadgeIcons";
+import {
+  Gold,
+  Bronze,
+  Silver,
+  Novice,
+  Diamond as DiamondFrame,
+} from "./icons/BadgeLevelFrameIcons";
 import { MarillacCoin, Profile, Trophy } from "./icons/MiscIcons";
 import { Dot, ExclamationMark, Mail } from "./icons/NotificationIcons";
 import { Assigned, Complete, Excused, Incomplete } from "./icons/StatusIcons";
@@ -26,17 +47,26 @@ import MarillacPlaceCalendar from "./misc/MarillacPlaceCalendar";
 import DataTable from "./misc/DataTable";
 import DateOptions from "./misc/DateOptions";
 import { AssignedTask } from "../types/models";
-import { Level, TaskStatus, TaskType, Icon, DayPreference, TimePreference, DayOfWeek } from "../types/enums";
+import {
+  Level,
+  TaskStatus,
+  TaskType,
+  Icon,
+  DayPreference,
+  TimePreference,
+  DayOfWeek,
+} from "../types/enums";
 import Badge from "./misc/BadgeProgress";
 import TaskStatusDisplay from "./misc/TaskStatusDisplay";
 import ToggleButton from "./buttons/ToggleButton";
+import { now } from "../helpers/formatDateTime";
 
 export default function UI() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState<boolean>(false);
   const [showErrorPopup, setShowErrorPopup] = useState<boolean>(false);
-  const [date, setDate] = useState<Date>(new Date());
-  const [time, setTime] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(now());
+  const [time, setTime] = useState<Date>(now());
   const [number, setNumber] = useState<number>(0);
   const [text, setText] = useState<string>("");
   const [textarea, setTextarea] = useState<string>("");
@@ -48,12 +78,20 @@ export default function UI() {
     "Option 2": "option2",
     "Option 3": "option3",
   };
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(null);
-  const [dateOptionDayPreference, setDateOptionDayPreference] = useState<DayPreference | null>(null);
-  const [dateOptionDays, setDateOptionDays] = useState<DayOfWeek[] | null>(null);
-  const [dateOptionTimePreference, setDateOptionTimePreference] = useState<TimePreference | null>(null);
-  const [dateOptionStartTime, setDateOptionStartTime] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date>(now());
+  const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(
+    null
+  );
+  const [dateOptionDayPreference, setDateOptionDayPreference] =
+    useState<DayPreference | null>(null);
+  const [dateOptionDays, setDateOptionDays] = useState<DayOfWeek[] | null>(
+    null
+  );
+  const [dateOptionTimePreference, setDateOptionTimePreference] =
+    useState<TimePreference | null>(null);
+  const [dateOptionStartTime, setDateOptionStartTime] = useState<Date | null>(
+    null
+  );
   const [dateOptionEndTime, setDateOptionEndTime] = useState<Date | null>(null);
   const [showDateOptions, setShowDateOptions] = useState<boolean>(false);
   const [toggleActive, setToggleActive] = useState<boolean>(false);
@@ -66,28 +104,13 @@ export default function UI() {
   const dataTableRows = [
     [
       {
-        element: "Row 1.1"
+        element: "Row 1.1",
       },
       {
-        element: "Row 2.1"
+        element: "Row 2.1",
       },
       {
-        element: "Row 3.1"
-      },
-      {
-        element: <Marker size={20} />,
-        action: () => console.log("action"),
-      },
-    ],
-    [
-      {
-        element: "Row 1.2"
-      },
-      {
-        element: "Row 2.2"
-      },
-      {
-        element: "Row 3.2"
+        element: "Row 3.1",
       },
       {
         element: <Marker size={20} />,
@@ -96,13 +119,28 @@ export default function UI() {
     ],
     [
       {
-        element: "Row 1.3"
+        element: "Row 1.2",
       },
       {
-        element: "Row 2.3"
+        element: "Row 2.2",
       },
       {
-        element: "Row 3.3"
+        element: "Row 3.2",
+      },
+      {
+        element: <Marker size={20} />,
+        action: () => console.log("action"),
+      },
+    ],
+    [
+      {
+        element: "Row 1.3",
+      },
+      {
+        element: "Row 2.3",
+      },
+      {
+        element: "Row 3.3",
       },
       {
         element: <Marker size={20} />,
@@ -121,8 +159,8 @@ export default function UI() {
       value: 10,
       penalty: 5,
       comment: "Comment 1",
-      start_date: subDays(new Date(), 1).toISOString(),
-      end_date: new Date().toISOString(),
+      start_date: subDays(now(), 1).toISOString(),
+      end_date: now().toISOString(),
     },
     {
       aid: 2,
@@ -134,8 +172,8 @@ export default function UI() {
       value: 10,
       penalty: 5,
       comment: "Comment 2",
-      start_date: addDays(new Date(), 2).toISOString(),
-      end_date: addDays(new Date(), 5).toISOString(),
+      start_date: addDays(now(), 2).toISOString(),
+      end_date: addDays(now(), 5).toISOString(),
     },
     {
       aid: 3,
@@ -147,13 +185,13 @@ export default function UI() {
       value: 10,
       penalty: 5,
       comment: "Comment 2",
-      start_date: set(new Date(), {
+      start_date: set(now(), {
         hours: 8,
         minutes: 0,
         seconds: 0,
         milliseconds: 0,
       }).toISOString(),
-      end_date: set(new Date(), {
+      end_date: set(now(), {
         hours: 12,
         minutes: 0,
         seconds: 0,
@@ -170,13 +208,13 @@ export default function UI() {
       value: 10,
       penalty: 5,
       comment: "Comment 2",
-      start_date: set(addDays(new Date(), 1), {
+      start_date: set(addDays(now(), 1), {
         hours: 11,
         minutes: 0,
         seconds: 0,
         milliseconds: 0,
       }).toISOString(),
-      end_date: set(addDays(new Date(), 1), {
+        end_date: set(addDays(now(), 1), {
         hours: 14,
         minutes: 0,
         seconds: 0,
@@ -186,48 +224,72 @@ export default function UI() {
   ];
 
   return (
-    <Flex flexDir="column" w="100vw" h="fit-content" alignItems="left" justifyContent="center" padding="50px" gap="20px">
-      <Text textStyle="web.h1" color="primary.700">Marillac Place UI Components</Text>
+    <Flex
+      flexDir="column"
+      w="100vw"
+      h="fit-content"
+      alignItems="left"
+      justifyContent="center"
+      padding="50px"
+      gap="20px"
+    >
+      <Text textStyle="web.h1" color="primary.700">
+        Marillac Place UI Components
+      </Text>
 
       <Text textStyle="web.h3">Buttons</Text>
       <Flex flexDir="row" gap="10px">
-        <BlackOutlineButton 
-          label="BlackOutlineButton" 
-          action={() => { console.log("clicked"); }} 
-          is_active={false} 
+        <BlackOutlineButton
+          label="BlackOutlineButton"
+          action={() => {
+            console.log("clicked");
+          }}
+          is_active={false}
         />
-        <BlackOutlineButton 
-          label="BlackOutlineButton (active)" 
-          action={() => { console.log("clicked"); }} 
+        <BlackOutlineButton
+          label="BlackOutlineButton (active)"
+          action={() => {
+            console.log("clicked");
+          }}
           is_active
         />
-        <BlackOutlineButton 
-          label="BlackOutlineButton (with icon)" 
-          action={() => { console.log("clicked"); }} 
+        <BlackOutlineButton
+          label="BlackOutlineButton (with icon)"
+          action={() => {
+            console.log("clicked");
+          }}
           is_active={false}
           icon={<Marker />}
         />
-        <BlackOutlineButton 
-          label="BlackOutlineButton (custom text color)" 
-          action={() => { console.log("clicked"); }} 
-          is_active={false} 
+        <BlackOutlineButton
+          label="BlackOutlineButton (custom text color)"
+          action={() => {
+            console.log("clicked");
+          }}
+          is_active={false}
           text_color="red"
         />
       </Flex>
       <Flex flexDir="row" gap="10px">
         <OrangeButton
           label="OrangeButton"
-          action={() => { console.log("clicked"); }}
+          action={() => {
+            console.log("clicked");
+          }}
           is_active={false}
         />
         <OrangeButton
           label="OrangeButton (active)"
-          action={() => { console.log("clicked"); }}
+          action={() => {
+            console.log("clicked");
+          }}
           is_active
         />
         <OrangeButton
           label="OrangeButton (with icon)"
-          action={() => { console.log("clicked"); }}
+          action={() => {
+            console.log("clicked");
+          }}
           is_active={false}
           icon={<Marker color="white" />}
         />
@@ -235,18 +297,24 @@ export default function UI() {
       <Flex flexDir="row" gap="10px">
         <GreenOutlineButton
           label="GreenOutlineButton"
-          action={() => { console.log("clicked"); }}
+          action={() => {
+            console.log("clicked");
+          }}
           is_active={false}
         />
         <GreenOutlineButton
           label="GreenOutlineButton (active)"
-          action={() => { console.log("clicked"); }}
+          action={() => {
+            console.log("clicked");
+          }}
           is_active
         />
       </Flex>
       <UnderlineButton
         label="UnderlineButton"
-        action={() => { console.log("clicked"); }}
+        action={() => {
+          console.log("clicked");
+        }}
       />
       <ToggleButton active={toggleActive} setActive={setToggleActive} />
 
@@ -300,22 +368,32 @@ export default function UI() {
       <Flex flexDir="row" gap="10px">
         <UnderlineButton
           label="Show PopupContainer"
-          action={() => { setShowPopup(true); }}
+          action={() => {
+            setShowPopup(true);
+          }}
         />
         <UnderlineButton
           label="Show PopupContainer (loading)"
-          action={() => { setShowLoadingPopup(true); }}
+          action={() => {
+            setShowLoadingPopup(true);
+          }}
         />
         <UnderlineButton
           label="Show PopupContainer (error)"
-          action={() => { setShowErrorPopup(true); }}
+          action={() => {
+            setShowErrorPopup(true);
+          }}
         />
         {showPopup && (
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => { console.log("submit"); }}
-            cancel_action={() => { setShowPopup(false); }}
+            submit_action={() => {
+              console.log("submit");
+            }}
+            cancel_action={() => {
+              setShowPopup(false);
+            }}
             error_message=""
             loading={false}
           >
@@ -326,8 +404,12 @@ export default function UI() {
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => { console.log("submit"); }}
-            cancel_action={() => { setShowLoadingPopup(false); }}
+            submit_action={() => {
+              console.log("submit");
+            }}
+            cancel_action={() => {
+              setShowLoadingPopup(false);
+            }}
             error_message=""
             loading
           >
@@ -338,9 +420,14 @@ export default function UI() {
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => { console.log("submit"); }}
-            cancel_action={() => { setShowErrorPopup(false); }}
+            submit_action={() => {
+              console.log("submit");
+            }}
+            cancel_action={() => {
+              setShowErrorPopup(false);
+            }}
             error_message="Something went wrong."
+            system_error
             loading={false}
           >
             <Text textStyle="web.b2">PopupContainer (error)</Text>
@@ -350,26 +437,14 @@ export default function UI() {
 
       <Text textStyle="web.h3">Badges</Text>
       <Flex flexDir="row" gap="10px">
-        <Badge
-          icon={Icon.BABY}
-          level={Level.NOVICE}
-          percentageComplete={50}
-        />
+        <Badge icon={Icon.BABY} level={Level.NOVICE} percentageComplete={50} />
         <Badge
           icon={Icon.DIAMOND}
           level={Level.BRONZE}
           percentageComplete={100}
         />
-        <Badge
-          icon={Icon.MONEY}
-          level={Level.SILVER}
-          percentageComplete={0}
-        />
-        <Badge
-          icon={Icon.PLANT}
-          level={Level.GOLD}
-          percentageComplete={65}
-        />
+        <Badge icon={Icon.MONEY} level={Level.SILVER} percentageComplete={0} />
+        <Badge icon={Icon.PLANT} level={Level.GOLD} percentageComplete={65} />
         <Badge
           icon={Icon.WINGS}
           level={Level.DIAMOND}
@@ -378,7 +453,20 @@ export default function UI() {
       </Flex>
 
       <Text textStyle="web.h3">Icons</Text>
-      <Flex width="fit-content" height="fit-content" maxW="100vw" flexWrap="wrap" maxH="100vh" flexDir="row" gap="10px" padding="10px" bg="neutral.300" rounded="8px" alignItems="center" justifyContent="center">
+      <Flex
+        width="fit-content"
+        height="fit-content"
+        maxW="100vw"
+        flexWrap="wrap"
+        maxH="100vh"
+        flexDir="row"
+        gap="10px"
+        padding="10px"
+        bg="neutral.300"
+        rounded="8px"
+        alignItems="center"
+        justifyContent="center"
+      >
         <Comment />
         <Pin />
         <Marker />
@@ -501,8 +589,12 @@ export default function UI() {
         <PopupContainer
           title="DateOptions"
           submit_text="Save"
-          submit_action={() => { console.log("submit"); }}
-          cancel_action={() => { setShowDateOptions(false); }}
+          submit_action={() => {
+            console.log("submit");
+          }}
+          cancel_action={() => {
+            setShowDateOptions(false);
+          }}
           error_message=""
           loading={false}
         >

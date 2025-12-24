@@ -19,10 +19,10 @@ import {
   setHours,
   startOfDay,
 } from "date-fns";
-import { enCA } from "date-fns/locale";
+import { enCA } from "date-fns/locale/en-CA";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AssignedTask } from "../../types/models";
-import { formatTimeString } from "../../helpers/formatDateTime";
+import { formatTimeString, now } from "../../helpers/formatDateTime";
 
 type CustomHeaderProps = {
   date: Date;
@@ -31,7 +31,7 @@ type CustomHeaderProps = {
 function CustomHeader({ date }: CustomHeaderProps) {
   const dayAbbr = format(date, "EEE").toUpperCase();
   const dayNumber = format(date, "d");
-  const isToday = isSameDay(date, new Date());
+  const isToday = isSameDay(date, now());
 
   return (
     <Box
@@ -79,7 +79,10 @@ function AssignedTaskEvent({
   assignedTask,
   viewTaskDetails,
 }: AssignedTaskEventProps) {
-  const displayDate = isSameDay(new Date(assignedTask.start_date), new Date(assignedTask.end_date))
+  const displayDate = isSameDay(
+    new Date(assignedTask.start_date),
+    new Date(assignedTask.end_date)
+  );
   return (
     <Flex
       padding="4px"
@@ -88,10 +91,13 @@ function AssignedTaskEvent({
       direction="column"
       gap="2px"
     >
-      <Text textStyle="web.s1" color="inherit">{assignedTask.name}</Text>
-      { displayDate && (
+      <Text textStyle="web.s1" color="inherit">
+        {assignedTask.name}
+      </Text>
+      {displayDate && (
         <Text fontSize="10px" color="inherit">
-          {formatTimeString(assignedTask.start_date)} - {formatTimeString(assignedTask.end_date)}
+          {formatTimeString(assignedTask.start_date)} -{" "}
+          {formatTimeString(assignedTask.end_date)}
         </Text>
       )}
     </Flex>
@@ -116,12 +122,8 @@ export default function MarillacPlaceCalendar({
   const calendarView = view === "mobile" ? Views.DAY : Views.WEEK;
   return (
     <>
-      { view === "mobile" && (
-        <Text
-          textStyle="web.b1"
-          mb="12px"
-          textAlign="center"
-        >
+      {view === "mobile" && (
+        <Text textStyle="web.b1" mb="12px" textAlign="center">
           {format(startDate, "EEEE d").toUpperCase()}
         </Text>
       )}
@@ -129,8 +131,8 @@ export default function MarillacPlaceCalendar({
         localizer={dateFnsLocalizer({
           format,
           parse,
-          startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 0 }),
-          startOfDay: () => startOfDay(new Date()),
+          startOfWeek: () => startOfWeek(now(), { weekStartsOn: 0 }),
+          startOfDay: () => startOfDay(now()),
           getDay,
           locales: { "en-CA": enCA },
         })}
@@ -140,7 +142,7 @@ export default function MarillacPlaceCalendar({
         endAccessor={(event: AssignedTask) => new Date(event.end_date)}
         view={calendarView}
         date={startDate}
-        min={setMinutes(setHours(new Date(), 6), 0)}
+        min={setMinutes(setHours(now(), 6), 0)}
         onSelectEvent={viewTaskDetails}
         formats={{ eventTimeRangeFormat: () => "" }}
         toolbar={false}
@@ -154,7 +156,7 @@ export default function MarillacPlaceCalendar({
               />
             );
           },
-          week: { header: CustomHeader }
+          week: { header: CustomHeader },
         }}
         eventPropGetter={(event: AssignedTask) => {
           const statusClass = `status-${event.status.toLowerCase()}`;

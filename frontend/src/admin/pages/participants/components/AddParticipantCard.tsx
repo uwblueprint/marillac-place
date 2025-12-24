@@ -5,12 +5,12 @@ export {};
 // import { CREATE_PARTICIPANT } from "../../../../gql/mutations";
 // import ModalContainer from "../../../common/form/ModalContainer";
 // import CoreInput from "../../../common/form/CoreInput";
-// 
+//
 // type AddParticipantCardProps = {
 //   roomNumber: number;
 //   close: () => void;
 // };
-// 
+//
 // const AddParticipantCard = ({
 //   roomNumber,
 //   close,
@@ -18,9 +18,9 @@ export {};
 //   const [id, setId] = useState("");
 //   const [arrivalDate, setArrivalDate] = useState("");
 //   const [password, setPassword] = useState("");
-// 
+//
 //   const [error, setError] = useState("");
-// 
+//
 //   const [createParticipant, { loading }] = useMutation(CREATE_PARTICIPANT, {
 //     onCompleted: () => {
 //       localStorage.setItem(
@@ -33,10 +33,10 @@ export {};
 //       setError(err.message);
 //     },
 //   });
-// 
+//
 //   function handleSubmit() {
 //     setError("");
-// 
+//
 //     if (!id || !arrivalDate || !password) {
 //       setError("Missing fields");
 //     } else {
@@ -45,7 +45,7 @@ export {};
 //         setError("Arrival is in the future");
 //         return;
 //       }
-// 
+//
 //       createParticipant({
 //         variables: {
 //           participant_id: Number(id),
@@ -56,7 +56,7 @@ export {};
 //       });
 //     }
 //   }
-// 
+//
 //   return (
 //     <ModalContainer
 //       title={"Add Participant to Room " + roomNumber}
@@ -89,5 +89,5 @@ export {};
 //     </ModalContainer>
 //   );
 // };
-// 
+//
 // export default AddParticipantCard;

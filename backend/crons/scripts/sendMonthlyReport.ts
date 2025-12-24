@@ -24,6 +24,7 @@ async function sendMonthlyReport() {
       })
     );
 
+    // if necessary, we can clear relevant data that is already recorded in the generated report
     console.log("successfully sent monthly report to recipients");
   } catch (err) {
     console.error(err);

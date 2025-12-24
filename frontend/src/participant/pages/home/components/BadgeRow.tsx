@@ -3,7 +3,7 @@ export {};
 // import React from "react";
 // import { Box, Flex, Text, Button } from "@chakra-ui/react";
 // import Badge, { BadgeRarity } from "../../../common/Badge";
-// 
+//
 // interface BadgeRowProps {
 //   messageText: string;
 //   title: string;
@@ -17,7 +17,7 @@ export {};
 //   showButton?: boolean;
 //   onProgressClick?: () => void;
 // }
-// 
+//
 // const BadgeRow: React.FC<BadgeRowProps> = ({
 //   messageText,
 //   title,
@@ -50,7 +50,7 @@ export {};
 //           </Button>
 //         )}
 //       </Flex>
-// 
+//
 //       {/* Badge and content row */}
 //       <Flex align="center" gap="12px" mb={isLast ? "0" : "16px"}>
 //         <Badge
@@ -80,5 +80,5 @@ export {};
 //     </Box>
 //   );
 // };
-// 
+//
 // export default BadgeRow;

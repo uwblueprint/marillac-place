@@ -15,7 +15,7 @@ export {};
 // import incomplete from "../../../icons/status/incomplete.svg";
 // import excused from "../../../icons/status/excused.svg";
 // import comment from "../../../icons/misc/comment.svg";
-// 
+//
 // interface AssignedTask {
 //   assigned_task_id: number;
 //   task_name: string;
@@ -24,16 +24,16 @@ export {};
 //   end_date: string;
 //   comment: string;
 // }
-// 
+//
 // const TodoListWidget = () => {
 //   const participant = useContext(ParticipantContext) as
 //     | { id: number }
 //     | undefined;
 //   const participantId = participant?.id;
-// 
+//
 //   const navigate = useNavigate();
 //   const date = getToday();
-// 
+//
 //   const { data, loading, error } = useQuery(
 //     GET_ASSIGNED_TASKS_BY_PARTICIPANT_ID_AND_DATE,
 //     {
@@ -41,7 +41,7 @@ export {};
 //       skip: !participantId,
 //     }
 //   );
-// 
+//
 //   return (
 //     <>
 //       <Flex direction="row" justify="space-between" align="center">
@@ -59,16 +59,16 @@ export {};
 //           Schedule
 //         </Text>
 //       </Flex>
-// 
+//
 //       {loading && <Spinner />}
-// 
+//
 //       {error && (
 //         <Alert status="error" mb={4}>
 //           <AlertIcon />
 //           Error loading tasks.
 //         </Alert>
 //       )}
-// 
+//
 //       {!loading &&
 //         !error &&
 //         data &&
@@ -96,7 +96,7 @@ export {};
 //                     <Icon icon={comment} width="12px" height="12px" />
 //                   )}
 //                 </Flex>
-// 
+//
 //                 <Text color="text.light.secondary" textStyle="mobile.b1">
 //                   {formatTimeRange(
 //                     assigned_task.start_date,
@@ -110,5 +110,5 @@ export {};
 //     </>
 //   );
 // };
-// 
+//
 // export default TodoListWidget;
