@@ -104,7 +104,7 @@ export default function DateOptions({
         ))}
       </Flex>
 
-      { dayPreference !== DayPreference.DAY_RANGE && ( 
+      {dayPreference !== DayPreference.DAY_RANGE && (
         <SelectInput
           label="Time"
           current_value={timePreference}

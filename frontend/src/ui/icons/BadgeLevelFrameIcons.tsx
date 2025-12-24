@@ -1,5 +1,6 @@
 import React from "react";
 import { IconProps } from "../../types/component";
+import useChakraColor from "../../hooks/useChakraColor";
 
 export const Novice: React.FC<IconProps> = ({ size = 16 }) => (
   <svg

@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { Flex, Text, Spinner } from "@chakra-ui/react";
-import { useQuery, useMutation } from "@apollo/client";
-
+import { useQuery } from "@apollo/client";
 import ReportsTable from "./components/ReportsTable";
-import EmailModal from "./components/EmailModal";
-
-import {
-  GET_REPORT_RECIPIENTS,
-  CREATE_REPORT_RECIPIENT,
-  UPDATE_REPORT_RECIPIENT,
-  DELETE_REPORT_RECIPIENT,
-} from "../../../gql/reportRecipientRequests";
+import AddEmailModal from "./components/AddEmailModal";
+import { GET_REPORT_RECIPIENTS } from "../../../gql/reportRecipientRequests";
+import LoadingScreen from "../../../ui/screens/LoadingScreen";
+import ErrorScreen from "../../../ui/screens/ErrorScreen";
+import OrangeButton from "../../../ui/buttons/OrangeButton";
 
 type Report = {
   email: string;
@@ -19,126 +15,13 @@ type Report = {
 };
 
 export default function AdminReportsPage() {
-  const [addEmail, setAddEmail] = useState(false);
-  const [editEmail, setEditEmail] = useState(false);
-  const [selectedEmail, setSelectedEmail] = useState<Report | null>(null);
-
   const { loading, error, data, refetch } = useQuery(GET_REPORT_RECIPIENTS);
-  const [createReportRecipient] = useMutation(CREATE_REPORT_RECIPIENT);
-  const [updateReportRecipient] = useMutation(UPDATE_REPORT_RECIPIENT);
-  const [deleteReportRecipient] = useMutation(DELETE_REPORT_RECIPIENT);
-
   const reports: Report[] = data?.getReportRecipients || [];
 
-  const handleAddEmail = async (emailData: {
-    email: string;
-    weekly: boolean;
-    monthly: boolean;
-  }) => {
-    try {
-      await createReportRecipient({
-        variables: {
-          email: emailData.email,
-          weekly: emailData.weekly,
-          monthly: emailData.monthly,
-        },
-      });
-      refetch();
-      setAddEmail(false);
-    } catch (err) {
-      console.error("Error creating report recipient:", err);
-    }
-  };
+  const [addEmail, setAddEmail] = useState(false);
 
-  const handleEditEmail = async (emailData: {
-    email: string;
-    weekly: boolean;
-    monthly: boolean;
-  }) => {
-    if (!selectedEmail) return;
-    try {
-      await updateReportRecipient({
-        variables: {
-          email: selectedEmail.email,
-          weekly: emailData.weekly,
-          monthly: emailData.monthly,
-        },
-      });
-      refetch();
-      setEditEmail(false);
-      setSelectedEmail(null);
-    } catch (err) {
-      console.error("Error updating report recipient:", err);
-    }
-  };
-
-  const handleDeleteEmail = async (email: string) => {
-    try {
-      await deleteReportRecipient({
-        variables: {
-          email,
-        },
-      });
-      refetch();
-    } catch (err) {
-      console.error("Error deleting report recipient:", err);
-    }
-  };
-
-  const handleEditClick = (report: Report) => {
-    setSelectedEmail(report);
-    setEditEmail(true);
-  };
-
-  if (loading) {
-    return (
-      <Flex
-        width="100%"
-        height="fit-content"
-        justifyContent="center"
-        alignItems="center"
-        padding="20px"
-      >
-        <Spinner size="lg" color="primary.700" />
-      </Flex>
-    );
-  }
-
-  if (error) {
-    // Log full error details to console for debugging
-    console.error("Error loading reports:", error);
-    console.error("Network error:", error.networkError);
-    console.error("GraphQL errors:", error.graphQLErrors);
-
-    // Extract more detailed error message
-    let errorMessage = error.message;
-    if (error.networkError) {
-      errorMessage = error.networkError.message || error.message;
-    } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-      errorMessage = error.graphQLErrors.map((err) => err.message).join(", ");
-    }
-
-    return (
-      <Flex
-        width="100%"
-        height="fit-content"
-        justifyContent="center"
-        padding="20px"
-        flexDir="column"
-        gap="10px"
-      >
-        <Text color="danger.900" fontWeight="bold" textStyle="web.b2">
-          Error loading reports
-        </Text>
-        <Text color="danger.800" textStyle="web.b3">
-          {errorMessage}
-        </Text>
-        <Text color="text.light.secondary" fontSize="sm" textStyle="web.b3">
-          Check the browser console for more details.
-        </Text>
-      </Flex>
-    );
-  }
+  if (loading) return <LoadingScreen />
+  if (error) return <ErrorScreen message={error.message} />
 
   return (
     <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
@@ -148,32 +31,32 @@ export default function AdminReportsPage() {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Flex alignItems="center" gap="15px">
-          <Text textStyle="web.h2" color="primary.700">
-            Reports
-          </Text>
-          <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
-            Reports will be automatically generated and emailed. Edit frequency
-            of reports below.
-          </Text>
+        <Flex alignItems="center" justifyContent="space-between" w="100%">
+          <Flex alignItems="center" gap="15px">
+            <Text textStyle="web.h2" color="primary.700">
+              Reports
+            </Text>
+            <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
+              Reports will be automatically generated and emailed. Edit frequency
+              of reports below.
+            </Text>
+          </Flex>
+          <OrangeButton
+            label="Add Email"
+            action={() => setAddEmail(true)}
+            is_active={addEmail}
+          />
         </Flex>
       </Flex>
       <ReportsTable
         reports={reports}
-        onAddEmail={() => setAddEmail(true)}
-        onEditEmail={handleEditClick}
-        onDeleteEmail={handleDeleteEmail}
+        refetch={refetch}
       />
 
-      {(addEmail || (editEmail && selectedEmail)) && (
-        <EmailModal
-          initialData={editEmail && selectedEmail ? selectedEmail : undefined}
-          onClose={() => {
-            setAddEmail(false);
-            setEditEmail(false);
-            setSelectedEmail(null);
-          }}
-          onSubmit={editEmail ? handleEditEmail : handleAddEmail}
+      {addEmail && (
+        <AddEmailModal
+          onClose={() => setAddEmail(false)}
+          refetch={refetch}
         />
       )}
     </Flex>

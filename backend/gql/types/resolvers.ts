@@ -38,6 +38,8 @@ const resolvers = gql`
     getEarnedCustomBadges(pid: Int!): [EarnedCustomBadge!]!
 
     getAchievedBadgeLevels(pid: Int!): [AchievedBadgeLevel!]!
+
+    getBadgeLevelProgress(pid: Int!): [BadgeLevelProgress!]!
   }
 
   type Mutation {
@@ -142,6 +144,7 @@ const resolvers = gql`
       name: String!
       icon: Icon!
       description: String!
+      value: Int!
     ): EarnedCustomBadge!
     fetchNewEarnedCustomBadges(pid: Int!): [EarnedCustomBadge!]!
 
@@ -160,6 +163,7 @@ const resolvers = gql`
 
     createAssignedTask(
       pid: Int!
+      tid: Int!
       name: String!
       type: TaskType!
       value: Int!

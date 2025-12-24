@@ -4,11 +4,11 @@ export {};
 // import React, { useState } from "react";
 // import AddParticipantCard from "./AddParticipantCard";
 // import OrangeButton from "../../../common/buttons/OrangeButton";
-// 
+//
 // type EmptyRoomCardProps = {
 //   roomNumber: number;
 // };
-// 
+//
 // export default function EmptyRoomCard({ roomNumber }: EmptyRoomCardProps) {
 //   const [addParticipant, setAddParticipant] = useState(false);
 //   return (
@@ -37,9 +37,9 @@ export {};
 //       >
 //         <Text textStyle="web.s1">Room {roomNumber}</Text>
 //       </Flex>
-// 
+//
 //       <Text textStyle="web.b3">This room is empty.</Text>
-// 
+//
 //       <Flex position="absolute" bottom="12px">
 //         <OrangeButton
 //           text="Add Participant"
@@ -47,7 +47,7 @@ export {};
 //           is_active={addParticipant}
 //         />
 //       </Flex>
-// 
+//
 //       {addParticipant && (
 //         <AddParticipantCard
 //           roomNumber={roomNumber}

@@ -9,14 +9,14 @@ export {};
 // import { isSameDay } from "../../../../utils/formatDateTime";
 // import { weekdays } from "../../../../constants/misc";
 // import { toTitleCase } from "../../../../utils/string_helpers";
-// 
+//
 // interface ScheduleListViewProps {
 //   specificTasks: CalendarEvent[];
 //   anytimeTasks: CalendarEvent[];
 //   anydayTasks: CalendarEvent[];
 //   onTaskSelect: (event: CalendarEvent) => void;
 // }
-// 
+//
 // export default function ScheduleListView({
 //   specificTasks,
 //   anytimeTasks,
@@ -24,7 +24,7 @@ export {};
 //   onTaskSelect,
 // }: ScheduleListViewProps) {
 //   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(DayOfWeek.MONDAY);
-// 
+//
 //   const getTasksForDay = (dayName: DayOfWeek): CalendarEvent[] => {
 //     const specficTasksForDay = specificTasks.filter((task) => {
 //       return isSameDay(dayName, task.start);
@@ -34,7 +34,7 @@ export {};
 //     });
 //     return [...specficTasksForDay, ...anytimeTasksForDay];
 //   };
-// 
+//
 //   return (
 //     <VStack align="stretch" spacing={4}>
 //       <Box position="relative" width="100%">
@@ -67,7 +67,7 @@ export {};
 //             </Button>
 //           ))}
 //         </HStack>
-// 
+//
 //         <Box
 //           position="relative"
 //           zIndex={2}
@@ -82,12 +82,12 @@ export {};
 //           />
 //         </Box>
 //       </Box>
-// 
+//
 //       <Box>
 //         <Text textStyle="web.h3" color="primary.700" mb={2}>
 //           Any Day
 //         </Text>
-// 
+//
 //         <TaskTableBottom tasks={anydayTasks} onTaskSelect={onTaskSelect} />
 //       </Box>
 //     </VStack>

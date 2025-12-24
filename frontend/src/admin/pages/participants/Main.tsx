@@ -8,23 +8,23 @@ export {};
 // import OccupiedRoomCard from "./components/OccupiedRoomCard";
 // import EmptyRoomCard from "./components/EmptyRoomCard";
 // import PastParticipantTable from "./components/PastParticipantTable";
-// 
+//
 // export default function AdminParticipantsPage() {
 //   const { loading, error, data } = useQuery(GET_CURRENT_PARTICIPANTS);
-// 
+//
 //   const currentParticipants: Record<number, any> = {};
 //   if (data && data.getCurrentParticipants) {
 //     data.getCurrentParticipants.forEach((participant: any) => {
 //       currentParticipants[participant.room_number] = participant;
 //     });
 //   }
-// 
+//
 //   return (
 //     <Flex w="100%" flexDir="column" minHeight="fit-content">
 //       <Text textStyle="web.h2" color="primary.700" mb="10px">
 //         Current Participants
 //       </Text>
-// 
+//
 //       {loading ? (
 //         <Spinner />
 //       ) : error ? (
@@ -44,7 +44,7 @@ export {};
 //           )}
 //         </Grid>
 //       )}
-// 
+//
 //       <Text textStyle="web.h2" color="primary.700" mt="20px" mb="10px">
 //         Past Participants
 //       </Text>

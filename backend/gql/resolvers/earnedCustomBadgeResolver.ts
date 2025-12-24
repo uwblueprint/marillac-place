@@ -1,5 +1,6 @@
 import { EarnedCustomBadge, Icon } from "@prisma/client";
 import db from "../../prisma";
+import processEarning from "../../utils/transactionUtils";
 
 const earnedCustomBadgeResolver = {
   Query: {
@@ -46,16 +47,17 @@ const earnedCustomBadgeResolver = {
         name,
         icon,
         description,
+        value,
       }: {
         pid: number;
         name: string;
         icon: Icon;
         description: string;
+        value: number;
       }
     ): Promise<EarnedCustomBadge> => {
-      // TODO:
-      // modify this endpoint to receive a value input field and process it as an earning (helper function exists in transactionUtils.ts)
-      // make sure to update the resolver types as well to include the value input field
+      const reasonForEarning = `${name} custom badge earned!`;
+      await processEarning(pid, value, reasonForEarning);
       return db.earnedCustomBadge.create({
         data: { pid, name, icon, description },
       });

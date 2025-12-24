@@ -39,9 +39,10 @@ Backend: http://localhost:5000/graphql
 
 ## Database Interactions
 Apply / migrate changes in prisma.schema to the database:
-1. Change the DATABASE_URL in the backend .env file to: postgresql://postgres:postgres@**localhost**:5432/mp
-2. In your terminal, run `npx prisma migrate dev` in the backend folder and follow the prompts
-3. Don’t forget to reset DATABASE_URL back to postgresql://postgres:postgres@**mp_db**:5432/mp
+1. First ensure your `mp_db` container is running 
+2. Change the DATABASE_URL in the backend .env file to: postgresql://postgres:postgres@**localhost**:5432/mp
+3. In your terminal, run `npx prisma migrate dev` in the backend folder and follow the prompts
+4. Don’t forget to reset DATABASE_URL back to postgresql://postgres:postgres@**mp_db**:5432/mp
 
 Common database commands:
 ```bash

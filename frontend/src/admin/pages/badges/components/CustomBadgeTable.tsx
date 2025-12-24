@@ -1,128 +1,100 @@
-export {};
-// TODO: Refactor this component
-// import { Text, Flex, Image as ChakraImage } from "@chakra-ui/react";
-// import EditIcon from "@mui/icons-material/Edit";
-// import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-// import React, { useState } from "react";
-// import { useMutation } from "@apollo/client";
-// import { DELETE_CUSTOM_BADGE } from "../../../../gql/mutations";
-// import EditCustomBadgeModal from "./EditCustomBadgeModal";
-// import DataTable from "../../../common/misc/DataTable";
-// 
-// type CustomBadgeTableProps = {
-//   loading: boolean;
-//   error: any;
-//   badges: any[];
-// };
-// 
-// const CustomBadgeTable = ({
-//   loading,
-//   error,
-//   badges,
-// }: CustomBadgeTableProps) => {
-//   const [edit, setEdit] = useState(false);
-//   const [selected, setSelected] = useState(null);
-// 
-//   const [deleteCustomBadge] = useMutation(DELETE_CUSTOM_BADGE);
-// 
-//   async function handleDelete(id: number) {
-//     try {
-//       await deleteCustomBadge({
-//         variables: {
-//           badge_id: id,
-//         },
-//       });
-//     } catch (err: any) {
-//       console.log(err);
-//     }
-//     window.location.reload();
-//   }
-// 
-//   const columns = [
-//     { header: "Icon", width: "5%" },
-//     { header: "Badge Name", width: "25%" },
-//     { header: "Description", width: "65%" },
-//     { header: "Actions", width: "5%" },
-//   ];
-// 
-//   const rows: JSX.Element[][] = badges.length
-//     ? badges.map((badge: any) => {
-//         const cells: JSX.Element[] = [
-//           <ChakraImage
-//             key={`icon-${badge.badge_id}`}
-//             src={`/badges/${badge.icon.toLowerCase()}.svg`}
-//             alt={badge.name}
-//             style={{ width: "1.5rem", height: "1.5rem" }}
-//             opacity={0.5}
-//           />,
-//           <Text
-//             key={`name-${badge.badge_id}`}
-//             textStyle="web.b3"
-//             color="#000000"
-//             whiteSpace="normal"
-//           >
-//             {badge.name}
-//           </Text>,
-//           <Text
-//             key={`desc-${badge.badge_id}`}
-//             textStyle="web.b3"
-//             color="#000000"
-//             whiteSpace="normal"
-//           >
-//             {badge.description}
-//           </Text>,
-//           <Flex
-//             key={`actions-${badge.badge_id}`}
-//             alignItems="center"
-//             justifyContent="center"
-//             gap="15px"
-//           >
-//             <Flex
-//               cursor="pointer"
-//               onClick={() => {
-//                 setSelected(badge);
-//                 setEdit(true);
-//               }}
-//             >
-//               <EditIcon
-//                 style={{
-//                   width: "1.2rem",
-//                   height: "1.2rem",
-//                   color: "#000000",
-//                   cursor: "pointer",
-//                 }}
-//               />
-//             </Flex>
-//             <Flex cursor="pointer" onClick={() => handleDelete(badge.badge_id)}>
-//               <DeleteOutlineIcon
-//                 style={{
-//                   width: "1.3rem",
-//                   height: "1.3rem",
-//                   color: "#D34C5C",
-//                 }}
-//               />
-//             </Flex>
-//           </Flex>,
-//         ];
-//         return cells;
-//       })
-//     : [];
-// 
-//   const editModal = (
-//     <EditCustomBadgeModal onClose={() => setEdit(false)} selected={selected} />
-//   );
-// 
-//   return (
-//     <DataTable
-//       loading={loading}
-//       error={error}
-//       columns={columns}
-//       rows={rows}
-//       editModal={editModal}
-//       selected={selected}
-//       edit={edit}
-//     />
-//   );
-// };
-// 
-// export default CustomBadgeTable;
+import { Text, Flex, Image as ChakraImage } from "@chakra-ui/react";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { DELETE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
+import EditCustomBadgeModal from "./EditCustomBadgeModal";
+import DataTable, { Column, Row } from "../../../../ui/misc/DataTable";
+import { CustomBadge } from "../../../../types/models";
+import { Marker, Trash } from "../../../../ui/icons/ActionIcons";
+import { ICON_MAP } from "../../../../constants/icons";
+
+type CustomBadgeTableProps = {
+  loading: boolean;
+  error: any;
+  badges: CustomBadge[];
+  refetch: () => void;
+};
+
+const CustomBadgeTable = ({
+  loading,
+  error,
+  badges,
+  refetch,
+}: CustomBadgeTableProps) => {
+  const [edit, setEdit] = useState(false);
+  const [selected, setSelected] = useState<CustomBadge | null>(null);
+  const [deleteError, setDeleteError] = useState<string>("");
+
+  const [deleteCustomBadge, { loading: deleteCustomBadgeLoading }] =
+    useMutation(DELETE_CUSTOM_BADGE);
+
+  async function handleDelete(id: number) {
+    setDeleteError("");
+    try {
+      await deleteCustomBadge({
+        variables: {
+          cid: id,
+        },
+      });
+      await refetch();
+    } catch (err: any) {
+      setDeleteError(err.message);
+    }
+  }
+
+  const columns: Column[] = [
+    { header: "Icon", width: "5%", center: true },
+    { header: "Badge Name", width: "25%" },
+    { header: "Description", width: "68%" },
+    { header: "", width: "1%" },
+    { header: "", width: "1%" },
+  ];
+
+  const rows: Row[][] = badges.length
+    ? badges.map((badge: CustomBadge) => {
+        const IconComponent = ICON_MAP[badge.icon];
+        return [
+          { element: <IconComponent size={20} /> },
+          { element: badge.name },
+          { element: badge.description },
+          {
+            element: <Marker size={20} />,
+            action: () => {
+              setSelected(badge);
+              setEdit(true);
+            },
+          },
+          {
+            element: <Trash size={20} />,
+            action: async () => handleDelete(badge.cid),
+          },
+        ];
+      })
+    : [];
+
+  if (edit && selected) {
+    return (
+      <EditCustomBadgeModal
+        onClose={() => {
+          setEdit(false);
+          setSelected(null);
+        }}
+        selected={selected}
+        refetch={refetch}
+      />
+    );
+  }
+
+  return (
+    <DataTable
+      loading={loading || deleteCustomBadgeLoading}
+      error={error + deleteError}
+      columns={columns}
+      rows={rows}
+    />
+  );
+};
+
+export default CustomBadgeTable;

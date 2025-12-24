@@ -114,6 +114,11 @@ export default function getMiddleware() {
         ROLES.RELIEF,
         ROLES.PARTICIPANT,
       ]),
+      getBadgeLevelProgress: verifyRole([
+        ROLES.ADMIN,
+        ROLES.RELIEF,
+        ROLES.PARTICIPANT,
+      ]),
     },
     Mutation: {
       createNote: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),

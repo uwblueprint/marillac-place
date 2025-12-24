@@ -5,6 +5,7 @@ const models = gql`
     name: String!
     level: Level!
     pid: Int!
+    notified: Boolean!
     date: Date!
 
     badge_level: BadgeLevel
@@ -23,6 +24,7 @@ const models = gql`
   type AssignedTask {
     aid: Int!
     pid: Int!
+    tid: Int!
     name: String!
     type: TaskType!
     status: TaskStatus!
@@ -79,6 +81,7 @@ const models = gql`
     name: String!
     icon: Icon!
     description: String!
+    notified: Boolean!
 
     participant: Participant
   }

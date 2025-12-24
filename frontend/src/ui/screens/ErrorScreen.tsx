@@ -1,6 +1,7 @@
 // TODO:
 // Design and implement common error popup (works on both mobile and web)
 // Displays error, along with contact support information
+// Add a refresh button to the error screen
 // Add to UI page
 
 import { Flex } from "@chakra-ui/react";

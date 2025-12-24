@@ -12,13 +12,13 @@ export {};
 // import { Priority } from "../../../types/AnnouncementTypes";
 // import GreenButton from "../../common/GreenButton";
 // import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";
-// 
+//
 // const FILTER_LABELS = ["ALL", "UNREAD", "PINNED", "IMPORTANT"] as const;
-// 
+//
 // export default function ParticipantsAnnouncementsPage() {
 //   const participant = useContext(ParticipantContext);
 //   const participantId = participant?.id;
-// 
+//
 //   const [expandedView, setExpandedView] = useState(false);
 //   const [selected, setSelected] = useState({
 //     uaid: -1,
@@ -29,10 +29,10 @@ export {};
 //     pinned: false,
 //     date: "",
 //   });
-// 
+//
 //   const [filter, setFilter] = useState(0);
 //   const isAll = filter === 0;
-// 
+//
 //   const {
 //     data: allData,
 //     loading: allLoading,
@@ -44,7 +44,7 @@ export {};
 //     nextFetchPolicy: "cache-first",
 //     notifyOnNetworkStatusChange: true,
 //   });
-// 
+//
 //   const {
 //     data: filteredData,
 //     loading: filteredLoading,
@@ -59,20 +59,20 @@ export {};
 //     nextFetchPolicy: "cache-first",
 //     notifyOnNetworkStatusChange: true,
 //   });
-// 
+//
 //   const loading = isAll ? allLoading : filteredLoading;
 //   const error = isAll ? allError : filteredError;
 //   const data = isAll
 //     ? allData?.getAnnouncementsByParticipantId ?? []
 //     : filteredData?.getParticipantAnnouncements ?? [];
-// 
+//
 //   if (loading) return <Text>Loading announcements…</Text>;
 //   if (error) return <Text color="red.500">Error loading announcements.</Text>;
-// 
+//
 //   if (expandedView && selected) {
 //     return <AnnouncementsExpandedView announcement={selected} />;
 //   }
-// 
+//
 //   return (
 //     <>
 //       <Flex w="100%" alignItems="center" justifyContent="center" gap="8px">
@@ -97,7 +97,7 @@ export {};
 //           is_active={filter === 3}
 //         />
 //       </Flex>
-// 
+//
 //       {!data || data.length === 0 ? (
 //         <Flex>No announcements.</Flex>
 //       ) : (
@@ -112,10 +112,10 @@ export {};
 //               pinned,
 //               announcement: { message, priority, creation_date: date },
 //             } = a;
-// 
+//
 //             const allRooms = false;
 //             const importance = Object.values(Priority).indexOf(priority);
-// 
+//
 //             return (
 //               <Flex
 //                 key={i}

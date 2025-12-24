@@ -9,13 +9,7 @@ export default function TextInput({
   size,
 }: InputProps) {
   const width =
-    size === "small"
-      ? "100px"
-      : size === "medium"
-      ? "200px"
-      : size === "large"
-      ? "400px"
-      : "100%";
+    size === "small" ? "100px" : size === "medium" ? "250px" : "400px";
   return (
     <FormControl width="100%">
       {label && (
@@ -28,7 +22,7 @@ export default function TextInput({
           type="text"
           value={current_value}
           onChange={(e) => update_action(e.target.value)}
-          width={width === "100%" ? "100%" : width}
+          width={width}
           height="fit-content"
           paddingX="12px"
           paddingY="6px"

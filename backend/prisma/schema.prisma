@@ -82,6 +82,7 @@ enum Icon {
   DIAMOND
   PENCIL
   TOOL
+  PLANT
 }
 
 model Participant {
@@ -183,6 +184,7 @@ model Task {
 model AssignedTask {
   aid        Int        @id @default(autoincrement())
   pid        Int
+  tid        Int
   name       String
   type       TaskType
   status     TaskStatus @default(ASSIGNED)
