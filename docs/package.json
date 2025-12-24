@@ -1,0 +1,12 @@
+{
+  "name": "marillac-place-docs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "mintlify dev -p 3333"
+  },
+  "devDependencies": {
+    "mintlify": "^4.0.0"
+  }
+}
+

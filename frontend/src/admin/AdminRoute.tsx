@@ -25,7 +25,10 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
     onCompleted: (data) => {
       if (!data || !data.getCurrentParticipants || !adminContext) {
-        setError("error fetching participants for context");
+        // Only set error in production mode
+        if (process.env.NODE_ENV !== "development") {
+          setError("error fetching participants for context");
+        }
         return;
       }
       const roomToParticipantMap: Record<number, number> = {};
@@ -35,12 +38,25 @@ export default function AdminRoute({ children }: AdminRouteProps) {
       adminContext.setRoomToParticipant(roomToParticipantMap);
     },
     onError: (err: Error) => {
-      setError(err.message);
+      // Only set error in production mode
+      if (process.env.NODE_ENV !== "development") {
+        setError(err.message);
+      } else {
+        console.warn("Could not fetch participants:", err.message);
+      }
     },
   });
 
   useEffect(() => {
     const authorize = async () => {
+      // Development mode: allow access without authentication for testing
+      const isDevelopment = process.env.NODE_ENV === "development";
+      if (isDevelopment) {
+        setAuthorized(true);
+        setLoading(false);
+        return;
+      }
+      
       const isStaff = await verifyRole([ADMIN, RELIEF]);
       if (isStaff) {
         setAuthorized(true);
@@ -52,11 +68,10 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
   useEffect(() => {
     if (authorized) {
-      setLoading(true);
+      // Try to fetch participants, but don't fail if it errors (for development)
       getCurrentParticipants();
-      setLoading(false);
     }
-  }, [authorized]);
+  }, [authorized, getCurrentParticipants]);
 
   if (loading) {
     return <LoadingScreen />;

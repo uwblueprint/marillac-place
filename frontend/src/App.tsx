@@ -17,7 +17,7 @@ import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
 // import AdminParticipantsPage from "./admin/pages/participants/Main";
 // import AdminTasksPage from "./admin/pages/tasks/Main";
 import AdminBadgesPage from "./admin/pages/badges/Main";
-// import AdminReportsPage from "./admin/pages/reports/Main";
+import AdminReportsPage from "./admin/pages/reports/Main";
 
 import ParticipantLoginPage from "./participant/pages/login/Main";
 // import ParticipantHomePage from "./participant/pages/home/Main";
@@ -37,8 +37,9 @@ import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
 
 function initApolloClient() {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
   const endpoint = createUploadLink({
-    uri: `${process.env.REACT_APP_BACKEND_URL}/graphql`,
+    uri: `${backendUrl}/graphql`,
     credentials: "include",
   });
 
@@ -115,6 +116,14 @@ const App = (): React.ReactElement => {
                   </AdminRoute>
                 }
               />
+              <Route
+                path={ROUTES.ADMIN_REPORTS_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminReportsPage />
+                  </AdminRoute>
+                }
+              />
             </Route>
             
             <Route element={<ParticipantLayout />}>
@@ -145,14 +154,6 @@ const App = (): React.ReactElement => {
                 element={
                   <AdminRoute>
                     <AdminTasksPage />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={ROUTES.ADMIN_REPORTS_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminReportsPage />
                   </AdminRoute>
                 }
               />
