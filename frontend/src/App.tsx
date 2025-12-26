@@ -21,8 +21,8 @@ import AdminReportsPage from "./admin/pages/reports/Main";
 
 import ParticipantLoginPage from "./participant/pages/login/Main";
 // import ParticipantHomePage from "./participant/pages/home/Main";
-// import ParticipantSchedulePage from "./participant/pages/schedule/Main";
-// import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
+import ParticipantSchedulePage from "./participant/pages/schedule/Main";
+import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
 // import ParticipantProgressPage from "./participant/pages/progress/Main";
 
 import * as ROUTES from "./constants/routes";
@@ -175,14 +175,7 @@ const App = (): React.ReactElement => {
                   </ParticipantRoute>
                 }
               />
-              <Route
-                path={ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE}
-                element={
-                  <ParticipantRoute>
-                    <ParticipantAnnouncementsPage />
-                  </ParticipantRoute>
-                }
-              />
+              
               <Route
                 path={ROUTES.PARTICIPANTS_PROGRESS_PAGE}
                 element={
@@ -192,6 +185,15 @@ const App = (): React.ReactElement => {
                 }
               />
             </Route> */}
+
+              <Route
+                path={ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE}
+                element={
+                  <ParticipantRoute>
+                    <ParticipantAnnouncementsPage />
+                  </ParticipantRoute>
+                }
+              />
 
             <Route path="/ui" element={<UI />} />
             <Route path="*" element={<NotFoundScreen />} />
