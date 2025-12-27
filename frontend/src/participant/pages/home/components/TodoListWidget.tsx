@@ -34,7 +34,7 @@ const TodoListWidget = () => {
   const { data, loading, error } = useQuery(
     GET_ASSIGNED_TASKS_FOR_TODAY,
     {
-      variables: { pid : pid},
+      variables: { pid },
       skip: !pid,
     })
 
@@ -69,8 +69,8 @@ const TodoListWidget = () => {
       {!loading &&
         !error &&
         data &&
-        data.getAssignedTasksByParticipantIdAndDate.length !== 0 &&
-        data.getAssignedTasksByParticipantIdAndDate.map(
+        data.getAssignedTasksForToday.length !== 0 &&
+        data.getAssignedTasksForToday.map(
           (assigned_task: AssignedTask) => {
             return (
               <Flex

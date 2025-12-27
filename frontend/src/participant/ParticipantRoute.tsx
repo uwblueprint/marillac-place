@@ -34,6 +34,9 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
     },
     onError: (err: Error) => {
       console.error(err.message);
+      // Clear invalid token and redirect to login
+      localStorage.removeItem("token");
+      setAuthorized(false);
     },
   });
 

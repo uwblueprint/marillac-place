@@ -99,6 +99,14 @@ const App = (): React.ReactElement => {
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
                 element={<ParticipantLoginPage />}
               />
+              <Route
+                path={ROUTES.PARTICIPANTS_HOME_PAGE}
+                element={
+                  <ParticipantRoute>
+                    <ParticipantsHomePage />
+                  </ParticipantRoute>
+                }
+              />
             </Route>
             {/* <Route element={<AdminLayout />}>
               <Route
@@ -168,14 +176,6 @@ const App = (): React.ReactElement => {
                 element={<ParticipantLoginPage />}
               />
               */}
-              <Route
-                path={ROUTES.PARTICIPANTS_HOME_PAGE}
-                element={
-                  <ParticipantRoute>
-                    <ParticipantsHomePage />
-                  </ParticipantRoute>
-                }
-              />
               {/*
               <Route
                 path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE}

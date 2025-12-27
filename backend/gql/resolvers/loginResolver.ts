@@ -8,6 +8,7 @@ import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 
 type LoginResponse = {
   token: string;
+  pid?: number;
 };
 
 const loginResolver = {
@@ -86,7 +87,7 @@ const loginResolver = {
       const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
         expiresIn: "12h",
       });
-      return { token };
+      return { token, pid };
     },
   },
 };

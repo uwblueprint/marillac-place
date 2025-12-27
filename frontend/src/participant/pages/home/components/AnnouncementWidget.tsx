@@ -22,7 +22,7 @@ export default function AnnouncementWidget() {
     error: announcementError,
   } = useQuery(GET_RECEIVED_ANNOUNCEMENTS, {
     variables: {
-      pid: pid,
+      pid,
     },
   });
 
@@ -44,7 +44,7 @@ export default function AnnouncementWidget() {
           </Text>
         </Flex>
 
-        {announcementData.getAnnouncementsByParticipantId.map(
+        {announcementData.getReceivedAnnouncements.map(
           (announcement: any) => (
             <Flex
               width="100%"
