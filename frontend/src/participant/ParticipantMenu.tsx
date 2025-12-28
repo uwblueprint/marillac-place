@@ -114,7 +114,7 @@ export default function ParticipantMenu() {
   const room = participant?.room;
   const balance = participant?.balance;
 
-  const error = !participant || !room || !balance;
+  const error = !participant || room == null || balance == null;
   if (error) {
     return (
       <ErrorScreen message="Unable to retrieve participant information." />
