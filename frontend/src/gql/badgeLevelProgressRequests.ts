@@ -11,6 +11,7 @@ export const GET_BADGE_LEVEL_PROGRESS = gql`
         value
         benchmark
         system_badge {
+          name
           icon
           description
           is_active
