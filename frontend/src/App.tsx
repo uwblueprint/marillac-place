@@ -35,8 +35,6 @@ import NotFoundScreen from "./ui/screens/NotFoundScreen";
 import UI from "./ui/UI";
 import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
-
-import UI from "./ui/UI";
 import ParticipantsHomePage from "./participant/pages/home/Main";
 
 function initApolloClient() {
