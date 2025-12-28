@@ -109,6 +109,7 @@ export default function AdminTasksPage() {
         </Flex>
 
         <TasksTable
+          taskType={selectedTaskType}
           loading={loading}
           error={error}
           tasks={tasks}
