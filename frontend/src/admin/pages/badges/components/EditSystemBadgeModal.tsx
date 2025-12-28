@@ -169,8 +169,15 @@ const EditSystemBadgeModal = ({
             if (!badgeLevels[level]) return null;
             const data = badgeLevels[level];
             return (
-              <Flex key={level} alignItems="center" justifyContent="center" width="90%">
-                <Text textStyle="web.b3" width="100px">{toTitleCase(level)}:</Text>
+              <Flex
+                key={level}
+                alignItems="center"
+                justifyContent="center"
+                width="90%"
+              >
+                <Text textStyle="web.b3" width="100px">
+                  {toTitleCase(level)}:
+                </Text>
                 <NumberInput
                   key={level}
                   current_value={data.benchmark}
@@ -190,7 +197,11 @@ const EditSystemBadgeModal = ({
           })}
         </Flex>
         <Flex flexDir="column" gap="5px">
-          <Text textStyle="web.s1" color="text.light.secondary" textAlign="right">
+          <Text
+            textStyle="web.s1"
+            color="text.light.secondary"
+            textAlign="right"
+          >
             Marillac Bucks
           </Text>
           {LEVEL_ORDER.map((level: Level) => {

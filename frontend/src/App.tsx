@@ -12,10 +12,10 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 import AdminLoginPage from "./admin/pages/login/Main";
 import AdminHomePage from "./admin/pages/home/Main";
-// import AdminSchedulePage from "./admin/pages/schedule/Main";
+import AdminSchedulePage from "./admin/pages/schedule/Main";
 import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
 // import AdminParticipantsPage from "./admin/pages/participants/Main";
-// import AdminTasksPage from "./admin/pages/tasks/Main";
+import AdminTasksPage from "./admin/pages/tasks/Main";
 import AdminBadgesPage from "./admin/pages/badges/Main";
 import AdminReportsPage from "./admin/pages/reports/Main";
 
@@ -37,7 +37,8 @@ import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
 
 function initApolloClient() {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
   const endpoint = createUploadLink({
     uri: `${backendUrl}/graphql`,
     credentials: "include",
@@ -101,10 +102,26 @@ const App = (): React.ReactElement => {
                 }
               />
               <Route
+                path={ROUTES.ADMIN_SCHEDULE_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminSchedulePage />
+                  </AdminRoute>
+                }
+              />
+              <Route
                 path={ROUTES.ADMIN_ANNOUNCEMENTS_PAGE}
                 element={
                   <AdminRoute>
                     <AdminAnnouncementsPage />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path={ROUTES.ADMIN_TASKS_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminTasksPage />
                   </AdminRoute>
                 }
               />
@@ -125,7 +142,7 @@ const App = (): React.ReactElement => {
                 }
               />
             </Route>
-            
+
             <Route element={<ParticipantLayout />}>
               <Route
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
@@ -138,22 +155,6 @@ const App = (): React.ReactElement => {
                 element={
                   <AdminRoute>
                     <AdminParticipantsPage />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={ROUTES.ADMIN_SCHEDULE_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminSchedulePage />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={ROUTES.ADMIN_TASKS_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminTasksPage />
                   </AdminRoute>
                 }
               />

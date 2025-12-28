@@ -60,6 +60,7 @@ import Badge from "./misc/BadgeProgress";
 import TaskStatusDisplay from "./misc/TaskStatusDisplay";
 import ToggleButton from "./buttons/ToggleButton";
 import { now } from "../helpers/formatDateTime";
+import { DisplayView } from "../constants/views";
 
 export default function UI() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -82,11 +83,11 @@ export default function UI() {
   const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(
     null
   );
+  const [participantPreference, setParticipantPreference] =
+    useState<boolean>(false);
   const [dateOptionDayPreference, setDateOptionDayPreference] =
     useState<DayPreference | null>(null);
-  const [dateOptionDays, setDateOptionDays] = useState<DayOfWeek[] | null>(
-    null
-  );
+  const [dateOptionDays, setDateOptionDays] = useState<DayOfWeek[]>([]);
   const [dateOptionTimePreference, setDateOptionTimePreference] =
     useState<TimePreference | null>(null);
   const [dateOptionStartTime, setDateOptionStartTime] = useState<Date | null>(
@@ -214,7 +215,7 @@ export default function UI() {
         seconds: 0,
         milliseconds: 0,
       }).toISOString(),
-        end_date: set(addDays(now(), 1), {
+      end_date: set(addDays(now(), 1), {
         hours: 14,
         minutes: 0,
         seconds: 0,
@@ -599,6 +600,9 @@ export default function UI() {
           loading={false}
         >
           <DateOptions
+            taskType={TaskType.REQUIRED}
+            setParticipantPreference={setParticipantPreference}
+            participantPreference={participantPreference}
             setDayPreference={setDateOptionDayPreference}
             setDays={(value) => setDateOptionDays(value ?? [])}
             setTimePreference={setDateOptionTimePreference}
@@ -628,7 +632,7 @@ export default function UI() {
           startDate={startDate}
           setStartDate={setStartDate}
           viewTaskDetails={setViewTaskDetails}
-          view="web"
+          view={DisplayView.WEB}
         />
       </Box>
 
@@ -639,7 +643,7 @@ export default function UI() {
           startDate={startDate}
           setStartDate={setStartDate}
           viewTaskDetails={setViewTaskDetails}
-          view="mobile"
+          view={DisplayView.MOBILE}
         />
       </Box>
 

@@ -92,7 +92,12 @@ export default function AdminBadgesPage() {
           refetch={refetchCustomBadges}
         />
       )}
-      {assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} customBadges={customBadgesData?.getCustomBadges ?? []} />}
+      {assign && (
+        <AssignCustomBadgeModal
+          onClose={() => setAssign(false)}
+          customBadges={customBadgesData?.getCustomBadges ?? []}
+        />
+      )}
     </Flex>
   );
 }

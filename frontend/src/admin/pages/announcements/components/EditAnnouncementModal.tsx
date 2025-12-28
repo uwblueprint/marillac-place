@@ -30,7 +30,8 @@ const EditAnnouncementModal = ({
 
   const [error, setError] = useState<string>("");
 
-  const [editAnnouncement, { loading: editAnnouncementLoading }] = useMutation(UPDATE_ANNOUNCEMENT);
+  const [editAnnouncement, { loading: editAnnouncementLoading }] =
+    useMutation(UPDATE_ANNOUNCEMENT);
 
   const handleSave = async () => {
     setError("");

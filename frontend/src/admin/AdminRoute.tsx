@@ -56,7 +56,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
         setLoading(false);
         return;
       }
-      
+
       const isStaff = await verifyRole([ADMIN, RELIEF]);
       if (isStaff) {
         setAuthorized(true);
@@ -87,11 +87,11 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
   return (
     <Flex alignItems="center" justifyContent="center">
-      <Flex 
-        position="relative" 
-        width="100vw" 
+      <Flex
+        position="relative"
+        width="100vw"
         height="100vh"
-        maxWidth="1400px" 
+        maxWidth="1400px"
         overflow="hidden"
       >
         <AdminMenu />

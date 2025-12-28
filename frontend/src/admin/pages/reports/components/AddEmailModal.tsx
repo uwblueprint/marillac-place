@@ -20,8 +20,13 @@ export default function AddEmailModal({
   const [monthly, setMonthly] = useState<boolean>(false);
   const [error, setError] = useState("");
 
-  const [createReportRecipient, { loading: createReportRecipientLoading }] = useMutation(CREATE_REPORT_RECIPIENT);
-  const handleAddEmail = async (new_email: string, send_weekly: boolean, send_monthly: boolean) => {
+  const [createReportRecipient, { loading: createReportRecipientLoading }] =
+    useMutation(CREATE_REPORT_RECIPIENT);
+  const handleAddEmail = async (
+    new_email: string,
+    send_weekly: boolean,
+    send_monthly: boolean
+  ) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email.trim())) {
       setError("Please enter a valid email address");
@@ -29,10 +34,10 @@ export default function AddEmailModal({
     }
     try {
       await createReportRecipient({
-        variables: { 
-          email: new_email, 
-          weekly: send_weekly, 
-          monthly: send_monthly 
+        variables: {
+          email: new_email,
+          weekly: send_weekly,
+          monthly: send_monthly,
         },
       });
       onClose();
@@ -60,12 +65,16 @@ export default function AddEmailModal({
       <Text textStyle="web.s1" color="text.light.secondary">
         Report Frequency
       </Text>
-      <Flex w='100%' alignItems='center' gap="15px">
-        <Text textStyle="web.b3" color="text.light.primary" w="95px">Weekly Reports</Text>
+      <Flex w="100%" alignItems="center" gap="15px">
+        <Text textStyle="web.b3" color="text.light.primary" w="95px">
+          Weekly Reports
+        </Text>
         <ToggleButton active={weekly} setActive={setWeekly} />
       </Flex>
-      <Flex w='100%' alignItems='center' gap="15px">
-        <Text textStyle="web.b3" color="text.light.primary" w="95px">Monthly Reports</Text>
+      <Flex w="100%" alignItems="center" gap="15px">
+        <Text textStyle="web.b3" color="text.light.primary" w="95px">
+          Monthly Reports
+        </Text>
         <ToggleButton active={monthly} setActive={setMonthly} />
       </Flex>
     </PopupContainer>

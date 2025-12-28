@@ -13,7 +13,7 @@ export default function TimeInput({
   size,
 }: InputProps) {
   const width =
-    size === "small" ? "100px" : size === "medium" ? "250px" : "400px";
+    size === "small" ? "100px" : size === "medium" ? "150px" : "400px";
   return (
     <FormControl>
       {label && (

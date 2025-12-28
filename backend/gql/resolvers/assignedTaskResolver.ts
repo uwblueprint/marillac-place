@@ -10,6 +10,7 @@ import {
   FIRST_GOAL,
   INDIVIDUAL_GOAL,
 } from "../../constants/systemBadges";
+import { now } from "../../utils/dateUtils";
 
 const assignedTaskResolver = {
   Query: {
@@ -18,7 +19,7 @@ const assignedTaskResolver = {
         where: {
           OR: [
             { departure: null },
-            { departure: { gt: endOfDay(new Date()) } },
+            { departure: { gt: endOfDay(now()) } },
           ],
         },
         select: {
@@ -62,8 +63,8 @@ const assignedTaskResolver = {
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfDay(new Date()) },
-          end_date: { gte: startOfDay(new Date()) },
+          start_date: { lte: endOfDay(now()) },
+          end_date: { gte: startOfDay(now()) },
         },
       });
     },
@@ -74,14 +75,15 @@ const assignedTaskResolver = {
         weekStart,
       }: {
         pid: number;
-        weekStart: Date;
+        weekStart: string;
       }
     ): Promise<AssignedTask[]> => {
+      const weekStartDate = new Date(weekStart);
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfWeek(weekStart) },
-          end_date: { gte: weekStart },
+          start_date: { lte: endOfWeek(weekStartDate) },
+          end_date: { gte: weekStartDate },
         },
       });
     },
@@ -98,8 +100,8 @@ const assignedTaskResolver = {
           pid,
           type: TaskType.REQUIRED,
           status: { not: TaskStatus.COMPLETE },
-          start_date: { lte: endOfWeek(new Date()) },
-          end_date: { gte: startOfWeek(new Date()) },
+          start_date: { lte: endOfWeek(now()) },
+          end_date: { gte: startOfWeek(now()) },
         },
       });
 
@@ -126,8 +128,8 @@ const assignedTaskResolver = {
         type: TaskType;
         value: number;
         penalty: number;
-        start_date: Date;
-        end_date: Date;
+        start_date: string;
+        end_date: string;
         comment?: string;
       }
     ): Promise<AssignedTask> => {
@@ -139,8 +141,8 @@ const assignedTaskResolver = {
           type,
           value,
           penalty,
-          start_date,
-          end_date,
+          start_date: new Date(start_date),
+          end_date: new Date(end_date),
           comment,
         },
       });
@@ -164,8 +166,8 @@ const assignedTaskResolver = {
         type?: TaskType;
         value?: number;
         penalty?: number;
-        start_date?: Date;
-        end_date?: Date;
+        start_date?: string;
+        end_date?: string;
         comment?: string;
       }
     ): Promise<AssignedTask> => {
@@ -175,8 +177,8 @@ const assignedTaskResolver = {
       if (type !== undefined) updates.type = type;
       if (value !== undefined) updates.value = value;
       if (penalty !== undefined) updates.penalty = penalty;
-      if (start_date !== undefined) updates.start_date = start_date;
-      if (end_date !== undefined) updates.end_date = end_date;
+      if (start_date !== undefined) updates.start_date = new Date(start_date);
+      if (end_date !== undefined) updates.end_date = new Date(end_date);
       if (comment !== undefined) updates.comment = comment;
 
       const isEmpty = Object.keys(updates).length === 0;
@@ -218,8 +220,8 @@ const assignedTaskResolver = {
               where: {
                 pid: assignedTask.pid,
                 status: { not: TaskStatus.COMPLETE },
-                start_date: { lte: endOfWeek(new Date()) },
-                end_date: { gte: startOfWeek(new Date()) },
+                start_date: { lte: endOfWeek(now()) },
+                end_date: { gte: startOfWeek(now()) },
                 type: TaskType.REQUIRED,
               },
             }
@@ -236,8 +238,8 @@ const assignedTaskResolver = {
           const countCompletedOptionalTasks = await db.assignedTask.count({
             where: {
               pid: assignedTask.pid,
-              start_date: { lte: endOfWeek(new Date()) },
-              end_date: { gte: startOfWeek(new Date()) },
+              start_date: { lte: endOfWeek(now()) },
+              end_date: { gte: startOfWeek(now()) },
               type: TaskType.OPTIONAL,
               status: TaskStatus.COMPLETE,
             },
@@ -257,8 +259,8 @@ const assignedTaskResolver = {
                 pid: assignedTask.pid,
                 type: TaskType.INDIVIDUAL_GOAL,
                 status: { not: TaskStatus.COMPLETE },
-                start_date: { lte: endOfWeek(new Date()) },
-                end_date: { gte: startOfWeek(new Date()) },
+                start_date: { lte: endOfWeek(now()) },
+                end_date: { gte: startOfWeek(now()) },
               },
             }
           );

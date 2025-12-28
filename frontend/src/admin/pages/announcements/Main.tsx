@@ -19,12 +19,15 @@ export default function AdminAnnouncementsPage() {
     new Array(10).fill(false)
   );
 
-  const [getAllAnnouncements, { 
-    loading: getAllAnnouncementsLoading, 
-    error: getAllAnnouncementsError, 
-    data: getAllAnnouncementsData,
-    refetch: refetchAllAnnouncements
-  }] = useLazyQuery(GET_ANNOUNCEMENTS_SENT_TO_PARTICIPANTS);
+  const [
+    getAllAnnouncements,
+    {
+      loading: getAllAnnouncementsLoading,
+      error: getAllAnnouncementsError,
+      data: getAllAnnouncementsData,
+      refetch: refetchAllAnnouncements,
+    },
+  ] = useLazyQuery(GET_ANNOUNCEMENTS_SENT_TO_PARTICIPANTS);
 
   const { roomToParticipant } = useContext(AdminContext);
 
@@ -67,7 +70,8 @@ export default function AdminAnnouncementsPage() {
   };
 
   if (getAllAnnouncementsLoading) return <LoadingScreen />;
-  if (getAllAnnouncementsError) return <ErrorScreen message={getAllAnnouncementsError.message} />;
+  if (getAllAnnouncementsError)
+    return <ErrorScreen message={getAllAnnouncementsError.message} />;
 
   return (
     <Flex width="100%" flexDir="column" gap="15px">
@@ -94,11 +98,7 @@ export default function AdminAnnouncementsPage() {
       </Flex>
 
       <Flex alignItems="center" gap="15px">
-        <Text
-          textStyle="web.s1"
-          color="#000000"
-          fontWeight={600}
-        >
+        <Text textStyle="web.s1" color="#000000" fontWeight={600}>
           Filters:
         </Text>
         <Flex alignItems="center" gap="5px">
@@ -111,10 +111,7 @@ export default function AdminAnnouncementsPage() {
             />
           ))}
         </Flex>
-        <UnderlineButton
-          label="Select All"
-          action={() => handleSelectAll()}
-        />
+        <UnderlineButton label="Select All" action={() => handleSelectAll()} />
         <UnderlineButton
           label="Deselect All"
           action={() => handleDeselectAll()}
@@ -126,17 +123,19 @@ export default function AdminAnnouncementsPage() {
       </Text>
 
       <VStack spacing={4} align="stretch" paddingBottom="20px">
-        {getAllAnnouncementsData?.getAnnouncementsSentToParticipants.map((announcement: any) => (
-          <AnnouncementCard
-            key={announcement.aid}
-            announcement_id={announcement.aid}
-            room={getRoomString(announcement)}
-            message={announcement.message}
-            timestamp={formatDateTimeString(announcement.date)}
-            priority={announcement.priority}
-            refetch={refetchAllAnnouncements}
-          />
-        ))}
+        {getAllAnnouncementsData?.getAnnouncementsSentToParticipants.map(
+          (announcement: any) => (
+            <AnnouncementCard
+              key={announcement.aid}
+              announcement_id={announcement.aid}
+              room={getRoomString(announcement)}
+              message={announcement.message}
+              timestamp={formatDateTimeString(announcement.date)}
+              priority={announcement.priority}
+              refetch={refetchAllAnnouncements}
+            />
+          )
+        )}
       </VStack>
 
       {create && (

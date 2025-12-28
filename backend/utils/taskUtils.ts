@@ -2,11 +2,12 @@ import { addDays, endOfDay, startOfWeek, set, startOfDay } from "date-fns";
 import { Task, DayPreference, TimePreference } from "@prisma/client";
 import db from "../prisma";
 import { orderedDays } from "../constants/days";
+import { now } from "./dateUtils";
 
 export async function assignTasksToAllParticipants(tasks: Task[]) {
   const participants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
+      OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
     },
     select: { pid: true },
   });
@@ -26,7 +27,7 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
             await Promise.all(
               orderedDays.map(async (day) => {
                 const baseDate = addDays(
-                  startOfWeek(new Date()),
+                  startOfWeek(now()),
                   orderedDays.indexOf(day)
                 );
                 if (task.time_preference === TimePreference.SPECIFIC) {
@@ -89,7 +90,7 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
             await Promise.all(
               task.days.map(async (day) => {
                 const baseDate = addDays(
-                  startOfWeek(new Date()),
+                  startOfWeek(now()),
                   orderedDays.indexOf(day)
                 );
                 if (task.time_preference === TimePreference.SPECIFIC) {
@@ -150,11 +151,11 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
             if (task.days.length !== 2)
               throw new Error("day range must contain exactly two elements");
             const startDate = addDays(
-              startOfWeek(new Date()),
+              startOfWeek(now()),
               orderedDays.indexOf(task.days[0])
             );
             const endDate = addDays(
-              startOfWeek(new Date()),
+              startOfWeek(now()),
               orderedDays.indexOf(task.days[1]) + 1
             );
 

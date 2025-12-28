@@ -27,13 +27,7 @@ const AdminHomePage = (): React.ReactElement => {
         </Text>
       </Flex>
 
-      <Flex
-        w="100%"
-        h="100%"
-        flexDir="row"
-        position="relative"
-        gap="10px"
-      >
+      <Flex w="100%" h="100%" flexDir="row" position="relative" gap="10px">
         <Flex flexDir="column" flex="1" gap="10px">
           <RoomsOverview />
           <AnnouncementSection />

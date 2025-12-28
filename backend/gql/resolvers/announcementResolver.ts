@@ -1,13 +1,14 @@
 import { Announcement, Priority } from "@prisma/client";
 import { startOfDay } from "date-fns";
 import db from "../../prisma";
+import { now } from "../../utils/dateUtils";
 
 const announcementResolver = {
   Query: {
     getAnnouncementsFromToday: async (): Promise<Announcement[]> => {
       return db.announcement.findMany({
         where: {
-          date: { gte: startOfDay(new Date()) },
+          date: { gte: startOfDay(now()) },
         },
         orderBy: {
           date: "desc",
@@ -66,7 +67,7 @@ const announcementResolver = {
       const announcement = await db.announcement.create({
         data: {
           priority,
-          date: new Date(),
+          date: now(),
           message,
         },
       });

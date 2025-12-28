@@ -102,11 +102,14 @@ export function formatDateTimeString(date: string): string {
  */
 export function formatTimeString(date: string): string {
   const dateObj = new Date(date);
-  return dateObj.toLocaleTimeString("en-CA", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
+  return dateObj
+    .toLocaleTimeString("en-CA", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .replace("a.m.", "AM")
+    .replace("p.m.", "PM");
 }
 
 /**

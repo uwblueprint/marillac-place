@@ -5,6 +5,7 @@ import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
+import { now } from "../../utils/dateUtils";
 
 type LoginResponse = {
   token: string;
@@ -55,7 +56,7 @@ const loginResolver = {
           pid,
           OR: [
             { departure: null },
-            { departure: { gt: endOfDay(new Date()) } },
+            { departure: { gt: endOfDay(now()) } },
           ],
         },
       });
@@ -72,8 +73,8 @@ const loginResolver = {
         where: {
           pid,
           date: {
-            gte: startOfDay(new Date()),
-            lte: endOfDay(new Date()),
+            gte: startOfDay(now()),
+            lte: endOfDay(now()),
           },
         },
       });

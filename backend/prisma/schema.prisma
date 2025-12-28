@@ -175,8 +175,8 @@ model Task {
   day_preference  DayPreference
   days            DayOfWeek[]
   time_preference TimePreference
-  start_time      DateTime?      @db.Time
-  end_time        DateTime?      @db.Time
+  start_time      DateTime?
+  end_time        DateTime?
 
   @@map("task")
 }

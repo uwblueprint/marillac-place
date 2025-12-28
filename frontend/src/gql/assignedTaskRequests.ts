@@ -24,7 +24,7 @@ export const GET_ASSIGNED_TASKS_FOR_TODAY = gql`
 `;
 
 export const GET_ASSIGNED_TASKS_BY_WEEK = gql`
-  query getAssignedTasksByWeek($pid: Int!, $weekStart: Date!) {
+  query getAssignedTasksByWeek($pid: Int!, $weekStart: String!) {
     getAssignedTasksByWeek(pid: $pid, weekStart: $weekStart) {
       aid
       pid
@@ -54,8 +54,8 @@ export const CREATE_ASSIGNED_TASK = gql`
     $type: TaskType!
     $value: Int!
     $penalty: Int!
-    $startDate: Date!
-    $endDate: Date!
+    $startDate: String!
+    $endDate: String!
     $comment: String
   ) {
     createAssignedTask(
@@ -92,8 +92,8 @@ export const UPDATE_ASSIGNED_TASK = gql`
     $type: TaskType
     $value: Int
     $penalty: Int
-    $startDate: Date
-    $endDate: Date
+    $startDate: String
+    $endDate: String
     $comment: String
   ) {
     updateAssignedTask(

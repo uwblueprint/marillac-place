@@ -26,7 +26,11 @@ const AnnouncementCard: React.FC<{ announcement: Announcement }> = ({
           <Text textStyle="web.b2" fontWeight={600} color="black">
             {getRoomString(announcement)}
           </Text>
-          <Text textStyle="web.b3" color="text.light.secondary" marginLeft="10px">
+          <Text
+            textStyle="web.b3"
+            color="text.light.secondary"
+            marginLeft="10px"
+          >
             posted at {formatTimeString(announcement.date)}
           </Text>
         </Flex>
@@ -74,7 +78,8 @@ const AnnouncementSection = () => {
             Announcements
           </Text>
           <Text textStyle="web.b3" color="text.light.secondary">
-            {announcements.length} new post{announcements.length === 1 ? "" : "s"} today
+            {announcements.length} new post
+            {announcements.length === 1 ? "" : "s"} today
           </Text>
         </Flex>
         <UnderlineButton
@@ -82,7 +87,7 @@ const AnnouncementSection = () => {
           action={() => navigate(ADMIN_ANNOUNCEMENTS_PAGE)}
         />
       </Flex>
-      <Flex 
+      <Flex
         gap="10px"
         flexDir="column"
         alignItems="center"
@@ -97,7 +102,10 @@ const AnnouncementSection = () => {
       >
         {announcements.length > 0 ? (
           announcements.map((announcement: Announcement) => (
-            <AnnouncementCard key={announcement.aid} announcement={announcement} />
+            <AnnouncementCard
+              key={announcement.aid}
+              announcement={announcement}
+            />
           ))
         ) : (
           <Text textStyle="web.b2" color="text.light.secondary">

@@ -42,7 +42,6 @@ export default function AnnouncementCard({
     }
   };
 
-
   return (
     <WidgetContainer
       width="100%"
@@ -58,12 +57,9 @@ export default function AnnouncementCard({
               {room}
             </Text>
             <Flex>
-              {(priority === Priority.HIGH || priority === Priority.CRITICAL) && (
-                <ExclamationMark />
-              )}
-              {priority === Priority.CRITICAL && (
-                <ExclamationMark />
-              )}
+              {(priority === Priority.HIGH ||
+                priority === Priority.CRITICAL) && <ExclamationMark />}
+              {priority === Priority.CRITICAL && <ExclamationMark />}
             </Flex>
           </Flex>
 
@@ -86,7 +82,10 @@ export default function AnnouncementCard({
           <Flex onClick={() => setEdit(true)} cursor="pointer">
             <Marker size={20} />
           </Flex>
-          <Flex onClick={() => handleDeleteAnnouncement(announcement_id)} cursor="pointer">
+          <Flex
+            onClick={() => handleDeleteAnnouncement(announcement_id)}
+            cursor="pointer"
+          >
             <Trash size={20} />
           </Flex>
         </Flex>

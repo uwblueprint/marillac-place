@@ -23,6 +23,7 @@ import { enCA } from "date-fns/locale/en-CA";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AssignedTask } from "../../types/models";
 import { formatTimeString, now } from "../../helpers/formatDateTime";
+import { DisplayView } from "../../constants/views";
 
 type CustomHeaderProps = {
   date: Date;
@@ -109,7 +110,7 @@ type MarillacPlaceCalendarProps = {
   startDate: Date;
   setStartDate: (date: Date) => void;
   viewTaskDetails: (task: AssignedTask | null) => void;
-  view: "web" | "mobile";
+  view: DisplayView;
 };
 
 export default function MarillacPlaceCalendar({
@@ -119,10 +120,10 @@ export default function MarillacPlaceCalendar({
   viewTaskDetails,
   view,
 }: MarillacPlaceCalendarProps) {
-  const calendarView = view === "mobile" ? Views.DAY : Views.WEEK;
+  const calendarView = view === DisplayView.MOBILE ? Views.DAY : Views.WEEK;
   return (
     <>
-      {view === "mobile" && (
+      {view === DisplayView.MOBILE && (
         <Text textStyle="web.b1" mb="12px" textAlign="center">
           {format(startDate, "EEEE d").toUpperCase()}
         </Text>

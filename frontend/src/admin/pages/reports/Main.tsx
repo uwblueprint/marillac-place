@@ -20,8 +20,8 @@ export default function AdminReportsPage() {
 
   const [addEmail, setAddEmail] = useState(false);
 
-  if (loading) return <LoadingScreen />
-  if (error) return <ErrorScreen message={error.message} />
+  if (loading) return <LoadingScreen />;
+  if (error) return <ErrorScreen message={error.message} />;
 
   return (
     <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
@@ -36,9 +36,13 @@ export default function AdminReportsPage() {
             <Text textStyle="web.h2" color="primary.700" pl="5px">
               Reports
             </Text>
-            <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
-              Reports will be automatically generated and emailed. Edit frequency
-              of reports below.
+            <Text
+              textStyle="web.b3"
+              color="text.light.secondary"
+              marginTop="7px"
+            >
+              Reports will be automatically generated and emailed. Edit
+              frequency of reports below.
             </Text>
           </Flex>
           <OrangeButton
@@ -48,16 +52,10 @@ export default function AdminReportsPage() {
           />
         </Flex>
       </Flex>
-      <ReportsTable
-        reports={reports}
-        refetch={refetch}
-      />
+      <ReportsTable reports={reports} refetch={refetch} />
 
       {addEmail && (
-        <AddEmailModal
-          onClose={() => setAddEmail(false)}
-          refetch={refetch}
-        />
+        <AddEmailModal onClose={() => setAddEmail(false)} refetch={refetch} />
       )}
     </Flex>
   );

@@ -8,16 +8,20 @@ import { AdminContext } from "../../../AdminContext";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 import { ADMIN_PARTICIPANTS_PAGE } from "../../../../constants/routes";
+import { ScheduleView } from "../../../../constants/views";
 
 export default function RoomsOverview() {
   const { roomToParticipant } = useContext(AdminContext);
-  const { data, loading, error } = useQuery(GET_NUMBER_OF_ASSIGNED_TASKS_BY_ROOM);
+  const { data, loading, error } = useQuery(
+    GET_NUMBER_OF_ASSIGNED_TASKS_BY_ROOM
+  );
 
   const navigate = useNavigate();
   const handleViewSchedule = (roomNumber: number) => {
     navigate("/admin/schedule", {
       state: {
         room: roomNumber,
+        view: ScheduleView.CALENDAR,
       },
     });
   };
@@ -48,9 +52,14 @@ export default function RoomsOverview() {
           Showing pending tasks for today
         </Text>
       </Flex>
-      <Grid w="100%" h="calc(100% - 40px)" templateColumns="repeat(5, 1fr)" gap="10px">
+      <Grid
+        w="100%"
+        h="calc(100% - 40px)"
+        templateColumns="repeat(5, 1fr)"
+        gap="10px"
+      >
         {ROOM_NUMBERS.map((room: number) => (
-          <WidgetContainer 
+          <WidgetContainer
             key={room}
             bg_color="transparent"
             paddingY="0px"
@@ -77,9 +86,16 @@ export default function RoomsOverview() {
                   ID Number: <b>#{roomToParticipant[room]}</b>
                 </Text>
                 <Text textStyle="web.b3" textAlign="center" mt="5px">
-                  {data?.getNumberOfAssignedTasksByRoom[room - 1]} Assigned Tasks
+                  {data?.getNumberOfAssignedTasksByRoom[room - 1]} Assigned
+                  Tasks
                 </Text>
-                <Flex position="absolute" bottom="10px" left="0" justifyContent="center" width="100%">
+                <Flex
+                  position="absolute"
+                  bottom="10px"
+                  left="0"
+                  justifyContent="center"
+                  width="100%"
+                >
                   <UnderlineButton
                     label="View Schedule"
                     action={() => handleViewSchedule(room)}
@@ -91,7 +107,13 @@ export default function RoomsOverview() {
                 <Text textStyle="web.b3" textAlign="center" mt="25px">
                   Room Available.
                 </Text>
-                <Flex position="absolute" bottom="10px" left="0" justifyContent="center" width="100%">
+                <Flex
+                  position="absolute"
+                  bottom="10px"
+                  left="0"
+                  justifyContent="center"
+                  width="100%"
+                >
                   <UnderlineButton
                     label="View Participants"
                     action={() => navigate(ADMIN_PARTICIPANTS_PAGE)}

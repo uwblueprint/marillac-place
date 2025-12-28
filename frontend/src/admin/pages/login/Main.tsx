@@ -31,20 +31,23 @@ export default function AdminLoginPage() {
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
 
-  const [adminLogin, { loading: adminLoginLoading }] = useMutation(ADMIN_LOGIN, {
-    onCompleted: (data) => {
-      localStorage.setItem("token", data.adminLogin.token);
-      if (!adminContext) {
-        setError("admin context not found");
-        return;
-      }
-      adminContext.setRole(role);
-      navigate(ROUTES.ADMIN_HOME_PAGE);
-    },
-    onError: (err: Error) => {
-      setError(err.message);
-    },
-  });
+  const [adminLogin, { loading: adminLoginLoading }] = useMutation(
+    ADMIN_LOGIN,
+    {
+      onCompleted: (data) => {
+        localStorage.setItem("token", data.adminLogin.token);
+        if (!adminContext) {
+          setError("admin context not found");
+          return;
+        }
+        adminContext.setRole(role);
+        navigate(ROUTES.ADMIN_HOME_PAGE);
+      },
+      onError: (err: Error) => {
+        setError(err.message);
+      },
+    }
+  );
 
   useEffect(() => {
     const authenticate = async () => {
@@ -115,7 +118,10 @@ export default function AdminLoginPage() {
               placeholder="Select Role"
               current_value={role}
               update_action={setRole}
-              value_options={{ "Administrative Staff": ADMIN, "Relief Staff": RELIEF }}
+              value_options={{
+                "Administrative Staff": ADMIN,
+                "Relief Staff": RELIEF,
+              }}
             />
 
             <PasswordInput

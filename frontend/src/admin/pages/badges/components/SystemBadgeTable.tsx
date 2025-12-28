@@ -92,7 +92,7 @@ const SystemBadgeTable = ({
         columns={columns}
         rows={rows}
       />
-      { edit && selected && (
+      {edit && selected && (
         <EditSystemBadgeModal
           isOpen={edit}
           onClose={() => {
