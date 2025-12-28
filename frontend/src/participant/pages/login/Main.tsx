@@ -56,7 +56,7 @@ export default function ParticipantsLoginPage() {
     if (!id || !password) {
       setError("missing required fields");
     } else {
-      participantLogin({ variables: { id: Number(id), password } });
+      participantLogin({ variables: { pid: Number(id), password } });
     }
   };
 

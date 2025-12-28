@@ -36,6 +36,9 @@ import UI from "./ui/UI";
 import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
 
+import UI from "./ui/UI";
+import ParticipantsHomePage from "./participant/pages/home/Main";
+
 function initApolloClient() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
   const endpoint = createUploadLink({
@@ -88,6 +91,26 @@ const App = (): React.ReactElement => {
         <Router>
           <Routes>
             <Route element={<AdminLayout />}>
+              <Route
+                path={ROUTES.ADMIN_LOGIN_PAGE}
+                element={<AdminLoginPage />}
+              />
+            </Route>
+            <Route element={<ParticipantLayout />}>
+              <Route
+                path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
+                element={<ParticipantLoginPage />}
+              />
+              <Route
+                path={ROUTES.PARTICIPANTS_HOME_PAGE}
+                element={
+                  <ParticipantRoute>
+                    <ParticipantsHomePage />
+                  </ParticipantRoute>
+                }
+              />
+            </Route>
+            {/* <Route element={<AdminLayout />}>
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
                 element={<AdminLoginPage />}
@@ -160,13 +183,11 @@ const App = (): React.ReactElement => {
             </Route>
             <Route element={<ParticipantLayout />}>
               <Route
-                path={ROUTES.PARTICIPANTS_HOME_PAGE}
-                element={
-                  <ParticipantRoute>
-                    <ParticipantHomePage />
-                  </ParticipantRoute>
-                }
+                path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
+                element={<ParticipantLoginPage />}
               />
+              */}
+              {/*
               <Route
                 path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE}
                 element={

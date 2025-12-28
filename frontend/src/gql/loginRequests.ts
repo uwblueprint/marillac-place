@@ -12,6 +12,7 @@ export const PARTICIPANT_LOGIN = gql`
   mutation participantLogin($pid: Int!, $password: String!) {
     participantLogin(pid: $pid, password: $password) {
       token
+      pid
     }
   }
 `;

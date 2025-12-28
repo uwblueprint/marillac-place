@@ -10,6 +10,8 @@ import { ParticipantContext } from "./ParticipantContext";
 import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
 import ErrorScreen from "../ui/screens/ErrorScreen";
 import ParticipantMenu from "./ParticipantMenu";
+import { Home } from "../ui/icons/BadgeIcons";
+import ParticipantsHomePage from "./pages/home/Main";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
@@ -32,6 +34,9 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
     },
     onError: (err: Error) => {
       console.error(err.message);
+      // Clear invalid token and redirect to login
+      localStorage.removeItem("token");
+      setAuthorized(false);
     },
   });
 
