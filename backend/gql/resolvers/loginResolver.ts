@@ -54,10 +54,7 @@ const loginResolver = {
       const participant: Participant | null = await db.participant.findUnique({
         where: {
           pid,
-          OR: [
-            { departure: null },
-            { departure: { gt: endOfDay(now()) } },
-          ],
+          OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
         },
       });
 

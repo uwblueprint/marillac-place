@@ -22,12 +22,10 @@ function verifyRole(allowedRoles: string[]) {
     context: { req: { headers: { authorization?: string } } },
     info: GraphQLResolveInfo
   ) {
-
-
     // Skip authentication in development mode for easier testing/refactoring
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== "production") {
       return resolve(parent, args, context, info);
-    } //remove before prod 
+    } // remove before prod
 
     const authHeader = context.req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer")) {

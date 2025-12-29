@@ -17,10 +17,7 @@ const assignedTaskResolver = {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
       const currentParticipants = await db.participant.findMany({
         where: {
-          OR: [
-            { departure: null },
-            { departure: { gt: endOfDay(now()) } },
-          ],
+          OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
         },
         select: {
           pid: true,

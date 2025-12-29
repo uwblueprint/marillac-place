@@ -19,10 +19,7 @@ const participantResolver = {
     getCurrentParticipants: async (): Promise<Participant[]> => {
       return db.participant.findMany({
         where: {
-          OR: [
-            { departure: null },
-            { departure: { gt: endOfDay(now()) } },
-          ],
+          OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
         },
         orderBy: [{ room: "asc" }],
       });
@@ -66,10 +63,7 @@ const participantResolver = {
       const occupiedRoom = await db.participant.findFirst({
         where: {
           room,
-          OR: [
-            { departure: null },
-            { departure: { gt: endOfDay(now()) } },
-          ],
+          OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
         },
       });
       if (occupiedRoom) throw new Error("room is occupied");

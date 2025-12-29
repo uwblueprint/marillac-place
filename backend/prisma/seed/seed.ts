@@ -1,4 +1,4 @@
-import { createSeedClient } from "@snaplet/seed";
+import { type SeedClient, createSeedClient } from "@snaplet/seed";
 import { badgeLevels, systemBadges, tasks } from "./initialData";
 import db from "../index";
 import * as random from "./random";
@@ -52,7 +52,7 @@ async function generateMockData(seed: any) {
 }
 
 const main = async () => {
-  const seed = await createSeedClient();
+  const seed: SeedClient = await createSeedClient();
   const environment: string = process.env.NODE_ENV || "development";
   const isDevelopment: boolean = environment === "development";
   if (isDevelopment) {
