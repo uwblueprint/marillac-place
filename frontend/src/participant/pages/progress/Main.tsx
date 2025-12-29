@@ -277,7 +277,7 @@ export default function ParticipantsProgressPage() {
           {activeTab === "badges" ? (
             <BadgeWidget allBadges={badgesInProgress} achieved={false} />
           ) : (
-            <BadgeWidget allBadges={achievedBadges} achieved />
+            <BadgeWidget allBadges={achievedBadges} achieved={true} />
           )}
         </Box>
       </Flex>

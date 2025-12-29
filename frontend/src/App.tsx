@@ -209,7 +209,19 @@ const App = (): React.ReactElement => {
                     <ParticipantSchedulePage />
                   </ParticipantRoute>
                 }
-              /> */}
+              />
+            </Route> */}
+
+            <Route element={<ParticipantLayout />}>
+              <Route
+                path={ROUTES.PARTICIPANTS_HOME_PAGE}
+                element={
+                  <ParticipantRoute>
+                    <ParticipantProgressPage />
+                  </ParticipantRoute>
+                }
+              />
+            </Route>
 
             <Route path="/ui" element={<UI />} />
             <Route path="*" element={<NotFoundScreen />} />
