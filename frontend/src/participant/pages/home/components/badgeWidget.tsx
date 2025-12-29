@@ -1,6 +1,6 @@
 import React from "react";
-import { Box } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { PARTICIPANTS_PROGRESS_PAGE } from "../../../../constants/routes";
 import { Level, Icon } from "../../../../types/enums";
 import BadgeRow from "./BadgeRow";
@@ -34,14 +34,7 @@ const BadgeWidget: React.FC<BadgeWidgetProps> = ({
   // fallback if no badges are provided
   if (!badgesToDisplayInWidget || badgesToDisplayInWidget.length === 0) {
     return (
-      <Box
-        bg="white"
-        borderRadius="12px"
-        border="1px solid"
-        borderColor="neutral.300"
-        p="20px"
-        mb="16px"
-      >
+      <WidgetContainer width="100%">
         <BadgeRow
           messageText="No badges to display"
           title="Add some badges!"
@@ -53,50 +46,44 @@ const BadgeWidget: React.FC<BadgeWidgetProps> = ({
           }}
           isLast
         />
-      </Box>
+      </WidgetContainer>
     );
   }
 
   return (
-    <Box
-      bg="white"
-      borderRadius="12px"
-      border="1px solid"
-      borderColor="neutral.300"
-      p="20px"
-      mb="16px"
-      position="relative"
-    >
-      {badgesToDisplayInWidget.map((badgeData, index) => {
-        const key = `badge-${index}`;
-        const isLast = index === badgesToDisplayInWidget.length - 1;
-        const isFirst = index === 0;
+    <WidgetContainer width="100%">
+      <>
+        {badgesToDisplayInWidget.map((badgeData, index) => {
+          const key = `badge-${index}`;
+          const isLast = index === badgesToDisplayInWidget.length - 1;
+          const isFirst = index === 0;
 
-        const {
-          messageText = "Badge Progress",
-          title,
-          subtitle = "",
-          badge = {
-            icon: Icon.DIAMOND,
-            level: Level.BRONZE,
-            percentageComplete: 0,
-          },
-        } = badgeData;
+          const {
+            messageText = "Badge Progress",
+            title,
+            subtitle = "",
+            badge = {
+              icon: Icon.DIAMOND,
+              level: Level.BRONZE,
+              percentageComplete: 0,
+            },
+          } = badgeData;
 
-        return (
-          <BadgeRow
-            key={key}
-            messageText={messageText}
-            title={title}
-            subtitle={subtitle}
-            badge={badge}
-            isLast={isLast}
-            showButton={isFirst}
-            onProgressClick={handleProgressClick}
-          />
-        );
-      })}
-    </Box>
+          return (
+            <BadgeRow
+              key={key}
+              messageText={messageText}
+              title={title}
+              subtitle={subtitle}
+              badge={badge}
+              isLast={isLast}
+              showButton={isFirst}
+              onProgressClick={handleProgressClick}
+            />
+          );
+        })}
+      </>
+    </WidgetContainer>
   );
 };
 

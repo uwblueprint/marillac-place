@@ -28,15 +28,21 @@ export default function AnnouncementWidget() {
   if (announcementError) return <Text>Error fetching announcements.</Text>;
 
   return (
-    <WidgetContainer>
+    <WidgetContainer width="100%">
       <>
-        <Flex flexDir="row" justifyContent="space-between">
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
           <Text textStyle="mobile.h2">Announcements</Text>
           <Text
-            textStyle="mobile.b1"
-            onClick={() => navigate(ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE)}
+            textStyle="mobile.h3"
+            color="primary.700"
+            fontWeight="600"
             textDecoration="underline"
             cursor="pointer"
+            _hover={{
+              color: "primary.700",
+              opacity: 0.8,
+            }}
+            onClick={() => navigate(ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE)}
           >
             Announcements
           </Text>

@@ -34,17 +34,19 @@ const TodoListWidget = () => {
   );
 
   return (
-    <WidgetContainer>
+    <WidgetContainer width="100%">
       <>
-        <Flex direction="row" justify="space-between" align="center">
+        <Flex direction="row" justify="space-between" alignItems="center">
           <Text textStyle="mobile.h2">To-Do List</Text>
           <Text
-            color="text.light.primary"
             textStyle="mobile.h3"
+            color="primary.700"
+            fontWeight="600"
             textDecoration="underline"
             cursor="pointer"
             _hover={{
-              textDecoration: "none",
+              color: "primary.700",
+              opacity: 0.8,
             }}
             onClick={() => navigate(PARTICIPANTS_SCHEDULE_PAGE)}
           >

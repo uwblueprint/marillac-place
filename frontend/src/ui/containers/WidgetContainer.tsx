@@ -18,10 +18,11 @@ export default function WidgetContainer({
   width = "fit-content",
   height = "fit-content",
   paddingX = "12px",
-  paddingY = "6px",
+  paddingY = "12px",
   loading = false,
   error = "",
 }: WidgetContainerProps) {
+
   return (
     <Box
       position="relative"

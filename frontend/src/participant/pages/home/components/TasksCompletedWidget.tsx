@@ -1,7 +1,8 @@
-// export {};
-// TODO: Refactor this component
 import React from "react";
-import { Flex, Text, Link } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { Flex, Text } from "@chakra-ui/react";
+import WidgetContainer from "../../../../ui/containers/WidgetContainer";
+import { PARTICIPANTS_SCHEDULE_PAGE } from "../../../../constants/routes";
 
 const TrophyIcon = () => (
   <svg
@@ -74,60 +75,36 @@ const TrophyIcon = () => (
 );
 
 export default function TasksCompletedWidget() {
-  return (
-    <Flex
-      w="100%"
-      bg="white"
-      border="1px solid"
-      borderColor="neutral.300"
-      borderRadius="8px"
-      padding="16px"
-      flexDir="column"
-      gap="12px"
-    >
-      {/* Header - Title and Link */}
-      <Flex w="100%" justifyContent="space-between" alignItems="center">
-        <Text
-          fontFamily="Nunito"
-          fontWeight="700"
-          fontSize="16px"
-          color="black"
-        >
-          Mandatory Tasks Completed!
-        </Text>
-        <Link
-          href="/schedule"
-          fontFamily="Nunito"
-          fontWeight="700"
-          fontSize="16px"
-          color="black"
-          textDecoration="underline"
-          _hover={{
-            textDecoration: "none",
-          }}
-        >
-          Tasks
-        </Link>
-      </Flex>
+  const navigate = useNavigate();
 
-      {/* Body - Trophy and Message */}
-      <Flex w="100%" alignItems="center" gap="12px">
-        {/* Trophy Icon */}
-        <Flex>
-          <TrophyIcon />
+  return (
+    <WidgetContainer width="100%">
+      <>
+        <Flex w="100%" justifyContent="space-between" alignItems="center">
+          <Text textStyle="mobile.h2">Mandatory Tasks Completed!</Text>
+          <Text
+            textStyle="mobile.h3"
+            color="primary.700"
+            fontWeight="600"
+            textDecoration="underline"
+            cursor="pointer"
+            _hover={{
+              color: "primary.700",
+              opacity: 0.8,
+            }}
+            onClick={() => navigate(PARTICIPANTS_SCHEDULE_PAGE)}
+          >
+            Tasks
+          </Text>
         </Flex>
 
-        {/* Message */}
-        <Text
-          fontFamily="Nunito"
-          fontWeight="400"
-          fontSize="14px"
-          color="black"
-          flex="1"
-        >
-          You&apos;ve completed your mandatory tasks for the week.
-        </Text>
-      </Flex>
-    </Flex>
+        <Flex w="100%" alignItems="center" gap="12px">
+          <TrophyIcon />
+          <Text textStyle="mobile.b1" flex="1">
+            You&apos;ve completed your mandatory tasks for the week.
+          </Text>
+        </Flex>
+      </>
+    </WidgetContainer>
   );
 }
