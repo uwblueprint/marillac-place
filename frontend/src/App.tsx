@@ -14,7 +14,7 @@ import AdminLoginPage from "./admin/pages/login/Main";
 import AdminHomePage from "./admin/pages/home/Main";
 // import AdminSchedulePage from "./admin/pages/schedule/Main";
 import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
-// import AdminParticipantsPage from "./admin/pages/participants/Main";
+import AdminParticipantsPage from "./admin/pages/participants/Main";
 // import AdminTasksPage from "./admin/pages/tasks/Main";
 import AdminBadgesPage from "./admin/pages/badges/Main";
 import AdminReportsPage from "./admin/pages/reports/Main";
@@ -38,7 +38,8 @@ import { Text, textStyles } from "./theme/typography";
 import ParticipantsHomePage from "./participant/pages/home/Main";
 
 function initApolloClient() {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
   const endpoint = createUploadLink({
     uri: `${backendUrl}/graphql`,
     credentials: "include",
@@ -92,6 +93,22 @@ const App = (): React.ReactElement => {
               <Route
                 path={ROUTES.ADMIN_LOGIN_PAGE}
                 element={<AdminLoginPage />}
+              />
+              <Route
+                path={ROUTES.ADMIN_HOME_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminHomePage />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminParticipantsPage />
+                  </AdminRoute>
+                }
               />
             </Route>
             <Route element={<ParticipantLayout />}>
@@ -170,14 +187,7 @@ const App = (): React.ReactElement => {
               />
             </Route>
             {/* 
-              <Route
-                path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminParticipantsPage />
-                  </AdminRoute>
-                }
-              />
+              
               <Route
                 path={ROUTES.ADMIN_SCHEDULE_PAGE}
                 element={
@@ -201,7 +211,7 @@ const App = (): React.ReactElement => {
                 element={<ParticipantLoginPage />}
               />
               */}
-              {/*
+            {/*
               <Route
                 path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE}
                 element={

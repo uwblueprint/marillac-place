@@ -85,6 +85,13 @@ export function formatDateTimeString(date: string): string {
   return formatted.replace("a.m.", "AM").replace("p.m.", "PM");
 }
 
+export function formatDateMonthDayYear(date: Date): string {
+  return date.toLocaleDateString("en-CA", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 /**
  * Converts a UTC string date (typically from a GraphQL response) into a formatted time string
  * "12:00 AM" in the local timezone.

@@ -134,7 +134,7 @@ const resolvers = gql`
       password: String
       room: Int
       arrival: Date
-      departure: String
+      departure: Date
     ): Participant!
 
     updateBalance(pid: Int!, amount: Int!, reason: String!): Transaction!
