@@ -9,6 +9,7 @@ import { formatTimeString } from "../../../../helpers/formatDateTime";
 import { TaskStatus } from "../../../../types/enums";
 import TaskStatusDisplay from "../../../../ui/misc/TaskStatusDisplay";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
+import { Comment } from "../../../../ui/icons/ActionIcons";
 
 interface AssignedTask {
   aid: number;
@@ -37,7 +38,7 @@ const TodoListWidget = () => {
     <WidgetContainer width="100%">
       <>
         <Flex direction="row" justify="space-between" alignItems="center">
-          <Text textStyle="mobile.h2">To-Do List</Text>
+          <Text textStyle="mobile.h2">Today&apos;s To-Do List</Text>
           <Text
             textStyle="mobile.h3"
             color="primary.700"
@@ -68,16 +69,21 @@ const TodoListWidget = () => {
           data &&
           data.getAssignedTasksForToday.length !== 0 &&
           data.getAssignedTasksForToday.map(
-            (assigned_task: AssignedTask) => {
+            (assigned_task: AssignedTask, index: number) => {
+              const isLast = index === data.getAssignedTasksForToday.length - 1;
               return (
                 <Flex
                   key={assigned_task.aid}
                   justify="space-between"
                   align="center"
+                  mb={isLast ? "0" : "12px"}
                 >
                   <Flex gap="8px" align="center">
                     <TaskStatusDisplay status={assigned_task.status}/>
                     <Text textStyle="mobile.b1">{assigned_task.name}</Text>
+                    {assigned_task.comment && (
+                      <Comment size={20} color="text.light.secondary" />
+                    )}
                   </Flex>
 
                   <Text color="text.light.secondary" textStyle="mobile.b1">

@@ -1,15 +1,12 @@
 import React from "react";
 import {
   Text,
-  Card,
-  CardHeader,
-  CardBody,
   Progress,
   Image,
   Flex,
-  Button,
   Box,
 } from "@chakra-ui/react";
+import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 
 type BucksGoalCardProps = {
   value: number;
@@ -32,16 +29,26 @@ export default function BucksGoalCard({
   };
 
   return (
-    <Card m="15px" borderRadius="md">
-      <CardHeader pb="10px">
-        <Flex direction="row" justifyContent="space-between">
-          <Text fontWeight="bold">Marillac Bucks Goal</Text>
-          <Button variant="link" onClick={onEditGoalClick}>
+    <WidgetContainer width="100%">
+      <>
+        <Flex direction="row" justifyContent="space-between" alignItems="center" mb="12px">
+          <Text textStyle="mobile.h2">Marillac Bucks Goal</Text>
+          <Text
+            textStyle="mobile.h3"
+            color="primary.700"
+            fontWeight="600"
+            textDecoration="underline"
+            cursor="pointer"
+            _hover={{
+              color: "primary.700",
+              opacity: 0.8,
+            }}
+            onClick={onEditGoalClick}
+          >
             {editGoalText()}
-          </Button>
+          </Text>
         </Flex>
-      </CardHeader>
-      <CardBody pt="0">
+
         {goalExists ? (
           metGoal ? (
             <Flex direction="row" gap={4}>
@@ -51,7 +58,7 @@ export default function BucksGoalCard({
                 width="40px"
                 height="40px"
               />
-              <Text>
+              <Text textStyle="mobile.b1">
                 Congratulations on completing your goal. Make sure to tell
                 Marillac staff about your achievement.
               </Text>
@@ -98,9 +105,9 @@ export default function BucksGoalCard({
             </Flex>
           )
         ) : (
-          <Text>Set a new goal to track your progress!</Text>
+          <Text textStyle="mobile.b1">Set a new goal to track your progress!</Text>
         )}
-      </CardBody>
-    </Card>
+      </>
+    </WidgetContainer>
   );
 }

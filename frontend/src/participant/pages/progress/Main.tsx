@@ -1,6 +1,7 @@
 import React, { useContext, useState, useMemo } from "react";
-import { Box, Flex, Text, HStack } from "@chakra-ui/react";
+import { Flex, Text, HStack } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
+import WidgetContainer from "../../../ui/containers/WidgetContainer";
 import { ParticipantContext } from "../../ParticipantContext";
 import { EditGoal } from "./components/EditGoal";
 import { SetGoal } from "./components/SetGoal";
@@ -243,20 +244,10 @@ export default function ParticipantsProgressPage() {
           currentBalance={balance}
         />
       )}
-      <Box padding="10px 20px">
-        <WeeklyEarningsChart weeklyEarnings={weeklyEarnings} />
-      </Box>
+      <WeeklyEarningsChart weeklyEarnings={weeklyEarnings} />
 
-      <Flex justifyContent="center" alignItems="center">
-        <Box
-          bg="white"
-          borderRadius="12px"
-          p="20px"
-          position="relative"
-          border="2px solid"
-          borderColor="#f0f0f0"
-          width="92%"
-        >
+      <WidgetContainer width="100%">
+        <>
           <HStack spacing={6} mb={4}>
             {(["badges", "achieved"] as const).map((tab) => (
               <Text
@@ -277,10 +268,10 @@ export default function ParticipantsProgressPage() {
           {activeTab === "badges" ? (
             <BadgeWidget allBadges={badgesInProgress} achieved={false} />
           ) : (
-            <BadgeWidget allBadges={achievedBadges} achieved={true} />
+            <BadgeWidget allBadges={achievedBadges} achieved />
           )}
-        </Box>
-      </Flex>
+        </>
+      </WidgetContainer>
     </>
   );
 }

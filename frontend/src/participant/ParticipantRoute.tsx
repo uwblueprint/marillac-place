@@ -90,6 +90,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
           padding="20px"
           overflow="scroll"
           gap="8px"
+          bg="neutral.100"
         >
           {children}
         </Flex>

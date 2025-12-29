@@ -40,17 +40,12 @@ export default function TaskStatusDisplay({ status }: TaskStatusDisplayProps) {
     <Flex
       align="center"
       justify="center"
-      gap={1}
       bg={TaskStatusConfig[status].bgColor}
-      color={TaskStatusConfig[status].textColor}
-      borderRadius="lg"
-      width="120px"
+      borderRadius="full"
+      width="30px"
       height="30px"
     >
       <Icon size={20} />
-      <Text textStyle="web.s1" color={TaskStatusConfig[status].textColor}>
-        {TaskStatusConfig[status].text}
-      </Text>
     </Flex>
   );
 }
