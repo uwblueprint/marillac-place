@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Flex, Button, Text, Spinner, Box, HStack } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import { startOfWeek } from "date-fns";
+import { format, startOfWeek } from "date-fns";
 import RoomNavigation from "./components/RoomNavigation";
 import { DisplayView, ScheduleView } from "../../../constants/views";
-import { formatDateInputValue, now } from "../../../helpers/formatDateTime";
+import { now } from "../../../helpers/formatDateTime";
 import { AssignedTask } from "../../../types/models";
 import { GET_ASSIGNED_TASKS_BY_WEEK } from "../../../gql/assignedTaskRequests";
 import { GET_PARTICIPANT_BY_PID } from "../../../gql/participantRequests";
@@ -13,8 +13,18 @@ import { AdminContext } from "../../AdminContext";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import MarillacPlaceCalendar from "../../../ui/misc/MarillacPlaceCalendar";
+import OrangeButton from "../../../ui/buttons/OrangeButton";
+import { ADMIN_PARTICIPANTS_PAGE } from "../../../constants/routes";
+import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
+import { Calendar, List } from "../../../ui/icons/MiscIcons";
+import { Marker, PlusSign } from "../../../ui/icons/ActionIcons";
+import AnyDayTasksTable from "./components/AnyDayTasksTable";
+import DailyTasksTable from "./components/DailyTasksTable";
+import MarillacBalanceModal from "./components/MarillacBalanceModal";
+import AssignTaskModal from "./components/AssignTaskModal";
 
 export default function AdminSchedulePage() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { room, view } = location.state || {
     room: 1,
@@ -24,13 +34,15 @@ export default function AdminSchedulePage() {
 
   const [selectedRoom, setSelectedRoom] = useState<number>(room);
   const [currentView, setCurrentView] = useState<ScheduleView>(view);
+
+  // can use this eventually to fast forward or go back to previous weeks
   const [weekStart, setWeekStart] = useState<Date>(startOfWeek(now()));
 
   const [assignTask, setAssignTask] = useState(false);
   const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(
     null
   );
-  const [editMarillacBucks, setEditMarillacBucks] = useState(false);
+  const [editMarillacBucks, setEditMarillacBucks] = useState<boolean>(false);
 
   const {
     data: assignedTasksData,
@@ -40,7 +52,7 @@ export default function AdminSchedulePage() {
   } = useQuery(GET_ASSIGNED_TASKS_BY_WEEK, {
     variables: {
       pid: roomToParticipant[selectedRoom],
-      weekStart: formatDateInputValue(weekStart),
+      weekStart,
     },
     skip: !(selectedRoom in roomToParticipant),
   });
@@ -72,7 +84,7 @@ export default function AdminSchedulePage() {
       refetchAssignedTasksByWeek({
         variables: {
           pid: roomToParticipant[selectedRoom],
-          weekStart: formatDateInputValue(weekStart),
+          weekStart,
         },
       });
     }
@@ -82,187 +94,162 @@ export default function AdminSchedulePage() {
   if (participantError || assignedTasksError) return <ErrorScreen />;
 
   return (
-    <>
+    <Flex flexDir="column" gap="10px" width="100%" h="fit-content">
       <RoomNavigation
         selectedRoom={selectedRoom}
         changeRoom={setSelectedRoom}
       />
 
-      <MarillacPlaceCalendar
-        assignedTasks={assignedTasksData?.getAssignedTasksByWeek ?? []}
-        startDate={weekStart}
-        setStartDate={setWeekStart}
-        viewTaskDetails={setViewTaskDetails}
-        view={DisplayView.WEB}
-      />
-
-      {/* <Box w="100%" flex={1} display="flex" flexDirection="column">
-        {loading ? (
-          <Flex justify="center" align="center" h="400px">
-            <Spinner color="primary.700" size="lg" />
-          </Flex>
-        ) : error ? (
-          <Flex justify="center" align="center" h="400px">
-            <Text color="red.500">{error.message}</Text>
-          </Flex>
-        ) : !participantId ? (
-          <Flex
-            w="100%"
-            h="80%"
-            justify="center"
-            align="center"
-            direction="column"
-            gap={4}
-          >
-            <Text textStyle="web.h2" color="text.light.disabled">
-              This room is empty
+      {selectedRoom in roomToParticipant ? (
+        <>
+          <Flex alignItems="center" justifyContent="space-between" w="100%">
+            <Text textStyle="web.h2" color="primary.700" pl="3px">
+              {format(weekStart, "MMMM yyyy").toUpperCase()}
             </Text>
-            <OrangeButton
-              text="Add Participant"
-              action={() => {
-                window.location.href = "/admin/participants";
-              }}
-              is_active={false}
+            <GreenOutlineButton
+              label={
+                (participantData?.getParticipantByPid?.balance ?? 0) +
+                " M-Bucks"
+              }
+              action={() => setEditMarillacBucks(true)}
+              is_active={editMarillacBucks}
+              icon={<Marker color="currentColor" />}
             />
           </Flex>
-        ) : (
-          <Flex direction="column" flex={1} minH={0}>
-            <Flex justify="space-between" align="center" mb="15px">
-              <Flex align="center" gap={4}>
-                <Text textStyle="web.h2" color="primary.700">
-                  {moment(currentDate).format("MMMM YYYY").toUpperCase()}
-                </Text>
 
-                <SimpleButton
-                  text={getCurrentWeekRange(currentDate)}
-                  action={() => {}}
-                  is_active
-                  text_color="#0C727E"
-                />
-              </Flex>
-
+          <Flex alignItems="center" justifyContent="space-between" w="100%">
+            <HStack spacing={0}>
               <Button
-                padding="0px 15px"
-                color="#0D8312"
+                onClick={() => setCurrentView(ScheduleView.LIST)}
+                isActive={currentView === ScheduleView.LIST}
+                leftIcon={<List color="currentColor" />}
+                width="115px"
+                height="30px"
+                paddingX="12px"
+                paddingY="6px"
+                borderLeftRadius="8px"
+                borderRightRadius="0px"
                 border="1px solid"
-                borderColor="#0D8312"
-                borderRadius="8px"
-                bg="#ECFFED"
-                gap="5px"
-                _hover={{ background: "#C9DEC9" }}
-                onClick={() => setEditMarillacBucks(true)}
+                borderColor="#E67D4F"
+                bg="#FFFFFF"
+                color="#E67D4F"
+                _hover={{
+                  bg: "#E67D4F",
+                  color: "#FFFFFF",
+                }}
+                _active={{
+                  bg: "#E67D4F",
+                  color: "#FFFFFF",
+                }}
               >
-                <Text textStyle="web.b2" fontWeight={700} color="inherit">
-                  {marillacBucks} M-Bucks
-                </Text>
-                <EditIcon
-                  style={{
-                    width: "17px",
-                    height: "17px",
-                  }}
-                />
-              </Button>
-            </Flex>
-
-            <Flex justify="space-between" align="center" mb={5}>
-              <HStack spacing={0}>
-                <Button
-                  fontWeight={700}
-                  fontSize="12px"
-                  variant={
-                    currentView === ScheduleView.LIST
-                      ? "primaryFilled"
-                      : "primaryOutline"
-                  }
-                  borderRightRadius="0"
-                  onClick={() => setCurrentView(ScheduleView.LIST)}
-                  leftIcon={
-                    <ListIcon
-                      color={
-                        currentView === ScheduleView.LIST ? "white" : "#E67D4F"
-                      }
-                    />
-                  }
-                >
+                <Text textStyle="web.s1" color="inherit">
                   List
-                </Button>
-                <Button
-                  fontWeight={700}
-                  fontSize="12px"
-                  variant={
-                    currentView === ScheduleView.CALENDAR
-                      ? "primaryFilled"
-                      : "primaryOutline"
-                  }
-                  borderLeftRadius="0"
-                  onClick={() => setCurrentView(ScheduleView.CALENDAR)}
-                  leftIcon={
-                    <CalendarIcon
-                      color={
-                        currentView === ScheduleView.CALENDAR
-                          ? "white"
-                          : "#E67D4F"
-                      }
-                    />
-                  }
-                >
+                </Text>
+              </Button>
+              <Button
+                onClick={() => setCurrentView(ScheduleView.CALENDAR)}
+                isActive={currentView === ScheduleView.CALENDAR}
+                leftIcon={<Calendar color="currentColor" />}
+                width="115px"
+                height="30px"
+                paddingX="12px"
+                paddingY="6px"
+                borderLeftRadius="0px"
+                borderRightRadius="8px"
+                border="1px solid"
+                borderColor="#E67D4F"
+                bg="#FFFFFF"
+                color="#E67D4F"
+                _hover={{
+                  bg: "#E67D4F",
+                  color: "#FFFFFF",
+                }}
+                _active={{
+                  bg: "#E67D4F",
+                  color: "#FFFFFF",
+                }}
+              >
+                <Text textStyle="web.s1" color="inherit">
                   Calendar
-                </Button>
-              </HStack>
-
-              <OrangeButton
-                text="Assign Task"
-                action={() => setAssignTask(true)}
-                is_active={assignTask}
-              />
-            </Flex>
-
-            <Box flex={1} display="flex" flexDirection="column" minH={0}>
-              {currentView === ScheduleView.LIST ? (
-                <ScheduleListView
-                  specificTasks={specificTasks}
-                  anytimeTasks={anytimeTasks}
-                  anydayTasks={anydayTasks}
-                  onTaskSelect={setSelectedTask}
-                />
-              ) : (
-                <ScheduleCalendar
-                  events={specificTasks}
-                  allDayEvents={[...anydayTasks, ...anytimeTasks]}
-                  currentDate={currentDate}
-                  onNavigate={setCurrentDate}
-                  onSelectEvent={setSelectedTask}
-                  scrollToTime={moment().hour(8).minute(0).toDate()}
-                />
-              )}
-            </Box>
+                </Text>
+              </Button>
+            </HStack>
+            <OrangeButton
+              label="Assign Task"
+              action={() => setAssignTask(true)}
+              is_active={assignTask}
+            />
           </Flex>
-        )}
-      </Box>
 
-      {editMarillacBucks && participantId && (
-        <MarillacBalanceModal
-          close={() => setEditMarillacBucks(false)}
-          participantId={participantId}
-          currentBalance={marillacBucks}
-          roomNumber={selectedRoom}
-        />
+          {currentView === ScheduleView.CALENDAR ? (
+            <MarillacPlaceCalendar
+              assignedTasks={assignedTasksData?.getAssignedTasksByWeek ?? []}
+              startDate={weekStart}
+              setStartDate={setWeekStart}
+              viewTaskDetails={setViewTaskDetails}
+              view={DisplayView.WEB}
+            />
+          ) : (
+            <>
+              <Text textStyle="web.h2" color="primary.700" pl="3px">
+                Daily
+              </Text>
+              <DailyTasksTable
+                tasks={assignedTasksData?.getAssignedTasksByWeek ?? []}
+                onTaskSelect={setViewTaskDetails}
+                error={assignedTasksError}
+                loading={assignedTasksLoading}
+              />
+              <Text textStyle="web.h2" color="primary.700" pl="3px">
+                Any Day
+              </Text>
+              <AnyDayTasksTable
+                tasks={assignedTasksData?.getAssignedTasksByWeek ?? []}
+                onTaskSelect={setViewTaskDetails}
+                error={assignedTasksError}
+                loading={assignedTasksLoading}
+              />
+            </>
+          )}
+
+          {editMarillacBucks && (
+            <MarillacBalanceModal
+              currentBalance={
+                participantData?.getParticipantByPid?.balance ?? 0
+              }
+              participantId={roomToParticipant[selectedRoom]}
+              close={() => setEditMarillacBucks(false)}
+              refetchParticipant={refetchParticipantById}
+            />
+          )}
+
+          {assignTask && (
+            <AssignTaskModal
+              participantId={roomToParticipant[selectedRoom]}
+              onClose={() => setAssignTask(false)}
+              refetchAssignedTasks={refetchAssignedTasksByWeek}
+            />
+          )}
+        </>
+      ) : (
+        <Flex
+          w="100%"
+          h="80%"
+          justify="center"
+          align="center"
+          direction="column"
+          gap={4}
+        >
+          <Text textStyle="web.h3" color="text.light.disabled">
+            This room is empty
+          </Text>
+          <OrangeButton
+            label="Add Participant"
+            action={() => navigate(ADMIN_PARTICIPANTS_PAGE)}
+            is_active={false}
+          />
+        </Flex>
       )}
-
-      {assignTask && participantId && (
-        <AssignTaskModal
-          participantId={participantId}
-          isOpen={assignTask}
-          onClose={() => setAssignTask(false)}
-        />
-      )}
-
-      {selectedTask && (
-        <TaskDetailsModal
-          task={selectedTask}
-          onClose={() => setSelectedTask(null)}
-        />
-      )} */}
-    </>
+    </Flex>
   );
 }

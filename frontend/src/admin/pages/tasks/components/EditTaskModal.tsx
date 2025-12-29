@@ -9,7 +9,7 @@ import {
 } from "../../../../types/enums";
 import { Task } from "../../../../types/models";
 import { DAYS } from "../../../../constants/days";
-import { isValidTask } from "../../../../helpers/validateTask";
+import { isValidTask } from "../../../../helpers/taskHelpers";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import { toTitleCase } from "../../../../helpers/stringUtils";
 import FixedInput from "../../../../ui/inputs/FixedInput";

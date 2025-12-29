@@ -15,6 +15,7 @@ import NumberInput from "../inputs/NumberInput";
 import TimeInput from "../inputs/TimeInput";
 
 type DateOptionsProps = {
+  showParticipantPreference?: boolean;
   taskType: TaskType;
   setParticipantPreference: (e: boolean) => void;
   setDayPreference: (e: DayPreference | null) => void;
@@ -31,6 +32,7 @@ type DateOptionsProps = {
 };
 
 export default function DateOptions({
+  showParticipantPreference = true,
   taskType,
   setParticipantPreference,
   setDayPreference,
@@ -112,7 +114,7 @@ export default function DateOptions({
 
   return (
     <>
-      {taskType !== TaskType.REQUIRED && (
+      {taskType !== TaskType.REQUIRED && showParticipantPreference && (
         <Flex alignItems="center" gap="5px" pt="3px">
           <Checkbox
             isChecked={participantPreference}

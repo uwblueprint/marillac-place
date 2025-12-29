@@ -60,7 +60,7 @@ export default function AddEmailModal({
         label="Email Address"
         current_value={email}
         update_action={setEmail}
-        size="full"
+        size="large"
       />
       <Text textStyle="web.s1" color="text.light.secondary">
         Report Frequency

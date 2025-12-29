@@ -41,7 +41,7 @@ export default function PopupContainer({
       <ModalOverlay />
       <ModalContent
         width="fit-content"
-        minWidth="350px"
+        minWidth="300px"
         maxWidth="550px"
         height="fit-content"
         boxShadow="xl"

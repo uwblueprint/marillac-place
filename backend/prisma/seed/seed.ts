@@ -3,6 +3,8 @@ import { badgeLevels, systemBadges, tasks } from "./initialData";
 import db from "../index";
 import * as random from "./random";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
+import { assignTasksToAllParticipants } from "../../utils/taskUtils";
+import { Task, TaskType } from "@prisma/client";
 
 async function initDb() {
   const systemBadgeCount = await db.systemBadge.count();
@@ -49,6 +51,11 @@ async function generateMockData(seed: any) {
   await Promise.all(
     participants.participant.map((p: any) => initBadgeLevelProgress(p.pid))
   );
+
+  const requiredTasks = await db.task.findMany({
+    where: { type: TaskType.REQUIRED },
+  });
+  await assignTasksToAllParticipants(requiredTasks);
 }
 
 const main = async () => {

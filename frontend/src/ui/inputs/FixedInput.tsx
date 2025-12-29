@@ -14,7 +14,7 @@ export default function FixedInput({
 }: FixedInputProps) {
   return (
     <Flex
-      gap="4px"
+      gap="5px"
       alignItems="flex-start"
       flexDir={orientation === "horizontal" ? "row" : "column"}
       mb="4px"

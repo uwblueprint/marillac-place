@@ -15,7 +15,7 @@ import NumberInput from "../../../../ui/inputs/NumberInput";
 import TextInput from "../../../../ui/inputs/TextInput";
 import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
 import DateOptions from "../../../../ui/misc/DateOptions";
-import { isValidTask } from "../../../../helpers/validateTask";
+import { isValidTask } from "../../../../helpers/taskHelpers";
 
 type AddTaskModalProps = {
   taskType: TaskType;

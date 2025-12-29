@@ -7,12 +7,13 @@ import {
   DayPreference,
   DayOfWeek,
   TimePreference,
-  TaskType
+  TaskType,
 } from "../../../../types/enums";
 import { DAY_ABBREVIATIONS } from "../../../../constants/days";
 import { formatTimeString } from "../../../../helpers/formatDateTime";
 import { Marker, Trash } from "../../../../ui/icons/ActionIcons";
 import EditTaskModal from "./EditTaskModal";
+import { formatCurrency } from "../../../../helpers/formatCurrency";
 
 type TasksTableProps = {
   taskType: TaskType;
@@ -22,7 +23,13 @@ type TasksTableProps = {
   refetch: () => void;
 };
 
-const TasksTable = ({ taskType, loading, error, tasks, refetch }: TasksTableProps) => {
+const TasksTable = ({
+  taskType,
+  loading,
+  error,
+  tasks,
+  refetch,
+}: TasksTableProps) => {
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [deleteTask] = useMutation(DELETE_TASK);
 
@@ -79,61 +86,58 @@ const TasksTable = ({ taskType, loading, error, tasks, refetch }: TasksTableProp
     { header: "", width: "10%", center: true },
   ];
 
-  const rows = tasks.length !== 0 ? tasks.map((task: any) => {
-    return [
-      {
-        element: task.name,
-      },
-      {
-        element: getAssignedDaysString(task.day_preference, task.days),
-      },
-      {
-        element: getAssignedTimesString(
-          task.time_preference,
-          task.start_time,
-          task.end_time
-        ),
-      },
-      {
-        element: new Intl.NumberFormat("en-CA", {
-          style: "currency",
-          currency: "CAD",
-        }).format(task.value),
-      },
-      {
-        element: <Marker size={20} />,
-        action: async () => setEditTask(task),
-      },
-      {
-        element: <Trash size={20} />,
-        action: async () => handleDeleteTask(task.tid),
-      },
-    ];
-  }) : [];
+  const rows =
+    tasks.length !== 0
+      ? tasks.map((task: any) => {
+          return [
+            {
+              element: task.name,
+            },
+            {
+              element: getAssignedDaysString(task.day_preference, task.days),
+            },
+            {
+              element: getAssignedTimesString(
+                task.time_preference,
+                task.start_time,
+                task.end_time
+              ),
+            },
+            {
+              element: formatCurrency(task.value),
+            },
+            {
+              element: <Marker size={20} />,
+              action: async () => setEditTask(task),
+            },
+            {
+              element: <Trash size={20} />,
+              action: async () => handleDeleteTask(task.tid),
+            },
+          ];
+        })
+      : [];
 
   if (taskType === TaskType.OPTIONAL) {
     rows.push([
       {
-        element: "Individual Goal"
+        element: "Individual Goal",
       },
       {
-        element: "Participant Preference"
+        element: "Participant Preference",
       },
       {
-        element: "Participant Preference"
+        element: "Participant Preference",
       },
       {
-        element: new Intl.NumberFormat("en-CA", {
-          style: "currency",
-          currency: "CAD",
-        }).format(10),
+        element: formatCurrency(10),
       },
       {
-        element: ""
+        element: "",
       },
       {
-        element: ""
-      }
+        element: "",
+      },
     ]);
   }
 

@@ -8,6 +8,7 @@ export default function GreenOutlineButton({
   label,
   action,
   is_active,
+  icon,
 }: ButtonProps) {
   return (
     <Button
@@ -32,9 +33,12 @@ export default function GreenOutlineButton({
         bg: "#0C727E",
       }}
     >
-      <Text textStyle="web.s1" color="inherit">
-        {label}
-      </Text>
+      <Flex alignItems="center" gap="5px">
+        {icon}
+        <Text textStyle="web.s1" color="inherif">
+          {label}
+        </Text>
+      </Flex>
     </Button>
   );
 }

@@ -73,7 +73,7 @@ export default function AdminBadgesPage() {
             is_active={assign}
           />
           <OrangeButton
-            label="Create New"
+            label="Create Badge"
             action={() => setCreate(true)}
             is_active={create}
           />

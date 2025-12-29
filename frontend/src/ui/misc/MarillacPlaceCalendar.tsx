@@ -18,6 +18,7 @@ import {
   setMinutes,
   setHours,
   startOfDay,
+  differenceInMinutes,
 } from "date-fns";
 import { enCA } from "date-fns/locale/en-CA";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -128,44 +129,46 @@ export default function MarillacPlaceCalendar({
           {format(startDate, "EEEE d").toUpperCase()}
         </Text>
       )}
-      <Calendar
-        localizer={dateFnsLocalizer({
-          format,
-          parse,
-          startOfWeek: () => startOfWeek(now(), { weekStartsOn: 0 }),
-          startOfDay: () => startOfDay(now()),
-          getDay,
-          locales: { "en-CA": enCA },
-        })}
-        events={assignedTasks}
-        titleAccessor="name"
-        startAccessor={(event: AssignedTask) => new Date(event.start_date)}
-        endAccessor={(event: AssignedTask) => new Date(event.end_date)}
-        view={calendarView}
-        date={startDate}
-        min={setMinutes(setHours(now(), 6), 0)}
-        onSelectEvent={viewTaskDetails}
-        formats={{ eventTimeRangeFormat: () => "" }}
-        toolbar={false}
-        components={{
-          event: (props: { event: AssignedTask }) => {
-            const { event } = props;
-            return (
-              <AssignedTaskEvent
-                assignedTask={event}
-                viewTaskDetails={viewTaskDetails}
-              />
-            );
-          },
-          week: { header: CustomHeader },
-        }}
-        eventPropGetter={(event: AssignedTask) => {
-          const statusClass = `status-${event.status.toLowerCase()}`;
-          return {
-            className: statusClass,
-          };
-        }}
-      />
+      <Box w="100%"minH="fit-content" overflow="hidden">
+        <Calendar
+          localizer={dateFnsLocalizer({
+            format,
+            parse,
+            startOfWeek: () => startOfWeek(now(), { weekStartsOn: 0 }),
+            startOfDay: () => startOfDay(now()),
+            getDay,
+            locales: { "en-CA": enCA },
+          })}
+          events={assignedTasks}
+          titleAccessor="name"
+          startAccessor={(event: AssignedTask) => new Date(event.start_date)}
+          endAccessor={(event: AssignedTask) => new Date(event.end_date)}
+          view={calendarView}
+          date={startDate}
+          min={setMinutes(setHours(now(), 6), 0)}
+          onSelectEvent={viewTaskDetails}
+          formats={{ eventTimeRangeFormat: () => "" }}
+          toolbar={false}
+          components={{
+            event: (props: { event: AssignedTask }) => {
+              const { event } = props;
+              return (
+                <AssignedTaskEvent
+                  assignedTask={event}
+                  viewTaskDetails={viewTaskDetails}
+                />
+              );
+            },
+            week: { header: CustomHeader },
+          }}
+          eventPropGetter={(event: AssignedTask) => {
+            const statusClass = `status-${event.status.toLowerCase()}`;
+            return {
+              className: statusClass,
+            };
+          }}
+        />
+      </Box>
     </>
   );
 }
