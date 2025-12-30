@@ -1,11 +1,126 @@
-import { format } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
+import { format, parse } from "date-fns";
+import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 
 export const now = () => toZonedTime(new Date(), "America/New_York");
 
-// ============================================================================
-// UTC Date Object to Local Timezone Strings
-// ============================================================================
+/**
+ * Formats date into a human-readable format given a date object in EST.
+ *
+ * @param date - A date object interpreted as EST
+ * @returns A formatted date string
+ * @example
+ * ```ts
+ * const date = new Date();
+ * const formatted = formatDateStringUTC(date); // "January 15, 2025"
+ * ```
+ */
+export function formatDateStringEST(date: Date): string {
+  return formatInTimeZone(date, "America/New_York", "MMMM d, yyyy");
+}
+
+/**
+ * Formats month and year into a human-readable format given a date object in EST.
+ *
+ * @param date - A date object interpreted as EST
+ * @returns A formatted month string
+ * @example
+ * ```ts
+ * const date = new Date();
+ * const formatted = formatMonthStringEST(date); // "JANUARY 2025"
+ * ```
+ */
+export function formatMonthStringEST(date: Date): string {
+  return formatInTimeZone(date, "America/New_York", "MMMM yyyy").toUpperCase();
+}
+
+/**
+ * Formats day and date into a human-readable format given a date object in EST.
+ *
+ * @param date - A date object interpreted as EST
+ * @returns A formatted day string
+ * @example
+ * ```ts
+ * const date = new Date();
+ * const formatted = formatDayStringEST(date); // "WEDNESDAY 15"
+ * ```
+ */
+export function formatDayStringEST(date: Date): string {
+  return formatInTimeZone(date, "America/New_York", "EEEE d").toUpperCase();
+}
+
+/**
+ * Format date and time to a UTC date string format given a date object in EST (no conversion)
+ *
+ * @param date - A date object interpreted as EST
+ * @returns A string in UTC format
+ * @example
+ * ```ts
+ * const date = new Date();
+ * const formatted = formatUTCDateStringEST(date); // "2025-01-15T14:30:00Z"
+ * ```
+ */
+export const formatUTCDateStringEST = (date: Date) => {
+  const est = date.toLocaleString("en-CA", {
+    timeZone: "America/New_York",
+    hour12: false,
+  });
+  const [day, time] = est.split(", ");
+  const utcString = `${day}T${time}Z`;
+  return utcString;
+}
+
+/**
+ * Formats date and time to a human-readable format given a date string in UTC
+ *
+ * @param date - A date string in UTC
+ * @returns A formatted date and time string 
+ * @example
+ * ```ts
+ * const date = "2025-01-15T14:30:00Z";
+ * const formatted = formatDateTimeStringUTC(date); // "Jan 15, 2:30 PM"
+ * ```
+ */
+export function formatDateTimeStringUTC(date: string): string {
+  return formatInTimeZone(date, "UTC", "MMM d, h:mm a");
+}
+
+/**
+ * Formats time to a human-readable format given a date string in UTC
+ *
+ * @param date - A date string in UTC
+ * @returns A formatted time string
+ * @example
+ * ```ts
+ * const date = "2025-01-15T14:30:00Z";
+ * const formatted = formatTimeStringUTC(date); // "2:30 PM"
+ * ```
+ */
+export function formatTimeStringUTC(date: string): string {
+  return formatInTimeZone(date, "UTC", "h:mm a");
+}
+
+/**
+ * Creates an EST date object given a date string in UTC (no conversion)
+ *
+ * @param date - A date string in UTC
+ * @returns A Date object in EST
+ * @example
+ * ```ts
+ * const date = "2025-01-15T14:30:00.000Z";
+ * const formatted = createESTDateObjectUTC(date); // Date object for Jan 15, 2025 at 2:30:00 PM EST
+ * ```
+ */
+export function createESTDateObjectUTC(date: string): Date {
+  return parse(date, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", new Date());
+}
+
+
+
+
+
+
+
+
 
 /**
  * Converts a Date object to a string in the format "YYYY-MM-DD" for use with <input type="date">.
@@ -45,71 +160,6 @@ export function formatTimeInputValue(date: Date): string {
     minute: "2-digit",
     hour12: false,
   });
-}
-
-/**
- * Converts today's date into a human-readable format "January 1, 2025" in the local timezone.
- *
- * @returns A string representing today's date (e.g., "January 15, 2025")
- * @example
- * ```ts
- * const today = getTodayDateString(); // "January 15, 2025"
- * ```
- */
-export function getTodayDateString(): string {
-  return new Date().toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-/**
- * Converts a UTC string date (typically from a GraphQL response) into a formatted string
- * with date and time: "Jan 1, 12:00 AM" in the local timezone.
- *
- * @param date - A UTC date string (ISO format) or Date object
- * @returns A formatted string (e.g., "Jan 15, 2:30 PM")
- * @example
- * ```ts
- * const utcString = "2025-01-15T14:30:00Z";
- * const formatted = formatDateTimeString(utcString); // "Jan 15, 2:30 PM" (in local timezone)
- * ```
- */
-export function formatDateTimeString(date: string): string {
-  const dateObj = new Date(date);
-  const formatted = dateObj.toLocaleString("en-CA", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-    month: "short",
-    day: "numeric",
-  });
-  return formatted.replace("a.m.", "AM").replace("p.m.", "PM");
-}
-
-/**
- * Converts a UTC string date (typically from a GraphQL response) into a formatted time string
- * "12:00 AM" in the local timezone.
- *
- * @param date - A UTC date string (ISO format) or Date object
- * @returns A formatted time string (e.g., "2:30 PM")
- * @example
- * ```ts
- * const utcString = "2025-01-15T14:30:00Z";
- * const formatted = formatTimeString(utcString); // "2:30 PM" (in local timezone)
- * ```
- */
-export function formatTimeString(date: string): string {
-  const dateObj = new Date(date);
-  return dateObj
-    .toLocaleTimeString("en-CA", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .replace("a.m.", "AM")
-    .replace("p.m.", "PM");
 }
 
 /**

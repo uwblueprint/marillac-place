@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { ReportType } from "./reportUtils";
-import { now } from "./dateUtils";
+import { current } from "./dateUtils";
 
 // TODO: get smtp env vars
 const transporter = nodemailer.createTransport({
@@ -19,7 +19,12 @@ export async function sendReportEmail(
   reportType: ReportType
 ) {
   try {
-    const timestamp = now().toISOString().replace(/[:.]/g, "-");
+    const timestamp = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
     const filename = `${reportType.toLowerCase()}-report-${timestamp}.csv`;
 
     const firstLine = csvContent.split("\n")[0];

@@ -102,7 +102,7 @@ export default function AddTaskModal({
     >
       <FixedInput
         label="Task Type"
-        current_value={toTitleCase(taskType as string)}
+        current_value={toTitleCase(String(taskType))}
         orientation="horizontal"
       />
 

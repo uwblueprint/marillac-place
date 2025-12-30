@@ -1,4 +1,4 @@
-import { now } from "../../utils/dateUtils";
+import { current } from "../../utils/dateUtils";
 
 const chars =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?~";
@@ -9,5 +9,5 @@ export const password = () =>
   Array.from({ length: 12 }, () =>
     chars.charAt(Math.floor(Math.random() * chars.length))
   ).join("");
-export const date = (start = new Date(2022, 0, 1), end = now()) =>
+export const date = (start = new Date(2022, 0, 1), end = new Date(current())) =>
   new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));

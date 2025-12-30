@@ -23,7 +23,7 @@ export default function FixedInput({
         {label}
       </Text>
       <Text textStyle="web.b3" color="text.light.secondary">
-        {toTitleCase(current_value as string)}
+        {current_value}
       </Text>
     </Flex>
   );

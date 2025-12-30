@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
-import { isSameDay, startOfWeek, addDays, differenceInCalendarDays, isEqual, startOfDay } from "date-fns";
+import {
+  isSameDay,
+  startOfWeek,
+  addDays,
+  differenceInCalendarDays,
+  isEqual,
+  startOfDay,
+} from "date-fns";
 import { AssignedTask } from "../../../../types/models";
 import DataTable, { Column, Row } from "../../../../ui/misc/DataTable";
 import { DayOfWeek } from "../../../../types/enums";
-import { formatTimeString, now } from "../../../../helpers/formatDateTime";
+import { formatTimeStringUTC, now } from "../../../../helpers/formatDateTime";
 import { DAYS } from "../../../../constants/days";
 import TaskStatusDisplay from "../../../../ui/misc/TaskStatusDisplay";
 import { formatCurrency } from "../../../../helpers/formatCurrency";
@@ -39,18 +46,14 @@ export default function DailyTasksTable({
     return (
       differenceInCalendarDays(task.end_date, task.start_date) === 1 &&
       isEqual(task.end_date, startOfDay(task.end_date))
-    )
+    );
   }
 
   function isDailyTask(task: AssignedTask, day: DayOfWeek): boolean {
-    const chosenDate = addDays(
-      startOfWeek(now()),
-      DAYS.indexOf(day)
-    );
+    const chosenDate = addDays(startOfWeek(now()), DAYS.indexOf(day));
     return (
       isSameDay(task.start_date, chosenDate) &&
-      (isSameDay(task.start_date, task.end_date) ||
-      isDailyAnytimeTask(task))
+      (isSameDay(task.start_date, task.end_date) || isDailyAnytimeTask(task))
     );
   }
 
@@ -63,13 +66,19 @@ export default function DailyTasksTable({
             element: task.name,
           },
           {
-            element: <Flex pr="35px"><TaskStatusDisplay status={task.status} /></Flex>,
+            element: (
+              <Flex pr="35px">
+                <TaskStatusDisplay status={task.status} />
+              </Flex>
+            ),
             action: () => {},
           },
           {
-            element: isDailyAnytimeTask(task) 
-              ? "Anytime" 
-              : `${formatTimeString(task.start_date)} - ${formatTimeString(task.end_date)}`,
+            element: isDailyAnytimeTask(task)
+              ? "Anytime"
+              : `${formatTimeStringUTC(task.start_date)} - ${formatTimeStringUTC(
+                  task.end_date
+                )}`,
           },
           {
             element: formatCurrency(task.value),

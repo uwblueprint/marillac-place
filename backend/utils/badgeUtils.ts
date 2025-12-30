@@ -7,7 +7,7 @@ import {
   PR_LEADER,
 } from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
-import { now } from "./dateUtils";
+import { current } from "./dateUtils";
 
 async function getNextBadgeLevel(name: string, level: Level) {
   const levels = [
@@ -71,7 +71,7 @@ export async function updateBadgeLevelProgress(
     newAmount >= badgeLevelProgress.badge_level.benchmark;
   if (reachedBenchmark) {
     await db.achievedBadgeLevel.create({
-      data: { name, level: badgeLevelProgress.level, pid },
+      data: { name, level: badgeLevelProgress.level, pid, date: current() },
     });
 
     const prLeaderProgress = await db.badgeLevelProgress.findFirst({
@@ -95,6 +95,7 @@ export async function updateBadgeLevelProgress(
             name: PR_LEADER,
             level: prLeaderProgress.level,
             pid,
+            date: current(),
           },
         });
 
@@ -151,7 +152,7 @@ export async function updateBadgeLevelProgress(
 export async function validateBadgeLevelProgress(name: string) {
   const currentParticipants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
+      OR: [{ departure: null }, { departure: { gt: endOfDay(current()).toISOString() } }],
     },
   });
 

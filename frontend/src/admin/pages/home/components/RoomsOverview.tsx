@@ -49,7 +49,7 @@ export default function RoomsOverview() {
           Rooms
         </Text>
         <Text textStyle="web.b3" color="text.light.secondary">
-          Showing pending tasks for today
+          Showing pending tasks for this week
         </Text>
       </Flex>
       <Grid

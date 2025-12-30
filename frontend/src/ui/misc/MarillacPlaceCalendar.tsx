@@ -23,7 +23,7 @@ import {
 import { enCA } from "date-fns/locale/en-CA";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AssignedTask } from "../../types/models";
-import { formatTimeString, now } from "../../helpers/formatDateTime";
+import { createESTDateObjectUTC, formatDayStringEST, formatTimeStringUTC } from "../../helpers/formatDateTime";
 import { DisplayView } from "../../constants/views";
 
 type CustomHeaderProps = {
@@ -33,7 +33,7 @@ type CustomHeaderProps = {
 function CustomHeader({ date }: CustomHeaderProps) {
   const dayAbbr = format(date, "EEE").toUpperCase();
   const dayNumber = format(date, "d");
-  const isToday = isSameDay(date, now());
+  const isToday = isSameDay(date, new Date());
 
   return (
     <Box
@@ -81,10 +81,7 @@ function AssignedTaskEvent({
   assignedTask,
   viewTaskDetails,
 }: AssignedTaskEventProps) {
-  const displayDate = isSameDay(
-    new Date(assignedTask.start_date),
-    new Date(assignedTask.end_date)
-  );
+  const displayDate = isSameDay(assignedTask.start_date, assignedTask.end_date);
   return (
     <Flex
       padding="4px"
@@ -98,8 +95,7 @@ function AssignedTaskEvent({
       </Text>
       {displayDate && (
         <Text fontSize="10px" color="inherit">
-          {formatTimeString(assignedTask.start_date)} -{" "}
-          {formatTimeString(assignedTask.end_date)}
+          {`${formatTimeStringUTC(assignedTask.start_date)} - ${formatTimeStringUTC(assignedTask.end_date)}`}
         </Text>
       )}
     </Flex>
@@ -109,7 +105,6 @@ function AssignedTaskEvent({
 type MarillacPlaceCalendarProps = {
   assignedTasks: AssignedTask[];
   startDate: Date;
-  setStartDate: (date: Date) => void;
   viewTaskDetails: (task: AssignedTask | null) => void;
   view: DisplayView;
 };
@@ -117,7 +112,6 @@ type MarillacPlaceCalendarProps = {
 export default function MarillacPlaceCalendar({
   assignedTasks,
   startDate,
-  setStartDate,
   viewTaskDetails,
   view,
 }: MarillacPlaceCalendarProps) {
@@ -126,26 +120,26 @@ export default function MarillacPlaceCalendar({
     <>
       {view === DisplayView.MOBILE && (
         <Text textStyle="web.b1" mb="12px" textAlign="center">
-          {format(startDate, "EEEE d").toUpperCase()}
+          {formatDayStringEST(startDate)}
         </Text>
       )}
-      <Box w="100%"minH="fit-content" overflow="hidden">
+      <Box w="100%" minH="fit-content" overflow="hidden">
         <Calendar
           localizer={dateFnsLocalizer({
             format,
             parse,
-            startOfWeek: () => startOfWeek(now(), { weekStartsOn: 0 }),
-            startOfDay: () => startOfDay(now()),
+            startOfWeek: () => startOfWeek(new Date()),
+            startOfDay: () => startOfDay(new Date()),
             getDay,
             locales: { "en-CA": enCA },
           })}
           events={assignedTasks}
           titleAccessor="name"
-          startAccessor={(event: AssignedTask) => new Date(event.start_date)}
-          endAccessor={(event: AssignedTask) => new Date(event.end_date)}
+          startAccessor={(event: AssignedTask) => createESTDateObjectUTC(event.start_date)}
+          endAccessor={(event: AssignedTask) => createESTDateObjectUTC(event.end_date)}
           view={calendarView}
           date={startDate}
-          min={setMinutes(setHours(now(), 6), 0)}
+          min={setMinutes(setHours(new Date(), 6), 0)}
           onSelectEvent={viewTaskDetails}
           formats={{ eventTimeRangeFormat: () => "" }}
           toolbar={false}

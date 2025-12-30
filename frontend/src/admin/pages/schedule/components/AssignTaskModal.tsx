@@ -22,6 +22,7 @@ import {
   getStartAndEndDates,
   isValidTask,
 } from "../../../../helpers/taskHelpers";
+import { toTitleCase } from "../../../../helpers/stringUtils";
 
 type InitialAssignTaskModalProps = {
   onNext: (task: Task) => void;
@@ -226,7 +227,7 @@ export default function AssignTaskModal({
       ) : (
         <FixedInput
           label="Task Name"
-          current_value={taskName}
+          current_value={toTitleCase(taskName)}
           orientation="horizontal"
         />
       )}

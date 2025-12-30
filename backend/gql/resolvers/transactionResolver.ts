@@ -2,7 +2,7 @@ import { Transaction, TransactionType, DayOfWeek } from "@prisma/client";
 import { endOfWeek, startOfWeek } from "date-fns";
 import db from "../../prisma";
 import { orderedDays } from "../../constants/days";
-import { now } from "../../utils/dateUtils";
+import { current } from "../../utils/dateUtils";
 
 type GetWeeklyEarningsResponse = Record<DayOfWeek, number>;
 
@@ -21,8 +21,8 @@ const transactionResolver = {
           pid,
           type: TransactionType.EARNING,
           date: {
-            gte: startOfWeek(now()),
-            lte: endOfWeek(now()),
+            gte: startOfWeek(current()).toISOString(),
+            lte: endOfWeek(current()).toISOString(),
           },
         },
       });
@@ -74,7 +74,7 @@ const transactionResolver = {
       const type =
         amount < 0 ? TransactionType.PURCHASE : TransactionType.REFUND;
       return db.transaction.create({
-        data: { pid, amount: Math.abs(amount), type, reason },
+        data: { pid, amount: Math.abs(amount), type, reason, date: current() },
       });
     },
   },

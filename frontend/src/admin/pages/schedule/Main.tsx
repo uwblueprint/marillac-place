@@ -2,10 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Flex, Button, Text, Spinner, Box, HStack } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import { format, startOfWeek } from "date-fns";
+import { format, startOfDay, startOfWeek } from "date-fns";
 import RoomNavigation from "./components/RoomNavigation";
 import { DisplayView, ScheduleView } from "../../../constants/views";
-import { now } from "../../../helpers/formatDateTime";
+import { createESTDateObjectUTC, formatDateStringEST, formatMonthStringEST, formatUTCDateStringEST, now } from "../../../helpers/formatDateTime";
 import { AssignedTask } from "../../../types/models";
 import { GET_ASSIGNED_TASKS_BY_WEEK } from "../../../gql/assignedTaskRequests";
 import { GET_PARTICIPANT_BY_PID } from "../../../gql/participantRequests";
@@ -22,6 +22,7 @@ import AnyDayTasksTable from "./components/AnyDayTasksTable";
 import DailyTasksTable from "./components/DailyTasksTable";
 import MarillacBalanceModal from "./components/MarillacBalanceModal";
 import AssignTaskModal from "./components/AssignTaskModal";
+import TaskDetailsModal from "./components/TaskDetailsModal";
 
 export default function AdminSchedulePage() {
   const navigate = useNavigate();
@@ -32,11 +33,9 @@ export default function AdminSchedulePage() {
   };
   const { roomToParticipant } = useContext(AdminContext);
 
+  const weekStart = startOfWeek(new Date());
   const [selectedRoom, setSelectedRoom] = useState<number>(room);
   const [currentView, setCurrentView] = useState<ScheduleView>(view);
-
-  // can use this eventually to fast forward or go back to previous weeks
-  const [weekStart, setWeekStart] = useState<Date>(startOfWeek(now()));
 
   const [assignTask, setAssignTask] = useState(false);
   const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(
@@ -52,7 +51,7 @@ export default function AdminSchedulePage() {
   } = useQuery(GET_ASSIGNED_TASKS_BY_WEEK, {
     variables: {
       pid: roomToParticipant[selectedRoom],
-      weekStart,
+      weekStart: formatUTCDateStringEST(weekStart),
     },
     skip: !(selectedRoom in roomToParticipant),
   });
@@ -84,11 +83,11 @@ export default function AdminSchedulePage() {
       refetchAssignedTasksByWeek({
         variables: {
           pid: roomToParticipant[selectedRoom],
-          weekStart,
+          weekStart: formatUTCDateStringEST(weekStart),
         },
       });
     }
-  }, [selectedRoom, weekStart]);
+  }, [selectedRoom]);
 
   if (participantLoading || assignedTasksLoading) return <LoadingScreen />;
   if (participantError || assignedTasksError) return <ErrorScreen />;
@@ -104,7 +103,7 @@ export default function AdminSchedulePage() {
         <>
           <Flex alignItems="center" justifyContent="space-between" w="100%">
             <Text textStyle="web.h2" color="primary.700" pl="3px">
-              {format(weekStart, "MMMM yyyy").toUpperCase()}
+              {formatMonthStringEST(weekStart)}
             </Text>
             <GreenOutlineButton
               label={
@@ -185,7 +184,6 @@ export default function AdminSchedulePage() {
             <MarillacPlaceCalendar
               assignedTasks={assignedTasksData?.getAssignedTasksByWeek ?? []}
               startDate={weekStart}
-              setStartDate={setWeekStart}
               viewTaskDetails={setViewTaskDetails}
               view={DisplayView.WEB}
             />
@@ -228,6 +226,14 @@ export default function AdminSchedulePage() {
               participantId={roomToParticipant[selectedRoom]}
               onClose={() => setAssignTask(false)}
               refetchAssignedTasks={refetchAssignedTasksByWeek}
+            />
+          )}
+
+          {viewTaskDetails && (
+            <TaskDetailsModal
+              task={viewTaskDetails}
+              onClose={() => setViewTaskDetails(null)}
+              refetch={refetchAssignedTasksByWeek}
             />
           )}
         </>

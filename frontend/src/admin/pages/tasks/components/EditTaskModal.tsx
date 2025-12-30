@@ -124,7 +124,7 @@ export default function EditTaskModal({
     >
       <FixedInput
         label="Task Type"
-        current_value={toTitleCase(selected.type as string)}
+        current_value={toTitleCase(String(selected.type))}
         orientation="horizontal"
       />
 

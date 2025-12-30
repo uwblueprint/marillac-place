@@ -11,7 +11,7 @@ import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import UnderlineButton from "../../../ui/buttons/UnderlineButton";
 import { getRoomString } from "../../../helpers/stringUtils";
-import { formatDateTimeString } from "../../../helpers/formatDateTime";
+import { formatDateTimeStringUTC } from "../../../helpers/formatDateTime";
 
 export default function AdminAnnouncementsPage() {
   const [create, setCreate] = useState(false);
@@ -130,7 +130,7 @@ export default function AdminAnnouncementsPage() {
               announcement_id={announcement.aid}
               room={getRoomString(announcement)}
               message={announcement.message}
-              timestamp={formatDateTimeString(announcement.date)}
+              timestamp={formatDateTimeStringUTC(announcement.date)}
               priority={announcement.priority}
               refetch={refetchAllAnnouncements}
             />

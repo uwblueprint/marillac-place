@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { GET_ANNOUNCEMENTS_FROM_TODAY } from "../../../../gql/announcementRequests";
 import { Announcement, ReceivedAnnouncement } from "../../../../types/models";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
-import { formatTimeString } from "../../../../helpers/formatDateTime";
+import { formatTimeStringUTC } from "../../../../helpers/formatDateTime";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 import { ADMIN_ANNOUNCEMENTS_PAGE } from "../../../../constants/routes";
@@ -31,7 +31,7 @@ const AnnouncementCard: React.FC<{ announcement: Announcement }> = ({
             color="text.light.secondary"
             marginLeft="10px"
           >
-            posted at {formatTimeString(announcement.date)}
+            posted at {formatTimeStringUTC(announcement.date)}
           </Text>
         </Flex>
         <Flex width="100%">

@@ -2,7 +2,7 @@ import { Participant } from "@prisma/client";
 import { endOfDay, startOfDay } from "date-fns";
 import db from "../../prisma";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
-import { now } from "../../utils/dateUtils";
+import { current } from "../../utils/dateUtils";
 
 const participantResolver = {
   Query: {
@@ -19,7 +19,7 @@ const participantResolver = {
     getCurrentParticipants: async (): Promise<Participant[]> => {
       return db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
+          OR: [{ departure: null }, { departure: { gt: endOfDay(current()).toISOString() } }],
         },
         orderBy: [{ room: "asc" }],
       });
@@ -29,7 +29,7 @@ const participantResolver = {
         where: {
           departure: {
             not: null,
-            lte: startOfDay(now()),
+            lte: startOfDay(current()).toISOString(),
           },
         },
         orderBy: [{ departure: "desc" }],
@@ -56,14 +56,13 @@ const participantResolver = {
       });
       if (existingParticipant) throw new Error("participant id already exists");
 
-      const arrivalDate = new Date(arrival);
-      const validArrival = arrivalDate <= now();
+      const validArrival = arrival <= current();
       if (!validArrival) throw new Error("arrival is in the future");
 
       const occupiedRoom = await db.participant.findFirst({
         where: {
           room,
-          OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
+          OR: [{ departure: null }, { departure: { gt: endOfDay(current()).toISOString() } }],
         },
       });
       if (occupiedRoom) throw new Error("room is occupied");
@@ -72,8 +71,8 @@ const participantResolver = {
         data: {
           pid,
           room,
-          arrival: arrivalDate,
           password,
+          arrival,
         },
       });
       await initBadgeLevelProgress(pid);
@@ -95,11 +94,11 @@ const participantResolver = {
         departure?: string;
       }
     ): Promise<Participant> => {
-      const updates: Partial<Participant> = {};
+      const updates: any = {};
       if (password) updates.password = password;
       if (room) updates.room = room;
-      if (arrival) updates.arrival = new Date(arrival);
-      if (departure) updates.departure = new Date(departure);
+      if (arrival) updates.arrival = arrival;
+      if (departure) updates.departure = departure;
 
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");

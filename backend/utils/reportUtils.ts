@@ -1,7 +1,7 @@
 import { GoalAction, Level, TaskStatus, TransactionType } from "@prisma/client";
 import { endOfMonth, endOfWeek, startOfMonth, startOfWeek } from "date-fns";
 import db from "../prisma";
-import { now } from "./dateUtils";
+import { current } from "./dateUtils";
 
 export enum ReportType {
   WEEKLY = "Weekly",
@@ -69,13 +69,13 @@ const dateFormatter = new Intl.DateTimeFormat("en-CA", {
 
 function calculateDateRange(type: ReportType) {
   if (type === ReportType.WEEKLY) {
-    const startDate = startOfWeek(now());
-    const endDate = endOfWeek(now());
+    const startDate = startOfWeek(current());
+    const endDate = endOfWeek(current());
     return { startDate, endDate };
   }
 
-  const startDate = startOfMonth(now());
-  const endDate = endOfMonth(now());
+  const startDate = startOfMonth(current());
+  const endDate = endOfMonth(current());
   return { startDate, endDate };
 }
 
@@ -108,8 +108,8 @@ export async function generateDataReport(
       where: {
         status: { not: TaskStatus.ASSIGNED },
         start_date: {
-          lte: endDate,
-          gte: startDate,
+          lte: endDate.toISOString(),
+          gte: startDate.toISOString(),
         },
       },
       orderBy: [{ pid: "asc" }, { start_date: "desc" }],
@@ -120,14 +120,14 @@ export async function generateDataReport(
         OR: [
           {
             arrival: {
-              gte: startDate,
-              lte: endDate,
+              gte: startDate.toISOString(),
+              lte: endDate.toISOString(),
             },
           },
           {
             departure: {
-              gte: startDate,
-              lte: endDate,
+              gte: startDate.toISOString(),
+              lte: endDate.toISOString(),
             },
           },
         ],
@@ -138,8 +138,8 @@ export async function generateDataReport(
     const financialInformation = await db.transaction.findMany({
       where: {
         date: {
-          gte: startDate,
-          lte: endDate,
+          gte: startDate.toISOString(),
+          lte: endDate.toISOString(),
         },
       },
       orderBy: [{ pid: "asc" }, { date: "desc" }],
@@ -148,8 +148,8 @@ export async function generateDataReport(
     const badges = await db.achievedBadgeLevel.findMany({
       where: {
         date: {
-          gte: startDate,
-          lte: endDate,
+          gte: startDate.toISOString(),
+          lte: endDate.toISOString(),
         },
       },
       select: {
@@ -173,8 +173,8 @@ export async function generateDataReport(
     const loginStats = await db.loginHistory.findMany({
       where: {
         date: {
-          gte: startDate,
-          lte: endDate,
+          gte: startDate.toISOString(),
+          lte: endDate.toISOString(),
         },
       },
       orderBy: [{ pid: "asc" }, { date: "desc" }],
@@ -183,8 +183,8 @@ export async function generateDataReport(
     const earningGoal = await db.earningGoal.findMany({
       where: {
         date: {
-          gte: startDate,
-          lte: endDate,
+          gte: startDate.toISOString(),
+          lte: endDate.toISOString(),
         },
       },
       orderBy: [{ pid: "asc" }, { date: "desc" }],

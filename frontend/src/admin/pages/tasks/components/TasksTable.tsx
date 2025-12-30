@@ -10,7 +10,7 @@ import {
   TaskType,
 } from "../../../../types/enums";
 import { DAY_ABBREVIATIONS } from "../../../../constants/days";
-import { formatTimeString } from "../../../../helpers/formatDateTime";
+import { formatTimeStringUTC } from "../../../../helpers/formatDateTime";
 import { Marker, Trash } from "../../../../ui/icons/ActionIcons";
 import EditTaskModal from "./EditTaskModal";
 import { formatCurrency } from "../../../../helpers/formatCurrency";
@@ -70,7 +70,7 @@ const TasksTable = ({
         return "Anytime";
       case TimePreference.SPECIFIC:
         return (
-          formatTimeString(start_time) + " - " + formatTimeString(end_time)
+          formatTimeStringUTC(start_time) + " - " + formatTimeStringUTC(end_time)
         );
       default:
         return "Participant Preference";

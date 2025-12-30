@@ -10,14 +10,14 @@ import {
   FIRST_GOAL,
   INDIVIDUAL_GOAL,
 } from "../../constants/systemBadges";
-import { now } from "../../utils/dateUtils";
+import { current } from "../../utils/dateUtils";
 
 const assignedTaskResolver = {
   Query: {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
       const currentParticipants = await db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: endOfDay(now()) } }],
+          OR: [{ departure: null }, { departure: { gt: endOfDay(current()).toISOString() } }],
         },
         select: {
           pid: true,
@@ -60,8 +60,8 @@ const assignedTaskResolver = {
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfDay(now()) },
-          end_date: { gte: startOfDay(now()) },
+          start_date: { lte: endOfDay(current()).toISOString() },
+          end_date: { gte: startOfDay(current()).toISOString() },
         },
       });
     },
@@ -75,12 +75,11 @@ const assignedTaskResolver = {
         weekStart: string;
       }
     ): Promise<AssignedTask[]> => {
-      const weekStartDate = new Date(weekStart);
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfWeek(weekStartDate) },
-          end_date: { gte: weekStartDate },
+          start_date: { lte: endOfWeek(weekStart).toISOString() },
+          end_date: { gte: weekStart },
         },
       });
     },
@@ -97,8 +96,8 @@ const assignedTaskResolver = {
           pid,
           type: TaskType.REQUIRED,
           status: { not: TaskStatus.COMPLETE },
-          start_date: { lte: endOfWeek(now()) },
-          end_date: { gte: startOfWeek(now()) },
+          start_date: { lte: endOfWeek(current()).toISOString() },
+          end_date: { gte: startOfWeek(current()).toISOString() },
         },
       });
 
@@ -138,8 +137,8 @@ const assignedTaskResolver = {
           type,
           value,
           penalty,
-          start_date: new Date(start_date),
-          end_date: new Date(end_date),
+          start_date,
+          end_date,
           comment,
         },
       });
@@ -168,14 +167,14 @@ const assignedTaskResolver = {
         comment?: string;
       }
     ): Promise<AssignedTask> => {
-      const updates: Partial<AssignedTask> = {};
+      const updates: any = {};
       if (pid !== undefined) updates.pid = pid;
       if (name !== undefined) updates.name = name;
       if (type !== undefined) updates.type = type;
       if (value !== undefined) updates.value = value;
       if (penalty !== undefined) updates.penalty = penalty;
-      if (start_date !== undefined) updates.start_date = new Date(start_date);
-      if (end_date !== undefined) updates.end_date = new Date(end_date);
+      if (start_date !== undefined) updates.start_date = start_date;
+      if (end_date !== undefined) updates.end_date = end_date;
       if (comment !== undefined) updates.comment = comment;
 
       const isEmpty = Object.keys(updates).length === 0;
@@ -217,8 +216,8 @@ const assignedTaskResolver = {
               where: {
                 pid: assignedTask.pid,
                 status: { not: TaskStatus.COMPLETE },
-                start_date: { lte: endOfWeek(now()) },
-                end_date: { gte: startOfWeek(now()) },
+                start_date: { lte: endOfWeek(current()).toISOString() },
+                end_date: { gte: startOfWeek(current()).toISOString() },
                 type: TaskType.REQUIRED,
               },
             }
@@ -235,8 +234,8 @@ const assignedTaskResolver = {
           const countCompletedOptionalTasks = await db.assignedTask.count({
             where: {
               pid: assignedTask.pid,
-              start_date: { lte: endOfWeek(now()) },
-              end_date: { gte: startOfWeek(now()) },
+              start_date: { lte: endOfWeek(current()).toISOString() },
+              end_date: { gte: startOfWeek(current()).toISOString() },
               type: TaskType.OPTIONAL,
               status: TaskStatus.COMPLETE,
             },
@@ -256,8 +255,8 @@ const assignedTaskResolver = {
                 pid: assignedTask.pid,
                 type: TaskType.INDIVIDUAL_GOAL,
                 status: { not: TaskStatus.COMPLETE },
-                start_date: { lte: endOfWeek(now()) },
-                end_date: { gte: startOfWeek(now()) },
+                start_date: { lte: endOfWeek(current()).toISOString() },
+                end_date: { gte: startOfWeek(current()).toISOString() },
               },
             }
           );

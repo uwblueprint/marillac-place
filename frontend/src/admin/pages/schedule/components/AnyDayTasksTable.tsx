@@ -1,13 +1,16 @@
 import React from "react";
 import { Flex } from "@chakra-ui/react";
-import { isSameDay, differenceInCalendarDays, isEqual, startOfDay } from "date-fns";
+import {
+  isSameDay,
+  differenceInCalendarDays,
+  isEqual,
+  startOfDay,
+} from "date-fns";
 import { AssignedTask } from "../../../../types/models";
 import DataTable, { Column, Row } from "../../../../ui/misc/DataTable";
 import TaskStatusDisplay from "../../../../ui/misc/TaskStatusDisplay";
-import { formatTimeString } from "../../../../helpers/formatDateTime";
 import { formatCurrency } from "../../../../helpers/formatCurrency";
 import { Marker } from "../../../../ui/icons/ActionIcons";
-import { DayOfWeek } from "../../../../types/enums";
 import { DAY_ABBREVIATIONS, DAYS } from "../../../../constants/days";
 
 interface AnyDayTasksTableProps {
@@ -34,8 +37,10 @@ export default function AnyDayTasksTable({
   function isAnyDayTask(task: AssignedTask): boolean {
     return (
       !isSameDay(task.start_date, task.end_date) &&
-      !(differenceInCalendarDays(task.end_date, task.start_date) === 1 &&
-      isEqual(task.end_date, startOfDay(task.end_date)))
+      !(
+        differenceInCalendarDays(task.end_date, task.start_date) === 1 &&
+        isEqual(task.end_date, startOfDay(task.end_date))
+      )
     );
   }
 
@@ -46,12 +51,17 @@ export default function AnyDayTasksTable({
         element: task.name,
       },
       {
-        element: <Flex pr="35px"><TaskStatusDisplay status={task.status} /></Flex>,
+        element: (
+          <Flex pr="35px">
+            <TaskStatusDisplay status={task.status} />
+          </Flex>
+        ),
         action: () => {},
       },
       {
         element: [task.start_date, task.end_date]
-          .map((day: string) => DAY_ABBREVIATIONS[DAYS[(new Date(day)).getDay()]]).join(" - "),
+          .map((day: string) => DAY_ABBREVIATIONS[DAYS[new Date(day).getDay()]])
+          .join(" - "),
       },
       {
         element: formatCurrency(task.value),

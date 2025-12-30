@@ -1,5 +1,6 @@
 import { EarningGoal, GoalAction } from "@prisma/client";
 import db from "../../prisma";
+import { current } from "../../utils/dateUtils";
 
 const earningGoalResolver = {
   Query: {
@@ -27,7 +28,7 @@ const earningGoalResolver = {
       }
     ): Promise<EarningGoal> => {
       return db.earningGoal.create({
-        data: { pid, action, value },
+        data: { pid, action, value, date: current() },
       });
     },
     updateEarningGoal: async (
@@ -44,7 +45,7 @@ const earningGoalResolver = {
     ): Promise<EarningGoal> => {
       return db.earningGoal.update({
         where: {
-          pid_date: { pid, date: new Date(date) },
+          pid_date: { pid, date },
         },
         data: { value },
       });

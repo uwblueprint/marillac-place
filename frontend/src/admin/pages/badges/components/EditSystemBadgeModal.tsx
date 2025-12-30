@@ -149,7 +149,7 @@ const EditSystemBadgeModal = ({
     >
       <FixedInput
         label="Badge Name"
-        current_value={selected.name}
+        current_value={toTitleCase(selected.name)}
         orientation="horizontal"
       />
 

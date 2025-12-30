@@ -1,14 +1,14 @@
 import { Announcement, Priority } from "@prisma/client";
-import { startOfDay } from "date-fns";
+import { startOfDay, subDays } from "date-fns";
 import db from "../../prisma";
-import { now } from "../../utils/dateUtils";
+import { current } from "../../utils/dateUtils";
 
 const announcementResolver = {
   Query: {
     getAnnouncementsFromToday: async (): Promise<Announcement[]> => {
       return db.announcement.findMany({
         where: {
-          date: { gte: startOfDay(now()) },
+          date: { gte: startOfDay(current()).toISOString() },
         },
         orderBy: {
           date: "desc",
@@ -67,7 +67,7 @@ const announcementResolver = {
       const announcement = await db.announcement.create({
         data: {
           priority,
-          date: now(),
+          date: current(),
           message,
         },
       });

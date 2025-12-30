@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { subDays, addDays, startOfDay, set } from "date-fns";
+import { subDays, addDays, startOfDay, set, startOfWeek } from "date-fns";
 import BlackOutlineButton from "./buttons/BlackOutlineButton";
 import OrangeButton from "./buttons/OrangeButton";
 import GreenOutlineButton from "./buttons/GreenOutlineButton";
@@ -79,7 +79,6 @@ export default function UI() {
     "Option 2": "option2",
     "Option 3": "option3",
   };
-  const [startDate, setStartDate] = useState<Date>(now());
   const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(
     null
   );
@@ -149,6 +148,7 @@ export default function UI() {
       },
     ],
   ];
+  const startDate = startOfWeek(new Date());
   const assignedTasks: AssignedTask[] = [
     {
       aid: 1,
@@ -160,8 +160,8 @@ export default function UI() {
       value: 10,
       penalty: 5,
       comment: "Comment 1",
-      start_date: subDays(now(), 1).toISOString(),
-      end_date: now().toISOString(),
+      start_date: startOfDay(subDays(now(), 1)).toISOString(),
+      end_date: startOfDay(now()).toISOString(),
     },
     {
       aid: 2,
@@ -630,7 +630,6 @@ export default function UI() {
         <MarillacPlaceCalendar
           assignedTasks={assignedTasks}
           startDate={startDate}
-          setStartDate={setStartDate}
           viewTaskDetails={setViewTaskDetails}
           view={DisplayView.WEB}
         />
@@ -641,7 +640,6 @@ export default function UI() {
         <MarillacPlaceCalendar
           assignedTasks={assignedTasks}
           startDate={startDate}
-          setStartDate={setStartDate}
           viewTaskDetails={setViewTaskDetails}
           view={DisplayView.MOBILE}
         />

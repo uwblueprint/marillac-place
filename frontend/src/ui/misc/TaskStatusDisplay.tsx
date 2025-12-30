@@ -35,7 +35,10 @@ const TaskStatusConfig = {
   },
 };
 
-export default function TaskStatusDisplay({ status, size = "150px" }: TaskStatusDisplayProps) {
+export default function TaskStatusDisplay({
+  status,
+  size = "150px",
+}: TaskStatusDisplayProps) {
   const Icon = TaskStatusConfig[status].icon;
   return (
     <Flex
