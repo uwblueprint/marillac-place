@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
 import { verifyRole } from "../helpers/verifyRole";
@@ -19,13 +19,18 @@ type ParticipantRouteProps = {
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   const participantContext = useContext(ParticipantContext);
+  const navigate = useNavigate();
   const [authorized, setAuthorized] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const loading = !participantContext?.room || !participantContext?.balance;
   const [getParticipantByPid] = useLazyQuery(GET_PARTICIPANT_BY_PID, {
     onCompleted: (data) => {
-      if (!data || !data.getParticipantByPid || !participantContext) {
+      if (
+        !data ||
+        !data.getParticipantByPid.room ||
+        !data.getParticipantByPid.balance ||
+        !participantContext
+      ) {
         setError("error fetching participant for context");
         return;
       }
@@ -36,17 +41,17 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       console.error(err.message);
       // Clear invalid token and redirect to login
       localStorage.removeItem("token");
-      setAuthorized(false);
+      navigate(PARTICIPANTS_LOGIN_PAGE);
     },
   });
 
   useEffect(() => {
     const authorize = async () => {
       const isParticipant = await verifyRole([PARTICIPANT]);
-      if (isParticipant) {
-        setAuthorized(true);
+      if (!isParticipant) {
+        navigate(PARTICIPANTS_LOGIN_PAGE);
       }
-      setLoading(false);
+      setAuthorized(true);
     };
     authorize();
   }, []);
@@ -54,24 +59,20 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   useEffect(() => {
     const fetchParticipantData = async () => {
       if (authorized && participantContext) {
-        setLoading(true);
-        getParticipantByPid({ variables: { pid: participantContext.pid } });
-        setLoading(false);
+        getParticipantByPid({
+          variables: { pid: participantContext.pid },
+        });
       }
     };
     fetchParticipantData();
   }, [authorized, participantContext]);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
   if (error) {
     return <ErrorScreen message={error} />;
   }
 
-  if (!authorized) {
-    return <Navigate to={PARTICIPANTS_LOGIN_PAGE} replace />;
+  if (loading) {
+    return <LoadingScreen />;
   }
 
   return (

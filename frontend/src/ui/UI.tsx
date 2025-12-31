@@ -59,6 +59,7 @@ import {
 import Badge from "./misc/BadgeProgress";
 import TaskStatusDisplay from "./misc/TaskStatusDisplay";
 import ToggleButton from "./buttons/ToggleButton";
+import LoadingScreen from "./screens/LoadingScreen";
 
 export default function UI() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -666,6 +667,11 @@ export default function UI() {
           columns={dataTableColumns}
           rows={dataTableRows}
         />
+      </Box>
+      <Text textStyle="web.h3">Loading Screen</Text>
+
+      <Box width="1000px" outline="1px solid black" padding="20px">
+        <LoadingScreen message="Loading..." />
       </Box>
     </Flex>
   );
