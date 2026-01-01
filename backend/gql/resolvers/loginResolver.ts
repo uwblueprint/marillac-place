@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { Participant } from "@prisma/client";
-import { endOfDay, startOfDay } from "date-fns";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
@@ -54,7 +53,10 @@ const loginResolver = {
       const participant: Participant | null = await db.participant.findUnique({
         where: {
           pid,
-          OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: getEndOfDay(new Date()) } },
+          ],
         },
       });
 

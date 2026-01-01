@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import getSchema from "./gql/schema";
-import { getESTDate, getUTCDate } from "./utils/dateUtils";
 
 require("./crons/index");
 

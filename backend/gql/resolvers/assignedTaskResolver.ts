@@ -1,5 +1,4 @@
 import { AssignedTask, TaskStatus, TaskType } from "@prisma/client";
-import { startOfWeek, endOfWeek, endOfDay, startOfDay } from "date-fns";
 import db from "../../prisma";
 import processEarning from "../../utils/transactionUtils";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
@@ -10,14 +9,22 @@ import {
   FIRST_GOAL,
   INDIVIDUAL_GOAL,
 } from "../../constants/systemBadges";
-import { getEndOfDay, getEndOfWeek, getStartOfDay, getStartOfWeek } from "../../utils/dateUtils";
+import {
+  getEndOfDay,
+  getEndOfWeek,
+  getStartOfDay,
+  getStartOfWeek,
+} from "../../utils/dateUtils";
 
 const assignedTaskResolver = {
   Query: {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
       const currentParticipants = await db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: getEndOfDay(new Date()) } },
+          ],
         },
         select: {
           pid: true,
@@ -82,6 +89,9 @@ const assignedTaskResolver = {
           start_date: { lte: getEndOfWeek(weekStartDate) },
           end_date: { gte: weekStart },
         },
+        orderBy: {
+          aid: "asc"
+        }
       });
     },
     hasCompletedAllRequiredTasks: async (

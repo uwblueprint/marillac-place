@@ -1,4 +1,3 @@
-import { startOfDay, endOfDay } from "date-fns";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
@@ -8,7 +7,10 @@ async function resetLoginStreak() {
   try {
     const participants = await db.participant.findMany({
       where: {
-        OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+        OR: [
+          { departure: null },
+          { departure: { gt: getEndOfDay(new Date()) } },
+        ],
       },
       select: { pid: true },
     });

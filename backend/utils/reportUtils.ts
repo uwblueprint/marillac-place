@@ -1,7 +1,11 @@
 import { GoalAction, Level, TaskStatus, TransactionType } from "@prisma/client";
-import { endOfMonth, endOfWeek, startOfMonth, startOfWeek } from "date-fns";
 import db from "../prisma";
-import { getEndOfMonth, getEndOfWeek, getStartOfMonth, getStartOfWeek } from "./dateUtils";
+import {
+  getEndOfMonth,
+  getEndOfWeek,
+  getStartOfMonth,
+  getStartOfWeek,
+} from "./dateUtils";
 
 export enum ReportType {
   WEEKLY = "Weekly",

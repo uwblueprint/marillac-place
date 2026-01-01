@@ -93,7 +93,7 @@ export async function updateBadgeLevelProgress(
           data: {
             name: PR_LEADER,
             level: prLeaderProgress.level,
-            pid
+            pid,
           },
         });
 

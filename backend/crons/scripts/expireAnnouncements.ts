@@ -1,4 +1,4 @@
-import { subDays, startOfDay } from "date-fns";
+import { subDays } from "date-fns";
 import prisma from "../../prisma";
 import { getStartOfDay } from "../../utils/dateUtils";
 

@@ -1,4 +1,11 @@
-import { endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek } from "date-fns";
+import {
+  endOfDay,
+  endOfMonth,
+  endOfWeek,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+} from "date-fns";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 
 const timeZone = "America/Toronto";

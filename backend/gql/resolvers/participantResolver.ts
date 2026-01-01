@@ -1,5 +1,4 @@
 import { Participant } from "@prisma/client";
-import { endOfDay, startOfDay } from "date-fns";
 import db from "../../prisma";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
 import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
@@ -19,7 +18,10 @@ const participantResolver = {
     getCurrentParticipants: async (): Promise<Participant[]> => {
       return db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: getEndOfDay(new Date()) } },
+          ],
         },
         orderBy: [{ room: "asc" }],
       });
@@ -63,7 +65,10 @@ const participantResolver = {
       const occupiedRoom = await db.participant.findFirst({
         where: {
           room,
-          OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+          OR: [
+            { departure: null },
+            { departure: { gt: getEndOfDay(new Date()) } },
+          ],
         },
       });
       if (occupiedRoom) throw new Error("room is occupied");

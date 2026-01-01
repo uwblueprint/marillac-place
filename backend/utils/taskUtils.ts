@@ -1,20 +1,29 @@
-import { addDays, endOfDay, startOfWeek, set, startOfDay } from "date-fns";
+import { addDays, endOfDay, startOfWeek, startOfDay } from "date-fns";
 import { Task, DayPreference, TimePreference, DayOfWeek } from "@prisma/client";
 import db from "../prisma";
 import { orderedDays } from "../constants/days";
-import { getEndOfDay, getEndOfWeek, getESTDate, getStartOfDay, getStartOfWeek, getUTCDate } from "./dateUtils";
-import { combineDayAndTime } from "./dateUtils";
+import {
+  getEndOfDay,
+  getESTDate,
+  getUTCDate,
+  combineDayAndTime,
+} from "./dateUtils";
 
 type StartAndEndDates = {
   startDate: Date;
   endDate: Date;
-}
+};
 
 function buildStartAndEndDates(task: Task): StartAndEndDates[] {
   const { day_preference, time_preference, days, start_time, end_time } = task;
 
-  if (day_preference === DayPreference.PARTICIPANT_PREFERENCE || time_preference === TimePreference.PARTICIPANT_PREFERENCE) {
-    throw new Error("day and time preferences must be strictly defined to determine start and end dates");
+  if (
+    day_preference === DayPreference.PARTICIPANT_PREFERENCE ||
+    time_preference === TimePreference.PARTICIPANT_PREFERENCE
+  ) {
+    throw new Error(
+      "day and time preferences must be strictly defined to determine start and end dates"
+    );
   }
 
   const estDate = getESTDate(new Date());
@@ -24,7 +33,9 @@ function buildStartAndEndDates(task: Task): StartAndEndDates[] {
   let endTimeEST: Date;
   if (time_preference === TimePreference.SPECIFIC) {
     if (start_time === null || end_time === null) {
-      throw new Error("time preference is specific but start and end times are not provided");
+      throw new Error(
+        "time preference is specific but start and end times are not provided"
+      );
     }
     startTimeEST = getESTDate(start_time);
     endTimeEST = getESTDate(end_time);
@@ -49,12 +60,17 @@ function buildStartAndEndDates(task: Task): StartAndEndDates[] {
       startAndEndDates.push({ startDate, endDate });
     });
   } else if (day_preference === DayPreference.DAY_RANGE) {
-    if (days.length !== 2) {
-      throw new Error("day range must contain exactly two elements");
+    if (days.length <= 1) {
+      throw new Error("Day range should contain at least two days");
     }
     const baseStartDate = addDays(startOfWeekEST, orderedDays.indexOf(days[0]));
-    const baseEndDate = addDays(startOfWeekEST, orderedDays.indexOf(days[1]));
-    const startDate = getUTCDate(combineDayAndTime(baseStartDate, startTimeEST));
+    const baseEndDate = addDays(
+      startOfWeekEST,
+      orderedDays.indexOf(days[days.length - 1])
+    );
+    const startDate = getUTCDate(
+      combineDayAndTime(baseStartDate, startTimeEST)
+    );
     const endDate = getUTCDate(combineDayAndTime(baseEndDate, endTimeEST));
     startAndEndDates.push({ startDate, endDate });
   }
@@ -96,5 +112,3 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
     })
   );
 }
-
-             
