@@ -7,6 +7,7 @@ import SelectInput from "../../../../ui/inputs/SelectInput";
 import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
 import { Priority } from "../../../../types/enums";
 import FixedInput from "../../../../ui/inputs/FixedInput";
+import { toTitleCase } from "../../../../helpers/stringUtils";
 
 type EditAnnouncementModalProps = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +31,8 @@ const EditAnnouncementModal = ({
 
   const [error, setError] = useState<string>("");
 
-  const [editAnnouncement, { loading: editAnnouncementLoading }] = useMutation(UPDATE_ANNOUNCEMENT);
+  const [editAnnouncement, { loading: editAnnouncementLoading }] =
+    useMutation(UPDATE_ANNOUNCEMENT);
 
   const handleSave = async () => {
     setError("");
@@ -66,7 +68,7 @@ const EditAnnouncementModal = ({
     >
       <FixedInput
         label="Sent To"
-        current_value={sendTo}
+        current_value={toTitleCase(sendTo)}
         orientation="horizontal"
       />
 

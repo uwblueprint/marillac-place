@@ -73,7 +73,7 @@ export default function AdminBadgesPage() {
             is_active={assign}
           />
           <OrangeButton
-            label="Create New"
+            label="Create Badge"
             action={() => setCreate(true)}
             is_active={create}
           />
@@ -92,7 +92,12 @@ export default function AdminBadgesPage() {
           refetch={refetchCustomBadges}
         />
       )}
-      {assign && <AssignCustomBadgeModal onClose={() => setAssign(false)} customBadges={customBadgesData?.getCustomBadges ?? []} />}
+      {assign && (
+        <AssignCustomBadgeModal
+          onClose={() => setAssign(false)}
+          customBadges={customBadgesData?.getCustomBadges ?? []}
+        />
+      )}
     </Flex>
   );
 }

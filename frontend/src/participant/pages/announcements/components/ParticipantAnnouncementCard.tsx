@@ -4,7 +4,7 @@ import { Group } from "../../../../ui/icons/BadgeIcons";
 import { Profile } from "../../../../ui/icons/MiscIcons";
 import { ExclamationMark, Dot } from "../../../../ui/icons/NotificationIcons";
 import { Pin } from "../../../../ui/icons/ActionIcons";
-import { formatDateTimeString } from "../../../../helpers/formatDateTime";
+import { formatDateV3 } from "../../../../helpers/formatDateTime";
 
 type ParticipantAnnouncementCardProps = {
   allRooms: boolean;
@@ -55,7 +55,7 @@ export default function ParticipantAnnouncementCard({
             </>
           )}
           <Text textStyle="mobile.b1" color="text.light.secondary">
-            {formatDateTimeString(time)}
+            {formatDateV3(new Date(time))}
           </Text>
         </Flex>
 

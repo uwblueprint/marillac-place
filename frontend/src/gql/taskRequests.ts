@@ -27,8 +27,8 @@ export const CREATE_TASK = gql`
     $timePreference: TimePreference!
     $value: Int!
     $penalty: Int!
-    $startTime: Date
-    $endTime: Date
+    $startTime: String
+    $endTime: String
     $comment: String
   ) {
     createTask(
@@ -68,8 +68,8 @@ export const UPDATE_TASK = gql`
     $timePreference: TimePreference
     $value: Int
     $penalty: Int
-    $startTime: Date
-    $endTime: Date
+    $startTime: String
+    $endTime: String
     $comment: String
   ) {
     updateTask(

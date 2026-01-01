@@ -5,6 +5,7 @@ import { TaskStatus } from "../../types/enums";
 
 type TaskStatusDisplayProps = {
   status: TaskStatus;
+  size?: string;
 };
 
 const TaskStatusConfig = {
@@ -34,7 +35,10 @@ const TaskStatusConfig = {
   },
 };
 
-export default function TaskStatusDisplay({ status }: TaskStatusDisplayProps) {
+export default function TaskStatusDisplay({
+  status,
+  size = "150px",
+}: TaskStatusDisplayProps) {
   const Icon = TaskStatusConfig[status].icon;
   return (
     <Flex
@@ -44,7 +48,7 @@ export default function TaskStatusDisplay({ status }: TaskStatusDisplayProps) {
       bg={TaskStatusConfig[status].bgColor}
       color={TaskStatusConfig[status].textColor}
       borderRadius="lg"
-      width="120px"
+      width={size}
       height="30px"
     >
       <Icon size={20} />

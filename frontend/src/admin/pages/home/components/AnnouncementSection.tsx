@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { GET_ANNOUNCEMENTS_FROM_TODAY } from "../../../../gql/announcementRequests";
 import { Announcement, ReceivedAnnouncement } from "../../../../types/models";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
-import { formatTimeString } from "../../../../helpers/formatDateTime";
+import { formatDateV2 } from "../../../../helpers/formatDateTime";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 import { ADMIN_ANNOUNCEMENTS_PAGE } from "../../../../constants/routes";
@@ -26,8 +26,12 @@ const AnnouncementCard: React.FC<{ announcement: Announcement }> = ({
           <Text textStyle="web.b2" fontWeight={600} color="black">
             {getRoomString(announcement)}
           </Text>
-          <Text textStyle="web.b3" color="text.light.secondary" marginLeft="10px">
-            posted at {formatTimeString(announcement.date)}
+          <Text
+            textStyle="web.b3"
+            color="text.light.secondary"
+            marginLeft="10px"
+          >
+            posted at {formatDateV2(new Date(announcement.date))}
           </Text>
         </Flex>
         <Flex width="100%">
@@ -74,7 +78,8 @@ const AnnouncementSection = () => {
             Announcements
           </Text>
           <Text textStyle="web.b3" color="text.light.secondary">
-            {announcements.length} new post{announcements.length === 1 ? "" : "s"} today
+            {announcements.length} new post
+            {announcements.length === 1 ? "" : "s"} today
           </Text>
         </Flex>
         <UnderlineButton
@@ -82,7 +87,7 @@ const AnnouncementSection = () => {
           action={() => navigate(ADMIN_ANNOUNCEMENTS_PAGE)}
         />
       </Flex>
-      <Flex 
+      <Flex
         gap="10px"
         flexDir="column"
         alignItems="center"
@@ -97,7 +102,10 @@ const AnnouncementSection = () => {
       >
         {announcements.length > 0 ? (
           announcements.map((announcement: Announcement) => (
-            <AnnouncementCard key={announcement.aid} announcement={announcement} />
+            <AnnouncementCard
+              key={announcement.aid}
+              announcement={announcement}
+            />
           ))
         ) : (
           <Text textStyle="web.b2" color="text.light.secondary">

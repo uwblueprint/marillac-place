@@ -3,7 +3,6 @@ import { gql } from "apollo-server-express";
 const responses = gql`
   type LoginResponse {
     token: String!
-    pid: Int
   }
 
   type GetWeeklyEarningsResponse {

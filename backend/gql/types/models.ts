@@ -6,7 +6,7 @@ const models = gql`
     level: Level!
     pid: Int!
     notified: Boolean!
-    date: Date!
+    date: DateTime!
 
     badge_level: BadgeLevel
     participant: Participant
@@ -153,8 +153,8 @@ const models = gql`
     day_preference: DayPreference!
     days: [DayOfWeek!]!
     time_preference: TimePreference!
-    start_time: Time
-    end_time: Time
+    start_time: DateTime
+    end_time: DateTime
   }
 
   type Transaction {

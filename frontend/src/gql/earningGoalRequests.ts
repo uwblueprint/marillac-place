@@ -23,7 +23,7 @@ export const CREATE_EARNING_GOAL = gql`
 `;
 
 export const UPDATE_EARNING_GOAL = gql`
-  mutation updateEarningGoal($pid: Int!, $date: Date!, $value: Int!) {
+  mutation updateEarningGoal($pid: Int!, $date: String!, $value: Int!) {
     updateEarningGoal(pid: $pid, date: $date, value: $value) {
       pid
       action
