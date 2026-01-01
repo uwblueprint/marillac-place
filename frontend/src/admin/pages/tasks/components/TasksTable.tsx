@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { DELETE_TASK } from "../../../../gql/taskRequests";
-import DataTable, { Row } from "../../../../ui/misc/DataTable";
+import DataTable, { Column, Row } from "../../../../ui/misc/DataTable";
 import { Task } from "../../../../types/models";
 import {
   DayPreference,
@@ -10,7 +10,7 @@ import {
   TaskType,
 } from "../../../../types/enums";
 import { DAY_ABBREVIATIONS } from "../../../../constants/days";
-import { formatTimeStringUTC } from "../../../../helpers/formatDateTime";
+import { formatDateV2 } from "../../../../helpers/formatDateTime";
 import { Marker, Trash } from "../../../../ui/icons/ActionIcons";
 import EditTaskModal from "./EditTaskModal";
 import { formatCurrency } from "../../../../helpers/formatCurrency";
@@ -62,22 +62,20 @@ const TasksTable = ({
 
   function getAssignedTimesString(
     timePreference: TimePreference,
-    start_time: string,
-    end_time: string
+    start_time: Date,
+    end_time: Date
   ) {
     switch (timePreference) {
       case TimePreference.ANYTIME:
         return "Anytime";
       case TimePreference.SPECIFIC:
-        return (
-          formatTimeStringUTC(start_time) + " - " + formatTimeStringUTC(end_time)
-        );
+        return formatDateV2(start_time) + " - " + formatDateV2(end_time);
       default:
         return "Participant Preference";
     }
   }
 
-  const columns = [
+  const columns: Column[] = [
     { header: "Name", width: "20%" },
     { header: "Assigned Days", width: "20%" },
     { header: "Assigned Times", width: "20%" },
@@ -86,7 +84,7 @@ const TasksTable = ({
     { header: "", width: "10%", center: true },
   ];
 
-  const rows =
+  const rows: Row[][] =
     tasks.length !== 0
       ? tasks.map((task: any) => {
           return [
@@ -99,8 +97,8 @@ const TasksTable = ({
             {
               element: getAssignedTimesString(
                 task.time_preference,
-                task.start_time,
-                task.end_time
+                new Date(task.start_time),
+                new Date(task.end_time)
               ),
             },
             {

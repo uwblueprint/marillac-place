@@ -1,10 +1,4 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  Text,
-  Flex,
-} from "@chakra-ui/react";
+import { Text, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { AssignedTask } from "../../../../types/models";
@@ -16,7 +10,7 @@ import {
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import FixedInput from "../../../../ui/inputs/FixedInput";
 import { toTitleCase } from "../../../../helpers/stringUtils";
-import { formatDateTimeStringUTC } from "../../../../helpers/formatDateTime";
+import { formatDateV3 } from "../../../../helpers/formatDateTime";
 import { formatCurrency } from "../../../../helpers/formatCurrency";
 import BlackOutlineButton from "../../../../ui/buttons/BlackOutlineButton";
 import {
@@ -109,12 +103,12 @@ export default function TaskDetailsModal({
       />
       <FixedInput
         label="Start Date"
-        current_value={formatDateTimeStringUTC(task.start_date)}
+        current_value={formatDateV3(new Date(task.start_date))}
         orientation="horizontal"
       />
       <FixedInput
         label="End Date"
-        current_value={formatDateTimeStringUTC(task.end_date)}
+        current_value={formatDateV3(new Date(task.end_date))}
         orientation="horizontal"
       />
       <FixedInput

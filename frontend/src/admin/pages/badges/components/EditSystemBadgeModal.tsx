@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Flex, Input, FormLabel, FormControl, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_SYSTEM_BADGE } from "../../../../gql/systemBadgeRequests";
 import { UPDATE_BADGE_LEVEL } from "../../../../gql/badgeLevelRequests";

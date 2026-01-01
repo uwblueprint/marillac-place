@@ -1,6 +1,5 @@
 import { Flex, Text } from "@chakra-ui/react";
 import React from "react";
-import { toTitleCase } from "../../helpers/stringUtils";
 import { InputProps } from "../../types/component";
 
 type FixedInputProps = Omit<InputProps, "update_action" | "size"> & {
@@ -22,7 +21,7 @@ export default function FixedInput({
       <Text textStyle="web.s1" color="text.light.secondary">
         {label}
       </Text>
-      <Text textStyle="web.b3" color="text.light.secondary">
+      <Text textStyle="web.b3" color="text.light.primary">
         {current_value}
       </Text>
     </Flex>

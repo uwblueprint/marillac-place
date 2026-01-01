@@ -35,13 +35,7 @@ export default function AnyDayTasksTable({
   ];
 
   function isAnyDayTask(task: AssignedTask): boolean {
-    return (
-      !isSameDay(task.start_date, task.end_date) &&
-      !(
-        differenceInCalendarDays(task.end_date, task.start_date) === 1 &&
-        isEqual(task.end_date, startOfDay(task.end_date))
-      )
-    );
+    return !isSameDay(new Date(task.start_date), new Date(task.end_date));
   }
 
   const rows: Row[][] = tasks

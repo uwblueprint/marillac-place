@@ -1,4 +1,4 @@
-import { Text, Flex, Checkbox } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_TASK } from "../../../../gql/taskRequests";
@@ -69,29 +69,34 @@ export default function EditTaskModal({
   const [updateTask] = useMutation(UPDATE_TASK);
 
   async function handleSubmit() {
-    const { isValid, errorMessage } = isValidTask(
-      taskName,
-      participantPreference,
-      dayPreference,
+    const updatedTask: any = {
+      tid: selected.tid,
+      name: taskName,
+      type: selected.type,
+      value: addition,
+      penalty: deduction,
+      comment: comments,
+      day_preference: dayPreference ?? DayPreference.PARTICIPANT_PREFERENCE,
       days,
-      timePreference,
-      startTime,
-      endTime,
-      addition,
-      deduction
-    );
+      time_preference: timePreference ?? TimePreference.PARTICIPANT_PREFERENCE,
+      start_time: startTime ? startTime.toISOString() : undefined,
+      end_time: endTime ? endTime.toISOString() : undefined,
+    };
+
+    const { isValid, errorMessage } = isValidTask(updatedTask);
     if (!isValid) {
       setError(errorMessage);
       return;
     }
 
+    const storedDays =
+      dayPreference === DayPreference.DAY_RANGE
+        ? [days[0], days[days.length - 1]]
+        : dayPreference === DayPreference.EVERY_SELECTED_DAYS
+        ? [...days]
+        : [];
+
     try {
-      const storedDays =
-        dayPreference === DayPreference.DAY_RANGE
-          ? [days[0], days[days.length - 1]]
-          : dayPreference === DayPreference.EVERY_SELECTED_DAYS
-          ? [...days]
-          : [];
       updateTask({
         variables: {
           id: selected.tid,
@@ -102,8 +107,8 @@ export default function EditTaskModal({
           timePreference,
           value: addition,
           penalty: deduction,
-          startTime: startTime ?? undefined,
-          endTime: endTime ?? undefined,
+          startTime: startTime ? startTime.toISOString() : undefined,
+          endTime: endTime ? endTime.toISOString() : undefined,
           comment: comments ?? undefined,
         },
       });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { Button, Flex, Text, Input, FormControl } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { verifyRole } from "../../../helpers/verifyRole";
 import { PARTICIPANT } from "../../../constants/roles";

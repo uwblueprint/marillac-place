@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Flex, Text, Spinner } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import ReportsTable from "./components/ReportsTable";
 import AddEmailModal from "./components/AddEmailModal";

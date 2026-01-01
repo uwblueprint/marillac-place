@@ -1,5 +1,5 @@
 import { Checkbox, Flex, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   DayPreference,
   TimePreference,
@@ -10,8 +10,6 @@ import { DAYS } from "../../constants/days";
 import SelectInput from "../inputs/SelectInput";
 import GreenOutlineButton from "../buttons/GreenOutlineButton";
 import { toTitleCase } from "../../helpers/stringUtils";
-import TextAreaInput from "../inputs/TextAreaInput";
-import NumberInput from "../inputs/NumberInput";
 import TimeInput from "../inputs/TimeInput";
 
 type DateOptionsProps = {

@@ -3,7 +3,7 @@ import { Flex, Stack, Text } from "@chakra-ui/react";
 import RoomsOverview from "./components/RoomsOverview";
 import NoteSection from "./components/NoteSection";
 import AnnouncementSection from "./components/AnnouncementSection";
-import { formatDateStringEST } from "../../../helpers/formatDateTime";
+import { formatDateV1 } from "../../../helpers/formatDateTime";
 
 const AdminHomePage = (): React.ReactElement => {
   return (
@@ -23,7 +23,7 @@ const AdminHomePage = (): React.ReactElement => {
           Marillac Place Overview
         </Text>
         <Text textStyle="web.h3" color="#000000">
-          {formatDateStringEST(new Date())}
+          {formatDateV1(new Date())}
         </Text>
       </Flex>
 

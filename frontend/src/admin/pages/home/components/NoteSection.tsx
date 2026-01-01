@@ -16,7 +16,7 @@ import {
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { Airplane } from "../../../../ui/icons/ActionIcons";
 import { Note } from "../../../../types/models";
-import { formatDateTimeStringUTC } from "../../../../helpers/formatDateTime";
+import { formatDateV3 } from "../../../../helpers/formatDateTime";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 
 const NoteSection = () => {
@@ -130,7 +130,7 @@ const NoteSection = () => {
                   mt="5px"
                 >
                   <Text textStyle="web.b3" color="text.light.secondary">
-                    {formatDateTimeStringUTC(note.date)}
+                    {formatDateV3(new Date(note.date))}
                   </Text>
                   <UnderlineButton
                     label="Dismiss"

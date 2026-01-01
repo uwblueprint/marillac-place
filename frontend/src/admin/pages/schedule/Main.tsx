@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Flex, Button, Text, Spinner, Box, HStack } from "@chakra-ui/react";
+import { Flex, Button, Text, HStack } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import { format, startOfDay, startOfWeek } from "date-fns";
+import { startOfWeek } from "date-fns";
 import RoomNavigation from "./components/RoomNavigation";
 import { DisplayView, ScheduleView } from "../../../constants/views";
-import { createESTDateObjectUTC, formatDateStringEST, formatMonthStringEST, formatUTCDateStringEST, now } from "../../../helpers/formatDateTime";
 import { AssignedTask } from "../../../types/models";
 import { GET_ASSIGNED_TASKS_BY_WEEK } from "../../../gql/assignedTaskRequests";
 import { GET_PARTICIPANT_BY_PID } from "../../../gql/participantRequests";
@@ -17,12 +16,13 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 import { ADMIN_PARTICIPANTS_PAGE } from "../../../constants/routes";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import { Calendar, List } from "../../../ui/icons/MiscIcons";
-import { Marker, PlusSign } from "../../../ui/icons/ActionIcons";
+import { Marker } from "../../../ui/icons/ActionIcons";
 import AnyDayTasksTable from "./components/AnyDayTasksTable";
 import DailyTasksTable from "./components/DailyTasksTable";
 import MarillacBalanceModal from "./components/MarillacBalanceModal";
 import AssignTaskModal from "./components/AssignTaskModal";
 import TaskDetailsModal from "./components/TaskDetailsModal";
+import { formatDateV5 } from "../../../helpers/formatDateTime";
 
 export default function AdminSchedulePage() {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ export default function AdminSchedulePage() {
   } = useQuery(GET_ASSIGNED_TASKS_BY_WEEK, {
     variables: {
       pid: roomToParticipant[selectedRoom],
-      weekStart: formatUTCDateStringEST(weekStart),
+      weekStart: weekStart.toISOString(),
     },
     skip: !(selectedRoom in roomToParticipant),
   });
@@ -83,7 +83,7 @@ export default function AdminSchedulePage() {
       refetchAssignedTasksByWeek({
         variables: {
           pid: roomToParticipant[selectedRoom],
-          weekStart: formatUTCDateStringEST(weekStart),
+          weekStart: weekStart.toISOString(),
         },
       });
     }
@@ -103,7 +103,7 @@ export default function AdminSchedulePage() {
         <>
           <Flex alignItems="center" justifyContent="space-between" w="100%">
             <Text textStyle="web.h2" color="primary.700" pl="3px">
-              {formatMonthStringEST(weekStart)}
+              {formatDateV5(weekStart)}
             </Text>
             <GreenOutlineButton
               label={

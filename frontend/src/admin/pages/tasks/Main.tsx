@@ -72,7 +72,7 @@ export default function AdminTasksPage() {
         ))}
       </Flex>
 
-      <Flex w="100%" h="100%" flexDir="column" gap="10px">
+      <Flex w="100%" h="fit-content" flexDir="column" gap="10px">
         <Flex w="100%" justifyContent="space-between" gap="10px">
           <InputGroup>
             <InputLeftElement pb="7px" pl="3px">

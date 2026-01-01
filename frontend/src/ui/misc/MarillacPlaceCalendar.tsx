@@ -1,30 +1,22 @@
 import React from "react";
-import { Box, Text, Flex, Button } from "@chakra-ui/react";
-import {
-  Calendar,
-  dateFnsLocalizer,
-  NavigateAction,
-  View,
-  Views,
-} from "react-big-calendar";
+import { Box, Text, Flex } from "@chakra-ui/react";
+import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
 import {
   format,
   parse,
   startOfWeek,
   getDay,
   isSameDay,
-  addWeeks,
-  subWeeks,
   setMinutes,
   setHours,
   startOfDay,
-  differenceInMinutes,
 } from "date-fns";
 import { enCA } from "date-fns/locale/en-CA";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AssignedTask } from "../../types/models";
-import { createESTDateObjectUTC, formatDayStringEST, formatTimeStringUTC } from "../../helpers/formatDateTime";
+import { formatDateV2, formatDateV4 } from "../../helpers/formatDateTime";
 import { DisplayView } from "../../constants/views";
+import { isAllDayTask } from "../../helpers/taskHelpers";
 
 type CustomHeaderProps = {
   date: Date;
@@ -81,7 +73,7 @@ function AssignedTaskEvent({
   assignedTask,
   viewTaskDetails,
 }: AssignedTaskEventProps) {
-  const displayDate = isSameDay(assignedTask.start_date, assignedTask.end_date);
+  const displayDate = !isAllDayTask(assignedTask);
   return (
     <Flex
       padding="4px"
@@ -95,7 +87,9 @@ function AssignedTaskEvent({
       </Text>
       {displayDate && (
         <Text fontSize="10px" color="inherit">
-          {`${formatTimeStringUTC(assignedTask.start_date)} - ${formatTimeStringUTC(assignedTask.end_date)}`}
+          {`${formatDateV2(new Date(assignedTask.start_date))} - ${formatDateV2(
+            new Date(assignedTask.end_date)
+          )}`}
         </Text>
       )}
     </Flex>
@@ -120,7 +114,7 @@ export default function MarillacPlaceCalendar({
     <>
       {view === DisplayView.MOBILE && (
         <Text textStyle="web.b1" mb="12px" textAlign="center">
-          {formatDayStringEST(startDate)}
+          {formatDateV4(startDate)}
         </Text>
       )}
       <Box w="100%" minH="fit-content" overflow="hidden">
@@ -135,8 +129,9 @@ export default function MarillacPlaceCalendar({
           })}
           events={assignedTasks}
           titleAccessor="name"
-          startAccessor={(event: AssignedTask) => createESTDateObjectUTC(event.start_date)}
-          endAccessor={(event: AssignedTask) => createESTDateObjectUTC(event.end_date)}
+          startAccessor={(event: AssignedTask) => new Date(event.start_date)}
+          endAccessor={(event: AssignedTask) => new Date(event.end_date)}
+          allDayAccessor={(event: AssignedTask) => isAllDayTask(event)}
           view={calendarView}
           date={startDate}
           min={setMinutes(setHours(new Date(), 6), 0)}

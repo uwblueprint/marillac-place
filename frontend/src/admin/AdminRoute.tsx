@@ -17,7 +17,6 @@ type AdminRouteProps = {
 
 export default function AdminRoute({ children }: AdminRouteProps) {
   const adminContext = useContext(AdminContext);
-
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -38,7 +37,6 @@ export default function AdminRoute({ children }: AdminRouteProps) {
       adminContext.setRoomToParticipant(roomToParticipantMap);
     },
     onError: (err: Error) => {
-      // Only set error in production mode
       if (process.env.NODE_ENV !== "development") {
         setError(err.message);
       } else {
@@ -49,7 +47,6 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
   useEffect(() => {
     const authorize = async () => {
-      // Development mode: allow access without authentication for testing
       const isDevelopment = process.env.NODE_ENV === "development";
       if (isDevelopment) {
         setAuthorized(true);
@@ -68,7 +65,6 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
   useEffect(() => {
     if (authorized) {
-      // Try to fetch participants, but don't fail if it errors (for development)
       getCurrentParticipants();
     }
   }, [authorized, getCurrentParticipants]);

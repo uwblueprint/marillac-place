@@ -1,67 +1,83 @@
-import { addDays, startOfWeek, set, startOfDay } from "date-fns";
+import {
+  addDays,
+  startOfWeek,
+  startOfDay,
+  isSameDay,
+  endOfDay,
+  isEqual,
+} from "date-fns";
 import { DAYS } from "../constants/days";
 import { DayOfWeek, DayPreference, TimePreference } from "../types/enums";
-import { now } from "./formatDateTime";
+import { AssignedTask, Task } from "../types/models";
+import { combineDayAndTime } from "./formatDateTime";
+
+export function isAllDayTask(assignedTask: AssignedTask): boolean {
+  const startDate = new Date(assignedTask.start_date);
+  const endDate = new Date(assignedTask.end_date);
+  const allDay = (
+    !isSameDay(startDate, endDate) ||
+    (isEqual(startOfDay(startDate), startDate) &&
+      isEqual(endOfDay(endDate), endDate))
+  );
+  return allDay;
+}
 
 type TaskValidationResult = {
   isValid: boolean;
   errorMessage: string;
 };
 
-export function isValidTask(
-  taskName: string,
-  participantPreference: boolean,
-  dayPreference: DayPreference | null,
-  days: DayOfWeek[],
-  timePreference: TimePreference | null,
-  startTime: Date | null,
-  endTime: Date | null,
-  addition: number,
-  deduction: number
-): TaskValidationResult {
-  if (!taskName) {
+export function isValidTask(task: Task): TaskValidationResult {
+  const {
+    name,
+    value,
+    penalty,
+    day_preference,
+    days,
+    time_preference,
+    start_time,
+    end_time,
+  } = task;
+  if (!name) {
     return { isValid: false, errorMessage: "Task name is missing" };
   }
-  if (addition < 0 || deduction < 0) {
+  if (value < 0 || penalty < 0) {
     return {
       isValid: false,
       errorMessage: "Marillac bucks require positive values",
     };
   }
 
-  if (!participantPreference) {
+  if (
+    (day_preference === DayPreference.PARTICIPANT_PREFERENCE &&
+      time_preference !== TimePreference.PARTICIPANT_PREFERENCE) ||
+    (time_preference === TimePreference.PARTICIPANT_PREFERENCE &&
+      day_preference !== DayPreference.PARTICIPANT_PREFERENCE)
+  ) {
+    return {
+      isValid: false,
+      errorMessage: "Day and time preferences must be consistent",
+    };
+  }
+
+  if (
+    day_preference !== DayPreference.PARTICIPANT_PREFERENCE &&
+    time_preference !== TimePreference.PARTICIPANT_PREFERENCE
+  ) {
     if (
-      dayPreference === null ||
-      (dayPreference !== DayPreference.DAY_RANGE && timePreference === null)
-    ) {
-      return {
-        isValid: false,
-        errorMessage: "Day and time preferences are required",
-      };
-    }
-    if (
-      dayPreference === DayPreference.PARTICIPANT_PREFERENCE ||
-      timePreference === TimePreference.PARTICIPANT_PREFERENCE
-    ) {
-      return {
-        isValid: false,
-        errorMessage: "Invalid day or time preference",
-      };
-    }
-    if (
-      dayPreference === DayPreference.DAY_RANGE &&
-      timePreference !== TimePreference.ANYTIME
+      day_preference === DayPreference.DAY_RANGE &&
+      time_preference !== TimePreference.ANYTIME
     ) {
       return {
         isValid: false,
         errorMessage: "Anyday tasks must also be anytime tasks",
       };
     }
-    if (dayPreference === DayPreference.DAY_RANGE && days.length <= 1) {
+    if (day_preference === DayPreference.DAY_RANGE && days.length <= 1) {
       return { isValid: false, errorMessage: "Invalid day range" };
     }
     if (
-      dayPreference === DayPreference.EVERY_SELECTED_DAYS &&
+      day_preference === DayPreference.EVERY_SELECTED_DAYS &&
       days.length === 0
     ) {
       return {
@@ -69,14 +85,14 @@ export function isValidTask(
         errorMessage: "Please specify at least one day",
       };
     }
-    if (timePreference === TimePreference.SPECIFIC) {
-      if (startTime === null || endTime === null) {
+    if (time_preference === TimePreference.SPECIFIC) {
+      if (!start_time || !end_time) {
         return {
           isValid: false,
           errorMessage: "Start and end times are required",
         };
       }
-      if (startTime >= endTime) {
+      if (new Date(start_time) >= new Date(end_time)) {
         return {
           isValid: false,
           errorMessage: "Start time should be earlier than end time",
@@ -93,79 +109,48 @@ type StartAndEndDates = {
   endDate: Date;
 };
 
-export function getStartAndEndDates(
-  dayPreference: DayPreference,
-  days: DayOfWeek[],
-  timePreference: TimePreference,
-  startTime: Date | null,
-  endTime: Date | null
-): StartAndEndDates[] {
-  if (dayPreference === DayPreference.DAILY) {
-    return DAYS.map((day: DayOfWeek) => {
-      const baseDate = addDays(startOfWeek(now()), DAYS.indexOf(day));
+export function getStartAndEndDates(task: Task): StartAndEndDates[] {
+  const { day_preference, time_preference, days, start_time, end_time } = task;
 
-      if (
-        timePreference === TimePreference.SPECIFIC &&
-        startTime !== null &&
-        endTime !== null
-      ) {
-        const startDate = set(baseDate, {
-          hours: startTime.getHours(),
-          minutes: startTime.getMinutes(),
-          seconds: startTime.getSeconds(),
-          milliseconds: startTime.getMilliseconds(),
-        });
-
-        const endDate = set(baseDate, {
-          hours: endTime.getHours(),
-          minutes: endTime.getMinutes(),
-          seconds: endTime.getSeconds(),
-          milliseconds: endTime.getMilliseconds(),
-        });
-
-        return { startDate, endDate };
-      }
-
-      const startDate = startOfDay(baseDate);
-      const endDate = addDays(startDate, 1);
-      return { startDate, endDate };
-    });
-  }
-  if (dayPreference === DayPreference.EVERY_SELECTED_DAYS) {
-    return days.map((day: DayOfWeek) => {
-      const baseDate = addDays(startOfWeek(now()), DAYS.indexOf(day));
-
-      if (
-        timePreference === TimePreference.SPECIFIC &&
-        startTime !== null &&
-        endTime !== null
-      ) {
-        const startDate = set(baseDate, {
-          hours: startTime.getHours(),
-          minutes: startTime.getMinutes(),
-          seconds: startTime.getSeconds(),
-          milliseconds: startTime.getMilliseconds(),
-        });
-
-        const endDate = set(baseDate, {
-          hours: endTime.getHours(),
-          minutes: endTime.getMinutes(),
-          seconds: endTime.getSeconds(),
-          milliseconds: endTime.getMilliseconds(),
-        });
-
-        return { startDate, endDate };
-      }
-
-      const startDate = startOfDay(baseDate);
-      const endDate = addDays(startDate, 1);
-      return { startDate, endDate };
-    });
+  if (
+    day_preference === DayPreference.PARTICIPANT_PREFERENCE ||
+    time_preference === TimePreference.PARTICIPANT_PREFERENCE
+  ) {
+    throw new Error(
+      "Day and time preferences must be strictly defined to determine start and end dates"
+    );
   }
 
-  const startDate = addDays(startOfWeek(now()), DAYS.indexOf(days[0]));
+  const now = new Date();
+  const weekStart = startOfWeek(now);
 
-  const endDate = addDays(startOfWeek(now()), DAYS.indexOf(days[1]) + 1);
+  const startTime: Date = start_time ? new Date(start_time) : startOfDay(now);
+  const endTime: Date = end_time ? new Date(end_time) : endOfDay(now);
 
-  return [{ startDate, endDate }];
+  const startAndEndDates: StartAndEndDates[] = [];
+  if (day_preference === DayPreference.DAILY) {
+    DAYS.forEach((day: DayOfWeek) => {
+      const baseDate = addDays(weekStart, DAYS.indexOf(day));
+      const startDate = combineDayAndTime(baseDate, startTime);
+      const endDate = combineDayAndTime(baseDate, endTime);
+      startAndEndDates.push({ startDate, endDate });
+    });
+  } else if (day_preference === DayPreference.EVERY_SELECTED_DAYS) {
+    task.days.forEach((day: DayOfWeek) => {
+      const baseDate = addDays(weekStart, DAYS.indexOf(day));
+      const startDate = combineDayAndTime(baseDate, startTime);
+      const endDate = combineDayAndTime(baseDate, endTime);
+      startAndEndDates.push({ startDate, endDate });
+    });
+  } else if (day_preference === DayPreference.DAY_RANGE) {
+    if (days.length <= 1) {
+      throw new Error("Day range should contain at least two days");
+    }
+    const baseStartDate = addDays(weekStart, DAYS.indexOf(days[0]));
+    const baseEndDate = addDays(weekStart, DAYS.indexOf(days[days.length - 1]));
+    const startDate = combineDayAndTime(baseStartDate, startTime);
+    const endDate = combineDayAndTime(baseEndDate, endTime);
+    startAndEndDates.push({ startDate, endDate });
+  }
+  return startAndEndDates;
 }

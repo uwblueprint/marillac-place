@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
-import {
-  isSameDay,
-  startOfWeek,
-  addDays,
-  differenceInCalendarDays,
-  isEqual,
-  startOfDay,
-} from "date-fns";
+import { isSameDay, startOfWeek, addDays } from "date-fns";
 import { AssignedTask } from "../../../../types/models";
 import DataTable, { Column, Row } from "../../../../ui/misc/DataTable";
 import { DayOfWeek } from "../../../../types/enums";
-import { formatTimeStringUTC, now } from "../../../../helpers/formatDateTime";
+import { formatDateV2 } from "../../../../helpers/formatDateTime";
 import { DAYS } from "../../../../constants/days";
 import TaskStatusDisplay from "../../../../ui/misc/TaskStatusDisplay";
 import { formatCurrency } from "../../../../helpers/formatCurrency";
 import { Marker } from "../../../../ui/icons/ActionIcons";
 import { toTitleCase } from "../../../../helpers/stringUtils";
+import { isAllDayTask } from "../../../../helpers/taskHelpers";
 
 interface DailyTasksTableProps {
   tasks: AssignedTask[];
@@ -30,7 +24,9 @@ export default function DailyTasksTable({
   error,
   loading,
 }: DailyTasksTableProps) {
-  const [chosenDay, setChosenDay] = useState<DayOfWeek>(DAYS[now().getDay()]);
+  const [chosenDay, setChosenDay] = useState<DayOfWeek>(
+    DAYS[new Date().getDay()]
+  );
 
   const columns: Column[] = [
     { header: "Name", width: "22%" },
@@ -42,18 +38,11 @@ export default function DailyTasksTable({
 
   const [rows, setRows] = useState<Row[][]>([]);
 
-  function isDailyAnytimeTask(task: AssignedTask): boolean {
-    return (
-      differenceInCalendarDays(task.end_date, task.start_date) === 1 &&
-      isEqual(task.end_date, startOfDay(task.end_date))
-    );
-  }
-
   function isDailyTask(task: AssignedTask, day: DayOfWeek): boolean {
-    const chosenDate = addDays(startOfWeek(now()), DAYS.indexOf(day));
+    const chosenDate = addDays(startOfWeek(new Date()), DAYS.indexOf(day));
     return (
-      isSameDay(task.start_date, chosenDate) &&
-      (isSameDay(task.start_date, task.end_date) || isDailyAnytimeTask(task))
+      isSameDay(new Date(task.start_date), chosenDate) &&
+      isSameDay(new Date(task.end_date), chosenDate)
     );
   }
 
@@ -74,10 +63,10 @@ export default function DailyTasksTable({
             action: () => {},
           },
           {
-            element: isDailyAnytimeTask(task)
+            element: isAllDayTask(task)
               ? "Anytime"
-              : `${formatTimeStringUTC(task.start_date)} - ${formatTimeStringUTC(
-                  task.end_date
+              : `${formatDateV2(new Date(task.start_date))} - ${formatDateV2(
+                  new Date(task.end_date)
                 )}`,
           },
           {
@@ -90,7 +79,7 @@ export default function DailyTasksTable({
         ])
     );
   }, [chosenDay, tasks]);
-
+  
   return (
     <Flex flexDir="column" w="100%">
       <Flex w="100%" alignItems="center" justifyContent="center">
