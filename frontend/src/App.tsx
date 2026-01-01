@@ -20,10 +20,10 @@ import AdminBadgesPage from "./admin/pages/badges/Main";
 import AdminReportsPage from "./admin/pages/reports/Main";
 
 import ParticipantLoginPage from "./participant/pages/login/Main";
-// import ParticipantHomePage from "./participant/pages/home/Main";
+import ParticipantsHomePage from "./participant/pages/home/Main";
 // import ParticipantSchedulePage from "./participant/pages/schedule/Main";
-// import ParticipantAnnouncementsPage from "./participant/pages/announcements/Main";
-// import ParticipantProgressPage from "./participant/pages/progress/Main";
+import ParticipantsAnnouncementsPage from "./participant/pages/announcements/Main";
+import ParticipantsProgressPage from "./participant/pages/progress/Main";
 
 import * as ROUTES from "./constants/routes";
 import AdminRoute from "./admin/AdminRoute";
@@ -148,31 +148,11 @@ const App = (): React.ReactElement => {
                 path={ROUTES.PARTICIPANTS_LOGIN_PAGE}
                 element={<ParticipantLoginPage />}
               />
-            </Route>
-            {/* 
-              <Route
-                path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
-                element={
-                  <AdminRoute>
-                    <AdminParticipantsPage />
-                  </AdminRoute>
-                }
-              />
-            </Route>
-            <Route element={<ParticipantLayout />}>
               <Route
                 path={ROUTES.PARTICIPANTS_HOME_PAGE}
                 element={
                   <ParticipantRoute>
-                    <ParticipantHomePage />
-                  </ParticipantRoute>
-                }
-              />
-              <Route
-                path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE}
-                element={
-                  <ParticipantRoute>
-                    <ParticipantSchedulePage />
+                    <ParticipantsHomePage />
                   </ParticipantRoute>
                 }
               />
@@ -180,7 +160,7 @@ const App = (): React.ReactElement => {
                 path={ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE}
                 element={
                   <ParticipantRoute>
-                    <ParticipantAnnouncementsPage />
+                    <ParticipantsAnnouncementsPage />
                   </ParticipantRoute>
                 }
               />
@@ -188,11 +168,11 @@ const App = (): React.ReactElement => {
                 path={ROUTES.PARTICIPANTS_PROGRESS_PAGE}
                 element={
                   <ParticipantRoute>
-                    <ParticipantProgressPage />
+                    <ParticipantsProgressPage />
                   </ParticipantRoute>
                 }
               />
-            </Route> */}
+            </Route>
 
             <Route path="/ui" element={<UI />} />
             <Route path="*" element={<NotFoundScreen />} />
