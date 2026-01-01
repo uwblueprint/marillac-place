@@ -1,11 +1,12 @@
 import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_HOME_PAGE, PARTICIPANTS_HOME_PAGE } from "../../constants/routes";
+import {
+  ADMIN_HOME_PAGE,
+  PARTICIPANTS_HOME_PAGE,
+} from "../../constants/routes";
 import GreenOutlineButton from "../buttons/GreenOutlineButton";
 
-// TODO: verify this screen is for properly formatted on mobile and web + add contact support information
-// Add to UI page
 export default function NotFoundScreen() {
   const navigate = useNavigate();
 
@@ -34,8 +35,18 @@ export default function NotFoundScreen() {
         </Text>
         <Text textStyle="web.b2" color="text.light.primary" textAlign="center">
           Sorry! The page you are looking for does not exist. If you think
-          something is broken, please report a problem.
+          something is broken, please contact support via our{" "}
+          <a
+            href="https://marillacplace.ca/contact/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#0C727E", textDecoration: "underline" }}
+          >
+            contact page
+          </a>
+          .
         </Text>
+
         <GreenOutlineButton
           label="Return to Home"
           action={() => handleClick()}
