@@ -2,14 +2,14 @@ import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import getSchema from "./gql/schema";
-import { current } from "./utils/dateUtils";
+import { getESTDate, getUTCDate } from "./utils/dateUtils";
 
 require("./crons/index");
 
 const app = express();
 
 app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok", timestamp: current() });
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
 const schema = getSchema();

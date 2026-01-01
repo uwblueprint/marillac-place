@@ -10,14 +10,14 @@ import {
   FIRST_GOAL,
   INDIVIDUAL_GOAL,
 } from "../../constants/systemBadges";
-import { current } from "../../utils/dateUtils";
+import { getEndOfDay, getEndOfWeek, getStartOfDay, getStartOfWeek } from "../../utils/dateUtils";
 
 const assignedTaskResolver = {
   Query: {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
       const currentParticipants = await db.participant.findMany({
         where: {
-          OR: [{ departure: null }, { departure: { gt: endOfDay(current()).toISOString() } }],
+          OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
         },
         select: {
           pid: true,
@@ -60,8 +60,8 @@ const assignedTaskResolver = {
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfDay(current()).toISOString() },
-          end_date: { gte: startOfDay(current()).toISOString() },
+          start_date: { lte: getEndOfDay(new Date()) },
+          end_date: { gte: getStartOfDay(new Date()) },
         },
       });
     },
@@ -75,10 +75,11 @@ const assignedTaskResolver = {
         weekStart: string;
       }
     ): Promise<AssignedTask[]> => {
+      const weekStartDate = new Date(weekStart);
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfWeek(weekStart).toISOString() },
+          start_date: { lte: getEndOfWeek(weekStartDate) },
           end_date: { gte: weekStart },
         },
       });
@@ -96,8 +97,8 @@ const assignedTaskResolver = {
           pid,
           type: TaskType.REQUIRED,
           status: { not: TaskStatus.COMPLETE },
-          start_date: { lte: endOfWeek(current()).toISOString() },
-          end_date: { gte: startOfWeek(current()).toISOString() },
+          start_date: { lte: getEndOfWeek(new Date()) },
+          end_date: { gte: getStartOfWeek(new Date()) },
         },
       });
 
@@ -137,8 +138,8 @@ const assignedTaskResolver = {
           type,
           value,
           penalty,
-          start_date,
-          end_date,
+          start_date: new Date(start_date),
+          end_date: new Date(end_date),
           comment,
         },
       });
@@ -173,8 +174,8 @@ const assignedTaskResolver = {
       if (type !== undefined) updates.type = type;
       if (value !== undefined) updates.value = value;
       if (penalty !== undefined) updates.penalty = penalty;
-      if (start_date !== undefined) updates.start_date = start_date;
-      if (end_date !== undefined) updates.end_date = end_date;
+      if (start_date !== undefined) updates.start_date = new Date(start_date);
+      if (end_date !== undefined) updates.end_date = new Date(end_date);
       if (comment !== undefined) updates.comment = comment;
 
       const isEmpty = Object.keys(updates).length === 0;
@@ -216,8 +217,8 @@ const assignedTaskResolver = {
               where: {
                 pid: assignedTask.pid,
                 status: { not: TaskStatus.COMPLETE },
-                start_date: { lte: endOfWeek(current()).toISOString() },
-                end_date: { gte: startOfWeek(current()).toISOString() },
+                start_date: { lte: getEndOfWeek(new Date()) },
+                end_date: { gte: getStartOfWeek(new Date()) },
                 type: TaskType.REQUIRED,
               },
             }
@@ -234,8 +235,8 @@ const assignedTaskResolver = {
           const countCompletedOptionalTasks = await db.assignedTask.count({
             where: {
               pid: assignedTask.pid,
-              start_date: { lte: endOfWeek(current()).toISOString() },
-              end_date: { gte: startOfWeek(current()).toISOString() },
+              start_date: { lte: getEndOfWeek(new Date()) },
+              end_date: { gte: getStartOfWeek(new Date()) },
               type: TaskType.OPTIONAL,
               status: TaskStatus.COMPLETE,
             },
@@ -255,8 +256,8 @@ const assignedTaskResolver = {
                 pid: assignedTask.pid,
                 type: TaskType.INDIVIDUAL_GOAL,
                 status: { not: TaskStatus.COMPLETE },
-                start_date: { lte: endOfWeek(current()).toISOString() },
-                end_date: { gte: startOfWeek(current()).toISOString() },
+                start_date: { lte: getEndOfWeek(new Date()) },
+                end_date: { gte: getStartOfWeek(new Date()) },
               },
             }
           );

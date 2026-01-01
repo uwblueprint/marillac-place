@@ -1,5 +1,4 @@
 import { Level } from "@prisma/client";
-import { endOfDay } from "date-fns";
 import db from "../prisma";
 import {
   SYSTEM_BADGES,
@@ -7,7 +6,7 @@ import {
   PR_LEADER,
 } from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
-import { current } from "./dateUtils";
+import { getEndOfDay } from "./dateUtils";
 
 async function getNextBadgeLevel(name: string, level: Level) {
   const levels = [
@@ -71,7 +70,7 @@ export async function updateBadgeLevelProgress(
     newAmount >= badgeLevelProgress.badge_level.benchmark;
   if (reachedBenchmark) {
     await db.achievedBadgeLevel.create({
-      data: { name, level: badgeLevelProgress.level, pid, date: current() },
+      data: { name, level: badgeLevelProgress.level, pid },
     });
 
     const prLeaderProgress = await db.badgeLevelProgress.findFirst({
@@ -94,8 +93,7 @@ export async function updateBadgeLevelProgress(
           data: {
             name: PR_LEADER,
             level: prLeaderProgress.level,
-            pid,
-            date: current(),
+            pid
           },
         });
 
@@ -152,7 +150,7 @@ export async function updateBadgeLevelProgress(
 export async function validateBadgeLevelProgress(name: string) {
   const currentParticipants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: endOfDay(current()).toISOString() } }],
+      OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
     },
   });
 

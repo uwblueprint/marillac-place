@@ -1,6 +1,5 @@
 import { Note } from "@prisma/client";
 import db from "../../prisma";
-import { current } from "../../utils/dateUtils";
 
 const noteResolver = {
   Query: {
@@ -20,7 +19,7 @@ const noteResolver = {
       }
     ): Promise<Note> => {
       return db.note.create({
-        data: { message, date: current() },
+        data: { message },
       });
     },
     deleteNote: async (

@@ -1,7 +1,7 @@
 import { GoalAction, Level, TaskStatus, TransactionType } from "@prisma/client";
 import { endOfMonth, endOfWeek, startOfMonth, startOfWeek } from "date-fns";
 import db from "../prisma";
-import { current } from "./dateUtils";
+import { getEndOfMonth, getEndOfWeek, getStartOfMonth, getStartOfWeek } from "./dateUtils";
 
 export enum ReportType {
   WEEKLY = "Weekly",
@@ -69,13 +69,13 @@ const dateFormatter = new Intl.DateTimeFormat("en-CA", {
 
 function calculateDateRange(type: ReportType) {
   if (type === ReportType.WEEKLY) {
-    const startDate = startOfWeek(current());
-    const endDate = endOfWeek(current());
+    const startDate = getStartOfWeek(new Date());
+    const endDate = getEndOfWeek(new Date());
     return { startDate, endDate };
   }
 
-  const startDate = startOfMonth(current());
-  const endDate = endOfMonth(current());
+  const startDate = getStartOfMonth(new Date());
+  const endDate = getEndOfMonth(new Date());
   return { startDate, endDate };
 }
 

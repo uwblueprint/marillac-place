@@ -5,7 +5,7 @@ import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
-import { current } from "../../utils/dateUtils";
+import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
 
 type LoginResponse = {
   token: string;
@@ -54,7 +54,7 @@ const loginResolver = {
       const participant: Participant | null = await db.participant.findUnique({
         where: {
           pid,
-          OR: [{ departure: null }, { departure: { gt: endOfDay(current()).toISOString() } }],
+          OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
         },
       });
 
@@ -70,8 +70,8 @@ const loginResolver = {
         where: {
           pid,
           date: {
-            gte: startOfDay(current()).toISOString(),
-            lte: endOfDay(current()).toISOString(),
+            gte: getStartOfDay(new Date()),
+            lte: getEndOfDay(new Date()),
           },
         },
       });
@@ -79,7 +79,7 @@ const loginResolver = {
         await updateBadgeLevelProgress(LOGIN, pid, 1);
       }
 
-      await db.loginHistory.create({ data: { pid, date: current() } });
+      await db.loginHistory.create({ data: { pid } });
 
       const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
         expiresIn: "12h",

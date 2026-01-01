@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import { ReportType } from "./reportUtils";
-import { current } from "./dateUtils";
 
 // TODO: get smtp env vars
 const transporter = nodemailer.createTransport({

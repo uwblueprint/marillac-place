@@ -60,8 +60,8 @@ const taskResolver = {
           day_preference,
           days,
           time_preference,
-          start_time: start_time,
-          end_time: end_time,
+          start_time: start_time ? new Date(start_time) : null,
+          end_time: end_time ? new Date(end_time) : null,
           comment,
         },
       });
@@ -107,8 +107,8 @@ const taskResolver = {
       if (days !== undefined) updates.days = days;
       if (time_preference !== undefined)
         updates.time_preference = time_preference;
-      if (start_time !== undefined) updates.start_time = start_time;
-      if (end_time !== undefined) updates.end_time = end_time;
+      if (start_time !== undefined) updates.start_time = new Date(start_time);
+      if (end_time !== undefined) updates.end_time = new Date(end_time);
       if (comment !== undefined) updates.comment = comment;
 
       const isEmpty = Object.keys(updates).length === 0;

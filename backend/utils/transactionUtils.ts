@@ -2,7 +2,6 @@ import { GoalAction } from "@prisma/client";
 import db from "../prisma";
 import { updateBadgeLevelProgress } from "./badgeUtils";
 import { MONEY_EARNED } from "../constants/systemBadges";
-import { current } from "./dateUtils";
 
 export default async function processEarning(
   pid: number,
@@ -36,12 +35,12 @@ export default async function processEarning(
     earningGoal.value <= newEarnings
   ) {
     await db.earningGoal.create({
-      data: { pid, action: GoalAction.REACHED, value: earningGoal.value, date: current() },
+      data: { pid, action: GoalAction.REACHED, value: earningGoal.value },
     });
   }
 
   await db.transaction.create({
-    data: { pid, amount, reason, date: current() },
+    data: { pid, amount, reason },
   });
 
   await updateBadgeLevelProgress(MONEY_EARNED, pid, amount);
