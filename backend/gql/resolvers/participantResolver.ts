@@ -1,7 +1,8 @@
-import { Participant } from "@prisma/client";
+import { Participant, TaskType } from "@prisma/client";
 import db from "../../prisma";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
 import { getEndOfDay } from "../../utils/dateUtils";
+import { assignTasksToParticipants } from "../../utils/taskUtils";
 
 const participantResolver = {
   Query: {
@@ -82,6 +83,11 @@ const participantResolver = {
         },
       });
       await initBadgeLevelProgress(pid);
+
+      const requiredTasks = await db.task.findMany({
+        where: { type: TaskType.REQUIRED },
+      });
+      await assignTasksToParticipants(requiredTasks, [pid]);
       return participant;
     },
     updateParticipant: async (

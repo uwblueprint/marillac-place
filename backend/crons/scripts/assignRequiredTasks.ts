@@ -1,6 +1,6 @@
 import { Task, TaskType } from "@prisma/client";
 import db from "../../prisma";
-import { assignTasksToAllParticipants } from "../../utils/taskUtils";
+import { assignTasksToParticipants } from "../../utils/taskUtils";
 
 // assigns all required tasks to each participant for the current week
 async function assignRequiredTasks() {
@@ -8,7 +8,7 @@ async function assignRequiredTasks() {
     const requiredTasks: Task[] = await db.task.findMany({
       where: { type: TaskType.REQUIRED },
     });
-    assignTasksToAllParticipants(requiredTasks);
+    assignTasksToParticipants(requiredTasks);
     console.log("successfully assigned required tasks to participants");
   } catch (err) {
     console.error(err);

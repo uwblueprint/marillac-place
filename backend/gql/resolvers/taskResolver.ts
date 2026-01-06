@@ -6,7 +6,7 @@ import {
   TimePreference,
 } from "@prisma/client";
 import db from "../../prisma";
-import { assignTasksToAllParticipants } from "../../utils/taskUtils";
+import { assignTasksToParticipants } from "../../utils/taskUtils";
 
 const taskResolver = {
   Query: {
@@ -66,7 +66,7 @@ const taskResolver = {
         },
       });
       if (type === TaskType.REQUIRED) {
-        await assignTasksToAllParticipants([newTask]);
+        await assignTasksToParticipants([newTask]);
       }
       return newTask;
     },

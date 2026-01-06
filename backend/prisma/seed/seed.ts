@@ -4,7 +4,7 @@ import { badgeLevels, systemBadges, tasks } from "./initialData";
 import db from "../index";
 import * as random from "./random";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
-import { assignTasksToAllParticipants } from "../../utils/taskUtils";
+import { assignTasksToParticipants } from "../../utils/taskUtils";
 
 async function initDb() {
   const systemBadgeCount = await db.systemBadge.count();
@@ -55,7 +55,7 @@ async function generateMockData(seed: any) {
   const requiredTasks = await db.task.findMany({
     where: { type: TaskType.REQUIRED },
   });
-  await assignTasksToAllParticipants(requiredTasks);
+  await assignTasksToParticipants(requiredTasks);
 }
 
 const main = async () => {

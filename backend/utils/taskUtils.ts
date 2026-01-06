@@ -77,16 +77,22 @@ function buildStartAndEndDates(task: Task): StartAndEndDates[] {
   return startAndEndDates;
 }
 
-export async function assignTasksToAllParticipants(tasks: Task[]) {
-  const participants = await db.participant.findMany({
-    where: {
-      OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
-    },
-    select: { pid: true },
-  });
+export async function assignTasksToParticipants(tasks: Task[], pids?: number[]) {
+  let participantPids: number[];
+  if (pids) {
+    participantPids = pids;
+  } else {
+    const participants = await db.participant.findMany({
+      where: {
+        OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+      },
+      select: { pid: true },
+    });
+    participantPids = participants.map((p) => p.pid);
+  }
 
   await Promise.all(
-    participants.map(async (participant) => {
+    participantPids.map(async (pid) => {
       await Promise.all(
         tasks.map(async (task) => {
           const startAndEndDates = buildStartAndEndDates(task);
@@ -94,7 +100,7 @@ export async function assignTasksToAllParticipants(tasks: Task[]) {
             startAndEndDates.map(async ({ startDate, endDate }) => {
               await db.assignedTask.create({
                 data: {
-                  pid: participant.pid,
+                  pid,
                   tid: task.tid,
                   name: task.name,
                   type: task.type,

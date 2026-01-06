@@ -59,6 +59,9 @@ import {
 import Badge from "./misc/BadgeProgress";
 import TaskStatusDisplay from "./misc/TaskStatusDisplay";
 import ToggleButton from "./buttons/ToggleButton";
+import LoadingScreen from "./screens/LoadingScreen";
+import ErrorScreen from "./screens/ErrorScreen";
+import NotFoundScreen from "./screens/NotFoundScreen";
 import { DisplayView } from "../constants/views";
 
 export default function UI() {
@@ -236,7 +239,6 @@ export default function UI() {
       <Text textStyle="web.h1" color="primary.700">
         Marillac Place UI Components
       </Text>
-
       <Text textStyle="web.h3">Buttons</Text>
       <Flex flexDir="row" gap="10px">
         <BlackOutlineButton
@@ -294,7 +296,6 @@ export default function UI() {
       </Flex>
       <UnderlineButton label="UnderlineButton" action={() => {}} />
       <ToggleButton active={toggleActive} setActive={setToggleActive} />
-
       <Text textStyle="web.h3">Containers</Text>
       <Flex flexDir="row" gap="10px">
         <WidgetContainer
@@ -399,7 +400,6 @@ export default function UI() {
           </PopupContainer>
         )}
       </Flex>
-
       <Text textStyle="web.h3">Badges</Text>
       <Flex flexDir="row" gap="10px">
         <Badge icon={Icon.BABY} level={Level.NOVICE} percentageComplete={50} />
@@ -416,7 +416,6 @@ export default function UI() {
           percentageComplete={25}
         />
       </Flex>
-
       <Text textStyle="web.h3">Icons</Text>
       <Flex
         width="fit-content"
@@ -467,7 +466,6 @@ export default function UI() {
         <Excused />
         <Incomplete />
       </Flex>
-
       <Text textStyle="web.h3">Inputs</Text>
       <Flex flexDir="row" gap="10px">
         <FixedInput
@@ -544,7 +542,6 @@ export default function UI() {
         update_action={setSelect}
         value_options={options}
       />
-
       <Text textStyle="web.h3">Date Options</Text>
       <UnderlineButton
         label="Show DateOptions"
@@ -578,7 +575,6 @@ export default function UI() {
           />
         </PopupContainer>
       )}
-
       <Text textStyle="web.h3">Task Status Display</Text>
       <Flex flexDir="row" gap="10px">
         <TaskStatusDisplay status={TaskStatus.ASSIGNED} />
@@ -586,7 +582,6 @@ export default function UI() {
         <TaskStatusDisplay status={TaskStatus.INCOMPLETE} />
         <TaskStatusDisplay status={TaskStatus.COMPLETE} />
       </Flex>
-
       <Text textStyle="web.h3">Calendar (Web)</Text>
       <Box width="1000px">
         <MarillacPlaceCalendar
@@ -596,7 +591,6 @@ export default function UI() {
           view={DisplayView.WEB}
         />
       </Box>
-
       <Text textStyle="web.h3">Calendar (Mobile)</Text>
       <Box width="400px">
         <MarillacPlaceCalendar
@@ -606,7 +600,6 @@ export default function UI() {
           view={DisplayView.MOBILE}
         />
       </Box>
-
       <Text textStyle="web.h3">Data Table</Text>
       <Box width="800px">
         <DataTable
@@ -631,6 +624,18 @@ export default function UI() {
           columns={dataTableColumns}
           rows={dataTableRows}
         />
+      </Box>
+      <Text textStyle="web.h3">Loading Screen</Text>
+      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
+        <LoadingScreen message="Loading..." />
+      </Box>
+      <Text textStyle="web.h3">Not Found Screen</Text>
+      <Box width="1000px" outline="1px solid black" padding="20px">
+        <NotFoundScreen />
+      </Box>
+      <Text textStyle="web.h3">Error Screen</Text>
+      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
+        <ErrorScreen message="An error has occurred." />
       </Box>
     </Flex>
   );
