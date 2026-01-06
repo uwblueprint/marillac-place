@@ -1,14 +1,13 @@
 import jwt from "jsonwebtoken";
 import { Participant } from "@prisma/client";
-import { endOfDay, startOfDay } from "date-fns";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
+import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
 
 type LoginResponse = {
   token: string;
-  pid?: number;
 };
 
 const loginResolver = {
@@ -56,7 +55,7 @@ const loginResolver = {
           pid,
           OR: [
             { departure: null },
-            { departure: { gt: endOfDay(new Date()) } },
+            { departure: { gt: getEndOfDay(new Date()) } },
           ],
         },
       });
@@ -73,8 +72,8 @@ const loginResolver = {
         where: {
           pid,
           date: {
-            gte: startOfDay(new Date()),
-            lte: endOfDay(new Date()),
+            gte: getStartOfDay(new Date()),
+            lte: getEndOfDay(new Date()),
           },
         },
       });
@@ -87,7 +86,7 @@ const loginResolver = {
       const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
         expiresIn: "12h",
       });
-      return { token, pid };
+      return { token };
     },
   },
 };

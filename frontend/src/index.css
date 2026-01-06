@@ -102,6 +102,7 @@
 .rbc-time-content {
   border-right: 1px solid var(--border-color) !important;
   border-top: none !important;
+  overflow-y: hidden !important;
 }
 
 .rbc-button-link {
@@ -175,7 +176,7 @@
   overflow-y: auto !important;
   overflow-x: hidden !important;
   flex: 1 !important;
-  height: 0 !important;
+  height: 100% !important;
   min-height: 0 !important;
   max-height: none !important;
 }

@@ -1,7 +1,7 @@
 import { Divider, Flex, Text } from "@chakra-ui/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { formatDateTimeString } from "../../../../helpers/formatDateTime";
+import { formatDateV3 } from "../../../../helpers/formatDateTime";
 import { ExclamationMark, Dot } from "../../../../ui/icons/NotificationIcons";
 import { Pin } from "../../../../ui/icons/ActionIcons";
 import GreenOutlineButton from "../../../../ui/buttons/GreenOutlineButton";
@@ -168,7 +168,7 @@ export default function AnnouncementsExpandedView({
           )}
         </Flex>
         <Text textStyle="mobile.b1" color="text.light.secondary">
-          {formatDateTimeString(announcement.date)}
+          {formatDateV3(new Date(announcement.date))}
         </Text>
       </Flex>
 

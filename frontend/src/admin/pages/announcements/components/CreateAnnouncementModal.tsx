@@ -12,7 +12,7 @@ import { Priority } from "../../../../types/enums";
 
 const CreateAnnouncementModal = ({
   onClose,
-  refetch
+  refetch,
 }: {
   onClose: () => void;
   refetch: () => void;
@@ -22,7 +22,8 @@ const CreateAnnouncementModal = ({
   const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const [createAnnouncement, { loading: createAnnouncementLoading }] = useMutation(CREATE_ANNOUNCEMENT);
+  const [createAnnouncement, { loading: createAnnouncementLoading }] =
+    useMutation(CREATE_ANNOUNCEMENT);
   const { roomToParticipant } = useContext(AdminContext);
 
   const handleSend = async () => {

@@ -6,7 +6,7 @@ import {
   TimePreference,
 } from "@prisma/client";
 import db from "../../prisma";
-import { assignTasksToAllParticipants } from "../../utils/taskUtils";
+import { assignTasksToParticipants } from "../../utils/taskUtils";
 
 const taskResolver = {
   Query: {
@@ -20,6 +20,7 @@ const taskResolver = {
     ): Promise<Task[]> => {
       return db.task.findMany({
         where: { type },
+        orderBy: { tid: "asc" },
       });
     },
   },
@@ -45,8 +46,8 @@ const taskResolver = {
         day_preference: DayPreference;
         days: DayOfWeek[];
         time_preference: TimePreference;
-        start_time?: Date;
-        end_time?: Date;
+        start_time?: string;
+        end_time?: string;
         comment?: string;
       }
     ): Promise<Task> => {
@@ -59,13 +60,13 @@ const taskResolver = {
           day_preference,
           days,
           time_preference,
-          start_time,
-          end_time,
+          start_time: start_time ? new Date(start_time) : null,
+          end_time: end_time ? new Date(end_time) : null,
           comment,
         },
       });
       if (type === TaskType.REQUIRED) {
-        await assignTasksToAllParticipants([newTask]);
+        await assignTasksToParticipants([newTask]);
       }
       return newTask;
     },
@@ -92,12 +93,12 @@ const taskResolver = {
         day_preference?: DayPreference;
         days?: DayOfWeek[];
         time_preference?: TimePreference;
-        start_time?: Date;
-        end_time?: Date;
+        start_time?: string;
+        end_time?: string;
         comment?: string;
       }
     ): Promise<Task> => {
-      const updates: Partial<Task> = {};
+      const updates: any = {};
       if (type !== undefined) updates.type = type;
       if (name !== undefined) updates.name = name;
       if (value !== undefined) updates.value = value;
@@ -106,8 +107,8 @@ const taskResolver = {
       if (days !== undefined) updates.days = days;
       if (time_preference !== undefined)
         updates.time_preference = time_preference;
-      if (start_time !== undefined) updates.start_time = start_time;
-      if (end_time !== undefined) updates.end_time = end_time;
+      if (start_time !== undefined) updates.start_time = new Date(start_time);
+      if (end_time !== undefined) updates.end_time = new Date(end_time);
       if (comment !== undefined) updates.comment = comment;
 
       const isEmpty = Object.keys(updates).length === 0;

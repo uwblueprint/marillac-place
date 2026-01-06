@@ -3,6 +3,7 @@ import { Announcement, ReceivedAnnouncement } from "../types/models";
 
 export function toTitleCase(str: string): string {
   return str
+    .replaceAll("_", " ")
     .toLowerCase()
     .split(" ")
     .filter((word) => word.length > 0)

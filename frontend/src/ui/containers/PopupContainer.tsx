@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import BlackOutlineButton from "../buttons/BlackOutlineButton";
 import OrangeButton from "../buttons/OrangeButton";
+import { Marker, Trash } from "../icons/ActionIcons";
 
 type PopupContainerProps = {
   title: string;
@@ -19,6 +20,8 @@ type PopupContainerProps = {
   system_error?: boolean;
   error_message?: string;
   loading?: boolean;
+  edit_action?: () => void;
+  delete_action?: () => void;
 };
 
 export default function PopupContainer({
@@ -30,6 +33,8 @@ export default function PopupContainer({
   system_error = false,
   error_message = "",
   loading = false,
+  edit_action,
+  delete_action,
 }: PopupContainerProps) {
   return (
     <Modal
@@ -41,7 +46,7 @@ export default function PopupContainer({
       <ModalOverlay />
       <ModalContent
         width="fit-content"
-        minWidth="350px"
+        minWidth="300px"
         maxWidth="550px"
         height="fit-content"
         boxShadow="xl"
@@ -50,9 +55,31 @@ export default function PopupContainer({
         paddingY="20px"
         gap="8px"
       >
-        <Text textStyle="web.h3" mb="4px">
-          {title}
-        </Text>
+        <Flex justifyContent="space-between" alignItems="baseline">
+          <Text textStyle="web.h3" mb="4px" mr="20px">
+            {title}
+          </Text>
+          <Flex gap="5px">
+            {edit_action && (
+              <BlackOutlineButton
+                label="Edit"
+                action={edit_action}
+                is_active={false}
+                text_color="primary.700"
+                icon={<Marker color="primary.700" />}
+              />
+            )}
+            {delete_action && (
+              <BlackOutlineButton
+                label="Delete"
+                action={delete_action}
+                is_active={false}
+                text_color="#E30000"
+                icon={<Trash />}
+              />
+            )}
+          </Flex>
+        </Flex>
 
         {loading ? (
           <Flex

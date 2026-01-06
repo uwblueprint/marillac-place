@@ -3,7 +3,7 @@ import { IconProps } from "../../types/component";
 import useChakraColor from "../../hooks/useChakraColor";
 
 export const Baby: React.FC<IconProps> = ({ size = 16, color = "#808080" }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -19,14 +19,14 @@ export const Baby: React.FC<IconProps> = ({ size = 16, color = "#808080" }) => {
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Diamond: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -47,25 +47,31 @@ export const Diamond: React.FC<IconProps> = ({
         d="M14.8164 21.923L9.87695 8.02441H19.7558L14.8164 21.923Z"
         fill={iconColor}
       />
-      <path d="M4.93941 0L0 8.02435H29.6364L24.697 0H4.93941Z" fill={iconColor} />
+      <path
+        d="M4.93941 0L0 8.02435H29.6364L24.697 0H4.93941Z"
+        fill={iconColor}
+      />
       <path
         d="M4.93941 2.20912e-05L9.87881 8.02437H0L4.93941 2.20912e-05Z"
         fill={iconColor}
       />
-      <path d="M14.8164 0L19.7558 8.02435H9.87695L14.8164 0Z" fill={iconColor} />
+      <path
+        d="M14.8164 0L19.7558 8.02435H9.87695L14.8164 0Z"
+        fill={iconColor}
+      />
       <path
         d="M24.6972 2.20912e-05L29.6366 8.02437H19.7578L24.6972 2.20912e-05Z"
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const DollarSign: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -79,14 +85,14 @@ export const DollarSign: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const FiveStar: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -100,14 +106,14 @@ export const FiveStar: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Flower: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -131,14 +137,14 @@ export const Flower: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const FourStar: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -152,14 +158,14 @@ export const FourStar: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Group: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -173,14 +179,14 @@ export const Group: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Heart: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -194,14 +200,14 @@ export const Heart: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Hexagon: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -215,11 +221,11 @@ export const Hexagon: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Home: React.FC<IconProps> = ({ size = 16, color = "#808080" }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -233,14 +239,14 @@ export const Home: React.FC<IconProps> = ({ size = 16, color = "#808080" }) => {
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Pencil: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -256,14 +262,14 @@ export const Pencil: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Plant: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -284,14 +290,14 @@ export const Plant: React.FC<IconProps> = ({
         </clipPath>
       </defs>
     </svg>
-  )
+  );
 };
 
 export const Tools: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -312,14 +318,14 @@ export const Tools: React.FC<IconProps> = ({
         </clipPath>
       </defs>
     </svg>
-  )
+  );
 };
 
 export const Wings: React.FC<IconProps> = ({
   size = 16,
   color = "#808080",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size * 1.4}
@@ -341,5 +347,5 @@ export const Wings: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };

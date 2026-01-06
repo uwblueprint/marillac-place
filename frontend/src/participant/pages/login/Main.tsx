@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { Button, Flex, Text, Input, FormControl } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { verifyRole } from "../../../helpers/verifyRole";
 import { PARTICIPANT } from "../../../constants/roles";
@@ -25,20 +25,23 @@ export default function ParticipantsLoginPage() {
   const [id, setId] = useState<number | null>(null);
   const [password, setPassword] = useState("");
 
-  const [participantLogin, { loading: participantLoginLoading }] = useMutation(PARTICIPANT_LOGIN, {
-    onCompleted: (data) => {
-      localStorage.setItem("token", data.participantLogin.token);
-      if (!participantContext) {
-        setError("participant context not found");
-        return;
-      }
-      participantContext.setPid(data.participantLogin.pid);
-      navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
-    },
-    onError: (err: Error) => {
-      setError(err.message);
-    },
-  });
+  const [participantLogin, { loading: participantLoginLoading }] = useMutation(
+    PARTICIPANT_LOGIN,
+    {
+      onCompleted: (data) => {
+        localStorage.setItem("token", data.participantLogin.token);
+        if (!participantContext) {
+          setError("participant context not found");
+          return;
+        }
+        participantContext.setPid(data.participantLogin.pid);
+        navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
+      },
+      onError: (err: Error) => {
+        setError(err.message);
+      },
+    }
+  );
 
   useEffect(() => {
     const authenticate = async () => {

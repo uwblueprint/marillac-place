@@ -18,7 +18,12 @@ export async function sendReportEmail(
   reportType: ReportType
 ) {
   try {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const timestamp = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
     const filename = `${reportType.toLowerCase()}-report-${timestamp}.csv`;
 
     const firstLine = csvContent.split("\n")[0];
