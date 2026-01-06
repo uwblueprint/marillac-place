@@ -1,7 +1,10 @@
 import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_HOME_PAGE, PARTICIPANTS_HOME_PAGE } from "../../constants/routes";
+import {
+  ADMIN_HOME_PAGE,
+  PARTICIPANTS_HOME_PAGE,
+} from "../../constants/routes";
 import GreenOutlineButton from "../buttons/GreenOutlineButton";
 
 // TODO: verify this screen is for properly formatted on mobile and web + add contact support information

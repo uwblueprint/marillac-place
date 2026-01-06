@@ -24,7 +24,9 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
 
   const [selectedBadgeId, setSelectedBadgeId] = useState<string>("");
   const [badgeValue, setBadgeValue] = useState<number | null>(null);
-  const [selectedParticipants, setSelectedParticipants] = useState<number[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<number[]>(
+    []
+  );
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [error, setError] = useState("");
 
@@ -55,9 +57,11 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
     } else if (badgeValue < 0) {
       setError("Badge value must be greater than 0");
     } else {
-      const selectedBadge = customBadges.find((customBadge: CustomBadge) =>
-        String(customBadge.cid) === selectedBadgeId
-      ) ?? null;
+      const selectedBadge =
+        customBadges.find(
+          (customBadge: CustomBadge) =>
+            String(customBadge.cid) === selectedBadgeId
+        ) ?? null;
       if (!selectedBadge) {
         setError("Invalid badge");
         return;

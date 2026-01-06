@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { GET_RECEIVED_ANNOUNCEMENTS } from "../../../../gql/receivedAnnouncementRequests";
-import { formatDateTimeString } from "../../../../helpers/formatDateTime";
+import { formatDateV3 } from "../../../../helpers/formatDateTime";
 import { ParticipantContext } from "../../../ParticipantContext";
 import * as ROUTES from "../../../../constants/routes";
 
@@ -55,7 +55,7 @@ export default function AnnouncementWidget() {
                 {announcement.announcement.message}
               </Text>
               <Text textStyle="mobile.b1" color="text.light.secondary">
-                {formatDateTimeString(announcement.announcement.date)}
+                {formatDateV3(new Date(announcement.announcement.date))}
               </Text>
             </Flex>
           )

@@ -2,23 +2,28 @@ import { Flex, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import EditParticipantCard from "./EditParticipantCard";
 import OrangeButton from "../../../../ui/buttons/OrangeButton";
-import { formatDateMonthDayYear } from "../../../../helpers/formatDateTime";
+import { formatDateV6 } from "../../../../helpers/formatDateTime";
+import { Participant } from "../../../../types/models";
 
 type OccupiedRoomCardProps = {
   roomNumber: number;
-  participants: Record<number, any>;
+  participants: Record<number, Participant>;
+  refetchCurrent: () => void;
+  refetchPast: () => void;
 };
 
 const OccupiedRoomCard = ({
   roomNumber,
   participants,
+  refetchCurrent,
+  refetchPast,
 }: OccupiedRoomCardProps) => {
   const [editParticipant, setEditParticipant] = useState(false);
   const id = participants[roomNumber].pid;
   const { arrival } = participants[roomNumber];
   return (
     <Flex
-      height="130px"
+      height="140px"
       border="1px"
       borderColor="neutral.300"
       borderRadius="8px"
@@ -35,7 +40,7 @@ const OccupiedRoomCard = ({
         top={0}
         left={0}
         w="100%"
-        h="30px"
+        h="35px"
         justifyContent="center"
         alignItems="center"
         borderBottom="1px"
@@ -51,10 +56,10 @@ const OccupiedRoomCard = ({
           #{id}
         </Text>
       </Text>
-      <Text textStyle="web.b3">
+      <Text textStyle="web.b3" mb="2px">
         Arrival Date:&nbsp;
         <Text as="span" fontWeight="700">
-          {formatDateMonthDayYear(new Date(arrival))}
+          {formatDateV6(new Date(arrival))}
         </Text>
       </Text>
 
@@ -71,6 +76,8 @@ const OccupiedRoomCard = ({
           roomNumber={roomNumber}
           participants={participants}
           close={() => setEditParticipant(false)}
+          refetchCurrent={refetchCurrent}
+          refetchPast={refetchPast}
         />
       )}
     </Flex>

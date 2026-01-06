@@ -2,6 +2,88 @@ import React from "react";
 import { IconProps } from "../../types/component";
 import useChakraColor from "../../hooks/useChakraColor";
 
+export const Calendar: React.FC<IconProps> = ({
+  size = 14,
+  color = "#E67D4F",
+}) => {
+  const iconColor = useChakraColor(color);
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M5.625 0.75C6.03921 0.75 6.375 1.08579 6.375 1.5V2.25H11.625V1.5C11.625 1.08579 11.9608 0.75 12.375 0.75C12.7892 0.75 13.125 1.08579 13.125 1.5V2.26852C15.02 2.45666 16.5 4.05549 16.5 6V12.75C16.5 14.8211 14.8211 16.5 12.75 16.5H5.25C3.17893 16.5 1.5 14.8211 1.5 12.75V6C1.5 4.05549 2.98 2.45666 4.875 2.26852V1.5C4.875 1.08579 5.21079 0.75 5.625 0.75ZM3.12803 5.25H14.872C14.5631 4.37611 13.7297 3.75 12.75 3.75H5.25C4.27034 3.75 3.43691 4.37611 3.12803 5.25ZM15 6.75H3V12.75C3 13.9926 4.00736 15 5.25 15H12.75C13.9926 15 15 13.9926 15 12.75V6.75ZM4.5 9C4.5 8.58579 4.83579 8.25 5.25 8.25H12.75C13.1642 8.25 13.5 8.58579 13.5 9C13.5 9.41421 13.1642 9.75 12.75 9.75H5.25C4.83579 9.75 4.5 9.41421 4.5 9Z"
+        fill={iconColor}
+      />
+    </svg>
+  );
+};
+
+export const List: React.FC<IconProps> = ({ size = 12, color = "#E67D4F" }) => {
+  const iconColor = useChakraColor(color);
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 15 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M13.9999 6.99927H5.09082H13.9999Z"
+        fill={iconColor}
+      />
+      <path
+        d="M13.9999 6.99927H5.09082"
+        stroke={iconColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M13.9999 12.5996H5.09082H13.9999Z"
+        fill={iconColor}
+      />
+      <path
+        d="M13.9999 12.5996H5.09082"
+        stroke={iconColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M13.9999 1.39893H5.09082H13.9999Z"
+        fill={iconColor}
+      />
+      <path
+        d="M13.9999 1.39893H5.09082"
+        stroke={iconColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M1.27125 2.8C1.90762 2.8 2.54398 2.1 2.54398 1.4C2.54398 0.7 1.90762 0 1.27125 0C0.634888 0 0 0.7 0 1.4C0 2.1 0.634888 2.8 1.27125 2.8ZM1.27125 8.4C1.90762 8.4 2.54398 7.7 2.54398 7C2.54398 6.3 1.90762 5.6 1.27125 5.6C0.634888 5.6 0 6.3 0 7C0 7.7 0.634888 8.4 1.27125 8.4ZM1.27125 14C1.90762 14 2.54398 13.3 2.54398 12.6C2.54398 11.9 1.90762 11.2 1.27125 11.2C0.634888 11.2 0 11.9 0 12.6C0 13.3 0.634888 14 1.27125 14Z"
+        fill={iconColor}
+      />
+    </svg>
+  );
+};
+
 export const MarillacCoin: React.FC<IconProps> = ({ size = 16 }) => (
   <svg
     width={size}

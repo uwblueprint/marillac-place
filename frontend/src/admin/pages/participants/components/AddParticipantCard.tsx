@@ -1,38 +1,35 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { addDays } from "date-fns";
 import { CREATE_PARTICIPANT } from "../../../../gql/participantRequests";
 import ModalContainer from "../../../../ui/containers/PopupContainer";
 import NumberInput from "../../../../ui/inputs/NumberInput";
 import TextInput from "../../../../ui/inputs/TextInput";
 import DateInput from "../../../../ui/inputs/DateInput";
-import { formatDateInputValue } from "../../../../helpers/formatDateTime";
 
 type AddParticipantCardProps = {
   roomNumber: number;
   close: () => void;
+  refetch: () => void;
 };
 
 const AddParticipantCard = ({
   roomNumber,
   close,
+  refetch,
 }: AddParticipantCardProps): React.ReactElement => {
-  const [id, setId] = useState("");
+  const [id, setId] = useState<number | null>(null);
   const [arrivalDate, setArrivalDate] = useState<Date | null>(null);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState<string>("");
 
   const [error, setError] = useState("");
 
   const [createParticipant, { loading }] = useMutation(CREATE_PARTICIPANT, {
-    onCompleted: () => {
-      localStorage.setItem(
-        "notification",
-        "Participant #" + id + " added to Room " + roomNumber
-      );
-      window.location.reload();
-    },
     onError: (err) => {
       setError(err.message);
+    },
+    onCompleted: () => {
+      refetch();
+      close();
     },
   });
 
@@ -50,9 +47,9 @@ const AddParticipantCard = ({
 
       createParticipant({
         variables: {
-          pid: Number(id),
+          pid: id,
           room: roomNumber,
-          arrival: formatDateInputValue(addDays(arrivalDate, 1)),
+          arrival: arrivalDate.toISOString(),
           password,
         },
       });
@@ -66,6 +63,7 @@ const AddParticipantCard = ({
       submit_action={handleSubmit}
       cancel_action={close}
       error_message={error}
+      loading={loading}
     >
       <NumberInput
         label="ID Number"

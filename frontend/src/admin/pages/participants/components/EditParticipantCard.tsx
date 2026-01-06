@@ -1,41 +1,40 @@
-import { Flex, FormControl, Input, Text, Button } from "@chakra-ui/react";
+import { Flex, Text, Button } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { addDays } from "date-fns";
+import { endOfDay } from "date-fns";
 import { ROOM_NUMBERS } from "../../../../constants/rooms";
 import { UPDATE_PARTICIPANT } from "../../../../gql/participantRequests";
 import ModalContainer from "../../../../ui/containers/PopupContainer";
 import DateInput from "../../../../ui/inputs/DateInput";
-import { formatDateInputValue } from "../../../../helpers/formatDateTime";
 import TextInput from "../../../../ui/inputs/TextInput";
 import GreenButton from "../../../../ui/buttons/GreenOutlineButton";
+import { Participant } from "../../../../types/models";
+import FixedInput from "../../../../ui/inputs/FixedInput";
 
 type EditParticipantCardProps = {
   roomNumber: number;
-  participants: Record<number, any>;
+  participants: Record<number, Participant>;
   close: () => void;
+  refetchCurrent: () => void;
+  refetchPast: () => void;
 };
 
 export default function EditParticipantCard({
   roomNumber,
   participants,
   close,
+  refetchCurrent,
+  refetchPast,
 }: EditParticipantCardProps) {
-  const id: number = participants[roomNumber].pid;
-  const today = new Date();
-  const currentArrivalDate = participants[roomNumber].arrival
-    ? new Date(participants[roomNumber].arrival)
-    : new Date();
-
-  const currentPassword = participants[roomNumber].password;
+  const participant: Participant = participants[roomNumber];
+  const id: number = participant.pid;
+  const currentArrivalDate = new Date(participant.arrival);
+  const currentDepartureDate = participant.departure ? new Date(participant.departure) : null;
+  const currentPassword = participant.password;
 
   const [arrivalDate, setArrivalDate] = useState<Date>(currentArrivalDate);
-  const [password, setPassword] = useState(currentPassword);
-  const [departureDate, setDepartureDate] = useState<Date | null>(
-    participants[roomNumber].departure
-      ? new Date(participants[roomNumber].departure)
-      : null
-  );
+  const [password, setPassword] = useState<string>(currentPassword);
+  const [departureDate, setDepartureDate] = useState<Date | null>(currentDepartureDate);
 
   const [swapParticipant, setSwapParticipant] = useState(false);
   const [endStay, setEndStay] = useState(false);
@@ -43,10 +42,12 @@ export default function EditParticipantCard({
   const [error, setError] = useState("");
   const [selectedSwap, setSelectedSwap] = useState(-1);
 
-  const [updateParticipant] = useMutation(UPDATE_PARTICIPANT);
+  const [updateParticipant, { loading }] = useMutation(UPDATE_PARTICIPANT);
 
   async function handleSubmit() {
     setError("");
+    const today = endOfDay(new Date());
+
     if (
       !arrivalDate ||
       !password ||
@@ -58,24 +59,21 @@ export default function EditParticipantCard({
       setError("Invalid swap.");
     }
 
-    // no-op check
     if (
       arrivalDate.getTime() === currentArrivalDate.getTime() &&
       password === currentPassword &&
-      (!endStay || (endStay && !departureDate)) &&
+      !endStay &&
       !swapParticipant
     ) {
       setError("No changes made");
       return;
     }
 
-    // arrival must be before departure
     if (departureDate && arrivalDate.getTime() >= departureDate.getTime()) {
       setError("Arrival date must be less than departure date");
       return;
     }
 
-    // future dates check (compare to midnight today)
     if (arrivalDate.getTime() > today.getTime()) {
       setError("Arrival is in the future");
       return;
@@ -87,21 +85,19 @@ export default function EditParticipantCard({
     }
 
     try {
-      // perform update for this participant
       await updateParticipant({
         variables: {
           pid: id,
           room: swapParticipant ? selectedSwap : undefined,
-          arrival: formatDateInputValue(addDays(arrivalDate, 1)),
+          arrival: arrivalDate.toISOString(),
           departure:
             endStay && departureDate
-              ? formatDateInputValue(addDays(departureDate, 1))
+              ? departureDate.toISOString()
               : undefined,
           password,
         },
       });
 
-      // if swapping, update the other participant as well
       if (swapParticipant && selectedSwap in participants) {
         await updateParticipant({
           variables: {
@@ -111,30 +107,16 @@ export default function EditParticipantCard({
         });
       }
 
-      // set notification message
-      if (swapParticipant) {
-        let message = "Participant #" + id + " moved to Room " + selectedSwap;
-        if (selectedSwap in participants) {
-          message +=
-            ", Participant #" +
-            participants[selectedSwap].pid +
-            " moved to Room " +
-            roomNumber;
-        }
-        localStorage.setItem("notification", message);
-      } else if (endStay) {
-        localStorage.setItem(
-          "notification",
-          "Participant #" + id + " removed from Room " + roomNumber
-        );
-      } else {
-        localStorage.setItem("notification", "Participant #" + id + " updated");
-      }
-
-      window.location.reload();
+      refetchCurrent();
+      refetchPast();
+      close();
     } catch (err: any) {
       setError(err.message);
     }
+  }
+
+  if (!participant) {
+    return null;
   }
 
   return (
@@ -144,46 +126,29 @@ export default function EditParticipantCard({
       submit_action={handleSubmit}
       cancel_action={close}
       error_message={error}
+      loading={loading}
     >
-      <FormControl>
-        <Text textStyle="web.s1" color="text.light.secondary">
-          ID Number
-        </Text>
-        <Input
-          disabled
-          type="number"
-          value={id}
-          width="100%"
-          height="fit-content"
-          paddingX="12px"
-          paddingY="6px"
-          border="1px"
-          borderColor="#C5C8D8"
-          borderRadius="8px"
-          fontFamily="Nunito"
-          fontWeight="400"
-          fontSize="12px"
-          color="#000000"
-        />
-      </FormControl>
+      <FixedInput
+        label="Participant ID"
+        current_value={"#" + id}
+        orientation="horizontal"
+      />
 
       <DateInput
         label="Arrival Date"
         current_value={arrivalDate}
-        update_action={(date: Date) => {
-          setArrivalDate(date);
-        }}
+        update_action={setArrivalDate}
         size="large"
       />
 
       <TextInput
         label="Password"
         current_value={password}
-        update_action={(value: any) => setPassword(value)}
+        update_action={setPassword}
         size="large"
       />
 
-      <Flex alignItems="center" justifyContent="flex-start" gap="8px">
+      <Flex alignItems="center" justifyContent="flex-start" gap="8px" mt="10px">
         <GreenButton
           label="Swap Participant"
           action={() => {
@@ -233,7 +198,7 @@ export default function EditParticipantCard({
 
       {swapParticipant && (
         <Flex flexDir="column">
-          <Text textStyle="web.s1" color="text.light.secondary" mb="3px">
+          <Text textStyle="web.s1" color="text.light.secondary" mb="5px">
             Available Rooms
           </Text>
           <Flex wrap="wrap" gap="5px" width="400px">
@@ -273,9 +238,9 @@ export default function EditParticipantCard({
       {endStay && (
         <DateInput
           label="Departure Date"
-          current_value={departureDate || ""}
-          update_action={(date: Date) => setDepartureDate(date)}
-          size="medium"
+          current_value={departureDate}
+          update_action={setDepartureDate}
+          size="large"
         />
       )}
     </ModalContainer>

@@ -5,13 +5,14 @@ import OrangeButton from "../../../../ui/buttons/OrangeButton";
 
 type EmptyRoomCardProps = {
   roomNumber: number;
+  refetch: () => void;
 };
 
-export default function EmptyRoomCard({ roomNumber }: EmptyRoomCardProps) {
+export default function EmptyRoomCard({ roomNumber, refetch }: EmptyRoomCardProps) {
   const [addParticipant, setAddParticipant] = useState(false);
   return (
     <Flex
-      height="130px"
+      height="140px"
       border="1px"
       borderColor="neutral.300"
       borderRadius="8px"
@@ -26,7 +27,7 @@ export default function EmptyRoomCard({ roomNumber }: EmptyRoomCardProps) {
         top={0}
         left={0}
         w="100%"
-        h="30px"
+        h="35px"
         justifyContent="center"
         alignItems="center"
         borderBottom="1px"
@@ -36,7 +37,7 @@ export default function EmptyRoomCard({ roomNumber }: EmptyRoomCardProps) {
         <Text textStyle="web.s1">Room {roomNumber}</Text>
       </Flex>
 
-      <Text textStyle="web.b3">This room is empty.</Text>
+      <Text textStyle="web.b3" mb="2px">This room is empty.</Text>
 
       <Flex position="absolute" bottom="12px">
         <OrangeButton
@@ -50,6 +51,7 @@ export default function EmptyRoomCard({ roomNumber }: EmptyRoomCardProps) {
         <AddParticipantCard
           roomNumber={roomNumber}
           close={() => setAddParticipant(false)}
+          refetch={refetch}
         />
       )}
     </Flex>

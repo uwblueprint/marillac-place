@@ -10,7 +10,7 @@ import { GET_EARNING_GOAL } from "../../../gql/earningGoalRequests";
 import { GET_BADGE_LEVEL_PROGRESS } from "../../../gql/badgeLevelProgressRequests";
 import { GET_ACHIEVED_BADGE_LEVELS } from "../../../gql/achievedBadgeLevelRequests";
 import WeeklyEarningsChart from "./components/EarningsWidget";
-import BucksGoalCard from "./elements/BucksGoalCard";
+import BucksGoalCard from "./components/BucksGoalCard";
 import BadgeWidget from "./components/BadgeWidget";
 import { BadgeLevelProgress, AchievedBadgeLevel } from "../../../types/models";
 import { Level } from "../../../types/enums";

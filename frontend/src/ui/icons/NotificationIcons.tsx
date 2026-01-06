@@ -3,7 +3,7 @@ import { IconProps } from "../../types/component";
 import useChakraColor from "../../hooks/useChakraColor";
 
 export const Mail: React.FC<IconProps> = ({ size = 18, color = "#0C727E" }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -17,11 +17,11 @@ export const Mail: React.FC<IconProps> = ({ size = 18, color = "#0C727E" }) => {
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };
 
 export const Dot: React.FC<IconProps> = ({ size = 12, color = "#E67D4F" }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -32,14 +32,14 @@ export const Dot: React.FC<IconProps> = ({ size = 12, color = "#E67D4F" }) => {
     >
       <circle cx="6" cy="6" r="6" fill={iconColor} />
     </svg>
-  )
+  );
 };
 
 export const ExclamationMark: React.FC<IconProps> = ({
   size = 14,
   color = "#D34C5C",
 }) => {
-  const iconColor = useChakraColor(color)
+  const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
@@ -53,5 +53,5 @@ export const ExclamationMark: React.FC<IconProps> = ({
         fill={iconColor}
       />
     </svg>
-  )
+  );
 };

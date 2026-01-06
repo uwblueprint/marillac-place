@@ -38,13 +38,13 @@ const earningGoalResolver = {
         value,
       }: {
         pid: number;
-        date: Date;
+        date: string;
         value: number;
       }
     ): Promise<EarningGoal> => {
       return db.earningGoal.update({
         where: {
-          pid_date: { pid, date },
+          pid_date: { pid, date: new Date(date) },
         },
         data: { value },
       });

@@ -1,5 +1,4 @@
 import { AssignedTask, TaskStatus, TaskType } from "@prisma/client";
-import { startOfWeek, endOfWeek, endOfDay, startOfDay } from "date-fns";
 import db from "../../prisma";
 import processEarning from "../../utils/transactionUtils";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
@@ -10,6 +9,12 @@ import {
   FIRST_GOAL,
   INDIVIDUAL_GOAL,
 } from "../../constants/systemBadges";
+import {
+  getEndOfDay,
+  getEndOfWeek,
+  getStartOfDay,
+  getStartOfWeek,
+} from "../../utils/dateUtils";
 
 const assignedTaskResolver = {
   Query: {
@@ -18,7 +23,7 @@ const assignedTaskResolver = {
         where: {
           OR: [
             { departure: null },
-            { departure: { gt: endOfDay(new Date()) } },
+            { departure: { gt: getEndOfDay(new Date()) } },
           ],
         },
         select: {
@@ -34,11 +39,15 @@ const assignedTaskResolver = {
 
       if (currentParticipants.length === 0) return Array(10).fill(0);
 
+      const weekStart = getStartOfWeek(new Date());
+      const weekEnd = getEndOfWeek(weekStart);
       const assignedTaskCounts = await db.assignedTask.groupBy({
         by: ["pid"],
         where: {
           pid: { in: currentPids },
           status: TaskStatus.ASSIGNED,
+          start_date: { lte: weekEnd },
+          end_date: { gte: weekStart },
         },
         _count: { aid: true },
       });
@@ -62,8 +71,8 @@ const assignedTaskResolver = {
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfDay(new Date()) },
-          end_date: { gte: startOfDay(new Date()) },
+          start_date: { lte: getEndOfDay(new Date()) },
+          end_date: { gte: getStartOfDay(new Date()) },
         },
       });
     },
@@ -74,15 +83,19 @@ const assignedTaskResolver = {
         weekStart,
       }: {
         pid: number;
-        weekStart: Date;
+        weekStart: string;
       }
     ): Promise<AssignedTask[]> => {
+      const weekStartDate = new Date(weekStart);
       return db.assignedTask.findMany({
         where: {
           pid,
-          start_date: { lte: endOfWeek(weekStart) },
+          start_date: { lte: getEndOfWeek(weekStartDate) },
           end_date: { gte: weekStart },
         },
+        orderBy: {
+          aid: "asc"
+        }
       });
     },
     hasCompletedAllRequiredTasks: async (
@@ -98,8 +111,8 @@ const assignedTaskResolver = {
           pid,
           type: TaskType.REQUIRED,
           status: { not: TaskStatus.COMPLETE },
-          start_date: { lte: endOfWeek(new Date()) },
-          end_date: { gte: startOfWeek(new Date()) },
+          start_date: { lte: getEndOfWeek(new Date()) },
+          end_date: { gte: getStartOfWeek(new Date()) },
         },
       });
 
@@ -126,8 +139,8 @@ const assignedTaskResolver = {
         type: TaskType;
         value: number;
         penalty: number;
-        start_date: Date;
-        end_date: Date;
+        start_date: string;
+        end_date: string;
         comment?: string;
       }
     ): Promise<AssignedTask> => {
@@ -139,8 +152,8 @@ const assignedTaskResolver = {
           type,
           value,
           penalty,
-          start_date,
-          end_date,
+          start_date: new Date(start_date),
+          end_date: new Date(end_date),
           comment,
         },
       });
@@ -164,19 +177,19 @@ const assignedTaskResolver = {
         type?: TaskType;
         value?: number;
         penalty?: number;
-        start_date?: Date;
-        end_date?: Date;
+        start_date?: string;
+        end_date?: string;
         comment?: string;
       }
     ): Promise<AssignedTask> => {
-      const updates: Partial<AssignedTask> = {};
+      const updates: any = {};
       if (pid !== undefined) updates.pid = pid;
       if (name !== undefined) updates.name = name;
       if (type !== undefined) updates.type = type;
       if (value !== undefined) updates.value = value;
       if (penalty !== undefined) updates.penalty = penalty;
-      if (start_date !== undefined) updates.start_date = start_date;
-      if (end_date !== undefined) updates.end_date = end_date;
+      if (start_date !== undefined) updates.start_date = new Date(start_date);
+      if (end_date !== undefined) updates.end_date = new Date(end_date);
       if (comment !== undefined) updates.comment = comment;
 
       const isEmpty = Object.keys(updates).length === 0;
@@ -218,8 +231,8 @@ const assignedTaskResolver = {
               where: {
                 pid: assignedTask.pid,
                 status: { not: TaskStatus.COMPLETE },
-                start_date: { lte: endOfWeek(new Date()) },
-                end_date: { gte: startOfWeek(new Date()) },
+                start_date: { lte: getEndOfWeek(new Date()) },
+                end_date: { gte: getStartOfWeek(new Date()) },
                 type: TaskType.REQUIRED,
               },
             }
@@ -236,8 +249,8 @@ const assignedTaskResolver = {
           const countCompletedOptionalTasks = await db.assignedTask.count({
             where: {
               pid: assignedTask.pid,
-              start_date: { lte: endOfWeek(new Date()) },
-              end_date: { gte: startOfWeek(new Date()) },
+              start_date: { lte: getEndOfWeek(new Date()) },
+              end_date: { gte: getStartOfWeek(new Date()) },
               type: TaskType.OPTIONAL,
               status: TaskStatus.COMPLETE,
             },
@@ -257,8 +270,8 @@ const assignedTaskResolver = {
                 pid: assignedTask.pid,
                 type: TaskType.INDIVIDUAL_GOAL,
                 status: { not: TaskStatus.COMPLETE },
-                start_date: { lte: endOfWeek(new Date()) },
-                end_date: { gte: startOfWeek(new Date()) },
+                start_date: { lte: getEndOfWeek(new Date()) },
+                end_date: { gte: getStartOfWeek(new Date()) },
               },
             }
           );

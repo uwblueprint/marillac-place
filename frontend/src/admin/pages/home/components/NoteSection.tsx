@@ -16,20 +16,22 @@ import {
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { Airplane } from "../../../../ui/icons/ActionIcons";
 import { Note } from "../../../../types/models";
-import { formatDateTimeString } from "../../../../helpers/formatDateTime";
+import { formatDateV3 } from "../../../../helpers/formatDateTime";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 
 const NoteSection = () => {
   const [newNote, setNewNote] = useState("");
 
-  const [createNote, { loading: createNoteLoading, error: createNoteError }] = useMutation(CREATE_NOTE, {
-    refetchQueries: [{ query: GET_NOTES }],
-    awaitRefetchQueries: true,
-  });
-  const [deleteNote, { loading: deleteNoteLoading, error: deleteNoteError }] = useMutation(DELETE_NOTE, {
-    refetchQueries: [{ query: GET_NOTES }],
-    awaitRefetchQueries: true,
-  });
+  const [createNote, { loading: createNoteLoading, error: createNoteError }] =
+    useMutation(CREATE_NOTE, {
+      refetchQueries: [{ query: GET_NOTES }],
+      awaitRefetchQueries: true,
+    });
+  const [deleteNote, { loading: deleteNoteLoading, error: deleteNoteError }] =
+    useMutation(DELETE_NOTE, {
+      refetchQueries: [{ query: GET_NOTES }],
+      awaitRefetchQueries: true,
+    });
   const {
     loading: getNotesLoading,
     error: getNotesError,
@@ -110,15 +112,25 @@ const NoteSection = () => {
                 width="100%"
                 height="fit-content"
               >
-                <Flex width="100%" maxHeight="200px" flexWrap="wrap" overflow="hidden">
+                <Flex
+                  width="100%"
+                  maxHeight="200px"
+                  flexWrap="wrap"
+                  overflow="hidden"
+                >
                   <Text textStyle="web.b2" color="#000000">
                     {note.message}
                   </Text>
                 </Flex>
 
-                <Flex width="100%" justifyContent="space-between" alignItems="center" mt="5px">
+                <Flex
+                  width="100%"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mt="5px"
+                >
                   <Text textStyle="web.b3" color="text.light.secondary">
-                    {formatDateTimeString(note.date)}
+                    {formatDateV3(new Date(note.date))}
                   </Text>
                   <UnderlineButton
                     label="Dismiss"
@@ -126,14 +138,25 @@ const NoteSection = () => {
                   />
                 </Flex>
               </WidgetContainer>
-            )
+            );
           })
         )}
       </Flex>
-      
-      <Flex width="100%" height="60px" alignItems="center" justifyContent="center" position="absolute" bottom="0" left="0" paddingX="20px" paddingTop="10px" paddingBottom="12px">
+
+      <Flex
+        width="100%"
+        height="60px"
+        alignItems="center"
+        justifyContent="center"
+        position="absolute"
+        bottom="0"
+        left="0"
+        paddingX="20px"
+        paddingTop="10px"
+        paddingBottom="12px"
+      >
         <InputGroup width="100%" height="100%">
-         <Input
+          <Input
             width="100%"
             height="100%"
             fontFamily="Nunito"
@@ -152,7 +175,7 @@ const NoteSection = () => {
               boxShadow: "none",
             }}
           />
-          <InputRightElement width='fit-content' height="100%">
+          <InputRightElement width="fit-content" height="100%">
             <Button
               onClick={() => sendNote()}
               bg="transparent"
