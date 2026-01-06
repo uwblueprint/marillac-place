@@ -11,48 +11,42 @@ function handleClick() {
 }
 
 export default function ErrorScreen({
-  message = "Something went wrong. Please try again later.",
+  message = "An error has occured, please try again later.",
 }: ErrorScreenProps) {
   return (
     <Flex
       w="100%"
-      h="100vh"
+      h="100%"
       alignItems="center"
       justifyContent="center"
-      bg="neutral.100"
       role="alert"
     >
       <Box
         width={["90%", "420px"]}
         bg="white"
         borderRadius="12px"
-        boxShadow="lg"
         p={6}
         textAlign="center"
       >
-        <Box mb={4}>
-          <img src="/assets/logo.png" alt="Marillac Place Logo" width="64" />
-        </Box>
-
         <Box
-          fontSize="28px"
+          fontSize="32px"
           lineHeight="1"
-          mb={2}
+          mb={3}
           role="img"
           aria-label="error"
         >
           ⚠️
         </Box>
 
-        <Text fontSize="14px" color="gray.500" mb={2} fontWeight={500}>
+        <Text fontSize="14px" color="text.light.secondary" mb={2} fontWeight={500}>
           Oops — something went wrong
         </Text>
 
-        <Text fontSize="18px" color="secondary.700" mb={4} fontWeight={700}>
-          Error: {message}
+        <Text fontSize="18px" color="secondary.700" mb={2} fontWeight={700}>
+          {message}
         </Text>
 
-        <Text fontSize="12px" color="gray.500" mb={4}>
+        <Text fontSize="12px" color="text.light.secondary" mb={4}>
           If the problem persists, contact support via our{" "}
           <a
             href="https://marillacplace.ca/contact/"

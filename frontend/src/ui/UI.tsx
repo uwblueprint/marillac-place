@@ -626,7 +626,7 @@ export default function UI() {
         />
       </Box>
       <Text textStyle="web.h3">Loading Screen</Text>
-      <Box width="1000px" outline="1px solid black" padding="20px">
+      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
         <LoadingScreen message="Loading..." />
       </Box>
       <Text textStyle="web.h3">Not Found Screen</Text>
@@ -634,7 +634,7 @@ export default function UI() {
         <NotFoundScreen />
       </Box>
       <Text textStyle="web.h3">Error Screen</Text>
-      <Box width="1000px" outline="1px solid black" padding="20px">
+      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
         <ErrorScreen message="An error has occurred." />
       </Box>
     </Flex>
