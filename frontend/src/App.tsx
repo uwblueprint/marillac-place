@@ -14,7 +14,7 @@ import AdminLoginPage from "./admin/pages/login/Main";
 import AdminHomePage from "./admin/pages/home/Main";
 import AdminSchedulePage from "./admin/pages/schedule/Main";
 import AdminAnnouncementsPage from "./admin/pages/announcements/Main";
-// import AdminParticipantsPage from "./admin/pages/participants/Main";
+import AdminParticipantsPage from "./admin/pages/participants/Main";
 import AdminTasksPage from "./admin/pages/tasks/Main";
 import AdminBadgesPage from "./admin/pages/badges/Main";
 import AdminReportsPage from "./admin/pages/reports/Main";
@@ -114,6 +114,14 @@ const App = (): React.ReactElement => {
                 element={
                   <AdminRoute>
                     <AdminAnnouncementsPage />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path={ROUTES.ADMIN_PARTICIPANTS_PAGE}
+                element={
+                  <AdminRoute>
+                    <AdminParticipantsPage />
                   </AdminRoute>
                 }
               />

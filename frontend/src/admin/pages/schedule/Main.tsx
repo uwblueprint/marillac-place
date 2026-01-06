@@ -93,7 +93,7 @@ export default function AdminSchedulePage() {
   if (participantError || assignedTasksError) return <ErrorScreen />;
 
   return (
-    <Flex flexDir="column" gap="10px" width="100%" h="fit-content">
+    <Flex flexDir="column" gap="10px" width="100%" h="100%" minH="fit-content">
       <RoomNavigation
         selectedRoom={selectedRoom}
         changeRoom={setSelectedRoom}

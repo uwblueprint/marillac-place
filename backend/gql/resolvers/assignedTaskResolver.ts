@@ -39,11 +39,15 @@ const assignedTaskResolver = {
 
       if (currentParticipants.length === 0) return Array(10).fill(0);
 
+      const weekStart = getStartOfWeek(new Date());
+      const weekEnd = getEndOfWeek(weekStart);
       const assignedTaskCounts = await db.assignedTask.groupBy({
         by: ["pid"],
         where: {
           pid: { in: currentPids },
           status: TaskStatus.ASSIGNED,
+          start_date: { lte: weekEnd },
+          end_date: { gte: weekStart },
         },
         _count: { aid: true },
       });

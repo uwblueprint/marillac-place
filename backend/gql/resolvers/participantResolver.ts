@@ -1,7 +1,7 @@
 import { Participant } from "@prisma/client";
 import db from "../../prisma";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
-import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
+import { getEndOfDay } from "../../utils/dateUtils";
 
 const participantResolver = {
   Query: {
@@ -31,7 +31,7 @@ const participantResolver = {
         where: {
           departure: {
             not: null,
-            lte: getStartOfDay(new Date()),
+            lte: getEndOfDay(new Date()),
           },
         },
         orderBy: [{ departure: "desc" }],
