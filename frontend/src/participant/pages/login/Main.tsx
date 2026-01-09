@@ -7,7 +7,6 @@ import { PARTICIPANT } from "../../../constants/roles";
 import { PARTICIPANT_LOGIN } from "../../../gql/loginRequests";
 import * as ROUTES from "../../../constants/routes";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
-import { ParticipantContext } from "../../ParticipantContext";
 import WidgetContainer from "../../../ui/containers/WidgetContainer";
 import NumberInput from "../../../ui/inputs/NumberInput";
 import PasswordInput from "../../../ui/inputs/PasswordInput";
@@ -15,7 +14,6 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 
 export default function ParticipantsLoginPage() {
   const navigate = useNavigate();
-  const participantContext = useContext(ParticipantContext);
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,14 +26,8 @@ export default function ParticipantsLoginPage() {
     PARTICIPANT_LOGIN,
     {
       onCompleted: (data) => {
-        if (!participantContext) {
-          setError("participant context not found");
-        } else if (!id) {
-          setError("id is missing");
-        } else {
-          localStorage.setItem("token", data.participantLogin.token);
-          navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
-        }
+        localStorage.setItem("token", data.participantLogin.token);
+        navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
       },
       onError: (err: Error) => {
         setError(err.message);

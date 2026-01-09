@@ -5,26 +5,17 @@ import { Profile } from "../../../../ui/icons/MiscIcons";
 import { ExclamationMark, Dot } from "../../../../ui/icons/NotificationIcons";
 import { Pin } from "../../../../ui/icons/ActionIcons";
 import { formatDateV3 } from "../../../../helpers/formatDateTime";
+import { ReceivedAnnouncement } from "../../../../types/models";
+import { Priority } from "../../../../types/enums";
 
 type ParticipantAnnouncementCardProps = {
-  allRooms: boolean;
-  message: string;
-  importance: number;
-  hasRead: boolean;
-  isPinned: boolean;
-  time: string;
-  userAnnouncementId: number;
+  announcement: ReceivedAnnouncement;
 };
 
-export default function ParticipantAnnouncementCard({
-  userAnnouncementId,
-  allRooms,
-  message,
-  importance,
-  hasRead,
-  isPinned,
-  time,
-}: ParticipantAnnouncementCardProps) {
+export default function ParticipantAnnouncementCard({ announcement }: ParticipantAnnouncementCardProps) {
+  const importance = announcement.announcement ? announcement.announcement.priority : Priority.NORMAL;
+  const date = announcement.announcement ? new Date(announcement.announcement.date) : new Date();
+
   return (
     <Flex
       w="100%"
@@ -35,7 +26,7 @@ export default function ParticipantAnnouncementCard({
       flexDir="column"
       position="relative"
     >
-      {!hasRead && (
+      {!announcement.read && (
         <Flex position="absolute" top="42px" left="0px">
           <Dot size={12} />
         </Flex>
@@ -43,27 +34,17 @@ export default function ParticipantAnnouncementCard({
 
       <Flex alignItems="center" justifyContent="space-between">
         <Flex alignItems="center" gap="10px">
-          {allRooms ? (
-            <>
-              <Group size={15} />
-              <Text textStyle="mobile.b0">All Rooms</Text>
-            </>
-          ) : (
-            <>
-              <Profile size={12} />
-              <Text textStyle="mobile.b0">Your Room</Text>
-            </>
-          )}
+          <Text textStyle="mobile.b0">New Announcement</Text>
           <Text textStyle="mobile.b1" color="text.light.secondary">
-            {formatDateV3(new Date(time))}
+            {formatDateV3(date)}
           </Text>
         </Flex>
 
         <Flex gap="12px" paddingRight="4px">
-          {importance !== 0 && (
+          {importance !== Priority.NORMAL && (
             <ExclamationMark size={4} />
           )}
-          {isPinned && <Pin size={10} color="secondary.700" />}
+          {announcement.pinned && <Pin size={10} color="secondary.700" />}
         </Flex>
       </Flex>
 
@@ -74,7 +55,7 @@ export default function ParticipantAnnouncementCard({
         maxH="45px"
         overflow="hidden"
       >
-        {message}
+        {announcement.announcement?.message}
       </Text>
     </Flex>
   );

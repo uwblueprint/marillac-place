@@ -1,14 +1,15 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { getRole } from "../helpers/verifyRole";
 
 type AdminContextType = {
-  role: string | null;
+  role: string;
+  setRole: (role: string) => void;
   roomToParticipant: Record<number, number>;
   setRoomToParticipant: (roomToParticipant: Record<number, number>) => void;
 };
 
 export const AdminContext = createContext<AdminContextType>({
-  role: null,
+  role: "",
+  setRole: () => {},
   roomToParticipant: {},
   setRoomToParticipant: () => {},
 });
@@ -18,21 +19,14 @@ interface AdminProviderProps {
 }
 
 export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState<string>("");
   const [roomToParticipant, setRoomToParticipant] = useState<Record<number, number>>({});
-
-  useEffect(() => {
-    const fetchRole = async () => {
-      const fetchedRole = await getRole();
-      setRole(fetchedRole);
-    };
-    fetchRole();
-  }, []);
 
   return (
     <AdminContext.Provider
       value={{
         role,
+        setRole,
         roomToParticipant,
         setRoomToParticipant,
       }}

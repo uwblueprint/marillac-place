@@ -1,19 +1,20 @@
 import React, { createContext, ReactNode, useState, useEffect } from "react";
-import { getParticipantId } from "../helpers/verifyRole";
 
 type ParticipantContextType = {
-  pid: number | null;
-  room: number | null;
+  pid: number;
+  setPid: (pid: number) => void;
+  room: number;
   setRoom: (room: number) => void;
-  balance: number | null;
+  balance: number;
   setBalance: (balance: number) => void;
 };
 
 export const ParticipantContext = createContext<ParticipantContextType>({
-  pid: null,
-  room: null,
+  pid: -1,
+  setPid: () => {},
+  room: 0,
   setRoom: () => {},
-  balance: null,
+  balance: 0,
   setBalance: () => {},
 });
 
@@ -22,22 +23,15 @@ interface ParticipantProviderProps {
 }
 
 export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({ children }) => {
-  const [pid, setPid] = useState<number | null>(null);
-  const [room, setRoom] = useState<number | null>(null);
-  const [balance, setBalance] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchPid = async () => {
-      const fetchedPid = await getParticipantId();
-      setPid(fetchedPid);
-    };
-    fetchPid();
-  }, [pid]);
+  const [pid, setPid] = useState<number>(-1);
+  const [room, setRoom] = useState<number>(0);
+  const [balance, setBalance] = useState<number>(0);
 
   return (
     <ParticipantContext.Provider
       value={{
         pid,
+        setPid,
         room,
         setRoom,
         balance,

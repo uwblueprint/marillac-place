@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
-import { verifyRole } from "../helpers/verifyRole";
+import { getParticipantId, verifyRole } from "../helpers/verifyRole";
 import { PARTICIPANT } from "../constants/roles";
 import LoadingScreen from "../ui/screens/LoadingScreen";
 import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
@@ -17,19 +17,17 @@ type ParticipantRouteProps = {
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   const participantContext = useContext(ParticipantContext);
+  const [populatingContext, setPopulatingContext] = useState(true);
+
   const [authorized, setAuthorized] = useState(false);
+  const [authorizing, setAuthorizing] = useState(true);
+
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
 
   const [getParticipantByPid] = useLazyQuery(GET_PARTICIPANT_BY_PID, {
     onCompleted: (data) => {
-      if (
-        !data ||
-        !data.getParticipantByPid.room ||
-        !data.getParticipantByPid.balance ||
-        !participantContext
-      ) {
-        setError("error fetching participant for context");
+      if (!data || !data.getParticipantByPid || !data.getParticipantByPid.room || !data.getParticipantByPid.balance) {
+        setError("participant data is missing");
         return;
       }
       participantContext.setRoom(data.getParticipantByPid.room);
@@ -46,31 +44,28 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       if (isParticipant) {
         setAuthorized(true);
       }
-      setLoading(false);
+      setAuthorizing(false);
     };
     authorize();
   }, []);
 
   useEffect(() => {
-    const fetchParticipantData = async () => {
-      if (authorized && participantContext && participantContext.pid) {
-        getParticipantByPid({
-          variables: { pid: participantContext.pid },
-        });
-      }
-    };
-    fetchParticipantData();
-  }, [authorized, participantContext]);
+    if (!authorizing && authorized) {
+      const populateContext = async () => {
+        const pid = await getParticipantId();
+        if (pid === null) {
+          setError("unable to retrieve participant id, please login again");
+        } else {
+          participantContext.setPid(pid);
+          getParticipantByPid({ variables: { pid } });
+        }
+        setPopulatingContext(false);
+      };
+      populateContext();
+    }
+  }, [authorizing, authorized]);
 
-  if (loading || !participantContext || !participantContext.pid || !participantContext.room || !participantContext.balance) {
-    return <LoadingScreen />;
-  }
-
-  if (error) {
-    return <ErrorScreen message={error} />;
-  }
-
-  if (!authorized) {
+  if (!authorizing && !authorized) {
     return <Navigate to={PARTICIPANTS_LOGIN_PAGE} replace />;
   }
 
@@ -92,7 +87,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
           overflow="scroll"
           gap="8px"
         >
-          {error ? <ErrorScreen message={error} /> : loading ? <LoadingScreen /> : children}
+          {error ? <ErrorScreen message={error} /> : (authorizing || populatingContext) ? <LoadingScreen /> : children}
         </Flex>
       </Flex>
     </Flex>

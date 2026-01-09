@@ -2,6 +2,9 @@ import { jwtVerify } from "jose";
 
 export async function verifyRole(validRoles: string[]): Promise<boolean> {
   const token = localStorage.getItem("token") ?? "";
+  if (!token) {
+    return false;
+  }
   try {
     const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
     const { payload } = await jwtVerify(token, secret, {
