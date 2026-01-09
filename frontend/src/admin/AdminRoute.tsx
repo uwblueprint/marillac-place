@@ -24,10 +24,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
     onCompleted: (data) => {
       if (!data || !data.getCurrentParticipants || !adminContext) {
-        // Only set error in production mode
-        if (process.env.NODE_ENV !== "development") {
-          setError("error fetching participants for context");
-        }
+        setError("error fetching participants for context");
         return;
       }
       const roomToParticipantMap: Record<number, number> = {};
@@ -37,23 +34,12 @@ export default function AdminRoute({ children }: AdminRouteProps) {
       adminContext.setRoomToParticipant(roomToParticipantMap);
     },
     onError: (err: Error) => {
-      if (process.env.NODE_ENV !== "development") {
-        setError(err.message);
-      } else {
-        console.warn("Could not fetch participants:", err.message);
-      }
+      setError(err.message);
     },
   });
 
   useEffect(() => {
     const authorize = async () => {
-      const isDevelopment = process.env.NODE_ENV === "development";
-      if (isDevelopment) {
-        setAuthorized(true);
-        setLoading(false);
-        return;
-      }
-
       const isStaff = await verifyRole([ADMIN, RELIEF]);
       if (isStaff) {
         setAuthorized(true);
@@ -67,9 +53,9 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     if (authorized) {
       getCurrentParticipants();
     }
-  }, [authorized, getCurrentParticipants]);
+  }, [authorized]);
 
-  if (loading) {
+  if (loading || !adminContext || !adminContext.role) {
     return <LoadingScreen />;
   }
 

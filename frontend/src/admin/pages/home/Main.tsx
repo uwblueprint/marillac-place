@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Stack, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import RoomsOverview from "./components/RoomsOverview";
 import NoteSection from "./components/NoteSection";
 import AnnouncementSection from "./components/AnnouncementSection";
