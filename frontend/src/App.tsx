@@ -21,7 +21,7 @@ import AdminReportsPage from "./admin/pages/reports/Main";
 
 import ParticipantLoginPage from "./participant/pages/login/Main";
 import ParticipantsHomePage from "./participant/pages/home/Main";
-// import ParticipantSchedulePage from "./participant/pages/schedule/Main";
+import ParticipantSchedulePage from "./participant/pages/schedule/Main";
 import ParticipantsAnnouncementsPage from "./participant/pages/announcements/Main";
 import ParticipantsProgressPage from "./participant/pages/progress/Main";
 
@@ -161,6 +161,14 @@ const App = (): React.ReactElement => {
                 element={
                   <ParticipantRoute>
                     <ParticipantsHomePage />
+                  </ParticipantRoute>
+                }
+              />
+              <Route
+                path={ROUTES.PARTICIPANTS_SCHEDULE_PAGE}
+                element={
+                  <ParticipantRoute>
+                    <ParticipantSchedulePage />
                   </ParticipantRoute>
                 }
               />

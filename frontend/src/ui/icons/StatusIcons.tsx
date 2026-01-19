@@ -1,7 +1,7 @@
 import React from "react";
 import { IconProps } from "../../types/component";
 
-export const Assigned: React.FC<IconProps> = ({ size = 20 }) => (
+export const Assigned: React.FC<IconProps> = ({ size = 22 }) => (
   <svg
     width={size}
     height={size}
@@ -17,7 +17,7 @@ export const Assigned: React.FC<IconProps> = ({ size = 20 }) => (
   </svg>
 );
 
-export const Complete: React.FC<IconProps> = ({ size = 20 }) => (
+export const Complete: React.FC<IconProps> = ({ size = 22 }) => (
   <svg
     width={size}
     height={size}
@@ -39,7 +39,7 @@ export const Complete: React.FC<IconProps> = ({ size = 20 }) => (
   </svg>
 );
 
-export const Excused: React.FC<IconProps> = ({ size = 20 }) => (
+export const Excused: React.FC<IconProps> = ({ size = 22 }) => (
   <svg
     width={size}
     height={size}
@@ -59,7 +59,7 @@ export const Excused: React.FC<IconProps> = ({ size = 20 }) => (
   </svg>
 );
 
-export const Incomplete: React.FC<IconProps> = ({ size = 20 }) => (
+export const Incomplete: React.FC<IconProps> = ({ size = 22 }) => (
   <svg
     width={size}
     height={size}

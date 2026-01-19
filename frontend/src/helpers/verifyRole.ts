@@ -2,6 +2,9 @@ import { jwtVerify } from "jose";
 
 export async function verifyRole(validRoles: string[]): Promise<boolean> {
   const token = localStorage.getItem("token") ?? "";
+  if (!token) {
+    return false;
+  }
   try {
     const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
     const { payload } = await jwtVerify(token, secret, {
@@ -16,7 +19,24 @@ export async function verifyRole(validRoles: string[]): Promise<boolean> {
   }
 }
 
-export async function getParticipantId() {
+export async function getRole(): Promise<string | null> {
+  const token = localStorage.getItem("token") ?? "";
+  try {
+    const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
+    const { payload } = await jwtVerify(token, secret, {
+      algorithms: ["HS256"],
+    });
+
+    if (!payload || !payload.role) {
+      return null;
+    }
+    return payload.role as string;
+  } catch (err) {
+    return null;
+  }
+}
+
+export async function getParticipantId(): Promise<number | null> {
   const token = localStorage.getItem("token") ?? "";
   try {
     const secret = new TextEncoder().encode(process.env.REACT_APP_JWT_SECRET);
@@ -27,7 +47,7 @@ export async function getParticipantId() {
     if (!payload || !payload.pid) {
       return null;
     }
-    return Number(payload.pid);
+    return payload.pid as number;
   } catch (err) {
     return null;
   }

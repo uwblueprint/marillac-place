@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
-import { verifyRole } from "../helpers/verifyRole";
+import { getRole, verifyRole } from "../helpers/verifyRole";
 import { ADMIN, RELIEF } from "../constants/roles";
 import LoadingScreen from "../ui/screens/LoadingScreen";
 import { ADMIN_LOGIN_PAGE } from "../constants/routes";
@@ -10,6 +10,7 @@ import { GET_CURRENT_PARTICIPANTS } from "../gql/participantRequests";
 import { AdminContext } from "./AdminContext";
 import ErrorScreen from "../ui/screens/ErrorScreen";
 import AdminMenu from "./AdminMenu";
+import { Participant } from "../types/models";
 
 type AdminRouteProps = {
   children: React.ReactElement;
@@ -17,68 +18,67 @@ type AdminRouteProps = {
 
 export default function AdminRoute({ children }: AdminRouteProps) {
   const adminContext = useContext(AdminContext);
+  const [populatingContext, setPopulatingContext] = useState(true);
+
   const [authorized, setAuthorized] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [authorizing, setAuthorizing] = useState(true);
+
   const [error, setError] = useState("");
 
   const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
     onCompleted: (data) => {
-      if (!data || !data.getCurrentParticipants || !adminContext) {
-        // Only set error in production mode
-        if (process.env.NODE_ENV !== "development") {
-          setError("error fetching participants for context");
-        }
+      if (!data || !data.getCurrentParticipants) {
+        setError("current participants data is missing");
         return;
       }
       const roomToParticipantMap: Record<number, number> = {};
-      data.getCurrentParticipants.forEach((participant: any) => {
+      data.getCurrentParticipants.forEach((participant: Participant) => {
         roomToParticipantMap[participant.room] = participant.pid;
       });
       adminContext.setRoomToParticipant(roomToParticipantMap);
     },
     onError: (err: Error) => {
-      if (process.env.NODE_ENV !== "development") {
-        setError(err.message);
-      } else {
-        console.warn("Could not fetch participants:", err.message);
-      }
+      setError(err.message);
     },
   });
 
   useEffect(() => {
     const authorize = async () => {
-      const isDevelopment = process.env.NODE_ENV === "development";
-      if (isDevelopment) {
-        setAuthorized(true);
-        setLoading(false);
-        return;
-      }
-
       const isStaff = await verifyRole([ADMIN, RELIEF]);
       if (isStaff) {
         setAuthorized(true);
       }
-      setLoading(false);
+      setAuthorizing(false);
     };
     authorize();
   }, []);
 
   useEffect(() => {
-    if (authorized) {
-      getCurrentParticipants();
+    if (!authorizing && authorized) {
+      const populateContext = async () => {
+        getCurrentParticipants();
+        const role = await getRole();
+        if (role === null) {
+          setError("Unable to retrieve role, please login again");
+        } else {
+          adminContext.setRole(role);
+        }
+        setPopulatingContext(false);
+      }
+      populateContext();
     }
-  }, [authorized, getCurrentParticipants]);
+  }, [authorizing, authorized]);
 
-  if (loading) {
+  if (!authorizing && !authorized) {
+    return <Navigate to={ADMIN_LOGIN_PAGE} replace />;
+  }
+
+  if (authorizing || populatingContext) {
     return <LoadingScreen />;
   }
 
   if (error) {
     return <ErrorScreen message={error} />;
-  }
-
-  if (!authorized) {
-    return <Navigate to={ADMIN_LOGIN_PAGE} replace />;
   }
 
   return (

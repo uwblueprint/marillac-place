@@ -112,11 +112,6 @@ export default function MarillacPlaceCalendar({
   const calendarView = view === DisplayView.MOBILE ? Views.DAY : Views.WEEK;
   return (
     <>
-      {view === DisplayView.MOBILE && (
-        <Text textStyle="web.b1" mb="12px" textAlign="center">
-          {formatDateV4(startDate)}
-        </Text>
-      )}
       <Box w="100%" minH="fit-content" overflow="hidden">
         <Calendar
           localizer={dateFnsLocalizer({

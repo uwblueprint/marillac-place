@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { Flex, Text } from "@chakra-ui/react";
@@ -7,7 +7,6 @@ import { verifyRole } from "../../../helpers/verifyRole";
 import * as ROUTES from "../../../constants/routes";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import { ADMIN, RELIEF } from "../../../constants/roles";
-import { AdminContext } from "../../AdminContext";
 import WidgetContainer from "../../../ui/containers/WidgetContainer";
 import DropdownInput from "../../../ui/inputs/DropdownInput";
 import PasswordInput from "../../../ui/inputs/PasswordInput";
@@ -15,7 +14,6 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
-  const adminContext = useContext(AdminContext);
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,11 +27,6 @@ export default function AdminLoginPage() {
     {
       onCompleted: (data) => {
         localStorage.setItem("token", data.adminLogin.token);
-        if (!adminContext) {
-          setError("admin context not found");
-          return;
-        }
-        adminContext.setRole(role);
         navigate(ROUTES.ADMIN_HOME_PAGE);
       },
       onError: (err: Error) => {

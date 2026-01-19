@@ -9,6 +9,7 @@ import SelectInput from "../../../../ui/inputs/SelectInput";
 import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
 import { AdminContext } from "../../../AdminContext";
 import { Priority } from "../../../../types/enums";
+import TextInput from "../../../../ui/inputs/TextInput";
 
 const CreateAnnouncementModal = ({
   onClose,
@@ -19,6 +20,7 @@ const CreateAnnouncementModal = ({
 }) => {
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [priority, setPriority] = useState<Priority | null>(null);
+  const [topic, setTopic] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
 
@@ -27,7 +29,7 @@ const CreateAnnouncementModal = ({
   const { roomToParticipant } = useContext(AdminContext);
 
   const handleSend = async () => {
-    if (selectedRooms.length === 0 || priority === null || message === "") {
+    if (selectedRooms.length === 0 || priority === null || message === "" || topic === "") {
       setError("Missing fields.");
       return;
     }
@@ -51,6 +53,7 @@ const CreateAnnouncementModal = ({
         variables: {
           priority,
           pids: participantIds,
+          topic,
           message,
         },
       });
@@ -117,6 +120,13 @@ const CreateAnnouncementModal = ({
           High: Priority.HIGH,
           Critical: Priority.CRITICAL,
         }}
+      />
+
+      <TextInput
+        label="Topic"
+        current_value={topic}
+        update_action={setTopic}
+        size="large"
       />
 
       <TextAreaInput

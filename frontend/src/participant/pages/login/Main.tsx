@@ -7,8 +7,6 @@ import { PARTICIPANT } from "../../../constants/roles";
 import { PARTICIPANT_LOGIN } from "../../../gql/loginRequests";
 import * as ROUTES from "../../../constants/routes";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
-import ErrorScreen from "../../../ui/screens/ErrorScreen";
-import { ParticipantContext } from "../../ParticipantContext";
 import WidgetContainer from "../../../ui/containers/WidgetContainer";
 import NumberInput from "../../../ui/inputs/NumberInput";
 import PasswordInput from "../../../ui/inputs/PasswordInput";
@@ -16,7 +14,6 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 
 export default function ParticipantsLoginPage() {
   const navigate = useNavigate();
-  const participantContext = useContext(ParticipantContext);
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -30,11 +27,6 @@ export default function ParticipantsLoginPage() {
     {
       onCompleted: (data) => {
         localStorage.setItem("token", data.participantLogin.token);
-        if (!participantContext) {
-          setError("participant context not found");
-          return;
-        }
-        participantContext.setPid(data.participantLogin.pid);
         navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
       },
       onError: (err: Error) => {
@@ -59,16 +51,12 @@ export default function ParticipantsLoginPage() {
     if (!id || !password) {
       setError("missing required fields");
     } else {
-      participantLogin({ variables: { pid: Number(id), password } });
+      participantLogin({ variables: { pid: id, password } });
     }
   };
 
   if (loading || participantLoginLoading) {
     return <LoadingScreen />;
-  }
-
-  if (error) {
-    return <ErrorScreen message={error} />;
   }
 
   if (loggedIn) {
@@ -106,7 +94,8 @@ export default function ParticipantsLoginPage() {
               Please enter your login information.
             </Text>
           </Flex>
-          <Flex flexDir="column" gap="10px" my="20px">
+
+          <Flex flexDir="column" gap="10px" mt="15px" mb="10px">
             <NumberInput
               placeholder="ID #"
               current_value={id}
@@ -123,16 +112,18 @@ export default function ParticipantsLoginPage() {
           </Flex>
 
           {error && (
-            <Text textStyle="mobile.b2" fontWeight="600" color="#E30000">
+            <Text textStyle="mobile.b1" fontWeight="500" color="#E30000" mt="5px">
               {error}
             </Text>
           )}
 
-          <OrangeButton
-            label="Sign in"
-            action={handleSubmit}
-            is_active={false}
-          />
+          <Flex mt="15px">  
+            <OrangeButton
+              label="Sign in"
+              action={handleSubmit}
+              is_active={false}
+            />
+          </Flex>
         </WidgetContainer>
       </Flex>
     </Flex>

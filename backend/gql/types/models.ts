@@ -15,6 +15,7 @@ const models = gql`
   type Announcement {
     aid: Int!
     date: DateTime!
+    topic: String!
     message: String!
     priority: Priority!
 

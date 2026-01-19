@@ -2,66 +2,59 @@ import React, { useContext, useState } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import ParticipantAnnouncementCard from "./components/ParticipantAnnouncementCard";
-import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";
-import { GET_RECEIVED_ANNOUNCEMENTS
-} from "../../../gql/receivedAnnouncementRequests";
+import { GET_RECEIVED_ANNOUNCEMENTS } from "../../../gql/receivedAnnouncementRequests";
 import { ParticipantContext } from "../../ParticipantContext";
-import { Priority } from "../../../types/enums";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
-
-
-const FILTER_LABELS = ["ALL", "UNREAD", "PINNED", "IMPORTANT"] as const;
+import { ReceivedAnnouncement } from "../../../types/models";
+import LoadingScreen from "../../../ui/screens/LoadingScreen";
+import ErrorScreen from "../../../ui/screens/ErrorScreen";
+import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";
 
 export default function ParticipantsAnnouncementsPage() {
   const participant = useContext(ParticipantContext);
-  const participantId = participant?.pid;
+  const participantId = participant.pid;
 
   const [expandedView, setExpandedView] = useState(false);
-  const [selected, setSelected] = useState({
-    uaid: -1,
-    allRooms: false,
-    message: "",
-    importance: -1,
-    read: false,
-    pinned: false,
-    date: "",
-  });
+  const [selected, setSelected] = useState<ReceivedAnnouncement | null>(null);
 
   const [filter, setFilter] = useState(0);
-  
-  // helper function to get variable based on filter
   const getFilterVariables = () => {
     switch(filter){
       case 0: // ALL
-        return { pid: participantId};
+        return { pid: participantId };
       case 1: // UNREAD
-        return { pid: participantId, unread: true};
+        return { pid: participantId, unread: true };
       case 2: // PINNED
-        return { pid: participantId, pinned: true};
+        return { pid: participantId, pinned: true };
       case 3: // IMPORTANT
-        return { pid: participantId, important: true}
+        return { pid: participantId, important: true };
       default:
-        return { pid: participantId} 
+        return { pid: participantId };
     }
   };
 
-  const { data, loading, error } = useQuery(GET_RECEIVED_ANNOUNCEMENTS, {
+  const { data, loading, error, refetch } = useQuery(GET_RECEIVED_ANNOUNCEMENTS, {
     variables : getFilterVariables(),
     skip: !participantId,
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-first",
     notifyOnNetworkStatusChange: true,
   });
-  
-  const announcements = data?.getReceivedAnnouncements ?? [];
 
-  if (loading) return <Text>Loading announcements…</Text>;
-  if (error) return <Text color="red.500">Error loading announcements.</Text>;
+  if (loading) return <LoadingScreen />;
+  if (error) return <ErrorScreen message={error.message} />;
 
   if (expandedView && selected) {
-    return <AnnouncementsExpandedView announcement={selected}
-    onBack={ () => setExpandedView(false)}
-    />;
+    return (
+      <AnnouncementsExpandedView 
+        announcement={selected} 
+        onBack={() => {
+          refetch();
+          setExpandedView(false);
+          setSelected(null);
+        }}
+      />
+    )
   }
 
   return (
@@ -89,56 +82,24 @@ export default function ParticipantsAnnouncementsPage() {
         />
       </Flex>
 
-
-      {!data || data.length === 0 ? (
-        <Flex>No announcements.</Flex>
-      ) : (
-        <>
-          <Text textStyle="mobile.s1" color="text.light.secondary">
-            Most Recent
-          </Text>
-          {announcements.map((a: any, i: number) => {
-            const {
-              aid: uaid,
-              read,
-              pinned,
-              announcement: { message, priority, date },
-            } = a;
-
-            const allRooms = false;
-            const importance = Object.values(Priority).indexOf(priority);
-
-            return (
-              <Flex
-                key={uaid}
-                cursor="pointer"
-                onClick={() => {
-                  setSelected({
-                    uaid,
-                    allRooms,
-                    message,
-                    importance,
-                    read,
-                    pinned,
-                    date,
-                  });
-                  setExpandedView(true);
-                }}
-              >
-                <ParticipantAnnouncementCard
-                  userAnnouncementId={uaid}
-                  allRooms={allRooms}
-                  message={message}
-                  importance={importance}
-                  hasRead={read}
-                  isPinned={pinned}
-                  time={date}
-                />
-              </Flex>
-            );
-          })}
-        </>
-      )}
+      <Text textStyle="mobile.s1" color="text.light.secondary">
+        Most Recent
+      </Text>
+      
+      {data?.getReceivedAnnouncements.map((announcement: ReceivedAnnouncement, index: number) => {
+        return (
+          <Flex
+            key={index}
+            cursor="pointer"
+            onClick={() => {
+              setSelected(announcement);
+              setExpandedView(true);
+            }}
+          >
+            <ParticipantAnnouncementCard announcement={announcement} />
+          </Flex>
+        );
+      })}
     </>
   );
 }

@@ -2,24 +2,19 @@ import { Divider, Flex, Text } from "@chakra-ui/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { formatDateV3 } from "../../../../helpers/formatDateTime";
-import { ExclamationMark, Dot } from "../../../../ui/icons/NotificationIcons";
-import { Pin } from "../../../../ui/icons/ActionIcons";
+import { ExclamationMark, Dot, Mail } from "../../../../ui/icons/NotificationIcons";
+import { Pin, Pinned } from "../../../../ui/icons/ActionIcons";
 import GreenOutlineButton from "../../../../ui/buttons/GreenOutlineButton";
 import { UPDATE_RECEIVED_ANNOUNCEMENT } from "../../../../gql/receivedAnnouncementRequests";
 import { ParticipantContext } from "../../../ParticipantContext";
-
-type AnnouncementInfo = {
-  uaid: number;
-  allRooms: boolean;
-  message: string;
-  importance: number;
-  read: boolean;
-  pinned: boolean;
-  date: string;
-};
+import { Announcement, ReceivedAnnouncement } from "../../../../types/models";
+import ErrorScreen from "../../../../ui/screens/ErrorScreen";
+import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
+import { Priority } from "../../../../types/enums";
+import { toTitleCase } from "../../../../helpers/stringUtils";
 
 type AnnouncementsExpandedViewProps = {
-  announcement: AnnouncementInfo;
+  announcement: ReceivedAnnouncement;
   onBack: () => void;
 };
 
@@ -27,131 +22,102 @@ export default function AnnouncementsExpandedView({
   announcement,
   onBack,
 }: AnnouncementsExpandedViewProps) {
-  const participant = useContext(ParticipantContext);
-  const participantId = participant?.pid;
-
-  const [pinned, setPinned] = useState<boolean>(announcement.pinned);
-  const prevPinnedRef = useRef<boolean>(announcement.pinned);
-  const [updating, setUpdating] = useState(false);
+  const { pid } = useContext(ParticipantContext);
   const [error, setError] = useState("");
 
   const [updatePinRead] = useMutation(UPDATE_RECEIVED_ANNOUNCEMENT);
+  const [read, setRead] = useState<boolean>(announcement.read);
+  const [pinned, setPinned] = useState<boolean>(announcement.pinned);
 
-  useEffect(() => {
-    let cancelled = false;
-  
-    const shouldSkip = !participantId || pinned === prevPinnedRef.current;
-  
-    if (!shouldSkip) {
-      const updatePin = async () => {
-        setUpdating(true);
-        try {
-          await updatePinRead({
-            variables: {
-              aid: announcement.uaid,
-              pid: participantId,
-              pinned,
-            },
-          });
-  
-          if (!cancelled) {
-            prevPinnedRef.current = pinned;
-          }
-        } catch (err) {
-          if (!cancelled) {
-            setPinned(prevPinnedRef.current);
-            setError("Unable to update pin status");
-          }
-        } finally {
-          if (!cancelled) setUpdating(false);
-        }
-      };
-  
-      updatePin();
+  const handleUpdatePin = async (pin: boolean) => {
+    if (!pid) {
+      setError("Unable to update pin status, something went wrong.")
     }
-  
-    return () => {
-      cancelled = true;
-    };
-  }, [announcement.uaid, participantId, pinned, updatePinRead]);
-  
-  useEffect(() => {
-    let cancelled = false;
-  
-    const shouldSkip = !participantId || announcement.read;
-  
-    if (!shouldSkip) {
-      const markAsRead = async () => {
-        setUpdating(true);
-        try {
-          await updatePinRead({
-            variables: {
-              aid: announcement.uaid,
-              pid: participantId,
-              read: true,
-            },
-          });
-        } catch (err) {
-          if (!cancelled) setError("Unable to mark as read");
-        } finally {
-          if (!cancelled) setUpdating(false);
-        }
-      };
-  
-      markAsRead();
-    }
-  
-    return () => {
-      cancelled = true;
-    };
-  }, [announcement.uaid, announcement.read, participantId, updatePinRead]);
-  
-  // mark as unread (manual function)
-  const handleMarkAsUnread = async () => {
-    if (!participantId || updating) return;
-    setError(""); 
-    setUpdating(true);
 
     try {
       await updatePinRead({
         variables: {
-          aid: announcement.uaid,
-          pid: participantId,
-          read: false,
+          aid: announcement.aid,
+          pid,
+          pinned: pin,
         },
       });
-      onBack(); 
-    } catch (err) {
-      setError("Unable to mark as unread");
-    } finally {
-      setUpdating(false);
+      setPinned(pin);
+    } catch (err: any) {
+      setError(err.message);
     }
   };
+  
+  const handleMarkAsUnread = async () => {
+    if (!pid) {
+      setError("Unable to update read status, something went wrong.")
+    }
+
+    try {
+      if (read) {
+        await updatePinRead({
+          variables: {
+            aid: announcement.aid,
+            pid,
+            read: false,
+          },
+        });
+        setRead(false);
+      }
+      onBack(); 
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const handleGoBack = async () => {
+    if (!pid) {
+      setError("Unable to mark message as read, something went wrong.")
+    }
+ 
+    try {
+      if (!read) {
+        await updatePinRead({
+          variables: {
+            aid: announcement.aid,
+            pid,
+            read: true,
+          },
+        });
+        setRead(true);
+      }
+      onBack(); 
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  const details: Announcement | undefined = announcement.announcement;
+  if (!details || (details && (!details.topic || !details.date || !details.message || !details.priority))) {
+    return <ErrorScreen message="Unable to load announcement details, something went wrong." />
+  }
 
   return (
     <>
       <Flex alignItems="center" justify="space-between">
-        <Text textStyle="mobile.h2">
-          {announcement.allRooms ? "Admin To All Rooms" : "Admin To Your Room"}
+        <Text textStyle="mobile.h2" color="primary.700">
+          {toTitleCase(details.topic)}
         </Text>
-        <Text
-          onClick={onBack} // Use callback instead of reload
-          textStyle="mobile.b1"
-          textDecoration="underline"
-          cursor="pointer"
-          _hover={{
-            textDecoration: "none",
-          }}
-        >
-          Back to Announcements
-        </Text>
+        <UnderlineButton
+          label="Go Back"
+          action={handleGoBack}
+        />
       </Flex>
 
-      <Flex alignItems="center" justify="space-between">
+      <Flex alignItems="center" justify="space-between" marginBottom="4px">
+        <Text textStyle="mobile.b1" color="text.light.secondary">
+          {formatDateV3(new Date(details.date))}
+        </Text>
+
         <Flex gap="12px">
-          {announcement.importance !== 0 && (
-            <Flex gap="8px" alignItems="center">
-              <ExclamationMark size={4} />
+          {details.priority !== Priority.NORMAL && (
+            <Flex gap="4px" alignItems="center">
+              <ExclamationMark size={12} />
               <Text textStyle="mobile.b1" color="danger.800">
                 Priority
               </Text>
@@ -159,46 +125,39 @@ export default function AnnouncementsExpandedView({
           )}
 
           {pinned && (
-            <Flex gap="8px" alignItems="center">
-              <Pin size={8} color="secondary.700" />
+            <Flex gap="4px" alignItems="center">
+              <Pinned size={12} />
               <Text textStyle="mobile.b1" color="secondary.700">
                 Pinned
               </Text>
             </Flex>
           )}
         </Flex>
-        <Text textStyle="mobile.b1" color="text.light.secondary">
-          {formatDateV3(new Date(announcement.date))}
-        </Text>
       </Flex>
 
       <Divider borderColor="neutral.300" />
 
-      <Text textStyle="mobile.b1">{announcement.message}</Text>
+      <Text textStyle="mobile.b1" my="8px">{details.message}</Text>
 
       {error && (
-        <Text textStyle="mobile.b2" color="danger.800" mt="8px">
-          {error}
+        <Text textStyle="mobile.b1" color="danger.800">
+          this is an error message
         </Text>
       )}
 
-      <Flex marginTop="8px" gap="12px" alignItems="center">
-        <Flex alignItems="center" gap="8px">
-          <GreenOutlineButton
-            label="Mark as Unread"
-            action={handleMarkAsUnread}
-            is_active={false}
-          />
-          <Dot size={14} />
-        </Flex>
-        <Flex alignItems="center" gap="8px">
-          <GreenOutlineButton
-            label={pinned ? "Unpin" : "Pin"}
-            action={() => setPinned(!pinned)}
-            is_active={false}
-          />
-          <Pin size={8} color={pinned ? "secondary.700" : "primary.700"} />
-        </Flex>
+      <Flex gap="8px" alignItems="center">
+        <GreenOutlineButton
+          label="Mark as Unread"
+          action={handleMarkAsUnread}
+          is_active={false}
+          icon={<Mail size={14} color="currentColor" />}
+        />
+        <GreenOutlineButton
+          label={pinned ? "Unpin" : "Pin"}
+          action={() => handleUpdatePin(!pinned)}
+          is_active={false}
+          icon={pinned ? <Pinned size={12} color="currentColor" /> : <Pin size={12} color="currentColor" />}
+        />
       </Flex>
     </>
   );
