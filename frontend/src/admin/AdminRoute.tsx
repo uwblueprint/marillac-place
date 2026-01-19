@@ -69,12 +69,12 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     }
   }, [authorizing, authorized]);
 
-  if (authorizing || populatingContext) {
-    return <LoadingScreen />;
-  }
-
   if (!authorizing && !authorized) {
     return <Navigate to={ADMIN_LOGIN_PAGE} replace />;
+  }
+
+  if (authorizing || populatingContext) {
+    return <LoadingScreen />;
   }
 
   if (error) {

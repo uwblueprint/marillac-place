@@ -49,7 +49,7 @@ export default function TaskStatusDisplay({
       color={TaskStatusConfig[status].textColor}
       borderRadius="lg"
       width={size}
-      height="30px"
+      height="35px"
     >
       <Icon size={20} />
       <Text textStyle="web.s1" color={TaskStatusConfig[status].textColor}>

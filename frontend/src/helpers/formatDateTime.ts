@@ -30,6 +30,11 @@ export function formatDateV6(date: Date): string {
   return format(date, "MMM d, yyyy");
 };
 
+// e.g. Thursday, Jan 1
+export function formatDateV7(date: Date): string {
+  return format(date, "EEEE, MMM d");
+};
+
 export function formatDateInputValue(date: Date): string {
   return format(date, "yyyy-MM-dd");
 };
