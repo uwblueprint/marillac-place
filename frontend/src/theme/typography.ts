@@ -73,7 +73,7 @@ export const textStyles = {
       fontSize: "12px",
     },
     b0: {
-      fontWeight: "600",
+      fontWeight: "700",
       fontSize: "14px",
     },
     b1: {

@@ -144,6 +144,7 @@ model LoginHistory {
 model Announcement {
   aid      Int      @id @default(autoincrement())
   date     DateTime @default(now())
+  topic    String
   message  String
   priority Priority @default(NORMAL)
 

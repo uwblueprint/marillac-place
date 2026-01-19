@@ -2,12 +2,13 @@ import React, { useContext, useState } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import ParticipantAnnouncementCard from "./components/ParticipantAnnouncementCard";
-import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";
 import { GET_RECEIVED_ANNOUNCEMENTS } from "../../../gql/receivedAnnouncementRequests";
 import { ParticipantContext } from "../../ParticipantContext";
-import { Priority } from "../../../types/enums";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import { ReceivedAnnouncement } from "../../../types/models";
+import LoadingScreen from "../../../ui/screens/LoadingScreen";
+import ErrorScreen from "../../../ui/screens/ErrorScreen";
+import AnnouncementsExpandedView from "./components/AnnouncementsExpandedView";
 
 export default function ParticipantsAnnouncementsPage() {
   const participant = useContext(ParticipantContext);
@@ -32,7 +33,7 @@ export default function ParticipantsAnnouncementsPage() {
     }
   };
 
-  const { data, loading, error } = useQuery(GET_RECEIVED_ANNOUNCEMENTS, {
+  const { data, loading, error, refetch } = useQuery(GET_RECEIVED_ANNOUNCEMENTS, {
     variables : getFilterVariables(),
     skip: !participantId,
     fetchPolicy: "network-only",
@@ -40,8 +41,21 @@ export default function ParticipantsAnnouncementsPage() {
     notifyOnNetworkStatusChange: true,
   });
 
-  if (loading) return <Text>Loading announcements…</Text>;
-  if (error) return <Text color="red.500">Error loading announcements.</Text>;
+  if (loading) return <LoadingScreen />;
+  if (error) return <ErrorScreen message={error.message} />;
+
+  if (expandedView && selected) {
+    return (
+      <AnnouncementsExpandedView 
+        announcement={selected} 
+        onBack={() => {
+          refetch();
+          setExpandedView(false);
+          setSelected(null);
+        }}
+      />
+    )
+  }
 
   return (
     <>

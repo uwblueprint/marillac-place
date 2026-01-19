@@ -33,7 +33,7 @@ export default function GreenOutlineButton({
     >
       <Flex alignItems="center" gap="5px">
         {icon}
-        <Text textStyle="web.s1" color="inherif">
+        <Text textStyle="web.s1" color="inherit">
           {label}
         </Text>
       </Flex>

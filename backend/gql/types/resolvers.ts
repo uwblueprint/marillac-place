@@ -61,6 +61,7 @@ const resolvers = gql`
     createAnnouncement(
       priority: Priority!
       pids: [Int!]!
+      topic: String!
       message: String!
     ): Announcement!
     updateAnnouncement(

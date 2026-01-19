@@ -56,16 +56,19 @@ const announcementResolver = {
       {
         priority,
         pids,
+        topic,
         message,
       }: {
         priority: Priority;
         pids: number[];
+        topic: string;
         message: string;
       }
     ): Promise<Announcement> => {
       const announcement = await db.announcement.create({
         data: {
           priority,
+          topic,
           message,
         },
       });

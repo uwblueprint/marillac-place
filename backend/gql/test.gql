@@ -306,6 +306,7 @@ mutation CreateAnnouncement(
 ) {
   createAnnouncement(priority: $priority, pids: $pids, message: $message) {
     aid
+    topic
     message
     date
     priority
