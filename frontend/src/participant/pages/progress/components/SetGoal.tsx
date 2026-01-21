@@ -1,49 +1,51 @@
-import { Flex, Image, Input, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { ParticipantContext } from "../../../ParticipantContext";
 import { CREATE_EARNING_GOAL } from "../../../../gql/earningGoalRequests";
 import { GoalAction } from "../../../../types/enums";
-import useNotification from "../../../../hooks/useNotification";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
+import { MarillacCoin } from "../../../../ui/icons/MiscIcons";
+import NumberInput from "../../../../ui/inputs/NumberInput";
 
 interface SetGoalProps {
   handleClose: () => void;
-  onGoalSet: () => void;
+  refetchGoal: () => void;
+  prevGoal: number;
 }
 
-export const SetGoal: React.FC<SetGoalProps> = ({ handleClose, onGoalSet }) => {
-  const [goal, setGoal] = useState("");
+export const SetGoal: React.FC<SetGoalProps> = ({ handleClose, refetchGoal, prevGoal }) => {
+  const [goal, setGoal] = useState<number | null>(null);
   const [error, setError] = useState("");
-  const participantContext = useContext(ParticipantContext);
-  const { sendNotification } = useNotification();
+  const { pid } = useContext(ParticipantContext);
 
-  const [createGoalMutation] = useMutation(CREATE_EARNING_GOAL);
-
+  const [createGoalMutation, { loading }] = useMutation(CREATE_EARNING_GOAL);
   const handleSave = async () => {
-    if (!participantContext?.pid) {
-      setError("Not logged in");
+    if (pid === -1) {
+      setError("Something went wrong. Please try again.");
       return;
     }
 
-    const goalValue = parseInt(goal, 10);
+    if (goal === null) {
+      setError("Please enter a new goal");
+      return;
+    }
 
-    if (Number.isNaN(goalValue) || goalValue <= 0) {
-      setError("Goal must be greater than 0");
+    if (goal <= prevGoal) {
+      setError("New goal must be greater than previous goal");
       return;
     }
 
     try {
       await createGoalMutation({
         variables: {
-          pid: participantContext.pid,
+          pid,
           action: GoalAction.SET,
-          value: goalValue,
+          value: goal,
         },
       });
 
-      sendNotification("Goal set successfully!");
-      onGoalSet();
+      refetchGoal();
       handleClose();
     } catch (err: any) {
       setError(err.message || "Failed to save goal — please try again.");
@@ -52,32 +54,21 @@ export const SetGoal: React.FC<SetGoalProps> = ({ handleClose, onGoalSet }) => {
 
   return (
     <PopupContainer
-      title="Set a Goal"
+      title="Set Goal"
       submit_text="Save"
       submit_action={handleSave}
       cancel_action={handleClose}
       error_message={error}
+      loading={loading}
     >
-      <Flex justify="space-between">
-        <Text textStyle="web.b1">New goal:</Text>
-        <Flex align="center" justify="space-between">
-          <Image src="/assets/marillac_bucks.png" alt="coin" />
-          <Input
-            ml="10px"
-            size="sm"
-            minWidth="32px"
-            maxWidth="80px"
-            height="32px"
-            fontWeight="semibold"
-            type="number"
-            placeholder="0"
-            value={goal}
-            onFocus={(e) => {
-              e.target.select();
-            }}
-            onChange={(e) => {
-              setGoal(e.target.value);
-            }}
+      <Flex justify="space-between" alignItems="center">
+        <Text textStyle="mobile.b1">New goal:</Text>
+        <Flex align="center" gap={2} justifyContent="space-between" mr="-4px">
+          <MarillacCoin size={22} />
+          <NumberInput
+            current_value={goal}
+            update_action={setGoal}
+            size="small"
           />
         </Flex>
       </Flex>

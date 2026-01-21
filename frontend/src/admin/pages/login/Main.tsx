@@ -1,20 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import {
-  Select,
-  Button,
-  Flex,
-  Text,
-  Input,
-  FormControl,
-} from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { ADMIN_LOGIN } from "../../../gql/loginRequests";
 import { verifyRole } from "../../../helpers/verifyRole";
 import * as ROUTES from "../../../constants/routes";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import { ADMIN, RELIEF } from "../../../constants/roles";
-import { AdminContext } from "../../AdminContext";
 import WidgetContainer from "../../../ui/containers/WidgetContainer";
 import DropdownInput from "../../../ui/inputs/DropdownInput";
 import PasswordInput from "../../../ui/inputs/PasswordInput";
@@ -22,7 +14,6 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
-  const adminContext = useContext(AdminContext);
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -31,20 +22,18 @@ export default function AdminLoginPage() {
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
 
-  const [adminLogin, { loading: adminLoginLoading }] = useMutation(ADMIN_LOGIN, {
-    onCompleted: (data) => {
-      localStorage.setItem("token", data.adminLogin.token);
-      if (!adminContext) {
-        setError("admin context not found");
-        return;
-      }
-      adminContext.setRole(role);
-      navigate(ROUTES.ADMIN_HOME_PAGE);
-    },
-    onError: (err: Error) => {
-      setError(err.message);
-    },
-  });
+  const [adminLogin, { loading: adminLoginLoading }] = useMutation(
+    ADMIN_LOGIN,
+    {
+      onCompleted: (data) => {
+        localStorage.setItem("token", data.adminLogin.token);
+        navigate(ROUTES.ADMIN_HOME_PAGE);
+      },
+      onError: (err: Error) => {
+        setError(err.message);
+      },
+    }
+  );
 
   useEffect(() => {
     const authenticate = async () => {
@@ -115,7 +104,10 @@ export default function AdminLoginPage() {
               placeholder="Select Role"
               current_value={role}
               update_action={setRole}
-              value_options={{ "Administrative Staff": ADMIN, "Relief Staff": RELIEF }}
+              value_options={{
+                "Administrative Staff": ADMIN,
+                "Relief Staff": RELIEF,
+              }}
             />
 
             <PasswordInput

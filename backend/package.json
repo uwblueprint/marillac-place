@@ -7,7 +7,7 @@
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
     "postinstall": "npx prisma generate && tsc",
-    "start": "npx prisma db push && npx prisma generate && if [ \"$NODE_ENV\" = \"production\" ]; then node build/server.js; else nodemon -L; fi"
+    "start": "npx prisma migrate deploy && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && if [ \"$NODE_ENV\" = \"production\" ]; then node build/server.js; else nodemon -L; fi"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +28,7 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "graphql": "15.5.0",
@@ -91,7 +92,8 @@
     "config": "prisma/seed/seed.config.ts"
   },
   "prisma": {
-    "schema": "./prisma/schema.prisma"
+    "schema": "./prisma/schema.prisma",
+    "seed": "npx tsx ./prisma/seed/seed.ts"
   },
   "engines": {
     "node": "18.18.2"

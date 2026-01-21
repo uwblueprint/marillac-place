@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
-import { verifyRole } from "../helpers/verifyRole";
+import { getParticipantId, verifyRole } from "../helpers/verifyRole";
 import { PARTICIPANT } from "../constants/roles";
 import LoadingScreen from "../ui/screens/LoadingScreen";
 import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
@@ -10,8 +10,6 @@ import { ParticipantContext } from "./ParticipantContext";
 import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
 import ErrorScreen from "../ui/screens/ErrorScreen";
 import ParticipantMenu from "./ParticipantMenu";
-import { Home } from "../ui/icons/BadgeIcons";
-import ParticipantsHomePage from "./pages/home/Main";
 
 type ParticipantRouteProps = {
   children: React.ReactElement;
@@ -19,24 +17,25 @@ type ParticipantRouteProps = {
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   const participantContext = useContext(ParticipantContext);
+  const [populatingContext, setPopulatingContext] = useState(true);
+
   const [authorized, setAuthorized] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [authorizing, setAuthorizing] = useState(true);
+
   const [error, setError] = useState("");
 
   const [getParticipantByPid] = useLazyQuery(GET_PARTICIPANT_BY_PID, {
     onCompleted: (data) => {
-      if (!data || !data.getParticipantByPid || !participantContext) {
-        setError("error fetching participant for context");
+      if (!data || !data.getParticipantByPid || !data.getParticipantByPid.room || !data.getParticipantByPid.balance) {
+        setError("participant data is missing");
         return;
       }
       participantContext.setRoom(data.getParticipantByPid.room);
       participantContext.setBalance(data.getParticipantByPid.balance);
+      participantContext.setTotalEarnings(data.getParticipantByPid.total_earnings);
     },
     onError: (err: Error) => {
-      console.error(err.message);
-      // Clear invalid token and redirect to login
-      localStorage.removeItem("token");
-      setAuthorized(false);
+      setError(err.message);
     },
   });
 
@@ -46,31 +45,28 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       if (isParticipant) {
         setAuthorized(true);
       }
-      setLoading(false);
+      setAuthorizing(false);
     };
     authorize();
   }, []);
 
   useEffect(() => {
-    const fetchParticipantData = async () => {
-      if (authorized && participantContext) {
-        setLoading(true);
-        getParticipantByPid({ variables: { pid: participantContext.pid } });
-        setLoading(false);
-      }
-    };
-    fetchParticipantData();
-  }, [authorized, participantContext]);
+    if (!authorizing && authorized) {
+      const populateContext = async () => {
+        const pid = await getParticipantId();
+        if (pid === null) {
+          setError("unable to retrieve participant id, please login again");
+        } else {
+          participantContext.setPid(pid);
+          getParticipantByPid({ variables: { pid } });
+        }
+        setPopulatingContext(false);
+      };
+      populateContext();
+    }
+  }, [authorizing, authorized]);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
-  if (error) {
-    return <ErrorScreen message={error} />;
-  }
-
-  if (!authorized) {
+  if (!authorizing && !authorized) {
     return <Navigate to={PARTICIPANTS_LOGIN_PAGE} replace />;
   }
 
@@ -80,19 +76,20 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       h="100vh"
       alignItems="flex-start"
       justifyContent="center"
-      bg="neutral.100"
     >
-      <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column">
-        <ParticipantMenu />
+      <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column" position="relative">
+        <ParticipantMenu room={participantContext.room} balance={participantContext.balance} />
         <Flex
           flexDir="column"
+          mt="60px"
           width="100%"
+          height="calc(100vh - 60px)"
           padding="20px"
           overflow="scroll"
           gap="8px"
           bg="neutral.100"
         >
-          {children}
+          {error ? <ErrorScreen message={error} /> : (authorizing || populatingContext) ? <LoadingScreen /> : children}
         </Flex>
       </Flex>
     </Flex>

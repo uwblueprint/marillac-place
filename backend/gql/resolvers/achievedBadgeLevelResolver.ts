@@ -27,6 +27,7 @@ const achievedBadgeLevelResolver = {
             },
           },
         },
+        orderBy: { date: "desc" },
       });
     },
   },

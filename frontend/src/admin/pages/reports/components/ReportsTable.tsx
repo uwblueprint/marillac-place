@@ -3,7 +3,10 @@ import { useMutation } from "@apollo/client";
 import { Trash } from "../../../../ui/icons/ActionIcons";
 import DataTable, { Row } from "../../../../ui/misc/DataTable";
 import ToggleButton from "../../../../ui/buttons/ToggleButton";
-import { DELETE_REPORT_RECIPIENT, UPDATE_REPORT_RECIPIENT } from "../../../../gql/reportRecipientRequests";
+import {
+  DELETE_REPORT_RECIPIENT,
+  UPDATE_REPORT_RECIPIENT,
+} from "../../../../gql/reportRecipientRequests";
 
 type Report = {
   email: string;
@@ -17,15 +20,17 @@ type ReportsTableProps = {
 };
 
 export default function ReportsTable({ reports, refetch }: ReportsTableProps) {
-  const [updateReportRecipient, { loading: updateReportRecipientLoading }] = useMutation(UPDATE_REPORT_RECIPIENT);
-  const [deleteReportRecipient, { loading: deleteReportRecipientLoading }] = useMutation(DELETE_REPORT_RECIPIENT);
+  const [updateReportRecipient, { loading: updateReportRecipientLoading }] =
+    useMutation(UPDATE_REPORT_RECIPIENT);
+  const [deleteReportRecipient, { loading: deleteReportRecipientLoading }] =
+    useMutation(DELETE_REPORT_RECIPIENT);
 
   const handleChangeWeekly = async (email: string, weekly: boolean) => {
     try {
       await updateReportRecipient({
         variables: {
           email,
-          weekly
+          weekly,
         },
       });
       refetch();
@@ -39,7 +44,7 @@ export default function ReportsTable({ reports, refetch }: ReportsTableProps) {
       await updateReportRecipient({
         variables: {
           email,
-          monthly
+          monthly,
         },
       });
       refetch();
@@ -47,7 +52,7 @@ export default function ReportsTable({ reports, refetch }: ReportsTableProps) {
       console.error("Error updating report recipient:", err);
     }
   };
-  
+
   const handleDeleteEmail = async (email: string) => {
     try {
       await deleteReportRecipient({
@@ -70,27 +75,27 @@ export default function ReportsTable({ reports, refetch }: ReportsTableProps) {
 
   const rows: Row[][] = reports.map((report: Report) => [
     {
-      element: report.email
+      element: report.email,
     },
     {
       element: <ToggleButton active={report.weekly} setActive={() => {}} />,
-      action: async () => handleChangeWeekly(report.email, !report.weekly)
+      action: async () => handleChangeWeekly(report.email, !report.weekly),
     },
     {
       element: <ToggleButton active={report.monthly} setActive={() => {}} />,
-      action: async () => handleChangeMonthly(report.email, !report.monthly)
+      action: async () => handleChangeMonthly(report.email, !report.monthly),
     },
     {
       element: <Trash size={20} />,
-      action: async () => handleDeleteEmail(report.email)
+      action: async () => handleDeleteEmail(report.email),
     },
   ]);
 
   return (
-      <DataTable
-        loading={updateReportRecipientLoading || deleteReportRecipientLoading}
-        columns={columns}
-        rows={rows}
-      />
+    <DataTable
+      loading={updateReportRecipientLoading || deleteReportRecipientLoading}
+      columns={columns}
+      rows={rows}
+    />
   );
 }

@@ -1,9 +1,10 @@
-import { subDays, startOfDay } from "date-fns";
+import { subDays } from "date-fns";
 import prisma from "../../prisma";
+import { getStartOfDay } from "../../utils/dateUtils";
 
 // deletes announcements that are older than 7 days ago
 async function expireAnnouncements() {
-  const sevenDaysAgo = subDays(startOfDay(new Date()), 7);
+  const sevenDaysAgo = subDays(getStartOfDay(new Date()), 7).toISOString();
   try {
     await prisma.announcement.deleteMany({
       where: { date: { lt: sevenDaysAgo } },

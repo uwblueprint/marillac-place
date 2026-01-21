@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 import { ParticipantContext } from "../../../ParticipantContext";
 import { GET_ASSIGNED_TASKS_FOR_TODAY } from "../../../../gql/assignedTaskRequests";
 import { PARTICIPANTS_SCHEDULE_PAGE } from "../../../../constants/routes";
-import { formatTimeString } from "../../../../helpers/formatDateTime";
+import { formatDateV2 } from "../../../../helpers/formatDateTime";
 import { TaskStatus } from "../../../../types/enums";
 import TaskStatusDisplay from "../../../../ui/misc/TaskStatusDisplay";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
@@ -87,7 +87,7 @@ const TodoListWidget = () => {
                   </Flex>
 
                   <Text color="text.light.secondary" textStyle="mobile.b1">
-                    {formatTimeString(assigned_task.start_date)}-{formatTimeString(assigned_task.end_date)}
+                    {formatDateV2(new Date(assigned_task.start_date))}-{formatDateV2(new Date(assigned_task.end_date))}
                   </Text>
                 </Flex>
               );

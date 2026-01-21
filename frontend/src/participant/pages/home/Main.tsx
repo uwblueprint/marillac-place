@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import TodoListWidget from "./components/TodoListWidget";
-import { getTodayDateString } from "../../../helpers/formatDateTime";
+import { formatDateV1 } from "../../../helpers/formatDateTime";
 import AnnouncementWidget from "./components/AnnouncementWidget";
 import BadgeWidget, { BadgeToDisplay } from "./components/badgeWidget";
 import TasksCompletedWidget from "./components/TasksCompletedWidget";
@@ -86,7 +86,7 @@ export default function ParticipantsHomePage() {
           Welcome to Marillac Place
         </Text>
         <Text color="text.light.secondary" textStyle="mobile.h3">
-          {getTodayDateString()}
+          {formatDateV1(new Date())}
         </Text>
       </Flex>
 

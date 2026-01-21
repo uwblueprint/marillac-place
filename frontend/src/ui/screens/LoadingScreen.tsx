@@ -1,9 +1,5 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Spinner, Text } from "@chakra-ui/react";
 import React from "react";
-
-// TODO: Design and implement common loading screen (compatible with mobile and web)
-// Accepts optional loading message as a prop, defaults to "Loading..."
-// Add to UI page
 
 type LoadingScreenProps = {
   message?: string;
@@ -12,8 +8,19 @@ export default function LoadingScreen({
   message = "Loading...",
 }: LoadingScreenProps) {
   return (
-    <Flex w="100vw" h="100vh" alignItems="center" justifyContent="center">
-      {message}
+    <Flex
+      width="100%"
+      minH="100%"
+      align="center"
+      justify="center"
+      direction="column"
+      gap={3}
+      role="status"
+    >
+      <Spinner size="xl" color="primary.700" thickness="4px" />
+      <Text fontSize="md" color="gray.600">
+        {message}
+      </Text>
     </Flex>
   );
 }

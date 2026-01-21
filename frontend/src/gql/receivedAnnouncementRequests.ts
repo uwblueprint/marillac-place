@@ -20,6 +20,7 @@ export const GET_RECEIVED_ANNOUNCEMENTS = gql`
       announcement {
         aid
         date
+        topic
         message
         priority
       }

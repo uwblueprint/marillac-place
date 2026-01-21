@@ -1,11 +1,9 @@
-import { Text, Flex, Image as ChakraImage, Switch } from "@chakra-ui/react";
-import EditIcon from "@mui/icons-material/Edit";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_SYSTEM_BADGE } from "../../../../gql/systemBadgeRequests";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
 import DataTable, { Column, Row } from "../../../../ui/misc/DataTable";
-import { BadgeLevel, SystemBadge } from "../../../../types/models";
+import { SystemBadge } from "../../../../types/models";
 import { ICON_MAP } from "../../../../constants/icons";
 import { Marker } from "../../../../ui/icons/ActionIcons";
 import { LEVEL_ABBREVIATION, LEVEL_ORDER } from "../../../../constants/levels";
@@ -92,7 +90,7 @@ const SystemBadgeTable = ({
         columns={columns}
         rows={rows}
       />
-      { edit && selected && (
+      {edit && selected && (
         <EditSystemBadgeModal
           isOpen={edit}
           onClose={() => {

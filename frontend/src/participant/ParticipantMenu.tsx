@@ -1,11 +1,10 @@
 import { Flex, Text, Image, Tab, TabList, Tabs } from "@chakra-ui/react";
-import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ParticipantContext } from "./ParticipantContext";
 import * as ROUTES from "../constants/routes";
-import ErrorScreen from "../ui/screens/ErrorScreen";
+import { MarillacCoin } from "../ui/icons/MiscIcons";
+import { Cross, Menu } from "../ui/icons/ActionIcons";
 
 type Page = {
   label: string;
@@ -35,7 +34,7 @@ function ExpandedParticipantMenu({
   return (
     <Flex
       position="absolute"
-      top="75px"
+      top="60px"
       left="0px"
       width="100%"
       padding="20px"
@@ -90,6 +89,7 @@ function ExpandedParticipantMenu({
         color="danger.900"
         cursor="pointer"
         onClick={() => handleSignOut()}
+        mt="10px"
       >
         Sign Out
       </Text>
@@ -97,7 +97,12 @@ function ExpandedParticipantMenu({
   );
 }
 
-export default function ParticipantMenu() {
+type ParticipantMenuProps = {
+  room: number;
+  balance: number;
+};
+
+export default function ParticipantMenu({ room, balance }: ParticipantMenuProps) {
   const pages = [
     { label: "Home", route: ROUTES.PARTICIPANTS_HOME_PAGE },
     { label: "Schedule", route: ROUTES.PARTICIPANTS_SCHEDULE_PAGE },
@@ -110,36 +115,28 @@ export default function ParticipantMenu() {
     (page) => page.route === window.location.pathname
   );
 
-  const participant = useContext(ParticipantContext);
-  const room = participant?.room;
-  const balance = participant?.balance;
-
-  const error = !participant || !room || !balance;
-  if (error) {
-    return (
-      <ErrorScreen message="Unable to retrieve participant information." />
-    );
-  }
-
   return (
     <Flex
       width="100%"
-      height="75px"
+      height="60px"
       bg="primary.100"
-      padding="20px"
-      alignItems="flex-end"
-      justifyContent="space-between"
-      position="relative"
+      alignItems="center"
+      justifyContent="center"
+      position="absolute"
+      top="0px"
+      left="0px"
+      zIndex={100}
     >
       {!expandMenu && (
-        <Flex onClick={() => setExpandMenu(true)} cursor="pointer">
-          <MenuIcon fontSize="medium" />
+        <Flex onClick={() => setExpandMenu(true)} cursor="pointer" position="absolute" left="20px" top="20px" zIndex={100}>
+          <Menu size={24} />
         </Flex>
       )}
+
       {expandMenu && (
         <>
-          <Flex onClick={() => setExpandMenu(false)} cursor="pointer">
-            <CloseIcon fontSize="medium" />
+          <Flex onClick={() => setExpandMenu(false)} cursor="pointer" position="absolute" left="20px" top="20px" zIndex={100}>
+            <Cross size={24} />
           </Flex>
           <ExpandedParticipantMenu
             room={room}
@@ -149,16 +146,11 @@ export default function ParticipantMenu() {
           />
         </>
       )}
-      <Text textStyle="mobile.h1">{pages[currentPageIndex].label}</Text>
-      <Flex gap="7px" alignItems="center" justifyContent="center">
-        <Image
-          src="/assets/marillac_bucks.png"
-          alt="$"
-          width="25px"
-          height="25px"
-          objectFit="cover"
-          borderRadius="100%"
-        />
+
+      <Text textStyle="mobile.h1" pt="5px">{pages[currentPageIndex].label}</Text>
+
+      <Flex gap="7px" alignItems="center" justifyContent="center" position="absolute" right="20px" top="20px" zIndex={100}>
+        <MarillacCoin size={24} />
         <Text textStyle="mobile.h2">{balance}</Text>
       </Flex>
     </Flex>

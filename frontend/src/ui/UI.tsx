@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { subDays, addDays, startOfDay, set } from "date-fns";
+import { subDays, addDays, startOfDay, set, startOfWeek } from "date-fns";
 import BlackOutlineButton from "./buttons/BlackOutlineButton";
 import OrangeButton from "./buttons/OrangeButton";
 import GreenOutlineButton from "./buttons/GreenOutlineButton";
@@ -59,6 +59,10 @@ import {
 import Badge from "./misc/BadgeProgress";
 import TaskStatusDisplay from "./misc/TaskStatusDisplay";
 import ToggleButton from "./buttons/ToggleButton";
+import LoadingScreen from "./screens/LoadingScreen";
+import ErrorScreen from "./screens/ErrorScreen";
+import NotFoundScreen from "./screens/NotFoundScreen";
+import { DisplayView } from "../constants/views";
 
 export default function UI() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -77,15 +81,14 @@ export default function UI() {
     "Option 2": "option2",
     "Option 3": "option3",
   };
-  const [startDate, setStartDate] = useState<Date>(new Date());
   const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(
     null
   );
+  const [participantPreference, setParticipantPreference] =
+    useState<boolean>(false);
   const [dateOptionDayPreference, setDateOptionDayPreference] =
     useState<DayPreference | null>(null);
-  const [dateOptionDays, setDateOptionDays] = useState<DayOfWeek[] | null>(
-    null
-  );
+  const [dateOptionDays, setDateOptionDays] = useState<DayOfWeek[]>([]);
   const [dateOptionTimePreference, setDateOptionTimePreference] =
     useState<TimePreference | null>(null);
   const [dateOptionStartTime, setDateOptionStartTime] = useState<Date | null>(
@@ -113,7 +116,7 @@ export default function UI() {
       },
       {
         element: <Marker size={20} />,
-        action: () => console.log("action"),
+        action: () => {},
       },
     ],
     [
@@ -128,7 +131,7 @@ export default function UI() {
       },
       {
         element: <Marker size={20} />,
-        action: () => console.log("action"),
+        action: () => {},
       },
     ],
     [
@@ -143,10 +146,11 @@ export default function UI() {
       },
       {
         element: <Marker size={20} />,
-        action: () => console.log("action"),
+        action: () => {},
       },
     ],
   ];
+  const startDate = startOfWeek(new Date());
   const assignedTasks: AssignedTask[] = [
     {
       aid: 1,
@@ -158,8 +162,8 @@ export default function UI() {
       value: 10,
       penalty: 5,
       comment: "Comment 1",
-      start_date: subDays(new Date(), 1).toISOString(),
-      end_date: new Date().toISOString(),
+      start_date: startOfDay(subDays(new Date(), 1)).toISOString(),
+      end_date: startOfDay(new Date()).toISOString(),
     },
     {
       aid: 2,
@@ -235,36 +239,27 @@ export default function UI() {
       <Text textStyle="web.h1" color="primary.700">
         Marillac Place UI Components
       </Text>
-
       <Text textStyle="web.h3">Buttons</Text>
       <Flex flexDir="row" gap="10px">
         <BlackOutlineButton
           label="BlackOutlineButton"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active={false}
         />
         <BlackOutlineButton
           label="BlackOutlineButton (active)"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active
         />
         <BlackOutlineButton
           label="BlackOutlineButton (with icon)"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active={false}
           icon={<Marker />}
         />
         <BlackOutlineButton
           label="BlackOutlineButton (custom text color)"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active={false}
           text_color="red"
         />
@@ -272,23 +267,17 @@ export default function UI() {
       <Flex flexDir="row" gap="10px">
         <OrangeButton
           label="OrangeButton"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active={false}
         />
         <OrangeButton
           label="OrangeButton (active)"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active
         />
         <OrangeButton
           label="OrangeButton (with icon)"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active={false}
           icon={<Marker color="white" />}
         />
@@ -296,27 +285,17 @@ export default function UI() {
       <Flex flexDir="row" gap="10px">
         <GreenOutlineButton
           label="GreenOutlineButton"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active={false}
         />
         <GreenOutlineButton
           label="GreenOutlineButton (active)"
-          action={() => {
-            console.log("clicked");
-          }}
+          action={() => {}}
           is_active
         />
       </Flex>
-      <UnderlineButton
-        label="UnderlineButton"
-        action={() => {
-          console.log("clicked");
-        }}
-      />
+      <UnderlineButton label="UnderlineButton" action={() => {}} />
       <ToggleButton active={toggleActive} setActive={setToggleActive} />
-
       <Text textStyle="web.h3">Containers</Text>
       <Flex flexDir="row" gap="10px">
         <WidgetContainer
@@ -367,29 +346,21 @@ export default function UI() {
       <Flex flexDir="row" gap="10px">
         <UnderlineButton
           label="Show PopupContainer"
-          action={() => {
-            setShowPopup(true);
-          }}
+          action={() => setShowPopup(true)}
         />
         <UnderlineButton
           label="Show PopupContainer (loading)"
-          action={() => {
-            setShowLoadingPopup(true);
-          }}
+          action={() => setShowLoadingPopup(true)}
         />
         <UnderlineButton
           label="Show PopupContainer (error)"
-          action={() => {
-            setShowErrorPopup(true);
-          }}
+          action={() => setShowErrorPopup(true)}
         />
         {showPopup && (
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => {
-              console.log("submit");
-            }}
+            submit_action={() => {}}
             cancel_action={() => {
               setShowPopup(false);
             }}
@@ -403,9 +374,7 @@ export default function UI() {
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => {
-              console.log("submit");
-            }}
+            submit_action={() => {}}
             cancel_action={() => {
               setShowLoadingPopup(false);
             }}
@@ -419,9 +388,7 @@ export default function UI() {
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => {
-              console.log("submit");
-            }}
+            submit_action={() => {}}
             cancel_action={() => {
               setShowErrorPopup(false);
             }}
@@ -433,7 +400,6 @@ export default function UI() {
           </PopupContainer>
         )}
       </Flex>
-
       <Text textStyle="web.h3">Badges</Text>
       <Flex flexDir="row" gap="10px">
         <Badge icon={Icon.BABY} level={Level.NOVICE} percentageComplete={50} />
@@ -450,7 +416,6 @@ export default function UI() {
           percentageComplete={25}
         />
       </Flex>
-
       <Text textStyle="web.h3">Icons</Text>
       <Flex
         width="fit-content"
@@ -501,7 +466,6 @@ export default function UI() {
         <Excused />
         <Incomplete />
       </Flex>
-
       <Text textStyle="web.h3">Inputs</Text>
       <Flex flexDir="row" gap="10px">
         <FixedInput
@@ -578,7 +542,6 @@ export default function UI() {
         update_action={setSelect}
         value_options={options}
       />
-
       <Text textStyle="web.h3">Date Options</Text>
       <UnderlineButton
         label="Show DateOptions"
@@ -588,9 +551,7 @@ export default function UI() {
         <PopupContainer
           title="DateOptions"
           submit_text="Save"
-          submit_action={() => {
-            console.log("submit");
-          }}
+          submit_action={() => {}}
           cancel_action={() => {
             setShowDateOptions(false);
           }}
@@ -598,6 +559,9 @@ export default function UI() {
           loading={false}
         >
           <DateOptions
+            taskType={TaskType.REQUIRED}
+            setParticipantPreference={setParticipantPreference}
+            participantPreference={participantPreference}
             setDayPreference={setDateOptionDayPreference}
             setDays={(value) => setDateOptionDays(value ?? [])}
             setTimePreference={setDateOptionTimePreference}
@@ -611,7 +575,6 @@ export default function UI() {
           />
         </PopupContainer>
       )}
-
       <Text textStyle="web.h3">Task Status Display</Text>
       <Flex flexDir="row" gap="10px">
         <TaskStatusDisplay status={TaskStatus.ASSIGNED} />
@@ -619,29 +582,24 @@ export default function UI() {
         <TaskStatusDisplay status={TaskStatus.INCOMPLETE} />
         <TaskStatusDisplay status={TaskStatus.COMPLETE} />
       </Flex>
-
       <Text textStyle="web.h3">Calendar (Web)</Text>
       <Box width="1000px">
         <MarillacPlaceCalendar
           assignedTasks={assignedTasks}
           startDate={startDate}
-          setStartDate={setStartDate}
           viewTaskDetails={setViewTaskDetails}
-          view="web"
+          view={DisplayView.WEB}
         />
       </Box>
-
       <Text textStyle="web.h3">Calendar (Mobile)</Text>
       <Box width="400px">
         <MarillacPlaceCalendar
           assignedTasks={assignedTasks}
           startDate={startDate}
-          setStartDate={setStartDate}
           viewTaskDetails={setViewTaskDetails}
-          view="mobile"
+          view={DisplayView.MOBILE}
         />
       </Box>
-
       <Text textStyle="web.h3">Data Table</Text>
       <Box width="800px">
         <DataTable
@@ -666,6 +624,18 @@ export default function UI() {
           columns={dataTableColumns}
           rows={dataTableRows}
         />
+      </Box>
+      <Text textStyle="web.h3">Loading Screen</Text>
+      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
+        <LoadingScreen message="Loading..." />
+      </Box>
+      <Text textStyle="web.h3">Not Found Screen</Text>
+      <Box width="1000px" outline="1px solid black" padding="20px">
+        <NotFoundScreen />
+      </Box>
+      <Text textStyle="web.h3">Error Screen</Text>
+      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
+        <ErrorScreen message="An error has occurred." />
       </Box>
     </Flex>
   );

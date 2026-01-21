@@ -39,6 +39,7 @@ module.exports = {
     "no-lonely-if": "off",
     "no-restricted-syntax": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/naming-convention": "off",
   },
   ignorePatterns: ["build/*"],
 };

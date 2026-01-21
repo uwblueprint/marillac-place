@@ -1,71 +1,61 @@
-import { Flex, Image, Input, Text } from "@chakra-ui/react";
-import React, { useState, useContext, useEffect } from "react";
+import { Flex, Text } from "@chakra-ui/react";
+import React, { useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { ParticipantContext } from "../../../ParticipantContext";
 import { UPDATE_EARNING_GOAL } from "../../../../gql/earningGoalRequests";
-import useNotification from "../../../../hooks/useNotification";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
+import { EarningGoal } from "../../../../types/models";
+import { MarillacCoin } from "../../../../ui/icons/MiscIcons";
+import NumberInput from "../../../../ui/inputs/NumberInput";
 
 interface EditGoalProps {
   handleClose: () => void;
-  onGoalUpdated: () => void;
-  currentGoal: number;
-  currentBalance: number;
+  refetchGoal: () => void;
+  currentGoal: EarningGoal;
 }
 
 export const EditGoal: React.FC<EditGoalProps> = ({
   handleClose,
-  onGoalUpdated,
+  refetchGoal,
   currentGoal,
-  currentBalance,
 }) => {
-  const [goal, setGoal] = useState("");
+  const { pid } = useContext(ParticipantContext);
+  const [goal, setGoal] = useState<number | null>(null);
   const [error, setError] = useState("");
-  const participantContext = useContext(ParticipantContext);
-  const { sendNotification } = useNotification();
 
-  const [updateGoalMutation] = useMutation(UPDATE_EARNING_GOAL);
-
+  const [updateGoalMutation, { loading }] = useMutation(UPDATE_EARNING_GOAL);
   const handleSave = async () => {
-    if (!participantContext?.pid) {
-      setError("Not logged in");
+    setError("");
+    if (pid === -1) {
+      setError("Something went wrong. Please try again.");
       return;
     }
 
-    const goalValue = parseInt(goal, 10);
-    if (Number.isNaN(goalValue)) {
-      setError("Please enter a valid number");
+    if (goal === null) {
+      setError("Please enter a new goal");
       return;
     }
 
-    if (goalValue <= currentBalance) {
-      setError("Goals must be greater than current Marillac Bucks Balance");
+    if (goal <= currentGoal.value) {
+      setError("New goal must be greater than previous goal");
       return;
     }
 
     try {
-      // Get today's date for the update
-      const today = new Date();
       await updateGoalMutation({
         variables: {
-          pid: participantContext.pid,
-          date: today,
-          value: goalValue,
+          pid,
+          date: currentGoal.date,
+          value: goal,
         },
       });
 
-      sendNotification("Goal updated successfully!");
-      onGoalUpdated();
+      refetchGoal();
       handleClose();
     } catch (err: any) {
       setError(err.message || "Failed to update goal — please try again.");
     }
   };
-
-  // Show previous goal value
-  useEffect(() => {
-    setGoal(currentGoal.toString());
-  }, [currentGoal]);
 
   return (
     <PopupContainer
@@ -74,42 +64,25 @@ export const EditGoal: React.FC<EditGoalProps> = ({
       submit_action={handleSave}
       cancel_action={handleClose}
       error_message={error}
+      loading={loading}
     >
-      <Flex flexDirection="column" gap="15px">
-        {/* Previous Goal */}
-        <Flex justify="space-between">
-          <Text textStyle="web.b1">Previous goal:</Text>
-          <Flex align="center" justify="space-between">
-            <Image src="/assets/marillac_bucks.png" alt="coin" />
-            <Text ml="10px" fontWeight="semibold">
-              {currentGoal}
-            </Text>
-          </Flex>
+      <Flex justify="space-between" alignItems="center">
+        <Text textStyle="mobile.b1">Previous goal:</Text>
+        <Flex align="center" gap={2} justifyContent="space-between">
+          <MarillacCoin size={17.5} />
+          <Text textStyle="mobile.b0" mr='1px'>{currentGoal.value}</Text>
         </Flex>
+      </Flex>
 
-        {/* New Goal */}
-        <Flex justify="space-between">
-          <Text textStyle="web.b1">New goal:</Text>
-          <Flex align="center" justify="space-between">
-            <Image src="/assets/marillac_bucks.png" alt="coin" />
-            <Input
-              ml="10px"
-              size="sm"
-              minWidth="32px"
-              maxWidth="80px"
-              height="32px"
-              fontWeight="semibold"
-              type="number"
-              placeholder="0"
-              value={goal}
-              onFocus={(e) => {
-                e.target.select();
-              }}
-              onChange={(e) => {
-                setGoal(e.target.value);
-              }}
-            />
-          </Flex>
+      <Flex justify="space-between" alignItems="center">
+        <Text textStyle="mobile.b1">New goal:</Text>
+        <Flex align="center" gap={2} justifyContent="space-between" mr="-4px">
+          <MarillacCoin size={22} />
+          <NumberInput
+            current_value={goal}
+            update_action={setGoal}
+            size="small"
+          />
         </Flex>
       </Flex>
     </PopupContainer>

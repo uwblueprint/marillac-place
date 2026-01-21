@@ -42,7 +42,6 @@ export default function AnnouncementCard({
     }
   };
 
-
   return (
     <WidgetContainer
       width="100%"
@@ -53,17 +52,14 @@ export default function AnnouncementCard({
     >
       <Flex direction="row" justify="space-between" align="center" gap="10px">
         <Flex direction="column" flex="1">
-          <Flex align="center" gap={3}>
+          <Flex align="center" gap={1.5}>
             <Text textStyle="web.c1" fontWeight={700}>
               {room}
             </Text>
             <Flex>
-              {(priority === Priority.HIGH || priority === Priority.CRITICAL) && (
-                <ExclamationMark />
-              )}
-              {priority === Priority.CRITICAL && (
-                <ExclamationMark />
-              )}
+              {(priority === Priority.HIGH ||
+                priority === Priority.CRITICAL) && <ExclamationMark />}
+              {priority === Priority.CRITICAL && <ExclamationMark />}
             </Flex>
           </Flex>
 
@@ -86,7 +82,10 @@ export default function AnnouncementCard({
           <Flex onClick={() => setEdit(true)} cursor="pointer">
             <Marker size={20} />
           </Flex>
-          <Flex onClick={() => handleDeleteAnnouncement(announcement_id)} cursor="pointer">
+          <Flex
+            onClick={() => handleDeleteAnnouncement(announcement_id)}
+            cursor="pointer"
+          >
             <Trash size={20} />
           </Flex>
         </Flex>
