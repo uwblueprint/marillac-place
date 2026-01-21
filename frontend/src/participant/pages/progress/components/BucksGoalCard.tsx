@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   Text,
   Card,
@@ -10,97 +10,120 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react";
+import { useMutation, useQuery } from "@apollo/client";
+import WidgetContainer from "../../../../ui/containers/WidgetContainer";
+import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
+import { ParticipantContext } from "../../../ParticipantContext";
+import { GET_EARNING_GOAL } from "../../../../gql/earningGoalRequests";
+import ErrorScreen from "../../../../ui/screens/ErrorScreen";
+import LoadingScreen from "../../../../ui/screens/LoadingScreen";
+import { GoalAction } from "../../../../types/enums";
+import { EarningGoal } from "../../../../types/models";
+import { Triangle, Trophy } from "../../../../ui/icons/MiscIcons";
+import { EditGoal } from "./EditGoal";
+import { SetGoal } from "./SetGoal";
 
-type BucksGoalCardProps = {
-  value: number;
-  goal: number | null;
-  onEditGoalClick?: () => void;
-};
-
-export default function BucksGoalCard({
-  value,
-  goal,
-  onEditGoalClick,
-}: BucksGoalCardProps) {
-  const metGoal = value >= (goal ?? -1);
-  const goalExists = !!goal;
+export default function BucksGoalCard() {
+  const { pid, totalEarnings } = useContext(ParticipantContext);
+  const { data, loading, error, refetch } = useQuery(GET_EARNING_GOAL, {
+    variables: { pid },
+  });
+  const [editGoal, setEditGoal] = useState<EarningGoal | null>(null);
+  const [setGoal, setSetGoal] = useState(false);
+  
+  const goal = data?.getEarningGoal ?? null;
+  const metGoal = goal?.action === GoalAction.REACHED;
+  const percentComplete = (totalEarnings / goal?.value) * 100;
 
   const editGoalText = () => {
-    if (!goalExists) return "Set Goal";
+    if (!goal) return "Set Goal";
     if (!metGoal) return "Change Goal";
-    return "Set another";
+    return "Set Another Goal";
   };
 
+  const editGoalAction = () => {
+    if (!goal || metGoal) {
+      setSetGoal(true);
+    } else {
+      setEditGoal(goal);
+    }
+  };
+
+  if (pid === -1 || error) {
+    return <ErrorScreen message="Failed to load marillac bucks goal. Please try again later." />;
+  }
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <Card m="15px" borderRadius="md">
-      <CardHeader pb="10px">
-        <Flex direction="row" justifyContent="space-between">
-          <Text fontWeight="bold">Marillac Bucks Goal</Text>
-          <Button variant="link" onClick={onEditGoalClick}>
-            {editGoalText()}
-          </Button>
+    <>
+      {editGoal && <EditGoal handleClose={() => setEditGoal(null)} refetchGoal={refetch} currentGoal={editGoal} />}
+      {setGoal && <SetGoal handleClose={() => setSetGoal(false)} refetchGoal={refetch} prevGoal={goal?.value ?? 0} />}
+      <WidgetContainer
+        width="100%"
+        height="fit-content"
+        paddingX="18px"
+        paddingY="14px"
+        loading={false}
+        error=""
+      >
+        <Flex direction="row" justifyContent="space-between" alignItems="center" mb="8px">
+          <Text textStyle="mobile.b0">Marillac Bucks Goal</Text>
+          <UnderlineButton
+            label={editGoalText()}
+            action={() => editGoalAction()}
+          />
         </Flex>
-      </CardHeader>
-      <CardBody pt="0">
-        {goalExists ? (
-          metGoal ? (
-            <Flex direction="row" gap={4}>
-              <Image
-                src="/assets/goal_trophy.png"
-                alt="$"
-                width="40px"
-                height="40px"
-              />
-              <Text>
-                Congratulations on completing your goal. Make sure to tell
-                Marillac staff about your achievement.
+        {!goal ? (
+          <Text textStyle="mobile.b1">Set a new goal to track your progress!</Text>
+        ) : !metGoal ? (
+          <Flex direction="column" gap={2} mt="8px" mb={percentComplete >= 15 && percentComplete <= 85 ? "8px" : "0px"}>
+            <Progress
+              colorScheme="primary.700"
+              value={percentComplete}
+              borderRadius="full"
+              height="15px"
+            />
+            <Flex
+              width="100%"
+              direction="row"
+              justifyContent="space-between"
+              alignItems="start"
+              position="relative"
+            >
+              <Text textStyle="mobile.b0" color="text.light.secondary">
+                $0
+              </Text>
+              {(percentComplete >= 15 && percentComplete <= 85) && (
+                <Flex
+                  direction="column"
+                  position="absolute"
+                  left={`${Math.floor(percentComplete)}%`}
+                  transform="translateX(-50%)"
+                  align="center"
+                  pb="10px"
+                >
+                  <Triangle />
+                  <Text textStyle="mobile.b0">${totalEarnings}</Text>
+                </Flex>
+              )}
+              <Text textStyle="mobile.b0" color="text.light.secondary">
+                ${goal.value}
               </Text>
             </Flex>
-          ) : (
-            <Flex direction="column" gap={2}>
-              <Progress
-                value={(value / goal) * 100}
-                borderRadius="full"
-                height="15px"
-              />
-              <Flex
-                direction="row"
-                justifyContent="space-between"
-                alignItems="start"
-              >
-                <Text fontWeight="bold" color="gray.500">
-                  $0
-                </Text>
-                {value / goal > 0.25 && (
-                  <Flex
-                    direction="column"
-                    position="absolute"
-                    left={`${(value / goal) * 100}%`}
-                    transform="translateX(-50%)"
-                    align="center"
-                    pb="10px"
-                  >
-                    <Box
-                      as="svg"
-                      viewBox="0 0 13 11"
-                      boxSize="15px"
-                      fill="blue.500"
-                    >
-                      <path d="M5.49153 0.535249C5.87459 -0.140713 6.84849 -0.140712 7.23155 0.535249L11.8907 8.75697C12.2685 9.42361 11.787 10.25 11.0207 10.25L1.70236 10.25C0.936125 10.25 0.45457 9.4236 0.832346 8.75697L5.49153 0.535249Z" />
-                    </Box>
-                    <Text fontWeight="bold">${value}</Text>
-                  </Flex>
-                )}
-                <Text fontWeight="bold" color="gray.500">
-                  ${goal}
-                </Text>
-              </Flex>
-            </Flex>
-          )
+          </Flex>
         ) : (
-          <Text>Set a new goal to track your progress!</Text>
+          <Flex direction="row" gap={4} alignItems="center">
+            <Trophy size={48} />
+            <Text textStyle="mobile.b1">
+              Congratulations on completing your goal! Make sure to tell
+              Marillac staff about your achievement.
+            </Text>
+          </Flex>
         )}
-      </CardBody>
-    </Card>
+      </WidgetContainer>
+    </>
   );
 }

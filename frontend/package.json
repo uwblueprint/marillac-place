@@ -49,6 +49,7 @@
     "react": "^18.2.0",
     "react-big-calendar": "^1.19.4",
     "react-bootstrap": "^1.5.2",
+    "react-confetti": "^6.4.0",
     "react-dom": "^18.2.0",
     "react-google-login": "^5.2.2",
     "react-icons": "^5.2.1",

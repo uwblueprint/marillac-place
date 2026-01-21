@@ -18,7 +18,7 @@ import { Comment } from "../../../ui/icons/ActionIcons";
 
 export default function ParticipantsSchedulePage() {
   const { pid } = useContext(ParticipantContext);
-  const [view, setView] = useState<ScheduleView>(ScheduleView.CALENDAR);
+  const [view, setView] = useState<ScheduleView>(ScheduleView.LIST);
   const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(null);
 
   const { data, loading, error } = useQuery(GET_ASSIGNED_TASKS_BY_WEEK, {

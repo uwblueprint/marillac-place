@@ -7,6 +7,8 @@ import {
   startOfWeek,
 } from "date-fns";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
+import { orderedDays } from "../constants/days";
+import { DayOfWeek } from "@prisma/client";
 
 const timeZone = "America/Toronto";
 
@@ -16,6 +18,11 @@ export function getESTDate(utcDate: Date): Date {
 
 export function getUTCDate(estDate: Date): Date {
   return fromZonedTime(estDate, timeZone);
+}
+
+export function whichDay(utcDate: Date): DayOfWeek {
+  const estDate = getESTDate(utcDate);
+  return orderedDays[estDate.getDay()];
 }
 
 export function getStartOfDay(utcDate: Date): Date {
