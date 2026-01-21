@@ -213,3 +213,12 @@ export const Trophy: React.FC<IconProps> = ({ size = 16 }) => (
     </defs>
   </svg>
 );
+
+export const Triangle: React.FC<IconProps> = ({ size = 12 }) => (
+  <svg width={size} height={size} viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path 
+      d="M4.79035 0.506928C5.17342 -0.169033 6.14732 -0.169033 6.53038 0.506929L11.1896 8.72865C11.5673 9.39529 11.0858 10.2217 10.3195 10.2217L1.00119 10.2217C0.234953 10.2217 -0.246602 9.39528 0.131174 8.72865L4.79035 0.506928Z" 
+      fill="#0C727E"
+    />
+  </svg>
+);

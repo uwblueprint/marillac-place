@@ -7,6 +7,8 @@ type ParticipantContextType = {
   setRoom: (room: number) => void;
   balance: number;
   setBalance: (balance: number) => void;
+  totalEarnings: number;
+  setTotalEarnings: (totalEarnings: number) => void;
 };
 
 export const ParticipantContext = createContext<ParticipantContextType>({
@@ -16,6 +18,8 @@ export const ParticipantContext = createContext<ParticipantContextType>({
   setRoom: () => {},
   balance: 0,
   setBalance: () => {},
+  totalEarnings: 0,
+  setTotalEarnings: () => {},
 });
 
 interface ParticipantProviderProps {
@@ -26,7 +30,8 @@ export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({ childr
   const [pid, setPid] = useState<number>(-1);
   const [room, setRoom] = useState<number>(0);
   const [balance, setBalance] = useState<number>(0);
-
+  const [totalEarnings, setTotalEarnings] = useState<number>(0);
+  
   return (
     <ParticipantContext.Provider
       value={{
@@ -36,6 +41,8 @@ export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({ childr
         setRoom,
         balance,
         setBalance,
+        totalEarnings,
+        setTotalEarnings,
       }}
     >
       {children}

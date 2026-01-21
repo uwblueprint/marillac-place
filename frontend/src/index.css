@@ -400,3 +400,7 @@
     padding: 1px 4px !important;
   }
 } 
+
+.recharts-wrapper *:focus {
+  outline: none;
+}

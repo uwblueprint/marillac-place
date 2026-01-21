@@ -32,6 +32,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
       }
       participantContext.setRoom(data.getParticipantByPid.room);
       participantContext.setBalance(data.getParticipantByPid.balance);
+      participantContext.setTotalEarnings(data.getParticipantByPid.total_earnings);
     },
     onError: (err: Error) => {
       setError(err.message);
