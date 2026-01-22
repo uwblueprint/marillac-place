@@ -225,3 +225,38 @@ export const Diamond: React.FC<IconProps> = ({ size = 16 }) => (
     </defs>
   </svg>
 );
+
+export const Custom: React.FC<IconProps> = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path 
+      d="M76 38C76 58.9868 58.9868 76 38 76C17.0132 76 0 58.9868 0 38C0 17.0132 17.0132 0 38 0C58.9868 0 76 17.0132 76 38Z" 
+      fill="url(#paint0_linear_1_2)"
+    />
+    <path 
+      d="M76 38C76 58.9868 58.9868 76 38 76C17.0132 76 0 58.9868 0 38C0 17.0132 17.0132 0 38 0C58.9868 0 76 17.0132 76 38ZM7.07397 38C7.07397 55.08 20.92 68.926 38 68.926C55.08 68.926 68.926 55.08 68.926 38C68.926 20.92 55.08 7.07397 38 7.07397C20.92 7.07397 7.07397 20.92 7.07397 38Z" 
+      fill="#0C727E"
+    />
+    <path 
+      d="M38 0L44.079 7.43873L52.542 2.89258L55.3116 12.0914L64.8701 11.1299L63.9086 20.6884L73.1074 23.458L68.5613 31.921L76 38L68.5613 44.079L73.1074 52.542L63.9086 55.3116L64.8701 64.8701L55.3116 63.9086L52.542 73.1074L44.079 68.5613L38 76L31.921 68.5613L23.458 73.1074L20.6884 63.9086L11.1299 64.8701L12.0914 55.3116L2.89258 52.542L7.43873 44.079L0 38L7.43873 31.921L2.89258 23.458L12.0914 20.6884L11.1299 11.1299L20.6884 12.0914L23.458 2.89258L31.921 7.43873L38 0Z" 
+      fill="url(#paint1_linear_1_2)"
+    />
+    <path 
+      d="M38.0002 68.9263C20.9203 68.9263 7.07422 55.0802 7.07422 38.0002C7.07422 20.9203 20.9203 7.07422 38.0002 7.07422C55.0802 7.07422 68.9263 20.9203 68.9263 38.0002C68.9263 55.0802 55.0802 68.9263 38.0002 68.9263Z" 
+      fill="url(#paint2_linear_1_2)"
+    />
+    <defs>
+      <linearGradient id="paint0_linear_1_2" x1="38" y1="0" x2="38" y2="76" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#F7DA0C"/>
+        <stop offset="1" stopColor="#F7C208"/>
+      </linearGradient>
+      <linearGradient id="paint1_linear_1_2" x1="38" y1="0" x2="38" y2="76" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#F4B396"/>
+        <stop offset="1" stopColor="#0C727E"/>
+      </linearGradient>
+      <linearGradient id="paint2_linear_1_2" x1="38.0002" y1="7.07422" x2="38.0002" y2="68.9263" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#F2BCA2"/>
+        <stop offset="1" stopColor="#E67D4F"/>
+      </linearGradient>
+    </defs>
+  </svg>
+);

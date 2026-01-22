@@ -59,7 +59,7 @@ export default function ParticipantsAnnouncementsPage() {
 
   return (
     <>
-      <Flex w="100%" alignItems="center" justifyContent="center" gap="8px">
+      <Flex w="100%" alignItems="center" justifyContent="center" gap="8px" mb="8px">
         <GreenOutlineButton
           label="All"
           action={() => setFilter(0)}
@@ -81,10 +81,6 @@ export default function ParticipantsAnnouncementsPage() {
           is_active={filter === 3}
         />
       </Flex>
-
-      <Text textStyle="mobile.s1" color="text.light.secondary">
-        Most Recent
-      </Text>
       
       {data?.getReceivedAnnouncements.map((announcement: ReceivedAnnouncement, index: number) => {
         return (

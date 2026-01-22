@@ -49,8 +49,12 @@ export default function TaskStatusDisplay({
       borderRadius="lg"
       width={size}
       height="35px"
+      gap="1px"
     >
       <Icon size={20} />
+      <Text textStyle="web.s1" color={TaskStatusConfig[status].textColor}>
+        {TaskStatusConfig[status].text}
+      </Text>
     </Flex>
   );
 }

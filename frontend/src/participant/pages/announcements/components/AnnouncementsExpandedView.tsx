@@ -30,7 +30,7 @@ export default function AnnouncementsExpandedView({
   const [pinned, setPinned] = useState<boolean>(announcement.pinned);
 
   const handleUpdatePin = async (pin: boolean) => {
-    if (!pid) {
+    if (pid === -1) {
       setError("Unable to update pin status, something went wrong.")
     }
 
@@ -49,7 +49,7 @@ export default function AnnouncementsExpandedView({
   };
   
   const handleMarkAsUnread = async () => {
-    if (!pid) {
+    if (pid === -1) {
       setError("Unable to update read status, something went wrong.")
     }
 
@@ -71,7 +71,7 @@ export default function AnnouncementsExpandedView({
   };
 
   const handleGoBack = async () => {
-    if (!pid) {
+    if (pid === -1) {
       setError("Unable to mark message as read, something went wrong.")
     }
  
@@ -110,7 +110,7 @@ export default function AnnouncementsExpandedView({
       </Flex>
 
       <Flex alignItems="center" justify="space-between" marginBottom="4px">
-        <Text textStyle="mobile.b1" color="text.light.secondary">
+        <Text textStyle="mobile.b2" color="text.light.secondary">
           {formatDateV3(new Date(details.date))}
         </Text>
 
@@ -118,7 +118,7 @@ export default function AnnouncementsExpandedView({
           {details.priority !== Priority.NORMAL && (
             <Flex gap="4px" alignItems="center">
               <ExclamationMark size={12} />
-              <Text textStyle="mobile.b1" color="danger.800">
+              <Text textStyle="mobile.b2" color="danger.800">
                 Priority
               </Text>
             </Flex>
@@ -127,7 +127,7 @@ export default function AnnouncementsExpandedView({
           {pinned && (
             <Flex gap="4px" alignItems="center">
               <Pinned size={12} />
-              <Text textStyle="mobile.b1" color="secondary.700">
+              <Text textStyle="mobile.b2" color="secondary.700">
                 Pinned
               </Text>
             </Flex>

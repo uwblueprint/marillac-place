@@ -6,12 +6,15 @@ import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { GET_RECEIVED_ANNOUNCEMENTS } from "../../../../gql/receivedAnnouncementRequests";
 import { formatDateV3 } from "../../../../helpers/formatDateTime";
 import { ParticipantContext } from "../../../ParticipantContext";
-import * as ROUTES from "../../../../constants/routes";
+import { PARTICIPANTS_ANNOUNCEMENTS_PAGE } from "../../../../constants/routes";
+import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
+import { ReceivedAnnouncement } from "../../../../types/models";
 
+type AnnouncementWidgetProps = {
+  pid: number;
+}
 
-export default function AnnouncementWidget() {
-  const participant = useContext(ParticipantContext);
-  const pid = participant?.pid ?? "";
+export default function AnnouncementWidget({ pid }: AnnouncementWidgetProps) {
   const navigate = useNavigate();
 
   const {
@@ -19,54 +22,35 @@ export default function AnnouncementWidget() {
     loading: announcementLoading,
     error: announcementError,
   } = useQuery(GET_RECEIVED_ANNOUNCEMENTS, {
-    variables: {
-      pid,
-    },
+    variables: { pid },
   });
 
-  if (announcementLoading) return <Text>Loading announcements.</Text>;
-  if (announcementError) return <Text>Error fetching announcements.</Text>;
+  const announcements = announcementData?.getReceivedAnnouncements ?? [];
 
   return (
-    <WidgetContainer width="100%">
-      <>
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <Text textStyle="mobile.h2">Announcements</Text>
-          <Text
-            textStyle="mobile.h3"
-            color="primary.700"
-            fontWeight="600"
-            textDecoration="underline"
-            cursor="pointer"
-            _hover={{
-              color: "primary.700",
-              opacity: 0.8,
-            }}
-            onClick={() => navigate(ROUTES.PARTICIPANTS_ANNOUNCEMENTS_PAGE)}
-          >
-            Announcements
-          </Text>
-        </Flex>
+    <WidgetContainer 
+      width="100%"
+      height="fit-content"
+      paddingX="18px"
+      paddingY="14px"
+      loading={announcementLoading}
+      error={announcementError?.message}
+    >
+      <Flex w="100%" justifyContent="space-between" alignItems="center" mb={announcements.length > 0 ? "8px" : "0px"}>
+        <Text textStyle="mobile.b0">Recent Announcements</Text>
+        <UnderlineButton
+          label="View All"
+          action={() => navigate(PARTICIPANTS_ANNOUNCEMENTS_PAGE)}
+        />
+      </Flex>
 
-        {announcementData.getReceivedAnnouncements.map(
-          (announcement: any) => (
-            <Flex
-              width="100%"
-              flexDir="column"
-              gap="6px"
-              key={announcement.announcement_id}
-            >
-              <Divider borderColor="neutral.300" />
-              <Text paddingTop="4px" textStyle="mobile.b1">
-                {announcement.announcement.message}
-              </Text>
-              <Text textStyle="mobile.b1" color="text.light.secondary">
-                {formatDateV3(new Date(announcement.announcement.date))}
-              </Text>
-            </Flex>
-          )
-        )}
-      </>
+      {announcements.slice(0, 5).map((announcement: ReceivedAnnouncement, index: number) => (
+        <Flex key={index} width="100%" flexDir="column">
+          {index > 0 && <Divider orientation="horizontal" borderColor="neutral.300" my="8px" />}
+          <Text textStyle="mobile.b1" mb="2px">{announcement.announcement?.message}</Text>
+          <Text textStyle="mobile.b2" color="text.light.secondary">{formatDateV3(new Date(announcement.announcement?.date ?? ""))}</Text>
+        </Flex>
+      ))}
     </WidgetContainer>
   );
 }

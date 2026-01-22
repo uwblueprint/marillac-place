@@ -14,6 +14,7 @@ type Report = {
   monthly: boolean;
 };
 
+// TODO: Relief staff cannot access this page
 export default function AdminReportsPage() {
   const { loading, error, data, refetch } = useQuery(GET_REPORT_RECIPIENTS);
   const reports: Report[] = data?.getReportRecipients || [];

@@ -35,6 +35,11 @@ export function formatDateV7(date: Date): string {
   return format(date, "EEEE, MMM d");
 };
 
+// e.g. Thursday - January 1, 2026
+export function formatDateV8(date: Date): string {
+  return format(date, "EEEE - MMM d, yyyy");
+};
+
 export function formatDateInputValue(date: Date): string {
   return format(date, "yyyy-MM-dd");
 };

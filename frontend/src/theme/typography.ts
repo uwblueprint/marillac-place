@@ -82,11 +82,11 @@ export const textStyles = {
     },
     b2: {
       fontWeight: "400",
-      fontSize: "10px",
+      fontSize: "12px",
     },
     b3: {
       fontWeight: "400",
-      fontSize: "12px",
+      fontSize: "10px",
     },
     c1: {
       color: "#808080",

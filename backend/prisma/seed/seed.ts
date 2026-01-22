@@ -45,6 +45,7 @@ async function generateMockData(seed: any) {
       arrival: random.date(),
       departure: null,
       balance: random.number(0, 2500),
+      total_earnings: random.number(0, 2500),
     }))
   );
 

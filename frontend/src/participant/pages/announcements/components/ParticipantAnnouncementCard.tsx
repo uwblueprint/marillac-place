@@ -40,10 +40,10 @@ export default function ParticipantAnnouncementCard({ announcement }: Participan
       flexDir="column"
     >
       <Flex alignItems="center" justifyContent="space-between">
-        <Flex alignItems="center" gap="10px">
+        <Flex alignItems="baseline" gap="10px">
           {!announcement.read && <Dot size={12} />}
           <Text textStyle="mobile.b0">{toTitleCase(details.topic)}</Text>
-          <Text textStyle="mobile.b1" color="text.light.secondary">
+          <Text textStyle="mobile.b2" color="text.light.secondary">
             {formatDateV3(new Date(details.date))}
           </Text>
         </Flex>

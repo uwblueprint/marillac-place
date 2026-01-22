@@ -1,23 +1,26 @@
 import React from "react";
 import { Flex, Text, Divider } from "@chakra-ui/react";
-import { Icon } from "../../../../types/enums";
-import { AchievedBadgeLevel, BadgeLevelProgress } from "../../../../types/models";
-import BadgeProgress from "../../../../ui/misc/BadgeProgress";
-import { MarillacCoin } from "../../../../ui/icons/MiscIcons";
-import { toTitleCase } from "../../../../helpers/stringUtils";
+import { Icon } from "../../types/enums";
+import { AchievedBadgeLevel, BadgeLevelProgress, EarnedCustomBadge } from "../../types/models";
+import BadgeProgress from "./BadgeProgress";
+import { MarillacCoin } from "../icons/MiscIcons";
+import { toTitleCase } from "../../helpers/stringUtils";
 
-interface BadgeRowProps {
+interface BadgeLevelRowProps {
   badge: AchievedBadgeLevel | BadgeLevelProgress;
-  isAchieved: boolean;
   index: number;
+  achieved?: boolean;
 }
 
-const BadgeRow: React.FC<BadgeRowProps> = ({ badge, isAchieved, index }) => {
+const BadgeLevelRow: React.FC<BadgeLevelRowProps> = ({ badge, index, achieved = false }) => {
   const icon = badge.badge_level?.system_badge?.icon ?? Icon.FIVE_STAR;
   const description = badge.badge_level?.system_badge?.description ?? "Error loading badge description";
   const value = badge.badge_level?.value ?? 0;
 
   function getPercentageComplete(bl: any): number {
+    if (achieved) {
+      return 100;
+    }
     const benchmark = bl.badge_level?.benchmark ?? 0;
     if (benchmark === 0) {
       return 0;
@@ -32,11 +35,7 @@ const BadgeRow: React.FC<BadgeRowProps> = ({ badge, isAchieved, index }) => {
       )}
       <Flex width="100%" alignItems="center" justifyContent="space-between" mt="8px">
         <Flex alignItems="center" gap="12px">
-          {isAchieved ? (
-            <BadgeProgress icon={icon} level={badge.level} percentageComplete={100} />
-          ) : (
-            <BadgeProgress icon={icon} level={badge.level} percentageComplete={getPercentageComplete(badge)} />
-          )}
+          <BadgeProgress icon={icon} level={badge.level} percentageComplete={getPercentageComplete(badge)} />
 
           <Flex flexDir="column">
             <Text textStyle="mobile.b0" color="primary.700">
@@ -47,7 +46,7 @@ const BadgeRow: React.FC<BadgeRowProps> = ({ badge, isAchieved, index }) => {
             </Text>
           </Flex>
         </Flex>
-        {!isAchieved && (
+        {!achieved && (
           <Flex alignItems="center" gap="8px">
             <Text textStyle="mobile.b1">
               {value}
@@ -55,10 +54,9 @@ const BadgeRow: React.FC<BadgeRowProps> = ({ badge, isAchieved, index }) => {
             <MarillacCoin size={16} />
           </Flex>
         )}
-        
       </Flex>
     </>
   );
 };
 
-export default BadgeRow;
+export default BadgeLevelRow;

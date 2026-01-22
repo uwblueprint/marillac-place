@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   Card,
@@ -14,7 +14,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 import { ParticipantContext } from "../../../ParticipantContext";
-import { GET_EARNING_GOAL } from "../../../../gql/earningGoalRequests";
+import { CREATE_EARNING_GOAL, GET_EARNING_GOAL } from "../../../../gql/earningGoalRequests";
 import ErrorScreen from "../../../../ui/screens/ErrorScreen";
 import LoadingScreen from "../../../../ui/screens/LoadingScreen";
 import { GoalAction } from "../../../../types/enums";
@@ -25,9 +25,28 @@ import { SetGoal } from "./SetGoal";
 
 export default function BucksGoalCard() {
   const { pid, totalEarnings } = useContext(ParticipantContext);
+
+  const [createGoal, { loading: createGoalLoading, error: createGoalError }] = useMutation(CREATE_EARNING_GOAL);
   const { data, loading, error, refetch } = useQuery(GET_EARNING_GOAL, {
     variables: { pid },
   });
+
+  useEffect(() => {
+    const goal = data?.getEarningGoal;
+    if (!loading && !error && goal && pid !== -1) {
+      if (goal.action === GoalAction.SET && totalEarnings >= goal.value) {
+        createGoal({
+          variables: {
+            pid,
+            action: GoalAction.REACHED,
+            value: goal.value,
+          },
+        });
+        refetch();
+      }
+    }
+  }, [data, loading, error, pid, totalEarnings]);
+
   const [editGoal, setEditGoal] = useState<EarningGoal | null>(null);
   const [setGoal, setSetGoal] = useState(false);
   
@@ -49,11 +68,11 @@ export default function BucksGoalCard() {
     }
   };
 
-  if (pid === -1 || error) {
+  if (pid === -1 || error || createGoalError) {
     return <ErrorScreen message="Failed to load marillac bucks goal. Please try again later." />;
   }
 
-  if (loading) {
+  if (loading || createGoalLoading) {
     return <LoadingScreen />;
   }
 

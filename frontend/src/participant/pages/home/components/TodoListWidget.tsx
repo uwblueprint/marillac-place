@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Text, Spinner, Alert, AlertIcon, Flex } from "@chakra-ui/react";
+import { endOfDay, isEqual, startOfDay } from "date-fns";
 import { useQuery } from "@apollo/client";
 import { ParticipantContext } from "../../../ParticipantContext";
 import { GET_ASSIGNED_TASKS_FOR_TODAY } from "../../../../gql/assignedTaskRequests";
@@ -10,90 +11,63 @@ import { TaskStatus } from "../../../../types/enums";
 import TaskStatusDisplay from "../../../../ui/misc/TaskStatusDisplay";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { Comment } from "../../../../ui/icons/ActionIcons";
+import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
+import { ScheduleView } from "../../../../constants/views";
+import { AssignedTask } from "../../../../types/models";
+import { Assigned, Excused, Complete, Incomplete } from "../../../../ui/icons/StatusIcons";
 
-interface AssignedTask {
-  aid: number;
-  name: string;
-  status: TaskStatus;
-  start_date: string;
-  end_date: string;
-  comment: string;
+type TodoListWidgetProps = {
+  pid: number;
 }
 
-const TodoListWidget = () => {
-  const participant = useContext(ParticipantContext) 
-  const pid = participant?.pid;
-
+const TodoListWidget = ({ pid }: TodoListWidgetProps) => {
   const navigate = useNavigate();
 
   const { data, loading, error } = useQuery(
-    GET_ASSIGNED_TASKS_FOR_TODAY,
-    {
+    GET_ASSIGNED_TASKS_FOR_TODAY, {
       variables: { pid },
-      skip: !pid,
     }
   );
 
+  const tasks = data?.getAssignedTasksForToday ?? [];
+
   return (
-    <WidgetContainer width="100%">
-      <>
-        <Flex direction="row" justify="space-between" alignItems="center">
-          <Text textStyle="mobile.h2">Today&apos;s To-Do List</Text>
-          <Text
-            textStyle="mobile.h3"
-            color="primary.700"
-            fontWeight="600"
-            textDecoration="underline"
-            cursor="pointer"
-            _hover={{
-              color: "primary.700",
-              opacity: 0.8,
-            }}
-            onClick={() => navigate(PARTICIPANTS_SCHEDULE_PAGE)}
-          >
-            Schedule
-          </Text>
-        </Flex>
-
-        {loading && <Spinner />}
-
-        {error && (
-          <Alert status="error" mb={4}>
-            <AlertIcon />
-            Error loading tasks.
-          </Alert>
-        )}
-
-        {!loading &&
-          !error &&
-          data &&
-          data.getAssignedTasksForToday.length !== 0 &&
-          data.getAssignedTasksForToday.map(
-            (assigned_task: AssignedTask, index: number) => {
-              const isLast = index === data.getAssignedTasksForToday.length - 1;
-              return (
-                <Flex
-                  key={assigned_task.aid}
-                  justify="space-between"
-                  align="center"
-                  mb={isLast ? "0" : "12px"}
-                >
-                  <Flex gap="8px" align="center">
-                    <TaskStatusDisplay status={assigned_task.status}/>
-                    <Text textStyle="mobile.b1">{assigned_task.name}</Text>
-                    {assigned_task.comment && (
-                      <Comment size={20} color="text.light.secondary" />
-                    )}
-                  </Flex>
-
-                  <Text color="text.light.secondary" textStyle="mobile.b1">
-                    {formatDateV2(new Date(assigned_task.start_date))}-{formatDateV2(new Date(assigned_task.end_date))}
-                  </Text>
-                </Flex>
-              );
-            }
-          )}
-      </>
+    <WidgetContainer 
+      width="100%"
+      height="fit-content"
+      paddingX="18px"
+      paddingY="14px"
+      loading={loading}
+      error={error?.message}
+    >
+      <Flex w="100%" justifyContent="space-between" alignItems="center" mb={tasks.length > 0 ? "8px" : "0px"}>
+        <Text textStyle="mobile.b0">Todo List</Text>
+        <UnderlineButton
+          label="Schedule"
+          action={() => navigate(PARTICIPANTS_SCHEDULE_PAGE, { state: { view: ScheduleView.CALENDAR } })}
+        />
+      </Flex>
+      <Flex flexDir="column" gap="8px">
+        {tasks.map((task: AssignedTask, index: number) => {
+          const noSpecificTime = (
+            isEqual(startOfDay(new Date(task.start_date)), new Date(task.start_date)) &&
+            isEqual(endOfDay(new Date(task.end_date)), new Date(task.end_date))
+          );
+          return (
+            <Flex key={index} justifyContent="space-between" alignItems="center">
+              <Flex alignItems="center" gap="12px">
+                {task.status === TaskStatus.ASSIGNED && <Assigned />}
+                {task.status === TaskStatus.COMPLETE && <Complete />}
+                {task.status === TaskStatus.EXCUSED && <Excused />}
+                {task.status === TaskStatus.INCOMPLETE && <Incomplete />}
+                <Text textStyle="mobile.b1">{task.name}</Text>
+                {task.comment && <Comment size={12} />}
+              </Flex>
+              <Text textStyle="mobile.b2" color="text.light.secondary">{noSpecificTime ? "Anytime" : formatDateV2(new Date(task.start_date)) + " - " + formatDateV2(new Date(task.end_date))}</Text>
+            </Flex>
+          )
+        })}
+      </Flex>
     </WidgetContainer>
   );
 };
