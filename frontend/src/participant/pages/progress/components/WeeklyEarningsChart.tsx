@@ -32,7 +32,7 @@ const WeeklyEarningsChart = () => {
     error: errorEarnings,
   } = useQuery(GET_WEEKLY_EARNINGS, {
     variables: { pid },
-    skip: !pid,
+    skip: pid === -1,
   });
 
   const weeklyEarnings: number[] = useMemo(() => {
@@ -57,7 +57,7 @@ const WeeklyEarningsChart = () => {
   const maxEarnings = Math.max(...weeklyEarnings);
   const upperBound = Math.ceil(maxEarnings * 1.2) || 10;
 
-  if (!pid) {
+  if (pid === -1) {
     return <ErrorScreen message="Failed to load weekly earnings. Please try again later." />;
   }
 

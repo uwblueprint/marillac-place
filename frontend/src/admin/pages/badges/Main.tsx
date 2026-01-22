@@ -10,6 +10,7 @@ import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
 
+// TODO: Relief staff cannot change the badges
 export default function AdminBadgesPage() {
   const [create, setCreate] = useState(false);
   const [assign, setAssign] = useState(false);

@@ -2,6 +2,7 @@ import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { endOfDay, isEqual, isSameDay, startOfDay, startOfWeek } from "date-fns";
+import { useLocation } from "react-router-dom";
 import { ParticipantContext } from "../../ParticipantContext";
 import { GET_ASSIGNED_TASKS_BY_WEEK } from "../../../gql/assignedTaskRequests";
 import ErrorScreen from "../../../ui/screens/ErrorScreen";
@@ -18,7 +19,9 @@ import { Comment } from "../../../ui/icons/ActionIcons";
 
 export default function ParticipantsSchedulePage() {
   const { pid } = useContext(ParticipantContext);
-  const [view, setView] = useState<ScheduleView>(ScheduleView.LIST);
+  const location = useLocation();
+  const { view } = location.state || { view: ScheduleView.LIST };
+  const [currentView, setCurrentView] = useState<ScheduleView>(view);
   const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(null);
 
   const { data, loading, error } = useQuery(GET_ASSIGNED_TASKS_BY_WEEK, {
@@ -29,7 +32,7 @@ export default function ParticipantsSchedulePage() {
     return <LoadingScreen />;
   }
 
-  if (error || !pid || pid === -1) {
+  if (error || pid === -1) {
     return <ErrorScreen message="Failed to load assigned tasks. Please try again later." />;
   }
 
@@ -39,12 +42,12 @@ export default function ParticipantsSchedulePage() {
     <>
       <Flex w="100%" mb="12px" justifyContent="space-between" alignItems="center">
         <Text color="primary.700" textStyle="mobile.h1">
-          {view === ScheduleView.CALENDAR ? formatDateV1(new Date()) : "This Week"}
+          {currentView === ScheduleView.CALENDAR ? formatDateV1(new Date()) : "This Week"}
         </Text>
         <HStack spacing={0}>
           <Button
-            onClick={() => setView(ScheduleView.LIST)}
-            isActive={view === ScheduleView.LIST}
+            onClick={() => setCurrentView(ScheduleView.LIST)}
+            isActive={currentView === ScheduleView.LIST}
             width="30px"
             height="30px"
             padding="0px"
@@ -66,8 +69,8 @@ export default function ParticipantsSchedulePage() {
             <List color="currentColor" size={12} />
           </Button>
           <Button
-            onClick={() => setView(ScheduleView.CALENDAR)}
-            isActive={view === ScheduleView.CALENDAR}
+            onClick={() => setCurrentView(ScheduleView.CALENDAR)}
+            isActive={currentView === ScheduleView.CALENDAR}
             width="30px"
             height="30px"
             borderLeftRadius="0px"
@@ -91,7 +94,7 @@ export default function ParticipantsSchedulePage() {
         </HStack>
       </Flex>
 
-      {view === ScheduleView.CALENDAR ? (
+      {currentView === ScheduleView.CALENDAR ? (
         <MarillacPlaceCalendar
           assignedTasks={tasks}
           startDate={startOfDay(new Date())}
@@ -127,7 +130,7 @@ export default function ParticipantsSchedulePage() {
                     <Text textStyle="mobile.b1">{task.name}</Text>
                     {task.comment && <Comment size={12} />}
                   </Flex>
-                  <Text textStyle="mobile.b1" color="text.light.secondary">{noSpecificTime ? "Anytime" : formatDateV2(new Date(task.start_date)) + " to " + formatDateV2(new Date(task.end_date))}</Text>
+                  <Text textStyle="mobile.b2" color="text.light.secondary">{noSpecificTime ? "Anytime" : formatDateV2(new Date(task.start_date)) + " to " + formatDateV2(new Date(task.end_date))}</Text>
                 </Flex>
               </>
             )

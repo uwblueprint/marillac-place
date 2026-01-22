@@ -38,6 +38,7 @@ const BadgeRow: React.FC<BadgeRowProps> = ({
             variant="link"
             color="primary.700"
             textStyle="mobile.h3"
+            fontWeight="600"
             textDecoration="underline"
             onClick={onProgressClick}
             _hover={{

@@ -1,29 +1,12 @@
 import React from "react";
 import { Box, color } from "@chakra-ui/react";
-import * as BadgeIconSet from "../icons/BadgeIcons";
 import * as BadgeLevelFrameSet from "../icons/BadgeLevelFrameIcons";
 import { IconProps } from "../../types/component";
 import { Icon, Level } from "../../types/enums";
-
-const badgeIconComponents: Record<Icon, React.FC<IconProps>> = {
-  [Icon.BABY]: BadgeIconSet.Baby,
-  [Icon.DIAMOND]: BadgeIconSet.Diamond,
-  [Icon.MONEY]: BadgeIconSet.DollarSign,
-  [Icon.FIVE_STAR]: BadgeIconSet.FiveStar,
-  [Icon.FLOWER]: BadgeIconSet.Flower,
-  [Icon.FOUR_STAR]: BadgeIconSet.FourStar,
-  [Icon.GROUP]: BadgeIconSet.Group,
-  [Icon.HEART]: BadgeIconSet.Heart,
-  [Icon.GEMSTONE]: BadgeIconSet.Hexagon,
-  [Icon.HOME]: BadgeIconSet.Home,
-  [Icon.PENCIL]: BadgeIconSet.Pencil,
-  [Icon.PLANT]: BadgeIconSet.Plant,
-  [Icon.TOOL]: BadgeIconSet.Tools,
-  [Icon.WINGS]: BadgeIconSet.Wings,
-};
+import { ICON_MAP } from "../../constants/icons";
 
 const levelConfig: Record<
-  Level,
+  Level | "CUSTOM",
   { FrameIcon: React.FC<IconProps>; color: string }
 > = {
   [Level.NOVICE]: {
@@ -46,6 +29,10 @@ const levelConfig: Record<
     FrameIcon: BadgeLevelFrameSet.Diamond,
     color: "#0199D1",
   },
+  CUSTOM: {
+    FrameIcon: BadgeLevelFrameSet.Custom,
+    color: "#0C727E",
+  },
 };
 
 const normalizePercentage = (value: number) =>
@@ -53,7 +40,7 @@ const normalizePercentage = (value: number) =>
 
 interface BadgeProps {
   icon: Icon;
-  level: Level;
+  level: Level | "CUSTOM";
   percentageComplete?: number;
 }
 
@@ -62,7 +49,7 @@ const Badge: React.FC<BadgeProps> = ({
   level,
   percentageComplete = 100,
 }) => {
-  const IconComponent = badgeIconComponents[icon] ?? BadgeIconSet.FiveStar;
+  const IconComponent = ICON_MAP[icon] ?? ICON_MAP[Icon.FIVE_STAR];
   const { FrameIcon: LevelComponent, color: iconColor } =
     levelConfig[level] ?? levelConfig[Level.NOVICE];
   const normalizedPercentage = normalizePercentage(percentageComplete) / 100;

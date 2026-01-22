@@ -44,12 +44,12 @@ export default function TaskStatusDisplay({
     <Flex
       align="center"
       justify="center"
-      gap={1}
       bg={TaskStatusConfig[status].bgColor}
       color={TaskStatusConfig[status].textColor}
       borderRadius="lg"
       width={size}
       height="35px"
+      gap="1px"
     >
       <Icon size={20} />
       <Text textStyle="web.s1" color={TaskStatusConfig[status].textColor}>

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { HStack, Text } from "@chakra-ui/react";
+import { Divider, HStack, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { toTitleCase } from "../../../../helpers/stringUtils";
@@ -8,8 +8,10 @@ import ErrorScreen from "../../../../ui/screens/ErrorScreen";
 import LoadingScreen from "../../../../ui/screens/LoadingScreen";
 import { GET_BADGE_LEVEL_PROGRESS } from "../../../../gql/badgeLevelProgressRequests";
 import { GET_ACHIEVED_BADGE_LEVELS } from "../../../../gql/achievedBadgeLevelRequests";
-import BadgeRow from "./BadgeRow";
-import { AchievedBadgeLevel, BadgeLevelProgress } from "../../../../types/models";
+import BadgeLevelRow from "../../../../ui/misc/BadgeLevelRow";
+import { AchievedBadgeLevel, BadgeLevelProgress, EarnedCustomBadge } from "../../../../types/models";
+import { GET_EARNED_CUSTOM_BADGES } from "../../../../gql/earnedCustomBadgeRequests";
+import CustomBadgeRow from "../../../../ui/misc/CustomBadgeRow";
 
 const BadgeDisplay = () => {
   const { pid } = useContext(ParticipantContext);
@@ -21,7 +23,7 @@ const BadgeDisplay = () => {
     error: errorProgress,
   } = useQuery(GET_BADGE_LEVEL_PROGRESS, {
     variables: { pid },
-    skip: !pid,
+    skip: pid === -1,
   });
 
   const {
@@ -30,14 +32,23 @@ const BadgeDisplay = () => {
     error: errorAchieved,
   } = useQuery(GET_ACHIEVED_BADGE_LEVELS, {
     variables: { pid },
-    skip: !pid,
+    skip: pid === -1,
   });
 
-  if (!pid || errorProgress || errorAchieved) {
+  const {
+    data: earnedCustomBadgeData,
+    loading: loadingEarnedCustomBadge,
+    error: errorEarnedCustomBadge,
+  } = useQuery(GET_EARNED_CUSTOM_BADGES, {
+    variables: { pid },
+    skip: pid === -1,
+  });
+
+  if (pid === -1 || errorProgress || errorAchieved || errorEarnedCustomBadge) {
     return <ErrorScreen message="Failed to load badge data. Please try again later." />;
   }
 
-  if (loadingProgress || loadingAchieved) {
+  if (loadingProgress || loadingAchieved || loadingEarnedCustomBadge) {
     return <LoadingScreen />;
   }
 
@@ -66,10 +77,21 @@ const BadgeDisplay = () => {
         ))}
       </HStack>
       {activeTab === "badges" ? progressData?.getBadgeLevelProgress?.map((badge: BadgeLevelProgress, index: number) => (
-        <BadgeRow key={`${activeTab}-${index}`} badge={badge} isAchieved={false} index={index} />
-      )) : achievedData?.getAchievedBadgeLevels?.map((badge: AchievedBadgeLevel, index: number) => (
-        <BadgeRow key={`${activeTab}-${index}`} badge={badge} isAchieved index={index} />
-      ))}
+        <BadgeLevelRow key={`${activeTab}-${index}`} badge={badge} index={index} />
+      )) : (
+        <>
+          {achievedData?.getAchievedBadgeLevels?.map((badge: AchievedBadgeLevel, index: number) => (
+            <BadgeLevelRow key={`${activeTab}-${index}`} badge={badge} achieved index={index} />
+          ))}
+          { achievedData?.getAchievedBadgeLevels?.length > 0 && 
+            earnedCustomBadgeData?.getEarnedCustomBadges?.length > 0 && 
+            <Divider orientation="horizontal" color='neutral.300' mt="8px" />
+          }
+          {earnedCustomBadgeData?.getEarnedCustomBadges?.map((badge: EarnedCustomBadge, index: number) => (
+            <CustomBadgeRow key={`${activeTab}-${index}`} badge={badge} index={index} />
+          ))}
+        </>
+      )}
     </WidgetContainer>
   );
 };
