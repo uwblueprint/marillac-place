@@ -7,6 +7,7 @@ import { Priority } from "../../../../types/enums";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { ExclamationMark } from "../../../../ui/icons/NotificationIcons";
 import { Marker, Trash } from "../../../../ui/icons/ActionIcons";
+import useNotification from "../../../../hooks/useNotification";
 
 type AnnouncementCardProps = {
   announcement_id: any;
@@ -27,7 +28,7 @@ export default function AnnouncementCard({
 }: AnnouncementCardProps) {
   const [edit, setEdit] = useState(false);
   const [error, setError] = useState<string>("");
-
+  const { sendNotification } = useNotification();
   const [deleteAnnouncement] = useMutation(DELETE_ANNOUNCEMENT);
   const handleDeleteAnnouncement = async (aid: number) => {
     setError("");
@@ -35,8 +36,9 @@ export default function AnnouncementCard({
       await deleteAnnouncement({
         variables: { aid },
       });
-
+      
       refetch();
+      sendNotification("Announcement deleted successfully");
     } catch (err: any) {
       setError(err.message);
     }

@@ -8,6 +8,7 @@ import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
 import { Priority } from "../../../../types/enums";
 import FixedInput from "../../../../ui/inputs/FixedInput";
 import { toTitleCase } from "../../../../helpers/stringUtils";
+import useNotification from "../../../../hooks/useNotification";
 
 type EditAnnouncementModalProps = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +31,7 @@ const EditAnnouncementModal = ({
   const [message, setMessage] = useState<string>(initialMessage);
 
   const [error, setError] = useState<string>("");
-
+  const { sendNotification } = useNotification();
   const [editAnnouncement, { loading: editAnnouncementLoading }] =
     useMutation(UPDATE_ANNOUNCEMENT);
 
@@ -52,6 +53,7 @@ const EditAnnouncementModal = ({
 
       refetch();
       setIsOpen(false);
+      sendNotification("Announcement updated successfully");
     } catch (err: any) {
       setError("Unable to update announcement");
     }

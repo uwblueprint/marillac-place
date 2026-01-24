@@ -10,6 +10,7 @@ import { AdminContext } from "../../../AdminContext";
 import { toTitleCase } from "../../../../helpers/stringUtils";
 import { CustomBadge } from "../../../../types/models";
 import DropdownInput from "../../../../ui/inputs/DropdownInput";
+import useNotification from "../../../../hooks/useNotification";
 
 interface AssignCustomBadgeModalProps {
   onClose: () => void;
@@ -21,7 +22,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
   customBadges,
 }) => {
   const { roomToParticipant } = useContext(AdminContext);
-
+  const { sendNotification } = useNotification();
   const [selectedBadgeId, setSelectedBadgeId] = useState<string>("");
   const [badgeValue, setBadgeValue] = useState<number | null>(null);
   const [selectedParticipants, setSelectedParticipants] = useState<number[]>(
@@ -81,6 +82,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
           )
         );
         onClose();
+        sendNotification("Custom badge assigned successfully");
       } catch (err: any) {
         setError(err.message);
       }

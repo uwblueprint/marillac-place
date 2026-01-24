@@ -7,6 +7,7 @@ import FixedInput from "../../../../ui/inputs/FixedInput";
 import NumberInput from "../../../../ui/inputs/NumberInput";
 import SelectInput from "../../../../ui/inputs/SelectInput";
 import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
+import useNotification from "../../../../hooks/useNotification";
 
 type MarillacBalanceModalProps = {
   currentBalance: number;
@@ -25,7 +26,7 @@ export default function MarillacBalanceModal({
   const [amount, setAmount] = useState<number>(0);
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
-
+  const { sendNotification } = useNotification();
   const [updateMarillacBucks, { loading: updateMarillacBucksLoading }] =
     useMutation(UPDATE_BALANCE);
 
@@ -45,11 +46,12 @@ export default function MarillacBalanceModal({
             reason,
           },
         });
+        refetchParticipant();
+        close();
+        sendNotification("Marillac balance updated successfully");
       } catch (err: any) {
         setError(err.message);
       }
-      refetchParticipant();
-      close();
     }
   }
 

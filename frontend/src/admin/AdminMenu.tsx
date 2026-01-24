@@ -42,6 +42,7 @@ type SignOutPopUpProps = {
 
 function SignOutPopUp({ cancel }: SignOutPopUpProps) {
   const navigate = useNavigate();
+
   const handleSignOut = () => {
     localStorage.removeItem("token");
     return navigate(ROUTES.ADMIN_LOGIN_PAGE);

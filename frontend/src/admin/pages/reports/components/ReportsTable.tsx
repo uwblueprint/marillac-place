@@ -7,6 +7,7 @@ import {
   DELETE_REPORT_RECIPIENT,
   UPDATE_REPORT_RECIPIENT,
 } from "../../../../gql/reportRecipientRequests";
+import useNotification from "../../../../hooks/useNotification";
 
 type Report = {
   email: string;
@@ -24,6 +25,7 @@ export default function ReportsTable({ reports, refetch }: ReportsTableProps) {
     useMutation(UPDATE_REPORT_RECIPIENT);
   const [deleteReportRecipient, { loading: deleteReportRecipientLoading }] =
     useMutation(DELETE_REPORT_RECIPIENT);
+  const { sendNotification } = useNotification();
 
   const handleChangeWeekly = async (email: string, weekly: boolean) => {
     try {
@@ -34,6 +36,7 @@ export default function ReportsTable({ reports, refetch }: ReportsTableProps) {
         },
       });
       refetch();
+      sendNotification("Weekly report frequency updated successfully");
     } catch (err) {
       console.error("Error updating report recipient:", err);
     }
@@ -48,6 +51,7 @@ export default function ReportsTable({ reports, refetch }: ReportsTableProps) {
         },
       });
       refetch();
+      sendNotification("Monthly report frequency updated successfully");
     } catch (err) {
       console.error("Error updating report recipient:", err);
     }
@@ -61,6 +65,7 @@ export default function ReportsTable({ reports, refetch }: ReportsTableProps) {
         },
       });
       refetch();
+      sendNotification("Email deleted successfully");
     } catch (err) {
       console.error("Error deleting report recipient:", err);
     }

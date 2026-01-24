@@ -11,6 +11,7 @@ import FixedInput from "../../../../ui/inputs/FixedInput";
 import { LEVEL_ORDER } from "../../../../constants/levels";
 import { toTitleCase } from "../../../../helpers/stringUtils";
 import NumberInput from "../../../../ui/inputs/NumberInput";
+import useNotification from "../../../../hooks/useNotification";
 
 interface EditSystemBadgeModalProps {
   isOpen: boolean;
@@ -62,7 +63,7 @@ const EditSystemBadgeModal = ({
     )
   );
   const [error, setError] = useState("");
-
+  const { sendNotification } = useNotification();
   const [updateBadgeLevel, { loading: updateBadgeLevelLoading }] =
     useMutation(UPDATE_BADGE_LEVEL);
   const [updateSystemBadge, { loading: updateSystemBadgeLoading }] =
@@ -133,6 +134,7 @@ const EditSystemBadgeModal = ({
       await Promise.all(requests);
       await refetch();
       onClose();
+      sendNotification("System badge updated successfully");
     } catch (err: any) {
       setError("Failed to edit system badge");
     }

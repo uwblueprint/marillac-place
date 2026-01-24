@@ -5,6 +5,7 @@ import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
 import { CREATE_REPORT_RECIPIENT } from "../../../../gql/reportRecipientRequests";
 import ToggleButton from "../../../../ui/buttons/ToggleButton";
+import useNotification from "../../../../hooks/useNotification";
 
 type AddEmailModalProps = {
   refetch: () => void;
@@ -19,7 +20,7 @@ export default function AddEmailModal({
   const [weekly, setWeekly] = useState<boolean>(false);
   const [monthly, setMonthly] = useState<boolean>(false);
   const [error, setError] = useState("");
-
+  const { sendNotification } = useNotification();
   const [createReportRecipient, { loading: createReportRecipientLoading }] =
     useMutation(CREATE_REPORT_RECIPIENT);
   const handleAddEmail = async (
@@ -42,6 +43,7 @@ export default function AddEmailModal({
       });
       onClose();
       refetch();
+      sendNotification("Email added successfully");
     } catch (err: any) {
       setError(err.message);
     }

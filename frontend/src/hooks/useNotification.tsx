@@ -9,10 +9,10 @@ export default function useNotification() {
   const sendNotification = (message: string) => {
     toast({
       description: message,
-      status: "success",
       position: "top",
       duration: 3000,
-      variant: "left-accent",
+      variant: "subtle",
+      status: "success",
     });
   };
 

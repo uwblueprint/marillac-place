@@ -13,6 +13,7 @@ import FixedInput from "../../../../ui/inputs/FixedInput";
 import PasswordInput from "../../../../ui/inputs/PasswordInput";
 import { Swap } from "../../../../ui/icons/ActionIcons";
 import { ExitDoor } from "../../../../ui/icons/MiscIcons";
+import useNotification from "../../../../hooks/useNotification";
 
 type EditParticipantCardProps = {
   roomNumber: number;
@@ -46,7 +47,7 @@ export default function EditParticipantCard({
   const [selectedSwap, setSelectedSwap] = useState(-1);
 
   const [updateParticipant, { loading }] = useMutation(UPDATE_PARTICIPANT);
-
+  const { sendNotification } = useNotification();
   async function handleSubmit() {
     setError("");
     const today = endOfDay(new Date());
@@ -113,6 +114,7 @@ export default function EditParticipantCard({
       refetchCurrent();
       refetchPast();
       close();
+      sendNotification("Participant updated successfully"); 
     } catch (err: any) {
       setError(err.message);
     }

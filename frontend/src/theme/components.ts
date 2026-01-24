@@ -1,5 +1,5 @@
 import { progressAnatomy, checkboxAnatomy } from "@chakra-ui/anatomy";
-import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
+import { createMultiStyleConfigHelpers, defineStyle, defineStyleConfig } from "@chakra-ui/react";
 
 const { definePartsStyle: definePartsStyleProgress, defineMultiStyleConfig: defineMultiStyleConfigProgress } =
   createMultiStyleConfigHelpers(progressAnatomy.keys);
@@ -46,4 +46,27 @@ const baseStyleCheckbox = definePartsStyleCheckbox({
 
 export const Checkbox = defineMultiStyleConfigCheckbox({
   baseStyle: baseStyleCheckbox,
+});
+
+const baseStyleAlert = defineStyle({
+  container: {
+    borderRadius: "8px",
+    padding: "12px",
+    fontFamily: "Nunito, sans-serif",
+    fontWeight: 650,
+    fontSize: "14px",
+    bg: "indicate.lightGreen",
+    border: "2px solid",
+    borderColor: "indicate.deepGreen",
+  },
+  description: {
+    color: "indicate.deepGreen",
+  },
+  icon: {
+    color: "indicate.deepGreen",
+  },
+});
+
+export const Alert = defineStyleConfig({
+  baseStyle: baseStyleAlert
 });

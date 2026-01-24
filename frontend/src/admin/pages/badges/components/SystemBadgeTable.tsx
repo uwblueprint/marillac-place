@@ -10,6 +10,7 @@ import { LEVEL_ABBREVIATION, LEVEL_ORDER } from "../../../../constants/levels";
 import ToggleButton from "../../../../ui/buttons/ToggleButton";
 import { AdminContext } from "../../../AdminContext";
 import { ADMIN } from "../../../../constants/roles";
+import useNotification from "../../../../hooks/useNotification";
 
 type SystemBadgeTableProps = {
   loading: boolean;
@@ -25,7 +26,7 @@ const SystemBadgeTable = ({
   refetch,
 }: SystemBadgeTableProps) => {
   const { role } = useContext(AdminContext);
-
+  const { sendNotification } = useNotification();
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState<SystemBadge | null>(null);
   const [updateError, setUpdateError] = useState<string>("");
@@ -41,6 +42,7 @@ const SystemBadgeTable = ({
         },
       });
       await refetch();
+      sendNotification("System badge status updated successfully");
     } catch (err: any) {
       setUpdateError(err.message);
     }

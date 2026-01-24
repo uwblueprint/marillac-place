@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_CUSTOM_BADGE } from "../../../../gql/customBadgeRequests";
 import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
+import useNotification from "../../../../hooks/useNotification";
 
 interface EditCustomBadgeModalProps {
   onClose: () => void;
@@ -18,7 +19,7 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
   const [badgeName, setBadgeName] = useState(selected.name);
   const [badgeCriteria, setBadgeCriteria] = useState(selected.description);
   const [error, setError] = useState("");
-
+  const { sendNotification } = useNotification();
   const [updateCustomBadge, { loading: updateCustomBadgeLoading }] =
     useMutation(UPDATE_CUSTOM_BADGE);
 
@@ -40,6 +41,7 @@ const EditCustomBadgeModal: React.FC<EditCustomBadgeModalProps> = ({
       });
       await refetch();
       onClose();
+      sendNotification("Custom badge updated successfully");
     } catch (err: any) {
       setError(err.message);
     }

@@ -10,6 +10,7 @@ import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
 import { AdminContext } from "../../../AdminContext";
 import { Priority } from "../../../../types/enums";
 import TextInput from "../../../../ui/inputs/TextInput";
+import useNotification from "../../../../hooks/useNotification";
 
 const CreateAnnouncementModal = ({
   onClose,
@@ -23,6 +24,8 @@ const CreateAnnouncementModal = ({
   const [topic, setTopic] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
+
+  const { sendNotification } = useNotification();
 
   const [createAnnouncement, { loading: createAnnouncementLoading }] =
     useMutation(CREATE_ANNOUNCEMENT);
@@ -59,6 +62,7 @@ const CreateAnnouncementModal = ({
       });
 
       refetch();
+      sendNotification("Announcement created successfully");
       onClose();
     } catch (err: any) {
       setError("Unable to create announcement");

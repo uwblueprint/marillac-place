@@ -11,6 +11,7 @@ import { AdminContext } from "./AdminContext";
 import ErrorScreen from "../ui/screens/ErrorScreen";
 import AdminMenu from "./AdminMenu";
 import { Participant } from "../types/models";
+import useNotification from "../hooks/useNotification";
 
 type AdminRouteProps = {
   children: React.ReactElement;

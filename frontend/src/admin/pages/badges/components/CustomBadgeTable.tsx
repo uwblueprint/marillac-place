@@ -8,6 +8,7 @@ import { Marker, Trash } from "../../../../ui/icons/ActionIcons";
 import { ICON_MAP } from "../../../../constants/icons";
 import { AdminContext } from "../../../AdminContext";
 import { ADMIN } from "../../../../constants/roles";
+import useNotification from "../../../../hooks/useNotification";
 
 type CustomBadgeTableProps = {
   loading: boolean;
@@ -23,7 +24,7 @@ const CustomBadgeTable = ({
   refetch,
 }: CustomBadgeTableProps) => {
   const { role } = useContext(AdminContext);
-
+  const { sendNotification } = useNotification();
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState<CustomBadge | null>(null);
   const [deleteError, setDeleteError] = useState<string>("");
@@ -40,6 +41,7 @@ const CustomBadgeTable = ({
         },
       });
       await refetch();
+      sendNotification("Custom badge deleted successfully");
     } catch (err: any) {
       setDeleteError(err.message);
     }

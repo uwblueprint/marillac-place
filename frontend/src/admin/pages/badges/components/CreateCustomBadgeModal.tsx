@@ -6,6 +6,7 @@ import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
 import { Icon } from "../../../../types/enums";
 import { ICON_MAP } from "../../../../constants/icons";
+import useNotification from "../../../../hooks/useNotification";
 
 interface CreateCustomBadgeModalProps {
   onClose: () => void;
@@ -20,7 +21,7 @@ const CreateCustomBadgeModal = ({
   const [criteria, setCriteria] = useState("");
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [error, setError] = useState("");
-
+  const { sendNotification } = useNotification();
   const availableIcons = [
     Icon.PLANT,
     Icon.GROUP,
@@ -48,6 +49,7 @@ const CreateCustomBadgeModal = ({
         });
         onClose();
         await refetch();
+        sendNotification("Custom badge created successfully");
       } catch (err: any) {
         setError(err.message);
       }

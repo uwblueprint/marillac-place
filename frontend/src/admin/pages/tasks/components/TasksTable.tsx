@@ -14,6 +14,7 @@ import { formatDateV2 } from "../../../../helpers/formatDateTime";
 import { Marker, Trash } from "../../../../ui/icons/ActionIcons";
 import EditTaskModal from "./EditTaskModal";
 import { formatCurrency } from "../../../../helpers/formatCurrency";
+import useNotification from "../../../../hooks/useNotification";
 
 type TasksTableProps = {
   taskType: TaskType;
@@ -32,16 +33,17 @@ const TasksTable = ({
 }: TasksTableProps) => {
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [deleteTask] = useMutation(DELETE_TASK);
-
+  const { sendNotification } = useNotification();
   async function handleDeleteTask(tid: number) {
     try {
       await deleteTask({
         variables: { tid },
       });
+      refetch();
+      sendNotification("Task deleted successfully");
     } catch (err: any) {
       console.log(err);
     }
-    refetch();
   }
 
   function getAssignedDaysString(
