@@ -190,7 +190,7 @@ export default function AdminSchedulePage() {
             />
           ) : (
             <>
-              <Text textStyle="h3" color="brand.primaryDark" pl="3px" mt='8px'>
+              <Text textStyle="h3" color="brand.primaryDark" pl="3px" mt="8px">
                 Daily
               </Text>
               <DailyTasksTable

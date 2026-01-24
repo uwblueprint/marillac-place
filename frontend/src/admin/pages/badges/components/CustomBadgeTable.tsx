@@ -52,10 +52,12 @@ const CustomBadgeTable = ({
     { header: "Badge Name", width: "25%" },
     { header: "Description", width: "68%" },
 
-    ...(role === ADMIN ? [
-      { header: "", width: "1%" },
-      { header: "", width: "1%" },
-    ] : []),
+    ...(role === ADMIN
+      ? [
+          { header: "", width: "1%" },
+          { header: "", width: "1%" },
+        ]
+      : []),
   ];
 
   const rows: Row[][] = badges.length
@@ -66,19 +68,21 @@ const CustomBadgeTable = ({
           { element: badge.name },
           { element: badge.description },
 
-          ...(role === ADMIN ? [
-            {
-              element: <Marker size={20} />,
-              action: () => {
-                setSelected(badge);
-                setEdit(true);
-              },
-            },
-            {
-              element: <Trash size={20} />,
-              action: async () => handleDelete(badge.cid),
-            },
-          ] : []),
+          ...(role === ADMIN
+            ? [
+                {
+                  element: <Marker size={20} />,
+                  action: () => {
+                    setSelected(badge);
+                    setEdit(true);
+                  },
+                },
+                {
+                  element: <Trash size={20} />,
+                  action: async () => handleDelete(badge.cid),
+                },
+              ]
+            : []),
         ];
       })
     : [];

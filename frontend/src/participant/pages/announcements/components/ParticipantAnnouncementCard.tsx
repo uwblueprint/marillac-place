@@ -11,9 +11,18 @@ type ParticipantAnnouncementCardProps = {
   announcement: ReceivedAnnouncement;
 };
 
-export default function ParticipantAnnouncementCard({ announcement }: ParticipantAnnouncementCardProps) {
+export default function ParticipantAnnouncementCard({
+  announcement,
+}: ParticipantAnnouncementCardProps) {
   const details: Announcement | undefined = announcement.announcement;
-  if (!details || (details && (!details.topic || !details.date || !details.message || !details.priority))) {
+  if (
+    !details ||
+    (details &&
+      (!details.topic ||
+        !details.date ||
+        !details.message ||
+        !details.priority))
+  ) {
     return (
       <Flex
         w="100%"
@@ -28,7 +37,7 @@ export default function ParticipantAnnouncementCard({ announcement }: Participan
           Unable to load announcement details.
         </Text>
       </Flex>
-    )
+    );
   }
 
   return (
@@ -49,7 +58,7 @@ export default function ParticipantAnnouncementCard({ announcement }: Participan
         </Flex>
 
         <Flex gap="8px">
-          {(details.priority !== Priority.NORMAL) && (
+          {details.priority !== Priority.NORMAL && (
             <ExclamationMark size={12} />
           )}
           {announcement.pinned && <Pin size={12} color="brand.secondaryDark" />}

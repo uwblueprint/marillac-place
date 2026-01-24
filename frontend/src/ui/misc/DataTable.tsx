@@ -67,14 +67,14 @@ const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
             <Tr outline="1px solid" outlineColor="background.border">
               <Td colSpan={6} paddingY="50px">
                 <Flex flexDir="column" gap="2px">
-                  <Text textStyle="s1" color="indicate.brightRed" textAlign="center">
-                    ERROR
-                  </Text>
                   <Text
-                    textStyle="b1"
-                    color="text.medium"
+                    textStyle="s1"
+                    color="indicate.brightRed"
                     textAlign="center"
                   >
+                    ERROR
+                  </Text>
+                  <Text textStyle="b1" color="text.medium" textAlign="center">
                     {error}
                   </Text>
                 </Flex>
@@ -114,10 +114,7 @@ const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
                         </Button>
                       </Flex>
                     ) : (
-                      <Text
-                        textStyle="b2"
-                        textAlign="left"
-                      >
+                      <Text textStyle="b2" textAlign="left">
                         {cell.element}
                       </Text>
                     )}

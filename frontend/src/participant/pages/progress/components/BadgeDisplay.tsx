@@ -9,7 +9,11 @@ import LoadingScreen from "../../../../ui/screens/LoadingScreen";
 import { GET_BADGE_LEVEL_PROGRESS } from "../../../../gql/badgeLevelProgressRequests";
 import { GET_ACHIEVED_BADGE_LEVELS } from "../../../../gql/achievedBadgeLevelRequests";
 import BadgeLevelRow from "../../../../ui/badge/BadgeLevelRow";
-import { AchievedBadgeLevel, BadgeLevelProgress, EarnedCustomBadge } from "../../../../types/models";
+import {
+  AchievedBadgeLevel,
+  BadgeLevelProgress,
+  EarnedCustomBadge,
+} from "../../../../types/models";
 import { GET_EARNED_CUSTOM_BADGES } from "../../../../gql/earnedCustomBadgeRequests";
 import CustomBadgeRow from "../../../../ui/badge/CustomBadgeRow";
 
@@ -45,7 +49,9 @@ const BadgeDisplay = () => {
   });
 
   if (pid === -1 || errorProgress || errorAchieved || errorEarnedCustomBadge) {
-    return <ErrorScreen message="Failed to load badge data. Please try again later." />;
+    return (
+      <ErrorScreen message="Failed to load badge data. Please try again later." />
+    );
   }
 
   if (loadingProgress || loadingAchieved || loadingEarnedCustomBadge) {
@@ -53,11 +59,7 @@ const BadgeDisplay = () => {
   }
 
   return (
-    <WidgetContainer
-      width="100%"
-      height="fit-content"
-      paddingX="16px"
-    >
+    <WidgetContainer width="100%" height="fit-content" paddingX="16px">
       <Flex mb="12px" gap="12px" alignItems="center">
         {(["badges", "achieved"] as const).map((tab) => (
           <Text
@@ -66,7 +68,9 @@ const BadgeDisplay = () => {
             textStyle={activeTab === tab ? "s1" : "b1"}
             color={activeTab === tab ? "text.dark" : "text.light"}
             textDecoration="underline"
-            _hover={{ textDecoration: activeTab === tab ? "underline" : "none" }}
+            _hover={{
+              textDecoration: activeTab === tab ? "underline" : "none",
+            }}
             cursor="pointer"
             onClick={() => setActiveTab(tab)}
             transition="all 0.2s ease"
@@ -75,20 +79,45 @@ const BadgeDisplay = () => {
           </Text>
         ))}
       </Flex>
-      {activeTab === "badges" ? progressData?.getBadgeLevelProgress?.map((badge: BadgeLevelProgress, index: number) => (
-        <BadgeLevelRow key={`${activeTab}-${index}`} badge={badge} index={index} />
-      )) : (
+      {activeTab === "badges" ? (
+        progressData?.getBadgeLevelProgress?.map(
+          (badge: BadgeLevelProgress, index: number) => (
+            <BadgeLevelRow
+              key={`${activeTab}-${index}`}
+              badge={badge}
+              index={index}
+            />
+          )
+        )
+      ) : (
         <>
-          {achievedData?.getAchievedBadgeLevels?.map((badge: AchievedBadgeLevel, index: number) => (
-            <BadgeLevelRow key={`${activeTab}-${index}`} badge={badge} achieved index={index} />
-          ))}
-          { achievedData?.getAchievedBadgeLevels?.length > 0 && 
-            earnedCustomBadgeData?.getEarnedCustomBadges?.length > 0 && 
-            <Divider orientation="horizontal" color='background.border' mt="8px" />
-          }
-          {earnedCustomBadgeData?.getEarnedCustomBadges?.map((badge: EarnedCustomBadge, index: number) => (
-            <CustomBadgeRow key={`${activeTab}-${index}`} badge={badge} index={index} />
-          ))}
+          {achievedData?.getAchievedBadgeLevels?.map(
+            (badge: AchievedBadgeLevel, index: number) => (
+              <BadgeLevelRow
+                key={`${activeTab}-${index}`}
+                badge={badge}
+                achieved
+                index={index}
+              />
+            )
+          )}
+          {achievedData?.getAchievedBadgeLevels?.length > 0 &&
+            earnedCustomBadgeData?.getEarnedCustomBadges?.length > 0 && (
+              <Divider
+                orientation="horizontal"
+                color="background.border"
+                mt="8px"
+              />
+            )}
+          {earnedCustomBadgeData?.getEarnedCustomBadges?.map(
+            (badge: EarnedCustomBadge, index: number) => (
+              <CustomBadgeRow
+                key={`${activeTab}-${index}`}
+                badge={badge}
+                index={index}
+              />
+            )
+          )}
         </>
       )}
     </WidgetContainer>

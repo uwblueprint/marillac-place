@@ -32,7 +32,12 @@ const CreateAnnouncementModal = ({
   const { roomToParticipant } = useContext(AdminContext);
 
   const handleSend = async () => {
-    if (selectedRooms.length === 0 || priority === null || message === "" || topic === "") {
+    if (
+      selectedRooms.length === 0 ||
+      priority === null ||
+      message === "" ||
+      topic === ""
+    ) {
       setError("Missing fields.");
       return;
     }

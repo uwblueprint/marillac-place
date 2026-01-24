@@ -65,7 +65,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
           adminContext.setRole(role);
         }
         setPopulatingContext(false);
-      }
+      };
       populateContext();
     }
   }, [authorizing, authorized]);

@@ -80,7 +80,7 @@ const App = (): React.ReactElement => {
   const theme = extendTheme({
     colors,
     textStyles,
-    components: { 
+    components: {
       Text,
       Progress,
       Checkbox,

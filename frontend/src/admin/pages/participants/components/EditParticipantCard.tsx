@@ -33,12 +33,16 @@ export default function EditParticipantCard({
   const participant: Participant = participants[roomNumber];
   const id: number = participant.pid;
   const currentArrivalDate = new Date(participant.arrival);
-  const currentDepartureDate = participant.departure ? new Date(participant.departure) : null;
+  const currentDepartureDate = participant.departure
+    ? new Date(participant.departure)
+    : null;
   const currentPassword = participant.password;
 
   const [arrivalDate, setArrivalDate] = useState<Date>(currentArrivalDate);
   const [password, setPassword] = useState<string>(currentPassword);
-  const [departureDate, setDepartureDate] = useState<Date | null>(currentDepartureDate);
+  const [departureDate, setDepartureDate] = useState<Date | null>(
+    currentDepartureDate
+  );
 
   const [swapParticipant, setSwapParticipant] = useState(false);
   const [endStay, setEndStay] = useState(false);
@@ -95,9 +99,7 @@ export default function EditParticipantCard({
           room: swapParticipant ? selectedSwap : undefined,
           arrival: arrivalDate.toISOString(),
           departure:
-            endStay && departureDate
-              ? departureDate.toISOString()
-              : undefined,
+            endStay && departureDate ? departureDate.toISOString() : undefined,
           password,
         },
       });
@@ -114,7 +116,7 @@ export default function EditParticipantCard({
       refetchCurrent();
       refetchPast();
       close();
-      sendNotification("Participant updated successfully"); 
+      sendNotification("Participant updated successfully");
     } catch (err: any) {
       setError(err.message);
     }
@@ -157,7 +159,7 @@ export default function EditParticipantCard({
         <GreenButton
           label="Swap Rooms"
           action={() => {
-            if (!swapParticipant) { 
+            if (!swapParticipant) {
               setEndStay(false);
               setDepartureDate(null);
             }
@@ -169,7 +171,7 @@ export default function EditParticipantCard({
         />
         <Button
           onClick={() => {
-            if (!endStay) { 
+            if (!endStay) {
               setSwapParticipant(false);
               setSelectedSwap(-1);
             }

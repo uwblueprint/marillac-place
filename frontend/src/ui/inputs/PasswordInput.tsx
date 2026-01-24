@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { FormControl, Input, Text, InputGroup, InputRightElement, IconButton } from "@chakra-ui/react";
+import {
+  FormControl,
+  Input,
+  Text,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+} from "@chakra-ui/react";
 import { InputProps } from "../../types/component";
 import { Eye, ClosedEye } from "../icons/MiscIcons";
 
@@ -42,11 +49,7 @@ export default function PasswordInput({
             boxShadow: "none",
           }}
         />
-        <InputRightElement
-          h="100%"
-          display="flex"
-          alignItems="center"
-        >
+        <InputRightElement h="100%" display="flex" alignItems="center">
           <IconButton
             aria-label="Toggle password visibility"
             icon={showPassword ? <Eye /> : <ClosedEye />}

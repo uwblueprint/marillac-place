@@ -74,7 +74,7 @@ export default function AdminMenu() {
     { label: "Participants", route: ROUTES.ADMIN_PARTICIPANTS_PAGE },
     { label: "Task Library", route: ROUTES.ADMIN_TASKS_PAGE },
     { label: "Badge Library", route: ROUTES.ADMIN_BADGES_PAGE },
-    
+
     ...(role === ADMIN
       ? [{ label: "Reports", route: ROUTES.ADMIN_REPORTS_PAGE }]
       : []),

@@ -164,9 +164,7 @@ const EditSystemBadgeModal = ({
 
       <Flex justifyContent="space-between" alignItems="center" w="100%">
         <Flex flexDir="column" gap="5px">
-          <Text textStyle="s2">
-            Set Badge Levels
-          </Text>
+          <Text textStyle="s2">Set Badge Levels</Text>
           {LEVEL_ORDER.map((level: Level) => {
             if (!badgeLevels[level]) return null;
             const data = badgeLevels[level];
@@ -199,10 +197,7 @@ const EditSystemBadgeModal = ({
           })}
         </Flex>
         <Flex flexDir="column" gap="5px">
-          <Text
-            textStyle="s2"
-            textAlign="right"
-          >
+          <Text textStyle="s2" textAlign="right">
             Marillac Bucks
           </Text>
           {LEVEL_ORDER.map((level: Level) => {

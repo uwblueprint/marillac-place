@@ -1,6 +1,6 @@
 /**
  * Color Structure
- * 
+ *
  * - brand: marillac's main colors.
  * - background: the whites and greys for pages, popups, tables, etc.
  * - indicate: colors for success/error/warning/informational UI.
@@ -16,15 +16,15 @@ const colors = {
     secondaryLight: "#FCF2ED",
   },
   background: {
-    admin: "#FFFFFF", 
-    participant: "#FDFDFD", 
+    admin: "#FFFFFF",
+    participant: "#FDFDFD",
     highlight: "#F8F8F8",
     border: "#C5C8D8",
   },
   indicate: {
     darkRed: "#B21D2F",
     brightRed: "#E30000",
-    deepGreen: "#259E29", 
+    deepGreen: "#259E29",
     lightGreen: "#EAFFEB",
   },
   schedule: {

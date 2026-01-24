@@ -36,7 +36,7 @@ export default function AnnouncementCard({
       await deleteAnnouncement({
         variables: { aid },
       });
-      
+
       refetch();
       sendNotification("Announcement deleted successfully");
     } catch (err: any) {
@@ -55,21 +55,15 @@ export default function AnnouncementCard({
       <Flex direction="row" justify="space-between" align="center" gap="20px">
         <Flex direction="column" flex="1">
           <Flex align="center" gap={1.5}>
-            <Text textStyle="s1">
-              {room}
-            </Text>
+            <Text textStyle="s1">{room}</Text>
             <Flex>
-              {(priority === Priority.HIGH || priority === Priority.CRITICAL) && <ExclamationMark />}
+              {(priority === Priority.HIGH ||
+                priority === Priority.CRITICAL) && <ExclamationMark />}
               {priority === Priority.CRITICAL && <ExclamationMark />}
             </Flex>
           </Flex>
 
-          <Text
-            textStyle="b1"
-            mt={1}
-            whiteSpace="pre-line"
-            color="text.dark"
-          >
+          <Text textStyle="b1" mt={1} whiteSpace="pre-line" color="text.dark">
             {message}
           </Text>
 

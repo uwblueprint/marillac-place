@@ -220,69 +220,93 @@ export const ExitDoor: React.FC<IconProps> = ({
 }) => {
   const iconColor = useChakraColor(color);
   return (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 16 16" 
-    fill="none" 
-    xmlns="http://www.w3.org/2000/svg" 
-  >
-    <path 
-      d="M8.66634 2.66647H10.6663C11.02 2.66647 11.3591 2.80695 11.6091 3.057C11.8592 3.30705 11.9997 3.64618 11.9997 3.99981V13.3331M1.33301 13.3331H3.33301M3.33301 13.3331L7.83834 14.4591C7.9366 14.4836 8.03914 14.4854 8.1382 14.4644C8.23725 14.4434 8.33021 14.4 8.41002 14.3377C8.48983 14.2754 8.55439 14.1957 8.5988 14.1047C8.64322 14.0137 8.66631 13.9137 8.66634 13.8125V3.04114C8.66621 2.83859 8.61993 2.63807 8.53103 2.45608C8.44212 2.27409 8.31292 2.11475 8.15323 1.99015C7.99355 1.86555 7.80757 1.77897 7.60943 1.73698C7.41128 1.69498 7.20617 1.69869 7.00967 1.74781L4.34301 2.41447C4.05456 2.48657 3.79848 2.65302 3.61548 2.88736C3.43248 3.1217 3.33305 3.41048 3.33301 3.70781V13.3331ZM8.66634 13.3331H14.6663M6.66634 7.99981V8.00647" 
-      stroke={iconColor} 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      strokeWidth="1.5"
-    />
-  </svg>
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M8.66634 2.66647H10.6663C11.02 2.66647 11.3591 2.80695 11.6091 3.057C11.8592 3.30705 11.9997 3.64618 11.9997 3.99981V13.3331M1.33301 13.3331H3.33301M3.33301 13.3331L7.83834 14.4591C7.9366 14.4836 8.03914 14.4854 8.1382 14.4644C8.23725 14.4434 8.33021 14.4 8.41002 14.3377C8.48983 14.2754 8.55439 14.1957 8.5988 14.1047C8.64322 14.0137 8.66631 13.9137 8.66634 13.8125V3.04114C8.66621 2.83859 8.61993 2.63807 8.53103 2.45608C8.44212 2.27409 8.31292 2.11475 8.15323 1.99015C7.99355 1.86555 7.80757 1.77897 7.60943 1.73698C7.41128 1.69498 7.20617 1.69869 7.00967 1.74781L4.34301 2.41447C4.05456 2.48657 3.79848 2.65302 3.61548 2.88736C3.43248 3.1217 3.33305 3.41048 3.33301 3.70781V13.3331ZM8.66634 13.3331H14.6663M6.66634 7.99981V8.00647"
+        stroke={iconColor}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+    </svg>
   );
 };
 
 export const Triangle: React.FC<IconProps> = ({ size = 12 }) => (
-  <svg width={size} height={size} viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path 
-      d="M4.79035 0.506928C5.17342 -0.169033 6.14732 -0.169033 6.53038 0.506929L11.1896 8.72865C11.5673 9.39529 11.0858 10.2217 10.3195 10.2217L1.00119 10.2217C0.234953 10.2217 -0.246602 9.39528 0.131174 8.72865L4.79035 0.506928Z" 
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 12 11"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.79035 0.506928C5.17342 -0.169033 6.14732 -0.169033 6.53038 0.506929L11.1896 8.72865C11.5673 9.39529 11.0858 10.2217 10.3195 10.2217L1.00119 10.2217C0.234953 10.2217 -0.246602 9.39528 0.131174 8.72865L4.79035 0.506928Z"
       fill="#0C727E"
     />
   </svg>
 );
 
-export const Eye: React.FC<IconProps> = ({ size = 16, color = "text.medium" }) => {
+export const Eye: React.FC<IconProps> = ({
+  size = 16,
+  color = "text.medium",
+}) => {
   const iconColor = useChakraColor(color);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g id="SVGRepo_iconCarrier"> 
-        <path 
-          d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" 
-          stroke={iconColor} 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z"
+          stroke={iconColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
-        <path 
-          d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" 
-          stroke={iconColor} 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
+        <path
+          d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z"
+          stroke={iconColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </g>
     </svg>
   );
 };
 
-export const ClosedEye: React.FC<IconProps> = ({ size = 16, color = "text.medium" }) => {
+export const ClosedEye: React.FC<IconProps> = ({
+  size = 16,
+  color = "text.medium",
+}) => {
   const iconColor = useChakraColor(color);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g id="SVGRepo_iconCarrier"> 
-        <path 
-          d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" 
-          stroke={iconColor} 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-        /> 
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5"
+          stroke={iconColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </g>
     </svg>
   );

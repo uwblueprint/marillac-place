@@ -22,7 +22,6 @@ export default function WidgetContainer({
   loading = false,
   error = "",
 }: WidgetContainerProps) {
-
   return (
     <Box
       position="relative"
@@ -56,11 +55,7 @@ export default function WidgetContainer({
           <Text textStyle="s1" color="indicate.brightRed" textAlign="center">
             ERROR
           </Text>
-          <Text
-            textStyle="b1"
-            color="text.medium"
-            textAlign="center"
-          >
+          <Text textStyle="b1" color="text.medium" textAlign="center">
             {error}
           </Text>
         </Flex>

@@ -8,7 +8,10 @@ type EmptyRoomCardProps = {
   refetch: () => void;
 };
 
-export default function EmptyRoomCard({ roomNumber, refetch }: EmptyRoomCardProps) {
+export default function EmptyRoomCard({
+  roomNumber,
+  refetch,
+}: EmptyRoomCardProps) {
   const [addParticipant, setAddParticipant] = useState(false);
   return (
     <Flex
@@ -37,7 +40,9 @@ export default function EmptyRoomCard({ roomNumber, refetch }: EmptyRoomCardProp
         <Text textStyle="s1">Room {roomNumber}</Text>
       </Flex>
 
-      <Text textStyle="b1" mb="2px">This room is empty.</Text>
+      <Text textStyle="b1" mb="2px">
+        This room is empty.
+      </Text>
 
       <Flex position="absolute" bottom="12px">
         <OrangeButton

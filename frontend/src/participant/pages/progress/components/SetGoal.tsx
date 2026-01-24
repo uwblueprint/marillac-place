@@ -14,7 +14,11 @@ interface SetGoalProps {
   prevGoal: number;
 }
 
-export const SetGoal: React.FC<SetGoalProps> = ({ handleClose, refetchGoal, prevGoal }) => {
+export const SetGoal: React.FC<SetGoalProps> = ({
+  handleClose,
+  refetchGoal,
+  prevGoal,
+}) => {
   const [goal, setGoal] = useState<number | null>(null);
   const [error, setError] = useState("");
   const { pid } = useContext(ParticipantContext);

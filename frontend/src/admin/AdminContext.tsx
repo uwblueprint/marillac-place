@@ -20,7 +20,9 @@ interface AdminProviderProps {
 
 export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
   const [role, setRole] = useState<string>("");
-  const [roomToParticipant, setRoomToParticipant] = useState<Record<number, number>>({});
+  const [roomToParticipant, setRoomToParticipant] = useState<
+    Record<number, number>
+  >({});
 
   return (
     <AdminContext.Provider

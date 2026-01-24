@@ -12,7 +12,12 @@ type PastParticipantTableProps = {
   loading: boolean;
   error: ApolloError | undefined;
 };
-const PastParticipantTable = ({ participants, refetch, loading, error }: PastParticipantTableProps) => {
+const PastParticipantTable = ({
+  participants,
+  refetch,
+  loading,
+  error,
+}: PastParticipantTableProps) => {
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState(-1);
   const [selectedArrival, setSelectedArrival] = useState<Date | null>(null);
@@ -36,27 +41,32 @@ const PastParticipantTable = ({ participants, refetch, loading, error }: PastPar
 
   const rows: Row[][] = participants.length
     ? participants.map((participant: Participant, index: number) => {
-      return [
-        {
-          element: participant.pid,
-        },
-        {
-          element: formatDateV1(new Date(participant.arrival)),
-        },
-        {
-          element: participant.departure ? formatDateV1(new Date(participant.departure)) : "",
-        },
-        {
-          element: <Marker size={20} />,
-          action: () => {
-            setSelectedId(participant.pid);
-            setSelectedArrival(new Date(participant.arrival));
-            setSelectedDeparture(participant.departure ? new Date(participant.departure) : null);
-            setEdit(true);
-          }
-        }
-      ];
-    }): [];
+        return [
+          {
+            element: participant.pid,
+          },
+          {
+            element: formatDateV1(new Date(participant.arrival)),
+          },
+          {
+            element: participant.departure
+              ? formatDateV1(new Date(participant.departure))
+              : "",
+          },
+          {
+            element: <Marker size={20} />,
+            action: () => {
+              setSelectedId(participant.pid);
+              setSelectedArrival(new Date(participant.arrival));
+              setSelectedDeparture(
+                participant.departure ? new Date(participant.departure) : null
+              );
+              setEdit(true);
+            },
+          },
+        ];
+      })
+    : [];
 
   return (
     <>
@@ -66,14 +76,15 @@ const PastParticipantTable = ({ participants, refetch, loading, error }: PastPar
         loading={loading}
         error={error?.message}
       />
-      {edit && selectedArrival && selectedDeparture && selectedId && 
-      <EditPastParticipantCard
-        id={selectedId}
-        arrival={selectedArrival}
-        departure={selectedDeparture}
-        close={() => setEdit(false)}
-        refetch={refetch}
-      />}
+      {edit && selectedArrival && selectedDeparture && selectedId && (
+        <EditPastParticipantCard
+          id={selectedId}
+          arrival={selectedArrival}
+          departure={selectedDeparture}
+          close={() => setEdit(false)}
+          refetch={refetch}
+        />
+      )}
     </>
   );
 };

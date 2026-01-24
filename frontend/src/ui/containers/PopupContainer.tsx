@@ -96,11 +96,7 @@ export default function PopupContainer({
             <Text textStyle="s1" color="indicate.brightRed" textAlign="center">
               ERROR
             </Text>
-            <Text
-              textStyle="b1"
-              color="text.medium"
-              textAlign="center"
-            >
+            <Text textStyle="b1" color="text.medium" textAlign="center">
               Something went wrong.
             </Text>
           </Flex>

@@ -10,7 +10,10 @@ import AnnouncementWidget from "./components/AnnouncementWidget";
 
 export default function ParticipantsHomePage() {
   const { pid } = useContext(ParticipantContext);
-  if (pid === -1) return <ErrorScreen message="Something is wrong. Please try again later." />;
+  if (pid === -1)
+    return (
+      <ErrorScreen message="Something is wrong. Please try again later." />
+    );
 
   return (
     <>
@@ -22,7 +25,7 @@ export default function ParticipantsHomePage() {
           {formatDateV8(new Date())}
         </Text>
       </Flex>
-      
+
       <Flex w="100%" flexDir="column" gap="8px">
         <TasksCompletedWidget pid={pid} />
         <NewAchievedBadgesWidget pid={pid} />

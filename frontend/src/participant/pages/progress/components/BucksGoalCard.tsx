@@ -14,7 +14,10 @@ import { useMutation, useQuery } from "@apollo/client";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 import { ParticipantContext } from "../../../ParticipantContext";
-import { CREATE_EARNING_GOAL, GET_EARNING_GOAL } from "../../../../gql/earningGoalRequests";
+import {
+  CREATE_EARNING_GOAL,
+  GET_EARNING_GOAL,
+} from "../../../../gql/earningGoalRequests";
 import ErrorScreen from "../../../../ui/screens/ErrorScreen";
 import LoadingScreen from "../../../../ui/screens/LoadingScreen";
 import { GoalAction } from "../../../../types/enums";
@@ -26,7 +29,8 @@ import { SetGoal } from "./SetGoal";
 export default function BucksGoalCard() {
   const { pid, totalEarnings } = useContext(ParticipantContext);
 
-  const [createGoal, { loading: createGoalLoading, error: createGoalError }] = useMutation(CREATE_EARNING_GOAL);
+  const [createGoal, { loading: createGoalLoading, error: createGoalError }] =
+    useMutation(CREATE_EARNING_GOAL);
   const { data, loading, error, refetch } = useQuery(GET_EARNING_GOAL, {
     variables: { pid },
   });
@@ -49,7 +53,7 @@ export default function BucksGoalCard() {
 
   const [editGoal, setEditGoal] = useState<EarningGoal | null>(null);
   const [setGoal, setSetGoal] = useState(false);
-  
+
   const goal = data?.getEarningGoal ?? null;
   const metGoal = goal?.action === GoalAction.REACHED;
   const percentComplete = (totalEarnings / goal?.value) * 100;
@@ -69,7 +73,9 @@ export default function BucksGoalCard() {
   };
 
   if (pid === -1 || error || createGoalError) {
-    return <ErrorScreen message="Failed to load marillac bucks goal. Please try again later." />;
+    return (
+      <ErrorScreen message="Failed to load marillac bucks goal. Please try again later." />
+    );
   }
 
   if (loading || createGoalLoading) {
@@ -78,8 +84,20 @@ export default function BucksGoalCard() {
 
   return (
     <>
-      {editGoal && <EditGoal handleClose={() => setEditGoal(null)} refetchGoal={refetch} currentGoal={editGoal} />}
-      {setGoal && <SetGoal handleClose={() => setSetGoal(false)} refetchGoal={refetch} prevGoal={goal?.value ?? 0} />}
+      {editGoal && (
+        <EditGoal
+          handleClose={() => setEditGoal(null)}
+          refetchGoal={refetch}
+          currentGoal={editGoal}
+        />
+      )}
+      {setGoal && (
+        <SetGoal
+          handleClose={() => setSetGoal(false)}
+          refetchGoal={refetch}
+          prevGoal={goal?.value ?? 0}
+        />
+      )}
       <WidgetContainer
         width="100%"
         height="fit-content"
@@ -87,7 +105,12 @@ export default function BucksGoalCard() {
         loading={false}
         error=""
       >
-        <Flex direction="row" justifyContent="space-between" alignItems="center" mb="8px">
+        <Flex
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb="8px"
+        >
           <Text textStyle="s1">Marillac Bucks Goal</Text>
           <UnderlineButton
             label={editGoalText()}
@@ -97,7 +120,12 @@ export default function BucksGoalCard() {
         {!goal ? (
           <Text textStyle="b1">Set a new goal to track your progress!</Text>
         ) : !metGoal ? (
-          <Flex direction="column" gap={2} mt="8px" mb={percentComplete >= 15 && percentComplete <= 85 ? "8px" : "0px"}>
+          <Flex
+            direction="column"
+            gap={2}
+            mt="8px"
+            mb={percentComplete >= 15 && percentComplete <= 85 ? "8px" : "0px"}
+          >
             <Progress
               colorScheme="brand.primaryDark"
               value={percentComplete}
@@ -114,7 +142,7 @@ export default function BucksGoalCard() {
               <Text textStyle="s2" color="text.medium">
                 $0
               </Text>
-              {(percentComplete >= 15 && percentComplete <= 85) && (
+              {percentComplete >= 15 && percentComplete <= 85 && (
                 <Flex
                   direction="column"
                   position="absolute"

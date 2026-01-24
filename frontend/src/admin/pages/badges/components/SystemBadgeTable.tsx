@@ -53,10 +53,12 @@ const SystemBadgeTable = ({
     { header: "Description", width: "50%" },
     { header: "Offered Levels", width: "10%" },
 
-    ...(role === ADMIN ? [
-      { header: "Status", width: "5%", center: true },
-      { header: "", width: "5%" },
-    ] : []),
+    ...(role === ADMIN
+      ? [
+          { header: "Status", width: "5%", center: true },
+          { header: "", width: "5%" },
+        ]
+      : []),
   ];
 
   const rows: Row[][] = badges.length
@@ -73,23 +75,28 @@ const SystemBadgeTable = ({
           { element: badge.description },
           { element: offeredLevels },
 
-          ...(role === ADMIN ? [
-            {
-              element: (
-                <ToggleButton active={badge.is_active} setActive={() => {}} />
-              ),
-              action: async () => {
-                changeActivityStatus(badge.name, !badge.is_active);
-              },
-            },
-            {
-              element: <Marker size={20} />,
-              action: () => {
-                setSelected(badge);
-                setEdit(true);
-              },
-            },
-          ] : []),
+          ...(role === ADMIN
+            ? [
+                {
+                  element: (
+                    <ToggleButton
+                      active={badge.is_active}
+                      setActive={() => {}}
+                    />
+                  ),
+                  action: async () => {
+                    changeActivityStatus(badge.name, !badge.is_active);
+                  },
+                },
+                {
+                  element: <Marker size={20} />,
+                  action: () => {
+                    setSelected(badge);
+                    setEdit(true);
+                  },
+                },
+              ]
+            : []),
         ];
       })
     : [];

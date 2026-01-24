@@ -97,7 +97,9 @@ const CreateCustomBadgeModal = ({
               py="12px"
               px="8px"
               border="1px solid"
-              borderColor={isSelected ? "brand.primaryDark" : "background.border"}
+              borderColor={
+                isSelected ? "brand.primaryDark" : "background.border"
+              }
               borderRadius="8px"
               cursor="pointer"
               onClick={() => setSelectedIcon(icon)}

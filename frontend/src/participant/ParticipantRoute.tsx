@@ -26,13 +26,20 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
 
   const [getParticipantByPid] = useLazyQuery(GET_PARTICIPANT_BY_PID, {
     onCompleted: (data) => {
-      if (!data || !data.getParticipantByPid || !data.getParticipantByPid.room || !data.getParticipantByPid.balance) {
+      if (
+        !data ||
+        !data.getParticipantByPid ||
+        !data.getParticipantByPid.room ||
+        !data.getParticipantByPid.balance
+      ) {
         setError("participant data is missing");
         return;
       }
       participantContext.setRoom(data.getParticipantByPid.room);
       participantContext.setBalance(data.getParticipantByPid.balance);
-      participantContext.setTotalEarnings(data.getParticipantByPid.total_earnings);
+      participantContext.setTotalEarnings(
+        data.getParticipantByPid.total_earnings
+      );
     },
     onError: (err: Error) => {
       setError(err.message);
@@ -71,14 +78,18 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   }
 
   return (
-    <Flex
-      w="100vw"
-      h="100vh"
-      alignItems="flex-start"
-      justifyContent="center"
-    >
-      <Flex maxWidth="500px" width="100%" height="fit-content" flexDir="column" position="relative">
-        <ParticipantMenu room={participantContext.room} balance={participantContext.balance} />
+    <Flex w="100vw" h="100vh" alignItems="flex-start" justifyContent="center">
+      <Flex
+        maxWidth="500px"
+        width="100%"
+        height="fit-content"
+        flexDir="column"
+        position="relative"
+      >
+        <ParticipantMenu
+          room={participantContext.room}
+          balance={participantContext.balance}
+        />
         <Flex
           flexDir="column"
           mt="60px"
@@ -89,7 +100,13 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
           gap="8px"
           bg="background.participant"
         >
-          {error ? <ErrorScreen message={error} /> : (authorizing || populatingContext) ? <LoadingScreen /> : children}
+          {error ? (
+            <ErrorScreen message={error} />
+          ) : authorizing || populatingContext ? (
+            <LoadingScreen />
+          ) : (
+            children
+          )}
         </Flex>
       </Flex>
     </Flex>

@@ -10,25 +10,37 @@ import { HAS_COMPLETED_ALL_REQUIRED_TASKS } from "../../../../gql/assignedTaskRe
 
 type TasksCompletedWidgetProps = {
   pid: number;
-}
+};
 
-export default function TasksCompletedWidget({ pid }: TasksCompletedWidgetProps) {
+export default function TasksCompletedWidget({
+  pid,
+}: TasksCompletedWidgetProps) {
   const navigate = useNavigate();
-  const { data: completedAllTasksData, loading: completedAllTasksLoading, error: completedAllTasksError} = useQuery(HAS_COMPLETED_ALL_REQUIRED_TASKS, {
+  const {
+    data: completedAllTasksData,
+    loading: completedAllTasksLoading,
+    error: completedAllTasksError,
+  } = useQuery(HAS_COMPLETED_ALL_REQUIRED_TASKS, {
     variables: { pid },
   });
-  const hasCompletedAllTasks = completedAllTasksData?.hasCompletedAllRequiredTasks || false;
+  const hasCompletedAllTasks =
+    completedAllTasksData?.hasCompletedAllRequiredTasks || false;
   if (!hasCompletedAllTasks) return null;
 
   return (
-    <WidgetContainer 
-      width="100%" 
-      height="fit-content" 
-      paddingX="16px" 
+    <WidgetContainer
+      width="100%"
+      height="fit-content"
+      paddingX="16px"
       loading={completedAllTasksLoading}
       error={completedAllTasksError?.message}
     >
-      <Flex w="100%" justifyContent="space-between" alignItems="center" mb="8px">
+      <Flex
+        w="100%"
+        justifyContent="space-between"
+        alignItems="center"
+        mb="8px"
+      >
         <Text textStyle="s1">Mandatory Tasks Completed!</Text>
         <UnderlineButton
           label="Tasks"

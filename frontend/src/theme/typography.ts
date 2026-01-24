@@ -2,7 +2,7 @@ import { defineStyleConfig } from "@chakra-ui/react";
 
 /**
  * Typography Structure
- * 
+ *
  * - h: heading
  * - s: subtitle
  * - b: body
@@ -18,11 +18,11 @@ export const Text = defineStyleConfig({
 });
 
 export const textStyles = {
-  h1: { 
+  h1: {
     fontWeight: "700",
     fontSize: "26px",
   },
-  h2: { 
+  h2: {
     fontWeight: "700",
     fontSize: "24px",
   },

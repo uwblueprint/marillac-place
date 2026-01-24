@@ -30,7 +30,9 @@ export default function RoomNavigation({
           cursor="pointer"
           onClick={() => changeRoom(num)}
           borderBottom="3px solid"
-          borderColor={selectedRoom === num ? "brand.primaryDark" : "transparent"}
+          borderColor={
+            selectedRoom === num ? "brand.primaryDark" : "transparent"
+          }
           px="10px"
           pb="10px"
         >

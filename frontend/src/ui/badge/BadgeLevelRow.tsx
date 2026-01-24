@@ -12,9 +12,15 @@ interface BadgeLevelRowProps {
   achieved?: boolean;
 }
 
-const BadgeLevelRow: React.FC<BadgeLevelRowProps> = ({ badge, index, achieved = false }) => {
+const BadgeLevelRow: React.FC<BadgeLevelRowProps> = ({
+  badge,
+  index,
+  achieved = false,
+}) => {
   const icon = badge.badge_level?.system_badge?.icon ?? Icon.FIVE_STAR;
-  const description = badge.badge_level?.system_badge?.description ?? "Error loading badge description";
+  const description =
+    badge.badge_level?.system_badge?.description ??
+    "Error loading badge description";
   const value = badge.badge_level?.value ?? 0;
 
   function getPercentageComplete(bl: any): number {
@@ -31,11 +37,20 @@ const BadgeLevelRow: React.FC<BadgeLevelRowProps> = ({ badge, index, achieved = 
   return (
     <>
       {index !== 0 && (
-        <Divider orientation="horizontal" color='background.border' mt="8px" />
+        <Divider orientation="horizontal" color="background.border" mt="8px" />
       )}
-      <Flex width="100%" alignItems="center" justifyContent="space-between" mt="8px">
+      <Flex
+        width="100%"
+        alignItems="center"
+        justifyContent="space-between"
+        mt="8px"
+      >
         <Flex alignItems="center" gap="12px">
-          <BadgeProgress icon={icon} level={badge.level} percentageComplete={getPercentageComplete(badge)} />
+          <BadgeProgress
+            icon={icon}
+            level={badge.level}
+            percentageComplete={getPercentageComplete(badge)}
+          />
 
           <Flex flexDir="column">
             <Text textStyle="s1" color="brand.primaryDark">
@@ -48,9 +63,7 @@ const BadgeLevelRow: React.FC<BadgeLevelRowProps> = ({ badge, index, achieved = 
         </Flex>
         {!achieved && (
           <Flex alignItems="center" gap="8px">
-            <Text textStyle="b1">
-              {value}
-            </Text>
+            <Text textStyle="b1">{value}</Text>
             <MarillacCoin size={16} />
           </Flex>
         )}

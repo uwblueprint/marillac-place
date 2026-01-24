@@ -42,7 +42,12 @@ export default function ErrorScreen({
           Oops — something went wrong
         </Text>
 
-        <Text fontSize="18px" color="brand.secondaryDark" mb={2} fontWeight={700}>
+        <Text
+          fontSize="18px"
+          color="brand.secondaryDark"
+          mb={2}
+          fontWeight={700}
+        >
           {message}
         </Text>
 

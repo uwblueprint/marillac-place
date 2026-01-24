@@ -1,20 +1,36 @@
 import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
-import { endOfDay, isEqual, isSameDay, startOfDay, startOfWeek } from "date-fns";
+import {
+  endOfDay,
+  isEqual,
+  isSameDay,
+  startOfDay,
+  startOfWeek,
+} from "date-fns";
 import { useLocation } from "react-router-dom";
 import { ParticipantContext } from "../../ParticipantContext";
 import { GET_ASSIGNED_TASKS_BY_WEEK } from "../../../gql/assignedTaskRequests";
 import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import { DisplayView, ScheduleView } from "../../../constants/views";
-import { formatDateV1, formatDateV2, formatDateV6, formatDateV7 } from "../../../helpers/formatDateTime";
+import {
+  formatDateV1,
+  formatDateV2,
+  formatDateV6,
+  formatDateV7,
+} from "../../../helpers/formatDateTime";
 import MarillacPlaceCalendar from "../../../ui/misc/MarillacPlaceCalendar";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import { Calendar, List } from "../../../ui/icons/MiscIcons";
 import { AssignedTask } from "../../../types/models";
 import TaskDetailsModal from "./components/TaskDetailsModal";
 import { TaskStatus } from "../../../types/enums";
-import { Assigned, Complete, Excused, Incomplete } from "../../../ui/icons/StatusIcons";
+import {
+  Assigned,
+  Complete,
+  Excused,
+  Incomplete,
+} from "../../../ui/icons/StatusIcons";
 import { Comment } from "../../../ui/icons/ActionIcons";
 
 export default function ParticipantsSchedulePage() {
@@ -22,7 +38,9 @@ export default function ParticipantsSchedulePage() {
   const location = useLocation();
   const { view } = location.state || { view: ScheduleView.LIST };
   const [currentView, setCurrentView] = useState<ScheduleView>(view);
-  const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(null);
+  const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(
+    null
+  );
 
   const { data, loading, error } = useQuery(GET_ASSIGNED_TASKS_BY_WEEK, {
     variables: { pid, weekStart: startOfWeek(new Date()).toISOString() },
@@ -33,16 +51,25 @@ export default function ParticipantsSchedulePage() {
   }
 
   if (error || pid === -1) {
-    return <ErrorScreen message="Failed to load assigned tasks. Please try again later." />;
+    return (
+      <ErrorScreen message="Failed to load assigned tasks. Please try again later." />
+    );
   }
 
   const tasks = data?.getAssignedTasksByWeek ?? [];
 
   return (
     <>
-      <Flex w="100%" mb="12px" justifyContent="space-between" alignItems="center">
+      <Flex
+        w="100%"
+        mb="12px"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Text color="brand.primaryDark" textStyle="h3">
-          {currentView === ScheduleView.CALENDAR ? formatDateV1(new Date()) : "This Week"}
+          {currentView === ScheduleView.CALENDAR
+            ? formatDateV1(new Date())
+            : "This Week"}
         </Text>
         <HStack spacing={0}>
           <Button
@@ -104,24 +131,39 @@ export default function ParticipantsSchedulePage() {
       ) : (
         <Flex flexDir="column" gap="12px">
           {tasks.map((task: AssignedTask, index: number) => {
-            const noSpecificTime = (
-              isEqual(startOfDay(new Date(task.start_date)), new Date(task.start_date)) &&
-              isEqual(endOfDay(new Date(task.end_date)), new Date(task.end_date))
-            );
-            const showDayHeader = (
-              index === 0 || 
-              !isSameDay(new Date(task.start_date), new Date(tasks[index - 1].start_date))
-            );
+            const noSpecificTime =
+              isEqual(
+                startOfDay(new Date(task.start_date)),
+                new Date(task.start_date)
+              ) &&
+              isEqual(
+                endOfDay(new Date(task.end_date)),
+                new Date(task.end_date)
+              );
+            const showDayHeader =
+              index === 0 ||
+              !isSameDay(
+                new Date(task.start_date),
+                new Date(tasks[index - 1].start_date)
+              );
 
             return (
               <>
                 {showDayHeader && (
                   <>
                     <Divider borderColor="background.border" />
-                    <Text textStyle="s1">{formatDateV7(new Date(task.start_date))}</Text>
+                    <Text textStyle="s1">
+                      {formatDateV7(new Date(task.start_date))}
+                    </Text>
                   </>
                 )}
-                <Flex key={index} justifyContent="space-between" alignItems="center" onClick={() => setViewTaskDetails(task)} cursor="pointer">
+                <Flex
+                  key={index}
+                  justifyContent="space-between"
+                  alignItems="center"
+                  onClick={() => setViewTaskDetails(task)}
+                  cursor="pointer"
+                >
                   <Flex alignItems="center" gap="12px">
                     {task.status === TaskStatus.ASSIGNED && <Assigned />}
                     {task.status === TaskStatus.COMPLETE && <Complete />}
@@ -130,16 +172,25 @@ export default function ParticipantsSchedulePage() {
                     <Text textStyle="b1">{task.name}</Text>
                     {task.comment && <Comment size={12} />}
                   </Flex>
-                  <Text textStyle="b2" color="text.medium">{noSpecificTime ? "Anytime" : formatDateV2(new Date(task.start_date)) + " to " + formatDateV2(new Date(task.end_date))}</Text>
+                  <Text textStyle="b2" color="text.medium">
+                    {noSpecificTime
+                      ? "Anytime"
+                      : formatDateV2(new Date(task.start_date)) +
+                        " to " +
+                        formatDateV2(new Date(task.end_date))}
+                  </Text>
                 </Flex>
               </>
-            )
+            );
           })}
         </Flex>
       )}
 
       {viewTaskDetails && (
-        <TaskDetailsModal task={viewTaskDetails} onClose={() => setViewTaskDetails(null)} />
+        <TaskDetailsModal
+          task={viewTaskDetails}
+          onClose={() => setViewTaskDetails(null)}
+        />
       )}
     </>
   );

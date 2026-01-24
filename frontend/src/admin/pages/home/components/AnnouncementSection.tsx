@@ -26,11 +26,7 @@ const AnnouncementCard: React.FC<{ announcement: Announcement }> = ({
           <Text textStyle="s1" fontWeight={600} color="text.dark">
             {getRoomString(announcement)}
           </Text>
-          <Text
-            textStyle="b2"
-            color="text.medium"
-            marginLeft="10px"
-          >
+          <Text textStyle="b2" color="text.medium" marginLeft="10px">
             posted at {formatDateV2(new Date(announcement.date))}
           </Text>
         </Flex>

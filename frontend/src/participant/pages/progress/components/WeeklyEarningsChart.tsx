@@ -49,7 +49,7 @@ const WeeklyEarningsChart = () => {
   const chartData: ChartDataItem[] = useMemo(() => {
     return weeklyEarnings.map((earnings, index) => ({
       amount: earnings,
-      day: DAY_ABBREVIATIONS[DAYS[index]]
+      day: DAY_ABBREVIATIONS[DAYS[index]],
     }));
   }, [weeklyEarnings, dayOfWeek]);
 
@@ -57,7 +57,9 @@ const WeeklyEarningsChart = () => {
   const upperBound = Math.ceil(maxEarnings * 1.2);
 
   if (pid === -1) {
-    return <ErrorScreen message="Failed to load weekly earnings. Please try again later." />;
+    return (
+      <ErrorScreen message="Failed to load weekly earnings. Please try again later." />
+    );
   }
 
   return (
@@ -68,7 +70,9 @@ const WeeklyEarningsChart = () => {
       loading={loadingEarnings}
       error={errorEarnings?.message}
     >
-      <Text textStyle="s1" mb="16px">Weekly Earnings</Text>
+      <Text textStyle="s1" mb="16px">
+        Weekly Earnings
+      </Text>
       <ResponsiveContainer width="100%" height={250}>
         <BarChart data={chartData}>
           <CartesianGrid
@@ -97,34 +101,36 @@ const WeeklyEarningsChart = () => {
             width={35}
             fontFamily="Nunito"
           />
-          <Bar
-            dataKey="amount"
-            radius={[2, 2, 0, 0]}
-          >
+          <Bar dataKey="amount" radius={[2, 2, 0, 0]}>
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={index === dayOfWeek ? colors.brand.primaryDark : colors.brand.primaryLight}
+                fill={
+                  index === dayOfWeek
+                    ? colors.brand.primaryDark
+                    : colors.brand.primaryLight
+                }
               />
             ))}
-            <LabelList content={(props: any) => {
-              const { x, y, width, index, value } = props;
-              console.log(props);
-              if (index !== dayOfWeek) return null;
-              return (
-                <text
-                  x={x + width / 2}
-                  y={y - 8}
-                  textAnchor="middle"
-                  fill="#000000"
-                  fontSize="12px"
-                  fontWeight={650}
-                  fontFamily="Nunito"
-                >
-                  ${value}
-                </text>
-              );
-            }}
+            <LabelList
+              content={(props: any) => {
+                const { x, y, width, index, value } = props;
+                console.log(props);
+                if (index !== dayOfWeek) return null;
+                return (
+                  <text
+                    x={x + width / 2}
+                    y={y - 8}
+                    textAnchor="middle"
+                    fill="#000000"
+                    fontSize="12px"
+                    fontWeight={650}
+                    fontFamily="Nunito"
+                  >
+                    ${value}
+                  </text>
+                );
+              }}
             />
           </Bar>
         </BarChart>

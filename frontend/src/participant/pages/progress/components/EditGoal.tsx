@@ -70,7 +70,9 @@ export const EditGoal: React.FC<EditGoalProps> = ({
         <Text textStyle="b1">Previous Goal:</Text>
         <Flex align="center" gap={2} justifyContent="space-between">
           <MarillacCoin size={17.5} />
-          <Text textStyle="s1" mr='1px'>{currentGoal.value}</Text>
+          <Text textStyle="s1" mr="1px">
+            {currentGoal.value}
+          </Text>
         </Flex>
       </Flex>
 

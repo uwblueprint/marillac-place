@@ -56,7 +56,9 @@ export default function AdminTasksPage() {
           <Text
             key={type}
             textStyle="s1"
-            color={selectedTaskType === type ? "brand.primaryDark" : "text.dark"}
+            color={
+              selectedTaskType === type ? "brand.primaryDark" : "text.dark"
+            }
             cursor="pointer"
             onClick={() => setSelectedTaskType(type)}
             borderBottom="3px solid"

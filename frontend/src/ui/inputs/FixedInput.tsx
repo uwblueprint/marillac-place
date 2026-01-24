@@ -18,12 +18,8 @@ export default function FixedInput({
       flexDir={orientation === "horizontal" ? "row" : "column"}
       mb="4px"
     >
-      <Text textStyle="s2">
-        {label}
-      </Text>
-      <Text textStyle="b2">
-        {current_value}
-      </Text>
+      <Text textStyle="s2">{label}</Text>
+      <Text textStyle="b2">{current_value}</Text>
     </Flex>
   );
 }

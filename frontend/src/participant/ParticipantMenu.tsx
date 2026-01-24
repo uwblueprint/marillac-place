@@ -102,7 +102,10 @@ type ParticipantMenuProps = {
   balance: number;
 };
 
-export default function ParticipantMenu({ room, balance }: ParticipantMenuProps) {
+export default function ParticipantMenu({
+  room,
+  balance,
+}: ParticipantMenuProps) {
   const pages = [
     { label: "Home", route: ROUTES.PARTICIPANTS_HOME_PAGE },
     { label: "Schedule", route: ROUTES.PARTICIPANTS_SCHEDULE_PAGE },
@@ -128,14 +131,28 @@ export default function ParticipantMenu({ room, balance }: ParticipantMenuProps)
       zIndex={100}
     >
       {!expandMenu && (
-        <Flex onClick={() => setExpandMenu(true)} cursor="pointer" position="absolute" left="20px" top="24px" zIndex={100}>
+        <Flex
+          onClick={() => setExpandMenu(true)}
+          cursor="pointer"
+          position="absolute"
+          left="20px"
+          top="24px"
+          zIndex={100}
+        >
           <Menu size={18} />
         </Flex>
       )}
 
       {expandMenu && (
         <>
-          <Flex onClick={() => setExpandMenu(false)} cursor="pointer" position="absolute" left="21px" top="26px" zIndex={100}>
+          <Flex
+            onClick={() => setExpandMenu(false)}
+            cursor="pointer"
+            position="absolute"
+            left="21px"
+            top="26px"
+            zIndex={100}
+          >
             <Cross size={16} />
           </Flex>
           <ExpandedParticipantMenu
@@ -147,9 +164,19 @@ export default function ParticipantMenu({ room, balance }: ParticipantMenuProps)
         </>
       )}
 
-      <Text textStyle="h4" pt="5px">{pages[currentPageIndex].label}</Text>
+      <Text textStyle="h4" pt="5px">
+        {pages[currentPageIndex].label}
+      </Text>
 
-      <Flex gap="7px" alignItems="center" justifyContent="center" position="absolute" right="20px" top="22px" zIndex={100}>
+      <Flex
+        gap="7px"
+        alignItems="center"
+        justifyContent="center"
+        position="absolute"
+        right="20px"
+        top="22px"
+        zIndex={100}
+      >
         <MarillacCoin size={18} />
         <Text textStyle="s1">{balance}</Text>
       </Flex>

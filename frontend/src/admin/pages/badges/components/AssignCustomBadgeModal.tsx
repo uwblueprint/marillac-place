@@ -130,9 +130,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
 
       <Flex w="100%" h="1px" bg="background.border" mt="6px" />
 
-      <Text textStyle="s2">
-        Choose Room(s)
-      </Text>
+      <Text textStyle="s2">Choose Room(s)</Text>
       <Grid templateColumns="repeat(5, 1fr)" gap="5px">
         {ROOM_NUMBERS.map((num: number) => (
           <GreenOutlineButton

@@ -26,8 +26,9 @@ export default function AdminReportsPage() {
 
   if (loading) return <LoadingScreen />;
   if (error) return <ErrorScreen message={error.message} />;
-  if (role !== ADMIN) return <ErrorScreen message="You are not authorized to access this page" />;
-  
+  if (role !== ADMIN)
+    return <ErrorScreen message="You are not authorized to access this page" />;
+
   return (
     <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
       <Flex
@@ -41,10 +42,7 @@ export default function AdminReportsPage() {
             <Text textStyle="h2" color="brand.primaryDark" pl="5px">
               Reports
             </Text>
-            <Text
-              textStyle="b2"
-              color="text.light"
-            >
+            <Text textStyle="b2" color="text.light">
               Reports will be automatically generated and emailed. Edit
               frequency of reports below.
             </Text>

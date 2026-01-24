@@ -13,27 +13,41 @@ type TaskDetailsModalProps = {
   onClose: () => void;
 };
 
-export default function TaskDetailsModal({ task, onClose }: TaskDetailsModalProps) {
-  const noSpecificTime = (
+export default function TaskDetailsModal({
+  task,
+  onClose,
+}: TaskDetailsModalProps) {
+  const noSpecificTime =
     isEqual(startOfDay(new Date(task.start_date)), new Date(task.start_date)) &&
-    isEqual(endOfDay(new Date(task.end_date)), new Date(task.end_date))
+    isEqual(endOfDay(new Date(task.end_date)), new Date(task.end_date));
+  const spansMultipleDays = !isSameDay(
+    new Date(task.start_date),
+    new Date(task.end_date)
   );
-  const spansMultipleDays = !isSameDay(new Date(task.start_date), new Date(task.end_date));
 
   return (
-    <PopupContainer
-      title={task.name}
-      cancel_action={onClose}
-    >
+    <PopupContainer title={task.name} cancel_action={onClose}>
       <FixedInput
         label="Time"
-        current_value={noSpecificTime ? "Anytime" : formatDateV2(new Date(task.start_date)) + " to " + formatDateV2(new Date(task.end_date))}
+        current_value={
+          noSpecificTime
+            ? "Anytime"
+            : formatDateV2(new Date(task.start_date)) +
+              " to " +
+              formatDateV2(new Date(task.end_date))
+        }
         orientation="horizontal"
       />
 
       <FixedInput
         label="Date"
-        current_value={spansMultipleDays ? formatDateV6(new Date(task.start_date)) + " to " + formatDateV6(new Date(task.end_date)) : formatDateV6(new Date(task.start_date))}
+        current_value={
+          spansMultipleDays
+            ? formatDateV6(new Date(task.start_date)) +
+              " to " +
+              formatDateV6(new Date(task.end_date))
+            : formatDateV6(new Date(task.start_date))
+        }
         orientation="horizontal"
       />
 

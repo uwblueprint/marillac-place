@@ -79,7 +79,7 @@ export default function DailyTasksTable({
         ])
     );
   }, [chosenDay, tasks]);
-  
+
   return (
     <Flex flexDir="column" w="100%">
       <Flex w="100%" alignItems="center" justifyContent="center">

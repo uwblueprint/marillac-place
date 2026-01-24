@@ -12,11 +12,20 @@ const CustomBadgeRow: React.FC<CustomBadgeRowProps> = ({ badge, index }) => {
   return (
     <>
       {index !== 0 && (
-        <Divider orientation="horizontal" color='background.border' mt="8px" />
+        <Divider orientation="horizontal" color="background.border" mt="8px" />
       )}
-      <Flex width="100%" alignItems="center" justifyContent="space-between" mt="8px">
+      <Flex
+        width="100%"
+        alignItems="center"
+        justifyContent="space-between"
+        mt="8px"
+      >
         <Flex alignItems="center" gap="12px">
-          <BadgeProgress icon={badge.icon} level="CUSTOM" percentageComplete={100} />
+          <BadgeProgress
+            icon={badge.icon}
+            level="CUSTOM"
+            percentageComplete={100}
+          />
 
           <Flex flexDir="column">
             <Text textStyle="s1" color="brand.primaryDark">

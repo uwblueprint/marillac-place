@@ -127,7 +127,7 @@ export default function TaskDetailsModal({
         orientation="horizontal"
       />
       <Flex flexDir="column">
-      <Flex width="350px" h="0px" />
+        <Flex width="350px" h="0px" />
         <Text textStyle="s2" mb="5px">
           Status
         </Text>
