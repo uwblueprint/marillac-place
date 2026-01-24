@@ -1,10 +1,8 @@
-name: Deploy to Railway
+name: Marillac Place - Railway Deployment
 
 on:
   push:
-    branches: [ main, dev ]
-  pull_request:
-    branches: [ main ]
+    branches: [ dev ]
 
 jobs:
   test:
@@ -32,6 +30,9 @@ jobs:
       with:
         node-version: '18.18.2'
         cache: 'yarn'
+        cache-dependency-path: |
+          backend/yarn.lock
+          frontend/yarn.lock
     
     - name: Install dependencies
       run: |
