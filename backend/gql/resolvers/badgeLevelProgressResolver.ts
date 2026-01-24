@@ -20,10 +20,7 @@ const badgeLevelProgressResolver = {
             },
           },
         },
-        orderBy: [
-          { name: "asc" },
-          { badge_level: { value: "asc" } },
-        ],
+        orderBy: [{ name: "asc" }, { badge_level: { value: "asc" } }],
       });
     },
   },

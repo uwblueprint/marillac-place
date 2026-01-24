@@ -77,14 +77,20 @@ function buildStartAndEndDates(task: Task): StartAndEndDates[] {
   return startAndEndDates;
 }
 
-export async function assignTasksToParticipants(tasks: Task[], pids?: number[]) {
+export async function assignTasksToParticipants(
+  tasks: Task[],
+  pids?: number[]
+) {
   let participantPids: number[];
   if (pids) {
     participantPids = pids;
   } else {
     const participants = await db.participant.findMany({
       where: {
-        OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+        OR: [
+          { departure: null },
+          { departure: { gt: getEndOfDay(new Date()) } },
+        ],
       },
       select: { pid: true },
     });

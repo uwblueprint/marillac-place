@@ -7,8 +7,8 @@ import {
   startOfWeek,
 } from "date-fns";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
-import { orderedDays } from "../constants/days";
 import { DayOfWeek } from "@prisma/client";
+import { orderedDays } from "../constants/days";
 
 const timeZone = "America/Toronto";
 

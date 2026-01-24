@@ -1,6 +1,5 @@
 import { Transaction, TransactionType, DayOfWeek } from "@prisma/client";
 import db from "../../prisma";
-import { orderedDays } from "../../constants/days";
 import { getEndOfWeek, getStartOfWeek, whichDay } from "../../utils/dateUtils";
 
 type GetWeeklyEarningsResponse = Record<DayOfWeek, number>;
