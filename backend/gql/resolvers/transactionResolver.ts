@@ -1,7 +1,7 @@
 import { Transaction, TransactionType, DayOfWeek } from "@prisma/client";
-import { endOfWeek, startOfWeek } from "date-fns";
 import db from "../../prisma";
 import { orderedDays } from "../../constants/days";
+import { getEndOfWeek, getStartOfWeek, whichDay } from "../../utils/dateUtils";
 
 type GetWeeklyEarningsResponse = Record<DayOfWeek, number>;
 
@@ -20,8 +20,8 @@ const transactionResolver = {
           pid,
           type: TransactionType.EARNING,
           date: {
-            gte: startOfWeek(new Date()),
-            lte: endOfWeek(new Date()),
+            gte: getStartOfWeek(new Date()),
+            lte: getEndOfWeek(new Date()),
           },
         },
       });
@@ -37,7 +37,7 @@ const transactionResolver = {
       };
 
       transactions.forEach((transaction) => {
-        const day = orderedDays[new Date(transaction.date).getDay()];
+        const day = whichDay(transaction.date);
         totals[day] += transaction.amount;
       });
 

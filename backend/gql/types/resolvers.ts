@@ -32,7 +32,7 @@ const resolvers = gql`
 
     getNumberOfAssignedTasksByRoom: [Int!]!
     getAssignedTasksForToday(pid: Int!): [AssignedTask!]!
-    getAssignedTasksByWeek(pid: Int!, weekStart: Date!): [AssignedTask!]!
+    getAssignedTasksByWeek(pid: Int!, weekStart: String!): [AssignedTask!]!
     hasCompletedAllRequiredTasks(pid: Int!): Boolean!
 
     getEarnedCustomBadges(pid: Int!): [EarnedCustomBadge!]!
@@ -61,6 +61,7 @@ const resolvers = gql`
     createAnnouncement(
       priority: Priority!
       pids: [Int!]!
+      topic: String!
       message: String!
     ): Announcement!
     updateAnnouncement(
@@ -78,7 +79,7 @@ const resolvers = gql`
     ): ReceivedAnnouncement!
 
     createEarningGoal(pid: Int!, action: GoalAction!, value: Int!): EarningGoal!
-    updateEarningGoal(pid: Int!, date: Date!, value: Int!): EarningGoal!
+    updateEarningGoal(pid: Int!, date: String!, value: Int!): EarningGoal!
 
     createTask(
       type: TaskType!
@@ -88,8 +89,8 @@ const resolvers = gql`
       day_preference: DayPreference!
       days: [DayOfWeek!]!
       time_preference: TimePreference!
-      start_time: Date
-      end_time: Date
+      start_time: String
+      end_time: String
       comment: String
     ): Task!
     updateTask(
@@ -101,8 +102,8 @@ const resolvers = gql`
       day_preference: DayPreference
       days: [DayOfWeek!]
       time_preference: TimePreference
-      start_time: Date
-      end_time: Date
+      start_time: String
+      end_time: String
       comment: String
     ): Task!
     deleteTask(tid: Int!): Task!
@@ -127,13 +128,13 @@ const resolvers = gql`
       pid: Int!
       password: String!
       room: Int!
-      arrival: Date!
+      arrival: String!
     ): Participant!
     updateParticipant(
       pid: Int!
       password: String
       room: Int
-      arrival: Date
+      arrival: String
       departure: String
     ): Participant!
 
@@ -168,8 +169,8 @@ const resolvers = gql`
       type: TaskType!
       value: Int!
       penalty: Int!
-      start_date: Date!
-      end_date: Date!
+      start_date: String!
+      end_date: String!
       comment: String
     ): AssignedTask!
     updateAssignedTask(
@@ -179,8 +180,8 @@ const resolvers = gql`
       type: TaskType
       value: Int
       penalty: Int
-      start_date: Date
-      end_date: Date
+      start_date: String
+      end_date: String
       comment: String
     ): AssignedTask!
     updateAssignedTaskStatus(aid: Int!, status: TaskStatus!): AssignedTask!

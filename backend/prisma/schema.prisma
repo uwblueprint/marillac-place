@@ -82,13 +82,14 @@ enum Icon {
   DIAMOND
   PENCIL
   TOOL
+  PLANT
 }
 
 model Participant {
   pid            Int       @id
   password       String
   room           Int
-  arrival        DateTime  @default(now())
+  arrival        DateTime 
   departure      DateTime?
   balance        Int       @default(0)
   total_earnings Int       @default(0)
@@ -107,7 +108,7 @@ model Participant {
 
 model Transaction {
   pid    Int
-  date   DateTime        @default(now())
+  date   DateTime @default(now())
   amount Int
   type   TransactionType @default(EARNING)
   reason String
@@ -121,7 +122,7 @@ model Transaction {
 model EarningGoal {
   pid    Int
   action GoalAction
-  date   DateTime   @default(now())
+  date   DateTime  @default(now()) 
   value  Int
 
   participant Participant @relation(fields: [pid], references: [pid], onDelete: Cascade, onUpdate: Cascade)
@@ -143,6 +144,7 @@ model LoginHistory {
 model Announcement {
   aid      Int      @id @default(autoincrement())
   date     DateTime @default(now())
+  topic    String
   message  String
   priority Priority @default(NORMAL)
 
@@ -174,8 +176,8 @@ model Task {
   day_preference  DayPreference
   days            DayOfWeek[]
   time_preference TimePreference
-  start_time      DateTime?      @db.Time
-  end_time        DateTime?      @db.Time
+  start_time      DateTime?
+  end_time        DateTime?
 
   @@map("task")
 }

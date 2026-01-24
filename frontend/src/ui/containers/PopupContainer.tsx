@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import BlackOutlineButton from "../buttons/BlackOutlineButton";
 import OrangeButton from "../buttons/OrangeButton";
+import { Marker, Trash } from "../icons/ActionIcons";
 
 type PopupContainerProps = {
   title: string;
@@ -16,8 +17,11 @@ type PopupContainerProps = {
   submit_action?: () => void;
   cancel_action: () => void;
   children: React.ReactNode;
+  system_error?: boolean;
   error_message?: string;
   loading?: boolean;
+  edit_action?: () => void;
+  delete_action?: () => void;
 };
 
 export default function PopupContainer({
@@ -26,8 +30,11 @@ export default function PopupContainer({
   submit_action,
   cancel_action,
   children,
+  system_error = false,
   error_message = "",
   loading = false,
+  edit_action,
+  delete_action,
 }: PopupContainerProps) {
   return (
     <Modal
@@ -39,7 +46,7 @@ export default function PopupContainer({
       <ModalOverlay />
       <ModalContent
         width="fit-content"
-        minWidth="350px"
+        minWidth="300px"
         maxWidth="550px"
         height="fit-content"
         boxShadow="xl"
@@ -48,9 +55,31 @@ export default function PopupContainer({
         paddingY="20px"
         gap="8px"
       >
-        <Text textStyle="web.h3" mb="4px">
-          {title}
-        </Text>
+        <Flex justifyContent="space-between" alignItems="baseline">
+          <Text textStyle="h3" mb="4px" mr="20px">
+            {title}
+          </Text>
+          <Flex gap="5px">
+            {edit_action && (
+              <BlackOutlineButton
+                label="Edit"
+                action={edit_action}
+                is_active={false}
+                text_color="brand.primaryDark"
+                icon={<Marker color="brand.primaryDark" />}
+              />
+            )}
+            {delete_action && (
+              <BlackOutlineButton
+                label="Delete"
+                action={delete_action}
+                is_active={false}
+                text_color="indicate.brightRed"
+                icon={<Trash />}
+              />
+            )}
+          </Flex>
+        </Flex>
 
         {loading ? (
           <Flex
@@ -60,27 +89,33 @@ export default function PopupContainer({
             alignItems="center"
             paddingY="10px"
           >
-            <Spinner size="md" color="primary.700" />
+            <Spinner size="md" color="brand.primaryDark" />
           </Flex>
-        ) : error_message !== "" ? (
+        ) : system_error ? (
           <Flex flexDir="column" gap="2px" paddingY="10px">
-            <Text textStyle="web.b2" color="#E30000" textAlign="center">
+            <Text textStyle="s1" color="indicate.brightRed" textAlign="center">
               ERROR
             </Text>
-            <Text textStyle="web.b2" color="text.grey" textAlign="center">
-              {error_message}
+            <Text
+              textStyle="b1"
+              color="text.medium"
+              textAlign="center"
+            >
+              Something went wrong.
             </Text>
           </Flex>
         ) : (
-          children
+          <>
+            {children}
+            {error_message && (
+              <Text textStyle="b1" color="indicate.brightRed">
+                {error_message}
+              </Text>
+            )}
+          </>
         )}
 
-        <Flex
-          alignItems="center"
-          justifyContent="flex-end"
-          gap="12px"
-          mt="8px"
-        >
+        <Flex alignItems="center" justifyContent="flex-end" gap="12px" mt="8px">
           <BlackOutlineButton
             label="Cancel"
             action={cancel_action}

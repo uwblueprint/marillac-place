@@ -1,28 +1,22 @@
 import React from "react";
-import { Box, Text, Flex, Button } from "@chakra-ui/react";
-import {
-  Calendar,
-  dateFnsLocalizer,
-  NavigateAction,
-  View,
-  Views,
-} from "react-big-calendar";
+import { Box, Text, Flex } from "@chakra-ui/react";
+import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
 import {
   format,
   parse,
   startOfWeek,
   getDay,
   isSameDay,
-  addWeeks,
-  subWeeks,
   setMinutes,
   setHours,
   startOfDay,
 } from "date-fns";
-import { enCA } from "date-fns/locale";
+import { enCA } from "date-fns/locale/en-CA";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AssignedTask } from "../../types/models";
-import { formatTimeString } from "../../helpers/formatDateTime";
+import { formatDateV2, formatDateV4 } from "../../helpers/formatDateTime";
+import { DisplayView } from "../../constants/views";
+import { isAllDayTask } from "../../helpers/taskHelpers";
 
 type CustomHeaderProps = {
   date: Date;
@@ -43,7 +37,7 @@ function CustomHeader({ date }: CustomHeaderProps) {
       flexDirection="column"
       justifyContent="center"
     >
-      <Text textStyle="web.b2" mb={1} letterSpacing="0.3px">
+      <Text textStyle="b1" mb={1} letterSpacing="0.3px">
         {dayAbbr}
       </Text>
       <Box
@@ -53,13 +47,13 @@ function CustomHeader({ date }: CustomHeaderProps) {
         w="27px"
         h="27px"
         borderRadius="full"
-        bg={isToday ? "secondary.700" : "transparent"}
+        bg={isToday ? "brand.secondaryDark" : "transparent"}
         cursor="default"
         margin="0"
         padding="0"
       >
         <Text
-          textStyle="web.b1"
+          textStyle="b1"
           textAlign="center"
           color={isToday ? "white" : "black"}
         >
@@ -79,7 +73,7 @@ function AssignedTaskEvent({
   assignedTask,
   viewTaskDetails,
 }: AssignedTaskEventProps) {
-  const displayDate = isSameDay(new Date(assignedTask.start_date), new Date(assignedTask.end_date))
+  const displayDate = !isAllDayTask(assignedTask);
   return (
     <Flex
       padding="4px"
@@ -88,10 +82,14 @@ function AssignedTaskEvent({
       direction="column"
       gap="2px"
     >
-      <Text textStyle="web.s1" color="inherit">{assignedTask.name}</Text>
-      { displayDate && (
-        <Text fontSize="10px" color="inherit">
-          {formatTimeString(assignedTask.start_date)} - {formatTimeString(assignedTask.end_date)}
+      <Text textStyle="s2" color="inherit">
+        {assignedTask.name}
+      </Text>
+      {displayDate && (
+        <Text fontSize="10px" fontWeight="400" color="inherit">
+          {`${formatDateV2(new Date(assignedTask.start_date))} - ${formatDateV2(
+            new Date(assignedTask.end_date)
+          )}`}
         </Text>
       )}
     </Flex>
@@ -101,68 +99,60 @@ function AssignedTaskEvent({
 type MarillacPlaceCalendarProps = {
   assignedTasks: AssignedTask[];
   startDate: Date;
-  setStartDate: (date: Date) => void;
   viewTaskDetails: (task: AssignedTask | null) => void;
-  view: "web" | "mobile";
+  view: DisplayView;
 };
 
 export default function MarillacPlaceCalendar({
   assignedTasks,
   startDate,
-  setStartDate,
   viewTaskDetails,
   view,
 }: MarillacPlaceCalendarProps) {
-  const calendarView = view === "mobile" ? Views.DAY : Views.WEEK;
+  const calendarView = view === DisplayView.MOBILE ? Views.DAY : Views.WEEK;
   return (
     <>
-      { view === "mobile" && (
-        <Text
-          textStyle="web.b1"
-          mb="12px"
-          textAlign="center"
-        >
-          {format(startDate, "EEEE d").toUpperCase()}
-        </Text>
-      )}
-      <Calendar
-        localizer={dateFnsLocalizer({
-          format,
-          parse,
-          startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 0 }),
-          startOfDay: () => startOfDay(new Date()),
-          getDay,
-          locales: { "en-CA": enCA },
-        })}
-        events={assignedTasks}
-        titleAccessor="name"
-        startAccessor={(event: AssignedTask) => new Date(event.start_date)}
-        endAccessor={(event: AssignedTask) => new Date(event.end_date)}
-        view={calendarView}
-        date={startDate}
-        min={setMinutes(setHours(new Date(), 6), 0)}
-        onSelectEvent={viewTaskDetails}
-        formats={{ eventTimeRangeFormat: () => "" }}
-        toolbar={false}
-        components={{
-          event: (props: { event: AssignedTask }) => {
-            const { event } = props;
-            return (
-              <AssignedTaskEvent
-                assignedTask={event}
-                viewTaskDetails={viewTaskDetails}
-              />
-            );
-          },
-          week: { header: CustomHeader }
-        }}
-        eventPropGetter={(event: AssignedTask) => {
-          const statusClass = `status-${event.status.toLowerCase()}`;
-          return {
-            className: statusClass,
-          };
-        }}
-      />
+      <Box w="100%" minH="fit-content" overflow="hidden">
+        <Calendar
+          localizer={dateFnsLocalizer({
+            format,
+            parse,
+            startOfWeek: () => startOfWeek(new Date()),
+            startOfDay: () => startOfDay(new Date()),
+            getDay,
+            locales: { "en-CA": enCA },
+          })}
+          events={assignedTasks}
+          titleAccessor="name"
+          startAccessor={(event: AssignedTask) => new Date(event.start_date)}
+          endAccessor={(event: AssignedTask) => new Date(event.end_date)}
+          allDayAccessor={(event: AssignedTask) => isAllDayTask(event)}
+          view={calendarView}
+          date={startDate}
+          min={setMinutes(setHours(new Date(), 6), 0)}
+          onSelectEvent={viewTaskDetails}
+          formats={{ eventTimeRangeFormat: () => "" }}
+          toolbar={false}
+          components={{
+            event: (props: { event: AssignedTask }) => {
+              const { event } = props;
+              return (
+                <AssignedTaskEvent
+                  assignedTask={event}
+                  viewTaskDetails={viewTaskDetails}
+                />
+              );
+            },
+            week: { header: CustomHeader },
+          }}
+          eventPropGetter={(event: AssignedTask) => {
+            const statusClass = `status-${event.status.toLowerCase()}`;
+            return {
+              className: statusClass,
+            };
+          }}
+        />
+      </Box>
     </>
   );
 }

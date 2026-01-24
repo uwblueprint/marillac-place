@@ -15,24 +15,24 @@ export default function OrangeButton({
       cursor="pointer"
       borderRadius="8px"
       border="1px"
-      borderColor="#E67D4F"
+      borderColor="brand.secondaryDark"
       width="fit-content"
       height="fit-content"
       paddingX="12px"
       paddingY="6px"
-      bg="#E67D4F"
+      bg="brand.secondaryDark"
       _hover={{
-        borderColor: "#D76A3B",
-        bg: "#D76A3B",
+        borderColor: "#D9764A",
+        bg: "#D9764A",
       }}
       _active={{
-        borderColor: "#D76A3B",
-        bg: "#D76A3B",
+        borderColor: "#D9764A",
+        bg: "#D9764A",
       }}
     >
       <Flex alignItems="center" gap="5px">
         {icon}
-        <Text textStyle="web.s1" color="#FFFFFF">
+        <Text textStyle="s2" color="white">
           {label}
         </Text>
       </Flex>

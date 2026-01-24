@@ -1,8 +1,12 @@
 import { Level } from "@prisma/client";
-import { endOfDay } from "date-fns";
 import db from "../prisma";
-import { SYSTEM_BADGES, JACK_OF_ALL_TRADES, PR_LEADER } from "../constants/systemBadges";
+import {
+  SYSTEM_BADGES,
+  JACK_OF_ALL_TRADES,
+  PR_LEADER,
+} from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
+import { getEndOfDay } from "./dateUtils";
 
 async function getNextBadgeLevel(name: string, level: Level) {
   const levels = [
@@ -82,11 +86,12 @@ export async function updateBadgeLevelProgress(
 
     if (prLeaderProgress) {
       const newPrLeaderAmount = prLeaderProgress.progress + 1;
-      const reachedPrLeaderBenchmark = newPrLeaderAmount >= prLeaderProgress.badge_level.benchmark;
+      const reachedPrLeaderBenchmark =
+        newPrLeaderAmount >= prLeaderProgress.badge_level.benchmark;
       if (reachedPrLeaderBenchmark) {
         await db.achievedBadgeLevel.create({
           data: {
-            name: PR_LEADER, 
+            name: PR_LEADER,
             level: prLeaderProgress.level,
             pid,
           },
@@ -94,7 +99,7 @@ export async function updateBadgeLevelProgress(
 
         await db.badgeLevelProgress.delete({
           where: {
-            name_level_pid: { 
+            name_level_pid: {
               name: PR_LEADER,
               level: prLeaderProgress.level,
               pid,
@@ -102,7 +107,7 @@ export async function updateBadgeLevelProgress(
           },
         });
       } else {
-        await db.badgeLevelProgress.update({ 
+        await db.badgeLevelProgress.update({
           where: {
             name_level_pid: {
               name: PR_LEADER,
@@ -114,7 +119,7 @@ export async function updateBadgeLevelProgress(
         });
       }
     }
-    
+
     await db.badgeLevelProgress.delete({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },
     });
@@ -145,7 +150,7 @@ export async function updateBadgeLevelProgress(
 export async function validateBadgeLevelProgress(name: string) {
   const currentParticipants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: endOfDay(new Date()) } }],
+      OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
     },
   });
 

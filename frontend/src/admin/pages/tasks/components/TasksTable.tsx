@@ -1,165 +1,162 @@
-export {};
-// TODO: Refactor this component
-// import { Text, Flex } from "@chakra-ui/react";
-// import EditIcon from "@mui/icons-material/Edit";
-// import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-// import React, { useState } from "react";
-// import { useMutation } from "@apollo/client";
-// import { DELETE_TASK } from "../../../../gql/mutations";
-// import EditTaskModal from "./EditTaskModal";
-// import DataTable from "../../../common/misc/DataTable";
-// 
-// type TasksTableProps = {
-//   loading: boolean;
-//   error: any;
-//   tasks: any[];
-// };
-// 
-// const TasksTable = ({ loading, error, tasks }: TasksTableProps) => {
-//   const days: Record<string, string> = {
-//     MONDAY: "M",
-//     TUESDAY: "T",
-//     WEDNESDAY: "W",
-//     THURSDAY: "Th",
-//     FRIDAY: "F",
-//     SATURDAY: "Sa",
-//     SUNDAY: "Su",
-//   };
-// 
-//   const [edit, setEdit] = useState(false);
-//   const [selected, setSelected] = useState(null);
-// 
-//   const [deleteTask] = useMutation(DELETE_TASK);
-// 
-//   function formatTime(t: string) {
-//     // const [h, m] = t.split(":").map(Number);
-//     // return `${(h % 12 || 12)}:${m.toString().padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
-//     return t;
-//   }
-// 
-//   async function handleDeleteTask(id: number) {
-//     try {
-//       await deleteTask({
-//         variables: {
-//           taskId: id,
-//         },
-//       });
-//     } catch (err: any) {
-//       console.log(err);
-//     }
-//     window.location.reload();
-//   }
-// 
-//   const columns = [
-//     { header: "Name", width: "22%" },
-//     { header: "Assigned Days", width: "22%" },
-//     { header: "Assigned Times", width: "22%" },
-//     { header: "Marillac Bucks", width: "22%" },
-//     { header: "Actions", width: "12%" },
-//   ];
-// 
-//   const rows: JSX.Element[][] = tasks.length
-//     ? tasks.map((task: any) => {
-//         const cells: JSX.Element[] = [
-//           <Text key={`name-${task.task_id}`} textStyle="web.b3" color="#000000">
-//             {task.task_name}
-//           </Text>,
-//           <Text key={`days-${task.task_id}`} textStyle="web.b3" color="#000000">
-//             {task.recurrence_preference === "PARTICIPANT_PREFERENCE"
-//               ? "Participant Preference"
-//               : task.recurrence_preference === "DAILY"
-//               ? "Daily"
-//               : (task.recurrence_preference === "EVERY_SELECTED_DAYS"
-//                   ? "Every"
-//                   : "Any") +
-//                 (task.repeat_days.length === 7
-//                   ? "day"
-//                   : (task.recurrence_preference === "ANY_SELECTED_DAYS"
-//                       ? " of "
-//                       : " ") +
-//                     task.repeat_days
-//                       .map((day: string) => days[day])
-//                       .join(", "))}
-//           </Text>,
-//           <Text
-//             key={`times-${task.task_id}`}
-//             textStyle="web.b3"
-//             color="#000000"
-//           >
-//             {task.time_preference === "PARTICIPANT_PREFERENCE"
-//               ? "Participant Preference"
-//               : task.time_preference === "ANYTIME"
-//               ? "Anytime"
-//               : formatTime(task.start_time) + " - " + formatTime(task.end_time)}
-//           </Text>,
-//           <Text
-//             key={`bucks-${task.task_id}`}
-//             textStyle="web.b3"
-//             color="#000000"
-//           >
-//             {new Intl.NumberFormat("en-US", {
-//               style: "currency",
-//               currency: "USD",
-//             }).format(task.marillac_bucks_addition)}
-//           </Text>,
-//           <Flex
-//             key={`actions-${task.task_id}`}
-//             alignItems="center"
-//             justifyContent="flex-start"
-//             gap="15px"
-//           >
-//             <Flex
-//               cursor="pointer"
-//               onClick={() => {
-//                 setSelected(task);
-//                 setEdit(true);
-//               }}
-//             >
-//               <EditIcon
-//                 style={{
-//                   width: "1.2rem",
-//                   height: "1.2rem",
-//                   color: "#000000",
-//                   cursor: "pointer",
-//                 }}
-//               />
-//             </Flex>
-//             <Flex
-//               cursor="pointer"
-//               onClick={() => handleDeleteTask(task.task_id)}
-//             >
-//               <DeleteOutlineIcon
-//                 style={{
-//                   width: "1.3rem",
-//                   height: "1.3rem",
-//                   color: "#D34C5C",
-//                 }}
-//               />
-//             </Flex>
-//           </Flex>,
-//         ];
-// 
-//         return cells;
-//       })
-//     : [];
-// 
-//   const editModal = selected && (
-//     <EditTaskModal selected={selected} close={() => setEdit(false)} />
-//   );
-// 
-//   return (
-//     <>
-//       <DataTable
-//         columns={columns}
-//         rows={rows}
-//         loading={loading}
-//         edit={edit}
-//         selected={selected}
-//         error={error}
-//         editModal={editModal}
-//       />
-//     </>
-//   );
-// };
-// 
-// export default TasksTable;
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { DELETE_TASK } from "../../../../gql/taskRequests";
+import DataTable, { Column, Row } from "../../../../ui/misc/DataTable";
+import { Task } from "../../../../types/models";
+import {
+  DayPreference,
+  DayOfWeek,
+  TimePreference,
+  TaskType,
+} from "../../../../types/enums";
+import { DAY_ABBREVIATIONS } from "../../../../constants/days";
+import { formatDateV2 } from "../../../../helpers/formatDateTime";
+import { Marker, Trash } from "../../../../ui/icons/ActionIcons";
+import EditTaskModal from "./EditTaskModal";
+import { formatCurrency } from "../../../../helpers/formatCurrency";
+
+type TasksTableProps = {
+  taskType: TaskType;
+  loading: boolean;
+  error: any;
+  tasks: any[];
+  refetch: () => void;
+};
+
+const TasksTable = ({
+  taskType,
+  loading,
+  error,
+  tasks,
+  refetch,
+}: TasksTableProps) => {
+  const [editTask, setEditTask] = useState<Task | null>(null);
+  const [deleteTask] = useMutation(DELETE_TASK);
+
+  async function handleDeleteTask(tid: number) {
+    try {
+      await deleteTask({
+        variables: { tid },
+      });
+    } catch (err: any) {
+      console.log(err);
+    }
+    refetch();
+  }
+
+  function getAssignedDaysString(
+    dayPreference: DayPreference,
+    days: DayOfWeek[]
+  ) {
+    switch (dayPreference) {
+      case DayPreference.DAILY:
+        return "Daily";
+      case DayPreference.DAY_RANGE:
+        return days.map((day: DayOfWeek) => DAY_ABBREVIATIONS[day]).join(" - ");
+      case DayPreference.EVERY_SELECTED_DAYS:
+        return days.map((day: DayOfWeek) => DAY_ABBREVIATIONS[day]).join(", ");
+      default:
+        return "Participant Preference";
+    }
+  }
+
+  function getAssignedTimesString(
+    timePreference: TimePreference,
+    start_time: Date,
+    end_time: Date
+  ) {
+    switch (timePreference) {
+      case TimePreference.ANYTIME:
+        return "Anytime";
+      case TimePreference.SPECIFIC:
+        return formatDateV2(start_time) + " - " + formatDateV2(end_time);
+      default:
+        return "Participant Preference";
+    }
+  }
+
+  const columns: Column[] = [
+    { header: "Name", width: "20%" },
+    { header: "Assigned Days", width: "20%" },
+    { header: "Assigned Times", width: "20%" },
+    { header: "Marillac Bucks", width: "20%" },
+    { header: "", width: "10%", center: true },
+    { header: "", width: "10%", center: true },
+  ];
+
+  const rows: Row[][] =
+    tasks.length !== 0
+      ? tasks.map((task: any) => {
+          return [
+            {
+              element: task.name,
+            },
+            {
+              element: getAssignedDaysString(task.day_preference, task.days),
+            },
+            {
+              element: getAssignedTimesString(
+                task.time_preference,
+                new Date(task.start_time),
+                new Date(task.end_time)
+              ),
+            },
+            {
+              element: formatCurrency(task.value),
+            },
+            {
+              element: <Marker size={20} />,
+              action: async () => setEditTask(task),
+            },
+            {
+              element: <Trash size={20} />,
+              action: async () => handleDeleteTask(task.tid),
+            },
+          ];
+        })
+      : [];
+
+  if (taskType === TaskType.OPTIONAL) {
+    rows.push([
+      {
+        element: "Individual Goal",
+      },
+      {
+        element: "Participant Preference",
+      },
+      {
+        element: "Participant Preference",
+      },
+      {
+        element: formatCurrency(10),
+      },
+      {
+        element: "",
+      },
+      {
+        element: "",
+      },
+    ]);
+  }
+
+  return (
+    <>
+      <DataTable
+        loading={loading}
+        error={error}
+        columns={columns}
+        rows={rows}
+      />
+
+      {editTask !== null && (
+        <EditTaskModal
+          selected={editTask}
+          close={() => setEditTask(null)}
+          refetch={refetch}
+        />
+      )}
+    </>
+  );
+};
+
+export default TasksTable;

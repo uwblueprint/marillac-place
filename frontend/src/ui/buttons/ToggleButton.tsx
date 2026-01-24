@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React from "react";
 
 interface ToggleButtonProps {
@@ -14,7 +14,7 @@ export default function ToggleButton({ active, setActive }: ToggleButtonProps) {
       width="42px"
       height="24px"
       borderRadius="16px"
-      bg={active ? "primary.700" : "neutral.300"}
+      bg={active ? "brand.primaryDark" : "background.border"}
       cursor="pointer"
       transition="background-color 0.3s ease"
       onClick={() => setActive(!active)}
@@ -32,7 +32,7 @@ export default function ToggleButton({ active, setActive }: ToggleButtonProps) {
         width="16px"
         height="16px"
         borderRadius="50%"
-        bg="neutral.0"
+        bg="white"
         transition="left 0.3s ease"
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.2)"
       />

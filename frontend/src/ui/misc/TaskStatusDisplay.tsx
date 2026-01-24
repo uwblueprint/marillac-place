@@ -5,50 +5,56 @@ import { TaskStatus } from "../../types/enums";
 
 type TaskStatusDisplayProps = {
   status: TaskStatus;
+  size?: string;
 };
 
 const TaskStatusConfig = {
   [TaskStatus.ASSIGNED]: {
     icon: Assigned,
-    bgColor: "#C5DCF8",
-    textColor: "#255B9A",
-    text: "Assigned"
+    bgColor: "schedule.assignedLight",
+    textColor: "schedule.assignedDark",
+    text: "Assigned",
   },
   [TaskStatus.COMPLETE]: {
     icon: Complete,
-    bgColor: "#CDEECE",
-    textColor: "#0D8312",
-    text: "Complete"
+    bgColor: "schedule.completeLight",
+    textColor: "schedule.completeDark",
+    text: "Complete",
   },
-  [TaskStatus.EXCUSED]: { 
+  [TaskStatus.EXCUSED]: {
     icon: Excused,
-    bgColor: "#FFE5B2",
-    textColor: "#B07D18",
-    text: "Excused"
+    bgColor: "schedule.excusedLight",
+    textColor: "schedule.excusedDark",
+    text: "Excused",
   },
   [TaskStatus.INCOMPLETE]: {
     icon: Incomplete,
-    bgColor: "#F8D7DB",
-    textColor: "#B21D2F",
-    text: "Incomplete"
+    bgColor: "schedule.incompleteLight",
+    textColor: "schedule.incompleteDark",
+    text: "Incomplete",
   },
-  } 
+};
 
-export default function TaskStatusDisplay({ status }: TaskStatusDisplayProps) {
+export default function TaskStatusDisplay({
+  status,
+  size = "150px",
+}: TaskStatusDisplayProps) {
   const Icon = TaskStatusConfig[status].icon;
   return (
-    <Flex 
+    <Flex
       align="center"
       justify="center"
-      gap={1}
       bg={TaskStatusConfig[status].bgColor}
       color={TaskStatusConfig[status].textColor}
       borderRadius="lg"
-      width="120px"
-      height="30px"
+      width={size}
+      height="32px"
+      gap="4px"
     >
-      <Icon size={20}/>
-      <Text textStyle="web.s1" color={TaskStatusConfig[status].textColor}>{TaskStatusConfig[status].text}</Text>
+      <Icon size={20} />
+      <Text textStyle="s2" color={TaskStatusConfig[status].textColor}>
+        {TaskStatusConfig[status].text}
+      </Text>
     </Flex>
   );
 }

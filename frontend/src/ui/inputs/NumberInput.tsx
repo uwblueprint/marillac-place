@@ -10,11 +10,11 @@ export default function NumberInput({
   size,
 }: InputProps) {
   const width =
-    size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
+    size === "small" ? "100px" : size === "medium" ? "250px" : "400px";
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.grey" mb="4px">
+        <Text textStyle="s2" mb="4px">
           {label}
         </Text>
       )}
@@ -29,13 +29,14 @@ export default function NumberInput({
         height="fit-content"
         paddingX="12px"
         paddingY="6px"
+        margin="0px"
         border="1px"
         borderColor="#C5C8D8"
         borderRadius="8px"
         fontFamily="Nunito"
         fontWeight="400"
         fontSize="12px"
-        color="#000000"
+        color="text.dark"
         _focus={{
           borderColor: "#C5C8D8",
           boxShadow: "none",

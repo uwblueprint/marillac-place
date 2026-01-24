@@ -1,5 +1,88 @@
 import React from "react";
 import { IconProps } from "../../types/component";
+import useChakraColor from "../../hooks/useChakraColor";
+
+export const Calendar: React.FC<IconProps> = ({
+  size = 12,
+  color = "#E67D4F",
+}) => {
+  const iconColor = useChakraColor(color);
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M5.625 0.75C6.03921 0.75 6.375 1.08579 6.375 1.5V2.25H11.625V1.5C11.625 1.08579 11.9608 0.75 12.375 0.75C12.7892 0.75 13.125 1.08579 13.125 1.5V2.26852C15.02 2.45666 16.5 4.05549 16.5 6V12.75C16.5 14.8211 14.8211 16.5 12.75 16.5H5.25C3.17893 16.5 1.5 14.8211 1.5 12.75V6C1.5 4.05549 2.98 2.45666 4.875 2.26852V1.5C4.875 1.08579 5.21079 0.75 5.625 0.75ZM3.12803 5.25H14.872C14.5631 4.37611 13.7297 3.75 12.75 3.75H5.25C4.27034 3.75 3.43691 4.37611 3.12803 5.25ZM15 6.75H3V12.75C3 13.9926 4.00736 15 5.25 15H12.75C13.9926 15 15 13.9926 15 12.75V6.75ZM4.5 9C4.5 8.58579 4.83579 8.25 5.25 8.25H12.75C13.1642 8.25 13.5 8.58579 13.5 9C13.5 9.41421 13.1642 9.75 12.75 9.75H5.25C4.83579 9.75 4.5 9.41421 4.5 9Z"
+        fill={iconColor}
+      />
+    </svg>
+  );
+};
+
+export const List: React.FC<IconProps> = ({ size = 10, color = "#E67D4F" }) => {
+  const iconColor = useChakraColor(color);
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 15 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M13.9999 6.99927H5.09082H13.9999Z"
+        fill={iconColor}
+      />
+      <path
+        d="M13.9999 6.99927H5.09082"
+        stroke={iconColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M13.9999 12.5996H5.09082H13.9999Z"
+        fill={iconColor}
+      />
+      <path
+        d="M13.9999 12.5996H5.09082"
+        stroke={iconColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M13.9999 1.39893H5.09082H13.9999Z"
+        fill={iconColor}
+      />
+      <path
+        d="M13.9999 1.39893H5.09082"
+        stroke={iconColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M1.27125 2.8C1.90762 2.8 2.54398 2.1 2.54398 1.4C2.54398 0.7 1.90762 0 1.27125 0C0.634888 0 0 0.7 0 1.4C0 2.1 0.634888 2.8 1.27125 2.8ZM1.27125 8.4C1.90762 8.4 2.54398 7.7 2.54398 7C2.54398 6.3 1.90762 5.6 1.27125 5.6C0.634888 5.6 0 6.3 0 7C0 7.7 0.634888 8.4 1.27125 8.4ZM1.27125 14C1.90762 14 2.54398 13.3 2.54398 12.6C2.54398 11.9 1.90762 11.2 1.27125 11.2C0.634888 11.2 0 11.9 0 12.6C0 13.3 0.634888 14 1.27125 14Z"
+        fill={iconColor}
+      />
+    </svg>
+  );
+};
 
 export const MarillacCoin: React.FC<IconProps> = ({ size = 16 }) => (
   <svg
@@ -131,40 +214,9 @@ export const Trophy: React.FC<IconProps> = ({ size = 16 }) => (
   </svg>
 );
 
-export const List: React.FC<IconProps> = ({ size = 16 }) => (
-  <svg 
-    width={size}
-    height={size}
-    viewBox="0 0 15 14" 
-    fill="none" 
-    xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" clipRule="evenodd" d="M13.9999 6.99927H5.09082H13.9999Z" fill="#E67D4F"/>
-    <path d="M13.9999 6.99927H5.09082" stroke="#E67D4F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path fillRule="evenodd" clipRule="evenodd" d="M13.9999 12.5996H5.09082H13.9999Z" fill="#E67D4F"/>
-    <path d="M13.9999 12.5996H5.09082" stroke="#E67D4F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path fillRule="evenodd" clipRule="evenodd" d="M13.9999 1.39893H5.09082H13.9999Z" fill="#E67D4F"/>
-    <path d="M13.9999 1.39893H5.09082" stroke="#E67D4F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path fillRule="evenodd" clipRule="evenodd" d="M1.27125 2.8C1.90762 2.8 2.54398 2.1 2.54398 1.4C2.54398 0.7 1.90762 0 1.27125 0C0.634888 0 0 0.7 0 1.4C0 2.1 0.634888 2.8 1.27125 2.8ZM1.27125 8.4C1.90762 8.4 2.54398 7.7 2.54398 7C2.54398 6.3 1.90762 5.6 1.27125 5.6C0.634888 5.6 0 6.3 0 7C0 7.7 0.634888 8.4 1.27125 8.4ZM1.27125 14C1.90762 14 2.54398 13.3 2.54398 12.6C2.54398 11.9 1.90762 11.2 1.27125 11.2C0.634888 11.2 0 11.9 0 12.6C0 13.3 0.634888 14 1.27125 14Z" fill="#E67D4F"/>
-</svg>
-);
-
-export const Swap: React.FC<IconProps> = ({
-  size = 14,
-  color = "#0C727E",
-}) => (
-  <svg 
-    width={size} 
-    height={size} 
-    viewBox="0 0 14 14" 
-    fill="none" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-  <path d="M9.33366 6.41667L11.667 4.08333M11.667 4.08333L9.33366 1.75M11.667 4.08333H2.33366M4.66699 7.58333L2.33366 9.91667M2.33366 9.91667L4.66699 12.25M2.33366 9.91667H11.667" stroke={color} strokeLinecap="round" strokeLinejoin="round"/></svg>
-);
-
-export const EndStay: React.FC<IconProps> = ({
+export const ExitDoor: React.FC<IconProps> = ({
   size = 16,
-  color = "#E30000",
+  color = "indicate.brightRed",
 }) => (
   <svg
     width={size}
@@ -183,17 +235,52 @@ export const EndStay: React.FC<IconProps> = ({
   </svg>
 );
 
-export const Calendar: React.FC<IconProps> = ({
-  size = 15,
-  color = "white",
-}) => (
-  <svg 
-    width={size} 
-    height={size} 
-    viewBox="0 0 15 16"
-    fill="none" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path fillRule="evenodd" clipRule="evenodd" d="M4.125 0C4.53921 0 4.875 0.335786 4.875 0.75V1.5H10.125V0.75C10.125 0.335786 10.4608 0 10.875 0C11.2892 0 11.625 0.335786 11.625 0.75V1.51852C13.52 1.70666 15 3.30549 15 5.25V12C15 14.0711 13.3211 15.75 11.25 15.75H3.75C1.67893 15.75 0 14.0711 0 12V5.25C0 3.30549 1.48 1.70666 3.375 1.51852V0.75C3.375 0.335786 3.71079 0 4.125 0ZM1.62803 4.5H13.372C13.0631 3.62611 12.2297 3 11.25 3H3.75C2.77034 3 1.93691 3.62611 1.62803 4.5ZM13.5 6H1.5V12C1.5 13.2426 2.50736 14.25 3.75 14.25H11.25C12.4926 14.25 13.5 13.2426 13.5 12V6ZM3 8.25C3 7.83579 3.33579 7.5 3.75 7.5H11.25C11.6642 7.5 12 7.83579 12 8.25C12 8.66421 11.6642 9 11.25 9H3.75C3.33579 9 3 8.66421 3 8.25Z" fill={color}/>
-</svg>
+export const Triangle: React.FC<IconProps> = ({ size = 12 }) => (
+  <svg width={size} height={size} viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path 
+      d="M4.79035 0.506928C5.17342 -0.169033 6.14732 -0.169033 6.53038 0.506929L11.1896 8.72865C11.5673 9.39529 11.0858 10.2217 10.3195 10.2217L1.00119 10.2217C0.234953 10.2217 -0.246602 9.39528 0.131174 8.72865L4.79035 0.506928Z" 
+      fill="#0C727E"
+    />
+  </svg>
 );
+
+export const Eye: React.FC<IconProps> = ({ size = 16, color = "text.medium" }) => {
+  const iconColor = useChakraColor(color);
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_iconCarrier"> 
+        <path 
+          d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" 
+          stroke={iconColor} 
+          strokeWidth="2" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+        />
+        <path 
+          d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" 
+          stroke={iconColor} 
+          strokeWidth="2" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+        />
+      </g>
+    </svg>
+  );
+};
+
+export const ClosedEye: React.FC<IconProps> = ({ size = 16, color = "text.medium" }) => {
+  const iconColor = useChakraColor(color);
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_iconCarrier"> 
+        <path 
+          d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" 
+          stroke={iconColor} 
+          strokeWidth="2" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+        /> 
+      </g>
+    </svg>
+  );
+};

@@ -10,7 +10,7 @@ export default function BlackOutlineButton({
   label,
   action,
   is_active,
-  text_color = "#000000",
+  text_color = "text.dark",
   icon,
 }: BlackOutlineButtonProps) {
   return (
@@ -25,17 +25,17 @@ export default function BlackOutlineButton({
       height="fit-content"
       paddingX="12px"
       paddingY="6px"
-      bg="#FFFFFF"
+      bg="white"
       _hover={{
-        bg: "#F5F6F8",
+        bg: "background.highlight",
       }}
       _active={{
-        bg: "#F5F6F8",
+        bg: "background.highlight",
       }}
     >
       <Flex alignItems="center" gap="5px">
         {icon}
-        <Text textStyle="web.s1" color={text_color}>
+        <Text textStyle="s2" color={text_color}>
           {label}
         </Text>
       </Flex>

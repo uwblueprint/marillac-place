@@ -15,7 +15,7 @@ export default function SelectInput({
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.grey" mb="4px">
+        <Text textStyle="s2" mb="4px">
           {label}
         </Text>
       )}
@@ -35,10 +35,10 @@ export default function SelectInput({
                 boxShadow: "none",
               }}
               _checked={{
-                bg: "#0C727E",
+                bg: "brand.primaryDark",
               }}
             >
-              <Text textStyle="web.b3" color="#000000">
+              <Text textStyle="b2" color="text.dark">
                 {key}
               </Text>
             </Radio>

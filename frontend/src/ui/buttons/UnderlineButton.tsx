@@ -21,10 +21,9 @@ export default function UnderlineButton({
       }}
     >
       <Text
-        textStyle="web.s1"
-        color="black"
+        textStyle="s2"
+        color="text.dark"
         textDecoration="underline"
-        fontWeight={600}
         _hover={{
           textDecoration: "none",
         }}

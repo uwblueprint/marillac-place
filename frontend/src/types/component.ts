@@ -10,7 +10,7 @@ export type InputProps = {
   placeholder?: string;
   current_value: any;
   update_action: React.Dispatch<React.SetStateAction<any>>;
-  size: "small" | "medium" | "large";
+  size: "small" | "medium" | "large" | "full";
 };
 
 export type IconProps = {

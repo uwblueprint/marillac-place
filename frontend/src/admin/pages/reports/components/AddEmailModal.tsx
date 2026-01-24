@@ -1,102 +1,79 @@
-export {};
-// TODO: Refactor this component
-// import React, { useState } from "react";
-// import { Switch, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
-// import ModalContainer from "../../../common/form/ModalContainer";
-// 
-// type AddEmailModalProps = {
-//   onClose: () => void;
-//   onSubmit: (emailData: any) => void;
-// };
-// 
-// export default function AddEmailModal({
-//   onClose,
-//   onSubmit,
-// }: AddEmailModalProps) {
-//   const [email, setEmail] = useState("");
-//   const [weekly, setWeekly] = useState(false);
-//   const [monthly, setMonthly] = useState(false);
-// 
-//   const handleSubmit = () => {
-//     if (!email.trim()) {
-//       return; // Basic validation
-//     }
-// 
-//     onSubmit({
-//       email: email.trim(),
-//       weekly,
-//       monthly,
-//       lastReportSent: "Never",
-//     });
-//   };
-// 
-//   return (
-//     <ModalContainer
-//       title="Add Email Address"
-//       submit_text="Add Email"
-//       submit_action={handleSubmit}
-//       cancel_action={onClose}
-//     >
-//       <FormControl>
-//         <Text textStyle="web.s1" color="text.grey">
-//           Email Address
-//         </Text>
-//         <Input
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//           width="100%"
-//           height="32px"
-//           paddingX="12px"
-//           paddingY="8px"
-//           border="1px"
-//           borderColor="#C5C8D8"
-//           borderRadius="8px"
-//           fontFamily="Nunito"
-//           fontWeight="400"
-//           fontSize="12px"
-//           color="#000000"
-//           _focus={{
-//             borderColor: "#C5C8D8",
-//             boxShadow: "none",
-//           }}
-//         />
-//       </FormControl>
-// 
-//       <FormControl mt="20px">
-//         <FormLabel textStyle="web.s1" color="text.grey">
-//           Report Frequency
-//         </FormLabel>
-//         <FormControl
-//           display="flex"
-//           alignItems="center"
-//           justifyContent="space-between"
-//           mt="10px"
-//         >
-//           <FormLabel textStyle="web.b3" color="#000000" mb="0">
-//             Weekly Reports
-//           </FormLabel>
-//           <Switch
-//             isChecked={weekly}
-//             onChange={(e) => setWeekly(e.target.checked)}
-//             colorScheme="blue"
-//           />
-//         </FormControl>
-//         <FormControl
-//           display="flex"
-//           alignItems="center"
-//           justifyContent="space-between"
-//           mt="10px"
-//         >
-//           <FormLabel textStyle="web.b3" color="#000000" mb="0">
-//             Monthly Reports
-//           </FormLabel>
-//           <Switch
-//             isChecked={monthly}
-//             onChange={(e) => setMonthly(e.target.checked)}
-//             colorScheme="blue"
-//           />
-//         </FormControl>
-//       </FormControl>
-//     </ModalContainer>
-//   );
-// }
+import React, { useState } from "react";
+import { Switch, FormControl, FormLabel, Text, Flex } from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
+import PopupContainer from "../../../../ui/containers/PopupContainer";
+import TextInput from "../../../../ui/inputs/TextInput";
+import { CREATE_REPORT_RECIPIENT } from "../../../../gql/reportRecipientRequests";
+import ToggleButton from "../../../../ui/buttons/ToggleButton";
+
+type AddEmailModalProps = {
+  refetch: () => void;
+  onClose: () => void;
+};
+
+export default function AddEmailModal({
+  refetch,
+  onClose,
+}: AddEmailModalProps) {
+  const [email, setEmail] = useState<string>("");
+  const [weekly, setWeekly] = useState<boolean>(false);
+  const [monthly, setMonthly] = useState<boolean>(false);
+  const [error, setError] = useState("");
+
+  const [createReportRecipient, { loading: createReportRecipientLoading }] =
+    useMutation(CREATE_REPORT_RECIPIENT);
+  const handleAddEmail = async (
+    new_email: string,
+    send_weekly: boolean,
+    send_monthly: boolean
+  ) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email.trim())) {
+      setError("Please enter a valid email address");
+      return;
+    }
+    try {
+      await createReportRecipient({
+        variables: {
+          email: new_email,
+          weekly: send_weekly,
+          monthly: send_monthly,
+        },
+      });
+      onClose();
+      refetch();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  return (
+    <PopupContainer
+      title="Add Email Address"
+      submit_text="Add Email"
+      submit_action={() => handleAddEmail(email, weekly, monthly)}
+      cancel_action={onClose}
+      error_message={error}
+      loading={createReportRecipientLoading}
+    >
+      <TextInput
+        label="Email Address"
+        current_value={email}
+        update_action={setEmail}
+        size="large"
+      />
+      <Flex w="100%" alignItems="center" gap="15px" mt="6px">
+        <Text textStyle="s2" color="text.dark" w="95px">
+          Weekly Reports
+        </Text>
+        <ToggleButton active={weekly} setActive={setWeekly} />
+      </Flex>
+      <Flex w="100%" alignItems="center" gap="15px">
+        <Text textStyle="s2" color="text.dark" w="95px">
+          Monthly Reports
+        </Text>
+        <ToggleButton active={monthly} setActive={setMonthly} />
+      </Flex>
+    </PopupContainer>
+  );
+}

@@ -1,8 +1,10 @@
 import { createSeedClient } from "@snaplet/seed";
+import { Priority, TaskType } from "@prisma/client";
 import { badgeLevels, systemBadges, tasks } from "./initialData";
 import db from "../index";
 import * as random from "./random";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
+import { assignTasksToParticipants } from "../../utils/taskUtils";
 
 async function initDb() {
   const systemBadgeCount = await db.systemBadge.count();
@@ -43,16 +45,22 @@ async function generateMockData(seed: any) {
       arrival: random.date(),
       departure: null,
       balance: random.number(0, 2500),
+      total_earnings: random.number(0, 2500),
     }))
   );
 
   await Promise.all(
     participants.participant.map((p: any) => initBadgeLevelProgress(p.pid))
   );
+
+  const requiredTasks = await db.task.findMany({
+    where: { type: TaskType.REQUIRED },
+  });
+  await assignTasksToParticipants(requiredTasks);
 }
 
 const main = async () => {
-  const seed = await createSeedClient();
+  const seed: any = await createSeedClient();
   const environment: string = process.env.NODE_ENV || "development";
   const isDevelopment: boolean = environment === "development";
   if (isDevelopment) {

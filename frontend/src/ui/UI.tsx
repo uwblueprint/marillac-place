@@ -1,17 +1,38 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { subDays, addDays, startOfDay, set } from "date-fns";
+import { subDays, addDays, startOfDay, set, startOfWeek } from "date-fns";
 import BlackOutlineButton from "./buttons/BlackOutlineButton";
 import OrangeButton from "./buttons/OrangeButton";
 import GreenOutlineButton from "./buttons/GreenOutlineButton";
 import UnderlineButton from "./buttons/UnderlineButton";
-import { Comment, Marker, TealPin, OrangePin, PlusSign, Send, Download, Trash } from "./icons/ActionIcons";
+import { Comment, Marker, PlusSign, Download, Trash } from "./icons/ActionIcons";
 import WidgetContainer from "./containers/WidgetContainer";
 import PopupContainer from "./containers/PopupContainer";
-import { Baby, FourStar, Group, Flower, Diamond, DollarSign, FiveStar, Heart, Hexagon, Home, Pencil, Plant, Tools, Wings, Muscles } from "./icons/BadgeIcons";
-import { Gold, Bronze, Silver, Novice, Diamond as DiamondFrame } from "./icons/BadgeLevelFrameIcons";
-import { MarillacCoin, Profile, Trophy, List, Calendar, EndStay, Swap } from "./icons/MiscIcons";
-import { Dot, ExclamationMark, Mail, Success } from "./icons/NotificationIcons";
+import {
+  Baby,
+  FourStar,
+  Group,
+  Flower,
+  Diamond,
+  DollarSign,
+  FiveStar,
+  Heart,
+  Hexagon,
+  Home,
+  Pencil,
+  Plant,
+  Tools,
+  Wings,
+} from "./icons/BadgeIcons";
+import {
+  Gold,
+  Bronze,
+  Silver,
+  Novice,
+  Diamond as DiamondFrame,
+} from "./icons/BadgeLevelFrameIcons";
+import { MarillacCoin, Profile, Trophy } from "./icons/MiscIcons";
+import { Dot, ExclamationMark, Mail } from "./icons/NotificationIcons";
 import { Assigned, Complete, Excused, Incomplete } from "./icons/StatusIcons";
 import DateInput from "./inputs/DateInput";
 import FixedInput from "./inputs/FixedInput";
@@ -26,10 +47,22 @@ import MarillacPlaceCalendar from "./misc/MarillacPlaceCalendar";
 import DataTable from "./misc/DataTable";
 import DateOptions from "./misc/DateOptions";
 import { AssignedTask } from "../types/models";
-import { Level, TaskStatus, TaskType, Icon, DayPreference, TimePreference, DayOfWeek } from "../types/enums";
-import Badge from "./misc/BadgeProgress";
+import {
+  Level,
+  TaskStatus,
+  TaskType,
+  Icon,
+  DayPreference,
+  TimePreference,
+  DayOfWeek,
+} from "../types/enums";
+import Badge from "./badge/BadgeProgress";
 import TaskStatusDisplay from "./misc/TaskStatusDisplay";
 import ToggleButton from "./buttons/ToggleButton";
+import LoadingScreen from "./screens/LoadingScreen";
+import ErrorScreen from "./screens/ErrorScreen";
+import NotFoundScreen from "./screens/NotFoundScreen";
+import { DisplayView } from "../constants/views";
 
 export default function UI() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -48,12 +81,19 @@ export default function UI() {
     "Option 2": "option2",
     "Option 3": "option3",
   };
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(null);
-  const [dateOptionDayPreference, setDateOptionDayPreference] = useState<DayPreference | null>(null);
-  const [dateOptionDays, setDateOptionDays] = useState<DayOfWeek[] | null>(null);
-  const [dateOptionTimePreference, setDateOptionTimePreference] = useState<TimePreference | null>(null);
-  const [dateOptionStartTime, setDateOptionStartTime] = useState<Date | null>(null);
+  const [viewTaskDetails, setViewTaskDetails] = useState<AssignedTask | null>(
+    null
+  );
+  const [participantPreference, setParticipantPreference] =
+    useState<boolean>(false);
+  const [dateOptionDayPreference, setDateOptionDayPreference] =
+    useState<DayPreference | null>(null);
+  const [dateOptionDays, setDateOptionDays] = useState<DayOfWeek[]>([]);
+  const [dateOptionTimePreference, setDateOptionTimePreference] =
+    useState<TimePreference | null>(null);
+  const [dateOptionStartTime, setDateOptionStartTime] = useState<Date | null>(
+    null
+  );
   const [dateOptionEndTime, setDateOptionEndTime] = useState<Date | null>(null);
   const [showDateOptions, setShowDateOptions] = useState<boolean>(false);
   const [toggleActive, setToggleActive] = useState<boolean>(false);
@@ -66,50 +106,51 @@ export default function UI() {
   const dataTableRows = [
     [
       {
-        element: "Row 1.1"
+        element: "Row 1.1",
       },
       {
-        element: "Row 2.1"
+        element: "Row 2.1",
       },
       {
-        element: "Row 3.1"
+        element: "Row 3.1",
       },
       {
         element: <Marker size={20} />,
-        action: () => console.log("action"),
+        action: () => {},
       },
     ],
     [
       {
-        element: "Row 1.2"
+        element: "Row 1.2",
       },
       {
-        element: "Row 2.2"
+        element: "Row 2.2",
       },
       {
-        element: "Row 3.2"
+        element: "Row 3.2",
       },
       {
         element: <Marker size={20} />,
-        action: () => console.log("action"),
+        action: () => {},
       },
     ],
     [
       {
-        element: "Row 1.3"
+        element: "Row 1.3",
       },
       {
-        element: "Row 2.3"
+        element: "Row 2.3",
       },
       {
-        element: "Row 3.3"
+        element: "Row 3.3",
       },
       {
         element: <Marker size={20} />,
-        action: () => console.log("action"),
+        action: () => {},
       },
     ],
   ];
+  const startDate = startOfWeek(new Date());
   const assignedTasks: AssignedTask[] = [
     {
       aid: 1,
@@ -121,8 +162,8 @@ export default function UI() {
       value: 10,
       penalty: 5,
       comment: "Comment 1",
-      start_date: subDays(new Date(), 1).toISOString(),
-      end_date: new Date().toISOString(),
+      start_date: startOfDay(subDays(new Date(), 1)).toISOString(),
+      end_date: startOfDay(new Date()).toISOString(),
     },
     {
       aid: 2,
@@ -186,48 +227,57 @@ export default function UI() {
   ];
 
   return (
-    <Flex flexDir="column" w="100vw" h="fit-content" alignItems="left" justifyContent="center" padding="50px" gap="20px">
-      <Text textStyle="web.h1" color="primary.700">Marillac Place UI Components</Text>
-
-      <Text textStyle="web.h3">Buttons</Text>
+    <Flex
+      flexDir="column"
+      w="100vw"
+      h="fit-content"
+      alignItems="left"
+      justifyContent="center"
+      padding="50px"
+      gap="20px"
+    >
+      <Text textStyle="h1" color="brand.primaryDark">
+        Marillac Place UI Components
+      </Text>
+      <Text textStyle="h3">Buttons</Text>
       <Flex flexDir="row" gap="10px">
-        <BlackOutlineButton 
-          label="BlackOutlineButton" 
-          action={() => { console.log("clicked"); }} 
-          is_active={false} 
+        <BlackOutlineButton
+          label="BlackOutlineButton"
+          action={() => {}}
+          is_active={false}
         />
-        <BlackOutlineButton 
-          label="BlackOutlineButton (active)" 
-          action={() => { console.log("clicked"); }} 
+        <BlackOutlineButton
+          label="BlackOutlineButton (active)"
+          action={() => {}}
           is_active
         />
-        <BlackOutlineButton 
-          label="BlackOutlineButton (with icon)" 
-          action={() => { console.log("clicked"); }} 
+        <BlackOutlineButton
+          label="BlackOutlineButton (with icon)"
+          action={() => {}}
           is_active={false}
           icon={<Marker />}
         />
-        <BlackOutlineButton 
-          label="BlackOutlineButton (custom text color)" 
-          action={() => { console.log("clicked"); }} 
-          is_active={false} 
+        <BlackOutlineButton
+          label="BlackOutlineButton (custom text color)"
+          action={() => {}}
+          is_active={false}
           text_color="red"
         />
       </Flex>
       <Flex flexDir="row" gap="10px">
         <OrangeButton
           label="OrangeButton"
-          action={() => { console.log("clicked"); }}
+          action={() => {}}
           is_active={false}
         />
         <OrangeButton
           label="OrangeButton (active)"
-          action={() => { console.log("clicked"); }}
+          action={() => {}}
           is_active
         />
         <OrangeButton
           label="OrangeButton (with icon)"
-          action={() => { console.log("clicked"); }}
+          action={() => {}}
           is_active={false}
           icon={<Marker color="white" />}
         />
@@ -235,25 +285,21 @@ export default function UI() {
       <Flex flexDir="row" gap="10px">
         <GreenOutlineButton
           label="GreenOutlineButton"
-          action={() => { console.log("clicked"); }}
+          action={() => {}}
           is_active={false}
         />
         <GreenOutlineButton
           label="GreenOutlineButton (active)"
-          action={() => { console.log("clicked"); }}
+          action={() => {}}
           is_active
         />
       </Flex>
-      <UnderlineButton
-        label="UnderlineButton"
-        action={() => { console.log("clicked"); }}
-      />
+      <UnderlineButton label="UnderlineButton" action={() => {}} />
       <ToggleButton active={toggleActive} setActive={setToggleActive} />
-
-      <Text textStyle="web.h3">Containers</Text>
+      <Text textStyle="h3">Containers</Text>
       <Flex flexDir="row" gap="10px">
         <WidgetContainer
-          bg_color="neutral.100"
+          bg_color="background.highlight"
           width="200px"
           height="100px"
           paddingX="12px"
@@ -261,10 +307,10 @@ export default function UI() {
           loading={false}
           error=""
         >
-          <Text textStyle="web.b2">WidgetContainer</Text>
+          <Text textStyle="b1">WidgetContainer</Text>
         </WidgetContainer>
         <WidgetContainer
-          bg_color="primary.100"
+          bg_color="brand.primaryLight"
           width="200px"
           height="100px"
           paddingX="12px"
@@ -272,10 +318,10 @@ export default function UI() {
           loading={false}
           error=""
         >
-          <Text textStyle="web.b2">WidgetContainer (bg color)</Text>
+          <Text textStyle="b1">WidgetContainer (bg color)</Text>
         </WidgetContainer>
         <WidgetContainer
-          bg_color="neutral.100"
+          bg_color="background.highlight"
           width="200px"
           height="100px"
           paddingX="12px"
@@ -283,10 +329,10 @@ export default function UI() {
           loading
           error=""
         >
-          <Text textStyle="web.b2">WidgetContainer (loading)</Text>
+          <Text textStyle="b1">WidgetContainer (loading)</Text>
         </WidgetContainer>
         <WidgetContainer
-          bg_color="neutral.100"
+          bg_color="background.highlight"
           width="200px"
           height="100px"
           paddingX="12px"
@@ -294,97 +340,100 @@ export default function UI() {
           loading={false}
           error="Something went wrong."
         >
-          <Text textStyle="web.b2">WidgetContainer (error)</Text>
+          <Text textStyle="b1">WidgetContainer (error)</Text>
         </WidgetContainer>
       </Flex>
       <Flex flexDir="row" gap="10px">
         <UnderlineButton
           label="Show PopupContainer"
-          action={() => { setShowPopup(true); }}
+          action={() => setShowPopup(true)}
         />
         <UnderlineButton
           label="Show PopupContainer (loading)"
-          action={() => { setShowLoadingPopup(true); }}
+          action={() => setShowLoadingPopup(true)}
         />
         <UnderlineButton
           label="Show PopupContainer (error)"
-          action={() => { setShowErrorPopup(true); }}
+          action={() => setShowErrorPopup(true)}
         />
         {showPopup && (
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => { console.log("submit"); }}
-            cancel_action={() => { setShowPopup(false); }}
+            submit_action={() => {}}
+            cancel_action={() => {
+              setShowPopup(false);
+            }}
             error_message=""
             loading={false}
           >
-            <Text textStyle="web.b2">PopupContainer</Text>
+            <Text textStyle="b1">PopupContainer</Text>
           </PopupContainer>
         )}
         {showLoadingPopup && (
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => { console.log("submit"); }}
-            cancel_action={() => { setShowLoadingPopup(false); }}
+            submit_action={() => {}}
+            cancel_action={() => {
+              setShowLoadingPopup(false);
+            }}
             error_message=""
             loading
           >
-            <Text textStyle="web.b2">PopupContainer (loading)</Text>
+            <Text textStyle="b1">PopupContainer (loading)</Text>
           </PopupContainer>
         )}
         {showErrorPopup && (
           <PopupContainer
             title="Title"
             submit_text="Save"
-            submit_action={() => { console.log("submit"); }}
-            cancel_action={() => { setShowErrorPopup(false); }}
+            submit_action={() => {}}
+            cancel_action={() => {
+              setShowErrorPopup(false);
+            }}
             error_message="Something went wrong."
+            system_error
             loading={false}
           >
-            <Text textStyle="web.b2">PopupContainer (error)</Text>
+            <Text textStyle="b1">PopupContainer (error)</Text>
           </PopupContainer>
         )}
       </Flex>
-
-      <Text textStyle="web.h3">Badges</Text>
+      <Text textStyle="h3">Badges</Text>
       <Flex flexDir="row" gap="10px">
-        <Badge
-          icon={Icon.BABY}
-          level={Level.NOVICE}
-          percentageComplete={50}
-        />
+        <Badge icon={Icon.BABY} level={Level.NOVICE} percentageComplete={50} />
         <Badge
           icon={Icon.DIAMOND}
           level={Level.BRONZE}
           percentageComplete={100}
         />
-        <Badge
-          icon={Icon.MONEY}
-          level={Level.SILVER}
-          percentageComplete={0}
-        />
-        <Badge
-          icon={Icon.PLANT}
-          level={Level.GOLD}
-          percentageComplete={65}
-        />
+        <Badge icon={Icon.MONEY} level={Level.SILVER} percentageComplete={0} />
+        <Badge icon={Icon.PLANT} level={Level.GOLD} percentageComplete={65} />
         <Badge
           icon={Icon.WINGS}
           level={Level.DIAMOND}
           percentageComplete={25}
         />
       </Flex>
-
-      <Text textStyle="web.h3">Icons</Text>
-      <Flex width="fit-content" height="fit-content" maxW="100vw" flexWrap="wrap" maxH="100vh" flexDir="row" gap="10px" padding="10px" bg="neutral.300" rounded="8px" alignItems="center" justifyContent="center">
+      <Text textStyle="h3">Icons</Text>
+      <Flex
+        width="fit-content"
+        height="fit-content"
+        maxW="100vw"
+        flexWrap="wrap"
+        maxH="100vh"
+        flexDir="row"
+        gap="10px"
+        padding="10px"
+        bg="background.border"
+        rounded="8px"
+        alignItems="center"
+        justifyContent="center"
+      >
         <Comment />
-        <TealPin />
-        <OrangePin />
         <Marker />
         <PlusSign />
-        <Send />
         <Download />
         <Trash />
         <Baby />
@@ -401,7 +450,6 @@ export default function UI() {
         <Plant />
         <Tools />
         <Wings />
-        <Muscles />
         <Novice />
         <Bronze />
         <Silver />
@@ -410,21 +458,15 @@ export default function UI() {
         <Trophy />
         <MarillacCoin />
         <Profile />
-        <List />
-        <Swap />
-        <Calendar />
-        <EndStay />
         <Mail />
         <Dot />
         <ExclamationMark />
-        <Success />
         <Assigned />
         <Complete />
         <Excused />
         <Incomplete />
       </Flex>
-
-      <Text textStyle="web.h3">Inputs</Text>
+      <Text textStyle="h3">Inputs</Text>
       <Flex flexDir="row" gap="10px">
         <FixedInput
           label="FixedInput"
@@ -500,8 +542,7 @@ export default function UI() {
         update_action={setSelect}
         value_options={options}
       />
-
-      <Text textStyle="web.h3">Date Options</Text>
+      <Text textStyle="h3">Date Options</Text>
       <UnderlineButton
         label="Show DateOptions"
         action={() => setShowDateOptions(!showDateOptions)}
@@ -510,12 +551,17 @@ export default function UI() {
         <PopupContainer
           title="DateOptions"
           submit_text="Save"
-          submit_action={() => { console.log("submit"); }}
-          cancel_action={() => { setShowDateOptions(false); }}
+          submit_action={() => {}}
+          cancel_action={() => {
+            setShowDateOptions(false);
+          }}
           error_message=""
           loading={false}
         >
           <DateOptions
+            taskType={TaskType.REQUIRED}
+            setParticipantPreference={setParticipantPreference}
+            participantPreference={participantPreference}
             setDayPreference={setDateOptionDayPreference}
             setDays={(value) => setDateOptionDays(value ?? [])}
             setTimePreference={setDateOptionTimePreference}
@@ -529,38 +575,32 @@ export default function UI() {
           />
         </PopupContainer>
       )}
-
-      <Text textStyle="web.h3">Task Status Display</Text>
+      <Text textStyle="h3">Task Status Display</Text>
       <Flex flexDir="row" gap="10px">
         <TaskStatusDisplay status={TaskStatus.ASSIGNED} />
         <TaskStatusDisplay status={TaskStatus.EXCUSED} />
         <TaskStatusDisplay status={TaskStatus.INCOMPLETE} />
         <TaskStatusDisplay status={TaskStatus.COMPLETE} />
       </Flex>
-
-      <Text textStyle="web.h3">Calendar (Web)</Text>
+      <Text textStyle="h3">Calendar (Web)</Text>
       <Box width="1000px">
         <MarillacPlaceCalendar
           assignedTasks={assignedTasks}
           startDate={startDate}
-          setStartDate={setStartDate}
           viewTaskDetails={setViewTaskDetails}
-          view="web"
+          view={DisplayView.WEB}
         />
       </Box>
-
-      <Text textStyle="web.h3">Calendar (Mobile)</Text>
+      <Text textStyle="h3">Calendar (Mobile)</Text>
       <Box width="400px">
         <MarillacPlaceCalendar
           assignedTasks={assignedTasks}
           startDate={startDate}
-          setStartDate={setStartDate}
           viewTaskDetails={setViewTaskDetails}
-          view="mobile"
+          view={DisplayView.MOBILE}
         />
       </Box>
-
-      <Text textStyle="web.h3">Data Table</Text>
+      <Text textStyle="h3">Data Table</Text>
       <Box width="800px">
         <DataTable
           loading={false}
@@ -584,6 +624,18 @@ export default function UI() {
           columns={dataTableColumns}
           rows={dataTableRows}
         />
+      </Box>
+      <Text textStyle="h3">Loading Screen</Text>
+      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
+        <LoadingScreen message="Loading..." />
+      </Box>
+      <Text textStyle="h3">Not Found Screen</Text>
+      <Box width="1000px" outline="1px solid black" padding="20px">
+        <NotFoundScreen />
+      </Box>
+      <Text textStyle="h3">Error Screen</Text>
+      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
+        <ErrorScreen message="An error has occurred." />
       </Box>
     </Flex>
   );

@@ -292,6 +292,20 @@
           "maxLength": null
         },
         {
+          "id": "public.announcement.topic",
+          "name": "topic",
+          "columnName": "topic",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "id": "public.announcement.message",
           "name": "message",
           "columnName": "message",
@@ -1245,7 +1259,7 @@
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
@@ -1806,7 +1820,7 @@
           "id": "public.task.start_time",
           "name": "start_time",
           "columnName": "start_time",
-          "type": "time",
+          "type": "timestamp",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,
@@ -1820,7 +1834,7 @@
           "id": "public.task.end_time",
           "name": "end_time",
           "columnName": "end_time",
-          "type": "time",
+          "type": "timestamp",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,
@@ -2044,6 +2058,9 @@
         },
         {
           "name": "PENCIL"
+        },
+        {
+          "name": "PLANT"
         },
         {
           "name": "TOOL"

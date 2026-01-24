@@ -1,29 +1,37 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useState, useEffect } from "react";
 
 type ParticipantContextType = {
-  pid: number | null;
+  pid: number;
   setPid: (pid: number) => void;
-  room: number | null;
+  room: number;
   setRoom: (room: number) => void;
-  balance: number | null;
+  balance: number;
   setBalance: (balance: number) => void;
+  totalEarnings: number;
+  setTotalEarnings: (totalEarnings: number) => void;
 };
 
-export const ParticipantContext = createContext<ParticipantContextType | null>(
-  null
-);
+export const ParticipantContext = createContext<ParticipantContextType>({
+  pid: -1,
+  setPid: () => {},
+  room: 0,
+  setRoom: () => {},
+  balance: 0,
+  setBalance: () => {},
+  totalEarnings: 0,
+  setTotalEarnings: () => {},
+});
 
 interface ParticipantProviderProps {
   children: ReactNode;
 }
 
-export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({
-  children,
-}) => {
-  const [pid, setPid] = useState<number | null>(null);
-  const [room, setRoom] = useState<number | null>(null);
-  const [balance, setBalance] = useState<number | null>(null);
-
+export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({ children }) => {
+  const [pid, setPid] = useState<number>(-1);
+  const [room, setRoom] = useState<number>(0);
+  const [balance, setBalance] = useState<number>(0);
+  const [totalEarnings, setTotalEarnings] = useState<number>(0);
+  
   return (
     <ParticipantContext.Provider
       value={{
@@ -33,6 +41,8 @@ export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({
         setRoom,
         balance,
         setBalance,
+        totalEarnings,
+        setTotalEarnings,
       }}
     >
       {children}

@@ -260,7 +260,7 @@ export const tasks = [
     type: TaskType.REQUIRED,
     value: 5,
     day_preference: DayPreference.DAY_RANGE,
-    days: [DayOfWeek.MONDAY, DayOfWeek.SUNDAY],
+    days: [DayOfWeek.SUNDAY, DayOfWeek.MONDAY],
     time_preference: TimePreference.ANYTIME,
   },
   {
@@ -268,7 +268,7 @@ export const tasks = [
     type: TaskType.REQUIRED,
     value: 5,
     day_preference: DayPreference.DAY_RANGE,
-    days: [DayOfWeek.MONDAY, DayOfWeek.SUNDAY],
+    days: [DayOfWeek.SUNDAY, DayOfWeek.MONDAY],
     time_preference: TimePreference.ANYTIME,
   },
   {
@@ -276,7 +276,7 @@ export const tasks = [
     type: TaskType.REQUIRED,
     value: 10,
     day_preference: DayPreference.DAY_RANGE,
-    days: [DayOfWeek.MONDAY, DayOfWeek.SUNDAY],
+    days: [DayOfWeek.SUNDAY, DayOfWeek.MONDAY],
     time_preference: TimePreference.ANYTIME,
   },
   {
@@ -284,7 +284,7 @@ export const tasks = [
     type: TaskType.OPTIONAL,
     value: 5,
     day_preference: DayPreference.DAY_RANGE,
-    days: [DayOfWeek.MONDAY, DayOfWeek.SUNDAY],
+    days: [DayOfWeek.SUNDAY, DayOfWeek.MONDAY],
     time_preference: TimePreference.ANYTIME,
   },
   {
@@ -308,7 +308,7 @@ export const tasks = [
     type: TaskType.OPTIONAL,
     value: 2,
     day_preference: DayPreference.DAY_RANGE,
-    days: [DayOfWeek.MONDAY, DayOfWeek.SUNDAY],
+    days: [DayOfWeek.SUNDAY, DayOfWeek.MONDAY],
     time_preference: TimePreference.ANYTIME,
   },
   {
@@ -329,7 +329,7 @@ export const tasks = [
     type: TaskType.OPTIONAL,
     value: 10,
     day_preference: DayPreference.DAY_RANGE,
-    days: [DayOfWeek.MONDAY, DayOfWeek.SUNDAY],
+    days: [DayOfWeek.SUNDAY, DayOfWeek.MONDAY],
     time_preference: TimePreference.ANYTIME,
   },
   {
@@ -337,7 +337,7 @@ export const tasks = [
     type: TaskType.OPTIONAL,
     value: 10,
     day_preference: DayPreference.DAY_RANGE,
-    days: [DayOfWeek.MONDAY, DayOfWeek.SUNDAY],
+    days: [DayOfWeek.SUNDAY, DayOfWeek.MONDAY],
     time_preference: TimePreference.ANYTIME,
   },
   {
@@ -355,6 +355,5 @@ export const tasks = [
     day_preference: DayPreference.PARTICIPANT_PREFERENCE,
     days: [],
     time_preference: TimePreference.PARTICIPANT_PREFERENCE,
-  }
+  },
 ];
-

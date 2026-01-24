@@ -1,183 +1,120 @@
-export {};
-// TODO: Refactor this component
-// import { Flex, Text, Link } from "@chakra-ui/react";
-// import React from "react";
-// import { useQuery } from "@apollo/client";
-// import { Link as RouterLink } from "react-router-dom";
-// import { GET_ANNOUNCEMENTS_IN_DATE_RANGE } from "../../../../gql/queries";
-// import {
-//   AnnouncementDisplayInfo,
-//   AnnouncementData,
-// } from "../../../../types/AnnouncementTypes";
-// import { ROOM_NUMBERS } from "../../../../constants/misc";
-// import { getRecentDate } from "../../../../utils/formatDateTime";
-// 
-// const getRoomString = (rooms: number[]) => {
-//   if (rooms.length === 1) {
-//     return `Room ${rooms[0]}`;
-//   }
-//   if (rooms.length === ROOM_NUMBERS.length) {
-//     return "All Rooms";
-//   }
-//   return `Rooms ${rooms.join(", ")}`;
-// };
-// 
-// const AnnouncementCard: React.FC<{ announcement: AnnouncementDisplayInfo }> = ({
-//   announcement,
-// }) => {
-//   const formatDate = (date: Date) => {
-//     return date
-//       .toLocaleString("en-ca", {
-//         hour: "numeric",
-//         minute: "2-digit",
-//         hour12: true,
-//       })
-//       .toLowerCase();
-//   };
-// 
-//   return (
-//     <Flex
-//       flexDir="column"
-//       width="100%"
-//       bg="neutral.100"
-//       border="1px solid"
-//       borderColor="background.border"
-//       rounded="8px"
-//       paddingX="16px"
-//       paddingY="12px"
-//       gap="5px"
-//     >
-//       <Flex width="100%" alignItems="baseline">
-//         <Text textStyle="web.b2" fontWeight={600} color="black">
-//           {getRoomString(announcement.rooms)}
-//         </Text>
-//         <Text textStyle="web.b3" color="text.grey" marginLeft="20px">
-//           posted at {formatDate(announcement.creation_date)}
-//         </Text>
-//       </Flex>
-//       <Flex width="100%">
-//         <Text textStyle="web.b2" color="black">
-//           {announcement.message}
-//         </Text>
-//       </Flex>
-//     </Flex>
-//   );
-// };
-// 
-// const AnnouncementSection = () => {
-//   const {
-//     loading: getAnnouncementsLoading,
-//     error: getAnnouncementsError,
-//     data: getAnnouncementsData,
-//   } = useQuery(GET_ANNOUNCEMENTS_IN_DATE_RANGE, {
-//     variables: {
-//       start: getRecentDate(0, true),
-//       end: getRecentDate(-1, true),
-//     },
-//   });
-// 
-//   // Get the display info for the announcements
-//   const data: AnnouncementDisplayInfo[] =
-//     getAnnouncementsData?.getAnnouncementsInDateRange?.map(
-//       (announcement: AnnouncementData) => ({
-//         announcement_id: announcement.announcement_id,
-//         rooms: announcement.user_announcements
-//           .map((ua) => ua.participant.room_number)
-//           .sort((a, b) => a - b),
-//         creation_date: new Date(announcement.creation_date),
-//         message: announcement.message,
-//       })
-//     ) || [];
-// 
-//   return (
-//     <Flex
-//       flexGrow={1}
-//       height="calc(100% - 330px)"
-//       paddingY="15px"
-//       paddingX="20px"
-//       border="1px solid"
-//       borderColor="background.border"
-//       borderRadius="8px"
-//       flexDir="column"
-//       gap="10px"
-//       justifyContent="flex-start"
-//       marginRight="10px"
-//     >
-//       {/* Title Row */}
-//       <Flex
-//         w="100%"
-//         flexDir="row"
-//         justifyContent="space-between"
-//         alignItems="center"
-//         px="2px"
-//       >
-//         <Flex flexDir="row" gap="20px" alignItems="baseline">
-//           <Text textStyle="web.h3" color="brand.teal">
-//             Announcements
-//           </Text>
-//           <Text textStyle="web.b3" color="text.grey">
-//             {data.length} new post{data.length === 1 ? "" : "s"} today
-//           </Text>
-//         </Flex>
-//         <Link
-//           as={RouterLink}
-//           to="/admin/announcements"
-//           textStyle="web.b3"
-//           fontFamily="Nunito"
-//           fontWeight={600}
-//           color="black"
-//           textDecoration="underline"
-//           _hover={{
-//             textDecoration: "none",
-//           }}
-//         >
-//           View All
-//         </Link>
-//       </Flex>
-//       <Flex
-//         alignItems="center"
-//         overflow="scroll"
-//         height="100%"
-//         justifyContent="center"
-//         sx={{
-//           "&::-webkit-scrollbar": {
-//             display: "none",
-//           },
-//         }}
-//       >
-//         {getAnnouncementsLoading ? (
-//           <Text textStyle="web.b2" color="text.grey">
-//             Loading...
-//           </Text>
-//         ) : getAnnouncementsError ? (
-//           <Text textStyle="web.b2" color="text.grey">
-//             {getAnnouncementsError?.message || "An error occurred"}
-//           </Text>
-//         ) : data.length === 0 ? (
-//           <Text textStyle="web.b2" color="text.grey">
-//             No Announcements Yet
-//           </Text>
-//         ) : (
-//           <Flex
-//             width="100%"
-//             height="100%"
-//             flexDir="column"
-//             justifyContent="flex-start"
-//             gap="10px"
-//           >
-//             {data.map((announcement: AnnouncementDisplayInfo) => {
-//               return (
-//                 <AnnouncementCard
-//                   key={announcement.announcement_id}
-//                   announcement={announcement}
-//                 />
-//               );
-//             })}
-//           </Flex>
-//         )}
-//       </Flex>
-//     </Flex>
-//   );
-// };
-// 
-// export default AnnouncementSection;
+import { Flex, Text, Link } from "@chakra-ui/react";
+import React from "react";
+import { useQuery } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
+import { GET_ANNOUNCEMENTS_FROM_TODAY } from "../../../../gql/announcementRequests";
+import { Announcement, ReceivedAnnouncement } from "../../../../types/models";
+import { ROOM_NUMBERS } from "../../../../constants/rooms";
+import { formatDateV2 } from "../../../../helpers/formatDateTime";
+import WidgetContainer from "../../../../ui/containers/WidgetContainer";
+import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
+import { ADMIN_ANNOUNCEMENTS_PAGE } from "../../../../constants/routes";
+import { getRoomString } from "../../../../helpers/stringUtils";
+
+const AnnouncementCard: React.FC<{ announcement: Announcement }> = ({
+  announcement,
+}) => {
+  return (
+    <WidgetContainer
+      bg_color="background.highlight"
+      width="100%"
+      paddingX="16px"
+      paddingY="10px"
+    >
+      <Flex flexDir="column" width="100%" gap="5px">
+        <Flex width="100%" alignItems="baseline">
+          <Text textStyle="s1" fontWeight={600} color="text.dark">
+            {getRoomString(announcement)}
+          </Text>
+          <Text
+            textStyle="b2"
+            color="text.medium"
+            marginLeft="10px"
+          >
+            posted at {formatDateV2(new Date(announcement.date))}
+          </Text>
+        </Flex>
+        <Flex width="100%">
+          <Text textStyle="b2" color="text.dark">
+            {announcement.message}
+          </Text>
+        </Flex>
+      </Flex>
+    </WidgetContainer>
+  );
+};
+
+const AnnouncementSection = () => {
+  const navigate = useNavigate();
+
+  const {
+    loading: getAnnouncementsLoading,
+    error: getAnnouncementsError,
+    data,
+  } = useQuery(GET_ANNOUNCEMENTS_FROM_TODAY);
+
+  const announcements: Announcement[] = data?.getAnnouncementsFromToday || [];
+
+  return (
+    <WidgetContainer
+      bg_color="transparent"
+      width="100%"
+      height="calc(100% - 330px)"
+      paddingY="12px"
+      paddingX="20px"
+      loading={getAnnouncementsLoading}
+      error={getAnnouncementsError?.message}
+    >
+      <Flex
+        w="100%"
+        h="40px"
+        flexDir="row"
+        justifyContent="space-between"
+        alignItems="baseline"
+        paddingBottom="10px"
+      >
+        <Flex gap="10px" alignItems="baseline">
+          <Text textStyle="h3" color="brand.primaryDark" pl="5px">
+            Announcements
+          </Text>
+          <Text textStyle="b2" color="text.light">
+            {announcements.length} new post
+            {announcements.length === 1 ? "" : "s"} today
+          </Text>
+        </Flex>
+        <UnderlineButton
+          label="View All"
+          action={() => navigate(ADMIN_ANNOUNCEMENTS_PAGE)}
+        />
+      </Flex>
+      <Flex
+        gap="10px"
+        flexDir="column"
+        alignItems="center"
+        justifyContent={announcements.length > 0 ? "flex-start" : "center"}
+        height="calc(100% - 42px)"
+        overflow="scroll"
+        sx={{
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
+        {announcements.length > 0 ? (
+          announcements.map((announcement: Announcement) => (
+            <AnnouncementCard
+              key={announcement.aid}
+              announcement={announcement}
+            />
+          ))
+        ) : (
+          <Text textStyle="b1" color="text.light">
+            No Announcements Yet
+          </Text>
+        )}
+      </Flex>
+    </WidgetContainer>
+  );
+};
+
+export default AnnouncementSection;

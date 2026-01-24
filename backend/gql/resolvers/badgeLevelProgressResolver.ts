@@ -18,8 +18,12 @@ const badgeLevelProgressResolver = {
             include: {
               system_badge: true,
             },
-          }
+          },
         },
+        orderBy: [
+          { name: "asc" },
+          { badge_level: { value: "asc" } },
+        ],
       });
     },
   },

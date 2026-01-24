@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, Input, Text } from "@chakra-ui/react";
+import { FormControl, Input, Text, Box } from "@chakra-ui/react";
 import { InputProps } from "../../types/component";
 
 export default function TextInput({
@@ -9,34 +9,36 @@ export default function TextInput({
   size,
 }: InputProps) {
   const width =
-    size === "small" ? "100px" : size === "medium" ? "200px" : "400px";
+    size === "small" ? "100px" : size === "medium" ? "250px" : "400px";
   return (
-    <FormControl>
+    <FormControl width="100%">
       {label && (
-        <Text textStyle="web.s1" color="text.grey" mb="4px">
+        <Text textStyle="s2" mb="4px">
           {label}
         </Text>
       )}
-      <Input
-        type="text"
-        value={current_value}
-        onChange={(e) => update_action(e.target.value)}
-        width={width}
-        height="fit-content"
-        paddingX="12px"
-        paddingY="6px"
-        border="1px"
-        borderColor="#C5C8D8"
-        borderRadius="8px"
-        fontFamily="Nunito"
-        fontWeight="400"
-        fontSize="12px"
-        color="#000000"
-        _focus={{
-          borderColor: "#C5C8D8",
-          boxShadow: "none",
-        }}
-      />
+      <Box width="100%">
+        <Input
+          type="text"
+          value={current_value}
+          onChange={(e) => update_action(e.target.value)}
+          width={width}
+          height="fit-content"
+          paddingX="12px"
+          paddingY="6px"
+          border="1px"
+          borderColor="background.border"
+          borderRadius="8px"
+          fontFamily="Nunito"
+          fontWeight="400"
+          fontSize="12px"
+          color="text.dark"
+          _focus={{
+            borderColor: "background.border",
+            boxShadow: "none",
+          }}
+        />
+      </Box>
     </FormControl>
   );
 }

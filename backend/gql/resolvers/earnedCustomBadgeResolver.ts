@@ -47,7 +47,7 @@ const earnedCustomBadgeResolver = {
         name,
         icon,
         description,
-        value
+        value,
       }: {
         pid: number;
         name: string;
@@ -56,6 +56,12 @@ const earnedCustomBadgeResolver = {
         value: number;
       }
     ): Promise<EarnedCustomBadge> => {
+      const prevEarnedCustomBadge = await db.earnedCustomBadge.findFirst({
+        where: { pid, name },
+      });
+      if (prevEarnedCustomBadge) {
+        throw new Error("participant has already earned this custom badge");
+      }
       const reasonForEarning = `${name} custom badge earned!`;
       await processEarning(pid, value, reasonForEarning);
       return db.earnedCustomBadge.create({

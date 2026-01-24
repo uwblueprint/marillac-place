@@ -13,15 +13,16 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-type Column = {
+export type Column = {
   header: string;
   width: string;
+  center?: boolean;
 };
 
-type Row = {
+export type Row = {
   element: string | ReactNode;
   action?: () => void;
-}
+};
 
 type DataTableProps = {
   loading: boolean;
@@ -30,52 +31,50 @@ type DataTableProps = {
   rows: Row[][];
 };
 
-const DataTable = ({
-  loading,
-  error,
-  columns,
-  rows,
-}: DataTableProps) => {
+const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
   return (
     <TableContainer
       border="1px solid"
-      borderColor="neutral.300"
+      borderColor="background.border"
       borderRadius="8px"
       w="100%"
     >
       <Table>
         <Thead>
-          <Tr backgroundColor="neutral.200" w="100%">
+          <Tr backgroundColor="background.highlight" w="100%">
             {columns.map((col: Column, index: number) => (
               <Th width={col.width} key={index}>
-                  <Text
-                    textStyle="web.s1"
-                    color="#000000"
-                    textTransform="none"
-                    textAlign="left"
-                  >
-                    {col.header}
-                  </Text>
+                <Text
+                  textStyle="s2"
+                  color="text.dark"
+                  textTransform="none"
+                  textAlign={col.center ? "center" : "left"}
+                >
+                  {col.header}
+                </Text>
               </Th>
             ))}
           </Tr>
         </Thead>
         <Tbody>
-          { loading ? (
-            <Tr outline="1px solid" outlineColor="neutral.300">
+          {loading ? (
+            <Tr outline="1px solid" outlineColor="background.border">
               <Td colSpan={6} textAlign="center" paddingY="50px">
-                <Spinner size="md" color="primary.700" />
+                <Spinner size="md" color="brand.primaryDark" />
               </Td>
             </Tr>
-            
           ) : error ? (
-            <Tr outline="1px solid" outlineColor="neutral.300">
+            <Tr outline="1px solid" outlineColor="background.border">
               <Td colSpan={6} paddingY="50px">
                 <Flex flexDir="column" gap="2px">
-                  <Text textStyle="web.b2" color="#E30000" textAlign="center">
+                  <Text textStyle="s1" color="indicate.brightRed" textAlign="center">
                     ERROR
                   </Text>
-                  <Text textStyle="web.b2" color="text.grey" textAlign="center">
+                  <Text
+                    textStyle="b1"
+                    color="text.medium"
+                    textAlign="center"
+                  >
                     {error}
                   </Text>
                 </Flex>
@@ -86,26 +85,41 @@ const DataTable = ({
               <Tr
                 key={index}
                 outline={index % 2 ? "0px solid" : "1px solid"}
-                outlineColor="neutral.300"
+                outlineColor="background.border"
               >
                 {row.map((cell: Row, cellIndex: number) => (
                   <Td key={cellIndex}>
-                    { cell.action ? (
-                      <Flex w="100%" h="100%" alignItems="center" justifyContent="center">
-                        <Button 
-                          onClick={cell.action} 
-                          cursor="pointer" 
-                          backgroundColor="transparent"  
+                    {cell.action ? (
+                      <Flex
+                        w="100%"
+                        h="100%"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Button
+                          onClick={cell.action}
+                          cursor="pointer"
+                          backgroundColor="transparent"
                           border="none"
                           height="fit-content"
                           lineHeight={1}
-                          _hover={{ backgroundColor: "transparent", border: "none" }}
+                          margin="0px"
+                          padding="0px"
+                          _hover={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
                         >
                           {cell.element}
                         </Button>
                       </Flex>
                     ) : (
-                      <Text textStyle="web.b3" color="text.black" textAlign="left">{cell.element}</Text>
+                      <Text
+                        textStyle="b2"
+                        textAlign="left"
+                      >
+                        {cell.element}
+                      </Text>
                     )}
                   </Td>
                 ))}

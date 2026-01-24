@@ -25,6 +25,7 @@ export interface Announcement {
   aid: number;
   date: string;
   message: string;
+  topic: string;
   priority: Priority;
 
   ReceivedAnnouncement?: ReceivedAnnouncement[];

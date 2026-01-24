@@ -47,7 +47,7 @@ export const CREATE_PARTICIPANT = gql`
     $pid: Int!
     $password: String!
     $room: Int!
-    $arrival: Date!
+    $arrival: String!
   ) {
     createParticipant(
       pid: $pid
@@ -71,8 +71,8 @@ export const UPDATE_PARTICIPANT = gql`
     $pid: Int!
     $password: String
     $room: Int
-    $arrival: Date
-    $departure: Date
+    $arrival: String
+    $departure: String
   ) {
     updateParticipant(
       pid: $pid

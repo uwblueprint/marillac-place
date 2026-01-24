@@ -39,12 +39,14 @@ export const CREATE_ANNOUNCEMENT = gql`
     $priority: Priority!
     $pids: [Int!]!
     $message: String!
+    $topic: String!
   ) {
-    createAnnouncement(priority: $priority, pids: $pids, message: $message) {
+    createAnnouncement(priority: $priority, pids: $pids, message: $message, topic: $topic) {
       aid
       date
       message
       priority
+      topic
     }
   }
 `;

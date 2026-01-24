@@ -22,6 +22,7 @@ module.exports = {
     "no-console": "off",
     "import/no-cycle": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/naming-convention": "off",
   },
   ignorePatterns: ["build/*"],
 };
