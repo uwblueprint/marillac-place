@@ -30,10 +30,10 @@ export default function NotFoundScreen() {
         padding="20px"
       >
         <img src="/assets/logo.png" alt="Marillac Place Logo" width="50%" />
-        <Text textStyle="web.h2" color="secondary.700" textAlign="center">
+        <Text textStyle="h2" color="brand.secondaryDark" textAlign="center">
           404 Page Not Found
         </Text>
-        <Text textStyle="web.b2" color="text.light.primary" textAlign="center">
+        <Text textStyle="b1" color="text.black" textAlign="center">
           Sorry! The page you are looking for does not exist. If you think
           something is broken, please contact support via our{" "}
           <a

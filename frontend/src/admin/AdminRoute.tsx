@@ -11,6 +11,7 @@ import { AdminContext } from "./AdminContext";
 import ErrorScreen from "../ui/screens/ErrorScreen";
 import AdminMenu from "./AdminMenu";
 import { Participant } from "../types/models";
+import useNotification from "../hooks/useNotification";
 
 type AdminRouteProps = {
   children: React.ReactElement;
@@ -64,7 +65,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
           adminContext.setRole(role);
         }
         setPopulatingContext(false);
-      }
+      };
       populateContext();
     }
   }, [authorizing, authorized]);
@@ -103,9 +104,9 @@ export default function AdminRoute({ children }: AdminRouteProps) {
             left="0px"
             width="100%"
             height="55px"
-            bg="primary.100"
+            bg="brand.primaryLight"
             borderBottom="1px solid"
-            borderColor="neutral.300"
+            borderColor="background.border"
             zIndex={5}
           />
           <Flex

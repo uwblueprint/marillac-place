@@ -79,7 +79,7 @@ export default function DailyTasksTable({
         ])
     );
   }, [chosenDay, tasks]);
-  
+
   return (
     <Flex flexDir="column" w="100%">
       <Flex w="100%" alignItems="center" justifyContent="center">
@@ -97,16 +97,17 @@ export default function DailyTasksTable({
             width="14.1%"
             height="fit-content"
             paddingX="12px"
-            paddingY="6px"
-            bg="#FFFFFF"
+            paddingTop="8px"
+            paddingBottom="6px"
+            bg="white"
             _hover={{
-              bg: "#F5F6F8",
+              bg: "background.highlight",
             }}
             _active={{
-              bg: "#F5F6F8",
+              bg: "background.highlight",
             }}
           >
-            <Text textStyle="web.s1" color="text.light.primary">
+            <Text textStyle="s2" color="text.dark">
               {toTitleCase(day)}
             </Text>
           </Button>

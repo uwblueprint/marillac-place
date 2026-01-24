@@ -26,12 +26,14 @@ interface ParticipantProviderProps {
   children: ReactNode;
 }
 
-export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({ children }) => {
+export const ParticipantProvider: React.FC<ParticipantProviderProps> = ({
+  children,
+}) => {
   const [pid, setPid] = useState<number>(-1);
   const [room, setRoom] = useState<number>(0);
   const [balance, setBalance] = useState<number>(0);
   const [totalEarnings, setTotalEarnings] = useState<number>(0);
-  
+
   return (
     <ParticipantContext.Provider
       value={{

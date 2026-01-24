@@ -75,8 +75,8 @@ const assignedTaskResolver = {
           end_date: { gte: getStartOfDay(new Date()) },
         },
         orderBy: {
-          start_date: "asc"
-        }
+          start_date: "asc",
+        },
       });
     },
     getAssignedTasksByWeek: async (
@@ -97,8 +97,8 @@ const assignedTaskResolver = {
           end_date: { gte: weekStart },
         },
         orderBy: {
-          start_date: "asc"
-        }
+          start_date: "asc",
+        },
       });
     },
     hasCompletedAllRequiredTasks: async (

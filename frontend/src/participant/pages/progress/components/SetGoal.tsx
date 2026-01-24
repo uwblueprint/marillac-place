@@ -14,7 +14,11 @@ interface SetGoalProps {
   prevGoal: number;
 }
 
-export const SetGoal: React.FC<SetGoalProps> = ({ handleClose, refetchGoal, prevGoal }) => {
+export const SetGoal: React.FC<SetGoalProps> = ({
+  handleClose,
+  refetchGoal,
+  prevGoal,
+}) => {
   const [goal, setGoal] = useState<number | null>(null);
   const [error, setError] = useState("");
   const { pid } = useContext(ParticipantContext);
@@ -62,7 +66,7 @@ export const SetGoal: React.FC<SetGoalProps> = ({ handleClose, refetchGoal, prev
       loading={loading}
     >
       <Flex justify="space-between" alignItems="center">
-        <Text textStyle="mobile.b1">New goal:</Text>
+        <Text textStyle="b1">New Goal:</Text>
         <Flex align="center" gap={2} justifyContent="space-between" mr="-4px">
           <MarillacCoin size={22} />
           <NumberInput

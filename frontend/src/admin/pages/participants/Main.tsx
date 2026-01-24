@@ -1,7 +1,10 @@
 import { Flex, Spinner, Text, Grid } from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { GET_CURRENT_PARTICIPANTS, GET_PAST_PARTICIPANTS } from "../../../gql/participantRequests";
+import {
+  GET_CURRENT_PARTICIPANTS,
+  GET_PAST_PARTICIPANTS,
+} from "../../../gql/participantRequests";
 import { ROOM_NUMBERS } from "../../../constants/rooms";
 import OccupiedRoomCard from "./components/OccupiedRoomCard";
 import EmptyRoomCard from "./components/EmptyRoomCard";
@@ -11,8 +14,18 @@ import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import { Participant } from "../../../types/models";
 
 export default function AdminParticipantsPage() {
-  const { loading: loadingCurrent, error: errorCurrent, data: dataCurrent, refetch: refetchCurrent } = useQuery(GET_CURRENT_PARTICIPANTS);
-  const { loading: loadingPast, error: errorPast, data: dataPast, refetch: refetchPast } = useQuery(GET_PAST_PARTICIPANTS);
+  const {
+    loading: loadingCurrent,
+    error: errorCurrent,
+    data: dataCurrent,
+    refetch: refetchCurrent,
+  } = useQuery(GET_CURRENT_PARTICIPANTS);
+  const {
+    loading: loadingPast,
+    error: errorPast,
+    data: dataPast,
+    refetch: refetchPast,
+  } = useQuery(GET_PAST_PARTICIPANTS);
 
   const currentParticipants: Record<number, Participant> = {};
   if (dataCurrent && dataCurrent.getCurrentParticipants) {
@@ -26,7 +39,7 @@ export default function AdminParticipantsPage() {
 
   return (
     <Flex w="100%" flexDir="column" minHeight="fit-content">
-      <Text textStyle="web.h2" color="primary.700" mb="10px">
+      <Text textStyle="h2" color="brand.primaryDark" mb="10px">
         Current Participants
       </Text>
 
@@ -41,15 +54,24 @@ export default function AdminParticipantsPage() {
               refetchPast={refetchPast}
             />
           ) : (
-            <EmptyRoomCard key={num} roomNumber={num} refetch={refetchCurrent} />
+            <EmptyRoomCard
+              key={num}
+              roomNumber={num}
+              refetch={refetchCurrent}
+            />
           )
         )}
       </Grid>
 
-      <Text textStyle="web.h2" color="primary.700" mt="20px" mb="10px">
+      <Text textStyle="h3" color="brand.primaryDark" mt="20px" mb="10px">
         Past Participants
       </Text>
-      <PastParticipantTable participants={dataPast?.getPastParticipants || []} refetch={refetchPast} loading={loadingPast} error={errorPast} />
+      <PastParticipantTable
+        participants={dataPast?.getPastParticipants || []}
+        refetch={refetchPast}
+        loading={loadingPast}
+        error={errorPast}
+      />
     </Flex>
   );
 }

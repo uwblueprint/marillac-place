@@ -11,6 +11,7 @@ import FixedInput from "../../../../ui/inputs/FixedInput";
 import { LEVEL_ORDER } from "../../../../constants/levels";
 import { toTitleCase } from "../../../../helpers/stringUtils";
 import NumberInput from "../../../../ui/inputs/NumberInput";
+import useNotification from "../../../../hooks/useNotification";
 
 interface EditSystemBadgeModalProps {
   isOpen: boolean;
@@ -62,7 +63,7 @@ const EditSystemBadgeModal = ({
     )
   );
   const [error, setError] = useState("");
-
+  const { sendNotification } = useNotification();
   const [updateBadgeLevel, { loading: updateBadgeLevelLoading }] =
     useMutation(UPDATE_BADGE_LEVEL);
   const [updateSystemBadge, { loading: updateSystemBadgeLoading }] =
@@ -133,6 +134,7 @@ const EditSystemBadgeModal = ({
       await Promise.all(requests);
       await refetch();
       onClose();
+      sendNotification("System badge updated successfully");
     } catch (err: any) {
       setError("Failed to edit system badge");
     }
@@ -162,9 +164,7 @@ const EditSystemBadgeModal = ({
 
       <Flex justifyContent="space-between" alignItems="center" w="100%">
         <Flex flexDir="column" gap="5px">
-          <Text textStyle="web.s1" color="text.light.secondary">
-            Set Badge Levels
-          </Text>
+          <Text textStyle="s2">Set Badge Levels</Text>
           {LEVEL_ORDER.map((level: Level) => {
             if (!badgeLevels[level]) return null;
             const data = badgeLevels[level];
@@ -175,7 +175,7 @@ const EditSystemBadgeModal = ({
                 justifyContent="center"
                 width="90%"
               >
-                <Text textStyle="web.b3" width="100px">
+                <Text textStyle="b2" width="100px">
                   {toTitleCase(level)}:
                 </Text>
                 <NumberInput
@@ -191,17 +191,13 @@ const EditSystemBadgeModal = ({
                   }
                   size="small"
                 />
-                <Text textStyle="web.b3">times</Text>
+                <Text textStyle="b2">times</Text>
               </Flex>
             );
           })}
         </Flex>
         <Flex flexDir="column" gap="5px">
-          <Text
-            textStyle="web.s1"
-            color="text.light.secondary"
-            textAlign="right"
-          >
+          <Text textStyle="s2" textAlign="right">
             Marillac Bucks
           </Text>
           {LEVEL_ORDER.map((level: Level) => {

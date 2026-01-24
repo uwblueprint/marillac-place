@@ -23,9 +23,9 @@ const OccupiedRoomCard = ({
   const { arrival } = participants[roomNumber];
   return (
     <Flex
-      height="140px"
+      height="150px"
       border="1px"
-      borderColor="neutral.300"
+      borderColor="background.border"
       borderRadius="8px"
       flexDir="column"
       justifyContent="center"
@@ -44,21 +44,21 @@ const OccupiedRoomCard = ({
         justifyContent="center"
         alignItems="center"
         borderBottom="1px"
-        borderColor="neutral.300"
-        bg="primary.100"
+        borderColor="background.border"
+        bg="brand.primaryLight"
       >
-        <Text textStyle="web.s1">Room {roomNumber}</Text>
+        <Text textStyle="s1">Room {roomNumber}</Text>
       </Flex>
 
-      <Text textStyle="web.b3">
+      <Text textStyle="b1">
         ID Number:&nbsp;
-        <Text as="span" fontWeight="700">
+        <Text as="span" fontWeight="650">
           #{id}
         </Text>
       </Text>
-      <Text textStyle="web.b3" mb="2px">
-        Arrival Date:&nbsp;
-        <Text as="span" fontWeight="700">
+      <Text textStyle="b1" mb="2px">
+        Arrival:&nbsp;
+        <Text as="span" fontWeight="650">
           {formatDateV6(new Date(arrival))}
         </Text>
       </Text>

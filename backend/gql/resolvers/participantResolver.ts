@@ -119,22 +119,8 @@ const participantResolver = {
       const isEmpty = Object.keys(updates).length === 0;
       if (isEmpty) throw new Error("no updates received");
 
-      if (room !== undefined) {
-        if (room < 1 || room > 10) {
-          throw new Error("room must be between 1 and 10");
-        }
-
-        const occupiedRoom = await db.participant.findFirst({
-          where: {
-            room,
-            pid: { not: pid },
-            OR: [
-              { departure: null },
-              { departure: { gt: getEndOfDay(new Date()) } },
-            ],
-          },
-        });
-        if (occupiedRoom) throw new Error("room is occupied");
+      if (room !== undefined && (room < 1 || room > 10)) {
+        throw new Error("room must be between 1 and 10");
       }
 
       return db.participant.update({

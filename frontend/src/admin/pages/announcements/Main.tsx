@@ -12,6 +12,7 @@ import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import UnderlineButton from "../../../ui/buttons/UnderlineButton";
 import { getRoomString } from "../../../helpers/stringUtils";
 import { formatDateV3 } from "../../../helpers/formatDateTime";
+import { Plus } from "../../../ui/icons/ActionIcons";
 
 export default function AdminAnnouncementsPage() {
   const [create, setCreate] = useState(false);
@@ -74,23 +75,24 @@ export default function AdminAnnouncementsPage() {
     return <ErrorScreen message={getAllAnnouncementsError.message} />;
 
   return (
-    <Flex width="100%" flexDir="column" gap="15px">
+    <Flex width="100%" flexDir="column" height="fit-content" gap="15px">
       <Flex
         width="100%"
         height="fit-content"
         alignItems="center"
         justifyContent="space-between"
       >
-        <Flex alignItems="center" gap="15px">
-          <Text textStyle="web.h2" color="primary.700" pl="3px">
+        <Flex alignItems="baseline" gap="15px">
+          <Text textStyle="h2" color="brand.primaryDark" pl="3px">
             Announcements
           </Text>
-          <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
+          <Text textStyle="b2" color="text.light">
             Expires in 7 days
           </Text>
         </Flex>
 
         <OrangeButton
+          icon={<Plus />}
           label="Create Announcement"
           action={() => setCreate(true)}
           is_active={create}
@@ -98,10 +100,10 @@ export default function AdminAnnouncementsPage() {
       </Flex>
 
       <Flex alignItems="center" gap="15px">
-        <Text textStyle="web.s1" color="#000000" fontWeight={600}>
+        <Text textStyle="s1" color="text.medium" fontWeight={600}>
           Filters:
         </Text>
-        <Flex alignItems="center" gap="5px">
+        <Flex alignItems="center" gap="4px">
           {selectedButtons.map((isSelected: boolean, index: number) => (
             <GreenOutlineButton
               key={index}
@@ -118,11 +120,7 @@ export default function AdminAnnouncementsPage() {
         />
       </Flex>
 
-      <Text textStyle="web.b3" color="text.light.secondary">
-        Most Recent
-      </Text>
-
-      <VStack spacing={4} align="stretch" paddingBottom="20px">
+      <Flex flexDir="column" gap="8px" mt="6px">
         {getAllAnnouncementsData?.getAnnouncementsSentToParticipants.map(
           (announcement: any) => (
             <AnnouncementCard
@@ -136,7 +134,7 @@ export default function AdminAnnouncementsPage() {
             />
           )
         )}
-      </VStack>
+      </Flex>
 
       {create && (
         <CreateAnnouncementModal

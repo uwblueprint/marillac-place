@@ -69,7 +69,7 @@ export default function ParticipantsLoginPage() {
       h="100vh"
       alignItems="flex-start"
       justifyContent="center"
-      bg="primary.100"
+      bg="brand.primaryLight"
     >
       <Flex
         width="350px"
@@ -89,10 +89,8 @@ export default function ParticipantsLoginPage() {
           paddingY="25px"
         >
           <Flex flexDir="column">
-            <Text textStyle="mobile.h1">Sign in</Text>
-            <Text textStyle="mobile.b1">
-              Please enter your login information.
-            </Text>
+            <Text textStyle="h2">Sign in</Text>
+            <Text textStyle="b1">Please enter your login information.</Text>
           </Flex>
 
           <Flex flexDir="column" gap="10px" mt="15px" mb="10px">
@@ -112,12 +110,17 @@ export default function ParticipantsLoginPage() {
           </Flex>
 
           {error && (
-            <Text textStyle="mobile.b1" fontWeight="500" color="#E30000" mt="5px">
+            <Text
+              textStyle="b1"
+              fontWeight="500"
+              color="indicate.brightRed"
+              mt="5px"
+            >
               {error}
             </Text>
           )}
 
-          <Flex mt="15px">  
+          <Flex mt="15px">
             <OrangeButton
               label="Sign in"
               action={handleSubmit}

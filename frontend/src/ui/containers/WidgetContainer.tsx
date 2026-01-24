@@ -22,7 +22,6 @@ export default function WidgetContainer({
   loading = false,
   error = "",
 }: WidgetContainerProps) {
-
   return (
     <Box
       position="relative"
@@ -32,7 +31,7 @@ export default function WidgetContainer({
       paddingY={paddingY}
       bg={bg_color}
       border="1px solid"
-      borderColor="neutral.300"
+      borderColor="background.border"
       rounded="8px"
     >
       {loading ? (
@@ -42,7 +41,7 @@ export default function WidgetContainer({
           justifyContent="center"
           alignItems="center"
         >
-          <Spinner size="md" color="primary.700" />
+          <Spinner size="md" color="brand.primaryDark" />
         </Flex>
       ) : error !== "" ? (
         <Flex
@@ -53,14 +52,10 @@ export default function WidgetContainer({
           flexDir="column"
           gap="2px"
         >
-          <Text textStyle="web.b2" color="#E30000" textAlign="center">
+          <Text textStyle="s1" color="indicate.brightRed" textAlign="center">
             ERROR
           </Text>
-          <Text
-            textStyle="web.b2"
-            color="text.light.secondary"
-            textAlign="center"
-          >
+          <Text textStyle="b1" color="text.medium" textAlign="center">
             {error}
           </Text>
         </Flex>

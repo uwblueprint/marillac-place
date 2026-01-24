@@ -17,7 +17,7 @@ export default function RoomNavigation({
       justifyContent="space-between"
       alignItems="center"
       position="absolute"
-      top="18px"
+      top="21px"
       left="0px"
       zIndex={10}
       paddingX="20px"
@@ -25,14 +25,15 @@ export default function RoomNavigation({
       {ROOM_NUMBERS.map((num: number) => (
         <Text
           key={num}
-          textStyle="web.b1"
-          fontWeight="700"
-          color={selectedRoom === num ? "primary.700" : "#000000"}
+          textStyle="s1"
+          color={selectedRoom === num ? "brand.primaryDark" : "text.dark"}
           cursor="pointer"
           onClick={() => changeRoom(num)}
           borderBottom="3px solid"
-          borderColor={selectedRoom === num ? "primary.700" : "transparent"}
-          px="12px"
+          borderColor={
+            selectedRoom === num ? "brand.primaryDark" : "transparent"
+          }
+          px="10px"
           pb="10px"
         >
           Room {num}

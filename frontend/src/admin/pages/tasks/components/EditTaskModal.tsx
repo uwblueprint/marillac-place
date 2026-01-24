@@ -17,6 +17,7 @@ import TextInput from "../../../../ui/inputs/TextInput";
 import DateOptions from "../../../../ui/misc/DateOptions";
 import NumberInput from "../../../../ui/inputs/NumberInput";
 import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
+import useNotification from "../../../../hooks/useNotification";
 
 type EditTaskModalProps = {
   selected: Task;
@@ -67,7 +68,7 @@ export default function EditTaskModal({
   const [error, setError] = useState("");
 
   const [updateTask] = useMutation(UPDATE_TASK);
-
+  const { sendNotification } = useNotification();
   async function handleSubmit() {
     const updatedTask: any = {
       tid: selected.tid,
@@ -114,6 +115,7 @@ export default function EditTaskModal({
       });
       refetch();
       close();
+      sendNotification("Task updated successfully");
     } catch (err: any) {
       setError(err.message);
     }

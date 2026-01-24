@@ -31,7 +31,7 @@ const levelConfig: Record<
   },
   CUSTOM: {
     FrameIcon: BadgeLevelFrameSet.Custom,
-    color: "#0C727E",
+    color: "brand.primaryDark",
   },
 };
 

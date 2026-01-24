@@ -14,7 +14,10 @@ import { useMutation, useQuery } from "@apollo/client";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import UnderlineButton from "../../../../ui/buttons/UnderlineButton";
 import { ParticipantContext } from "../../../ParticipantContext";
-import { CREATE_EARNING_GOAL, GET_EARNING_GOAL } from "../../../../gql/earningGoalRequests";
+import {
+  CREATE_EARNING_GOAL,
+  GET_EARNING_GOAL,
+} from "../../../../gql/earningGoalRequests";
 import ErrorScreen from "../../../../ui/screens/ErrorScreen";
 import LoadingScreen from "../../../../ui/screens/LoadingScreen";
 import { GoalAction } from "../../../../types/enums";
@@ -26,7 +29,8 @@ import { SetGoal } from "./SetGoal";
 export default function BucksGoalCard() {
   const { pid, totalEarnings } = useContext(ParticipantContext);
 
-  const [createGoal, { loading: createGoalLoading, error: createGoalError }] = useMutation(CREATE_EARNING_GOAL);
+  const [createGoal, { loading: createGoalLoading, error: createGoalError }] =
+    useMutation(CREATE_EARNING_GOAL);
   const { data, loading, error, refetch } = useQuery(GET_EARNING_GOAL, {
     variables: { pid },
   });
@@ -49,7 +53,7 @@ export default function BucksGoalCard() {
 
   const [editGoal, setEditGoal] = useState<EarningGoal | null>(null);
   const [setGoal, setSetGoal] = useState(false);
-  
+
   const goal = data?.getEarningGoal ?? null;
   const metGoal = goal?.action === GoalAction.REACHED;
   const percentComplete = (totalEarnings / goal?.value) * 100;
@@ -69,7 +73,9 @@ export default function BucksGoalCard() {
   };
 
   if (pid === -1 || error || createGoalError) {
-    return <ErrorScreen message="Failed to load marillac bucks goal. Please try again later." />;
+    return (
+      <ErrorScreen message="Failed to load marillac bucks goal. Please try again later." />
+    );
   }
 
   if (loading || createGoalLoading) {
@@ -78,29 +84,50 @@ export default function BucksGoalCard() {
 
   return (
     <>
-      {editGoal && <EditGoal handleClose={() => setEditGoal(null)} refetchGoal={refetch} currentGoal={editGoal} />}
-      {setGoal && <SetGoal handleClose={() => setSetGoal(false)} refetchGoal={refetch} prevGoal={goal?.value ?? 0} />}
+      {editGoal && (
+        <EditGoal
+          handleClose={() => setEditGoal(null)}
+          refetchGoal={refetch}
+          currentGoal={editGoal}
+        />
+      )}
+      {setGoal && (
+        <SetGoal
+          handleClose={() => setSetGoal(false)}
+          refetchGoal={refetch}
+          prevGoal={goal?.value ?? 0}
+        />
+      )}
       <WidgetContainer
         width="100%"
         height="fit-content"
-        paddingX="18px"
-        paddingY="14px"
+        paddingX="16px"
         loading={false}
         error=""
       >
-        <Flex direction="row" justifyContent="space-between" alignItems="center" mb="8px">
-          <Text textStyle="mobile.b0">Marillac Bucks Goal</Text>
+        <Flex
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb="8px"
+        >
+          <Text textStyle="s1">Marillac Bucks Goal</Text>
           <UnderlineButton
             label={editGoalText()}
             action={() => editGoalAction()}
           />
         </Flex>
         {!goal ? (
-          <Text textStyle="mobile.b1">Set a new goal to track your progress!</Text>
+          <Text textStyle="b1">Set a new goal to track your progress!</Text>
         ) : !metGoal ? (
-          <Flex direction="column" gap={2} mt="8px" mb={percentComplete >= 15 && percentComplete <= 85 ? "8px" : "0px"}>
+          <Flex
+            direction="column"
+            gap={2}
+            mt="8px"
+            mb={percentComplete >= 15 && percentComplete <= 85 ? "8px" : "0px"}
+          >
             <Progress
-              colorScheme="primary.700"
+              colorScheme="brand.primaryDark"
               value={percentComplete}
               borderRadius="full"
               height="15px"
@@ -112,10 +139,10 @@ export default function BucksGoalCard() {
               alignItems="start"
               position="relative"
             >
-              <Text textStyle="mobile.b0" color="text.light.secondary">
+              <Text textStyle="s2" color="text.medium">
                 $0
               </Text>
-              {(percentComplete >= 15 && percentComplete <= 85) && (
+              {percentComplete >= 15 && percentComplete <= 85 && (
                 <Flex
                   direction="column"
                   position="absolute"
@@ -125,10 +152,10 @@ export default function BucksGoalCard() {
                   pb="10px"
                 >
                   <Triangle />
-                  <Text textStyle="mobile.b0">${totalEarnings}</Text>
+                  <Text textStyle="s2">${totalEarnings}</Text>
                 </Flex>
               )}
-              <Text textStyle="mobile.b0" color="text.light.secondary">
+              <Text textStyle="s2" color="text.medium">
                 ${goal.value}
               </Text>
             </Flex>
@@ -136,7 +163,7 @@ export default function BucksGoalCard() {
         ) : (
           <Flex direction="row" gap={4} alignItems="center">
             <Trophy size={48} />
-            <Text textStyle="mobile.b1">
+            <Text textStyle="b1">
               Congratulations on completing your goal! Make sure to tell
               Marillac staff about your achievement.
             </Text>

@@ -36,8 +36,8 @@ export const Dot: React.FC<IconProps> = ({ size = 12, color = "#E67D4F" }) => {
 };
 
 export const ExclamationMark: React.FC<IconProps> = ({
-  size = 14,
-  color = "#D34C5C",
+  size = 12,
+  color = "indicate.brightRed",
 }) => {
   const iconColor = useChakraColor(color);
   return (

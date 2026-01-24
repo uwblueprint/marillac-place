@@ -7,6 +7,7 @@ import TextInput from "../../../../ui/inputs/TextInput";
 import NumberInput from "../../../../ui/inputs/NumberInput";
 import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
 import { UPDATE_ASSIGNED_TASK } from "../../../../gql/assignedTaskRequests";
+import useNotification from "../../../../hooks/useNotification";
 
 type EditAssignedTaskModalProps = {
   task: AssignedTask;
@@ -19,6 +20,7 @@ export default function EditAssignedTaskModal({
   onClose,
   refetch,
 }: EditAssignedTaskModalProps) {
+  const { sendNotification } = useNotification();
   const [taskName, setTaskName] = useState(task.name);
   const [addition, setAddition] = useState(task.value);
   const [deduction, setDeduction] = useState(task.penalty);
@@ -50,6 +52,7 @@ export default function EditAssignedTaskModal({
       });
       refetch();
       onClose();
+      sendNotification("Assigned task updated successfully");
     } catch (err: any) {
       setError(err.message);
     }

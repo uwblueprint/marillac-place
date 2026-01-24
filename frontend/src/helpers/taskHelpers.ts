@@ -14,11 +14,10 @@ import { combineDayAndTime } from "./formatDateTime";
 export function isAllDayTask(assignedTask: AssignedTask): boolean {
   const startDate = new Date(assignedTask.start_date);
   const endDate = new Date(assignedTask.end_date);
-  const allDay = (
+  const allDay =
     !isSameDay(startDate, endDate) ||
     (isEqual(startOfDay(startDate), startDate) &&
-      isEqual(endOfDay(endDate), endDate))
-  );
+      isEqual(endOfDay(endDate), endDate));
   return allDay;
 }
 

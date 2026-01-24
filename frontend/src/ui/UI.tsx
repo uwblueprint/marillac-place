@@ -5,7 +5,7 @@ import BlackOutlineButton from "./buttons/BlackOutlineButton";
 import OrangeButton from "./buttons/OrangeButton";
 import GreenOutlineButton from "./buttons/GreenOutlineButton";
 import UnderlineButton from "./buttons/UnderlineButton";
-import { Comment, Marker, Pin, PlusSign, Trash } from "./icons/ActionIcons";
+import { Comment, Marker, Plus, Download, Trash } from "./icons/ActionIcons";
 import WidgetContainer from "./containers/WidgetContainer";
 import PopupContainer from "./containers/PopupContainer";
 import {
@@ -56,7 +56,7 @@ import {
   TimePreference,
   DayOfWeek,
 } from "../types/enums";
-import Badge from "./misc/BadgeProgress";
+import Badge from "./badge/BadgeProgress";
 import TaskStatusDisplay from "./misc/TaskStatusDisplay";
 import ToggleButton from "./buttons/ToggleButton";
 import LoadingScreen from "./screens/LoadingScreen";
@@ -236,10 +236,10 @@ export default function UI() {
       padding="50px"
       gap="20px"
     >
-      <Text textStyle="web.h1" color="primary.700">
+      <Text textStyle="h1" color="brand.primaryDark">
         Marillac Place UI Components
       </Text>
-      <Text textStyle="web.h3">Buttons</Text>
+      <Text textStyle="h3">Buttons</Text>
       <Flex flexDir="row" gap="10px">
         <BlackOutlineButton
           label="BlackOutlineButton"
@@ -296,10 +296,10 @@ export default function UI() {
       </Flex>
       <UnderlineButton label="UnderlineButton" action={() => {}} />
       <ToggleButton active={toggleActive} setActive={setToggleActive} />
-      <Text textStyle="web.h3">Containers</Text>
+      <Text textStyle="h3">Containers</Text>
       <Flex flexDir="row" gap="10px">
         <WidgetContainer
-          bg_color="neutral.100"
+          bg_color="background.highlight"
           width="200px"
           height="100px"
           paddingX="12px"
@@ -307,10 +307,10 @@ export default function UI() {
           loading={false}
           error=""
         >
-          <Text textStyle="web.b2">WidgetContainer</Text>
+          <Text textStyle="b1">WidgetContainer</Text>
         </WidgetContainer>
         <WidgetContainer
-          bg_color="primary.100"
+          bg_color="brand.primaryLight"
           width="200px"
           height="100px"
           paddingX="12px"
@@ -318,10 +318,10 @@ export default function UI() {
           loading={false}
           error=""
         >
-          <Text textStyle="web.b2">WidgetContainer (bg color)</Text>
+          <Text textStyle="b1">WidgetContainer (bg color)</Text>
         </WidgetContainer>
         <WidgetContainer
-          bg_color="neutral.100"
+          bg_color="background.highlight"
           width="200px"
           height="100px"
           paddingX="12px"
@@ -329,10 +329,10 @@ export default function UI() {
           loading
           error=""
         >
-          <Text textStyle="web.b2">WidgetContainer (loading)</Text>
+          <Text textStyle="b1">WidgetContainer (loading)</Text>
         </WidgetContainer>
         <WidgetContainer
-          bg_color="neutral.100"
+          bg_color="background.highlight"
           width="200px"
           height="100px"
           paddingX="12px"
@@ -340,7 +340,7 @@ export default function UI() {
           loading={false}
           error="Something went wrong."
         >
-          <Text textStyle="web.b2">WidgetContainer (error)</Text>
+          <Text textStyle="b1">WidgetContainer (error)</Text>
         </WidgetContainer>
       </Flex>
       <Flex flexDir="row" gap="10px">
@@ -367,7 +367,7 @@ export default function UI() {
             error_message=""
             loading={false}
           >
-            <Text textStyle="web.b2">PopupContainer</Text>
+            <Text textStyle="b1">PopupContainer</Text>
           </PopupContainer>
         )}
         {showLoadingPopup && (
@@ -381,7 +381,7 @@ export default function UI() {
             error_message=""
             loading
           >
-            <Text textStyle="web.b2">PopupContainer (loading)</Text>
+            <Text textStyle="b1">PopupContainer (loading)</Text>
           </PopupContainer>
         )}
         {showErrorPopup && (
@@ -396,11 +396,11 @@ export default function UI() {
             system_error
             loading={false}
           >
-            <Text textStyle="web.b2">PopupContainer (error)</Text>
+            <Text textStyle="b1">PopupContainer (error)</Text>
           </PopupContainer>
         )}
       </Flex>
-      <Text textStyle="web.h3">Badges</Text>
+      <Text textStyle="h3">Badges</Text>
       <Flex flexDir="row" gap="10px">
         <Badge icon={Icon.BABY} level={Level.NOVICE} percentageComplete={50} />
         <Badge
@@ -416,7 +416,7 @@ export default function UI() {
           percentageComplete={25}
         />
       </Flex>
-      <Text textStyle="web.h3">Icons</Text>
+      <Text textStyle="h3">Icons</Text>
       <Flex
         width="fit-content"
         height="fit-content"
@@ -426,15 +426,15 @@ export default function UI() {
         flexDir="row"
         gap="10px"
         padding="10px"
-        bg="neutral.300"
+        bg="background.border"
         rounded="8px"
         alignItems="center"
         justifyContent="center"
       >
         <Comment />
-        <Pin />
         <Marker />
-        <PlusSign />
+        <Plus />
+        <Download />
         <Trash />
         <Baby />
         <Diamond />
@@ -466,7 +466,7 @@ export default function UI() {
         <Excused />
         <Incomplete />
       </Flex>
-      <Text textStyle="web.h3">Inputs</Text>
+      <Text textStyle="h3">Inputs</Text>
       <Flex flexDir="row" gap="10px">
         <FixedInput
           label="FixedInput"
@@ -542,7 +542,7 @@ export default function UI() {
         update_action={setSelect}
         value_options={options}
       />
-      <Text textStyle="web.h3">Date Options</Text>
+      <Text textStyle="h3">Date Options</Text>
       <UnderlineButton
         label="Show DateOptions"
         action={() => setShowDateOptions(!showDateOptions)}
@@ -575,14 +575,14 @@ export default function UI() {
           />
         </PopupContainer>
       )}
-      <Text textStyle="web.h3">Task Status Display</Text>
+      <Text textStyle="h3">Task Status Display</Text>
       <Flex flexDir="row" gap="10px">
         <TaskStatusDisplay status={TaskStatus.ASSIGNED} />
         <TaskStatusDisplay status={TaskStatus.EXCUSED} />
         <TaskStatusDisplay status={TaskStatus.INCOMPLETE} />
         <TaskStatusDisplay status={TaskStatus.COMPLETE} />
       </Flex>
-      <Text textStyle="web.h3">Calendar (Web)</Text>
+      <Text textStyle="h3">Calendar (Web)</Text>
       <Box width="1000px">
         <MarillacPlaceCalendar
           assignedTasks={assignedTasks}
@@ -591,7 +591,7 @@ export default function UI() {
           view={DisplayView.WEB}
         />
       </Box>
-      <Text textStyle="web.h3">Calendar (Mobile)</Text>
+      <Text textStyle="h3">Calendar (Mobile)</Text>
       <Box width="400px">
         <MarillacPlaceCalendar
           assignedTasks={assignedTasks}
@@ -600,7 +600,7 @@ export default function UI() {
           view={DisplayView.MOBILE}
         />
       </Box>
-      <Text textStyle="web.h3">Data Table</Text>
+      <Text textStyle="h3">Data Table</Text>
       <Box width="800px">
         <DataTable
           loading={false}
@@ -625,16 +625,26 @@ export default function UI() {
           rows={dataTableRows}
         />
       </Box>
-      <Text textStyle="web.h3">Loading Screen</Text>
-      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
+      <Text textStyle="h3">Loading Screen</Text>
+      <Box
+        width="1000px"
+        height="500px"
+        outline="1px solid black"
+        padding="20px"
+      >
         <LoadingScreen message="Loading..." />
       </Box>
-      <Text textStyle="web.h3">Not Found Screen</Text>
+      <Text textStyle="h3">Not Found Screen</Text>
       <Box width="1000px" outline="1px solid black" padding="20px">
         <NotFoundScreen />
       </Box>
-      <Text textStyle="web.h3">Error Screen</Text>
-      <Box width="1000px" height="500px" outline="1px solid black" padding="20px">
+      <Text textStyle="h3">Error Screen</Text>
+      <Box
+        width="1000px"
+        height="500px"
+        outline="1px solid black"
+        padding="20px"
+      >
         <ErrorScreen message="An error has occurred." />
       </Box>
     </Flex>

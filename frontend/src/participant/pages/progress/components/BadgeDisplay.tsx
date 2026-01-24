@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Divider, HStack, Text } from "@chakra-ui/react";
+import { Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import WidgetContainer from "../../../../ui/containers/WidgetContainer";
 import { toTitleCase } from "../../../../helpers/stringUtils";
@@ -8,10 +8,14 @@ import ErrorScreen from "../../../../ui/screens/ErrorScreen";
 import LoadingScreen from "../../../../ui/screens/LoadingScreen";
 import { GET_BADGE_LEVEL_PROGRESS } from "../../../../gql/badgeLevelProgressRequests";
 import { GET_ACHIEVED_BADGE_LEVELS } from "../../../../gql/achievedBadgeLevelRequests";
-import BadgeLevelRow from "../../../../ui/misc/BadgeLevelRow";
-import { AchievedBadgeLevel, BadgeLevelProgress, EarnedCustomBadge } from "../../../../types/models";
+import BadgeLevelRow from "../../../../ui/badge/BadgeLevelRow";
+import {
+  AchievedBadgeLevel,
+  BadgeLevelProgress,
+  EarnedCustomBadge,
+} from "../../../../types/models";
 import { GET_EARNED_CUSTOM_BADGES } from "../../../../gql/earnedCustomBadgeRequests";
-import CustomBadgeRow from "../../../../ui/misc/CustomBadgeRow";
+import CustomBadgeRow from "../../../../ui/badge/CustomBadgeRow";
 
 const BadgeDisplay = () => {
   const { pid } = useContext(ParticipantContext);
@@ -45,7 +49,9 @@ const BadgeDisplay = () => {
   });
 
   if (pid === -1 || errorProgress || errorAchieved || errorEarnedCustomBadge) {
-    return <ErrorScreen message="Failed to load badge data. Please try again later." />;
+    return (
+      <ErrorScreen message="Failed to load badge data. Please try again later." />
+    );
   }
 
   if (loadingProgress || loadingAchieved || loadingEarnedCustomBadge) {
@@ -53,43 +59,65 @@ const BadgeDisplay = () => {
   }
 
   return (
-    <WidgetContainer
-      width="100%"
-      height="fit-content"
-      paddingX="18px"
-      paddingY="14px"
-    >
-      <HStack mb="12px">
+    <WidgetContainer width="100%" height="fit-content" paddingX="16px">
+      <Flex mb="12px" gap="12px" alignItems="center">
         {(["badges", "achieved"] as const).map((tab) => (
           <Text
-            width="60px"
+            width="fit-content"
             key={tab}
-            textStyle={activeTab === tab ? "mobile.b0" : "mobile.b1"}
-            color={activeTab === tab ? "black" : "text.light.secondary"}
-            textDecoration={activeTab === tab ? "underline" : "none"}
+            textStyle={activeTab === tab ? "s1" : "b1"}
+            color={activeTab === tab ? "text.dark" : "text.light"}
+            textDecoration="underline"
+            _hover={{
+              textDecoration: activeTab === tab ? "underline" : "none",
+            }}
             cursor="pointer"
-            _hover={{ textDecoration: "underline" }}
             onClick={() => setActiveTab(tab)}
             transition="all 0.2s ease"
           >
             {toTitleCase(tab)}
           </Text>
         ))}
-      </HStack>
-      {activeTab === "badges" ? progressData?.getBadgeLevelProgress?.map((badge: BadgeLevelProgress, index: number) => (
-        <BadgeLevelRow key={`${activeTab}-${index}`} badge={badge} index={index} />
-      )) : (
+      </Flex>
+      {activeTab === "badges" ? (
+        progressData?.getBadgeLevelProgress?.map(
+          (badge: BadgeLevelProgress, index: number) => (
+            <BadgeLevelRow
+              key={`${activeTab}-${index}`}
+              badge={badge}
+              index={index}
+            />
+          )
+        )
+      ) : (
         <>
-          {achievedData?.getAchievedBadgeLevels?.map((badge: AchievedBadgeLevel, index: number) => (
-            <BadgeLevelRow key={`${activeTab}-${index}`} badge={badge} achieved index={index} />
-          ))}
-          { achievedData?.getAchievedBadgeLevels?.length > 0 && 
-            earnedCustomBadgeData?.getEarnedCustomBadges?.length > 0 && 
-            <Divider orientation="horizontal" color='neutral.300' mt="8px" />
-          }
-          {earnedCustomBadgeData?.getEarnedCustomBadges?.map((badge: EarnedCustomBadge, index: number) => (
-            <CustomBadgeRow key={`${activeTab}-${index}`} badge={badge} index={index} />
-          ))}
+          {achievedData?.getAchievedBadgeLevels?.map(
+            (badge: AchievedBadgeLevel, index: number) => (
+              <BadgeLevelRow
+                key={`${activeTab}-${index}`}
+                badge={badge}
+                achieved
+                index={index}
+              />
+            )
+          )}
+          {achievedData?.getAchievedBadgeLevels?.length > 0 &&
+            earnedCustomBadgeData?.getEarnedCustomBadges?.length > 0 && (
+              <Divider
+                orientation="horizontal"
+                color="background.border"
+                mt="8px"
+              />
+            )}
+          {earnedCustomBadgeData?.getEarnedCustomBadges?.map(
+            (badge: EarnedCustomBadge, index: number) => (
+              <CustomBadgeRow
+                key={`${activeTab}-${index}`}
+                badge={badge}
+                index={index}
+              />
+            )
+          )}
         </>
       )}
     </WidgetContainer>

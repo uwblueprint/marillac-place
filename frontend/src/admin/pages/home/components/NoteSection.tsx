@@ -77,10 +77,10 @@ const NoteSection = () => {
         gap="10px"
         paddingBottom="10px"
       >
-        <Text textStyle="web.h3" color="primary.700" pl="5px">
+        <Text textStyle="h3" color="brand.primaryDark" pl="5px">
           Internal Notes
         </Text>
-        <Text textStyle="web.b3" color="text.light.secondary">
+        <Text textStyle="b2" color="text.light">
           Expires in 48h
         </Text>
       </Flex>
@@ -100,7 +100,7 @@ const NoteSection = () => {
         }}
       >
         {getNotesData?.getNotes.length === 0 ? (
-          <Text textStyle="web.b2" color="text.light.secondary">
+          <Text textStyle="b1" color="text.light">
             No Admin Notes Yet
           </Text>
         ) : (
@@ -108,9 +108,10 @@ const NoteSection = () => {
             return (
               <WidgetContainer
                 key={note.nid}
-                bg_color="neutral.100"
+                bg_color="background.highlight"
                 width="100%"
                 height="fit-content"
+                paddingY="10px"
               >
                 <Flex
                   width="100%"
@@ -118,7 +119,7 @@ const NoteSection = () => {
                   flexWrap="wrap"
                   overflow="hidden"
                 >
-                  <Text textStyle="web.b2" color="#000000">
+                  <Text textStyle="b2" color="text.dark">
                     {note.message}
                   </Text>
                 </Flex>
@@ -126,10 +127,10 @@ const NoteSection = () => {
                 <Flex
                   width="100%"
                   justifyContent="space-between"
-                  alignItems="center"
-                  mt="5px"
+                  alignItems="baseline"
+                  mt="6px"
                 >
-                  <Text textStyle="web.b3" color="text.light.secondary">
+                  <Text textStyle="b2" color="text.medium">
                     {formatDateV3(new Date(note.date))}
                   </Text>
                   <UnderlineButton
@@ -152,8 +153,7 @@ const NoteSection = () => {
         bottom="0"
         left="0"
         paddingX="20px"
-        paddingTop="10px"
-        paddingBottom="12px"
+        paddingY="10px"
       >
         <InputGroup width="100%" height="100%">
           <Input
@@ -161,17 +161,17 @@ const NoteSection = () => {
             height="100%"
             fontFamily="Nunito"
             fontWeight="400"
-            fontSize="14px"
-            color="#000000"
+            fontSize="12px"
+            color="text.dark"
             placeholder="Write a note"
             type="text"
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
             border="1px solid"
-            borderColor="neutral.300"
+            borderColor="background.border"
             borderRadius="8px"
             _focus={{
-              borderColor: "neutral.300",
+              borderColor: "background.border",
               boxShadow: "none",
             }}
           />
@@ -182,7 +182,7 @@ const NoteSection = () => {
               padding="0px"
               _hover={{ bg: "transparent" }}
             >
-              <Airplane color="primary.700" size={16} />
+              <Airplane color="brand.primaryDark" size={16} />
             </Button>
           </InputRightElement>
         </InputGroup>

@@ -16,7 +16,7 @@ export const getRoomString = (announcement: Announcement) => {
     announcement.ReceivedAnnouncement?.map(
       (ra: ReceivedAnnouncement) => ra.participant?.room
     ).filter((room) => room !== undefined) ?? []
-  ).sort();
+  ).sort((a, b) => Number(a) - Number(b));
 
   if (announcement.ReceivedAnnouncement?.length === 1) {
     return `Room ${rooms[0]}`;

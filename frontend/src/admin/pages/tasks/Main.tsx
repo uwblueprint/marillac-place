@@ -14,7 +14,7 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 import { TaskType } from "../../../types/enums";
 import { Task } from "../../../types/models";
 import { toTitleCase } from "../../../helpers/stringUtils";
-import { MagnifyingGlass } from "../../../ui/icons/ActionIcons";
+import { MagnifyingGlass, Plus } from "../../../ui/icons/ActionIcons";
 import AddTaskModal from "./components/AddTaskModal";
 
 export default function AdminTasksPage() {
@@ -46,7 +46,7 @@ export default function AdminTasksPage() {
         justifyContent="flex-start"
         alignItems="center"
         position="absolute"
-        top="18px"
+        top="21px"
         left="0px"
         zIndex={10}
         paddingX="20px"
@@ -55,14 +55,15 @@ export default function AdminTasksPage() {
         {[TaskType.REQUIRED, TaskType.OPTIONAL].map((type: TaskType) => (
           <Text
             key={type}
-            textStyle="web.b1"
-            fontWeight="700"
-            color={selectedTaskType === type ? "primary.700" : "#000000"}
+            textStyle="s1"
+            color={
+              selectedTaskType === type ? "brand.primaryDark" : "text.dark"
+            }
             cursor="pointer"
             onClick={() => setSelectedTaskType(type)}
             borderBottom="3px solid"
             borderColor={
-              selectedTaskType === type ? "primary.700" : "transparent"
+              selectedTaskType === type ? "brand.primaryDark" : "transparent"
             }
             px="12px"
             pb="10px"
@@ -76,7 +77,7 @@ export default function AdminTasksPage() {
         <Flex w="100%" justifyContent="space-between" gap="10px">
           <InputGroup>
             <InputLeftElement pb="7px" pl="3px">
-              <MagnifyingGlass color="text.light.secondary" size={14} />
+              <MagnifyingGlass color="text.medium" size={14} />
             </InputLeftElement>
             <Input
               placeholder="Search"
@@ -88,14 +89,14 @@ export default function AdminTasksPage() {
               paddingX="12px"
               paddingY="6px"
               border="1px"
-              borderColor="neutral.300"
+              borderColor="background.border"
               borderRadius="8px"
               fontFamily="Nunito"
               fontWeight="400"
               fontSize="12px"
-              color="text.light.primary"
+              color="text.dark"
               _focus={{
-                borderColor: "neutral.300",
+                borderColor: "background.border",
                 boxShadow: "none",
               }}
             />
@@ -105,6 +106,7 @@ export default function AdminTasksPage() {
             label="Add Task"
             action={() => setAddTask(true)}
             is_active={addTask}
+            icon={<Plus />}
           />
         </Flex>
 

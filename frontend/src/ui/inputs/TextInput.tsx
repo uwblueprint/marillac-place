@@ -13,7 +13,7 @@ export default function TextInput({
   return (
     <FormControl width="100%">
       {label && (
-        <Text textStyle="web.s1" color="text.light.secondary" mb="4px">
+        <Text textStyle="s2" mb="4px">
           {label}
         </Text>
       )}
@@ -27,14 +27,14 @@ export default function TextInput({
           paddingX="12px"
           paddingY="6px"
           border="1px"
-          borderColor="neutral.300"
+          borderColor="background.border"
           borderRadius="8px"
           fontFamily="Nunito"
           fontWeight="400"
           fontSize="12px"
-          color="text.light.primary"
+          color="text.dark"
           _focus={{
-            borderColor: "neutral.300",
+            borderColor: "background.border",
             boxShadow: "none",
           }}
         />

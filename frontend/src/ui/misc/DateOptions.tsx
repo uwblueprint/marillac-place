@@ -113,14 +113,14 @@ export default function DateOptions({
   return (
     <>
       {taskType !== TaskType.REQUIRED && showParticipantPreference && (
-        <Flex alignItems="center" gap="5px" pt="3px">
+        <Flex alignItems="center" gap="8px" pt="3px">
+          <Text textStyle="s2" color="text.dark">
+            Participant Preference
+          </Text>
           <Checkbox
             isChecked={participantPreference}
             onChange={(e: any) => setParticipantPreference(e.target.checked)}
           />
-          <Text textStyle="web.b3" color="#000000">
-            Participant Preference?
-          </Text>
         </Flex>
       )}
 
@@ -137,7 +137,7 @@ export default function DateOptions({
             }}
           />
 
-          <Flex gap="5px">
+          <Flex gap="5px" mb="2px">
             {DAYS.map((day: DayOfWeek, index) => (
               <GreenOutlineButton
                 key={index}

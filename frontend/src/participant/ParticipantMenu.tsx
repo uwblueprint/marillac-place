@@ -41,13 +41,13 @@ function ExpandedParticipantMenu({
       alignItems="center"
       justifyContent="center"
       gap="10px"
-      bg="neutral.0"
+      bg="white"
       borderBottom="1px solid"
-      borderColor="neutral.300"
+      borderColor="background.border"
       flexDir="column"
       zIndex={100}
     >
-      <Text textStyle="mobile.h2" color="primary.700">
+      <Text textStyle="s1" color="brand.primaryDark">
         Room {room}
       </Text>
       <Tabs
@@ -64,18 +64,18 @@ function ExpandedParticipantMenu({
               padding="8px 16px"
               borderRadius="8px"
               justifyContent="center"
-              fontWeight={500}
-              fontSize="16px"
+              fontWeight={400}
+              fontSize="14px"
               fontFamily="Nunito"
-              color="#000000"
+              color="text.dark"
               onClick={() => {
                 navigate(page.route);
                 collapseMenu();
               }}
               _selected={{
-                fontWeight: 700,
-                color: "neutral.0",
-                bg: "secondary.700",
+                fontWeight: 650,
+                color: "white",
+                bg: "brand.secondaryDark",
               }}
             >
               {page.label}
@@ -83,13 +83,13 @@ function ExpandedParticipantMenu({
           ))}
         </TabList>
       </Tabs>
-      <Flex w="100%" h="1px" bg="neutral.300" />
+      <Flex w="100%" h="1px" bg="background.border" />
       <Text
-        textStyle="mobile.h2"
-        color="danger.900"
+        textStyle="s1"
+        color="indicate.brightRed"
         cursor="pointer"
         onClick={() => handleSignOut()}
-        mt="10px"
+        mt="8px"
       >
         Sign Out
       </Text>
@@ -102,7 +102,10 @@ type ParticipantMenuProps = {
   balance: number;
 };
 
-export default function ParticipantMenu({ room, balance }: ParticipantMenuProps) {
+export default function ParticipantMenu({
+  room,
+  balance,
+}: ParticipantMenuProps) {
   const pages = [
     { label: "Home", route: ROUTES.PARTICIPANTS_HOME_PAGE },
     { label: "Schedule", route: ROUTES.PARTICIPANTS_SCHEDULE_PAGE },
@@ -119,7 +122,7 @@ export default function ParticipantMenu({ room, balance }: ParticipantMenuProps)
     <Flex
       width="100%"
       height="60px"
-      bg="primary.100"
+      bg="brand.primaryLight"
       alignItems="center"
       justifyContent="center"
       position="absolute"
@@ -128,15 +131,29 @@ export default function ParticipantMenu({ room, balance }: ParticipantMenuProps)
       zIndex={100}
     >
       {!expandMenu && (
-        <Flex onClick={() => setExpandMenu(true)} cursor="pointer" position="absolute" left="20px" top="20px" zIndex={100}>
-          <Menu size={24} />
+        <Flex
+          onClick={() => setExpandMenu(true)}
+          cursor="pointer"
+          position="absolute"
+          left="20px"
+          top="24px"
+          zIndex={100}
+        >
+          <Menu size={18} />
         </Flex>
       )}
 
       {expandMenu && (
         <>
-          <Flex onClick={() => setExpandMenu(false)} cursor="pointer" position="absolute" left="20px" top="20px" zIndex={100}>
-            <Cross size={24} />
+          <Flex
+            onClick={() => setExpandMenu(false)}
+            cursor="pointer"
+            position="absolute"
+            left="21px"
+            top="26px"
+            zIndex={100}
+          >
+            <Cross size={16} />
           </Flex>
           <ExpandedParticipantMenu
             room={room}
@@ -147,11 +164,21 @@ export default function ParticipantMenu({ room, balance }: ParticipantMenuProps)
         </>
       )}
 
-      <Text textStyle="mobile.h1" pt="5px">{pages[currentPageIndex].label}</Text>
+      <Text textStyle="h4" pt="5px">
+        {pages[currentPageIndex].label}
+      </Text>
 
-      <Flex gap="7px" alignItems="center" justifyContent="center" position="absolute" right="20px" top="20px" zIndex={100}>
-        <MarillacCoin size={24} />
-        <Text textStyle="mobile.h2">{balance}</Text>
+      <Flex
+        gap="7px"
+        alignItems="center"
+        justifyContent="center"
+        position="absolute"
+        right="20px"
+        top="22px"
+        zIndex={100}
+      >
+        <MarillacCoin size={18} />
+        <Text textStyle="s1">{balance}</Text>
       </Flex>
     </Flex>
   );

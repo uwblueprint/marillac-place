@@ -67,15 +67,17 @@ export const EditGoal: React.FC<EditGoalProps> = ({
       loading={loading}
     >
       <Flex justify="space-between" alignItems="center">
-        <Text textStyle="mobile.b1">Previous goal:</Text>
+        <Text textStyle="b1">Previous Goal:</Text>
         <Flex align="center" gap={2} justifyContent="space-between">
           <MarillacCoin size={17.5} />
-          <Text textStyle="mobile.b0" mr='1px'>{currentGoal.value}</Text>
+          <Text textStyle="s1" mr="1px">
+            {currentGoal.value}
+          </Text>
         </Flex>
       </Flex>
 
       <Flex justify="space-between" alignItems="center">
-        <Text textStyle="mobile.b1">New goal:</Text>
+        <Text textStyle="b1">New Goal:</Text>
         <Flex align="center" gap={2} justifyContent="space-between" mr="-4px">
           <MarillacCoin size={22} />
           <NumberInput

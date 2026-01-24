@@ -19,7 +19,7 @@ export default function ParticipantsAnnouncementsPage() {
 
   const [filter, setFilter] = useState(0);
   const getFilterVariables = () => {
-    switch(filter){
+    switch (filter) {
       case 0: // ALL
         return { pid: participantId };
       case 1: // UNREAD
@@ -33,33 +33,42 @@ export default function ParticipantsAnnouncementsPage() {
     }
   };
 
-  const { data, loading, error, refetch } = useQuery(GET_RECEIVED_ANNOUNCEMENTS, {
-    variables : getFilterVariables(),
-    skip: !participantId,
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "cache-first",
-    notifyOnNetworkStatusChange: true,
-  });
+  const { data, loading, error, refetch } = useQuery(
+    GET_RECEIVED_ANNOUNCEMENTS,
+    {
+      variables: getFilterVariables(),
+      skip: !participantId,
+      fetchPolicy: "network-only",
+      nextFetchPolicy: "cache-first",
+      notifyOnNetworkStatusChange: true,
+    }
+  );
 
   if (loading) return <LoadingScreen />;
   if (error) return <ErrorScreen message={error.message} />;
 
   if (expandedView && selected) {
     return (
-      <AnnouncementsExpandedView 
-        announcement={selected} 
+      <AnnouncementsExpandedView
+        announcement={selected}
         onBack={() => {
           refetch();
           setExpandedView(false);
           setSelected(null);
         }}
       />
-    )
+    );
   }
 
   return (
     <>
-      <Flex w="100%" alignItems="center" justifyContent="center" gap="8px" mb="8px">
+      <Flex
+        w="100%"
+        alignItems="center"
+        justifyContent="center"
+        gap="8px"
+        mb="8px"
+      >
         <GreenOutlineButton
           label="All"
           action={() => setFilter(0)}
@@ -81,21 +90,23 @@ export default function ParticipantsAnnouncementsPage() {
           is_active={filter === 3}
         />
       </Flex>
-      
-      {data?.getReceivedAnnouncements.map((announcement: ReceivedAnnouncement, index: number) => {
-        return (
-          <Flex
-            key={index}
-            cursor="pointer"
-            onClick={() => {
-              setSelected(announcement);
-              setExpandedView(true);
-            }}
-          >
-            <ParticipantAnnouncementCard announcement={announcement} />
-          </Flex>
-        );
-      })}
+
+      {data?.getReceivedAnnouncements.map(
+        (announcement: ReceivedAnnouncement, index: number) => {
+          return (
+            <Flex
+              key={index}
+              cursor="pointer"
+              onClick={() => {
+                setSelected(announcement);
+                setExpandedView(true);
+              }}
+            >
+              <ParticipantAnnouncementCard announcement={announcement} />
+            </Flex>
+          );
+        }
+      )}
     </>
   );
 }

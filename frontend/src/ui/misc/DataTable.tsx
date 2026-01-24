@@ -35,18 +35,18 @@ const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
   return (
     <TableContainer
       border="1px solid"
-      borderColor="neutral.300"
+      borderColor="background.border"
       borderRadius="8px"
       w="100%"
     >
       <Table>
         <Thead>
-          <Tr backgroundColor="neutral.200" w="100%">
+          <Tr backgroundColor="background.highlight" w="100%">
             {columns.map((col: Column, index: number) => (
               <Th width={col.width} key={index}>
                 <Text
-                  textStyle="web.s1"
-                  color="#000000"
+                  textStyle="s2"
+                  color="text.dark"
                   textTransform="none"
                   textAlign={col.center ? "center" : "left"}
                 >
@@ -58,23 +58,23 @@ const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
         </Thead>
         <Tbody>
           {loading ? (
-            <Tr outline="1px solid" outlineColor="neutral.300">
+            <Tr outline="1px solid" outlineColor="background.border">
               <Td colSpan={6} textAlign="center" paddingY="50px">
-                <Spinner size="md" color="primary.700" />
+                <Spinner size="md" color="brand.primaryDark" />
               </Td>
             </Tr>
           ) : error ? (
-            <Tr outline="1px solid" outlineColor="neutral.300">
+            <Tr outline="1px solid" outlineColor="background.border">
               <Td colSpan={6} paddingY="50px">
                 <Flex flexDir="column" gap="2px">
-                  <Text textStyle="web.b2" color="#E30000" textAlign="center">
-                    ERROR
-                  </Text>
                   <Text
-                    textStyle="web.b2"
-                    color="text.light.secondary"
+                    textStyle="s1"
+                    color="indicate.brightRed"
                     textAlign="center"
                   >
+                    ERROR
+                  </Text>
+                  <Text textStyle="b1" color="text.medium" textAlign="center">
                     {error}
                   </Text>
                 </Flex>
@@ -85,7 +85,7 @@ const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
               <Tr
                 key={index}
                 outline={index % 2 ? "0px solid" : "1px solid"}
-                outlineColor="neutral.300"
+                outlineColor="background.border"
               >
                 {row.map((cell: Row, cellIndex: number) => (
                   <Td key={cellIndex}>
@@ -114,11 +114,7 @@ const DataTable = ({ loading, error, columns, rows }: DataTableProps) => {
                         </Button>
                       </Flex>
                     ) : (
-                      <Text
-                        textStyle="web.b3"
-                        color="text.light.primary"
-                        textAlign="left"
-                      >
+                      <Text textStyle="b2" textAlign="left">
                         {cell.element}
                       </Text>
                     )}

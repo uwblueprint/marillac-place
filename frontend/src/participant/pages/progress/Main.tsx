@@ -6,7 +6,7 @@ import BadgeDisplay from "./components/BadgeDisplay";
 
 export default function ParticipantsProgressPage() {
   return (
-    <Flex direction="column" gap="16px">
+    <Flex direction="column" gap="8px">
       <BucksGoalCard />
       <WeeklyEarningsChart />
       <BadgeDisplay />

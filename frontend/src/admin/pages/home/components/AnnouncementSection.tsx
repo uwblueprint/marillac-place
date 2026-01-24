@@ -16,26 +16,22 @@ const AnnouncementCard: React.FC<{ announcement: Announcement }> = ({
 }) => {
   return (
     <WidgetContainer
-      bg_color="neutral.100"
+      bg_color="background.highlight"
       width="100%"
-      paddingX="20px"
-      paddingY="12px"
+      paddingX="16px"
+      paddingY="10px"
     >
       <Flex flexDir="column" width="100%" gap="5px">
         <Flex width="100%" alignItems="baseline">
-          <Text textStyle="web.b2" fontWeight={600} color="black">
+          <Text textStyle="s1" fontWeight={600} color="text.dark">
             {getRoomString(announcement)}
           </Text>
-          <Text
-            textStyle="web.b3"
-            color="text.light.secondary"
-            marginLeft="10px"
-          >
+          <Text textStyle="b2" color="text.medium" marginLeft="10px">
             posted at {formatDateV2(new Date(announcement.date))}
           </Text>
         </Flex>
         <Flex width="100%">
-          <Text textStyle="web.b2" color="black">
+          <Text textStyle="b2" color="text.dark">
             {announcement.message}
           </Text>
         </Flex>
@@ -74,10 +70,10 @@ const AnnouncementSection = () => {
         paddingBottom="10px"
       >
         <Flex gap="10px" alignItems="baseline">
-          <Text textStyle="web.h3" color="primary.700" pl="5px">
+          <Text textStyle="h3" color="brand.primaryDark" pl="5px">
             Announcements
           </Text>
-          <Text textStyle="web.b3" color="text.light.secondary">
+          <Text textStyle="b2" color="text.light">
             {announcements.length} new post
             {announcements.length === 1 ? "" : "s"} today
           </Text>
@@ -108,7 +104,7 @@ const AnnouncementSection = () => {
             />
           ))
         ) : (
-          <Text textStyle="web.b2" color="text.light.secondary">
+          <Text textStyle="b1" color="text.light">
             No Announcements Yet
           </Text>
         )}

@@ -20,20 +20,20 @@ export default function GreenOutlineButton({
       height="fit-content"
       paddingX="12px"
       paddingY="6px"
-      bg="#FFFFFF"
+      bg="white"
       color="#0C727E"
       _hover={{
-        color: "#FFFFFF",
-        bg: "#0C727E",
+        color: "white",
+        bg: "brand.primaryDark",
       }}
       _active={{
-        color: "#FFFFFF",
-        bg: "#0C727E",
+        color: "white",
+        bg: "brand.primaryDark",
       }}
     >
-      <Flex alignItems="center" gap="5px">
+      <Flex alignItems="center" gap="6px">
         {icon}
-        <Text textStyle="web.s1" color="inherit">
+        <Text textStyle="s2" color="inherit">
           {label}
         </Text>
       </Flex>

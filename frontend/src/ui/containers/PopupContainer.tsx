@@ -56,7 +56,7 @@ export default function PopupContainer({
         gap="8px"
       >
         <Flex justifyContent="space-between" alignItems="baseline">
-          <Text textStyle="web.h3" mb="4px" mr="20px">
+          <Text textStyle="h3" mb="4px" mr="20px">
             {title}
           </Text>
           <Flex gap="5px">
@@ -65,8 +65,8 @@ export default function PopupContainer({
                 label="Edit"
                 action={edit_action}
                 is_active={false}
-                text_color="primary.700"
-                icon={<Marker color="primary.700" />}
+                text_color="brand.primaryDark"
+                icon={<Marker color="brand.primaryDark" />}
               />
             )}
             {delete_action && (
@@ -74,7 +74,7 @@ export default function PopupContainer({
                 label="Delete"
                 action={delete_action}
                 is_active={false}
-                text_color="#E30000"
+                text_color="indicate.brightRed"
                 icon={<Trash />}
               />
             )}
@@ -89,29 +89,26 @@ export default function PopupContainer({
             alignItems="center"
             paddingY="10px"
           >
-            <Spinner size="md" color="primary.700" />
+            <Spinner size="md" color="brand.primaryDark" />
           </Flex>
         ) : system_error ? (
           <Flex flexDir="column" gap="2px" paddingY="10px">
-            <Text textStyle="web.b2" color="#E30000" textAlign="center">
+            <Text textStyle="s1" color="indicate.brightRed" textAlign="center">
               ERROR
             </Text>
-            <Text
-              textStyle="web.b2"
-              color="text.light.secondary"
-              textAlign="center"
-            >
+            <Text textStyle="b1" color="text.medium" textAlign="center">
               Something went wrong.
             </Text>
           </Flex>
         ) : (
-          children
-        )}
-
-        {error_message && (
-          <Text textStyle="web.b2" color="#E30000">
-            {error_message}
-          </Text>
+          <>
+            {children}
+            {error_message && (
+              <Text textStyle="b1" color="indicate.brightRed">
+                {error_message}
+              </Text>
+            )}
+          </>
         )}
 
         <Flex alignItems="center" justifyContent="flex-end" gap="12px" mt="8px">

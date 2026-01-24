@@ -16,7 +16,7 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 import { ADMIN_PARTICIPANTS_PAGE } from "../../../constants/routes";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import { Calendar, List } from "../../../ui/icons/MiscIcons";
-import { Marker } from "../../../ui/icons/ActionIcons";
+import { Marker, Plus } from "../../../ui/icons/ActionIcons";
 import AnyDayTasksTable from "./components/AnyDayTasksTable";
 import DailyTasksTable from "./components/DailyTasksTable";
 import MarillacBalanceModal from "./components/MarillacBalanceModal";
@@ -102,7 +102,7 @@ export default function AdminSchedulePage() {
       {selectedRoom in roomToParticipant ? (
         <>
           <Flex alignItems="center" justifyContent="space-between" w="100%">
-            <Text textStyle="web.h2" color="primary.700" pl="3px">
+            <Text textStyle="h2" color="brand.primaryDark" pl="3px">
               {formatDateV5(weekStart)}
             </Text>
             <GreenOutlineButton
@@ -130,18 +130,18 @@ export default function AdminSchedulePage() {
                 borderRightRadius="0px"
                 border="1px solid"
                 borderColor="#E67D4F"
-                bg="#FFFFFF"
+                bg="white"
                 color="#E67D4F"
                 _hover={{
-                  bg: "#E67D4F",
-                  color: "#FFFFFF",
+                  bg: "brand.secondaryDark",
+                  color: "white",
                 }}
                 _active={{
-                  bg: "#E67D4F",
-                  color: "#FFFFFF",
+                  bg: "brand.secondaryDark",
+                  color: "white",
                 }}
               >
-                <Text textStyle="web.s1" color="inherit">
+                <Text textStyle="s2" color="inherit">
                   List
                 </Text>
               </Button>
@@ -157,18 +157,18 @@ export default function AdminSchedulePage() {
                 borderRightRadius="8px"
                 border="1px solid"
                 borderColor="#E67D4F"
-                bg="#FFFFFF"
-                color="#E67D4F"
+                bg="white"
+                color="brand.secondaryDark"
                 _hover={{
-                  bg: "#E67D4F",
-                  color: "#FFFFFF",
+                  bg: "brand.secondaryDark",
+                  color: "white",
                 }}
                 _active={{
-                  bg: "#E67D4F",
-                  color: "#FFFFFF",
+                  bg: "brand.secondaryDark",
+                  color: "white",
                 }}
               >
-                <Text textStyle="web.s1" color="inherit">
+                <Text textStyle="s2" color="inherit">
                   Calendar
                 </Text>
               </Button>
@@ -177,6 +177,7 @@ export default function AdminSchedulePage() {
               label="Assign Task"
               action={() => setAssignTask(true)}
               is_active={assignTask}
+              icon={<Plus />}
             />
           </Flex>
 
@@ -189,7 +190,7 @@ export default function AdminSchedulePage() {
             />
           ) : (
             <>
-              <Text textStyle="web.h2" color="primary.700" pl="3px">
+              <Text textStyle="h3" color="brand.primaryDark" pl="3px" mt="8px">
                 Daily
               </Text>
               <DailyTasksTable
@@ -198,7 +199,7 @@ export default function AdminSchedulePage() {
                 error={assignedTasksError}
                 loading={assignedTasksLoading}
               />
-              <Text textStyle="web.h2" color="primary.700" pl="3px">
+              <Text textStyle="h3" color="brand.primaryDark" pl="3px">
                 Any Day
               </Text>
               <AnyDayTasksTable
@@ -246,7 +247,7 @@ export default function AdminSchedulePage() {
           direction="column"
           gap={4}
         >
-          <Text textStyle="web.h3" color="text.light.disabled">
+          <Text textStyle="h3" color="text.medium">
             This room is empty
           </Text>
           <OrangeButton

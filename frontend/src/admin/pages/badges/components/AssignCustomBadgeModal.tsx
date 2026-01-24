@@ -10,6 +10,7 @@ import { AdminContext } from "../../../AdminContext";
 import { toTitleCase } from "../../../../helpers/stringUtils";
 import { CustomBadge } from "../../../../types/models";
 import DropdownInput from "../../../../ui/inputs/DropdownInput";
+import useNotification from "../../../../hooks/useNotification";
 
 interface AssignCustomBadgeModalProps {
   onClose: () => void;
@@ -21,7 +22,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
   customBadges,
 }) => {
   const { roomToParticipant } = useContext(AdminContext);
-
+  const { sendNotification } = useNotification();
   const [selectedBadgeId, setSelectedBadgeId] = useState<string>("");
   const [badgeValue, setBadgeValue] = useState<number | null>(null);
   const [selectedParticipants, setSelectedParticipants] = useState<number[]>(
@@ -81,6 +82,7 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
           )
         );
         onClose();
+        sendNotification("Custom badge assigned successfully");
       } catch (err: any) {
         setError(err.message);
       }
@@ -126,11 +128,9 @@ const AssignCustomBadgeModal: React.FC<AssignCustomBadgeModalProps> = ({
         size="small"
       />
 
-      <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
+      <Flex w="100%" h="1px" bg="background.border" mt="6px" />
 
-      <Text textStyle="web.s1" color="text.light.secondary">
-        Choose Room(s)
-      </Text>
+      <Text textStyle="s2">Choose Room(s)</Text>
       <Grid templateColumns="repeat(5, 1fr)" gap="5px">
         {ROOM_NUMBERS.map((num: number) => (
           <GreenOutlineButton

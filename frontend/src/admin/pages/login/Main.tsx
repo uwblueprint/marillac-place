@@ -69,12 +69,12 @@ export default function AdminLoginPage() {
       h="100vh"
       alignItems="center"
       justifyContent="center"
-      bg="neutral.0"
+      bg="white"
     >
       <Flex
         width="700px"
         h="350px"
-        bg="primary.100"
+        bg="brand.primaryLight"
         borderRadius="8px"
         boxShadow="lg"
         flexDir="row"
@@ -94,8 +94,8 @@ export default function AdminLoginPage() {
           paddingY="25px"
         >
           <Flex flexDir="column">
-            <Text textStyle="web.h2">Sign in</Text>
-            <Text textStyle="web.b2">Please enter your login information.</Text>
+            <Text textStyle="h2">Sign In</Text>
+            <Text textStyle="b1">Please enter your login information.</Text>
           </Flex>
 
           <Flex flexDir="column" gap="10px" my="20px">
@@ -117,14 +117,14 @@ export default function AdminLoginPage() {
             />
 
             {error && (
-              <Text textStyle="web.b2" fontWeight="600" color="#E30000">
+              <Text textStyle="b1" fontWeight="600" color="indicate.brightRed">
                 {error}
               </Text>
             )}
           </Flex>
 
           <OrangeButton
-            label="Sign in"
+            label="Sign In"
             action={handleSubmit}
             is_active={false}
           />

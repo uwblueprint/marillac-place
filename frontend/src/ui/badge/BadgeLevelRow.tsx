@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Text, Divider } from "@chakra-ui/react";
 import { Icon } from "../../types/enums";
-import { AchievedBadgeLevel, BadgeLevelProgress, EarnedCustomBadge } from "../../types/models";
+import { AchievedBadgeLevel, BadgeLevelProgress } from "../../types/models";
 import BadgeProgress from "./BadgeProgress";
 import { MarillacCoin } from "../icons/MiscIcons";
 import { toTitleCase } from "../../helpers/stringUtils";
@@ -12,9 +12,15 @@ interface BadgeLevelRowProps {
   achieved?: boolean;
 }
 
-const BadgeLevelRow: React.FC<BadgeLevelRowProps> = ({ badge, index, achieved = false }) => {
+const BadgeLevelRow: React.FC<BadgeLevelRowProps> = ({
+  badge,
+  index,
+  achieved = false,
+}) => {
   const icon = badge.badge_level?.system_badge?.icon ?? Icon.FIVE_STAR;
-  const description = badge.badge_level?.system_badge?.description ?? "Error loading badge description";
+  const description =
+    badge.badge_level?.system_badge?.description ??
+    "Error loading badge description";
   const value = badge.badge_level?.value ?? 0;
 
   function getPercentageComplete(bl: any): number {
@@ -31,26 +37,33 @@ const BadgeLevelRow: React.FC<BadgeLevelRowProps> = ({ badge, index, achieved = 
   return (
     <>
       {index !== 0 && (
-        <Divider orientation="horizontal" color='neutral.300' mt="8px" />
+        <Divider orientation="horizontal" color="background.border" mt="8px" />
       )}
-      <Flex width="100%" alignItems="center" justifyContent="space-between" mt="8px">
+      <Flex
+        width="100%"
+        alignItems="center"
+        justifyContent="space-between"
+        mt="8px"
+      >
         <Flex alignItems="center" gap="12px">
-          <BadgeProgress icon={icon} level={badge.level} percentageComplete={getPercentageComplete(badge)} />
+          <BadgeProgress
+            icon={icon}
+            level={badge.level}
+            percentageComplete={getPercentageComplete(badge)}
+          />
 
           <Flex flexDir="column">
-            <Text textStyle="mobile.b0" color="primary.700">
+            <Text textStyle="s1" color="brand.primaryDark">
               {toTitleCase(badge.level) + " " + badge.name + " Badge"}
             </Text>
-            <Text textStyle="mobile.b2" color="text.light.secondary">
+            <Text textStyle="b2" color="text.medium">
               {description}
             </Text>
           </Flex>
         </Flex>
         {!achieved && (
           <Flex alignItems="center" gap="8px">
-            <Text textStyle="mobile.b1">
-              {value}
-            </Text>
+            <Text textStyle="b1">{value}</Text>
             <MarillacCoin size={16} />
           </Flex>
         )}

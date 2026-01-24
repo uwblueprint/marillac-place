@@ -38,21 +38,26 @@ export default function ErrorScreen({
           ⚠️
         </Box>
 
-        <Text fontSize="14px" color="text.light.secondary" mb={2} fontWeight={500}>
+        <Text fontSize="14px" color="text.medium" mb={2} fontWeight={500}>
           Oops — something went wrong
         </Text>
 
-        <Text fontSize="18px" color="secondary.700" mb={2} fontWeight={700}>
+        <Text
+          fontSize="18px"
+          color="brand.secondaryDark"
+          mb={2}
+          fontWeight={700}
+        >
           {message}
         </Text>
 
-        <Text fontSize="12px" color="text.light.secondary" mb={4}>
+        <Text fontSize="12px" color="text.medium" mb={4}>
           If the problem persists, contact support via our{" "}
           <a
             href="https://marillacplace.ca/contact/"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "#0C727E", textDecoration: "underline" }}
+            style={{ color: "brand.primaryDark", textDecoration: "underline" }}
           >
             contact page
           </a>

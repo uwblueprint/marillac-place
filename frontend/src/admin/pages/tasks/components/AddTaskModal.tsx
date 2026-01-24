@@ -16,6 +16,7 @@ import TextInput from "../../../../ui/inputs/TextInput";
 import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
 import DateOptions from "../../../../ui/misc/DateOptions";
 import { isValidTask } from "../../../../helpers/taskHelpers";
+import useNotification from "../../../../hooks/useNotification";
 
 type AddTaskModalProps = {
   taskType: TaskType;
@@ -45,6 +46,7 @@ export default function AddTaskModal({
   const [error, setError] = useState<string>("");
 
   const [createTask, { loading: createTaskLoading }] = useMutation(CREATE_TASK);
+  const { sendNotification } = useNotification();
   async function handleSubmit() {
     const newTask: any = {
       tid: 0,
@@ -90,6 +92,7 @@ export default function AddTaskModal({
       });
       refetch();
       close();
+      sendNotification("Task created successfully");
     } catch (err: any) {
       setError(err.message);
     }

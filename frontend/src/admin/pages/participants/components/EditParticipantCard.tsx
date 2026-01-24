@@ -10,6 +10,10 @@ import TextInput from "../../../../ui/inputs/TextInput";
 import GreenButton from "../../../../ui/buttons/GreenOutlineButton";
 import { Participant } from "../../../../types/models";
 import FixedInput from "../../../../ui/inputs/FixedInput";
+import PasswordInput from "../../../../ui/inputs/PasswordInput";
+import { Swap } from "../../../../ui/icons/ActionIcons";
+import { ExitDoor } from "../../../../ui/icons/MiscIcons";
+import useNotification from "../../../../hooks/useNotification";
 
 type EditParticipantCardProps = {
   roomNumber: number;
@@ -29,12 +33,16 @@ export default function EditParticipantCard({
   const participant: Participant = participants[roomNumber];
   const id: number = participant.pid;
   const currentArrivalDate = new Date(participant.arrival);
-  const currentDepartureDate = participant.departure ? new Date(participant.departure) : null;
+  const currentDepartureDate = participant.departure
+    ? new Date(participant.departure)
+    : null;
   const currentPassword = participant.password;
 
   const [arrivalDate, setArrivalDate] = useState<Date>(currentArrivalDate);
   const [password, setPassword] = useState<string>(currentPassword);
-  const [departureDate, setDepartureDate] = useState<Date | null>(currentDepartureDate);
+  const [departureDate, setDepartureDate] = useState<Date | null>(
+    currentDepartureDate
+  );
 
   const [swapParticipant, setSwapParticipant] = useState(false);
   const [endStay, setEndStay] = useState(false);
@@ -43,7 +51,7 @@ export default function EditParticipantCard({
   const [selectedSwap, setSelectedSwap] = useState(-1);
 
   const [updateParticipant, { loading }] = useMutation(UPDATE_PARTICIPANT);
-
+  const { sendNotification } = useNotification();
   async function handleSubmit() {
     setError("");
     const today = endOfDay(new Date());
@@ -91,9 +99,7 @@ export default function EditParticipantCard({
           room: swapParticipant ? selectedSwap : undefined,
           arrival: arrivalDate.toISOString(),
           departure:
-            endStay && departureDate
-              ? departureDate.toISOString()
-              : undefined,
+            endStay && departureDate ? departureDate.toISOString() : undefined,
           password,
         },
       });
@@ -110,6 +116,7 @@ export default function EditParticipantCard({
       refetchCurrent();
       refetchPast();
       close();
+      sendNotification("Participant updated successfully");
     } catch (err: any) {
       setError(err.message);
     }
@@ -141,7 +148,7 @@ export default function EditParticipantCard({
         size="large"
       />
 
-      <TextInput
+      <PasswordInput
         label="Password"
         current_value={password}
         update_action={setPassword}
@@ -150,55 +157,61 @@ export default function EditParticipantCard({
 
       <Flex alignItems="center" justifyContent="flex-start" gap="8px" mt="10px">
         <GreenButton
-          label="Swap Participant"
+          label="Swap Rooms"
           action={() => {
-            setEndStay(false);
-            setDepartureDate(null);
+            if (!swapParticipant) {
+              setEndStay(false);
+              setDepartureDate(null);
+            }
             setError("");
-            setSwapParticipant(true);
+            setSwapParticipant(!swapParticipant);
           }}
           is_active={swapParticipant}
+          icon={<Swap color="currentColor" />}
         />
         <Button
           onClick={() => {
-            setSwapParticipant(false);
-            setSelectedSwap(-1);
+            if (!endStay) {
+              setSwapParticipant(false);
+              setSelectedSwap(-1);
+            }
             setError("");
-            setEndStay(true);
+            setEndStay(!endStay);
           }}
           isActive={endStay}
           cursor="pointer"
           borderRadius="8px"
           border="1px"
-          borderColor="#E30000"
+          borderColor="indicate.brightRed"
           width="fit-content"
           height="fit-content"
           paddingX="12px"
           paddingY="6px"
-          bg="#FFFFFF"
-          color="#E30000"
+          bg="white"
+          color="indicate.brightRed"
           _hover={{
-            color: "#FFFFFF",
-            bg: "#E30000",
+            color: "white",
+            bg: "indicate.brightRed",
           }}
           _active={{
-            color: "#FFFFFF",
-            bg: "#E30000",
+            color: "white",
+            bg: "indicate.brightRed",
           }}
         >
-          <Text textStyle="web.s1" color="inherit">
+          <ExitDoor color="currentColor" />
+          <Text textStyle="s2" color="inherit" ml="6px">
             End Stay
           </Text>
         </Button>
       </Flex>
 
       {(endStay || swapParticipant) && (
-        <Flex w="100%" h="1px" bg="neutral.300" mt="8px" />
+        <Flex w="100%" h="1px" bg="background.border" mt="6px" />
       )}
 
       {swapParticipant && (
         <Flex flexDir="column">
-          <Text textStyle="web.s1" color="text.light.secondary" mb="5px">
+          <Text textStyle="s2" mb="5px">
             Available Rooms
           </Text>
           <Flex wrap="wrap" gap="5px" width="400px">
@@ -216,18 +229,18 @@ export default function EditParticipantCard({
 
       {selectedSwap !== -1 &&
         (selectedSwap === roomNumber ? (
-          <Text textStyle="web.b3">
+          <Text textStyle="b2">
             Participant #{participants[roomNumber].pid} is already in Room{" "}
             {roomNumber}.
           </Text>
         ) : (
           <Flex flexDir="column" gap="5px">
-            <Text textStyle="web.b3">
+            <Text textStyle="b2">
               Participant #{participants[roomNumber].pid} will be moved to Room{" "}
               {selectedSwap}.
             </Text>
             {selectedSwap in participants && (
-              <Text textStyle="web.b3">
+              <Text textStyle="b2">
                 Participant #{participants[selectedSwap].pid} will be moved to
                 Room {roomNumber}.
               </Text>

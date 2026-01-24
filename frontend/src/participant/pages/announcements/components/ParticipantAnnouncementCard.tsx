@@ -11,53 +11,62 @@ type ParticipantAnnouncementCardProps = {
   announcement: ReceivedAnnouncement;
 };
 
-export default function ParticipantAnnouncementCard({ announcement }: ParticipantAnnouncementCardProps) {
+export default function ParticipantAnnouncementCard({
+  announcement,
+}: ParticipantAnnouncementCardProps) {
   const details: Announcement | undefined = announcement.announcement;
-  if (!details || (details && (!details.topic || !details.date || !details.message || !details.priority))) {
+  if (
+    !details ||
+    (details &&
+      (!details.topic ||
+        !details.date ||
+        !details.message ||
+        !details.priority))
+  ) {
     return (
       <Flex
         w="100%"
         borderTop="1px solid"
-        borderColor="neutral.300"
+        borderColor="background.border"
         paddingTop="12px"
         paddingLeft="25px"
         flexDir="column"
         position="relative"
       >
-        <Text textStyle="web.b2" color="#E30000" textAlign="center">
+        <Text textStyle="web.b1" color="indicate.brightRed" textAlign="center">
           Unable to load announcement details.
         </Text>
       </Flex>
-    )
+    );
   }
 
   return (
     <Flex
       w="100%"
       borderTop="1px solid"
-      borderColor="neutral.300"
+      borderColor="background.border"
       paddingTop="12px"
       flexDir="column"
     >
       <Flex alignItems="center" justifyContent="space-between">
         <Flex alignItems="baseline" gap="10px">
-          {!announcement.read && <Dot size={12} />}
-          <Text textStyle="mobile.b0">{toTitleCase(details.topic)}</Text>
-          <Text textStyle="mobile.b2" color="text.light.secondary">
+          {!announcement.read && <Dot size={10} />}
+          <Text textStyle="s1">{toTitleCase(details.topic)}</Text>
+          <Text textStyle="b2" color="text.medium">
             {formatDateV3(new Date(details.date))}
           </Text>
         </Flex>
 
         <Flex gap="8px">
-          {(details.priority !== Priority.NORMAL) && (
-            <ExclamationMark size={14} />
+          {details.priority !== Priority.NORMAL && (
+            <ExclamationMark size={12} />
           )}
-          {announcement.pinned && <Pin size={14} color="secondary.700" />}
+          {announcement.pinned && <Pin size={12} color="brand.secondaryDark" />}
         </Flex>
       </Flex>
 
       <Text
-        textStyle="mobile.b1"
+        textStyle="b1"
         marginTop="5px"
         minH="25px"
         maxH="45px"

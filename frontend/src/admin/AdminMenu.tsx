@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabList, Tab, Box, Flex, Text } from "@chakra-ui/react";
 import * as ROUTES from "../constants/routes";
 import PopupContainer from "../ui/containers/PopupContainer";
 import BlackOutlineButton from "../ui/buttons/BlackOutlineButton";
+import { AdminContext } from "./AdminContext";
+import { ADMIN } from "../constants/roles";
 
 type SideBarTabProps = {
   label: string;
@@ -21,12 +23,12 @@ function SideBarTab({ label, handleClick }: SideBarTabProps) {
       fontWeight={500}
       fontSize="16px"
       fontFamily="Nunito"
-      color="#000000"
+      color="text.dark"
       onClick={handleClick}
       _selected={{
         fontWeight: 700,
-        color: "neutral.0",
-        bg: "secondary.700",
+        color: "white",
+        bg: "brand.secondaryDark",
       }}
     >
       {label}
@@ -40,6 +42,7 @@ type SignOutPopUpProps = {
 
 function SignOutPopUp({ cancel }: SignOutPopUpProps) {
   const navigate = useNavigate();
+
   const handleSignOut = () => {
     localStorage.removeItem("token");
     return navigate(ROUTES.ADMIN_LOGIN_PAGE);
@@ -52,7 +55,7 @@ function SignOutPopUp({ cancel }: SignOutPopUpProps) {
       submit_action={handleSignOut}
       cancel_action={cancel}
     >
-      <Text textStyle="web.b2" color="text.light.secondary">
+      <Text textStyle="b1" color="text.grey">
         Are you sure you want to sign out?
       </Text>
     </PopupContainer>
@@ -62,6 +65,7 @@ function SignOutPopUp({ cancel }: SignOutPopUpProps) {
 export default function AdminMenu() {
   const navigate = useNavigate();
   const [signOut, setSignOut] = useState(false);
+  const { role } = useContext(AdminContext);
 
   const pages = [
     { label: "Home", route: ROUTES.ADMIN_HOME_PAGE },
@@ -70,7 +74,10 @@ export default function AdminMenu() {
     { label: "Participants", route: ROUTES.ADMIN_PARTICIPANTS_PAGE },
     { label: "Task Library", route: ROUTES.ADMIN_TASKS_PAGE },
     { label: "Badge Library", route: ROUTES.ADMIN_BADGES_PAGE },
-    { label: "Reports", route: ROUTES.ADMIN_REPORTS_PAGE },
+
+    ...(role === ADMIN
+      ? [{ label: "Reports", route: ROUTES.ADMIN_REPORTS_PAGE }]
+      : []),
   ];
 
   const currentPage = pages.findIndex(
@@ -85,8 +92,8 @@ export default function AdminMenu() {
       top={0}
       left={0}
       borderRight="1px"
-      borderRightColor="neutral.300"
-      bg="neutral.0"
+      borderRightColor="background.border"
+      bg="background.admin"
       padding="25px 20px"
       display="flex"
       flexDirection="column"
@@ -118,7 +125,7 @@ export default function AdminMenu() {
         label="Sign Out"
         action={() => setSignOut(true)}
         is_active={signOut}
-        text_color="danger.900"
+        text_color="indicate.brightRed"
       />
 
       {signOut && <SignOutPopUp cancel={() => setSignOut(false)} />}

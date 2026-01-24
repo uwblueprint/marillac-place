@@ -45,10 +45,10 @@ export default function RoomsOverview() {
         gap="10px"
         paddingBottom="10px"
       >
-        <Text textStyle="web.h3" color="primary.700" pl="5px">
+        <Text textStyle="h3" color="brand.primaryDark" pl="5px">
           Rooms
         </Text>
-        <Text textStyle="web.b3" color="text.light.secondary">
+        <Text textStyle="b2" color="text.light">
           Showing pending tasks for this week
         </Text>
       </Flex>
@@ -68,13 +68,13 @@ export default function RoomsOverview() {
             height="100%"
           >
             <Text
-              textStyle="web.s1"
-              bg="primary.100"
+              textStyle="s2"
+              bg="brand.primaryLight"
               width="100%"
               textAlign="center"
-              padding="8px"
+              padding="6px"
               borderBottom="1px solid"
-              borderColor="neutral.300"
+              borderColor="background.border"
               borderTopRightRadius="8px"
               borderTopLeftRadius="8px"
             >
@@ -82,10 +82,10 @@ export default function RoomsOverview() {
             </Text>
             {room in roomToParticipant ? (
               <>
-                <Text textStyle="web.b3" textAlign="center" mt="10px">
+                <Text textStyle="b2" textAlign="center" mt="10px">
                   ID Number: <b>#{roomToParticipant[room]}</b>
                 </Text>
-                <Text textStyle="web.b3" textAlign="center" mt="5px">
+                <Text textStyle="b2" textAlign="center" mt="6px">
                   {data?.getNumberOfAssignedTasksByRoom[room - 1]} Assigned
                   Tasks
                 </Text>
@@ -104,7 +104,7 @@ export default function RoomsOverview() {
               </>
             ) : (
               <>
-                <Text textStyle="web.b3" textAlign="center" mt="25px">
+                <Text textStyle="b2" textAlign="center" mt="25px">
                   Room Available.
                 </Text>
                 <Flex

@@ -17,7 +17,7 @@ export default function LoadingScreen({
       gap={3}
       role="status"
     >
-      <Spinner size="xl" color="primary.700" thickness="4px" />
+      <Spinner size="xl" color="brand.primaryDark" thickness="4px" />
       <Text fontSize="md" color="gray.600">
         {message}
       </Text>

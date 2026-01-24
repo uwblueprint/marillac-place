@@ -35,7 +35,7 @@ import NotFoundScreen from "./ui/screens/NotFoundScreen";
 import UI from "./ui/UI";
 import colors from "./theme/colors";
 import { Text, textStyles } from "./theme/typography";
-import { Progress } from "./theme/progress";
+import { Progress, Checkbox, Alert } from "./theme/components";
 
 function initApolloClient() {
   const backendUrl =
@@ -80,9 +80,11 @@ const App = (): React.ReactElement => {
   const theme = extendTheme({
     colors,
     textStyles,
-    components: { 
+    components: {
       Text,
       Progress,
+      Checkbox,
+      Alert,
     },
   });
   const apolloClient = initApolloClient();

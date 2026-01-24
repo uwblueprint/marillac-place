@@ -4,7 +4,7 @@ import useChakraColor from "../../hooks/useChakraColor";
 
 export const Comment: React.FC<IconProps> = ({
   size = 14,
-  color = "#626262",
+  color = "text.light",
 }) => {
   const iconColor = useChakraColor(color);
   return (
@@ -41,14 +41,23 @@ export const Pin: React.FC<IconProps> = ({ size = 16, color = "#0C727E" }) => {
   );
 };
 
-export const Pinned: React.FC<IconProps> = ({ size = 16, color = "#E67D4F" }) => {
+export const Pinned: React.FC<IconProps> = ({
+  size = 16,
+  color = "#E67D4F",
+}) => {
   const iconColor = useChakraColor(color);
   return (
-    <svg width={size} height={size} viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path 
-        fillRule="evenodd" 
-        clipRule="evenodd" 
-        d="M7.85714 5.25V1.5H8.57143C8.96429 1.5 9.28572 1.1625 9.28572 0.75C9.28572 0.3375 8.96429 0 8.57143 0H1.42857C1.03571 0 0.714286 0.3375 0.714286 0.75C0.714286 1.1625 1.03571 1.5 1.42857 1.5H2.14286V5.25C2.14286 6.495 1.18571 7.5 0 7.5V9H4.26429V14.25L4.97857 15L5.69286 14.25V9H10V7.5C8.81429 7.5 7.85714 6.495 7.85714 5.25Z" 
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 10 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M7.85714 5.25V1.5H8.57143C8.96429 1.5 9.28572 1.1625 9.28572 0.75C9.28572 0.3375 8.96429 0 8.57143 0H1.42857C1.03571 0 0.714286 0.3375 0.714286 0.75C0.714286 1.1625 1.03571 1.5 1.42857 1.5H2.14286V5.25C2.14286 6.495 1.18571 7.5 0 7.5V9H4.26429V14.25L4.97857 15L5.69286 14.25V9H10V7.5C8.81429 7.5 7.85714 6.495 7.85714 5.25Z"
         fill={iconColor}
       />
     </svg>
@@ -73,20 +82,25 @@ export const Marker: React.FC<IconProps> = ({ size = 16, color = "black" }) => {
   );
 };
 
-export const PlusSign: React.FC<IconProps> = ({
-  size = 14,
-  color = "white",
-}) => {
+export const Plus: React.FC<IconProps> = ({ size = 14, color = "white" }) => {
   const iconColor = useChakraColor(color);
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 14 14"
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill={iconColor} />
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M4 12H20M12 4V20"
+          stroke={iconColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
     </svg>
   );
 };
@@ -143,9 +157,27 @@ export const MagnifyingGlass: React.FC<IconProps> = ({
   );
 };
 
+export const Download: React.FC<IconProps> = ({
+  size = 16,
+  color = "black",
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M18 15V18H6V15H4V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V15H18ZM17 11L15.59 9.59L13 12.17V4H11V12.17L8.41 9.59L7 11L12 16L17 11Z"
+      fill={color}
+    />
+  </svg>
+);
+
 export const Trash: React.FC<IconProps> = ({
   size = 16,
-  color = "#E30000",
+  color = "indicate.brightRed",
 }) => {
   const iconColor = useChakraColor(color);
   return (
@@ -202,34 +234,57 @@ export const Trash: React.FC<IconProps> = ({
   );
 };
 
-export const Menu: React.FC<IconProps> = ({
-  size = 16,
-  color = "black",
-}) => {
+export const Menu: React.FC<IconProps> = ({ size = 16, color = "black" }) => {
   const iconColor = useChakraColor(color);
   return (
-    <svg width={size} height={size} viewBox="0 0 26 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path 
-      d="M0.791677 16.6868C0.566844 16.6868 0.378955 16.6102 0.228011 16.4572C0.0770665 16.3041 0.0010664 16.1157 1.08447e-05 15.8919C-0.00104471 15.6681 0.0749554 15.4803 0.228011 15.3282C0.381066 15.1763 0.568955 15.1008 0.791677 15.1018H24.5417C24.7665 15.1018 24.9544 15.1778 25.1053 15.3298C25.2573 15.4818 25.3333 15.6702 25.3333 15.8951C25.3333 16.1199 25.2573 16.3078 25.1053 16.4587C24.9533 16.6097 24.7655 16.6852 24.5417 16.6852L0.791677 16.6868ZM0.791677 9.13425C0.566844 9.13425 0.378955 9.05825 0.228011 8.90625C0.0770665 8.75425 0.0010664 8.56583 1.08447e-05 8.341C-0.00104471 8.11617 0.0749554 7.92828 0.228011 7.77733C0.381066 7.62639 0.568955 7.55092 0.791677 7.55092H24.5417C24.7665 7.55092 24.9544 7.62692 25.1053 7.77892C25.2563 7.93092 25.3323 8.11933 25.3333 8.34417C25.3344 8.569 25.2584 8.75689 25.1053 8.90783C24.9523 9.05878 24.7644 9.13425 24.5417 9.13425H0.791677ZM0.791677 1.58175C0.566844 1.58175 0.378955 1.50628 0.228011 1.35533C0.0760109 1.20333 1.08447e-05 1.01492 1.08447e-05 0.790083C1.08447e-05 0.56525 0.0760109 0.377361 0.228011 0.226417C0.380011 0.0754724 0.5679 0 0.791677 0H24.5417C24.7665 0 24.9544 0.0760001 25.1053 0.228C25.2563 0.38 25.3323 0.567361 25.3333 0.790083C25.3344 1.01281 25.2584 1.20069 25.1053 1.35375C24.9523 1.50681 24.7644 1.58281 24.5417 1.58175H0.791677Z" 
-      fill={iconColor}
-    />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 26 17"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0.791677 16.6868C0.566844 16.6868 0.378955 16.6102 0.228011 16.4572C0.0770665 16.3041 0.0010664 16.1157 1.08447e-05 15.8919C-0.00104471 15.6681 0.0749554 15.4803 0.228011 15.3282C0.381066 15.1763 0.568955 15.1008 0.791677 15.1018H24.5417C24.7665 15.1018 24.9544 15.1778 25.1053 15.3298C25.2573 15.4818 25.3333 15.6702 25.3333 15.8951C25.3333 16.1199 25.2573 16.3078 25.1053 16.4587C24.9533 16.6097 24.7655 16.6852 24.5417 16.6852L0.791677 16.6868ZM0.791677 9.13425C0.566844 9.13425 0.378955 9.05825 0.228011 8.90625C0.0770665 8.75425 0.0010664 8.56583 1.08447e-05 8.341C-0.00104471 8.11617 0.0749554 7.92828 0.228011 7.77733C0.381066 7.62639 0.568955 7.55092 0.791677 7.55092H24.5417C24.7665 7.55092 24.9544 7.62692 25.1053 7.77892C25.2563 7.93092 25.3323 8.11933 25.3333 8.34417C25.3344 8.569 25.2584 8.75689 25.1053 8.90783C24.9523 9.05878 24.7644 9.13425 24.5417 9.13425H0.791677ZM0.791677 1.58175C0.566844 1.58175 0.378955 1.50628 0.228011 1.35533C0.0760109 1.20333 1.08447e-05 1.01492 1.08447e-05 0.790083C1.08447e-05 0.56525 0.0760109 0.377361 0.228011 0.226417C0.380011 0.0754724 0.5679 0 0.791677 0H24.5417C24.7665 0 24.9544 0.0760001 25.1053 0.228C25.2563 0.38 25.3323 0.567361 25.3333 0.790083C25.3344 1.01281 25.2584 1.20069 25.1053 1.35375C24.9523 1.50681 24.7644 1.58281 24.5417 1.58175H0.791677Z"
+        fill={iconColor}
+      />
     </svg>
   );
 };
 
-export const Cross: React.FC<IconProps> = ({
-  size = 16,
-  color = "black",
-}) => {
+export const Cross: React.FC<IconProps> = ({ size = 16, color = "black" }) => {
   const iconColor = useChakraColor(color);
   return (
-    <svg width={size} height={size} viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path 
-        d="M18.2267 18L1 1M18.2267 1L1 18" 
-        stroke={iconColor} 
-        strokeWidth="2" 
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 20 19"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M18.2267 18L1 1M18.2267 1L1 18"
+        stroke={iconColor}
+        strokeWidth="2"
         strokeLinecap="round"
       />
     </svg>
   );
 };
+
+export const Swap: React.FC<IconProps> = ({ size = 14, color = "#0C727E" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 14 14"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9.33366 6.41667L11.667 4.08333M11.667 4.08333L9.33366 1.75M11.667 4.08333H2.33366M4.66699 7.58333L2.33366 9.91667M2.33366 9.91667L4.66699 12.25M2.33366 9.91667H11.667"
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

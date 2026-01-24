@@ -23,6 +23,7 @@ import {
   isValidTask,
 } from "../../../../helpers/taskHelpers";
 import { toTitleCase } from "../../../../helpers/stringUtils";
+import useNotification from "../../../../hooks/useNotification";
 
 type InitialAssignTaskModalProps = {
   onNext: (task: Task) => void;
@@ -105,7 +106,7 @@ export default function AssignTaskModal({
 }: AssignTaskModalProps) {
   const [initialState, setInitialState] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-
+  const { sendNotification } = useNotification();
   const [taskId, setTaskId] = useState<number | null>(null);
   const [taskName, setTaskName] = useState<string>("");
   const [taskType, setTaskType] = useState<TaskType>(TaskType.OPTIONAL);
@@ -164,6 +165,7 @@ export default function AssignTaskModal({
       await Promise.all(operations);
       refetchAssignedTasks();
       onClose();
+      sendNotification("Task assigned successfully");
     } catch (err: any) {
       setError(err.message);
     }

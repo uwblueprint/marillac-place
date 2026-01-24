@@ -15,14 +15,14 @@ const AdminHomePage = (): React.ReactElement => {
         zIndex="100"
         direction="row"
         justifyContent="space-between"
-        alignItems="center"
+        alignItems="baseline"
         px="20px"
         width="100%"
       >
-        <Text textStyle="web.h2" color="#000000">
+        <Text textStyle="h1" color="text.dark">
           Marillac Place Overview
         </Text>
-        <Text textStyle="web.h3" color="#000000">
+        <Text textStyle="h3" color="text.dark">
           {formatDateV1(new Date())}
         </Text>
       </Flex>

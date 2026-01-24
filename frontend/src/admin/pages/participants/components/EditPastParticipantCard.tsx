@@ -4,6 +4,7 @@ import { UPDATE_PARTICIPANT } from "../../../../gql/participantRequests";
 import ModalContainer from "../../../../ui/containers/PopupContainer";
 import DateInput from "../../../../ui/inputs/DateInput";
 import FixedInput from "../../../../ui/inputs/FixedInput";
+import useNotification from "../../../../hooks/useNotification";
 
 type EditPastParticipantCardProps = {
   id: number;
@@ -23,7 +24,7 @@ export default function EditPastParticipantCard({
   const [arrivalDate, setArrivalDate] = useState<Date>(arrival);
   const [departureDate, setDepartureDate] = useState<Date>(departure);
   const [error, setError] = useState("");
-
+  const { sendNotification } = useNotification();
   const [updateParticipant, { loading }] = useMutation(UPDATE_PARTICIPANT);
 
   async function handleSubmit() {
@@ -54,6 +55,7 @@ export default function EditPastParticipantCard({
           });
           refetch();
           close();
+          sendNotification("Past participant updated successfully");
         } catch (err: any) {
           setError(err.message);
         }

@@ -1,6 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CreateCustomBadgeModal from "./components/CreateCustomBadgeModal";
 import CustomBadgeTable from "./components/CustomBadgeTable";
 import SystemBadgeTable from "./components/SystemBadgeTable";
@@ -9,9 +9,13 @@ import { GET_SYSTEM_BADGES } from "../../../gql/systemBadgeRequests";
 import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
+import { Plus } from "../../../ui/icons/ActionIcons";
+import { AdminContext } from "../../AdminContext";
+import { ADMIN } from "../../../constants/roles";
 
-// TODO: Relief staff cannot change the badges
 export default function AdminBadgesPage() {
+  const { role } = useContext(AdminContext);
+
   const [create, setCreate] = useState(false);
   const [assign, setAssign] = useState(false);
 
@@ -37,11 +41,11 @@ export default function AdminBadgesPage() {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Flex alignItems="center" gap="15px" pl="5px">
-          <Text textStyle="web.h2" color="primary.700">
+        <Flex alignItems="baseline" gap="15px" pl="5px">
+          <Text textStyle="h2" color="brand.primaryDark">
             System Badges
           </Text>
-          <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
+          <Text textStyle="b2" color="text.light">
             System badges will be granted to participants automatically.
           </Text>
         </Flex>
@@ -59,26 +63,29 @@ export default function AdminBadgesPage() {
         justifyContent="space-between"
         mt="10px"
       >
-        <Flex alignItems="center" gap="15px">
-          <Text textStyle="web.h2" color="primary.700" pl="5px">
+        <Flex alignItems="baseline" gap="15px">
+          <Text textStyle="h2" color="brand.primaryDark" pl="5px">
             Custom Badges
           </Text>
-          <Text textStyle="web.b3" color="text.light.secondary" marginTop="7px">
+          <Text textStyle="b2" color="text.light">
             You can create new and reward participants custom badges.
           </Text>
         </Flex>
-        <Flex alignItems="center" gap="15px">
-          <GreenOutlineButton
-            label="Assign Custom Badge"
-            action={() => setAssign(true)}
-            is_active={assign}
-          />
-          <OrangeButton
-            label="Create Badge"
-            action={() => setCreate(true)}
-            is_active={create}
-          />
-        </Flex>
+        {role === ADMIN && (
+          <Flex alignItems="center" gap="15px">
+            <GreenOutlineButton
+              label="Assign Custom Badge"
+              action={() => setAssign(true)}
+              is_active={assign}
+            />
+            <OrangeButton
+              label="Create Badge"
+              action={() => setCreate(true)}
+              is_active={create}
+              icon={<Plus />}
+            />
+          </Flex>
+        )}
       </Flex>
       <CustomBadgeTable
         loading={customBadgesLoading}

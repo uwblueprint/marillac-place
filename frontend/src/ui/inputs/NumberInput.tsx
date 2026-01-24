@@ -14,7 +14,7 @@ export default function NumberInput({
   return (
     <FormControl>
       {label && (
-        <Text textStyle="web.s1" color="text.light.secondary" mb="4px">
+        <Text textStyle="s2" mb="4px">
           {label}
         </Text>
       )}
@@ -36,7 +36,7 @@ export default function NumberInput({
         fontFamily="Nunito"
         fontWeight="400"
         fontSize="12px"
-        color="#000000"
+        color="text.dark"
         _focus={{
           borderColor: "#C5C8D8",
           boxShadow: "none",

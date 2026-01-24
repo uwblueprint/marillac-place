@@ -37,7 +37,7 @@ function CustomHeader({ date }: CustomHeaderProps) {
       flexDirection="column"
       justifyContent="center"
     >
-      <Text textStyle="web.b2" mb={1} letterSpacing="0.3px">
+      <Text textStyle="b1" mb={1} letterSpacing="0.3px">
         {dayAbbr}
       </Text>
       <Box
@@ -47,13 +47,13 @@ function CustomHeader({ date }: CustomHeaderProps) {
         w="27px"
         h="27px"
         borderRadius="full"
-        bg={isToday ? "secondary.700" : "transparent"}
+        bg={isToday ? "brand.secondaryDark" : "transparent"}
         cursor="default"
         margin="0"
         padding="0"
       >
         <Text
-          textStyle="web.b1"
+          textStyle="b1"
           textAlign="center"
           color={isToday ? "white" : "black"}
         >
@@ -82,11 +82,11 @@ function AssignedTaskEvent({
       direction="column"
       gap="2px"
     >
-      <Text textStyle="web.s1" color="inherit">
+      <Text textStyle="s2" color="inherit">
         {assignedTask.name}
       </Text>
       {displayDate && (
-        <Text fontSize="10px" color="inherit">
+        <Text fontSize="10px" fontWeight="400" color="inherit">
           {`${formatDateV2(new Date(assignedTask.start_date))} - ${formatDateV2(
             new Date(assignedTask.end_date)
           )}`}

@@ -6,6 +6,7 @@ import PopupContainer from "../../../../ui/containers/PopupContainer";
 import TextInput from "../../../../ui/inputs/TextInput";
 import { Icon } from "../../../../types/enums";
 import { ICON_MAP } from "../../../../constants/icons";
+import useNotification from "../../../../hooks/useNotification";
 
 interface CreateCustomBadgeModalProps {
   onClose: () => void;
@@ -20,7 +21,7 @@ const CreateCustomBadgeModal = ({
   const [criteria, setCriteria] = useState("");
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [error, setError] = useState("");
-
+  const { sendNotification } = useNotification();
   const availableIcons = [
     Icon.PLANT,
     Icon.GROUP,
@@ -48,6 +49,7 @@ const CreateCustomBadgeModal = ({
         });
         onClose();
         await refetch();
+        sendNotification("Custom badge created successfully");
       } catch (err: any) {
         setError(err.message);
       }
@@ -79,7 +81,7 @@ const CreateCustomBadgeModal = ({
         size="large"
       />
 
-      <Text textStyle="web.s1" color="text.light.secondary">
+      <Text textStyle="s2" color="text.dark">
         Choose Badge Icon
       </Text>
       <Grid templateColumns="repeat(6, 1fr)" gap={3}>
@@ -95,14 +97,19 @@ const CreateCustomBadgeModal = ({
               py="12px"
               px="8px"
               border="1px solid"
-              borderColor={isSelected ? "primary.700" : "neutral.300"}
+              borderColor={
+                isSelected ? "brand.primaryDark" : "background.border"
+              }
               borderRadius="8px"
               cursor="pointer"
               onClick={() => setSelectedIcon(icon)}
+              _hover={{
+                bg: "background.highlight",
+              }}
             >
               <IconComponent
                 size={24}
-                color={isSelected ? "primary.700" : "text.light.secondary"}
+                color={isSelected ? "brand.primaryDark" : "text.medium"}
               />
             </Flex>
           );

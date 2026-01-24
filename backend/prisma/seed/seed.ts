@@ -1,5 +1,5 @@
 import { createSeedClient } from "@snaplet/seed";
-import { Priority, TaskType } from "@prisma/client";
+import { TaskType } from "@prisma/client";
 import { badgeLevels, systemBadges, tasks } from "./initialData";
 import db from "../index";
 import * as random from "./random";

@@ -10,36 +10,47 @@ import { HAS_COMPLETED_ALL_REQUIRED_TASKS } from "../../../../gql/assignedTaskRe
 
 type TasksCompletedWidgetProps = {
   pid: number;
-}
+};
 
-export default function TasksCompletedWidget({ pid }: TasksCompletedWidgetProps) {
+export default function TasksCompletedWidget({
+  pid,
+}: TasksCompletedWidgetProps) {
   const navigate = useNavigate();
-  const { data: completedAllTasksData, loading: completedAllTasksLoading, error: completedAllTasksError} = useQuery(HAS_COMPLETED_ALL_REQUIRED_TASKS, {
+  const {
+    data: completedAllTasksData,
+    loading: completedAllTasksLoading,
+    error: completedAllTasksError,
+  } = useQuery(HAS_COMPLETED_ALL_REQUIRED_TASKS, {
     variables: { pid },
   });
-  const hasCompletedAllTasks = completedAllTasksData?.hasCompletedAllRequiredTasks || false;
-  if (hasCompletedAllTasks) return null;
+  const hasCompletedAllTasks =
+    completedAllTasksData?.hasCompletedAllRequiredTasks || false;
+  if (!hasCompletedAllTasks) return null;
 
   return (
-    <WidgetContainer 
-      width="100%" 
-      height="fit-content" 
-      paddingX="18px" 
-      paddingY="14px"
+    <WidgetContainer
+      width="100%"
+      height="fit-content"
+      paddingX="16px"
       loading={completedAllTasksLoading}
       error={completedAllTasksError?.message}
     >
-      <Flex w="100%" justifyContent="space-between" alignItems="center" mb="8px">
-        <Text textStyle="mobile.b0">Mandatory Tasks Completed!</Text>
+      <Flex
+        w="100%"
+        justifyContent="space-between"
+        alignItems="center"
+        mb="8px"
+      >
+        <Text textStyle="s1">Mandatory Tasks Completed!</Text>
         <UnderlineButton
           label="Tasks"
           action={() => navigate(PARTICIPANTS_SCHEDULE_PAGE)}
         />
       </Flex>
 
-      <Flex w="100%" alignItems="center" gap="16px">
-        <Trophy size={28} />
-        <Text textStyle="mobile.b1" flex="1">
+      <Flex w="100%" alignItems="center" gap="12px">
+        <Trophy size={24} />
+        <Text textStyle="b1" flex="1">
           You&apos;ve completed all your mandatory tasks for the week.
         </Text>
       </Flex>

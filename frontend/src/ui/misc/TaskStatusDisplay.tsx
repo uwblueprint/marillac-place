@@ -11,26 +11,26 @@ type TaskStatusDisplayProps = {
 const TaskStatusConfig = {
   [TaskStatus.ASSIGNED]: {
     icon: Assigned,
-    bgColor: "#C5DCF8",
-    textColor: "#255B9A",
+    bgColor: "schedule.assignedLight",
+    textColor: "schedule.assignedDark",
     text: "Assigned",
   },
   [TaskStatus.COMPLETE]: {
     icon: Complete,
-    bgColor: "#CDEECE",
-    textColor: "#0D8312",
+    bgColor: "schedule.completeLight",
+    textColor: "schedule.completeDark",
     text: "Complete",
   },
   [TaskStatus.EXCUSED]: {
     icon: Excused,
-    bgColor: "#FFE5B2",
-    textColor: "#B07D18",
+    bgColor: "schedule.excusedLight",
+    textColor: "schedule.excusedDark",
     text: "Excused",
   },
   [TaskStatus.INCOMPLETE]: {
     icon: Incomplete,
-    bgColor: "#F8D7DB",
-    textColor: "#B21D2F",
+    bgColor: "schedule.incompleteLight",
+    textColor: "schedule.incompleteDark",
     text: "Incomplete",
   },
 };
@@ -48,11 +48,11 @@ export default function TaskStatusDisplay({
       color={TaskStatusConfig[status].textColor}
       borderRadius="lg"
       width={size}
-      height="35px"
-      gap="1px"
+      height="32px"
+      gap="4px"
     >
       <Icon size={20} />
-      <Text textStyle="web.s1" color={TaskStatusConfig[status].textColor}>
+      <Text textStyle="s2" color={TaskStatusConfig[status].textColor}>
         {TaskStatusConfig[status].text}
       </Text>
     </Flex>

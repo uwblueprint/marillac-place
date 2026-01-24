@@ -20,6 +20,7 @@ import {
   Incomplete,
 } from "../../../../ui/icons/StatusIcons";
 import EditAssignedTaskModal from "./EditAssignedTaskModal";
+import useNotification from "../../../../hooks/useNotification";
 
 interface TaskDetailsModalProps {
   task: AssignedTask;
@@ -35,7 +36,7 @@ export default function TaskDetailsModal({
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>(task.status);
   const [editDetails, setEditDetails] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
+  const { sendNotification } = useNotification();
   const [deleteAssignedTask, { loading: deleteAssignedTaskLoading }] =
     useMutation(DELETE_ASSIGNED_TASK);
   const handleDelete = async () => {
@@ -47,6 +48,7 @@ export default function TaskDetailsModal({
       });
       refetch();
       onClose();
+      sendNotification("Assigned task deleted successfully");
     } catch (err: any) {
       setError(err.message);
     }
@@ -74,6 +76,7 @@ export default function TaskDetailsModal({
       });
       refetch();
       onClose();
+      sendNotification("Task status updated successfully");
     } catch (err: any) {
       setError(err.message);
     }
@@ -124,8 +127,8 @@ export default function TaskDetailsModal({
         orientation="horizontal"
       />
       <Flex flexDir="column">
-      <Flex width="350px" h="0px" />
-        <Text textStyle="web.s1" color="text.light.secondary" mb="5px">
+        <Flex width="350px" h="0px" />
+        <Text textStyle="s2" mb="5px">
           Status
         </Text>
         <Flex gap="5px">

@@ -10,6 +10,7 @@ import TextAreaInput from "../../../../ui/inputs/TextAreaInput";
 import { AdminContext } from "../../../AdminContext";
 import { Priority } from "../../../../types/enums";
 import TextInput from "../../../../ui/inputs/TextInput";
+import useNotification from "../../../../hooks/useNotification";
 
 const CreateAnnouncementModal = ({
   onClose,
@@ -24,12 +25,19 @@ const CreateAnnouncementModal = ({
   const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  const { sendNotification } = useNotification();
+
   const [createAnnouncement, { loading: createAnnouncementLoading }] =
     useMutation(CREATE_ANNOUNCEMENT);
   const { roomToParticipant } = useContext(AdminContext);
 
   const handleSend = async () => {
-    if (selectedRooms.length === 0 || priority === null || message === "" || topic === "") {
+    if (
+      selectedRooms.length === 0 ||
+      priority === null ||
+      message === "" ||
+      topic === ""
+    ) {
       setError("Missing fields.");
       return;
     }
@@ -59,6 +67,7 @@ const CreateAnnouncementModal = ({
       });
 
       refetch();
+      sendNotification("Announcement created successfully");
       onClose();
     } catch (err: any) {
       setError("Unable to create announcement");
@@ -93,7 +102,7 @@ const CreateAnnouncementModal = ({
       error_message={error}
     >
       <Flex gap="5px" wrap="wrap" alignItems="center" maxWidth="400px">
-        <Text textStyle="web.s1" color="text.light.secondary" mr="5px">
+        <Text textStyle="s1" color="text.medium" mr="5px">
           Send To:
         </Text>
         {[[0], ...ROOM_NUMBERS].flat().map((room: number) => {

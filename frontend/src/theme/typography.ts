@@ -1,102 +1,53 @@
-// TODO (calista):
-// Go over Figma design update & categorize text styles
-// standardize text style for error messages
-
 import { defineStyleConfig } from "@chakra-ui/react";
+
+/**
+ * Typography Structure
+ *
+ * - h: heading
+ * - s: subtitle
+ * - b: body
+ */
 
 export const Text = defineStyleConfig({
   baseStyle: {
     fontFamily: "Nunito",
-    color: "#000000",
+    color: "text.dark",
     margin: 0,
     padding: 0,
   },
 });
 
 export const textStyles = {
-  web: {
-    h1: {
-      fontWeight: "700",
-      fontSize: "32px",
-    },
-    h2: {
-      fontWeight: "700",
-      fontSize: "24px",
-    },
-    h3: {
-      fontWeight: "700",
-      fontSize: "20px",
-    },
-    s1: {
-      fontWeight: "700",
-      fontSize: "12px",
-    },
-    b1: {
-      fontWeight: "400",
-      fontSize: "16px",
-    },
-    b2: {
-      fontWeight: "400",
-      fontSize: "14px",
-    },
-    b3: {
-      fontWeight: "400",
-      fontSize: "12px",
-    },
-    c1: {
-      color: "#808080",
-      fontWeight: "400",
-      fontSize: "14px",
-    },
-    label: {
-      fontWeight: "500",
-      fontSize: "16px",
-      textTransform: "uppercase",
-    },
+  h1: {
+    fontWeight: "700",
+    fontSize: "26px",
   },
-  mobile: {
-    h1: {
-      fontWeight: "700",
-      fontSize: "20px",
-    },
-    h2: {
-      fontWeight: "700",
-      fontSize: "16px",
-    },
-    h3: {
-      fontWeight: "400",
-      fontSize: "16px",
-    },
-    s1: {
-      color: "#808080",
-      fontWeight: "600",
-      fontSize: "12px",
-    },
-    b0: {
-      fontWeight: "700",
-      fontSize: "14px",
-    },
-    b1: {
-      fontWeight: "400",
-      fontSize: "14px",
-    },
-    b2: {
-      fontWeight: "400",
-      fontSize: "12px",
-    },
-    b3: {
-      fontWeight: "400",
-      fontSize: "10px",
-    },
-    c1: {
-      color: "#808080",
-      fontWeight: "400",
-      fontSize: "12px",
-    },
-    label: {
-      fontWeight: "500",
-      fontSize: "14px",
-      textTransform: "uppercase",
-    },
+  h2: {
+    fontWeight: "700",
+    fontSize: "24px",
+  },
+  h3: {
+    fontWeight: "700",
+    fontSize: "20px",
+  },
+  h4: {
+    fontWeight: "700",
+    fontSize: "16px",
+  },
+  s1: {
+    fontWeight: "650",
+    fontSize: "14px",
+  },
+  s2: {
+    fontWeight: "650",
+    fontSize: "12px",
+  },
+  b1: {
+    fontWeight: "400",
+    fontSize: "14px",
+  },
+  b2: {
+    fontWeight: "400",
+    fontSize: "12px",
   },
 };
