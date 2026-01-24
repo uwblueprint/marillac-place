@@ -5,6 +5,7 @@ import ModalContainer from "../../../../ui/containers/PopupContainer";
 import NumberInput from "../../../../ui/inputs/NumberInput";
 import TextInput from "../../../../ui/inputs/TextInput";
 import DateInput from "../../../../ui/inputs/DateInput";
+import PasswordInput from "../../../../ui/inputs/PasswordInput";
 
 type AddParticipantCardProps = {
   roomNumber: number;
@@ -77,7 +78,7 @@ const AddParticipantCard = ({
         update_action={(value: Date) => setArrivalDate(value)}
         size="large"
       />
-      <TextInput
+      <PasswordInput
         label="Password"
         current_value={password}
         update_action={(value: any) => setPassword(value)}

@@ -10,6 +10,9 @@ import TextInput from "../../../../ui/inputs/TextInput";
 import GreenButton from "../../../../ui/buttons/GreenOutlineButton";
 import { Participant } from "../../../../types/models";
 import FixedInput from "../../../../ui/inputs/FixedInput";
+import PasswordInput from "../../../../ui/inputs/PasswordInput";
+import { Swap } from "../../../../ui/icons/ActionIcons";
+import { ExitDoor } from "../../../../ui/icons/MiscIcons";
 
 type EditParticipantCardProps = {
   roomNumber: number;
@@ -141,7 +144,7 @@ export default function EditParticipantCard({
         size="large"
       />
 
-      <TextInput
+      <PasswordInput
         label="Password"
         current_value={password}
         update_action={setPassword}
@@ -160,6 +163,7 @@ export default function EditParticipantCard({
             setSwapParticipant(!swapParticipant);
           }}
           is_active={swapParticipant}
+          icon={<Swap color="currentColor" />}
         />
         <Button
           onClick={() => {
@@ -190,7 +194,8 @@ export default function EditParticipantCard({
             bg: "indicate.brightRed",
           }}
         >
-          <Text textStyle="s2" color="inherit">
+          <ExitDoor color="currentColor" />
+          <Text textStyle="s2" color="inherit" ml="6px">
             End Stay
           </Text>
         </Button>

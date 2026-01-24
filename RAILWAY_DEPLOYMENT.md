@@ -150,5 +150,3 @@ Railway respects the ENTRYPOINT, so both environments run `prismaInitAndRun` on 
    ```
 4. **Monitor Railway logs** on deployment to verify seeding behavior
 5. **Keep system badges in sync** between `prodData.ts` and production database
-
-TODO: Review & update doc

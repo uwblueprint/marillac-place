@@ -14,7 +14,7 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 import { TaskType } from "../../../types/enums";
 import { Task } from "../../../types/models";
 import { toTitleCase } from "../../../helpers/stringUtils";
-import { MagnifyingGlass } from "../../../ui/icons/ActionIcons";
+import { MagnifyingGlass, Plus } from "../../../ui/icons/ActionIcons";
 import AddTaskModal from "./components/AddTaskModal";
 
 export default function AdminTasksPage() {
@@ -104,6 +104,7 @@ export default function AdminTasksPage() {
             label="Add Task"
             action={() => setAddTask(true)}
             is_active={addTask}
+            icon={<Plus />}
           />
         </Flex>
 

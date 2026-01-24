@@ -7,6 +7,7 @@ import { GET_REPORT_RECIPIENTS } from "../../../gql/reportRecipientRequests";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
+import { Plus } from "../../../ui/icons/ActionIcons";
 
 type Report = {
   email: string;
@@ -49,6 +50,7 @@ export default function AdminReportsPage() {
             label="Add Email"
             action={() => setAddEmail(true)}
             is_active={addEmail}
+            icon={<Plus />}
           />
         </Flex>
       </Flex>

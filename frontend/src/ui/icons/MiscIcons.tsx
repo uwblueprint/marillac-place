@@ -217,7 +217,9 @@ export const Trophy: React.FC<IconProps> = ({ size = 16 }) => (
 export const ExitDoor: React.FC<IconProps> = ({
   size = 16,
   color = "indicate.brightRed",
-}) => (
+}) => {
+  const iconColor = useChakraColor(color);
+  return (
   <svg
     width={size}
     height={size}
@@ -227,13 +229,14 @@ export const ExitDoor: React.FC<IconProps> = ({
   >
     <path 
       d="M8.66634 2.66647H10.6663C11.02 2.66647 11.3591 2.80695 11.6091 3.057C11.8592 3.30705 11.9997 3.64618 11.9997 3.99981V13.3331M1.33301 13.3331H3.33301M3.33301 13.3331L7.83834 14.4591C7.9366 14.4836 8.03914 14.4854 8.1382 14.4644C8.23725 14.4434 8.33021 14.4 8.41002 14.3377C8.48983 14.2754 8.55439 14.1957 8.5988 14.1047C8.64322 14.0137 8.66631 13.9137 8.66634 13.8125V3.04114C8.66621 2.83859 8.61993 2.63807 8.53103 2.45608C8.44212 2.27409 8.31292 2.11475 8.15323 1.99015C7.99355 1.86555 7.80757 1.77897 7.60943 1.73698C7.41128 1.69498 7.20617 1.69869 7.00967 1.74781L4.34301 2.41447C4.05456 2.48657 3.79848 2.65302 3.61548 2.88736C3.43248 3.1217 3.33305 3.41048 3.33301 3.70781V13.3331ZM8.66634 13.3331H14.6663M6.66634 7.99981V8.00647" 
-      stroke={color} 
+      stroke={iconColor} 
       strokeLinecap="round" 
       strokeLinejoin="round" 
       strokeWidth="1.5"
     />
   </svg>
-);
+  );
+};
 
 export const Triangle: React.FC<IconProps> = ({ size = 12 }) => (
   <svg width={size} height={size} viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">

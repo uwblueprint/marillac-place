@@ -73,20 +73,22 @@ export const Marker: React.FC<IconProps> = ({ size = 16, color = "black" }) => {
   );
 };
 
-export const PlusSign: React.FC<IconProps> = ({
+export const Plus: React.FC<IconProps> = ({
   size = 14,
   color = "white",
 }) => {
   const iconColor = useChakraColor(color);
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 14 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill={iconColor} />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_iconCarrier"> 
+        <path 
+          d="M4 12H20M12 4V20" 
+          stroke={iconColor} 
+          strokeWidth="2" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+        /> 
+      </g>
     </svg>
   );
 };

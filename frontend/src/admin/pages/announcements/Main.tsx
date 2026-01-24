@@ -12,6 +12,7 @@ import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import UnderlineButton from "../../../ui/buttons/UnderlineButton";
 import { getRoomString } from "../../../helpers/stringUtils";
 import { formatDateV3 } from "../../../helpers/formatDateTime";
+import { Plus } from "../../../ui/icons/ActionIcons";
 
 export default function AdminAnnouncementsPage() {
   const [create, setCreate] = useState(false);
@@ -91,6 +92,7 @@ export default function AdminAnnouncementsPage() {
         </Flex>
 
         <OrangeButton
+          icon={<Plus />}
           label="Create Announcement"
           action={() => setCreate(true)}
           is_active={create}

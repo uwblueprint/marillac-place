@@ -16,7 +16,7 @@ import OrangeButton from "../../../ui/buttons/OrangeButton";
 import { ADMIN_PARTICIPANTS_PAGE } from "../../../constants/routes";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import { Calendar, List } from "../../../ui/icons/MiscIcons";
-import { Marker } from "../../../ui/icons/ActionIcons";
+import { Marker, Plus } from "../../../ui/icons/ActionIcons";
 import AnyDayTasksTable from "./components/AnyDayTasksTable";
 import DailyTasksTable from "./components/DailyTasksTable";
 import MarillacBalanceModal from "./components/MarillacBalanceModal";
@@ -177,6 +177,7 @@ export default function AdminSchedulePage() {
               label="Assign Task"
               action={() => setAssignTask(true)}
               is_active={assignTask}
+              icon={<Plus />}
             />
           </Flex>
 

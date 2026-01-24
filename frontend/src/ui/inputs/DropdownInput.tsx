@@ -1,5 +1,3 @@
-// TODO: Refactor the dropdown to match the Figma design
-
 import React from "react";
 import { FormControl, Text, Select } from "@chakra-ui/react";
 import { InputProps } from "../../types/component";

@@ -30,7 +30,7 @@ export default function OrangeButton({
         bg: "#D9764A",
       }}
     >
-      <Flex alignItems="center" gap="5px">
+      <Flex alignItems="center" gap="6px">
         {icon}
         <Text textStyle="s2" color="white">
           {label}

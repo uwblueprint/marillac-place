@@ -31,7 +31,7 @@ export default function GreenOutlineButton({
         bg: "brand.primaryDark",
       }}
     >
-      <Flex alignItems="center" gap="5px">
+      <Flex alignItems="center" gap="6px">
         {icon}
         <Text textStyle="s2" color="inherit">
           {label}

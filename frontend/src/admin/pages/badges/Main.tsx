@@ -9,6 +9,7 @@ import { GET_SYSTEM_BADGES } from "../../../gql/systemBadgeRequests";
 import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
+import { Plus } from "../../../ui/icons/ActionIcons";
 
 // TODO: Relief staff cannot change the badges
 export default function AdminBadgesPage() {
@@ -77,6 +78,7 @@ export default function AdminBadgesPage() {
             label="Create Badge"
             action={() => setCreate(true)}
             is_active={create}
+            icon={<Plus />}
           />
         </Flex>
       </Flex>

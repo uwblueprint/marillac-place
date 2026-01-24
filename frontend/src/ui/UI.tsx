@@ -5,7 +5,7 @@ import BlackOutlineButton from "./buttons/BlackOutlineButton";
 import OrangeButton from "./buttons/OrangeButton";
 import GreenOutlineButton from "./buttons/GreenOutlineButton";
 import UnderlineButton from "./buttons/UnderlineButton";
-import { Comment, Marker, PlusSign, Download, Trash } from "./icons/ActionIcons";
+import { Comment, Marker, Plus, Download, Trash } from "./icons/ActionIcons";
 import WidgetContainer from "./containers/WidgetContainer";
 import PopupContainer from "./containers/PopupContainer";
 import {
@@ -433,7 +433,7 @@ export default function UI() {
       >
         <Comment />
         <Marker />
-        <PlusSign />
+        <Plus />
         <Download />
         <Trash />
         <Baby />
