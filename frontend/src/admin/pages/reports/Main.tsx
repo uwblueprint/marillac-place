@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import ReportsTable from "./components/ReportsTable";
@@ -8,6 +8,8 @@ import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import ErrorScreen from "../../../ui/screens/ErrorScreen";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
 import { Plus } from "../../../ui/icons/ActionIcons";
+import { AdminContext } from "../../AdminContext";
+import { ADMIN } from "../../../constants/roles";
 
 type Report = {
   email: string;
@@ -15,8 +17,8 @@ type Report = {
   monthly: boolean;
 };
 
-// TODO: Relief staff cannot access this page
 export default function AdminReportsPage() {
+  const { role } = useContext(AdminContext);
   const { loading, error, data, refetch } = useQuery(GET_REPORT_RECIPIENTS);
   const reports: Report[] = data?.getReportRecipients || [];
 
@@ -24,7 +26,8 @@ export default function AdminReportsPage() {
 
   if (loading) return <LoadingScreen />;
   if (error) return <ErrorScreen message={error.message} />;
-
+  if (role !== ADMIN) return <ErrorScreen message="You are not authorized to access this page" />;
+  
   return (
     <Flex width="100%" height="fit-content" flexDir="column" gap="15px">
       <Flex

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_SYSTEM_BADGE } from "../../../../gql/systemBadgeRequests";
 import EditSystemBadgeModal from "./EditSystemBadgeModal";
@@ -8,6 +8,8 @@ import { ICON_MAP } from "../../../../constants/icons";
 import { Marker } from "../../../../ui/icons/ActionIcons";
 import { LEVEL_ABBREVIATION, LEVEL_ORDER } from "../../../../constants/levels";
 import ToggleButton from "../../../../ui/buttons/ToggleButton";
+import { AdminContext } from "../../../AdminContext";
+import { ADMIN } from "../../../../constants/roles";
 
 type SystemBadgeTableProps = {
   loading: boolean;
@@ -22,6 +24,8 @@ const SystemBadgeTable = ({
   badges,
   refetch,
 }: SystemBadgeTableProps) => {
+  const { role } = useContext(AdminContext);
+
   const [edit, setEdit] = useState(false);
   const [selected, setSelected] = useState<SystemBadge | null>(null);
   const [updateError, setUpdateError] = useState<string>("");
@@ -46,8 +50,11 @@ const SystemBadgeTable = ({
     { header: "Badge Name", width: "25%" },
     { header: "Description", width: "50%" },
     { header: "Offered Levels", width: "10%" },
-    { header: "Status", width: "5%", center: true },
-    { header: "", width: "5%" },
+
+    ...(role === ADMIN ? [
+      { header: "Status", width: "5%", center: true },
+      { header: "", width: "5%" },
+    ] : []),
   ];
 
   const rows: Row[][] = badges.length
@@ -63,21 +70,24 @@ const SystemBadgeTable = ({
           { element: badge.name },
           { element: badge.description },
           { element: offeredLevels },
-          {
-            element: (
-              <ToggleButton active={badge.is_active} setActive={() => {}} />
-            ),
-            action: async () => {
-              changeActivityStatus(badge.name, !badge.is_active);
+
+          ...(role === ADMIN ? [
+            {
+              element: (
+                <ToggleButton active={badge.is_active} setActive={() => {}} />
+              ),
+              action: async () => {
+                changeActivityStatus(badge.name, !badge.is_active);
+              },
             },
-          },
-          {
-            element: <Marker size={20} />,
-            action: () => {
-              setSelected(badge);
-              setEdit(true);
+            {
+              element: <Marker size={20} />,
+              action: () => {
+                setSelected(badge);
+                setEdit(true);
+              },
             },
-          },
+          ] : []),
         ];
       })
     : [];

@@ -1,6 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CreateCustomBadgeModal from "./components/CreateCustomBadgeModal";
 import CustomBadgeTable from "./components/CustomBadgeTable";
 import SystemBadgeTable from "./components/SystemBadgeTable";
@@ -10,9 +10,12 @@ import AssignCustomBadgeModal from "./components/AssignCustomBadgeModal";
 import GreenOutlineButton from "../../../ui/buttons/GreenOutlineButton";
 import OrangeButton from "../../../ui/buttons/OrangeButton";
 import { Plus } from "../../../ui/icons/ActionIcons";
+import { AdminContext } from "../../AdminContext";
+import { ADMIN } from "../../../constants/roles";
 
-// TODO: Relief staff cannot change the badges
 export default function AdminBadgesPage() {
+  const { role } = useContext(AdminContext);
+
   const [create, setCreate] = useState(false);
   const [assign, setAssign] = useState(false);
 
@@ -68,19 +71,21 @@ export default function AdminBadgesPage() {
             You can create new and reward participants custom badges.
           </Text>
         </Flex>
-        <Flex alignItems="center" gap="15px">
-          <GreenOutlineButton
-            label="Assign Custom Badge"
-            action={() => setAssign(true)}
-            is_active={assign}
-          />
-          <OrangeButton
-            label="Create Badge"
-            action={() => setCreate(true)}
-            is_active={create}
-            icon={<Plus />}
-          />
-        </Flex>
+        {role === ADMIN && (
+          <Flex alignItems="center" gap="15px">
+            <GreenOutlineButton
+              label="Assign Custom Badge"
+              action={() => setAssign(true)}
+              is_active={assign}
+            />
+            <OrangeButton
+              label="Create Badge"
+              action={() => setCreate(true)}
+              is_active={create}
+              icon={<Plus />}
+            />
+          </Flex>
+        )}
       </Flex>
       <CustomBadgeTable
         loading={customBadgesLoading}

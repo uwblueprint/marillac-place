@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabList, Tab, Box, Flex, Text } from "@chakra-ui/react";
 import * as ROUTES from "../constants/routes";
 import PopupContainer from "../ui/containers/PopupContainer";
 import BlackOutlineButton from "../ui/buttons/BlackOutlineButton";
+import { AdminContext } from "./AdminContext";
+import { ADMIN } from "../constants/roles";
 
 type SideBarTabProps = {
   label: string;
@@ -62,6 +64,7 @@ function SignOutPopUp({ cancel }: SignOutPopUpProps) {
 export default function AdminMenu() {
   const navigate = useNavigate();
   const [signOut, setSignOut] = useState(false);
+  const { role } = useContext(AdminContext);
 
   const pages = [
     { label: "Home", route: ROUTES.ADMIN_HOME_PAGE },
@@ -70,7 +73,10 @@ export default function AdminMenu() {
     { label: "Participants", route: ROUTES.ADMIN_PARTICIPANTS_PAGE },
     { label: "Task Library", route: ROUTES.ADMIN_TASKS_PAGE },
     { label: "Badge Library", route: ROUTES.ADMIN_BADGES_PAGE },
-    { label: "Reports", route: ROUTES.ADMIN_REPORTS_PAGE },
+    
+    ...(role === ADMIN
+      ? [{ label: "Reports", route: ROUTES.ADMIN_REPORTS_PAGE }]
+      : []),
   ];
 
   const currentPage = pages.findIndex(
