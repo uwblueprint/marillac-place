@@ -292,20 +292,6 @@
           "maxLength": null
         },
         {
-          "id": "public.announcement.topic",
-          "name": "topic",
-          "columnName": "topic",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.announcement.message",
           "name": "message",
           "columnName": "message",
@@ -330,6 +316,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.announcement.topic",
+          "name": "topic",
+          "columnName": "topic",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
