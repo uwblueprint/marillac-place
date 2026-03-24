@@ -5,6 +5,7 @@
   "description": "Playwright end-to-end tests for frontend, backend, and db",
   "scripts": {
     "test": "playwright test",
+    "test:coverage": "playwright test && node ./scripts/build-e2e-coverage.mjs",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:ui": "playwright test --ui",
@@ -15,9 +16,13 @@
   "devDependencies": {
     "@playwright/test": "^1.53.1",
     "@types/node": "^22.15.29",
+    "monocart-coverage-reports": "2.12.7",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "pg": "^8.16.0"
+  },
+  "resolutions": {
+    "commander": "13.1.0"
   }
 }

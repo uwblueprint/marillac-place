@@ -1,0 +1,27 @@
+coverage:
+  status:
+    project:
+      default: off
+      frontend-user:
+        flags:
+          - frontend-user
+        target: 60%
+      backend-unit:
+        flags:
+          - backend-unit
+        target: 70%
+      backend-integration:
+        flags:
+          - backend-integration
+        target: 60%
+      e2e:
+        flags:
+          - e2e
+        target: 40%
+    patch:
+      default: off
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: true

@@ -9,7 +9,11 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI
-    ? [["github"], ["html", { open: "never" }]]
+    ? [
+        ["github"],
+        ["html", { open: "never" }],
+        ["junit", { outputFile: "./test-results/junit.xml" }],
+      ]
     : [["list"], ["html", { open: "never" }]],
   timeout: 45_000,
   expect: {
@@ -25,6 +29,10 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "mobile-chrome",
+      use: { ...devices["Pixel 5"] },
     },
   ],
   outputDir: "./test-results",

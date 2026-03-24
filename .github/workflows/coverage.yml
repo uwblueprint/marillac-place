@@ -1,0 +1,91 @@
+name: Unit and Integration Coverage
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  frontend-unit-coverage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.18.2"
+          cache: "yarn"
+          cache-dependency-path: frontend/yarn.lock
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: yarn install --prefer-offline
+
+      - name: Run frontend unit test coverage
+        working-directory: ./frontend
+        run: yarn test:coverage
+
+      - name: Upload frontend coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          use_oidc: true
+          files: frontend/coverage/lcov.info
+          flags: frontend-user
+          name: frontend-user-coverage
+          fail_ci_if_error: false
+
+  backend-unit-integration-coverage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.18.2"
+          cache: "yarn"
+          cache-dependency-path: backend/yarn.lock
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: yarn install --prefer-offline
+
+      - name: Run backend unit coverage
+        working-directory: ./backend
+        run: yarn test:coverage:unit
+
+      - name: Upload backend unit coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          use_oidc: true
+          files: backend/coverage/unit/lcov.info
+          flags: backend-unit
+          name: backend-unit-coverage
+          fail_ci_if_error: false
+
+      - name: Run backend integration coverage
+        working-directory: ./backend
+        run: yarn test:coverage:integration
+
+      - name: Upload backend integration coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          use_oidc: true
+          files: backend/coverage/integration/lcov.info
+          flags: backend-integration
+          name: backend-integration-coverage
+          fail_ci_if_error: false

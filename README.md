@@ -6,6 +6,7 @@
 ▶️  [Application Execution](#application-execution)  
 📊  [Database Interactions](#database-interactions)  
 🧪  [E2E Testing](#e2e-testing)  
+🧪  [User and Integration Tests](#user-and-integration-tests)  
 🐞  [FAQ & Debugging](#faq--debugging)  
 ✨  [Linting](#linting)  
 🌐  [Other Links](#other-links)  
@@ -56,6 +57,62 @@ yarn test:docker
 ```
 
 For full details, see `e2e/README.md`.
+
+## User and Integration Tests
+
+Run frontend user-focused tests:
+
+```bash
+cd frontend
+yarn test
+```
+
+Run frontend coverage:
+
+```bash
+cd frontend
+yarn test:coverage
+```
+
+Run backend unit and integration tests:
+
+```bash
+cd backend
+yarn test:unit
+yarn test:integration
+```
+
+Run backend coverage:
+
+```bash
+cd backend
+yarn test:coverage:unit
+yarn test:coverage:integration
+```
+
+Coverage outputs:
+- Frontend: `frontend/coverage/lcov.info`
+- Backend unit: `backend/coverage/unit/lcov.info`
+- Backend integration: `backend/coverage/integration/lcov.info`
+- E2E browser: `e2e/coverage/e2e/lcov.info`
+
+Coverage flags are tracked independently in Codecov (`frontend-user`, `backend-unit`, `backend-integration`, `e2e`) with per-flag status checks so E2E and unit/integration coverage do not share a combined gate.
+
+Convenience test runners from repo root:
+
+```bash
+# frontend user/unit + backend unit
+./scripts/run-unit-tests.sh
+
+# backend integration only
+./scripts/run-integration-tests.sh
+
+# e2e only
+./scripts/run-e2e-tests.sh
+
+# all layers (unit -> integration -> e2e)
+./scripts/run-all-tests.sh
+```
 
 Common database commands:
 ```bash

@@ -4,6 +4,8 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
+bash "$REPO_ROOT/e2e/scripts/ensure-env-files.sh"
+
 echo "[e2e] Starting docker services..."
 docker compose -f "$REPO_ROOT/docker-compose.yml" up -d db backend frontend
 
