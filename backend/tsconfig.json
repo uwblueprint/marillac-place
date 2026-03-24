@@ -75,4 +75,10 @@
     "*.json",
     "./.eslintrc.js"
   ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "tests",
+    "coverage"
+  ]
 }
