@@ -11,4 +11,13 @@
 **/*.egg-info
 **/.eslintcache
 .idea
-**/prisma/migrations
+e2e/node_modules
+e2e/playwright-report
+e2e/test-results
+e2e/.coverage
+e2e/coverage
+frontend/coverage
+backend/coverage
+.nvmrc
+coverage/all
+test-results

@@ -1,0 +1,134 @@
+name: End-to-End Tests
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  playwright-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.18.2"
+          cache: "yarn"
+          cache-dependency-path: |
+            backend/yarn.lock
+            frontend/yarn.lock
+
+      - name: Install E2E dependencies
+        working-directory: ./e2e
+        run: yarn install --prefer-offline
+
+      - name: Install Playwright browser
+        working-directory: ./e2e
+        run: yarn install:browsers
+
+      - name: Create CI env files
+        env:
+          E2E_ENV_FILE: ${{ secrets.E2E_ENV_FILE }}
+          E2E_JWT_SECRET: ${{ secrets.E2E_JWT_SECRET }}
+        run: |
+          # backend/.env: prefer full-file secret, fallback to safe defaults
+          if [ -n "${E2E_ENV_FILE:-}" ]; then
+            printf '%s\n' "$E2E_ENV_FILE" > backend/.env
+          else
+            JWT_SHARED="${E2E_JWT_SECRET:-e2e-ci-jwt-secret}"
+            printf '%s\n' \
+              "NODE_ENV=test" \
+              "PORT=5000" \
+              "DATABASE_URL=postgresql://postgres:postgres@mp_db:5432/mp" \
+              "FRONTEND_URL=http://localhost:3000" \
+              "JWT_SECRET=${JWT_SHARED}" \
+              "ADMIN_STAFF_PASSWORD=abc123" \
+              "RELIEF_STAFF_PASSWORD=test123" \
+              "SEED_PARTICIPANT_PASSWORD=test123" \
+              "SMTP_HOST=smtp.gmail.com" \
+              "SMTP_PORT=587" \
+              "SMTP_USER=" \
+              "SMTP_PASSWORD=" > backend/.env
+          fi
+
+          # Keep frontend JWT verifier aligned with backend JWT secret.
+          JWT_SHARED="$(awk -F= '/^JWT_SECRET=/{print substr($0, index($0,$2)); exit}' backend/.env)"
+          if [ -z "${JWT_SHARED}" ]; then
+            JWT_SHARED="${E2E_JWT_SECRET:-e2e-ci-jwt-secret}"
+          fi
+
+          printf '%s\n' \
+            "REACT_APP_BACKEND_URL=http://localhost:5000" \
+            "REACT_APP_FRONTEND_URL=http://localhost:3000" \
+            "REACT_APP_JWT_SECRET=${JWT_SHARED}" > frontend/.env
+
+          printf '%s\n' \
+            "POSTGRES_USER=postgres" \
+            "POSTGRES_PASSWORD=postgres" \
+            "POSTGRES_DB=mp" > .env
+
+      - name: Run dockerized E2E tests
+        working-directory: ./e2e
+        env:
+          CI: true
+          # Optional secret for fallback mode (when E2E_ENV_FILE is not set).
+          E2E_JWT_SECRET: ${{ secrets.E2E_JWT_SECRET }}
+          # Optional full backend .env secret (preferred for parity):
+          # Settings -> Secrets and variables -> Actions -> New repository secret
+          # Name: E2E_ENV_FILE
+          E2E_ENV_FILE: ${{ secrets.E2E_ENV_FILE }}
+          E2E_BASE_URL: http://localhost:3000
+          E2E_BACKEND_URL: http://localhost:5000/graphql
+          E2E_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mp
+          E2E_PARTICIPANT_PID: "1"
+          E2E_PARTICIPANT_PASSWORD: test123
+          E2E_ADMIN_PASSWORD: abc123
+          E2E_RELIEF_PASSWORD: test123
+        run: yarn test:docker
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: e2e/playwright-report
+          if-no-files-found: ignore
+
+      - name: Upload raw test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: e2e/test-results
+          if-no-files-found: ignore
+
+      - name: Publish test results to GitHub Checks
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: e2e/test-results/junit.xml
+
+      - name: Upload E2E coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v4
+        with:
+          use_oidc: true
+          files: e2e/coverage/e2e/lcov.info
+          flags: e2e
+          name: e2e-browser-coverage
+          fail_ci_if_error: false

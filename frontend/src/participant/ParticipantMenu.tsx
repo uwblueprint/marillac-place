@@ -134,6 +134,9 @@ export default function ParticipantMenu({
         <Flex
           onClick={() => setExpandMenu(true)}
           cursor="pointer"
+          role="button"
+          aria-label="Open menu"
+          tabIndex={0}
           position="absolute"
           left="20px"
           top="24px"
@@ -148,6 +151,9 @@ export default function ParticipantMenu({
           <Flex
             onClick={() => setExpandMenu(false)}
             cursor="pointer"
+            role="button"
+            aria-label="Close menu"
+            tabIndex={0}
             position="absolute"
             left="21px"
             top="26px"

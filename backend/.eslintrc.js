@@ -3,7 +3,7 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 2020,
-    project: "./tsconfig.json",
+    project: ["./tsconfig.json", "./tsconfig.test.json"],
     sourceType: "module",
     createDefaultProgram: true,
     tsconfigRootDir: __dirname,
@@ -24,5 +24,5 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/naming-convention": "off",
   },
-  ignorePatterns: ["build/*"],
+  ignorePatterns: ["build/*", "coverage/**"],
 };
