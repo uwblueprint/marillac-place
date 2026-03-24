@@ -1,0 +1,23 @@
+{
+  "name": "marillac-place-e2e",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Playwright end-to-end tests for frontend, backend, and db",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "install:browsers": "playwright install --with-deps chromium",
+    "prepare:stack": "bash ./scripts/prepare-stack.sh",
+    "test:docker": "bash ./scripts/run-e2e.sh"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^22.15.29",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "pg": "^8.16.0"
+  }
+}

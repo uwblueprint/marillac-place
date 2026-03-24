@@ -37,10 +37,11 @@ async function initDb() {
 }
 
 async function generateMockData(seed: any) {
+  const seededParticipantPassword = process.env.SEED_PARTICIPANT_PASSWORD;
   const participants = await seed.participant((createMany: any) =>
     createMany(10, (ret: any) => ({
       pid: ret.index + 1,
-      password: random.password(),
+      password: seededParticipantPassword ?? random.password(),
       room: ret.index + 1,
       arrival: random.date(),
       departure: null,

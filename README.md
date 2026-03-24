@@ -5,6 +5,7 @@
 🚀  [Development Setup](#development-setup)  
 ▶️  [Application Execution](#application-execution)  
 📊  [Database Interactions](#database-interactions)  
+🧪  [E2E Testing](#e2e-testing)  
 🐞  [FAQ & Debugging](#faq--debugging)  
 ✨  [Linting](#linting)  
 🌐  [Other Links](#other-links)  
@@ -43,6 +44,18 @@ Apply / migrate changes in prisma.schema to the database:
 2. Change the DATABASE_URL in the backend .env file to: postgresql://postgres:postgres@**localhost**:5432/mp
 3. In your terminal, run `npx prisma migrate dev` in the backend folder and follow the prompts
 4. Don’t forget to reset DATABASE_URL back to postgresql://postgres:postgres@**mp_db**:5432/mp
+
+## E2E Testing
+Playwright E2E tests live in `e2e/` and exercise full end-to-end testing of all features.
+
+```bash
+cd e2e
+yarn install
+yarn install:browsers
+yarn test:docker
+```
+
+For full details, see `e2e/README.md`.
 
 Common database commands:
 ```bash
