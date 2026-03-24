@@ -11,7 +11,6 @@
 **/*.egg-info
 **/.eslintcache
 .idea
-**/prisma/migrations
 e2e/node_modules
 e2e/playwright-report
 e2e/test-results
