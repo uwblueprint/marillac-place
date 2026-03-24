@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { combineDayAndTime, getEndOfDay, getStartOfDay, whichDay } from "../../utils/dateUtils";
 import { DayOfWeek } from "@prisma/client";
+
+import {
+  combineDayAndTime,
+  getEndOfDay,
+  getStartOfDay,
+  whichDay,
+} from "../../utils/dateUtils";
 
 test("combineDayAndTime merges day and clock", () => {
   const day = new Date("2026-03-24T00:00:00.000Z");

@@ -7,11 +7,13 @@ export function mockDbMethod<T extends AnyFn>(
   method: string,
   implementation: T
 ) {
+  /* eslint-disable no-param-reassign -- test helper swaps methods on a stub object */
   const original = parent[method];
   parent[method] = implementation;
   return () => {
     parent[method] = original;
   };
+  /* eslint-enable no-param-reassign */
 }
 
 export function getDb() {
