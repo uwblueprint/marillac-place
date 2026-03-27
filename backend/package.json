@@ -41,7 +41,7 @@
     "multer": "^1.4.2",
     "node-cron": "^3.0.3",
     "node-fetch": "^2.6.1",
-    "nodemailer": "^6.5.0",
+    "nodemailer": "^8.0.4",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.5.0",
