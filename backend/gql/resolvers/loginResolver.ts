@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Participant } from "@prisma/client";
+import { getJwtExpiresIn } from "../../constants/auth";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
@@ -37,7 +38,9 @@ const loginResolver = {
       const jwtSecretKey = process.env.JWT_SECRET ?? "";
       if (!jwtSecretKey) throw new Error("jwt key missing");
 
-      const token = jwt.sign({ role }, jwtSecretKey, { expiresIn: "12h" });
+      const token = jwt.sign({ role }, jwtSecretKey, {
+        expiresIn: getJwtExpiresIn(),
+      });
       return { token };
     },
     participantLogin: async (
@@ -84,7 +87,7 @@ const loginResolver = {
       await db.loginHistory.create({ data: { pid } });
 
       const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
-        expiresIn: "12h",
+        expiresIn: getJwtExpiresIn(),
       });
       return { token };
     },
