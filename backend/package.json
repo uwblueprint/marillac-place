@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts,.js",
     "fix": "eslint . --ext .ts,.js --fix",
+    "test:auth-session-duration": "tsx tests/authSessionDuration.test.ts",
     "postinstall": "npx prisma generate && tsc",
     "start": "npx prisma migrate deploy && npx prisma generate && npx @snaplet/seed sync && npx prisma db seed && if [ \"$NODE_ENV\" = \"production\" ]; then node build/server.js; else nodemon -L; fi"
   },
