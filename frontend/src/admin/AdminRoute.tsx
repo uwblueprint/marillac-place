@@ -9,6 +9,7 @@ import { ADMIN_LOGIN_PAGE } from "../constants/routes";
 import { GET_CURRENT_PARTICIPANTS } from "../gql/participantRequests";
 import { AdminContext } from "./AdminContext";
 import ErrorScreen from "../ui/screens/ErrorScreen";
+import useSessionKeepAlive from "../hooks/useSessionKeepAlive";
 import AdminMenu from "./AdminMenu";
 import { Participant } from "../types/models";
 import useNotification from "../hooks/useNotification";
@@ -25,6 +26,8 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [authorizing, setAuthorizing] = useState(true);
 
   const [error, setError] = useState("");
+
+  useSessionKeepAlive(authorized, ADMIN_LOGIN_PAGE);
 
   const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
     onCompleted: (data) => {

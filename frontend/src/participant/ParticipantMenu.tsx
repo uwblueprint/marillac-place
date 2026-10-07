@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 import { MarillacCoin } from "../ui/icons/MiscIcons";
 import { Cross, Menu } from "../ui/icons/ActionIcons";
+import { clearSession } from "../helpers/session";
 
 type Page = {
   label: string;
@@ -27,7 +28,7 @@ function ExpandedParticipantMenu({
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    localStorage.removeItem("token");
+    clearSession();
     return navigate(ROUTES.PARTICIPANTS_LOGIN_PAGE);
   };
 

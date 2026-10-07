@@ -15,3 +15,11 @@ export const PARTICIPANT_LOGIN = gql`
     }
   }
 `;
+
+export const REFRESH_SESSION = gql`
+  mutation refreshSession {
+    refreshSession {
+      token
+    }
+  }
+`;

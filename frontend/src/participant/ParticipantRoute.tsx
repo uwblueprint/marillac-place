@@ -9,6 +9,7 @@ import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
 import { ParticipantContext } from "./ParticipantContext";
 import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
 import ErrorScreen from "../ui/screens/ErrorScreen";
+import useSessionKeepAlive from "../hooks/useSessionKeepAlive";
 import ParticipantMenu from "./ParticipantMenu";
 
 type ParticipantRouteProps = {
@@ -23,6 +24,8 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   const [authorizing, setAuthorizing] = useState(true);
 
   const [error, setError] = useState("");
+
+  useSessionKeepAlive(authorized, PARTICIPANTS_LOGIN_PAGE);
 
   const [getParticipantByPid] = useLazyQuery(GET_PARTICIPANT_BY_PID, {
     onCompleted: (data) => {
