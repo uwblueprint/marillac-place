@@ -120,24 +120,10 @@ yarn seed:dev
 
 ## Architecture Notes
 
-### Why Different Scripts for Dev and Prod?
+### Local Development vs Production
 
-- **Local Development (Docker)**: Uses `prismaInitAndRun` which includes seeding
-  - Runs via `yarn prismaInitAndRun` (Dockerfile ENTRYPOINT)
-  - Uses `NODE_ENV=development` (or whatever is set in `.env`)
-
-- **Railway Production**: Uses `start` script
-  - Railway's default is to run `yarn start` for Node.js apps
-  - `start` script does NOT include seeding (correct for restarts)
-  - Initial seeding happens via `prismaInitAndRun` on first deployment
-
-### Dockerfile vs Railway
-
-The Dockerfile is used by both:
-- **Docker Compose (local)**: Uses `ENTRYPOINT ["yarn", "prismaInitAndRun"]`
-- **Railway (production)**: Also uses the same Dockerfile
-
-Railway respects the ENTRYPOINT, so both environments run `prismaInitAndRun` on container start.
+- **Local Development (Docker Compose)**: builds `backend/Dockerfile.dev` and runs `yarn dev`, which resets the schema with `prisma db push --force-reset` and seeds mock data on every start
+- **Production**: `backend/Dockerfile`, whose ENTRYPOINT runs `yarn start` (see `backend/package.json`)
 
 ## Best Practices
 

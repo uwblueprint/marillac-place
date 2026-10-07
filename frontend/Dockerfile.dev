@@ -4,8 +4,8 @@ WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 COPY package.json yarn.lock ./
-RUN yarn config set registry https://registry.npmmirror.com/ && \
-    yarn install --network-timeout 600000
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
+    yarn install --frozen-lockfile --network-timeout 600000
 COPY . ./
 
 EXPOSE 3000
