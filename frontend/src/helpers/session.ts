@@ -9,6 +9,9 @@ const TOKEN_KEY = "token";
 // Refresh at most this often while the user is active.
 export const REFRESH_THROTTLE_MS = 5 * 60 * 1000;
 
+// After a failed refresh, wait this long before trying again.
+export const RETRY_AFTER_FAILURE_MS = 30 * 1000;
+
 // setTimeout fires immediately for delays above this (~24.8 days).
 const MAX_TIMEOUT_MS = 2 ** 31 - 1;
 
@@ -25,7 +28,8 @@ export type RefreshResult =
 
 // Module state is shared by every keep-alive instance (each page's route
 // guard starts its own) so they throttle and refresh together.
-let lastRefreshAt: number | null = null;
+// When the next refresh may start; null means right away.
+let nextRefreshAt: number | null = null;
 // Bumped whenever a session starts or is cleared, so a refresh from an
 // earlier session can't overwrite or bring back the current one.
 let sessionGeneration = 0;
@@ -40,13 +44,13 @@ export function getToken(): string | null {
 
 export function startSession(token: string): void {
   localStorage.setItem(TOKEN_KEY, token);
-  lastRefreshAt = Date.now();
+  nextRefreshAt = Date.now() + REFRESH_THROTTLE_MS;
   sessionGeneration += 1;
 }
 
 export function clearSession(): void {
   localStorage.removeItem(TOKEN_KEY);
-  lastRefreshAt = null;
+  nextRefreshAt = null;
   sessionGeneration += 1;
 }
 
@@ -73,9 +77,12 @@ function sharedRefresh(
   const generation = sessionGeneration;
   const promise = refreshToken()
     .then((result) => {
-      if (result.status === "refreshed" && generation === sessionGeneration) {
+      if (generation !== sessionGeneration) return result;
+      if (result.status === "refreshed") {
         localStorage.setItem(TOKEN_KEY, result.token);
-        lastRefreshAt = Date.now();
+        nextRefreshAt = Date.now() + REFRESH_THROTTLE_MS;
+      } else if (result.status === "failed") {
+        nextRefreshAt = Date.now() + RETRY_AFTER_FAILURE_MS;
       }
       return result;
     })
@@ -132,11 +139,7 @@ export function startSessionKeepAlive({
     const joining =
       inFlightRefresh !== null &&
       inFlightRefresh.generation === sessionGeneration;
-    if (
-      !joining &&
-      lastRefreshAt !== null &&
-      Date.now() - lastRefreshAt < REFRESH_THROTTLE_MS
-    ) {
+    if (!joining && nextRefreshAt !== null && Date.now() < nextRefreshAt) {
       return;
     }
 

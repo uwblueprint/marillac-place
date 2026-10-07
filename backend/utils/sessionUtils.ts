@@ -30,12 +30,11 @@ function getJwtSecret(): string {
 }
 
 export function getSessionExpiry(
-  role: string,
+  role: SessionClaims["role"],
   sessionStartedAt: number,
   now: number
 ): number {
   const duration = SESSION_DURATIONS[role];
-  if (!duration) throw new Error(`no session duration for role: ${role}`);
   return Math.min(
     now + duration.idleTimeoutSeconds,
     sessionStartedAt + duration.maxSessionSeconds

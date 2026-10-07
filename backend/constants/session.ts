@@ -12,7 +12,10 @@ export type SessionDuration = {
 
 // Staff mostly use the app on desktop computers (possibly shared), so their
 // sessions are shorter. Participants use the app on their own phones.
-export const SESSION_DURATIONS: Record<string, SessionDuration> = {
+export const SESSION_DURATIONS: Record<
+  typeof ROLES.ADMIN | typeof ROLES.RELIEF | typeof ROLES.PARTICIPANT,
+  SessionDuration
+> = {
   [ROLES.ADMIN]: {
     idleTimeoutSeconds: 8 * HOUR_SECONDS,
     maxSessionSeconds: 7 * DAY_SECONDS,

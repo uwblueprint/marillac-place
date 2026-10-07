@@ -1,10 +1,11 @@
+import { Prisma } from "@prisma/client";
 import { AuthenticationError } from "apollo-server-express";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 import { findCurrentParticipant } from "../../utils/participantUtils";
-import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
+import { getStartOfDay } from "../../utils/dateUtils";
 import {
   getBearerToken,
   nowInSeconds,
@@ -18,30 +19,23 @@ type LoginResponse = {
 
 type AuthContext = { req: { headers: { authorization?: string } } };
 
-// Namespace for per-participant advisory locks on login_history.
-const LOGIN_HISTORY_LOCK = 1001;
-
 // Records the first login (or session refresh) of each day. Sessions now last
 // across days, so refreshes must count too, or the login streak badge and
-// login stats in reports would stop advancing. The advisory lock makes
-// concurrent logins/refreshes for the same participant count only once.
+// login stats in reports would stop advancing. Rows are keyed on (pid, start
+// of day), so the primary key makes concurrent logins count only once.
 async function recordDailyLogin(pid: number): Promise<void> {
-  await db.$transaction(async (tx) => {
-    await tx.$executeRaw`SELECT pg_advisory_xact_lock(${LOGIN_HISTORY_LOCK}::int, ${pid}::int)`;
-    const loggedInToday = await tx.loginHistory.findFirst({
-      where: {
-        pid,
-        date: {
-          gte: getStartOfDay(new Date()),
-          lte: getEndOfDay(new Date()),
-        },
-      },
+  try {
+    await db.loginHistory.create({
+      data: { pid, date: getStartOfDay(new Date()) },
     });
-    if (loggedInToday) return;
-
-    await tx.loginHistory.create({ data: { pid } });
-    await updateBadgeLevelProgress(LOGIN, pid, 1);
-  });
+  } catch (err) {
+    const alreadyLoggedInToday =
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2002";
+    if (alreadyLoggedInToday) return;
+    throw err;
+  }
+  await updateBadgeLevelProgress(LOGIN, pid, 1);
 }
 
 const loginResolver = {

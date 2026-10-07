@@ -4,6 +4,7 @@ import {
   msUntilExpiry,
   REFRESH_THROTTLE_MS,
   RefreshResult,
+  RETRY_AFTER_FAILURE_MS,
   startSession,
   startSessionKeepAlive,
 } from "./session";
@@ -243,7 +244,7 @@ describe("startSessionKeepAlive", () => {
     expect(storedToken()).toBeNull();
   });
 
-  it("keeps the token and retries on next activity when a refresh fails", async () => {
+  it("keeps the token when a refresh fails and retries after a pause", async () => {
     const token = tokenExpiringAt(T0 + HOUR_MS);
     localStorage.setItem("token", token);
     start();
@@ -251,9 +252,30 @@ describe("startSessionKeepAlive", () => {
     expect(storedToken()).toBe(token);
     expect(onSessionEnded).not.toHaveBeenCalled();
 
-    // Not throttled, since no refresh succeeded.
+    jest.advanceTimersByTime(RETRY_AFTER_FAILURE_MS - 1);
+    fireActivity();
+    expect(backend.calls).toBe(1);
+
+    jest.advanceTimersByTime(1);
     fireActivity();
     expect(backend.calls).toBe(2);
+  });
+
+  it("sends one request per retry window while the backend keeps failing", async () => {
+    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    start();
+    await backend.respond({ status: "failed" });
+
+    // Scrolling fires many events; only one retry per window goes out.
+    for (let second = 1; second <= 90; second += 1) {
+      jest.advanceTimersByTime(1000);
+      fireActivity("wheel");
+      if (backend.pending.length > 0) {
+        // eslint-disable-next-line no-await-in-loop
+        await backend.respond({ status: "failed" });
+      }
+    }
+    expect(backend.calls).toBe(4);
   });
 
   it("never runs two refreshes at once", async () => {
@@ -263,6 +285,7 @@ describe("startSessionKeepAlive", () => {
     fireActivity("keydown");
     expect(backend.calls).toBe(1);
     await backend.respond({ status: "failed" });
+    jest.advanceTimersByTime(RETRY_AFTER_FAILURE_MS);
     fireActivity();
     expect(backend.calls).toBe(2);
   });

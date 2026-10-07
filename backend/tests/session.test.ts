@@ -2,8 +2,10 @@ import { after, beforeEach, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { AuthenticationError, ForbiddenError } from "apollo-server-express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { Prisma } from "@prisma/client";
 import * as ROLES from "../constants/roles";
 import { LOGIN } from "../constants/systemBadges";
+import { getStartOfDay } from "../utils/dateUtils";
 import { SESSION_DURATIONS } from "../constants/session";
 import db from "../prisma";
 import loginResolver from "../gql/resolvers/loginResolver";
@@ -93,10 +95,6 @@ describe("getSessionExpiry", () => {
       assert(idleTimeoutSeconds > 0);
       assert(idleTimeoutSeconds <= maxSessionSeconds);
     });
-  });
-
-  it("throws for an unknown role", () => {
-    assert.throws(() => getSessionExpiry("janitor", T0, T0), /no session/);
   });
 });
 
@@ -253,48 +251,47 @@ describe("getBearerToken", () => {
 // Resolver tests stub out the Prisma calls the login flow makes.
 type Stubs = {
   participant: { pid: number; password: string } | null;
-  loggedInToday: boolean;
-  loginHistoryCreates: number[];
+  loginHistoryKeys: Set<string>;
+  loginHistoryCreates: { pid: number; date: Date }[];
+  loginHistoryError: Error | null;
   badgeProgressLookups: string[];
   badgeError: Error | null;
-  lockedPids: unknown[];
 };
 
 let stubs: Stubs;
-// Emulates pg_advisory_xact_lock: held until the transaction finishes.
-let advisoryLock: Promise<void>;
 
 function stub(target: object, key: string, value: unknown) {
   Object.defineProperty(target, key, { configurable: true, value });
 }
 
-// Lets other pending requests run, so unlocked check-then-insert would race.
-function yieldToOthers(): Promise<void> {
-  return new Promise((resolve) => setImmediate(resolve));
+function uniqueViolation() {
+  return new Prisma.PrismaClientKnownRequestError("duplicate key", {
+    code: "P2002",
+    clientVersion: "test",
+  });
 }
 
 beforeEach(() => {
   stubs = {
     participant: { pid: PID, password: PARTICIPANT_PASSWORD },
-    loggedInToday: false,
+    loginHistoryKeys: new Set(),
     loginHistoryCreates: [],
+    loginHistoryError: null,
     badgeProgressLookups: [],
     badgeError: null,
-    lockedPids: [],
   };
-  advisoryLock = Promise.resolve();
 
   stub(db.participant, "findFirst", async () => stubs.participant);
-  stub(db.loginHistory, "findFirst", async () => {
-    await yieldToOthers();
-    return stubs.loggedInToday ? { pid: PID, date: new Date() } : null;
-  });
+  // Mirrors the (pid, date) primary key on login_history.
   stub(
     db.loginHistory,
     "create",
-    async ({ data }: { data: { pid: number } }) => {
-      stubs.loginHistoryCreates.push(data.pid);
-      stubs.loggedInToday = true;
+    async ({ data }: { data: { pid: number; date: Date } }) => {
+      if (stubs.loginHistoryError) throw stubs.loginHistoryError;
+      const key = `${data.pid}@${data.date.toISOString()}`;
+      if (stubs.loginHistoryKeys.has(key)) throw uniqueViolation();
+      stubs.loginHistoryKeys.add(key);
+      stubs.loginHistoryCreates.push(data);
       return data;
     }
   );
@@ -308,27 +305,11 @@ beforeEach(() => {
       return null;
     }
   );
-  stub(db, "$transaction", async (fn: (tx: unknown) => Promise<unknown>) => {
-    let release = () => {};
-    const tx = {
-      $executeRaw: async (_sql: TemplateStringsArray, ...values: unknown[]) => {
-        stubs.lockedPids.push(values[1]);
-        const previous = advisoryLock;
-        advisoryLock = new Promise((resolve) => {
-          release = resolve;
-        });
-        await previous;
-        return 1;
-      },
-      loginHistory: db.loginHistory,
-    };
-    try {
-      return await fn(tx);
-    } finally {
-      release();
-    }
-  });
 });
+
+function loggedInPids(): number[] {
+  return stubs.loginHistoryCreates.map(({ pid }) => pid);
+}
 
 after(async () => {
   await db.$disconnect();
@@ -337,10 +318,12 @@ after(async () => {
 const { adminLogin, participantLogin, refreshSession } = loginResolver.Mutation;
 
 describe("adminLogin", () => {
-  [
-    [ROLES.ADMIN, STAFF_PASSWORD],
-    [ROLES.RELIEF, RELIEF_PASSWORD],
-  ].forEach(([role, password]) => {
+  (
+    [
+      [ROLES.ADMIN, STAFF_PASSWORD],
+      [ROLES.RELIEF, RELIEF_PASSWORD],
+    ] as const
+  ).forEach(([role, password]) => {
     it(`${role}: issues a token for a new idle-timeout session`, async () => {
       const before = nowInSeconds();
       const { token } = await adminLogin(undefined, { role, password });
@@ -398,18 +381,32 @@ describe("participantLogin", () => {
       pid: PID,
       password: PARTICIPANT_PASSWORD,
     });
-    assert.deepEqual(stubs.loginHistoryCreates, [PID]);
+    assert.deepEqual(loggedInPids(), [PID]);
     assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
   });
 
   it("does not record a second login on the same day", async () => {
-    stubs.loggedInToday = true;
     await participantLogin(undefined, {
       pid: PID,
       password: PARTICIPANT_PASSWORD,
     });
-    assert.deepEqual(stubs.loginHistoryCreates, []);
+    stubs.badgeProgressLookups = [];
+    await participantLogin(undefined, {
+      pid: PID,
+      password: PARTICIPANT_PASSWORD,
+    });
+    assert.deepEqual(loggedInPids(), [PID]);
     assert.deepEqual(stubs.badgeProgressLookups, []);
+  });
+
+  it("stores the login under the start of the day", async () => {
+    await participantLogin(undefined, {
+      pid: PID,
+      password: PARTICIPANT_PASSWORD,
+    });
+    assert.deepEqual(stubs.loginHistoryCreates, [
+      { pid: PID, date: getStartOfDay(new Date()) },
+    ]);
   });
 
   it("rejects a participant who has left", async () => {
@@ -418,7 +415,7 @@ describe("participantLogin", () => {
       participantLogin(undefined, { pid: PID, password: PARTICIPANT_PASSWORD }),
       /participant not found/
     );
-    assert.deepEqual(stubs.loginHistoryCreates, []);
+    assert.deepEqual(loggedInPids(), []);
   });
 
   it("rejects a wrong password without recording a login", async () => {
@@ -426,7 +423,7 @@ describe("participantLogin", () => {
       participantLogin(undefined, { pid: PID, password: "nope" }),
       /incorrect password/
     );
-    assert.deepEqual(stubs.loginHistoryCreates, []);
+    assert.deepEqual(loggedInPids(), []);
   });
 });
 
@@ -488,14 +485,14 @@ describe("refreshSession", () => {
     );
     await refreshSession(undefined, {}, bearer(token));
     await refreshSession(undefined, {}, bearer(token));
-    assert.deepEqual(stubs.loginHistoryCreates, [PID]);
+    assert.deepEqual(loggedInPids(), [PID]);
     assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
   });
 
   it("does not touch login history for staff", async () => {
     const token = signSessionToken(claimsFor(ROLES.ADMIN, nowInSeconds()));
     await refreshSession(undefined, {}, bearer(token));
-    assert.deepEqual(stubs.loginHistoryCreates, []);
+    assert.deepEqual(loggedInPids(), []);
     assert.deepEqual(stubs.badgeProgressLookups, []);
   });
 
@@ -508,7 +505,7 @@ describe("refreshSession", () => {
       refreshSession(undefined, {}, bearer(token)),
       /participant not found/
     );
-    assert.deepEqual(stubs.loginHistoryCreates, []);
+    assert.deepEqual(loggedInPids(), []);
   });
 
   it("counts concurrent first-of-day refreshes once", async () => {
@@ -520,12 +517,25 @@ describe("refreshSession", () => {
         refreshSession(undefined, {}, bearer(token))
       )
     );
-    assert.deepEqual(stubs.loginHistoryCreates, [PID]);
+    assert.deepEqual(loggedInPids(), [PID]);
     assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
-    assert.deepEqual(stubs.lockedPids, [PID, PID, PID, PID, PID]);
   });
 
-  it("fails without ending the session when recording the login fails", async () => {
+  it("fails without ending the session when login history can't be written", async () => {
+    stubs.loginHistoryError = new Error("database unavailable");
+    const token = signSessionToken(
+      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
+    );
+    await assert.rejects(
+      refreshSession(undefined, {}, bearer(token)),
+      (err: Error) =>
+        !(err instanceof AuthenticationError) &&
+        err.message === "database unavailable"
+    );
+    assert.deepEqual(stubs.badgeProgressLookups, []);
+  });
+
+  it("fails without ending the session when the badge update fails", async () => {
     stubs.badgeError = new Error("database unavailable");
     const token = signSessionToken(
       claimsFor(ROLES.PARTICIPANT, nowInSeconds())
