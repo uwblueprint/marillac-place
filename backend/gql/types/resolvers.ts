@@ -110,6 +110,7 @@ const resolvers = gql`
 
     adminLogin(role: String!, password: String!): LoginResponse!
     participantLogin(pid: Int!, password: String!): LoginResponse!
+    refreshSession: LoginResponse!
 
     createCustomBadge(
       name: String!

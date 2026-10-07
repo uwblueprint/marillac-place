@@ -1,14 +1,49 @@
-import jwt from "jsonwebtoken";
 import { Participant } from "@prisma/client";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
 import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
+import {
+  getBearerToken,
+  nowInSeconds,
+  signSessionToken,
+  verifySessionToken,
+} from "../../utils/sessionUtils";
 
 type LoginResponse = {
   token: string;
 };
+
+type AuthContext = { req: { headers: { authorization?: string } } };
+
+function findCurrentParticipant(pid: number): Promise<Participant | null> {
+  return db.participant.findUnique({
+    where: {
+      pid,
+      OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+    },
+  });
+}
+
+// Records the first login (or session refresh) of each day. Sessions now last
+// across days, so refreshes must count too, or the login streak badge and
+// login stats in reports would stop advancing.
+async function recordDailyLogin(pid: number): Promise<void> {
+  const loggedInToday = await db.loginHistory.findFirst({
+    where: {
+      pid,
+      date: {
+        gte: getStartOfDay(new Date()),
+        lte: getEndOfDay(new Date()),
+      },
+    },
+  });
+  if (loggedInToday) return;
+
+  await updateBadgeLevelProgress(LOGIN, pid, 1);
+  await db.loginHistory.create({ data: { pid } });
+}
 
 const loginResolver = {
   Mutation: {
@@ -34,10 +69,10 @@ const loginResolver = {
       const validPassword: boolean = password === expectedPassword;
       if (!validPassword) throw new Error("incorrect password");
 
-      const jwtSecretKey = process.env.JWT_SECRET ?? "";
-      if (!jwtSecretKey) throw new Error("jwt key missing");
-
-      const token = jwt.sign({ role }, jwtSecretKey, { expiresIn: "12h" });
+      const token = signSessionToken({
+        role,
+        sessionStartedAt: nowInSeconds(),
+      });
       return { token };
     },
     participantLogin: async (
@@ -50,43 +85,36 @@ const loginResolver = {
         password: string;
       }
     ): Promise<LoginResponse> => {
-      const participant: Participant | null = await db.participant.findUnique({
-        where: {
-          pid,
-          OR: [
-            { departure: null },
-            { departure: { gt: getEndOfDay(new Date()) } },
-          ],
-        },
-      });
-
+      const participant = await findCurrentParticipant(pid);
       if (!participant) throw new Error("participant not found");
 
       const validPassword: boolean = password === participant.password;
       if (!validPassword) throw new Error("incorrect password");
 
-      const jwtSecretKey = process.env.JWT_SECRET ?? "";
-      if (!jwtSecretKey) throw new Error("jwt key missing");
-
-      const loggedInToday = await db.loginHistory.findFirst({
-        where: {
-          pid,
-          date: {
-            gte: getStartOfDay(new Date()),
-            lte: getEndOfDay(new Date()),
-          },
-        },
+      const token = signSessionToken({
+        role: ROLES.PARTICIPANT,
+        pid,
+        sessionStartedAt: nowInSeconds(),
       });
-      if (!loggedInToday) {
-        await updateBadgeLevelProgress(LOGIN, pid, 1);
+      await recordDailyLogin(pid);
+      return { token };
+    },
+    refreshSession: async (
+      _parent: undefined,
+      _args: Record<string, never>,
+      context: AuthContext
+    ): Promise<LoginResponse> => {
+      const claims = verifySessionToken(
+        getBearerToken(context.req.headers.authorization)
+      );
+
+      if (claims.role === ROLES.PARTICIPANT) {
+        const participant = await findCurrentParticipant(claims.pid);
+        if (!participant) throw new Error("participant not found");
+        await recordDailyLogin(claims.pid);
       }
 
-      await db.loginHistory.create({ data: { pid } });
-
-      const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
-        expiresIn: "12h",
-      });
-      return { token };
+      return { token: signSessionToken(claims) };
     },
   },
 };
