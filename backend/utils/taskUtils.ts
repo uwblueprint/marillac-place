@@ -2,12 +2,8 @@ import { addDays, endOfDay, startOfWeek, startOfDay } from "date-fns";
 import { Task, DayPreference, TimePreference, DayOfWeek } from "@prisma/client";
 import db from "../prisma";
 import { orderedDays } from "../constants/days";
-import {
-  getEndOfDay,
-  getESTDate,
-  getUTCDate,
-  combineDayAndTime,
-} from "./dateUtils";
+import { getESTDate, getUTCDate, combineDayAndTime } from "./dateUtils";
+import { currentParticipantFilter } from "./participantUtils";
 
 type StartAndEndDates = {
   startDate: Date;
@@ -87,10 +83,7 @@ export async function assignTasksToParticipants(
   } else {
     const participants = await db.participant.findMany({
       where: {
-        OR: [
-          { departure: null },
-          { departure: { gt: getEndOfDay(new Date()) } },
-        ],
+        ...currentParticipantFilter(),
       },
       select: { pid: true },
     });

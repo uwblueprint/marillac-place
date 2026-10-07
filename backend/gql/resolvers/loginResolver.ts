@@ -1,8 +1,9 @@
-import { Participant } from "@prisma/client";
+import { AuthenticationError } from "apollo-server-express";
 import * as ROLES from "../../constants/roles";
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
+import { findCurrentParticipant } from "../../utils/participantUtils";
 import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
 import {
   getBearerToken,
@@ -17,32 +18,30 @@ type LoginResponse = {
 
 type AuthContext = { req: { headers: { authorization?: string } } };
 
-function findCurrentParticipant(pid: number): Promise<Participant | null> {
-  return db.participant.findUnique({
-    where: {
-      pid,
-      OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
-    },
-  });
-}
+// Namespace for per-participant advisory locks on login_history.
+const LOGIN_HISTORY_LOCK = 1001;
 
 // Records the first login (or session refresh) of each day. Sessions now last
 // across days, so refreshes must count too, or the login streak badge and
-// login stats in reports would stop advancing.
+// login stats in reports would stop advancing. The advisory lock makes
+// concurrent logins/refreshes for the same participant count only once.
 async function recordDailyLogin(pid: number): Promise<void> {
-  const loggedInToday = await db.loginHistory.findFirst({
-    where: {
-      pid,
-      date: {
-        gte: getStartOfDay(new Date()),
-        lte: getEndOfDay(new Date()),
+  await db.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(${LOGIN_HISTORY_LOCK}::int, ${pid}::int)`;
+    const loggedInToday = await tx.loginHistory.findFirst({
+      where: {
+        pid,
+        date: {
+          gte: getStartOfDay(new Date()),
+          lte: getEndOfDay(new Date()),
+        },
       },
-    },
-  });
-  if (loggedInToday) return;
+    });
+    if (loggedInToday) return;
 
-  await updateBadgeLevelProgress(LOGIN, pid, 1);
-  await db.loginHistory.create({ data: { pid } });
+    await tx.loginHistory.create({ data: { pid } });
+    await updateBadgeLevelProgress(LOGIN, pid, 1);
+  });
 }
 
 const loginResolver = {
@@ -110,7 +109,8 @@ const loginResolver = {
 
       if (claims.role === ROLES.PARTICIPANT) {
         const participant = await findCurrentParticipant(claims.pid);
-        if (!participant) throw new Error("participant not found");
+        if (!participant)
+          throw new AuthenticationError("participant not found");
         await recordDailyLogin(claims.pid);
       }
 

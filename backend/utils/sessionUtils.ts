@@ -1,3 +1,4 @@
+import { AuthenticationError } from "apollo-server-express";
 import jwt from "jsonwebtoken";
 import * as ROLES from "../constants/roles";
 import { SESSION_DURATIONS } from "../constants/session";
@@ -5,6 +6,8 @@ import { SESSION_DURATIONS } from "../constants/session";
 // Sessions are sliding: each token expires after the role's idle timeout, and
 // the frontend refreshes it while the user is active. sessionStartedAt is
 // carried across refreshes so the role's max session length can be enforced.
+// Problems with the token itself throw AuthenticationError (UNAUTHENTICATED),
+// which the frontend treats as "session over"; anything else is retried.
 export type SessionClaims =
   | {
       role: typeof ROLES.ADMIN | typeof ROLES.RELIEF;
@@ -52,15 +55,23 @@ export function verifySessionToken(
   token: string,
   now: number = nowInSeconds()
 ): SessionClaims {
-  const payload = jwt.verify(token, getJwtSecret(), {
-    algorithms: ["HS256"],
-    clockTimestamp: now,
-  });
-  if (typeof payload === "string") throw new Error("invalid token payload");
+  const jwtSecretKey = getJwtSecret();
+  let payload: string | jwt.JwtPayload;
+  try {
+    payload = jwt.verify(token, jwtSecretKey, {
+      algorithms: ["HS256"],
+      clockTimestamp: now,
+    });
+  } catch (err) {
+    throw new AuthenticationError((err as Error).message);
+  }
+  if (typeof payload === "string") {
+    throw new AuthenticationError("invalid token payload");
+  }
 
   const { role, pid, sessionStartedAt } = payload;
   if (typeof sessionStartedAt !== "number") {
-    throw new Error("token is missing session start");
+    throw new AuthenticationError("token is missing session start");
   }
 
   switch (role) {
@@ -68,16 +79,18 @@ export function verifySessionToken(
     case ROLES.RELIEF:
       return { role, sessionStartedAt };
     case ROLES.PARTICIPANT:
-      if (typeof pid !== "number") throw new Error("token is missing pid");
+      if (typeof pid !== "number") {
+        throw new AuthenticationError("token is missing pid");
+      }
       return { role, pid, sessionStartedAt };
     default:
-      throw new Error("token has unknown role");
+      throw new AuthenticationError("token has unknown role");
   }
 }
 
 export function getBearerToken(authorization: string | undefined): string {
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    throw new Error("missing or invalid authorization header");
+    throw new AuthenticationError("missing or invalid authorization header");
   }
   return authorization.slice("Bearer ".length);
 }

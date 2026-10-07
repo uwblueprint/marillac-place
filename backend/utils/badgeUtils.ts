@@ -6,7 +6,7 @@ import {
   PR_LEADER,
 } from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
-import { getEndOfDay } from "./dateUtils";
+import { currentParticipantFilter } from "./participantUtils";
 
 async function getNextBadgeLevel(name: string, level: Level) {
   const levels = [
@@ -150,7 +150,7 @@ export async function updateBadgeLevelProgress(
 export async function validateBadgeLevelProgress(name: string) {
   const currentParticipants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+      ...currentParticipantFilter(),
     },
   });
 

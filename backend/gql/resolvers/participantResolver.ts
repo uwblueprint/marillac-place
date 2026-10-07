@@ -3,6 +3,7 @@ import db from "../../prisma";
 import { initBadgeLevelProgress } from "../../utils/badgeUtils";
 import { getEndOfDay } from "../../utils/dateUtils";
 import { assignTasksToParticipants } from "../../utils/taskUtils";
+import { currentParticipantFilter } from "../../utils/participantUtils";
 
 const participantResolver = {
   Query: {
@@ -19,10 +20,7 @@ const participantResolver = {
     getCurrentParticipants: async (): Promise<Participant[]> => {
       return db.participant.findMany({
         where: {
-          OR: [
-            { departure: null },
-            { departure: { gt: getEndOfDay(new Date()) } },
-          ],
+          ...currentParticipantFilter(),
         },
         orderBy: [{ room: "asc" }],
       });
@@ -70,10 +68,7 @@ const participantResolver = {
       const occupiedRoom = await db.participant.findFirst({
         where: {
           room,
-          OR: [
-            { departure: null },
-            { departure: { gt: getEndOfDay(new Date()) } },
-          ],
+          ...currentParticipantFilter(),
         },
       });
       if (occupiedRoom) throw new Error("room is occupied");

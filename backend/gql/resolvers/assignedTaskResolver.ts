@@ -15,16 +15,14 @@ import {
   getStartOfDay,
   getStartOfWeek,
 } from "../../utils/dateUtils";
+import { currentParticipantFilter } from "../../utils/participantUtils";
 
 const assignedTaskResolver = {
   Query: {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
       const currentParticipants = await db.participant.findMany({
         where: {
-          OR: [
-            { departure: null },
-            { departure: { gt: getEndOfDay(new Date()) } },
-          ],
+          ...currentParticipantFilter(),
         },
         select: {
           pid: true,

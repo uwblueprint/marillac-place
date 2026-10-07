@@ -1,11 +1,13 @@
 import { after, beforeEach, describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { AuthenticationError, ForbiddenError } from "apollo-server-express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import * as ROLES from "../constants/roles";
 import { LOGIN } from "../constants/systemBadges";
 import { SESSION_DURATIONS } from "../constants/session";
 import db from "../prisma";
 import loginResolver from "../gql/resolvers/loginResolver";
+import getMiddleware from "../gql/middleware";
 import {
   getBearerToken,
   getSessionExpiry,
@@ -45,6 +47,25 @@ function decode(token: string): JwtPayload {
 
 function bearer(token: string) {
   return { req: { headers: { authorization: `Bearer ${token}` } } };
+}
+
+// The frontend ends the session only for UNAUTHENTICATED errors.
+function isUnauthenticated(pattern?: RegExp) {
+  return (err: unknown) =>
+    err instanceof AuthenticationError &&
+    err.extensions.code === "UNAUTHENTICATED" &&
+    (!pattern || pattern.test(err.message));
+}
+
+function assertUnauthenticated(fn: () => unknown, pattern?: RegExp) {
+  assert.throws(fn, isUnauthenticated(pattern));
+}
+
+async function assertRejectsUnauthenticated(
+  promise: Promise<unknown>,
+  pattern?: RegExp
+) {
+  await assert.rejects(promise, isUnauthenticated(pattern));
 }
 
 describe("getSessionExpiry", () => {
@@ -99,7 +120,10 @@ describe("signSessionToken / verifySessionToken", () => {
       const { exp } = decode(token);
       assert(exp);
       assert.doesNotThrow(() => verifySessionToken(token, exp - 1));
-      assert.throws(() => verifySessionToken(token, exp), /jwt expired/);
+      assertUnauthenticated(
+        () => verifySessionToken(token, exp),
+        /jwt expired/
+      );
     });
 
     it(`${role}: refusing to sign once max session length is reached`, () => {
@@ -125,7 +149,10 @@ describe("signSessionToken / verifySessionToken", () => {
       { role: ROLES.ADMIN, sessionStartedAt: T0, exp: T0 + 60 },
       "other-secret"
     );
-    assert.throws(() => verifySessionToken(token, T0), /invalid signature/);
+    assertUnauthenticated(
+      () => verifySessionToken(token, T0),
+      /invalid signature/
+    );
   });
 
   it("rejects an unsigned (alg: none) token", () => {
@@ -134,12 +161,12 @@ describe("signSessionToken / verifySessionToken", () => {
       "",
       { algorithm: "none" }
     );
-    assert.throws(() => verifySessionToken(token, T0));
+    assertUnauthenticated(() => verifySessionToken(token, T0));
   });
 
   it("rejects legacy tokens without sessionStartedAt", () => {
     const token = jwt.sign({ role: ROLES.ADMIN, exp: T0 + 60 }, JWT_SECRET);
-    assert.throws(() => verifySessionToken(token, T0), /session start/);
+    assertUnauthenticated(() => verifySessionToken(token, T0), /session start/);
   });
 
   it("rejects a non-numeric sessionStartedAt", () => {
@@ -147,7 +174,7 @@ describe("signSessionToken / verifySessionToken", () => {
       { role: ROLES.ADMIN, sessionStartedAt: String(T0), exp: T0 + 60 },
       JWT_SECRET
     );
-    assert.throws(() => verifySessionToken(token, T0), /session start/);
+    assertUnauthenticated(() => verifySessionToken(token, T0), /session start/);
   });
 
   it("rejects an unknown role", () => {
@@ -155,12 +182,12 @@ describe("signSessionToken / verifySessionToken", () => {
       { role: "janitor", sessionStartedAt: T0, exp: T0 + 60 },
       JWT_SECRET
     );
-    assert.throws(() => verifySessionToken(token, T0), /unknown role/);
+    assertUnauthenticated(() => verifySessionToken(token, T0), /unknown role/);
   });
 
   it("rejects a missing role", () => {
     const token = jwt.sign({ sessionStartedAt: T0, exp: T0 + 60 }, JWT_SECRET);
-    assert.throws(() => verifySessionToken(token, T0), /unknown role/);
+    assertUnauthenticated(() => verifySessionToken(token, T0), /unknown role/);
   });
 
   it("rejects a participant token without a numeric pid", () => {
@@ -169,7 +196,7 @@ describe("signSessionToken / verifySessionToken", () => {
         { role: ROLES.PARTICIPANT, pid, sessionStartedAt: T0, exp: T0 + 60 },
         JWT_SECRET
       );
-      assert.throws(() => verifySessionToken(token, T0), /missing pid/);
+      assertUnauthenticated(() => verifySessionToken(token, T0), /missing pid/);
     });
   });
 
@@ -186,7 +213,7 @@ describe("signSessionToken / verifySessionToken", () => {
 
   it("rejects a string payload", () => {
     const token = jwt.sign("just-a-string", JWT_SECRET);
-    assert.throws(() => verifySessionToken(token, T0));
+    assertUnauthenticated(() => verifySessionToken(token, T0));
   });
 
   it("fails fast when JWT_SECRET is missing", () => {
@@ -196,7 +223,12 @@ describe("signSessionToken / verifySessionToken", () => {
         () => signSessionToken(claimsFor(ROLES.ADMIN, T0), T0),
         /jwt key missing/
       );
-      assert.throws(() => verifySessionToken("x.y.z", T0), /jwt key missing/);
+      assert.throws(
+        () => verifySessionToken("x.y.z", T0),
+        (err: Error) =>
+          !(err instanceof AuthenticationError) &&
+          /jwt key missing/.test(err.message)
+      );
     } finally {
       process.env.JWT_SECRET = JWT_SECRET;
     }
@@ -210,7 +242,10 @@ describe("getBearerToken", () => {
 
   [undefined, "", "Bearer", "bearer abc", "Basic abc"].forEach((header) => {
     it(`rejects ${JSON.stringify(header)}`, () => {
-      assert.throws(() => getBearerToken(header), /authorization header/);
+      assertUnauthenticated(
+        () => getBearerToken(header),
+        /authorization header/
+      );
     });
   });
 });
@@ -221,12 +256,21 @@ type Stubs = {
   loggedInToday: boolean;
   loginHistoryCreates: number[];
   badgeProgressLookups: string[];
+  badgeError: Error | null;
+  lockedPids: unknown[];
 };
 
 let stubs: Stubs;
+// Emulates pg_advisory_xact_lock: held until the transaction finishes.
+let advisoryLock: Promise<void>;
 
 function stub(target: object, key: string, value: unknown) {
   Object.defineProperty(target, key, { configurable: true, value });
+}
+
+// Lets other pending requests run, so unlocked check-then-insert would race.
+function yieldToOthers(): Promise<void> {
+  return new Promise((resolve) => setImmediate(resolve));
 }
 
 beforeEach(() => {
@@ -235,11 +279,16 @@ beforeEach(() => {
     loggedInToday: false,
     loginHistoryCreates: [],
     badgeProgressLookups: [],
+    badgeError: null,
+    lockedPids: [],
   };
-  stub(db.participant, "findUnique", async () => stubs.participant);
-  stub(db.loginHistory, "findFirst", async () =>
-    stubs.loggedInToday ? { pid: PID, date: new Date() } : null
-  );
+  advisoryLock = Promise.resolve();
+
+  stub(db.participant, "findFirst", async () => stubs.participant);
+  stub(db.loginHistory, "findFirst", async () => {
+    await yieldToOthers();
+    return stubs.loggedInToday ? { pid: PID, date: new Date() } : null;
+  });
   stub(
     db.loginHistory,
     "create",
@@ -255,9 +304,30 @@ beforeEach(() => {
     "findFirst",
     async ({ where }: { where: { name: string } }) => {
       stubs.badgeProgressLookups.push(where.name);
+      if (stubs.badgeError) throw stubs.badgeError;
       return null;
     }
   );
+  stub(db, "$transaction", async (fn: (tx: unknown) => Promise<unknown>) => {
+    let release = () => {};
+    const tx = {
+      $executeRaw: async (_sql: TemplateStringsArray, ...values: unknown[]) => {
+        stubs.lockedPids.push(values[1]);
+        const previous = advisoryLock;
+        advisoryLock = new Promise((resolve) => {
+          release = resolve;
+        });
+        await previous;
+        return 1;
+      },
+      loginHistory: db.loginHistory,
+    };
+    try {
+      return await fn(tx);
+    } finally {
+      release();
+    }
+  });
 });
 
 after(async () => {
@@ -405,7 +475,7 @@ describe("refreshSession", () => {
       const { idleTimeoutSeconds } = SESSION_DURATIONS[role];
       const start = now - idleTimeoutSeconds - 10;
       const expired = signSessionToken(claimsFor(role, start), start);
-      await assert.rejects(
+      await assertRejectsUnauthenticated(
         refreshSession(undefined, {}, bearer(expired)),
         /jwt expired/
       );
@@ -434,27 +504,160 @@ describe("refreshSession", () => {
     const token = signSessionToken(
       claimsFor(ROLES.PARTICIPANT, nowInSeconds())
     );
-    await assert.rejects(
+    await assertRejectsUnauthenticated(
       refreshSession(undefined, {}, bearer(token)),
       /participant not found/
     );
     assert.deepEqual(stubs.loginHistoryCreates, []);
   });
 
+  it("counts concurrent first-of-day refreshes once", async () => {
+    const token = signSessionToken(
+      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
+    );
+    await Promise.all(
+      Array.from({ length: 5 }, () =>
+        refreshSession(undefined, {}, bearer(token))
+      )
+    );
+    assert.deepEqual(stubs.loginHistoryCreates, [PID]);
+    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
+    assert.deepEqual(stubs.lockedPids, [PID, PID, PID, PID, PID]);
+  });
+
+  it("fails without ending the session when recording the login fails", async () => {
+    stubs.badgeError = new Error("database unavailable");
+    const token = signSessionToken(
+      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
+    );
+    await assert.rejects(
+      refreshSession(undefined, {}, bearer(token)),
+      (err: Error) =>
+        !(err instanceof AuthenticationError) &&
+        err.message === "database unavailable"
+    );
+  });
+
   it("rejects legacy tokens so users log in once more", async () => {
     const legacy = jwt.sign({ role: ROLES.ADMIN }, JWT_SECRET, {
       expiresIn: "12h",
     });
-    await assert.rejects(
+    await assertRejectsUnauthenticated(
       refreshSession(undefined, {}, bearer(legacy)),
       /session start/
     );
   });
 
   it("rejects a missing authorization header", async () => {
-    await assert.rejects(
+    await assertRejectsUnauthenticated(
       refreshSession(undefined, {}, { req: { headers: {} } }),
       /authorization header/
     );
+  });
+});
+
+describe("auth middleware (production)", () => {
+  const { Query, Mutation } = getMiddleware();
+  const resolved = { ok: true };
+  const resolve = async () => resolved;
+  const info = {} as Parameters<typeof Query.getNotes>[4];
+  let nodeEnv: string | undefined;
+
+  beforeEach(() => {
+    nodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = "production";
+  });
+
+  after(() => {
+    process.env.NODE_ENV = nodeEnv;
+  });
+
+  function call(
+    middleware: typeof Query.getNotes,
+    token: string | null,
+    args: Record<string, unknown> = {}
+  ) {
+    const headers = token ? { authorization: `Bearer ${token}` } : {};
+    return middleware(resolve, undefined, args, { req: { headers } }, info);
+  }
+
+  it("lets an allowed role through", async () => {
+    const token = signSessionToken(claimsFor(ROLES.ADMIN, nowInSeconds()));
+    assert.equal(await call(Query.getNotes, token), resolved);
+  });
+
+  it("forbids a role that isn't allowed", async () => {
+    const token = signSessionToken(claimsFor(ROLES.RELIEF, nowInSeconds()));
+    await assert.rejects(
+      call(Mutation.createCustomBadge, token),
+      (err: unknown) => err instanceof ForbiddenError
+    );
+  });
+
+  it("lets a participant access their own data", async () => {
+    const token = signSessionToken(
+      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
+    );
+    assert.equal(
+      await call(Query.getEarningGoal, token, { pid: PID }),
+      resolved
+    );
+  });
+
+  it("forbids a participant from accessing another participant", async () => {
+    const token = signSessionToken(
+      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
+    );
+    await assert.rejects(
+      call(Query.getEarningGoal, token, { pid: PID + 1 }),
+      (err: unknown) => err instanceof ForbiddenError
+    );
+  });
+
+  it("signs out a participant who has departed", async () => {
+    stubs.participant = null;
+    const token = signSessionToken(
+      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
+    );
+    await assertRejectsUnauthenticated(
+      call(Query.getEarningGoal, token, { pid: PID }),
+      /departed/
+    );
+  });
+
+  it("rejects legacy tokens without a session start", async () => {
+    const legacy = jwt.sign({ role: ROLES.ADMIN }, JWT_SECRET, {
+      expiresIn: "12h",
+    });
+    await assertRejectsUnauthenticated(call(Query.getNotes, legacy));
+  });
+
+  it("rejects an expired token", async () => {
+    const start = nowInSeconds() - 9 * 60 * 60;
+    const expired = signSessionToken(claimsFor(ROLES.ADMIN, start), start);
+    await assertRejectsUnauthenticated(
+      call(Query.getNotes, expired),
+      /jwt expired/
+    );
+  });
+
+  it("rejects a missing token", async () => {
+    await assertRejectsUnauthenticated(call(Query.getNotes, null));
+  });
+
+  it("passes resolver errors through unchanged", async () => {
+    const token = signSessionToken(claimsFor(ROLES.ADMIN, nowInSeconds()));
+    const failing = async () => {
+      throw new Error("note not found");
+    };
+    await assert.rejects(
+      Query.getNotes(failing, undefined, {}, bearer(token), info),
+      /note not found/
+    );
+  });
+
+  it("skips auth outside production", async () => {
+    process.env.NODE_ENV = "development";
+    assert.equal(await call(Query.getNotes, null), resolved);
   });
 });

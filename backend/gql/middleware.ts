@@ -1,6 +1,8 @@
-import jwt from "jsonwebtoken";
+import { AuthenticationError, ForbiddenError } from "apollo-server-express";
 import { GraphQLResolveInfo } from "graphql";
 import * as ROLES from "../constants/roles";
+import { findCurrentParticipant } from "../utils/participantUtils";
+import { getBearerToken, verifySessionToken } from "../utils/sessionUtils";
 
 type ResolverFunction = (
   parent: unknown,
@@ -8,11 +10,6 @@ type ResolverFunction = (
   context: { req: { headers: { authorization?: string } } },
   info: GraphQLResolveInfo
 ) => Promise<unknown> | unknown;
-
-interface JWTPayload {
-  role: string;
-  [key: string]: unknown;
-}
 
 function verifyRole(allowedRoles: string[]) {
   return async function verifyRoleMiddleware(
@@ -27,32 +24,25 @@ function verifyRole(allowedRoles: string[]) {
       return resolve(parent, args, context, info);
     } // remove before prod
 
-    const authHeader = context.req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer")) {
-      throw new Error("missing or invalid authorization header");
+    const claims = verifySessionToken(
+      getBearerToken(context.req.headers.authorization)
+    );
+
+    if (!allowedRoles.includes(claims.role)) {
+      throw new ForbiddenError("request is not authorized");
     }
 
-    try {
-      const TOKEN = authHeader.split(" ")[1];
-      const JWT_SECRET = process.env.JWT_SECRET ?? "";
-      const DATA = jwt.verify(TOKEN, JWT_SECRET) as JWTPayload;
-      const { role, pid } = DATA;
-
-      if (!allowedRoles.includes(role)) {
-        throw new Error("request is not authorized");
+    if (claims.role === ROLES.PARTICIPANT) {
+      if (args.pid !== claims.pid) {
+        throw new ForbiddenError("participant is not authenticated");
       }
-
-      if (role === ROLES.PARTICIPANT) {
-        const requestedPid = args.pid;
-        if (!requestedPid || requestedPid !== pid) {
-          throw new Error("participant is not authenticated");
-        }
+      // Sessions outlive a participant's stay, so check they haven't left.
+      if (!(await findCurrentParticipant(claims.pid))) {
+        throw new AuthenticationError("participant has departed");
       }
-
-      return resolve(parent, args, context, info);
-    } catch (err) {
-      throw new Error("invalid or expired token");
     }
+
+    return resolve(parent, args, context, info);
   };
 }
 
