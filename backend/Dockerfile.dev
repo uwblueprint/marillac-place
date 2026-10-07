@@ -1,19 +1,11 @@
-# syntax=docker/dockerfile:1
-# Local development image (docker-compose). Production builds use ./Dockerfile.
 FROM node:18.18.2-slim
 WORKDIR /app
 RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
-
-# Install dependencies before copying the source so this layer is only rebuilt
-# when package.json / yarn.lock change. Our own postinstall (prisma generate + tsc)
-# needs the source and isn't needed in dev, so it's stripped here; dependency
-# install scripts (prisma engines, esbuild, ...) still run. The yarn cache lives in
-# a BuildKit cache mount so it stays out of the image and is reused across builds.
 COPY package.json yarn.lock ./
+# Our postinstall (prisma generate + tsc) needs the source and isn't used in dev
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     npm pkg delete scripts.postinstall && \
     yarn install --frozen-lockfile --network-timeout 600000
-
 COPY . ./
 EXPOSE 5000
 ENTRYPOINT ["yarn", "dev"]
