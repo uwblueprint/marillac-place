@@ -43,7 +43,7 @@ If you pulled changes that add or update dependencies, add `-V` (`--renew-anon-v
 docker compose up --build -V
 ```
 
-**Changing ports:** if port 5000 or 3000 is taken (on macOS, the AirPlay Receiver uses port 5000), set `BACKEND_PORT` / `FRONTEND_PORT` in the root `.env`, e.g. `BACKEND_PORT=5001`. The frontend's backend URL and the backend's CORS origin follow automatically.
+**Changing ports:** if port 5000, 3000 or 5432 is taken (on macOS, the AirPlay Receiver uses port 5000), set `BACKEND_PORT` / `FRONTEND_PORT` / `DB_PORT` in the root `.env`, e.g. `BACKEND_PORT=5001`. The frontend's backend URL and the backend's CORS origin follow automatically.
 
 ## Database Interactions
 After changing `backend/prisma/schema.prisma`, restart the backend container (`docker compose restart backend`) to apply the new schema and re-seed. This also regenerates `backend/prisma/seed/.snaplet/dataModel.json`; commit it along with your schema change.
@@ -91,7 +91,7 @@ DELETE FROM task WHERE task_id = 1;
 Run the following in your terminal:
 ```bash
 docker system prune -a
-docker-compose up --build
+docker compose up --build
 ```
 </details>
 
