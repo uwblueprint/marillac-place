@@ -19,15 +19,30 @@ export type RefreshResult =
   | { status: "refreshed"; token: string }
   // The backend refused to refresh: the session is over.
   | { status: "rejected" }
-  // The backend couldn't be reached: keep the current token and retry on the
-  // next activity.
-  | { status: "unreachable" };
+  // Something else went wrong (network, server error): keep the current
+  // token and retry on the next activity.
+  | { status: "failed" };
 
-// Shared across keep-alive instances, since each page's route guard starts its own.
+// Module state is shared by every keep-alive instance (each page's route
+// guard starts its own) so they throttle and refresh together.
 let lastRefreshAt: number | null = null;
-// Bumped whenever the session is cleared, so an in-flight refresh can't
-// bring back a session the user has signed out of.
+// Bumped whenever a session starts or is cleared, so a refresh from an
+// earlier session can't overwrite or bring back the current one.
 let sessionGeneration = 0;
+let inFlightRefresh: {
+  generation: number;
+  promise: Promise<RefreshResult>;
+} | null = null;
+
+export function getToken(): string | null {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function startSession(token: string): void {
+  localStorage.setItem(TOKEN_KEY, token);
+  lastRefreshAt = Date.now();
+  sessionGeneration += 1;
+}
 
 export function clearSession(): void {
   localStorage.removeItem(TOKEN_KEY);
@@ -47,6 +62,30 @@ export function msUntilExpiry(token: string | null, now: number): number {
   }
 }
 
+// Starts a refresh, or joins the one already running for this session.
+function sharedRefresh(
+  refreshToken: () => Promise<RefreshResult>
+): Promise<RefreshResult> {
+  if (inFlightRefresh && inFlightRefresh.generation === sessionGeneration) {
+    return inFlightRefresh.promise;
+  }
+
+  const generation = sessionGeneration;
+  const promise = refreshToken()
+    .then((result) => {
+      if (result.status === "refreshed" && generation === sessionGeneration) {
+        localStorage.setItem(TOKEN_KEY, result.token);
+        lastRefreshAt = Date.now();
+      }
+      return result;
+    })
+    .finally(() => {
+      if (inFlightRefresh?.promise === promise) inFlightRefresh = null;
+    });
+  inFlightRefresh = { generation, promise };
+  return promise;
+}
+
 type KeepAliveOptions = {
   refreshToken: () => Promise<RefreshResult>;
   onSessionEnded: () => void;
@@ -59,17 +98,29 @@ export function startSessionKeepAlive({
   onSessionEnded,
 }: KeepAliveOptions): () => void {
   let stopped = false;
-  let refreshing = false;
   let expiryTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const stop = () => {
+    stopped = true;
+    clearTimeout(expiryTimer);
+    ACTIVITY_EVENTS.forEach((event) =>
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      window.removeEventListener(event, onActivity)
+    );
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    document.removeEventListener("visibilitychange", onVisibilityChange);
+  };
+
+  const endSession = () => {
+    stop();
+    clearSession();
+    onSessionEnded();
+  };
 
   const checkExpiry = () => {
     clearTimeout(expiryTimer);
-    const remaining = msUntilExpiry(
-      localStorage.getItem(TOKEN_KEY),
-      Date.now()
-    );
+    const remaining = msUntilExpiry(getToken(), Date.now());
     if (remaining <= 0) {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       endSession();
       return;
     }
@@ -77,8 +128,12 @@ export function startSessionKeepAlive({
   };
 
   const refresh = async () => {
-    if (stopped || refreshing) return;
+    if (stopped) return;
+    const joining =
+      inFlightRefresh !== null &&
+      inFlightRefresh.generation === sessionGeneration;
     if (
+      !joining &&
       lastRefreshAt !== null &&
       Date.now() - lastRefreshAt < REFRESH_THROTTLE_MS
     ) {
@@ -86,28 +141,18 @@ export function startSessionKeepAlive({
     }
 
     const generation = sessionGeneration;
-    refreshing = true;
-    let result: RefreshResult;
-    try {
-      result = await refreshToken();
-    } finally {
-      refreshing = false;
-    }
-    if (generation !== sessionGeneration) return;
+    const result = await sharedRefresh(refreshToken);
+    // Stopped (page change) or a different session now: not ours to act on.
+    if (stopped || generation !== sessionGeneration) return;
 
     switch (result.status) {
       case "refreshed":
-        // Saved even if this instance stopped meanwhile (e.g. the user moved
-        // to another page): the token is still valid for the session.
-        localStorage.setItem(TOKEN_KEY, result.token);
-        lastRefreshAt = Date.now();
-        if (!stopped) checkExpiry();
+        checkExpiry();
         return;
       case "rejected":
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        if (!stopped) endSession();
+        endSession();
         return;
-      case "unreachable":
+      case "failed":
         return;
       default:
         throw new Error(`unknown refresh result: ${JSON.stringify(result)}`);
@@ -124,21 +169,6 @@ export function startSessionKeepAlive({
     checkExpiry();
     refresh();
   };
-
-  const stop = () => {
-    stopped = true;
-    clearTimeout(expiryTimer);
-    ACTIVITY_EVENTS.forEach((event) =>
-      window.removeEventListener(event, onActivity)
-    );
-    document.removeEventListener("visibilitychange", onVisibilityChange);
-  };
-
-  function endSession() {
-    stop();
-    clearSession();
-    onSessionEnded();
-  }
 
   ACTIVITY_EVENTS.forEach((event) =>
     window.addEventListener(event, onActivity, { passive: true })

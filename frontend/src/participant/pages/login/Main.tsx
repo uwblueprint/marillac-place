@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Flex, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { verifyRole } from "../../../helpers/verifyRole";
+import { startSession } from "../../../helpers/session";
 import { PARTICIPANT } from "../../../constants/roles";
 import { PARTICIPANT_LOGIN } from "../../../gql/loginRequests";
 import * as ROUTES from "../../../constants/routes";
@@ -26,7 +27,7 @@ export default function ParticipantsLoginPage() {
     PARTICIPANT_LOGIN,
     {
       onCompleted: (data) => {
-        localStorage.setItem("token", data.participantLogin.token);
+        startSession(data.participantLogin.token);
         navigate(ROUTES.PARTICIPANTS_HOME_PAGE);
       },
       onError: (err: Error) => {

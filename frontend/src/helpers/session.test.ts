@@ -1,8 +1,10 @@
 import {
   clearSession,
+  getToken,
   msUntilExpiry,
   REFRESH_THROTTLE_MS,
   RefreshResult,
+  startSession,
   startSessionKeepAlive,
 } from "./session";
 
@@ -154,7 +156,7 @@ describe("startSessionKeepAlive", () => {
   it("ends the session exactly when an idle user's token expires", async () => {
     localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
     start();
-    await backend.respond({ status: "unreachable" });
+    await backend.respond({ status: "failed" });
 
     jest.advanceTimersByTime(HOUR_MS - 1);
     expect(onSessionEnded).not.toHaveBeenCalled();
@@ -241,11 +243,11 @@ describe("startSessionKeepAlive", () => {
     expect(storedToken()).toBeNull();
   });
 
-  it("keeps the token and retries on next activity when unreachable", async () => {
+  it("keeps the token and retries on next activity when a refresh fails", async () => {
     const token = tokenExpiringAt(T0 + HOUR_MS);
     localStorage.setItem("token", token);
     start();
-    await backend.respond({ status: "unreachable" });
+    await backend.respond({ status: "failed" });
     expect(storedToken()).toBe(token);
     expect(onSessionEnded).not.toHaveBeenCalled();
 
@@ -260,7 +262,7 @@ describe("startSessionKeepAlive", () => {
     fireActivity();
     fireActivity("keydown");
     expect(backend.calls).toBe(1);
-    await backend.respond({ status: "unreachable" });
+    await backend.respond({ status: "failed" });
     fireActivity();
     expect(backend.calls).toBe(2);
   });
@@ -281,7 +283,7 @@ describe("startSessionKeepAlive", () => {
   it("stop() removes listeners and timers", async () => {
     localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
     start();
-    await backend.respond({ status: "unreachable" });
+    await backend.respond({ status: "failed" });
     stop?.();
 
     fireActivity();
@@ -315,7 +317,7 @@ describe("startSessionKeepAlive", () => {
   it("ends the session on return if it expired while timers were suspended", async () => {
     localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
     start();
-    await backend.respond({ status: "unreachable" });
+    await backend.respond({ status: "failed" });
 
     // Phone locked: the clock moves on but no timers fire.
     setVisibility("hidden");
@@ -345,12 +347,77 @@ describe("startSessionKeepAlive", () => {
   it("handles expiries beyond setTimeout's maximum delay", async () => {
     localStorage.setItem("token", tokenExpiringAt(T0 + 30 * DAY_MS));
     start();
-    await backend.respond({ status: "unreachable" });
+    await backend.respond({ status: "failed" });
 
     jest.advanceTimersByTime(30 * DAY_MS - 1000);
     expect(onSessionEnded).not.toHaveBeenCalled();
     jest.advanceTimersByTime(1000);
     expect(onSessionEnded).toHaveBeenCalledTimes(1);
+  });
+
+  it("instances started during a refresh share it (one request)", async () => {
+    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    start();
+    const stopSecond = startSessionKeepAlive({
+      refreshToken: backend.refreshToken,
+      onSessionEnded,
+    });
+    fireActivity();
+    expect(backend.calls).toBe(1);
+
+    await backend.respond({ status: "rejected" });
+    expect(onSessionEnded).toHaveBeenCalledTimes(1);
+    expect(storedToken()).toBeNull();
+    stopSecond();
+  });
+
+  it("a remount mid-refresh (StrictMode) doesn't send a second request", async () => {
+    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    const stopFirst = start();
+    stopFirst();
+    start();
+    expect(backend.calls).toBe(1);
+
+    const fresh = tokenExpiringAt(T0 + 8 * HOUR_MS);
+    await backend.respond({ status: "refreshed", token: fresh });
+    expect(storedToken()).toBe(fresh);
+
+    // The surviving instance follows the new expiry, not the old one.
+    jest.advanceTimersByTime(HOUR_MS);
+    expect(onSessionEnded).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(7 * HOUR_MS);
+    expect(onSessionEnded).toHaveBeenCalledTimes(1);
+  });
+
+  it("doesn't refresh right after login", () => {
+    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    start();
+    expect(backend.calls).toBe(0);
+    jest.advanceTimersByTime(REFRESH_THROTTLE_MS);
+    fireActivity();
+    expect(backend.calls).toBe(1);
+  });
+
+  it("a refresh from a previous session can't overwrite a new login", async () => {
+    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    start();
+    const newLogin = tokenExpiringAt(T0 + 8 * HOUR_MS);
+    startSession(newLogin);
+    await backend.respond({
+      status: "refreshed",
+      token: tokenExpiringAt(T0 + 2 * HOUR_MS),
+    });
+    expect(getToken()).toBe(newLogin);
+  });
+
+  it("a new session doesn't join the previous session's refresh", async () => {
+    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    const stopFirst = start();
+    stopFirst();
+    clearSession();
+    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    start();
+    expect(backend.calls).toBe(2);
   });
 
   it("clearSession resets the throttle", async () => {

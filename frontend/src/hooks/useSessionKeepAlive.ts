@@ -4,6 +4,16 @@ import { ApolloError, useMutation } from "@apollo/client";
 import { REFRESH_SESSION } from "../gql/loginRequests";
 import { RefreshResult, startSessionKeepAlive } from "../helpers/session";
 
+// The backend marks "this session is over" errors as UNAUTHENTICATED; anything
+// else (network trouble, server errors) is worth retrying later.
+export function classifyRefreshError(err: unknown): RefreshResult {
+  if (!(err instanceof ApolloError)) throw err;
+  const unauthenticated = err.graphQLErrors.some(
+    (graphQLError) => graphQLError.extensions?.code === "UNAUTHENTICATED"
+  );
+  return unauthenticated ? { status: "rejected" } : { status: "failed" };
+}
+
 // Keeps the user signed in while they're active, and sends them to the login
 // page once their session expires. Only runs while `enabled`.
 export default function useSessionKeepAlive(
@@ -21,13 +31,7 @@ export default function useSessionKeepAlive(
         const { data } = await refreshSession();
         return { status: "refreshed", token: data.refreshSession.token };
       } catch (err) {
-        if (err instanceof ApolloError && err.graphQLErrors.length > 0) {
-          return { status: "rejected" };
-        }
-        if (err instanceof ApolloError && err.networkError) {
-          return { status: "unreachable" };
-        }
-        throw err;
+        return classifyRefreshError(err);
       }
     };
 

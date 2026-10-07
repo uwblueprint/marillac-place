@@ -26,6 +26,7 @@ import ParticipantsAnnouncementsPage from "./participant/pages/announcements/Mai
 import ParticipantsProgressPage from "./participant/pages/progress/Main";
 
 import * as ROUTES from "./constants/routes";
+import { getToken } from "./helpers/session";
 import AdminRoute from "./admin/AdminRoute";
 import ParticipantRoute from "./participant/ParticipantRoute";
 import { AdminProvider } from "./admin/AdminContext";
@@ -46,8 +47,7 @@ function initApolloClient() {
   });
 
   const header = setContext(async (_, { headers }) => {
-    let token = null;
-    token = localStorage.getItem("token");
+    const token = getToken();
     return {
       headers: {
         ...headers,
