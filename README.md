@@ -28,21 +28,25 @@ nvm use 18.18.2
 ```
 4. Optional, you might recieve a few errors about missing packages on your local computer. To resolve them, run *yarn install* in both the frontend and backend folders
 5. Populate .env files in the root, frontend and backend folders
-6. Apply prisma schema onto database following [these instructions](#database-interactions)
 
 ## Application Execution
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 Frontend: http://localhost:3000  
 Backend: http://localhost:5000/graphql
 
+Every time the backend container starts it resets the local database: it applies `prisma/schema.prisma` with `prisma db push --force-reset` and re-seeds mock data (`backend/prisma/seed`). Any data you added locally is wiped on restart.
+
+If you pulled changes that add or update dependencies, add `-V` (`--renew-anon-volumes`) so the containers pick up the newly installed `node_modules` instead of reusing the old ones:
+```bash
+docker compose up --build -V
+```
+
+**Changing ports:** if port 5000 or 3000 is taken (on macOS, the AirPlay Receiver uses port 5000), set `BACKEND_PORT` / `FRONTEND_PORT` in the root `.env`, e.g. `BACKEND_PORT=5001`. The frontend's backend URL and the backend's CORS origin follow automatically.
+
 ## Database Interactions
-Apply / migrate changes in prisma.schema to the database:
-1. First ensure your `mp_db` container is running 
-2. Change the DATABASE_URL in the backend .env file to: postgresql://postgres:postgres@**localhost**:5432/mp
-3. In your terminal, run `npx prisma migrate dev` in the backend folder and follow the prompts
-4. Don’t forget to reset DATABASE_URL back to postgresql://postgres:postgres@**mp_db**:5432/mp
+After changing `backend/prisma/schema.prisma`, restart the backend container (`docker compose restart backend`) to apply the new schema and re-seed. This also regenerates `backend/prisma/seed/.snaplet/dataModel.json`; commit it along with your schema change.
 
 Common database commands:
 ```bash
@@ -88,16 +92,6 @@ Run the following in your terminal:
 ```bash
 docker system prune -a
 docker-compose up --build
-```
-</details>
-
-<details>
-<summary>error ESOCKETTIMEOUT: "There appears to be a trouble with your network connection. Retrying…"</summary>
-  
-Sometimes Material UI takes a long time to install initially so we'll want to increase the timeout limit:
-```bash
-# in each docker file replace any "yarn install" line with:
-RUN yarn config set network-timeout 600000 && yarn install
 ```
 </details>
 
