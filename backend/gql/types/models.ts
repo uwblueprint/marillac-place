@@ -102,7 +102,6 @@ const models = gql`
 
   type Participant {
     pid: Int!
-    password: String!
     room: Int!
     arrival: DateTime!
     departure: DateTime

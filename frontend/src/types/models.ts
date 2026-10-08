@@ -110,7 +110,6 @@ export interface Note {
 
 export interface Participant {
   pid: number;
-  password: string;
   room: number;
   arrival: string;
   departure?: string;

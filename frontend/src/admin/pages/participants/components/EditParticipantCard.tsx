@@ -36,10 +36,10 @@ export default function EditParticipantCard({
   const currentDepartureDate = participant.departure
     ? new Date(participant.departure)
     : null;
-  const currentPassword = participant.password;
 
   const [arrivalDate, setArrivalDate] = useState<Date>(currentArrivalDate);
-  const [password, setPassword] = useState<string>(currentPassword);
+  // The API never returns passwords; a non-empty value here sets a new one.
+  const [password, setPassword] = useState<string>("");
   const [departureDate, setDepartureDate] = useState<Date | null>(
     currentDepartureDate
   );
@@ -58,7 +58,6 @@ export default function EditParticipantCard({
 
     if (
       !arrivalDate ||
-      !password ||
       (endStay && !departureDate) ||
       (swapParticipant && selectedSwap === -1)
     ) {
@@ -69,7 +68,7 @@ export default function EditParticipantCard({
 
     if (
       arrivalDate.getTime() === currentArrivalDate.getTime() &&
-      password === currentPassword &&
+      !password &&
       !endStay &&
       !swapParticipant
     ) {
@@ -100,7 +99,7 @@ export default function EditParticipantCard({
           arrival: arrivalDate.toISOString(),
           departure:
             endStay && departureDate ? departureDate.toISOString() : undefined,
-          password,
+          password: password || undefined,
         },
       });
 
@@ -149,7 +148,8 @@ export default function EditParticipantCard({
       />
 
       <PasswordInput
-        label="Password"
+        label="New Password"
+        placeholder="Leave blank to keep current password"
         current_value={password}
         update_action={setPassword}
         size="large"

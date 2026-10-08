@@ -29,7 +29,7 @@ import receivedAnnouncementResolver from "./resolvers/receivedAnnouncementResolv
 import systemBadgeResolver from "./resolvers/systemBadgeResolver";
 import transactionResolver from "./resolvers/transactionResolver";
 
-import getMiddleware from "./middleware";
+import getMiddleware, { assertEveryOperationHasMiddleware } from "./middleware";
 
 export default function getSchema() {
   const middleware = getMiddleware();
@@ -56,6 +56,7 @@ export default function getSchema() {
     ),
   });
 
+  assertEveryOperationHasMiddleware(schema, middleware);
   const schemaWithMiddleware = applyMiddleware(schema, middleware);
   return schemaWithMiddleware;
 }
