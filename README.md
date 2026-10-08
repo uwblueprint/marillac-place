@@ -75,7 +75,7 @@ DELETE FROM task WHERE task_id = 1;
 </details>
 
 <details>
-<summary>I added a new query/mutation and the backend won't start ("auth middleware is out of sync")</summary>
+<summary>I added a new query/mutation and the backend won't start ("operations missing auth middleware")</summary>
 
 - Every Query and Mutation needs an entry in `backend/gql/middleware.ts` saying which roles may call it, e.g. `verifyRole([ROLES.ADMIN, ROLES.RELIEF])`
 - The server refuses to start if one is missing, so nothing is accidentally left open in production

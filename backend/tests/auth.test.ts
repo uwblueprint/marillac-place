@@ -66,19 +66,6 @@ describe("assertEveryOperationHasMiddleware", () => {
     );
   });
 
-  it("rejects middleware for an operation that is not in the schema", () => {
-    const schema = buildSchema(`
-      type Query { a: Int }
-      type Mutation { c: Int }
-    `);
-    assert.throws(
-      () => assertEveryOperationHasMiddleware(schema, middleware),
-      (err: Error) =>
-        /Mutation\.b has auth but is not in the schema/.test(err.message) &&
-        /Mutation\.c has no auth/.test(err.message)
-    );
-  });
-
   it("rejects a schema without a Mutation type", () => {
     const schema = buildSchema(`type Query { a: Int }`);
     assert.throws(
@@ -183,6 +170,23 @@ describe("auth middleware (production)", () => {
       "getParticipantByPid with an unknown role",
       getParticipant,
       bearer({ role: "someone" }),
+    ],
+    [
+      "getParticipantByPid with an expired token",
+      getParticipant,
+      `Bearer ${jwt.sign({ role: ROLES.ADMIN }, JWT_SECRET, {
+        expiresIn: -1,
+      })}`,
+    ],
+    [
+      "getParticipantByPid as a participant with no pid claim",
+      getParticipant,
+      bearer({ role: ROLES.PARTICIPANT }),
+    ],
+    [
+      "getParticipantByPid with a token missing the Bearer prefix",
+      getParticipant,
+      jwt.sign({ role: ROLES.ADMIN }, JWT_SECRET),
     ],
     ["updateTask without a token", updateTask, undefined],
     [

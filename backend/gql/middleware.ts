@@ -187,18 +187,15 @@ export function assertEveryOperationHasMiddleware(
     if (!(type instanceof GraphQLObjectType)) {
       throw new Error(`schema is missing the ${typeName} type`);
     }
-    const fields = Object.keys(type.getFields());
+    // applyMiddleware already rejects entries for fields not in the schema.
     const entries = Object.keys(middleware[typeName]);
-    fields
+    Object.keys(type.getFields())
       .filter((field) => !entries.includes(field))
       .forEach((field) => problems.push(`${typeName}.${field} has no auth`));
-    entries
-      .filter((entry) => !fields.includes(entry))
-      .forEach((entry) =>
-        problems.push(`${typeName}.${entry} has auth but is not in the schema`)
-      );
   });
   if (problems.length > 0) {
-    throw new Error(`auth middleware is out of sync:\n${problems.join("\n")}`);
+    throw new Error(
+      `operations missing auth middleware:\n${problems.join("\n")}`
+    );
   }
 }
