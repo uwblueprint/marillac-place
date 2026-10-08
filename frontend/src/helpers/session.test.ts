@@ -1,13 +1,19 @@
 import {
+  ApolloLink,
+  execute,
+  FetchResult,
+  from,
+  gql,
+  Observable,
+} from "@apollo/client";
+import {
   clearSession,
+  createSessionLink,
   getToken,
   msUntilExpiry,
-  REFRESH_THROTTLE_MS,
-  RefreshResult,
-  RETRY_AFTER_FAILURE_MS,
   startSession,
-  startSessionKeepAlive,
   storeToken,
+  watchSessionExpiry,
 } from "./session";
 
 const T0 = Date.UTC(2026, 9, 7, 12, 0, 0);
@@ -43,47 +49,6 @@ function skewedToken(lifetimeMs: number, skewMs: number): string {
   return makeToken({ role: "admin", iat, exp: iat + lifetimeMs / 1000 });
 }
 
-function storedToken(): string | null {
-  return localStorage.getItem("token");
-}
-
-async function flushPromises(): Promise<void> {
-  for (let i = 0; i < 5; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    await Promise.resolve();
-  }
-}
-
-type Deferred = {
-  resolve: (result: RefreshResult) => void;
-  reject: (err: Error) => void;
-};
-
-// Controls the refresh responses the keep-alive sees.
-class FakeBackend {
-  calls = 0;
-
-  pending: Deferred[] = [];
-
-  refreshToken = (): Promise<RefreshResult> => {
-    this.calls += 1;
-    return new Promise((resolve, reject) => {
-      this.pending.push({ resolve, reject });
-    });
-  };
-
-  async respond(result: RefreshResult): Promise<void> {
-    const next = this.pending.shift();
-    if (!next) throw new Error("no pending refresh");
-    next.resolve(result);
-    await flushPromises();
-  }
-}
-
-function fireActivity(type = "pointerdown"): void {
-  window.dispatchEvent(new Event(type));
-}
-
 function setVisibility(state: DocumentVisibilityState): void {
   Object.defineProperty(document, "visibilityState", {
     configurable: true,
@@ -92,30 +57,14 @@ function setVisibility(state: DocumentVisibilityState): void {
   document.dispatchEvent(new Event("visibilitychange"));
 }
 
-let backend: FakeBackend;
-let onSessionEnded: jest.Mock;
-let stop: (() => void) | undefined;
-
-function start(): () => void {
-  stop = startSessionKeepAlive({
-    refreshToken: backend.refreshToken,
-    onSessionEnded,
-  });
-  return stop;
-}
-
 beforeEach(() => {
   jest.useFakeTimers();
   jest.setSystemTime(T0);
   clearSession();
-  backend = new FakeBackend();
-  onSessionEnded = jest.fn();
-  stop = undefined;
   setVisibility("visible");
 });
 
 afterEach(() => {
-  stop?.();
   jest.useRealTimers();
 });
 
@@ -169,20 +118,36 @@ describe("storeToken / msUntilExpiry", () => {
     ["a token without exp", makeToken({ iat: T0 / 1000 })],
   ])("refuses to store %s", (_label, token) => {
     expect(() => storeToken(token)).toThrow();
-    expect(storedToken()).toBeNull();
+    expect(getToken()).toBeNull();
+  });
+
+  it("clearSession removes the token and its expiry", () => {
+    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    clearSession();
+    expect(getToken()).toBeNull();
+    expect(localStorage.getItem("tokenExpiresAt")).toBeNull();
   });
 });
 
-describe("startSessionKeepAlive", () => {
-  it("refreshes immediately and stores the new token", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    expect(backend.calls).toBe(1);
+describe("watchSessionExpiry", () => {
+  let onExpired: jest.Mock;
+  let stop: () => void;
 
-    const fresh = tokenExpiringAt(T0 + 8 * HOUR_MS);
-    await backend.respond({ status: "refreshed", token: fresh });
-    expect(storedToken()).toBe(fresh);
-    expect(onSessionEnded).not.toHaveBeenCalled();
+  beforeEach(() => {
+    onExpired = jest.fn();
+  });
+
+  afterEach(() => {
+    stop();
+  });
+
+  it("fires exactly when the session expires", () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    stop = watchSessionExpiry(onExpired);
+    jest.advanceTimersByTime(HOUR_MS - 1);
+    expect(onExpired).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(1);
+    expect(onExpired).toHaveBeenCalledTimes(1);
   });
 
   it.each([
@@ -193,13 +158,23 @@ describe("startSessionKeepAlive", () => {
       "a token without a stored expiry",
       () => localStorage.setItem("token", "garbage"),
     ],
-  ])("ends the session straight away with %s", (_label, seed) => {
+  ])("fires straight away with %s", (_label, seed) => {
     seed();
-    start();
-    expect(onSessionEnded).toHaveBeenCalledTimes(1);
-    expect(storedToken()).toBeNull();
-    expect(localStorage.getItem("tokenExpiresAt")).toBeNull();
-    expect(backend.calls).toBe(0);
+    stop = watchSessionExpiry(onExpired);
+    expect(onExpired).toHaveBeenCalledTimes(1);
+  });
+
+  it("follows the expiry as requests slide the session", () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    stop = watchSessionExpiry(onExpired);
+
+    jest.advanceTimersByTime(30 * 60 * 1000);
+    storeToken(tokenExpiringAt(Date.now() + HOUR_MS));
+
+    jest.advanceTimersByTime(HOUR_MS - 1);
+    expect(onExpired).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(1);
+    expect(onExpired).toHaveBeenCalledTimes(1);
   });
 
   it.each([
@@ -207,333 +182,208 @@ describe("startSessionKeepAlive", () => {
     ["behind", -10 * HOUR_MS],
   ])(
     "keeps the full session when the server clock is 10h %s",
-    async (_label, skewMs) => {
-      storeToken(skewedToken(HOUR_MS, skewMs));
-      start();
-      await backend.respond({
-        status: "refreshed",
-        token: skewedToken(8 * HOUR_MS, skewMs),
-      });
-
+    (_label, skewMs) => {
+      storeToken(skewedToken(8 * HOUR_MS, skewMs));
+      stop = watchSessionExpiry(onExpired);
       jest.advanceTimersByTime(8 * HOUR_MS - 1);
-      expect(onSessionEnded).not.toHaveBeenCalled();
+      expect(onExpired).not.toHaveBeenCalled();
       jest.advanceTimersByTime(1);
-      expect(onSessionEnded).toHaveBeenCalledTimes(1);
+      expect(onExpired).toHaveBeenCalledTimes(1);
     }
   );
 
-  it("measures a refreshed token from when the refresh was requested", async () => {
+  it("fires on return if the session expired while timers were suspended", () => {
     storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    const lifetime = 8 * HOUR_MS;
-    const fresh = skewedToken(lifetime, 0);
-    // The response takes 2s to arrive.
-    jest.advanceTimersByTime(2000);
-    await backend.respond({ status: "refreshed", token: fresh });
-    expect(msUntilExpiry(Date.now())).toBe(lifetime - 2000);
-  });
-
-  it("ends the session exactly when an idle user's token expires", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    await backend.respond({ status: "failed" });
-
-    jest.advanceTimersByTime(HOUR_MS - 1);
-    expect(onSessionEnded).not.toHaveBeenCalled();
-    jest.advanceTimersByTime(1);
-    expect(onSessionEnded).toHaveBeenCalledTimes(1);
-    expect(storedToken()).toBeNull();
-  });
-
-  it("throttles refreshes while the user is active", async () => {
-    storeToken(tokenExpiringAt(T0 + 8 * HOUR_MS));
-    start();
-    await backend.respond({
-      status: "refreshed",
-      token: tokenExpiringAt(T0 + 8 * HOUR_MS),
-    });
-
-    jest.advanceTimersByTime(REFRESH_THROTTLE_MS - 1);
-    fireActivity();
-    expect(backend.calls).toBe(1);
-
-    jest.advanceTimersByTime(1);
-    fireActivity();
-    expect(backend.calls).toBe(2);
-  });
-
-  it.each(["pointerdown", "keydown", "wheel"])(
-    "treats %s as activity",
-    async (eventType) => {
-      storeToken(tokenExpiringAt(T0 + 8 * HOUR_MS));
-      start();
-      await backend.respond({
-        status: "refreshed",
-        token: tokenExpiringAt(T0 + 8 * HOUR_MS),
-      });
-      jest.advanceTimersByTime(REFRESH_THROTTLE_MS);
-      fireActivity(eventType);
-      expect(backend.calls).toBe(2);
-    }
-  );
-
-  it("ignores events that aren't user activity", async () => {
-    storeToken(tokenExpiringAt(T0 + 8 * HOUR_MS));
-    start();
-    await backend.respond({
-      status: "refreshed",
-      token: tokenExpiringAt(T0 + 8 * HOUR_MS),
-    });
-    jest.advanceTimersByTime(REFRESH_THROTTLE_MS);
-    fireActivity("mousemove");
-    fireActivity("resize");
-    expect(backend.calls).toBe(1);
-  });
-
-  it("keeps an active user signed in past the original expiry", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    await backend.respond({
-      status: "refreshed",
-      token: tokenExpiringAt(T0 + HOUR_MS),
-    });
-
-    // Active every 30 minutes for 5 hours, each refresh sliding expiry 1h ahead.
-    for (let i = 1; i <= 10; i += 1) {
-      jest.advanceTimersByTime(30 * 60 * 1000);
-      fireActivity();
-      // eslint-disable-next-line no-await-in-loop
-      await backend.respond({
-        status: "refreshed",
-        token: tokenExpiringAt(Date.now() + HOUR_MS),
-      });
-    }
-    expect(onSessionEnded).not.toHaveBeenCalled();
-
-    // Then goes idle: signed out an hour after the last refresh.
-    jest.advanceTimersByTime(HOUR_MS);
-    expect(onSessionEnded).toHaveBeenCalledTimes(1);
-  });
-
-  it("ends the session when the backend rejects the refresh", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    await backend.respond({ status: "rejected" });
-    expect(onSessionEnded).toHaveBeenCalledTimes(1);
-    expect(storedToken()).toBeNull();
-  });
-
-  it("keeps the token when a refresh fails and retries after a pause", async () => {
-    const token = tokenExpiringAt(T0 + HOUR_MS);
-    storeToken(token);
-    start();
-    await backend.respond({ status: "failed" });
-    expect(storedToken()).toBe(token);
-    expect(onSessionEnded).not.toHaveBeenCalled();
-
-    jest.advanceTimersByTime(RETRY_AFTER_FAILURE_MS - 1);
-    fireActivity();
-    expect(backend.calls).toBe(1);
-
-    jest.advanceTimersByTime(1);
-    fireActivity();
-    expect(backend.calls).toBe(2);
-  });
-
-  it("sends one request per retry window while the backend keeps failing", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    await backend.respond({ status: "failed" });
-
-    // Scrolling fires many events; only one retry per window goes out.
-    for (let second = 1; second <= 90; second += 1) {
-      jest.advanceTimersByTime(1000);
-      fireActivity("wheel");
-      if (backend.pending.length > 0) {
-        // eslint-disable-next-line no-await-in-loop
-        await backend.respond({ status: "failed" });
-      }
-    }
-    expect(backend.calls).toBe(4);
-  });
-
-  it("never runs two refreshes at once", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    fireActivity();
-    fireActivity("keydown");
-    expect(backend.calls).toBe(1);
-    await backend.respond({ status: "failed" });
-    jest.advanceTimersByTime(RETRY_AFTER_FAILURE_MS);
-    fireActivity();
-    expect(backend.calls).toBe(2);
-  });
-
-  it("shares the throttle between instances (one per page)", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    const stopFirst = start();
-    await backend.respond({
-      status: "refreshed",
-      token: tokenExpiringAt(T0 + HOUR_MS),
-    });
-    stopFirst();
-
-    start();
-    expect(backend.calls).toBe(1);
-  });
-
-  it("stop() removes listeners and timers", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    await backend.respond({ status: "failed" });
-    stop?.();
-
-    fireActivity();
-    setVisibility("visible");
-    jest.advanceTimersByTime(2 * HOUR_MS);
-    expect(backend.calls).toBe(1);
-    expect(onSessionEnded).not.toHaveBeenCalled();
-  });
-
-  it("still saves a refreshed token after stopping (page change mid-refresh)", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    stop?.();
-    const fresh = tokenExpiringAt(T0 + 8 * HOUR_MS);
-    await backend.respond({ status: "refreshed", token: fresh });
-    expect(storedToken()).toBe(fresh);
-  });
-
-  it("does not resurrect a session signed out of mid-refresh", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    clearSession();
-    stop?.();
-    await backend.respond({
-      status: "refreshed",
-      token: tokenExpiringAt(T0 + 8 * HOUR_MS),
-    });
-    expect(storedToken()).toBeNull();
-  });
-
-  it("ends the session on return if it expired while timers were suspended", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    await backend.respond({ status: "failed" });
+    stop = watchSessionExpiry(onExpired);
 
     // Phone locked: the clock moves on but no timers fire.
     setVisibility("hidden");
     jest.setSystemTime(T0 + 2 * HOUR_MS);
-    expect(onSessionEnded).not.toHaveBeenCalled();
+    expect(onExpired).not.toHaveBeenCalled();
 
     setVisibility("visible");
-    expect(onSessionEnded).toHaveBeenCalledTimes(1);
-    expect(backend.calls).toBe(1);
+    expect(onExpired).toHaveBeenCalledTimes(1);
   });
 
-  it("refreshes on return if the session is still valid", async () => {
+  it("doesn't fire on return if the session is still valid", () => {
     storeToken(tokenExpiringAt(T0 + 7 * DAY_MS));
-    start();
-    await backend.respond({
-      status: "refreshed",
-      token: tokenExpiringAt(T0 + 7 * DAY_MS),
-    });
-
+    stop = watchSessionExpiry(onExpired);
     setVisibility("hidden");
     jest.setSystemTime(T0 + DAY_MS);
     setVisibility("visible");
-    expect(backend.calls).toBe(2);
-    expect(onSessionEnded).not.toHaveBeenCalled();
+    expect(onExpired).not.toHaveBeenCalled();
   });
 
-  it("handles expiries beyond setTimeout's maximum delay", async () => {
+  it("handles expiries beyond setTimeout's maximum delay", () => {
     storeToken(tokenExpiringAt(T0 + 30 * DAY_MS));
-    start();
-    await backend.respond({ status: "failed" });
-
+    stop = watchSessionExpiry(onExpired);
     jest.advanceTimersByTime(30 * DAY_MS - 1000);
-    expect(onSessionEnded).not.toHaveBeenCalled();
+    expect(onExpired).not.toHaveBeenCalled();
     jest.advanceTimersByTime(1000);
-    expect(onSessionEnded).toHaveBeenCalledTimes(1);
+    expect(onExpired).toHaveBeenCalledTimes(1);
   });
 
-  it("instances started during a refresh share it (one request)", async () => {
+  it("stop() removes the timer and the visibility listener", () => {
     storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    const stopSecond = startSessionKeepAlive({
-      refreshToken: backend.refreshToken,
-      onSessionEnded,
+    stop = watchSessionExpiry(onExpired);
+    stop();
+    jest.advanceTimersByTime(2 * HOUR_MS);
+    setVisibility("visible");
+    expect(onExpired).not.toHaveBeenCalled();
+  });
+});
+
+describe("createSessionLink", () => {
+  type ServerReply = {
+    token?: string;
+    errors?: { message: string; extensions?: { code?: string } }[];
+    networkError?: Error;
+    delayMs?: number;
+  };
+
+  // Stands in for the HTTP link: replies with an optional session header.
+  function fakeServer(reply: ServerReply): ApolloLink {
+    return new ApolloLink(
+      (operation) =>
+        new Observable<FetchResult>((observer) => {
+          const respond = () => {
+            if (reply.networkError) {
+              observer.error(reply.networkError);
+              return;
+            }
+            operation.setContext({
+              response: {
+                headers: {
+                  get: (name: string) =>
+                    name === "x-session-token" ? reply.token ?? null : null,
+                },
+              },
+            });
+            observer.next(
+              reply.errors
+                ? ({ errors: reply.errors } as unknown as FetchResult)
+                : { data: { ok: true } }
+            );
+            observer.complete();
+          };
+          if (reply.delayMs) setTimeout(respond, reply.delayMs);
+          else respond();
+        })
+    );
+  }
+
+  let onUnauthenticated: jest.Mock;
+
+  beforeEach(() => {
+    onUnauthenticated = jest.fn();
+  });
+
+  function request(reply: ServerReply): Promise<void> {
+    const link = from([
+      createSessionLink(onUnauthenticated),
+      fakeServer(reply),
+    ]);
+    return new Promise((resolve) => {
+      execute(link, {
+        query: gql`
+          query Ping {
+            ok
+          }
+        `,
+      }).subscribe({ complete: resolve, error: () => resolve() });
     });
-    fireActivity();
-    expect(backend.calls).toBe(1);
+  }
 
-    await backend.respond({ status: "rejected" });
-    expect(onSessionEnded).toHaveBeenCalledTimes(1);
-    expect(storedToken()).toBeNull();
-    stopSecond();
-  });
-
-  it("a remount mid-refresh (StrictMode) doesn't send a second request", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    const stopFirst = start();
-    stopFirst();
-    start();
-    expect(backend.calls).toBe(1);
-
-    const fresh = tokenExpiringAt(T0 + 8 * HOUR_MS);
-    await backend.respond({ status: "refreshed", token: fresh });
-    expect(storedToken()).toBe(fresh);
-
-    // The surviving instance follows the new expiry, not the old one.
-    jest.advanceTimersByTime(HOUR_MS);
-    expect(onSessionEnded).not.toHaveBeenCalled();
-    jest.advanceTimersByTime(7 * HOUR_MS);
-    expect(onSessionEnded).toHaveBeenCalledTimes(1);
-  });
-
-  it("doesn't refresh right after login", () => {
+  it("saves the fresh token from the response header", async () => {
     startSession(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    expect(backend.calls).toBe(0);
-    jest.advanceTimersByTime(REFRESH_THROTTLE_MS);
-    fireActivity();
-    expect(backend.calls).toBe(1);
+    const slid = tokenExpiringAt(T0 + 8 * HOUR_MS);
+    await request({ token: slid });
+    expect(getToken()).toBe(slid);
+    expect(msUntilExpiry(T0)).toBe(8 * HOUR_MS);
   });
 
-  it("a refresh from a previous session can't overwrite a new login", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
+  it("measures the fresh token from when the request was sent", async () => {
+    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    const done = request({
+      token: skewedToken(8 * HOUR_MS, 0),
+      delayMs: 2000,
+    });
+    jest.advanceTimersByTime(2000);
+    await done;
+    expect(msUntilExpiry(Date.now())).toBe(8 * HOUR_MS - 2000);
+  });
+
+  it("leaves the token alone when the response has no header", async () => {
+    const token = tokenExpiringAt(T0 + HOUR_MS);
+    startSession(token);
+    await request({});
+    expect(getToken()).toBe(token);
+  });
+
+  it("doesn't bring back a session signed out of mid-request", async () => {
+    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    const done = request({
+      token: tokenExpiringAt(T0 + 8 * HOUR_MS),
+      delayMs: 1000,
+    });
+    clearSession();
+    jest.advanceTimersByTime(1000);
+    await done;
+    expect(getToken()).toBeNull();
+  });
+
+  it("doesn't overwrite a new login with a reply from the old session", async () => {
+    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    const done = request({
+      token: tokenExpiringAt(T0 + 2 * HOUR_MS),
+      delayMs: 1000,
+    });
     const newLogin = tokenExpiringAt(T0 + 8 * HOUR_MS);
     startSession(newLogin);
-    await backend.respond({
-      status: "refreshed",
-      token: tokenExpiringAt(T0 + 2 * HOUR_MS),
-    });
+    jest.advanceTimersByTime(1000);
+    await done;
     expect(getToken()).toBe(newLogin);
   });
 
-  it("a new session doesn't join the previous session's refresh", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    const stopFirst = start();
-    stopFirst();
-    clearSession();
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    expect(backend.calls).toBe(2);
+  it.each([
+    [
+      "an UNAUTHENTICATED error",
+      [{ message: "expired", extensions: { code: "UNAUTHENTICATED" } }],
+    ],
+    [
+      "UNAUTHENTICATED among other errors",
+      [
+        { message: "boom", extensions: { code: "INTERNAL_SERVER_ERROR" } },
+        { message: "expired", extensions: { code: "UNAUTHENTICATED" } },
+      ],
+    ],
+  ])("ends the session after %s", async (_label, errors) => {
+    await request({ errors });
+    expect(onUnauthenticated).toHaveBeenCalledTimes(1);
   });
 
-  it("clearSession resets the throttle", async () => {
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    const stopFirst = start();
-    await backend.respond({
-      status: "refreshed",
-      token: tokenExpiringAt(T0 + HOUR_MS),
-    });
-    stopFirst();
+  it.each([
+    [
+      "a forbidden error",
+      [{ message: "no", extensions: { code: "FORBIDDEN" } }],
+    ],
+    [
+      "a server error",
+      [{ message: "boom", extensions: { code: "INTERNAL_SERVER_ERROR" } }],
+    ],
+    ["an error without a code", [{ message: "boom" }]],
+  ])("keeps the session after %s", async (_label, errors) => {
+    await request({ errors });
+    expect(onUnauthenticated).not.toHaveBeenCalled();
+  });
 
-    clearSession();
-    storeToken(tokenExpiringAt(T0 + HOUR_MS));
-    start();
-    expect(backend.calls).toBe(2);
+  it("keeps the session after a network error", async () => {
+    await request({ networkError: new Error("offline") });
+    expect(onUnauthenticated).not.toHaveBeenCalled();
+  });
+
+  it("keeps the session after a successful request", async () => {
+    await request({});
+    expect(onUnauthenticated).not.toHaveBeenCalled();
   });
 });

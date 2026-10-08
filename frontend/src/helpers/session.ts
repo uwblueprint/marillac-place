@@ -1,45 +1,23 @@
+import { ApolloLink, from } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import { jwtDecode } from "jwt-decode";
 
-// Sessions are sliding: the backend issues tokens that expire after an idle
-// timeout, and while the user is active we swap the token for a fresh one.
-// See backend/constants/session.ts for the durations.
+// Sessions are sliding: authenticated requests come back with a fresh token in
+// a response header (see backend/gql/slideSession.ts), and the session ends
+// after the role's idle timeout without requests.
 
 const TOKEN_KEY = "token";
 // Local time the token expires, so the device clock never has to agree with
 // the server's.
 const EXPIRES_AT_KEY = "tokenExpiresAt";
-
-// Refresh at most this often while the user is active.
-export const REFRESH_THROTTLE_MS = 5 * 60 * 1000;
-
-// After a failed refresh, wait this long before trying again.
-export const RETRY_AFTER_FAILURE_MS = 30 * 1000;
+const SESSION_TOKEN_HEADER = "x-session-token";
 
 // setTimeout fires immediately for delays above this (~24.8 days).
 const MAX_TIMEOUT_MS = 2 ** 31 - 1;
 
-const ACTIVITY_EVENTS = ["pointerdown", "keydown", "wheel"] as const;
-
-export type RefreshResult =
-  // The backend issued a new token.
-  | { status: "refreshed"; token: string }
-  // The backend refused to refresh: the session is over.
-  | { status: "rejected" }
-  // Something else went wrong (network, server error): keep the current
-  // token and retry on the next activity.
-  | { status: "failed" };
-
-// Module state is shared by every keep-alive instance (each page's route
-// guard starts its own) so they throttle and refresh together.
-// When the next refresh may start; null means right away.
-let nextRefreshAt: number | null = null;
-// Bumped whenever a session starts or is cleared, so a refresh from an
+// Bumped whenever a session starts or is cleared, so a response from an
 // earlier session can't overwrite or bring back the current one.
 let sessionGeneration = 0;
-let inFlightRefresh: {
-  generation: number;
-  promise: Promise<RefreshResult>;
-} | null = null;
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
@@ -58,14 +36,12 @@ export function storeToken(token: string, receivedAt = Date.now()): void {
 
 export function startSession(token: string): void {
   storeToken(token);
-  nextRefreshAt = Date.now() + REFRESH_THROTTLE_MS;
   sessionGeneration += 1;
 }
 
 export function clearSession(): void {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(EXPIRES_AT_KEY);
-  nextRefreshAt = null;
   sessionGeneration += 1;
 }
 
@@ -78,122 +54,62 @@ export function msUntilExpiry(now: number): number {
   return expiresAt - now;
 }
 
-// Starts a refresh, or joins the one already running for this session.
-function sharedRefresh(
-  refreshToken: () => Promise<RefreshResult>
-): Promise<RefreshResult> {
-  if (inFlightRefresh && inFlightRefresh.generation === sessionGeneration) {
-    return inFlightRefresh.promise;
-  }
-
-  const generation = sessionGeneration;
-  // Measure the new token's lifetime from when we asked for it, so latency
-  // can only make it expire early locally, never late.
-  const requestedAt = Date.now();
-  const promise = refreshToken()
-    .then((result) => {
-      if (generation !== sessionGeneration) return result;
-      if (result.status === "refreshed") {
-        storeToken(result.token, requestedAt);
-        nextRefreshAt = Date.now() + REFRESH_THROTTLE_MS;
-      } else if (result.status === "failed") {
-        nextRefreshAt = Date.now() + RETRY_AFTER_FAILURE_MS;
-      }
+// Saves the fresh tokens the backend sends back, and ends the session when the
+// backend says it's over.
+export function createSessionLink(onUnauthenticated: () => void): ApolloLink {
+  const saveSlidToken = new ApolloLink((operation, forward) => {
+    const generation = sessionGeneration;
+    // Measuring the lifetime from when the request was sent means latency can
+    // only make the token expire early locally, never late.
+    const sentAt = Date.now();
+    return forward(operation).map((result) => {
+      const token = operation
+        .getContext()
+        .response?.headers.get(SESSION_TOKEN_HEADER);
+      if (token && generation === sessionGeneration) storeToken(token, sentAt);
       return result;
-    })
-    .finally(() => {
-      if (inFlightRefresh?.promise === promise) inFlightRefresh = null;
     });
-  inFlightRefresh = { generation, promise };
-  return promise;
+  });
+
+  const endOnUnauthenticated = onError(({ graphQLErrors }) => {
+    const unauthenticated = graphQLErrors?.some(
+      (error) => error.extensions?.code === "UNAUTHENTICATED"
+    );
+    if (unauthenticated) onUnauthenticated();
+  });
+
+  return from([endOnUnauthenticated, saveSlidToken]);
 }
 
-type KeepAliveOptions = {
-  refreshToken: () => Promise<RefreshResult>;
-  onSessionEnded: () => void;
-};
-
-// Keeps the session alive while the user is active, and ends it once the
-// token expires. Returns a function that stops it.
-export function startSessionKeepAlive({
-  refreshToken,
-  onSessionEnded,
-}: KeepAliveOptions): () => void {
-  let stopped = false;
+// Calls onExpired once the session expires, so an idle screen doesn't keep
+// showing data. Returns a function that stops watching.
+export function watchSessionExpiry(onExpired: () => void): () => void {
   let expiryTimer: ReturnType<typeof setTimeout> | undefined;
 
-  const stop = () => {
-    stopped = true;
-    clearTimeout(expiryTimer);
-    ACTIVITY_EVENTS.forEach((event) =>
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      window.removeEventListener(event, onActivity)
-    );
+  const onVisibilityChange = () => {
+    // Phones suspend timers in the background, so re-check on return.
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    if (document.visibilityState === "visible") checkExpiry();
+  };
+
+  const stop = () => {
+    clearTimeout(expiryTimer);
     document.removeEventListener("visibilitychange", onVisibilityChange);
   };
 
-  const endSession = () => {
-    stop();
-    clearSession();
-    onSessionEnded();
-  };
-
+  // Requests keep sliding the expiry, so re-read it whenever the timer fires.
   const checkExpiry = () => {
     clearTimeout(expiryTimer);
     const remaining = msUntilExpiry(Date.now());
     if (remaining <= 0) {
-      endSession();
+      stop();
+      onExpired();
       return;
     }
     expiryTimer = setTimeout(checkExpiry, Math.min(remaining, MAX_TIMEOUT_MS));
   };
 
-  const refresh = async () => {
-    if (stopped) return;
-    const joining =
-      inFlightRefresh !== null &&
-      inFlightRefresh.generation === sessionGeneration;
-    if (!joining && nextRefreshAt !== null && Date.now() < nextRefreshAt) {
-      return;
-    }
-
-    const generation = sessionGeneration;
-    const result = await sharedRefresh(refreshToken);
-    // Stopped (page change) or a different session now: not ours to act on.
-    if (stopped || generation !== sessionGeneration) return;
-
-    switch (result.status) {
-      case "refreshed":
-        checkExpiry();
-        return;
-      case "rejected":
-        endSession();
-        return;
-      case "failed":
-        return;
-      default:
-        throw new Error(`unknown refresh result: ${JSON.stringify(result)}`);
-    }
-  };
-
-  const onActivity = () => {
-    refresh();
-  };
-
-  const onVisibilityChange = () => {
-    // Phones suspend timers in the background, so re-check on return.
-    if (document.visibilityState !== "visible") return;
-    checkExpiry();
-    refresh();
-  };
-
-  ACTIVITY_EVENTS.forEach((event) =>
-    window.addEventListener(event, onActivity, { passive: true })
-  );
   document.addEventListener("visibilitychange", onVisibilityChange);
   checkExpiry();
-  refresh();
-
   return stop;
 }

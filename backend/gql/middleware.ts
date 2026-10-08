@@ -24,7 +24,7 @@ function verifyRole(allowedRoles: string[]) {
       return resolve(parent, args, context, info);
     } // remove before prod
 
-    const claims = verifySessionToken(
+    const { claims } = verifySessionToken(
       getBearerToken(context.req.headers.authorization)
     );
 

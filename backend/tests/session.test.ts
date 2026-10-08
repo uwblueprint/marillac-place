@@ -9,6 +9,7 @@ import { getStartOfDay } from "../utils/dateUtils";
 import { SESSION_DURATIONS } from "../constants/session";
 import db from "../prisma";
 import loginResolver from "../gql/resolvers/loginResolver";
+import { SESSION_TOKEN_HEADER, slideSession } from "../gql/slideSession";
 import getMiddleware from "../gql/middleware";
 import {
   getBearerToken,
@@ -103,7 +104,10 @@ describe("signSessionToken / verifySessionToken", () => {
     it(`${role}: round-trips claims exactly`, () => {
       const claims = claimsFor(role, T0 - 100);
       const token = signSessionToken(claims, T0);
-      assert.deepEqual(verifySessionToken(token, T0), claims);
+      assert.deepEqual(verifySessionToken(token, T0), {
+        claims,
+        issuedAt: T0,
+      });
 
       const payload = decode(token);
       assert.equal(payload.iat, T0);
@@ -203,10 +207,19 @@ describe("signSessionToken / verifySessionToken", () => {
       { role: ROLES.ADMIN, pid: PID, sessionStartedAt: T0, exp: T0 + 60 },
       JWT_SECRET
     );
-    assert.deepEqual(verifySessionToken(token, T0), {
+    assert.deepEqual(verifySessionToken(token, T0).claims, {
       role: ROLES.ADMIN,
       sessionStartedAt: T0,
     });
+  });
+
+  it("rejects a token without an issue time", () => {
+    const token = jwt.sign(
+      { role: ROLES.ADMIN, sessionStartedAt: T0, exp: T0 + 60 },
+      JWT_SECRET,
+      { noTimestamp: true }
+    );
+    assertUnauthenticated(() => verifySessionToken(token, T0), /issue time/);
   });
 
   it("rejects a string payload", () => {
@@ -315,7 +328,7 @@ after(async () => {
   await db.$disconnect();
 });
 
-const { adminLogin, participantLogin, refreshSession } = loginResolver.Mutation;
+const { adminLogin, participantLogin } = loginResolver.Mutation;
 
 describe("adminLogin", () => {
   (
@@ -427,142 +440,142 @@ describe("participantLogin", () => {
   });
 });
 
-describe("refreshSession", () => {
+describe("slideSession", () => {
+  // Noon in Toronto, so "issued today" is unambiguous.
+  const NOON = getStartOfDay(new Date(T0 * 1000)).getTime() / 1000 + 12 * 3600;
+  const START_OF_DAY = NOON - 12 * 3600;
+  const SLIDE_AFTER = 5 * 60;
+
+  async function slide(
+    authorization: string | undefined,
+    now = NOON
+  ): Promise<string | undefined> {
+    const headers: Record<string, string> = {};
+    await slideSession(
+      { headers: { authorization } },
+      {
+        setHeader: (name, value) => {
+          headers[name] = value;
+        },
+      },
+      now
+    );
+    return headers[SESSION_TOKEN_HEADER];
+  }
+
+  function tokenIssuedAt(
+    role: (typeof ALL_ROLES)[number],
+    issuedAt: number,
+    sessionStartedAt = issuedAt
+  ): string {
+    return `Bearer ${signSessionToken(
+      claimsFor(role, sessionStartedAt),
+      issuedAt
+    )}`;
+  }
+
   ALL_ROLES.forEach((role) => {
-    it(`${role}: slides expiry forward and keeps the session start`, async () => {
-      const now = nowInSeconds();
-      const sessionStartedAt = now - 3600;
-      const oldToken = signSessionToken(
-        claimsFor(role, sessionStartedAt),
-        now - 60
-      );
+    const { idleTimeoutSeconds, maxSessionSeconds } = SESSION_DURATIONS[role];
 
-      const { token } = await refreshSession(undefined, {}, bearer(oldToken));
-      const { iat, exp } = decode(token);
-      const oldExp = decode(oldToken).exp;
-      assert(iat && exp && oldExp);
-
-      assert.deepEqual(
-        verifySessionToken(token),
-        claimsFor(role, sessionStartedAt)
+    it(`${role}: slides the session once the token is ${SLIDE_AFTER}s old`, async () => {
+      const start = NOON - 3600;
+      const header = await slide(
+        tokenIssuedAt(role, NOON - SLIDE_AFTER, start)
       );
-      assert(iat >= now);
-      assert.equal(exp, iat + SESSION_DURATIONS[role].idleTimeoutSeconds);
-      assert(exp > oldExp);
+      assert(header);
+      assert.deepEqual(verifySessionToken(header, NOON), {
+        claims: claimsFor(role, start),
+        issuedAt: NOON,
+      });
+      assert.equal(decode(header).exp, NOON + idleTimeoutSeconds);
     });
 
-    it(`${role}: does not extend past the max session length`, async () => {
-      const now = nowInSeconds();
-      const sessionStartedAt =
-        now - SESSION_DURATIONS[role].maxSessionSeconds + 120;
-      const oldToken = signSessionToken(
-        claimsFor(role, sessionStartedAt),
-        now - 10
-      );
-
-      const { token } = await refreshSession(undefined, {}, bearer(oldToken));
+    it(`${role}: leaves a fresh token alone`, async () => {
       assert.equal(
-        decode(token).exp,
-        sessionStartedAt + SESSION_DURATIONS[role].maxSessionSeconds
+        await slide(tokenIssuedAt(role, NOON - SLIDE_AFTER + 1)),
+        undefined
       );
     });
 
-    it(`${role}: rejects an expired token`, async () => {
-      const now = nowInSeconds();
-      const { idleTimeoutSeconds } = SESSION_DURATIONS[role];
-      const start = now - idleTimeoutSeconds - 10;
-      const expired = signSessionToken(claimsFor(role, start), start);
-      await assertRejectsUnauthenticated(
-        refreshSession(undefined, {}, bearer(expired)),
-        /jwt expired/
-      );
+    it(`${role}: never slides past the max session length`, async () => {
+      const start = NOON - maxSessionSeconds + 60;
+      const header = await slide(tokenIssuedAt(role, NOON - 600, start));
+      assert(header);
+      assert.equal(decode(header).exp, start + maxSessionSeconds);
     });
   });
 
-  it("records the first refresh of the day as a daily login", async () => {
-    const token = signSessionToken(
-      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
+  it("slides a token issued yesterday right away and records the daily login", async () => {
+    const now = START_OF_DAY + 60;
+    const header = await slide(
+      tokenIssuedAt(ROLES.PARTICIPANT, START_OF_DAY - 60),
+      now
     );
-    await refreshSession(undefined, {}, bearer(token));
-    await refreshSession(undefined, {}, bearer(token));
+    assert(header);
+    assert.deepEqual(loggedInPids(), [PID]);
+    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
+  });
+
+  it("counts concurrent first-of-day requests once", async () => {
+    const authorization = tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600);
+    await Promise.all(Array.from({ length: 5 }, () => slide(authorization)));
     assert.deepEqual(loggedInPids(), [PID]);
     assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
   });
 
   it("does not touch login history for staff", async () => {
-    const token = signSessionToken(claimsFor(ROLES.ADMIN, nowInSeconds()));
-    await refreshSession(undefined, {}, bearer(token));
+    assert(await slide(tokenIssuedAt(ROLES.ADMIN, NOON - 600)));
     assert.deepEqual(loggedInPids(), []);
     assert.deepEqual(stubs.badgeProgressLookups, []);
   });
 
-  it("ends the session of a participant who has left", async () => {
+  it("doesn't slide a departed participant's session", async () => {
     stubs.participant = null;
-    const token = signSessionToken(
-      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
-    );
-    await assertRejectsUnauthenticated(
-      refreshSession(undefined, {}, bearer(token)),
-      /participant not found/
+    assert.equal(
+      await slide(tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600)),
+      undefined
     );
     assert.deepEqual(loggedInPids(), []);
   });
 
-  it("counts concurrent first-of-day refreshes once", async () => {
-    const token = signSessionToken(
-      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
-    );
-    await Promise.all(
-      Array.from({ length: 5 }, () =>
-        refreshSession(undefined, {}, bearer(token))
-      )
-    );
-    assert.deepEqual(loggedInPids(), [PID]);
-    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
-  });
-
-  it("fails without ending the session when login history can't be written", async () => {
-    stubs.loginHistoryError = new Error("database unavailable");
-    const token = signSessionToken(
-      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
-    );
-    await assert.rejects(
-      refreshSession(undefined, {}, bearer(token)),
-      (err: Error) =>
-        !(err instanceof AuthenticationError) &&
-        err.message === "database unavailable"
-    );
-    assert.deepEqual(stubs.badgeProgressLookups, []);
-  });
-
-  it("fails without ending the session when the badge update fails", async () => {
-    stubs.badgeError = new Error("database unavailable");
-    const token = signSessionToken(
-      claimsFor(ROLES.PARTICIPANT, nowInSeconds())
-    );
-    await assert.rejects(
-      refreshSession(undefined, {}, bearer(token)),
-      (err: Error) =>
-        !(err instanceof AuthenticationError) &&
-        err.message === "database unavailable"
-    );
-  });
-
-  it("rejects legacy tokens so users log in once more", async () => {
+  it("ignores requests without a valid session", async () => {
     const legacy = jwt.sign({ role: ROLES.ADMIN }, JWT_SECRET, {
       expiresIn: "12h",
     });
-    await assertRejectsUnauthenticated(
-      refreshSession(undefined, {}, bearer(legacy)),
-      /session start/
+    const expiredAt = NOON - SESSION_DURATIONS[ROLES.ADMIN].idleTimeoutSeconds;
+    const authorizations = [
+      undefined,
+      "",
+      "Basic abc",
+      "Bearer garbage",
+      `Bearer ${legacy}`,
+      tokenIssuedAt(ROLES.ADMIN, expiredAt),
+    ];
+    const headers = await Promise.all(
+      authorizations.map((authorization) => slide(authorization))
+    );
+    assert.deepEqual(
+      headers,
+      authorizations.map(() => undefined)
     );
   });
 
-  it("rejects a missing authorization header", async () => {
-    await assertRejectsUnauthenticated(
-      refreshSession(undefined, {}, { req: { headers: {} } }),
-      /authorization header/
+  it("surfaces database failures instead of hiding them", async () => {
+    stubs.loginHistoryError = new Error("database unavailable");
+    await assert.rejects(
+      slide(tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600)),
+      /database unavailable/
     );
+  });
+
+  it("fails fast when JWT_SECRET is missing", async () => {
+    const authorization = tokenIssuedAt(ROLES.ADMIN, NOON - 600);
+    delete process.env.JWT_SECRET;
+    try {
+      await assert.rejects(slide(authorization), /jwt key missing/);
+    } finally {
+      process.env.JWT_SECRET = JWT_SECRET;
+    }
   });
 });
 

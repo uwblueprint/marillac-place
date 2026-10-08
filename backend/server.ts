@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import getSchema from "./gql/schema";
+import { SESSION_TOKEN_HEADER, slideSession } from "./gql/slideSession";
 
 require("./crons/index");
 
@@ -14,7 +15,10 @@ app.get("/health", (req, res) => {
 const schema = getSchema();
 const server = new ApolloServer({
   schema,
-  context: ({ req, res }) => ({ req, res }),
+  context: async ({ req, res }) => {
+    await slideSession(req, res);
+    return { req, res };
+  },
   playground: {
     settings: {
       "request.credentials": "include",
@@ -28,6 +32,7 @@ server.applyMiddleware({
   cors: {
     origin: process.env.FRONTEND_URL || "http://localhost:3000",
     credentials: true,
+    exposedHeaders: [SESSION_TOKEN_HEADER],
   },
 });
 

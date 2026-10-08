@@ -5,7 +5,12 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  from,
+} from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
@@ -26,7 +31,7 @@ import ParticipantsAnnouncementsPage from "./participant/pages/announcements/Mai
 import ParticipantsProgressPage from "./participant/pages/progress/Main";
 
 import * as ROUTES from "./constants/routes";
-import { getToken } from "./helpers/session";
+import { clearSession, createSessionLink, getToken } from "./helpers/session";
 import AdminRoute from "./admin/AdminRoute";
 import ParticipantRoute from "./participant/ParticipantRoute";
 import { AdminProvider } from "./admin/AdminContext";
@@ -56,8 +61,17 @@ function initApolloClient() {
     };
   });
 
+  const sessionLink = createSessionLink(() => {
+    clearSession();
+    window.location.assign(
+      window.location.pathname.startsWith(ROUTES.ADMIN_HOME_PAGE)
+        ? ROUTES.ADMIN_LOGIN_PAGE
+        : ROUTES.PARTICIPANTS_LOGIN_PAGE
+    );
+  });
+
   const apolloClient = new ApolloClient({
-    link: header.concat(endpoint),
+    link: from([sessionLink, header, endpoint]),
     cache: new InMemoryCache(),
   });
 
