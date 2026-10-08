@@ -12,7 +12,6 @@ import ErrorScreen from "../ui/screens/ErrorScreen";
 import useSessionExpiry from "../hooks/useSessionExpiry";
 import AdminMenu from "./AdminMenu";
 import { Participant } from "../types/models";
-import useNotification from "../hooks/useNotification";
 
 type AdminRouteProps = {
   children: React.ReactElement;

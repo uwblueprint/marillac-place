@@ -1,5 +1,4 @@
-import { Flex, Text, Image, Tab, TabList, Tabs } from "@chakra-ui/react";
-import CloseIcon from "@mui/icons-material/Close";
+import { Flex, Text, Tab, TabList, Tabs } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
