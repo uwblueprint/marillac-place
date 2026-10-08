@@ -11,18 +11,20 @@ export type SessionDuration = {
 };
 
 // Staff mostly use the app on desktop computers (possibly shared), so their
-// sessions are shorter. Participants use the app on their own phones.
+// sessions are shorter. The staff max also bounds how long a session survives
+// a staff password change, since refreshes don't re-check the password.
+// Participants use the app on their own phones.
 export const SESSION_DURATIONS: Record<
   typeof ROLES.ADMIN | typeof ROLES.RELIEF | typeof ROLES.PARTICIPANT,
   SessionDuration
 > = {
   [ROLES.ADMIN]: {
     idleTimeoutSeconds: 8 * HOUR_SECONDS,
-    maxSessionSeconds: 7 * DAY_SECONDS,
+    maxSessionSeconds: DAY_SECONDS,
   },
   [ROLES.RELIEF]: {
     idleTimeoutSeconds: 8 * HOUR_SECONDS,
-    maxSessionSeconds: 7 * DAY_SECONDS,
+    maxSessionSeconds: DAY_SECONDS,
   },
   [ROLES.PARTICIPANT]: {
     idleTimeoutSeconds: 7 * DAY_SECONDS,

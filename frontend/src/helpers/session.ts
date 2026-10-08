@@ -5,6 +5,9 @@ import { jwtDecode } from "jwt-decode";
 // See backend/constants/session.ts for the durations.
 
 const TOKEN_KEY = "token";
+// Local time the token expires, so the device clock never has to agree with
+// the server's.
+const EXPIRES_AT_KEY = "tokenExpiresAt";
 
 // Refresh at most this often while the user is active.
 export const REFRESH_THROTTLE_MS = 5 * 60 * 1000;
@@ -42,28 +45,37 @@ export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
 }
 
-export function startSession(token: string): void {
+// Saves a token received at `receivedAt` (local time). Its expiry is measured
+// from then using the token's lifetime (exp - iat), not the server's clock.
+export function storeToken(token: string, receivedAt = Date.now()): void {
+  const { iat, exp } = jwtDecode(token);
+  if (typeof iat !== "number" || typeof exp !== "number") {
+    throw new Error("session token is missing iat or exp");
+  }
   localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(EXPIRES_AT_KEY, String(receivedAt + (exp - iat) * 1000));
+}
+
+export function startSession(token: string): void {
+  storeToken(token);
   nextRefreshAt = Date.now() + REFRESH_THROTTLE_MS;
   sessionGeneration += 1;
 }
 
 export function clearSession(): void {
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(EXPIRES_AT_KEY);
   nextRefreshAt = null;
   sessionGeneration += 1;
 }
 
-// Milliseconds until the token expires; zero or less if it is expired or unreadable.
-export function msUntilExpiry(token: string | null, now: number): number {
-  if (!token) return 0;
-  try {
-    const { exp } = jwtDecode(token);
-    if (typeof exp !== "number") return 0;
-    return exp * 1000 - now;
-  } catch (err) {
-    return 0;
-  }
+// Milliseconds until the stored token expires; zero or less if it has expired
+// or there's no usable token.
+export function msUntilExpiry(now: number): number {
+  if (!getToken()) return 0;
+  const expiresAt = Number(localStorage.getItem(EXPIRES_AT_KEY) ?? NaN);
+  if (!Number.isFinite(expiresAt)) return 0;
+  return expiresAt - now;
 }
 
 // Starts a refresh, or joins the one already running for this session.
@@ -75,11 +87,14 @@ function sharedRefresh(
   }
 
   const generation = sessionGeneration;
+  // Measure the new token's lifetime from when we asked for it, so latency
+  // can only make it expire early locally, never late.
+  const requestedAt = Date.now();
   const promise = refreshToken()
     .then((result) => {
       if (generation !== sessionGeneration) return result;
       if (result.status === "refreshed") {
-        localStorage.setItem(TOKEN_KEY, result.token);
+        storeToken(result.token, requestedAt);
         nextRefreshAt = Date.now() + REFRESH_THROTTLE_MS;
       } else if (result.status === "failed") {
         nextRefreshAt = Date.now() + RETRY_AFTER_FAILURE_MS;
@@ -126,7 +141,7 @@ export function startSessionKeepAlive({
 
   const checkExpiry = () => {
     clearTimeout(expiryTimer);
-    const remaining = msUntilExpiry(getToken(), Date.now());
+    const remaining = msUntilExpiry(Date.now());
     if (remaining <= 0) {
       endSession();
       return;

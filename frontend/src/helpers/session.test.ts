@@ -7,6 +7,7 @@ import {
   RETRY_AFTER_FAILURE_MS,
   startSession,
   startSessionKeepAlive,
+  storeToken,
 } from "./session";
 
 const T0 = Date.UTC(2026, 9, 7, 12, 0, 0);
@@ -27,8 +28,19 @@ function makeToken(payload: object): string {
   )}.signature`;
 }
 
+// A token issued now (server and device clocks agree) that expires at `ms`.
 function tokenExpiringAt(ms: number): string {
-  return makeToken({ role: "admin", exp: Math.floor(ms / 1000) });
+  return makeToken({
+    role: "admin",
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(ms / 1000),
+  });
+}
+
+// A token issued by a server whose clock is `skewMs` ahead of this device.
+function skewedToken(lifetimeMs: number, skewMs: number): string {
+  const iat = Math.floor((Date.now() + skewMs) / 1000);
+  return makeToken({ role: "admin", iat, exp: iat + lifetimeMs / 1000 });
 }
 
 function storedToken(): string | null {
@@ -107,31 +119,63 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-describe("msUntilExpiry", () => {
-  it("returns the time left on a valid token", () => {
-    expect(msUntilExpiry(tokenExpiringAt(T0 + HOUR_MS), T0)).toBe(HOUR_MS);
+describe("storeToken / msUntilExpiry", () => {
+  it("returns the time left on a stored token", () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    expect(msUntilExpiry(T0)).toBe(HOUR_MS);
   });
 
   it("is zero at the moment of expiry and negative after", () => {
-    const token = tokenExpiringAt(T0);
-    expect(msUntilExpiry(token, T0)).toBe(0);
-    expect(msUntilExpiry(token, T0 + 1000)).toBe(-1000);
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    expect(msUntilExpiry(T0 + HOUR_MS)).toBe(0);
+    expect(msUntilExpiry(T0 + HOUR_MS + 1000)).toBe(-1000);
   });
 
   it.each([
-    ["no token", null],
-    ["an empty token", ""],
+    ["10h ahead of", 10 * HOUR_MS],
+    ["10h behind", -10 * HOUR_MS],
+    ["1 minute ahead of", 60 * 1000],
+  ])(
+    "uses the token's lifetime when the server clock is %s the device",
+    (_label, skewMs) => {
+      storeToken(skewedToken(HOUR_MS, skewMs));
+      expect(msUntilExpiry(T0)).toBe(HOUR_MS);
+    }
+  );
+
+  it("measures from when the token was received", () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS), T0 - 1000);
+    expect(msUntilExpiry(T0)).toBe(HOUR_MS - 1000);
+  });
+
+  it("treats no token as expired", () => {
+    expect(msUntilExpiry(T0)).toBe(0);
+  });
+
+  it("treats a token stored without an expiry (pre-deploy) as expired", () => {
+    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    expect(msUntilExpiry(T0)).toBe(0);
+  });
+
+  it("treats a corrupted expiry as expired", () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    localStorage.setItem("tokenExpiresAt", "soon");
+    expect(msUntilExpiry(T0)).toBe(0);
+  });
+
+  it.each([
     ["a malformed token", "not-a-jwt"],
-    ["a token without exp", makeToken({ role: "admin" })],
-    ["a token with a string exp", makeToken({ exp: "soon" })],
-  ])("treats %s as expired", (_label, token) => {
-    expect(msUntilExpiry(token, T0)).toBe(0);
+    ["a token without iat", makeToken({ exp: T0 / 1000 + 3600 })],
+    ["a token without exp", makeToken({ iat: T0 / 1000 })],
+  ])("refuses to store %s", (_label, token) => {
+    expect(() => storeToken(token)).toThrow();
+    expect(storedToken()).toBeNull();
   });
 });
 
 describe("startSessionKeepAlive", () => {
   it("refreshes immediately and stores the new token", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     expect(backend.calls).toBe(1);
 
@@ -142,20 +186,55 @@ describe("startSessionKeepAlive", () => {
   });
 
   it.each([
-    ["no token", null],
-    ["an expired token", tokenExpiringAt(T0 - 1000)],
-    ["a token expiring right now", tokenExpiringAt(T0)],
-    ["a malformed token", "garbage"],
-  ])("ends the session straight away with %s", (_label, token) => {
-    if (token !== null) localStorage.setItem("token", token);
+    ["no token", () => {}],
+    ["an expired token", () => storeToken(tokenExpiringAt(T0 - 1000))],
+    ["a token expiring right now", () => storeToken(tokenExpiringAt(T0))],
+    [
+      "a token without a stored expiry",
+      () => localStorage.setItem("token", "garbage"),
+    ],
+  ])("ends the session straight away with %s", (_label, seed) => {
+    seed();
     start();
     expect(onSessionEnded).toHaveBeenCalledTimes(1);
     expect(storedToken()).toBeNull();
+    expect(localStorage.getItem("tokenExpiresAt")).toBeNull();
     expect(backend.calls).toBe(0);
   });
 
+  it.each([
+    ["ahead", 10 * HOUR_MS],
+    ["behind", -10 * HOUR_MS],
+  ])(
+    "keeps the full session when the server clock is 10h %s",
+    async (_label, skewMs) => {
+      storeToken(skewedToken(HOUR_MS, skewMs));
+      start();
+      await backend.respond({
+        status: "refreshed",
+        token: skewedToken(8 * HOUR_MS, skewMs),
+      });
+
+      jest.advanceTimersByTime(8 * HOUR_MS - 1);
+      expect(onSessionEnded).not.toHaveBeenCalled();
+      jest.advanceTimersByTime(1);
+      expect(onSessionEnded).toHaveBeenCalledTimes(1);
+    }
+  );
+
+  it("measures a refreshed token from when the refresh was requested", async () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    start();
+    const lifetime = 8 * HOUR_MS;
+    const fresh = skewedToken(lifetime, 0);
+    // The response takes 2s to arrive.
+    jest.advanceTimersByTime(2000);
+    await backend.respond({ status: "refreshed", token: fresh });
+    expect(msUntilExpiry(Date.now())).toBe(lifetime - 2000);
+  });
+
   it("ends the session exactly when an idle user's token expires", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     await backend.respond({ status: "failed" });
 
@@ -167,7 +246,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("throttles refreshes while the user is active", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + 8 * HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + 8 * HOUR_MS));
     start();
     await backend.respond({
       status: "refreshed",
@@ -186,7 +265,7 @@ describe("startSessionKeepAlive", () => {
   it.each(["pointerdown", "keydown", "wheel"])(
     "treats %s as activity",
     async (eventType) => {
-      localStorage.setItem("token", tokenExpiringAt(T0 + 8 * HOUR_MS));
+      storeToken(tokenExpiringAt(T0 + 8 * HOUR_MS));
       start();
       await backend.respond({
         status: "refreshed",
@@ -199,7 +278,7 @@ describe("startSessionKeepAlive", () => {
   );
 
   it("ignores events that aren't user activity", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + 8 * HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + 8 * HOUR_MS));
     start();
     await backend.respond({
       status: "refreshed",
@@ -212,7 +291,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("keeps an active user signed in past the original expiry", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     await backend.respond({
       status: "refreshed",
@@ -237,7 +316,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("ends the session when the backend rejects the refresh", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     await backend.respond({ status: "rejected" });
     expect(onSessionEnded).toHaveBeenCalledTimes(1);
@@ -246,7 +325,7 @@ describe("startSessionKeepAlive", () => {
 
   it("keeps the token when a refresh fails and retries after a pause", async () => {
     const token = tokenExpiringAt(T0 + HOUR_MS);
-    localStorage.setItem("token", token);
+    storeToken(token);
     start();
     await backend.respond({ status: "failed" });
     expect(storedToken()).toBe(token);
@@ -262,7 +341,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("sends one request per retry window while the backend keeps failing", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     await backend.respond({ status: "failed" });
 
@@ -279,7 +358,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("never runs two refreshes at once", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     fireActivity();
     fireActivity("keydown");
@@ -291,7 +370,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("shares the throttle between instances (one per page)", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     const stopFirst = start();
     await backend.respond({
       status: "refreshed",
@@ -304,7 +383,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("stop() removes listeners and timers", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     await backend.respond({ status: "failed" });
     stop?.();
@@ -317,7 +396,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("still saves a refreshed token after stopping (page change mid-refresh)", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     stop?.();
     const fresh = tokenExpiringAt(T0 + 8 * HOUR_MS);
@@ -326,7 +405,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("does not resurrect a session signed out of mid-refresh", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     clearSession();
     stop?.();
@@ -338,7 +417,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("ends the session on return if it expired while timers were suspended", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     await backend.respond({ status: "failed" });
 
@@ -353,7 +432,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("refreshes on return if the session is still valid", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + 7 * DAY_MS));
+    storeToken(tokenExpiringAt(T0 + 7 * DAY_MS));
     start();
     await backend.respond({
       status: "refreshed",
@@ -368,7 +447,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("handles expiries beyond setTimeout's maximum delay", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + 30 * DAY_MS));
+    storeToken(tokenExpiringAt(T0 + 30 * DAY_MS));
     start();
     await backend.respond({ status: "failed" });
 
@@ -379,7 +458,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("instances started during a refresh share it (one request)", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     const stopSecond = startSessionKeepAlive({
       refreshToken: backend.refreshToken,
@@ -395,7 +474,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("a remount mid-refresh (StrictMode) doesn't send a second request", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     const stopFirst = start();
     stopFirst();
     start();
@@ -422,7 +501,7 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("a refresh from a previous session can't overwrite a new login", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     const newLogin = tokenExpiringAt(T0 + 8 * HOUR_MS);
     startSession(newLogin);
@@ -434,17 +513,17 @@ describe("startSessionKeepAlive", () => {
   });
 
   it("a new session doesn't join the previous session's refresh", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     const stopFirst = start();
     stopFirst();
     clearSession();
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     expect(backend.calls).toBe(2);
   });
 
   it("clearSession resets the throttle", async () => {
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     const stopFirst = start();
     await backend.respond({
       status: "refreshed",
@@ -453,7 +532,7 @@ describe("startSessionKeepAlive", () => {
     stopFirst();
 
     clearSession();
-    localStorage.setItem("token", tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     start();
     expect(backend.calls).toBe(2);
   });
