@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { Flex, Text } from "@chakra-ui/react";
 import { ADMIN_LOGIN } from "../../../gql/loginRequests";
 import { verifyRole } from "../../../helpers/verifyRole";
-import { startSession } from "../../../helpers/session";
+import { storeToken } from "../../../helpers/session";
 import * as ROUTES from "../../../constants/routes";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import { ADMIN, RELIEF } from "../../../constants/roles";
@@ -27,7 +27,7 @@ export default function AdminLoginPage() {
     ADMIN_LOGIN,
     {
       onCompleted: (data) => {
-        startSession(data.adminLogin.token);
+        storeToken(data.adminLogin.token);
         navigate(ROUTES.ADMIN_HOME_PAGE);
       },
       onError: (err: Error) => {

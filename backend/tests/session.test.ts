@@ -308,6 +308,24 @@ beforeEach(() => {
       return data;
     }
   );
+  stub(
+    db.loginHistory,
+    "delete",
+    async ({
+      where: { pid_date: key },
+    }: {
+      where: { pid_date: { pid: number; date: Date } };
+    }) => {
+      const removed = stubs.loginHistoryKeys.delete(
+        `${key.pid}@${key.date.toISOString()}`
+      );
+      if (!removed) throw new Error("login_history row not found");
+      stubs.loginHistoryCreates = stubs.loginHistoryCreates.filter(
+        ({ pid, date }) =>
+          pid !== key.pid || date.getTime() !== key.date.getTime()
+      );
+    }
+  );
   // updateBadgeLevelProgress returns early when no progress row exists.
   stub(
     db.badgeLevelProgress,
@@ -420,6 +438,24 @@ describe("participantLogin", () => {
     assert.deepEqual(stubs.loginHistoryCreates, [
       { pid: PID, date: getStartOfDay(new Date()) },
     ]);
+  });
+
+  it("undoes the login record when the badge update fails, so it's retried", async () => {
+    stubs.badgeError = new Error("badge update failed");
+    await assert.rejects(
+      participantLogin(undefined, { pid: PID, password: PARTICIPANT_PASSWORD }),
+      /badge update failed/
+    );
+    assert.deepEqual(loggedInPids(), []);
+
+    stubs.badgeError = null;
+    stubs.badgeProgressLookups = [];
+    await participantLogin(undefined, {
+      pid: PID,
+      password: PARTICIPANT_PASSWORD,
+    });
+    assert.deepEqual(loggedInPids(), [PID]);
+    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
   });
 
   it("rejects a participant who has left", async () => {

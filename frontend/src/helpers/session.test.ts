@@ -9,9 +9,9 @@ import {
 import {
   clearSession,
   createSessionLink,
+  endSession,
   getToken,
   msUntilExpiry,
-  startSession,
   storeToken,
   watchSessionExpiry,
 } from "./session";
@@ -121,8 +121,29 @@ describe("storeToken / msUntilExpiry", () => {
     expect(getToken()).toBeNull();
   });
 
+  it("endSession clears the session and loads the login page", () => {
+    const assign = jest.fn();
+    const realLocation = window.location;
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { ...realLocation, assign },
+    });
+    try {
+      storeToken(tokenExpiringAt(T0 + HOUR_MS));
+      endSession("/admin/login");
+      expect(getToken()).toBeNull();
+      expect(localStorage.getItem("tokenExpiresAt")).toBeNull();
+      expect(assign).toHaveBeenCalledWith("/admin/login");
+    } finally {
+      Object.defineProperty(window, "location", {
+        configurable: true,
+        value: realLocation,
+      });
+    }
+  });
+
   it("clearSession removes the token and its expiry", () => {
-    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     clearSession();
     expect(getToken()).toBeNull();
     expect(localStorage.getItem("tokenExpiresAt")).toBeNull();
@@ -295,7 +316,7 @@ describe("createSessionLink", () => {
   }
 
   it("saves the fresh token from the response header", async () => {
-    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     const slid = tokenExpiringAt(T0 + 8 * HOUR_MS);
     await request({ token: slid });
     expect(getToken()).toBe(slid);
@@ -303,7 +324,7 @@ describe("createSessionLink", () => {
   });
 
   it("measures the fresh token from when the request was sent", async () => {
-    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     const done = request({
       token: skewedToken(8 * HOUR_MS, 0),
       delayMs: 2000,
@@ -315,13 +336,13 @@ describe("createSessionLink", () => {
 
   it("leaves the token alone when the response has no header", async () => {
     const token = tokenExpiringAt(T0 + HOUR_MS);
-    startSession(token);
+    storeToken(token);
     await request({});
     expect(getToken()).toBe(token);
   });
 
   it("doesn't bring back a session signed out of mid-request", async () => {
-    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     const done = request({
       token: tokenExpiringAt(T0 + 8 * HOUR_MS),
       delayMs: 1000,
@@ -333,16 +354,34 @@ describe("createSessionLink", () => {
   });
 
   it("doesn't overwrite a new login with a reply from the old session", async () => {
-    startSession(tokenExpiringAt(T0 + HOUR_MS));
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
     const done = request({
       token: tokenExpiringAt(T0 + 2 * HOUR_MS),
       delayMs: 1000,
     });
     const newLogin = tokenExpiringAt(T0 + 8 * HOUR_MS);
-    startSession(newLogin);
+    storeToken(newLogin);
     jest.advanceTimersByTime(1000);
     await done;
     expect(getToken()).toBe(newLogin);
+  });
+
+  it("doesn't start a session from a request sent while signed out", async () => {
+    await request({ token: tokenExpiringAt(T0 + 8 * HOUR_MS) });
+    expect(getToken()).toBeNull();
+  });
+
+  it("keeps the first fresh token when overlapping requests both slide", async () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    const first = tokenExpiringAt(T0 + 8 * HOUR_MS);
+    const firstDone = request({ token: first, delayMs: 1000 });
+    const secondDone = request({
+      token: tokenExpiringAt(T0 + 7 * HOUR_MS),
+      delayMs: 2000,
+    });
+    jest.advanceTimersByTime(2000);
+    await Promise.all([firstDone, secondDone]);
+    expect(getToken()).toBe(first);
   });
 
   it.each([

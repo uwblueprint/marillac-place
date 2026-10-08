@@ -31,7 +31,7 @@ import ParticipantsAnnouncementsPage from "./participant/pages/announcements/Mai
 import ParticipantsProgressPage from "./participant/pages/progress/Main";
 
 import * as ROUTES from "./constants/routes";
-import { clearSession, createSessionLink, getToken } from "./helpers/session";
+import { createSessionLink, endSession, getToken } from "./helpers/session";
 import AdminRoute from "./admin/AdminRoute";
 import ParticipantRoute from "./participant/ParticipantRoute";
 import { AdminProvider } from "./admin/AdminContext";
@@ -61,14 +61,13 @@ function initApolloClient() {
     };
   });
 
-  const sessionLink = createSessionLink(() => {
-    clearSession();
-    window.location.assign(
+  const sessionLink = createSessionLink(() =>
+    endSession(
       window.location.pathname.startsWith(ROUTES.ADMIN_HOME_PAGE)
         ? ROUTES.ADMIN_LOGIN_PAGE
         : ROUTES.PARTICIPANTS_LOGIN_PAGE
-    );
-  });
+    )
+  );
 
   const apolloClient = new ApolloClient({
     link: from([sessionLink, header, endpoint]),

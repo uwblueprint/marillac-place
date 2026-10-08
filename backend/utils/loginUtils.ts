@@ -7,12 +7,12 @@ import { getStartOfDay } from "./dateUtils";
 // Records the first login (or session slide) of each day. Sessions now last
 // across days, so slides must count too, or the login streak badge and login
 // stats in reports would stop advancing. Rows are keyed on (pid, start of
-// day), so the primary key makes concurrent requests count only once.
+// day), so the primary key makes concurrent requests count only once. If the
+// badge update fails, the row is removed so the next request tries again.
 export async function recordDailyLogin(pid: number): Promise<void> {
+  const date = getStartOfDay(new Date());
   try {
-    await db.loginHistory.create({
-      data: { pid, date: getStartOfDay(new Date()) },
-    });
+    await db.loginHistory.create({ data: { pid, date } });
   } catch (err) {
     const alreadyLoggedInToday =
       err instanceof Prisma.PrismaClientKnownRequestError &&
@@ -20,5 +20,10 @@ export async function recordDailyLogin(pid: number): Promise<void> {
     if (alreadyLoggedInToday) return;
     throw err;
   }
-  await updateBadgeLevelProgress(LOGIN, pid, 1);
+  try {
+    await updateBadgeLevelProgress(LOGIN, pid, 1);
+  } catch (err) {
+    await db.loginHistory.delete({ where: { pid_date: { pid, date } } });
+    throw err;
+  }
 }

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 import { MarillacCoin } from "../ui/icons/MiscIcons";
 import { Cross, Menu } from "../ui/icons/ActionIcons";
-import { clearSession } from "../helpers/session";
+import { endSession } from "../helpers/session";
 
 type Page = {
   label: string;
@@ -28,8 +28,7 @@ function ExpandedParticipantMenu({
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    clearSession();
-    return navigate(ROUTES.PARTICIPANTS_LOGIN_PAGE);
+    endSession(ROUTES.PARTICIPANTS_LOGIN_PAGE);
   };
 
   return (

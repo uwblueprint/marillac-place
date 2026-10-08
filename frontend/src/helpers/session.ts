@@ -15,10 +15,6 @@ const SESSION_TOKEN_HEADER = "x-session-token";
 // setTimeout fires immediately for delays above this (~24.8 days).
 const MAX_TIMEOUT_MS = 2 ** 31 - 1;
 
-// Bumped whenever a session starts or is cleared, so a response from an
-// earlier session can't overwrite or bring back the current one.
-let sessionGeneration = 0;
-
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
 }
@@ -34,15 +30,15 @@ export function storeToken(token: string, receivedAt = Date.now()): void {
   localStorage.setItem(EXPIRES_AT_KEY, String(receivedAt + (exp - iat) * 1000));
 }
 
-export function startSession(token: string): void {
-  storeToken(token);
-  sessionGeneration += 1;
-}
-
 export function clearSession(): void {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(EXPIRES_AT_KEY);
-  sessionGeneration += 1;
+}
+
+// Signs out with a full page load, so no cached data from the session survives.
+export function endSession(loginPage: string): void {
+  clearSession();
+  window.location.assign(loginPage);
 }
 
 // Milliseconds until the stored token expires; zero or less if it has expired
@@ -58,7 +54,7 @@ export function msUntilExpiry(now: number): number {
 // backend says it's over.
 export function createSessionLink(onUnauthenticated: () => void): ApolloLink {
   const saveSlidToken = new ApolloLink((operation, forward) => {
-    const generation = sessionGeneration;
+    const sentToken = getToken();
     // Measuring the lifetime from when the request was sent means latency can
     // only make the token expire early locally, never late.
     const sentAt = Date.now();
@@ -66,7 +62,11 @@ export function createSessionLink(onUnauthenticated: () => void): ApolloLink {
       const token = operation
         .getContext()
         .response?.headers.get(SESSION_TOKEN_HEADER);
-      if (token && generation === sessionGeneration) storeToken(token, sentAt);
+      // Only replace the token this request was sent with: if the user signed
+      // out or in again meanwhile (in any tab), the reply is stale.
+      if (token && sentToken !== null && getToken() === sentToken) {
+        storeToken(token, sentAt);
+      }
       return result;
     });
   });
