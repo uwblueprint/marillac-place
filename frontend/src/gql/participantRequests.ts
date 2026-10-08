@@ -7,7 +7,6 @@ export const GET_CURRENT_PARTICIPANTS = gql`
       room
       arrival
       departure
-      password
       balance
       total_earnings
     }
@@ -21,7 +20,6 @@ export const GET_PAST_PARTICIPANTS = gql`
       room
       arrival
       departure
-      password
       balance
       total_earnings
     }
@@ -37,7 +35,6 @@ export const GET_PARTICIPANT_BY_PID = gql`
       total_earnings
       arrival
       departure
-      password
     }
   }
 `;
@@ -59,7 +56,6 @@ export const CREATE_PARTICIPANT = gql`
       room
       arrival
       departure
-      password
       balance
       total_earnings
     }
@@ -85,7 +81,6 @@ export const UPDATE_PARTICIPANT = gql`
       room
       arrival
       departure
-      password
       balance
       total_earnings
     }

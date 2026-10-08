@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { GraphQLResolveInfo } from "graphql";
+import { GraphQLObjectType, GraphQLResolveInfo, GraphQLSchema } from "graphql";
 import * as ROLES from "../constants/roles";
 
 type ResolverFunction = (
@@ -56,6 +56,17 @@ function verifyRole(allowedRoles: string[]) {
   };
 }
 
+// Login mutations are how a client gets a token, so they must stay open.
+async function allowPublic(
+  resolve: ResolverFunction,
+  parent: unknown,
+  args: Record<string, unknown>,
+  context: { req: { headers: { authorization?: string } } },
+  info: GraphQLResolveInfo
+) {
+  return resolve(parent, args, context, info);
+}
+
 export default function getMiddleware() {
   const middleware = {
     Query: {
@@ -84,6 +95,11 @@ export default function getMiddleware() {
         ROLES.PARTICIPANT,
       ]),
       getCurrentParticipants: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
+      getParticipantByPid: verifyRole([
+        ROLES.ADMIN,
+        ROLES.RELIEF,
+        ROLES.PARTICIPANT,
+      ]),
       getPastParticipants: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
       getSystemBadges: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
       getNumberOfAssignedTasksByRoom: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
@@ -119,6 +135,8 @@ export default function getMiddleware() {
       ]),
     },
     Mutation: {
+      adminLogin: allowPublic,
+      participantLogin: allowPublic,
       createNote: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
       deleteNote: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
       createReportRecipient: verifyRole([ROLES.ADMIN]),
@@ -131,6 +149,7 @@ export default function getMiddleware() {
       createEarningGoal: verifyRole([ROLES.PARTICIPANT]),
       updateEarningGoal: verifyRole([ROLES.PARTICIPANT]),
       createTask: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
+      updateTask: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
       deleteTask: verifyRole([ROLES.ADMIN, ROLES.RELIEF]),
       createCustomBadge: verifyRole([ROLES.ADMIN]),
       updateCustomBadge: verifyRole([ROLES.ADMIN]),
@@ -151,4 +170,32 @@ export default function getMiddleware() {
   };
 
   return middleware;
+}
+
+export type Middleware = ReturnType<typeof getMiddleware>;
+
+// Every Query and Mutation must have an explicit middleware entry (use
+// allowPublic for intentionally open ones). A missing entry would leave that
+// operation unauthenticated, so refuse to build the schema instead.
+export function assertEveryOperationHasMiddleware(
+  schema: GraphQLSchema,
+  middleware: Middleware
+) {
+  const problems: string[] = [];
+  (["Query", "Mutation"] as const).forEach((typeName) => {
+    const type = schema.getType(typeName);
+    if (!(type instanceof GraphQLObjectType)) {
+      throw new Error(`schema is missing the ${typeName} type`);
+    }
+    // applyMiddleware already rejects entries for fields not in the schema.
+    const entries = Object.keys(middleware[typeName]);
+    Object.keys(type.getFields())
+      .filter((field) => !entries.includes(field))
+      .forEach((field) => problems.push(`${typeName}.${field} has no auth`));
+  });
+  if (problems.length > 0) {
+    throw new Error(
+      `operations missing auth middleware:\n${problems.join("\n")}`
+    );
+  }
 }
