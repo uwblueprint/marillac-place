@@ -5,7 +5,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { Prisma } from "@prisma/client";
 import * as ROLES from "../constants/roles";
 import { LOGIN } from "../constants/systemBadges";
-import { getStartOfDay } from "../utils/dateUtils";
+import { getEndOfDay, getStartOfDay } from "../utils/dateUtils";
 import { SESSION_DURATIONS } from "../constants/session";
 import db from "../prisma";
 import loginResolver from "../gql/resolvers/loginResolver";
@@ -295,6 +295,19 @@ beforeEach(() => {
   };
 
   stub(db.participant, "findFirst", async () => stubs.participant);
+  stub(
+    db.loginHistory,
+    "findFirst",
+    async ({
+      where,
+    }: {
+      where: { pid: number; date: { gte: Date; lte: Date } };
+    }) =>
+      stubs.loginHistoryCreates.find(
+        ({ pid, date }) =>
+          pid === where.pid && date >= where.date.gte && date <= where.date.lte
+      ) ?? null
+  );
   // Mirrors the (pid, date) primary key on login_history.
   stub(
     db.loginHistory,
@@ -337,6 +350,12 @@ beforeEach(() => {
     }
   );
 });
+
+// A row written before logins were keyed on the start of the day.
+function seedLegacyLogin(pid: number, date: Date) {
+  stubs.loginHistoryKeys.add(`${pid}@${date.toISOString()}`);
+  stubs.loginHistoryCreates.push({ pid, date });
+}
 
 function loggedInPids(): number[] {
   return stubs.loginHistoryCreates.map(({ pid }) => pid);
@@ -438,6 +457,53 @@ describe("participantLogin", () => {
     assert.deepEqual(stubs.loginHistoryCreates, [
       { pid: PID, date: getStartOfDay(new Date()) },
     ]);
+  });
+
+  it("counts a login already recorded today under its login time", async () => {
+    const earlierToday = new Date(getStartOfDay(new Date()).getTime() + 1);
+    seedLegacyLogin(PID, earlierToday);
+    await participantLogin(undefined, {
+      pid: PID,
+      password: PARTICIPANT_PASSWORD,
+    });
+    assert.deepEqual(stubs.loginHistoryCreates, [
+      { pid: PID, date: earlierToday },
+    ]);
+    assert.deepEqual(stubs.badgeProgressLookups, []);
+  });
+
+  it("counts a login at the very end of today as today", async () => {
+    seedLegacyLogin(PID, getEndOfDay(new Date()));
+    await participantLogin(undefined, {
+      pid: PID,
+      password: PARTICIPANT_PASSWORD,
+    });
+    assert.deepEqual(loggedInPids(), [PID]);
+    assert.deepEqual(stubs.badgeProgressLookups, []);
+  });
+
+  it("records today's login when the last one was just before midnight", async () => {
+    const justBeforeToday = new Date(getStartOfDay(new Date()).getTime() - 1);
+    seedLegacyLogin(PID, justBeforeToday);
+    await participantLogin(undefined, {
+      pid: PID,
+      password: PARTICIPANT_PASSWORD,
+    });
+    assert.deepEqual(stubs.loginHistoryCreates, [
+      { pid: PID, date: justBeforeToday },
+      { pid: PID, date: getStartOfDay(new Date()) },
+    ]);
+    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
+  });
+
+  it("isn't blocked by another participant's login today", async () => {
+    seedLegacyLogin(PID + 1, new Date());
+    await participantLogin(undefined, {
+      pid: PID,
+      password: PARTICIPANT_PASSWORD,
+    });
+    assert.deepEqual(loggedInPids(), [PID + 1, PID]);
+    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
   });
 
   it("undoes the login record when the badge update fails, so it's retried", async () => {
