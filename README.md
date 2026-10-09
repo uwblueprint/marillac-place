@@ -112,6 +112,7 @@ docker exec -it mp_[frontend/backend] /bin/bash -c "yarn fix"
 ```
 
 ## Testing
+Backend tests go in `backend/tests/*.test.ts` (Node's `node:test`); frontend tests sit next to their source as `*.test.ts` (Jest).
 ```bash
 docker exec -it mp_[frontend/backend] /bin/bash -c "yarn test"
 ```
