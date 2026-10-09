@@ -67,7 +67,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "serve": "serve -s build -l 3000",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx --cache",
     "fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix --cache"
   },
