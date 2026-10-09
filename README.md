@@ -7,6 +7,7 @@
 📊  [Database Interactions](#database-interactions)  
 🐞  [FAQ & Debugging](#faq--debugging)  
 ✨  [Linting](#linting)  
+🧪  [Testing](#testing)  
 🌐  [Other Links](#other-links)  
 
 ## Tech Stack
@@ -108,6 +109,11 @@ docker exec -it mp_[frontend/backend] /bin/bash -c "yarn lint"
 
 # linting with automatic fixes
 docker exec -it mp_[frontend/backend] /bin/bash -c "yarn fix"
+```
+
+## Testing
+```bash
+docker exec -it mp_[frontend/backend] /bin/bash -c "yarn test"
 ```
 
 ## Other Links
