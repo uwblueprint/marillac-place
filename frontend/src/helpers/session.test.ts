@@ -293,6 +293,10 @@ describe("createSessionLink", () => {
     );
   }
 
+  const UNAUTHENTICATED = {
+    message: "expired",
+    extensions: { code: "UNAUTHENTICATED" },
+  };
   let onUnauthenticated: jest.Mock;
 
   beforeEach(() => {
@@ -399,6 +403,41 @@ describe("createSessionLink", () => {
   ])("ends the session after %s", async (_label, errors) => {
     await request({ errors });
     expect(onUnauthenticated).toHaveBeenCalledTimes(1);
+  });
+
+  it("ends the current session after an UNAUTHENTICATED reply", async () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    await request({ errors: [UNAUTHENTICATED] });
+    expect(onUnauthenticated).toHaveBeenCalledTimes(1);
+  });
+
+  it("doesn't end a new login because the old session's request was rejected", async () => {
+    storeToken(tokenExpiringAt(T0 + HOUR_MS));
+    const done = request({ errors: [UNAUTHENTICATED], delayMs: 1000 });
+    const newLogin = tokenExpiringAt(T0 + 8 * HOUR_MS);
+    storeToken(newLogin);
+    jest.advanceTimersByTime(1000);
+    await done;
+    expect(onUnauthenticated).not.toHaveBeenCalled();
+    expect(getToken()).toBe(newLogin);
+  });
+
+  it("doesn't end a session started after a signed-out request was rejected", async () => {
+    const done = request({ errors: [UNAUTHENTICATED], delayMs: 1000 });
+    storeToken(tokenExpiringAt(T0 + 8 * HOUR_MS));
+    jest.advanceTimersByTime(1000);
+    await done;
+    expect(onUnauthenticated).not.toHaveBeenCalled();
+  });
+
+  it("doesn't save a token from an UNAUTHENTICATED reply", async () => {
+    const token = tokenExpiringAt(T0 + HOUR_MS);
+    storeToken(token);
+    await request({
+      errors: [UNAUTHENTICATED],
+      token: tokenExpiringAt(T0 + 8 * HOUR_MS),
+    });
+    expect(getToken()).toBe(token);
   });
 
   it.each([

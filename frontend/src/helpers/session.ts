@@ -1,5 +1,4 @@
-import { ApolloLink, from } from "@apollo/client";
-import { onError } from "@apollo/client/link/error";
+import { ApolloLink } from "@apollo/client";
 import { jwtDecode } from "jwt-decode";
 
 // Sessions are sliding: authenticated requests come back with a fresh token in
@@ -51,34 +50,31 @@ export function msUntilExpiry(now: number): number {
 }
 
 // Saves the fresh tokens the backend sends back, and ends the session when the
-// backend says it's over.
+// backend says it's over. Both apply only while the token the request was
+// sent with is still the stored one: if the user signed out or in again
+// meanwhile (in any tab), the reply is about a session that's gone.
 export function createSessionLink(onUnauthenticated: () => void): ApolloLink {
-  const saveSlidToken = new ApolloLink((operation, forward) => {
+  return new ApolloLink((operation, forward) => {
     const sentToken = getToken();
     // Measuring the lifetime from when the request was sent means latency can
     // only make the token expire early locally, never late.
     const sentAt = Date.now();
     return forward(operation).map((result) => {
+      if (getToken() !== sentToken) return result;
+      const unauthenticated = result.errors?.some(
+        (error) => error.extensions?.code === "UNAUTHENTICATED"
+      );
+      if (unauthenticated) {
+        onUnauthenticated();
+        return result;
+      }
       const token = operation
         .getContext()
         .response?.headers.get(SESSION_TOKEN_HEADER);
-      // Only replace the token this request was sent with: if the user signed
-      // out or in again meanwhile (in any tab), the reply is stale.
-      if (token && sentToken !== null && getToken() === sentToken) {
-        storeToken(token, sentAt);
-      }
+      if (token && sentToken !== null) storeToken(token, sentAt);
       return result;
     });
   });
-
-  const endOnUnauthenticated = onError(({ graphQLErrors }) => {
-    const unauthenticated = graphQLErrors?.some(
-      (error) => error.extensions?.code === "UNAUTHENTICATED"
-    );
-    if (unauthenticated) onUnauthenticated();
-  });
-
-  return from([endOnUnauthenticated, saveSlidToken]);
 }
 
 // Calls onExpired once the session expires, so an idle screen doesn't keep
