@@ -53,12 +53,12 @@ const loginResolver = {
       const validPassword: boolean = password === participant.password;
       if (!validPassword) throw new Error("incorrect password");
 
-      const token = signSessionToken({
-        role: ROLES.PARTICIPANT,
-        pid,
-        sessionStartedAt: nowInSeconds(),
-      });
-      await recordDailyLogin(pid);
+      const now = nowInSeconds();
+      const token = signSessionToken(
+        { role: ROLES.PARTICIPANT, pid, sessionStartedAt: now },
+        now
+      );
+      await recordDailyLogin(pid, new Date(now * 1000));
       return { token };
     },
   },

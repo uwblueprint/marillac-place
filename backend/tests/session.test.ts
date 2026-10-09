@@ -614,7 +614,9 @@ describe("slideSession", () => {
       now
     );
     assert(header);
-    assert.deepEqual(await loggedInPids(), [PID]);
+    assert.deepEqual(await logins(), [
+      { pid: PID, date: new Date(START_OF_DAY * 1000) },
+    ]);
     assert.deepEqual(await loginProgress(), [
       { level: Level.NOVICE, progress: 1 },
     ]);
