@@ -221,6 +221,7 @@ const assignedTaskResolver = {
 
         const reasonForEarning = `Required task ${assignedTask.name} completed!`;
         await processEarning(
+          db,
           assignedTask.pid,
           assignedTask.value,
           reasonForEarning
@@ -241,6 +242,7 @@ const assignedTaskResolver = {
 
           if (weeklyRequiredTasksNotComplete.length === 1) {
             await updateBadgeLevelProgress(
+              db,
               PERFECT_SCORE_REQUIRED,
               assignedTask.pid,
               1
@@ -259,6 +261,7 @@ const assignedTaskResolver = {
 
           if (countCompletedOptionalTasks === 2) {
             await updateBadgeLevelProgress(
+              db,
               PERFECT_SCORE_OPTIONAL,
               assignedTask.pid,
               1
@@ -279,13 +282,14 @@ const assignedTaskResolver = {
 
           if (individualGoalTasksNotComplete.length === 1) {
             await updateBadgeLevelProgress(
+              db,
               INDIVIDUAL_GOAL,
               assignedTask.pid,
               1
             );
           }
 
-          await updateBadgeLevelProgress(FIRST_GOAL, assignedTask.pid, 1);
+          await updateBadgeLevelProgress(db, FIRST_GOAL, assignedTask.pid, 1);
         }
 
         const hasPreviouslyCompleted = await db.assignedTask
@@ -299,6 +303,7 @@ const assignedTaskResolver = {
           .then((task) => task !== null);
         if (!hasPreviouslyCompleted) {
           await updateBadgeLevelProgress(
+            db,
             JACK_OF_ALL_TRADES,
             assignedTask.pid,
             1

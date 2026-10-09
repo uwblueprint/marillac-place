@@ -2,12 +2,13 @@ import { after, beforeEach, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { AuthenticationError, ForbiddenError } from "apollo-server-express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { Prisma } from "@prisma/client";
+import { Icon, Level } from "@prisma/client";
 import * as ROLES from "../constants/roles";
 import { LOGIN } from "../constants/systemBadges";
 import { getEndOfDay, getStartOfDay } from "../utils/dateUtils";
 import { SESSION_DURATIONS } from "../constants/session";
 import db from "../prisma";
+import { resetDatabase } from "./testDatabase";
 import loginResolver from "../gql/resolvers/loginResolver";
 import { SESSION_TOKEN_HEADER, slideSession } from "../gql/slideSession";
 import getMiddleware from "../gql/middleware";
@@ -261,104 +262,106 @@ describe("getBearerToken", () => {
   });
 });
 
-// Resolver tests stub out the Prisma calls the login flow makes.
-type Stubs = {
-  participant: { pid: number; password: string } | null;
-  loginHistoryKeys: Set<string>;
-  loginHistoryCreates: { pid: number; date: Date }[];
-  loginHistoryError: Error | null;
-  badgeProgressLookups: string[];
-  badgeError: Error | null;
-};
+// Login-flow tests run against the test database (see testDatabase.ts), so
+// transactions, primary keys and concurrency behave as in production.
+const LOGIN_BENCHMARK = 2;
+const LOGIN_VALUE = 5;
+const YESTERDAY = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-let stubs: Stubs;
+beforeEach(async () => {
+  await resetDatabase(db);
+  await db.systemBadge.create({
+    data: { name: LOGIN, icon: Icon.FIVE_STAR, description: "" },
+  });
+  await db.badgeLevel.createMany({
+    data: [
+      {
+        name: LOGIN,
+        level: Level.NOVICE,
+        benchmark: LOGIN_BENCHMARK,
+        value: LOGIN_VALUE,
+      },
+      { name: LOGIN, level: Level.BRONZE, benchmark: 5, value: 10 },
+    ],
+  });
+  await db.participant.create({
+    data: {
+      pid: PID,
+      password: PARTICIPANT_PASSWORD,
+      room: 1,
+      arrival: YESTERDAY,
+    },
+  });
+  await db.badgeLevelProgress.create({
+    data: { name: LOGIN, level: Level.NOVICE, pid: PID, progress: 0 },
+  });
+});
 
-function stub(target: object, key: string, value: unknown) {
-  Object.defineProperty(target, key, { configurable: true, value });
-}
-
-function uniqueViolation() {
-  return new Prisma.PrismaClientKnownRequestError("duplicate key", {
-    code: "P2002",
-    clientVersion: "test",
+async function departParticipant() {
+  await db.participant.update({
+    where: { pid: PID },
+    data: { departure: YESTERDAY },
   });
 }
 
-beforeEach(() => {
-  stubs = {
-    participant: { pid: PID, password: PARTICIPANT_PASSWORD },
-    loginHistoryKeys: new Set(),
-    loginHistoryCreates: [],
-    loginHistoryError: null,
-    badgeProgressLookups: [],
-    badgeError: null,
-  };
-
-  stub(db.participant, "findFirst", async () => stubs.participant);
-  stub(
-    db.loginHistory,
-    "findFirst",
-    async ({
-      where,
-    }: {
-      where: { pid: number; date: { gte: Date; lte: Date } };
-    }) =>
-      stubs.loginHistoryCreates.find(
-        ({ pid, date }) =>
-          pid === where.pid && date >= where.date.gte && date <= where.date.lte
-      ) ?? null
-  );
-  // Mirrors the (pid, date) primary key on login_history.
-  stub(
-    db.loginHistory,
-    "create",
-    async ({ data }: { data: { pid: number; date: Date } }) => {
-      if (stubs.loginHistoryError) throw stubs.loginHistoryError;
-      const key = `${data.pid}@${data.date.toISOString()}`;
-      if (stubs.loginHistoryKeys.has(key)) throw uniqueViolation();
-      stubs.loginHistoryKeys.add(key);
-      stubs.loginHistoryCreates.push(data);
-      return data;
-    }
-  );
-  stub(
-    db.loginHistory,
-    "delete",
-    async ({
-      where: { pid_date: key },
-    }: {
-      where: { pid_date: { pid: number; date: Date } };
-    }) => {
-      const removed = stubs.loginHistoryKeys.delete(
-        `${key.pid}@${key.date.toISOString()}`
-      );
-      if (!removed) throw new Error("login_history row not found");
-      stubs.loginHistoryCreates = stubs.loginHistoryCreates.filter(
-        ({ pid, date }) =>
-          pid !== key.pid || date.getTime() !== key.date.getTime()
-      );
-    }
-  );
-  // updateBadgeLevelProgress returns early when no progress row exists.
-  stub(
-    db.badgeLevelProgress,
-    "findFirst",
-    async ({ where }: { where: { name: string } }) => {
-      stubs.badgeProgressLookups.push(where.name);
-      if (stubs.badgeError) throw stubs.badgeError;
-      return null;
-    }
-  );
-});
-
 // A row written before logins were keyed on the start of the day.
-function seedLegacyLogin(pid: number, date: Date) {
-  stubs.loginHistoryKeys.add(`${pid}@${date.toISOString()}`);
-  stubs.loginHistoryCreates.push({ pid, date });
+async function seedLegacyLogin(pid: number, date: Date) {
+  if (pid !== PID) {
+    await db.participant.create({
+      data: { pid, password: "", room: 2, arrival: YESTERDAY },
+    });
+  }
+  await db.loginHistory.create({ data: { pid, date } });
 }
 
-function loggedInPids(): number[] {
-  return stubs.loginHistoryCreates.map(({ pid }) => pid);
+async function logins() {
+  return db.loginHistory.findMany({
+    select: { pid: true, date: true },
+    orderBy: { date: "asc" },
+  });
+}
+
+async function loggedInPids(): Promise<number[]> {
+  return (await logins()).map(({ pid }) => pid);
+}
+
+async function loginProgress() {
+  return db.badgeLevelProgress.findMany({
+    where: { pid: PID, name: LOGIN },
+    select: { level: true, progress: true },
+  });
+}
+
+// Everything the login flow can write, to check a failure leaves no trace.
+async function loginFlowState() {
+  return {
+    logins: await logins(),
+    progress: await loginProgress(),
+    achieved: await db.achievedBadgeLevel.findMany({
+      select: { name: true, level: true, pid: true },
+    }),
+    participant: await db.participant.findUnique({
+      where: { pid: PID },
+      select: { balance: true, total_earnings: true },
+    }),
+    transactions: await db.transaction.count(),
+  };
+}
+
+// Makes every write to `table` fail inside Postgres until the returned
+// function is called.
+async function failWritesTo(table: string): Promise<() => Promise<void>> {
+  await db.$executeRawUnsafe(`
+    CREATE OR REPLACE FUNCTION fail_write() RETURNS trigger AS $$
+    BEGIN RAISE EXCEPTION 'write to % failed', TG_TABLE_NAME; END;
+    $$ LANGUAGE plpgsql`);
+  await db.$executeRawUnsafe(
+    `CREATE TRIGGER fail_write BEFORE INSERT OR UPDATE OR DELETE ON "${table}"
+     FOR EACH ROW EXECUTE FUNCTION fail_write()`
+  );
+  return async () => {
+    await db.$executeRawUnsafe(`DROP TRIGGER fail_write ON "${table}"`);
+  };
 }
 
 after(async () => {
@@ -411,11 +414,11 @@ describe("adminLogin", () => {
 });
 
 describe("participantLogin", () => {
+  const login = () =>
+    participantLogin(undefined, { pid: PID, password: PARTICIPANT_PASSWORD });
+
   it("issues a participant session token", async () => {
-    const { token } = await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
+    const { token } = await login();
     const payload = decode(token);
     assert.equal(payload.role, ROLES.PARTICIPANT);
     assert.equal(payload.pid, PID);
@@ -426,111 +429,108 @@ describe("participantLogin", () => {
     );
   });
 
-  it("records the first login of the day and advances the login badge", async () => {
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    assert.deepEqual(loggedInPids(), [PID]);
-    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
-  });
-
-  it("does not record a second login on the same day", async () => {
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    stubs.badgeProgressLookups = [];
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    assert.deepEqual(loggedInPids(), [PID]);
-    assert.deepEqual(stubs.badgeProgressLookups, []);
-  });
-
-  it("stores the login under the start of the day", async () => {
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    assert.deepEqual(stubs.loginHistoryCreates, [
+  it("records the day's first login under the start of the day, once", async () => {
+    await login();
+    await login();
+    assert.deepEqual(await logins(), [
       { pid: PID, date: getStartOfDay(new Date()) },
     ]);
+    assert.deepEqual(await loginProgress(), [
+      { level: Level.NOVICE, progress: 1 },
+    ]);
+  });
+
+  it("awards the badge level a login reaches, with its earnings", async () => {
+    await db.badgeLevelProgress.update({
+      where: { name_level_pid: { name: LOGIN, level: Level.NOVICE, pid: PID } },
+      data: { progress: LOGIN_BENCHMARK - 1 },
+    });
+    await login();
+    const state = await loginFlowState();
+    assert.deepEqual(state.achieved, [
+      { name: LOGIN, level: Level.NOVICE, pid: PID },
+    ]);
+    assert.deepEqual(state.progress, [
+      { level: Level.BRONZE, progress: LOGIN_BENCHMARK },
+    ]);
+    assert.deepEqual(state.participant, {
+      balance: LOGIN_VALUE,
+      total_earnings: LOGIN_VALUE,
+    });
+    assert.equal(state.transactions, 1);
+  });
+
+  // Every table the award path writes, in order.
+  [
+    "login_history",
+    "achieved_badge_level",
+    "badge_level_progress",
+    "participant",
+    "transaction",
+  ].forEach((table) => {
+    it(`leaves nothing behind when the write to ${table} fails, and the retry awards once`, async () => {
+      await db.badgeLevelProgress.update({
+        where: {
+          name_level_pid: { name: LOGIN, level: Level.NOVICE, pid: PID },
+        },
+        data: { progress: LOGIN_BENCHMARK - 1 },
+      });
+      const before = await loginFlowState();
+      const stopFailing = await failWritesTo(table);
+      try {
+        await assert.rejects(login(), new RegExp(`write to ${table} failed`));
+      } finally {
+        await stopFailing();
+      }
+      assert.deepEqual(await loginFlowState(), before);
+
+      await login();
+      const retried = await loginFlowState();
+      assert.equal(retried.logins.length, 1);
+      assert.equal(retried.achieved.length, 1);
+      assert.equal(retried.transactions, 1);
+    });
   });
 
   it("counts a login already recorded today under its login time", async () => {
     const earlierToday = new Date(getStartOfDay(new Date()).getTime() + 1);
-    seedLegacyLogin(PID, earlierToday);
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    assert.deepEqual(stubs.loginHistoryCreates, [
-      { pid: PID, date: earlierToday },
+    await seedLegacyLogin(PID, earlierToday);
+    await login();
+    assert.deepEqual(await logins(), [{ pid: PID, date: earlierToday }]);
+    assert.deepEqual(await loginProgress(), [
+      { level: Level.NOVICE, progress: 0 },
     ]);
-    assert.deepEqual(stubs.badgeProgressLookups, []);
   });
 
   it("counts a login at the very end of today as today", async () => {
-    seedLegacyLogin(PID, getEndOfDay(new Date()));
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    assert.deepEqual(loggedInPids(), [PID]);
-    assert.deepEqual(stubs.badgeProgressLookups, []);
+    await seedLegacyLogin(PID, getEndOfDay(new Date()));
+    await login();
+    assert.deepEqual(await loggedInPids(), [PID]);
   });
 
   it("records today's login when the last one was just before midnight", async () => {
     const justBeforeToday = new Date(getStartOfDay(new Date()).getTime() - 1);
-    seedLegacyLogin(PID, justBeforeToday);
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    assert.deepEqual(stubs.loginHistoryCreates, [
+    await seedLegacyLogin(PID, justBeforeToday);
+    await login();
+    assert.deepEqual(await logins(), [
       { pid: PID, date: justBeforeToday },
       { pid: PID, date: getStartOfDay(new Date()) },
     ]);
-    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
+    assert.deepEqual(await loginProgress(), [
+      { level: Level.NOVICE, progress: 1 },
+    ]);
   });
 
   it("isn't blocked by another participant's login today", async () => {
-    seedLegacyLogin(PID + 1, new Date());
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    assert.deepEqual(loggedInPids(), [PID + 1, PID]);
-    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
-  });
-
-  it("undoes the login record when the badge update fails, so it's retried", async () => {
-    stubs.badgeError = new Error("badge update failed");
-    await assert.rejects(
-      participantLogin(undefined, { pid: PID, password: PARTICIPANT_PASSWORD }),
-      /badge update failed/
-    );
-    assert.deepEqual(loggedInPids(), []);
-
-    stubs.badgeError = null;
-    stubs.badgeProgressLookups = [];
-    await participantLogin(undefined, {
-      pid: PID,
-      password: PARTICIPANT_PASSWORD,
-    });
-    assert.deepEqual(loggedInPids(), [PID]);
-    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
+    await seedLegacyLogin(PID + 1, new Date());
+    await login();
+    assert.deepEqual((await loggedInPids()).sort(), [PID, PID + 1]);
   });
 
   it("rejects a participant who has left", async () => {
-    stubs.participant = null;
-    await assert.rejects(
-      participantLogin(undefined, { pid: PID, password: PARTICIPANT_PASSWORD }),
-      /participant not found/
-    );
-    assert.deepEqual(loggedInPids(), []);
+    await departParticipant();
+    await assert.rejects(login(), /participant not found/);
+    assert.deepEqual(await loggedInPids(), []);
   });
 
   it("rejects a wrong password without recording a login", async () => {
@@ -538,7 +538,7 @@ describe("participantLogin", () => {
       participantLogin(undefined, { pid: PID, password: "nope" }),
       /incorrect password/
     );
-    assert.deepEqual(loggedInPids(), []);
+    assert.deepEqual(await loggedInPids(), []);
   });
 });
 
@@ -614,30 +614,33 @@ describe("slideSession", () => {
       now
     );
     assert(header);
-    assert.deepEqual(loggedInPids(), [PID]);
-    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
+    assert.deepEqual(await loggedInPids(), [PID]);
+    assert.deepEqual(await loginProgress(), [
+      { level: Level.NOVICE, progress: 1 },
+    ]);
   });
 
   it("counts concurrent first-of-day requests once", async () => {
     const authorization = tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600);
     await Promise.all(Array.from({ length: 5 }, () => slide(authorization)));
-    assert.deepEqual(loggedInPids(), [PID]);
-    assert.deepEqual(stubs.badgeProgressLookups, [LOGIN]);
+    assert.deepEqual(await loggedInPids(), [PID]);
+    assert.deepEqual(await loginProgress(), [
+      { level: Level.NOVICE, progress: 1 },
+    ]);
   });
 
   it("does not touch login history for staff", async () => {
     assert(await slide(tokenIssuedAt(ROLES.ADMIN, NOON - 600)));
-    assert.deepEqual(loggedInPids(), []);
-    assert.deepEqual(stubs.badgeProgressLookups, []);
+    assert.deepEqual(await loggedInPids(), []);
   });
 
   it("doesn't slide a departed participant's session", async () => {
-    stubs.participant = null;
+    await departParticipant();
     assert.equal(
       await slide(tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600)),
       undefined
     );
-    assert.deepEqual(loggedInPids(), []);
+    assert.deepEqual(await loggedInPids(), []);
   });
 
   it("ignores requests without a valid session", async () => {
@@ -663,11 +666,15 @@ describe("slideSession", () => {
   });
 
   it("surfaces database failures instead of hiding them", async () => {
-    stubs.loginHistoryError = new Error("database unavailable");
-    await assert.rejects(
-      slide(tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600)),
-      /database unavailable/
-    );
+    const stopFailing = await failWritesTo("login_history");
+    try {
+      await assert.rejects(
+        slide(tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600)),
+        /write to login_history failed/
+      );
+    } finally {
+      await stopFailing();
+    }
   });
 
   it("fails fast when JWT_SECRET is missing", async () => {
@@ -740,7 +747,7 @@ describe("auth middleware (production)", () => {
   });
 
   it("signs out a participant who has departed", async () => {
-    stubs.participant = null;
+    await departParticipant();
     const token = signSessionToken(
       claimsFor(ROLES.PARTICIPANT, nowInSeconds())
     );

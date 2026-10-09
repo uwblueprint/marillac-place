@@ -63,7 +63,7 @@ const earnedCustomBadgeResolver = {
         throw new Error("participant has already earned this custom badge");
       }
       const reasonForEarning = `${name} custom badge earned!`;
-      await processEarning(pid, value, reasonForEarning);
+      await processEarning(db, pid, value, reasonForEarning);
       return db.earnedCustomBadge.create({
         data: { pid, name, icon, description },
       });
