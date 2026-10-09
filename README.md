@@ -7,6 +7,7 @@
 📊  [Database Interactions](#database-interactions)  
 🐞  [FAQ & Debugging](#faq--debugging)  
 ✨  [Linting](#linting)  
+🧪  [Testing](#testing)  
 🌐  [Other Links](#other-links)  
 
 ## Tech Stack
@@ -108,6 +109,13 @@ docker exec -it mp_[frontend/backend] /bin/bash -c "yarn lint"
 
 # linting with automatic fixes
 docker exec -it mp_[frontend/backend] /bin/bash -c "yarn fix"
+```
+
+## Testing
+Backend tests go in `backend/tests/*.test.ts` (Node's `node:test`); frontend tests sit next to their source as `*.test.ts` (Jest).
+Backend tests run against a separate `<db>_test` database on the `DATABASE_URL` server; `yarn test` syncs its schema first, and `resetDatabase()` in `backend/tests/testDatabase.ts` empties it between tests.
+```bash
+docker exec -it mp_[frontend/backend] /bin/bash -c "yarn test"
 ```
 
 ## Other Links
