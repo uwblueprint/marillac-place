@@ -1,10 +1,10 @@
-import { Flex, Text, Image, Tab, TabList, Tabs } from "@chakra-ui/react";
-import CloseIcon from "@mui/icons-material/Close";
+import { Flex, Text, Tab, TabList, Tabs } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 import { MarillacCoin } from "../ui/icons/MiscIcons";
 import { Cross, Menu } from "../ui/icons/ActionIcons";
+import { endSession } from "../helpers/session";
 
 type Page = {
   label: string;
@@ -27,8 +27,7 @@ function ExpandedParticipantMenu({
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    localStorage.removeItem("token");
-    return navigate(ROUTES.PARTICIPANTS_LOGIN_PAGE);
+    endSession(ROUTES.PARTICIPANTS_LOGIN_PAGE);
   };
 
   return (

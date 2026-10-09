@@ -1,14 +1,14 @@
 import { Level } from "@prisma/client";
-import db from "../prisma";
+import db, { DbClient } from "../prisma";
 import {
   SYSTEM_BADGES,
   JACK_OF_ALL_TRADES,
   PR_LEADER,
 } from "../constants/systemBadges";
 import processEarning from "./transactionUtils";
-import { getEndOfDay } from "./dateUtils";
+import { currentParticipantFilter } from "./participantUtils";
 
-async function getNextBadgeLevel(name: string, level: Level) {
+async function getNextBadgeLevel(client: DbClient, name: string, level: Level) {
   const levels = [
     Level.NOVICE,
     Level.BRONZE,
@@ -19,7 +19,7 @@ async function getNextBadgeLevel(name: string, level: Level) {
   const index = levels.indexOf(level);
   if (index === levels.length - 1) return null;
   const nextLevel = levels[index + 1];
-  const nextBadgeLevel = await db.badgeLevel.findUnique({
+  const nextBadgeLevel = await client.badgeLevel.findUnique({
     where: { name_level: { name, level: nextLevel } },
   });
   return nextBadgeLevel?.level;
@@ -53,11 +53,12 @@ export async function initBadgeLevelProgress(pid: number) {
 }
 
 export async function updateBadgeLevelProgress(
+  client: DbClient,
   name: string,
   pid: number,
   inc: number
 ) {
-  const badgeLevelProgress = await db.badgeLevelProgress.findFirst({
+  const badgeLevelProgress = await client.badgeLevelProgress.findFirst({
     where: { pid, name },
     include: {
       badge_level: true,
@@ -69,11 +70,11 @@ export async function updateBadgeLevelProgress(
   const reachedBenchmark =
     newAmount >= badgeLevelProgress.badge_level.benchmark;
   if (reachedBenchmark) {
-    await db.achievedBadgeLevel.create({
+    await client.achievedBadgeLevel.create({
       data: { name, level: badgeLevelProgress.level, pid },
     });
 
-    const prLeaderProgress = await db.badgeLevelProgress.findFirst({
+    const prLeaderProgress = await client.badgeLevelProgress.findFirst({
       where: {
         pid,
         name: PR_LEADER,
@@ -89,7 +90,7 @@ export async function updateBadgeLevelProgress(
       const reachedPrLeaderBenchmark =
         newPrLeaderAmount >= prLeaderProgress.badge_level.benchmark;
       if (reachedPrLeaderBenchmark) {
-        await db.achievedBadgeLevel.create({
+        await client.achievedBadgeLevel.create({
           data: {
             name: PR_LEADER,
             level: prLeaderProgress.level,
@@ -97,7 +98,7 @@ export async function updateBadgeLevelProgress(
           },
         });
 
-        await db.badgeLevelProgress.delete({
+        await client.badgeLevelProgress.delete({
           where: {
             name_level_pid: {
               name: PR_LEADER,
@@ -107,7 +108,7 @@ export async function updateBadgeLevelProgress(
           },
         });
       } else {
-        await db.badgeLevelProgress.update({
+        await client.badgeLevelProgress.update({
           where: {
             name_level_pid: {
               name: PR_LEADER,
@@ -120,27 +121,29 @@ export async function updateBadgeLevelProgress(
       }
     }
 
-    await db.badgeLevelProgress.delete({
+    await client.badgeLevelProgress.delete({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },
     });
 
     const reasonForEarning = `${badgeLevelProgress.level} ${name} badge achieved!`;
     await processEarning(
+      client,
       pid,
       badgeLevelProgress.badge_level.value,
       reasonForEarning
     );
 
     const nextBadgeLevel = await getNextBadgeLevel(
+      client,
       name,
       badgeLevelProgress.level
     );
     if (!nextBadgeLevel) return;
-    await db.badgeLevelProgress.create({
+    await client.badgeLevelProgress.create({
       data: { name, level: nextBadgeLevel, pid, progress: newAmount },
     });
   } else {
-    await db.badgeLevelProgress.update({
+    await client.badgeLevelProgress.update({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },
       data: { progress: newAmount },
     });
@@ -150,13 +153,13 @@ export async function updateBadgeLevelProgress(
 export async function validateBadgeLevelProgress(name: string) {
   const currentParticipants = await db.participant.findMany({
     where: {
-      OR: [{ departure: null }, { departure: { gt: getEndOfDay(new Date()) } }],
+      ...currentParticipantFilter(),
     },
   });
 
   await Promise.all(
     currentParticipants.map(async (participant) => {
-      return updateBadgeLevelProgress(name, participant.pid, 0);
+      return updateBadgeLevelProgress(db, name, participant.pid, 0);
     })
   );
 }

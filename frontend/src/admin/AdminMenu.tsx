@@ -6,6 +6,7 @@ import PopupContainer from "../ui/containers/PopupContainer";
 import BlackOutlineButton from "../ui/buttons/BlackOutlineButton";
 import { AdminContext } from "./AdminContext";
 import { ADMIN } from "../constants/roles";
+import { endSession } from "../helpers/session";
 
 type SideBarTabProps = {
   label: string;
@@ -41,11 +42,8 @@ type SignOutPopUpProps = {
 };
 
 function SignOutPopUp({ cancel }: SignOutPopUpProps) {
-  const navigate = useNavigate();
-
   const handleSignOut = () => {
-    localStorage.removeItem("token");
-    return navigate(ROUTES.ADMIN_LOGIN_PAGE);
+    endSession(ROUTES.ADMIN_LOGIN_PAGE);
   };
 
   return (

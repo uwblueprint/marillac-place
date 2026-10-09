@@ -1,16 +1,14 @@
 import { LOGIN } from "../../constants/systemBadges";
 import db from "../../prisma";
 import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
+import { currentParticipantFilter } from "../../utils/participantUtils";
 
 // checks whether or not a participant has logged in today and resets their progress for the login badge if not
 async function resetLoginStreak() {
   try {
     const participants = await db.participant.findMany({
       where: {
-        OR: [
-          { departure: null },
-          { departure: { gt: getEndOfDay(new Date()) } },
-        ],
+        ...currentParticipantFilter(),
       },
       select: { pid: true },
     });

@@ -2,16 +2,16 @@ import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
-import { getRole, verifyRole } from "../helpers/verifyRole";
+import { getSession } from "../helpers/session";
 import { ADMIN, RELIEF } from "../constants/roles";
 import LoadingScreen from "../ui/screens/LoadingScreen";
 import { ADMIN_LOGIN_PAGE } from "../constants/routes";
 import { GET_CURRENT_PARTICIPANTS } from "../gql/participantRequests";
 import { AdminContext } from "./AdminContext";
 import ErrorScreen from "../ui/screens/ErrorScreen";
+import useSessionExpiry from "../hooks/useSessionExpiry";
 import AdminMenu from "./AdminMenu";
 import { Participant } from "../types/models";
-import useNotification from "../hooks/useNotification";
 
 type AdminRouteProps = {
   children: React.ReactElement;
@@ -19,12 +19,12 @@ type AdminRouteProps = {
 
 export default function AdminRoute({ children }: AdminRouteProps) {
   const adminContext = useContext(AdminContext);
-  const [populatingContext, setPopulatingContext] = useState(true);
-
   const [authorized, setAuthorized] = useState(false);
   const [authorizing, setAuthorizing] = useState(true);
 
   const [error, setError] = useState("");
+
+  useSessionExpiry(authorized, ADMIN_LOGIN_PAGE);
 
   const [getCurrentParticipants] = useLazyQuery(GET_CURRENT_PARTICIPANTS, {
     onCompleted: (data) => {
@@ -44,37 +44,20 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   });
 
   useEffect(() => {
-    const authorize = async () => {
-      const isStaff = await verifyRole([ADMIN, RELIEF]);
-      if (isStaff) {
-        setAuthorized(true);
-      }
-      setAuthorizing(false);
-    };
-    authorize();
-  }, []);
-
-  useEffect(() => {
-    if (!authorizing && authorized) {
-      const populateContext = async () => {
-        getCurrentParticipants();
-        const role = await getRole();
-        if (role === null) {
-          setError("Unable to retrieve role, please login again");
-        } else {
-          adminContext.setRole(role);
-        }
-        setPopulatingContext(false);
-      };
-      populateContext();
+    const session = getSession();
+    if (session?.role === ADMIN || session?.role === RELIEF) {
+      adminContext.setRole(session.role);
+      getCurrentParticipants();
+      setAuthorized(true);
     }
-  }, [authorizing, authorized]);
+    setAuthorizing(false);
+  }, []);
 
   if (!authorizing && !authorized) {
     return <Navigate to={ADMIN_LOGIN_PAGE} replace />;
   }
 
-  if (authorizing || populatingContext) {
+  if (authorizing) {
     return <LoadingScreen />;
   }
 

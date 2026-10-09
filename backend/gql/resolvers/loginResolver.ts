@@ -1,10 +1,7 @@
-import jwt from "jsonwebtoken";
-import { Participant } from "@prisma/client";
 import * as ROLES from "../../constants/roles";
-import { LOGIN } from "../../constants/systemBadges";
-import db from "../../prisma";
-import { updateBadgeLevelProgress } from "../../utils/badgeUtils";
-import { getEndOfDay, getStartOfDay } from "../../utils/dateUtils";
+import { recordDailyLogin } from "../../utils/loginUtils";
+import { findCurrentParticipant } from "../../utils/participantUtils";
+import { nowInSeconds, signSessionToken } from "../../utils/sessionUtils";
 
 type LoginResponse = {
   token: string;
@@ -34,10 +31,10 @@ const loginResolver = {
       const validPassword: boolean = password === expectedPassword;
       if (!validPassword) throw new Error("incorrect password");
 
-      const jwtSecretKey = process.env.JWT_SECRET ?? "";
-      if (!jwtSecretKey) throw new Error("jwt key missing");
-
-      const token = jwt.sign({ role }, jwtSecretKey, { expiresIn: "12h" });
+      const token = signSessionToken({
+        role,
+        sessionStartedAt: nowInSeconds(),
+      });
       return { token };
     },
     participantLogin: async (
@@ -50,42 +47,18 @@ const loginResolver = {
         password: string;
       }
     ): Promise<LoginResponse> => {
-      const participant: Participant | null = await db.participant.findUnique({
-        where: {
-          pid,
-          OR: [
-            { departure: null },
-            { departure: { gt: getEndOfDay(new Date()) } },
-          ],
-        },
-      });
-
+      const participant = await findCurrentParticipant(pid);
       if (!participant) throw new Error("participant not found");
 
       const validPassword: boolean = password === participant.password;
       if (!validPassword) throw new Error("incorrect password");
 
-      const jwtSecretKey = process.env.JWT_SECRET ?? "";
-      if (!jwtSecretKey) throw new Error("jwt key missing");
-
-      const loggedInToday = await db.loginHistory.findFirst({
-        where: {
-          pid,
-          date: {
-            gte: getStartOfDay(new Date()),
-            lte: getEndOfDay(new Date()),
-          },
-        },
-      });
-      if (!loggedInToday) {
-        await updateBadgeLevelProgress(LOGIN, pid, 1);
-      }
-
-      await db.loginHistory.create({ data: { pid } });
-
-      const token = jwt.sign({ role: ROLES.PARTICIPANT, pid }, jwtSecretKey, {
-        expiresIn: "12h",
-      });
+      const now = nowInSeconds();
+      const token = signSessionToken(
+        { role: ROLES.PARTICIPANT, pid, sessionStartedAt: now },
+        now
+      );
+      await recordDailyLogin(pid, new Date(now * 1000));
       return { token };
     },
   },

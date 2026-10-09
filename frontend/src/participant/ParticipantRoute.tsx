@@ -2,13 +2,14 @@ import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import { useLazyQuery } from "@apollo/client";
-import { getParticipantId, verifyRole } from "../helpers/verifyRole";
+import { getSession } from "../helpers/session";
 import { PARTICIPANT } from "../constants/roles";
 import LoadingScreen from "../ui/screens/LoadingScreen";
 import { PARTICIPANTS_LOGIN_PAGE } from "../constants/routes";
 import { ParticipantContext } from "./ParticipantContext";
 import { GET_PARTICIPANT_BY_PID } from "../gql/participantRequests";
 import ErrorScreen from "../ui/screens/ErrorScreen";
+import useSessionExpiry from "../hooks/useSessionExpiry";
 import ParticipantMenu from "./ParticipantMenu";
 
 type ParticipantRouteProps = {
@@ -17,12 +18,12 @@ type ParticipantRouteProps = {
 
 export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   const participantContext = useContext(ParticipantContext);
-  const [populatingContext, setPopulatingContext] = useState(true);
-
   const [authorized, setAuthorized] = useState(false);
   const [authorizing, setAuthorizing] = useState(true);
 
   const [error, setError] = useState("");
+
+  useSessionExpiry(authorized, PARTICIPANTS_LOGIN_PAGE);
 
   const [getParticipantByPid] = useLazyQuery(GET_PARTICIPANT_BY_PID, {
     onCompleted: (data) => {
@@ -47,31 +48,14 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
   });
 
   useEffect(() => {
-    const authorize = async () => {
-      const isParticipant = await verifyRole([PARTICIPANT]);
-      if (isParticipant) {
-        setAuthorized(true);
-      }
-      setAuthorizing(false);
-    };
-    authorize();
-  }, []);
-
-  useEffect(() => {
-    if (!authorizing && authorized) {
-      const populateContext = async () => {
-        const pid = await getParticipantId();
-        if (pid === null) {
-          setError("unable to retrieve participant id, please login again");
-        } else {
-          participantContext.setPid(pid);
-          getParticipantByPid({ variables: { pid } });
-        }
-        setPopulatingContext(false);
-      };
-      populateContext();
+    const session = getSession();
+    if (session?.role === PARTICIPANT) {
+      participantContext.setPid(session.pid);
+      getParticipantByPid({ variables: { pid: session.pid } });
+      setAuthorized(true);
     }
-  }, [authorizing, authorized]);
+    setAuthorizing(false);
+  }, []);
 
   if (!authorizing && !authorized) {
     return <Navigate to={PARTICIPANTS_LOGIN_PAGE} replace />;
@@ -102,7 +86,7 @@ export default function ParticipantRoute({ children }: ParticipantRouteProps) {
         >
           {error ? (
             <ErrorScreen message={error} />
-          ) : authorizing || populatingContext ? (
+          ) : authorizing ? (
             <LoadingScreen />
           ) : (
             children
