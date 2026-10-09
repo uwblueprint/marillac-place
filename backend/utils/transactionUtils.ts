@@ -16,13 +16,12 @@ export default async function processEarning(
   });
   if (!participant) throw new Error("participant not found");
 
-  const newBalance = participant.balance + amount;
-  const newEarnings = participant.total_earnings + amount;
-  await client.participant.update({
+  // Increment in the database, so concurrent earnings can't overwrite each other.
+  const { total_earnings: newEarnings } = await client.participant.update({
     where: { pid },
     data: {
-      balance: newBalance,
-      total_earnings: newEarnings,
+      balance: { increment: amount },
+      total_earnings: { increment: amount },
     },
   });
 
