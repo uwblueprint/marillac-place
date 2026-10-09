@@ -61,7 +61,13 @@ describe("getStartOfDay / getEndOfDay", () => {
 describe("whichDay", () => {
   it("uses the Toronto day, not the UTC day", () => {
     // Wednesday 10:30pm in Toronto is already Thursday in UTC.
-    assert.equal(whichDay(new Date("2026-07-16T02:30:00.000Z")), DayOfWeek.WEDNESDAY);
-    assert.equal(whichDay(new Date("2026-07-16T04:00:00.000Z")), DayOfWeek.THURSDAY);
+    assert.equal(
+      whichDay(new Date("2026-07-16T02:30:00.000Z")),
+      DayOfWeek.WEDNESDAY
+    );
+    assert.equal(
+      whichDay(new Date("2026-07-16T04:00:00.000Z")),
+      DayOfWeek.THURSDAY
+    );
   });
 });
