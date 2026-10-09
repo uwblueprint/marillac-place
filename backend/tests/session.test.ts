@@ -623,23 +623,38 @@ describe("slideSession", () => {
   });
 
   it("counts concurrent first-of-day requests once", async () => {
-    const authorization = tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600);
-    await Promise.all(Array.from({ length: 5 }, () => slide(authorization)));
+    const authorization = tokenIssuedAt(ROLES.PARTICIPANT, START_OF_DAY - 60);
+    await Promise.all(
+      Array.from({ length: 5 }, () => slide(authorization, START_OF_DAY + 60))
+    );
     assert.deepEqual(await loggedInPids(), [PID]);
     assert.deepEqual(await loginProgress(), [
       { level: Level.NOVICE, progress: 1 },
     ]);
   });
 
+  it("doesn't re-record the login when sliding a token issued today", async () => {
+    assert(await slide(tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600)));
+    assert.deepEqual(await loggedInPids(), []);
+  });
+
   it("does not touch login history for staff", async () => {
-    assert(await slide(tokenIssuedAt(ROLES.ADMIN, NOON - 600)));
+    assert(
+      await slide(
+        tokenIssuedAt(ROLES.ADMIN, START_OF_DAY - 60),
+        START_OF_DAY + 60
+      )
+    );
     assert.deepEqual(await loggedInPids(), []);
   });
 
   it("doesn't slide a departed participant's session", async () => {
     await departParticipant();
     assert.equal(
-      await slide(tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600)),
+      await slide(
+        tokenIssuedAt(ROLES.PARTICIPANT, START_OF_DAY - 60),
+        START_OF_DAY + 60
+      ),
       undefined
     );
     assert.deepEqual(await loggedInPids(), []);
@@ -671,7 +686,10 @@ describe("slideSession", () => {
     const stopFailing = await failWritesTo("login_history");
     try {
       await assert.rejects(
-        slide(tokenIssuedAt(ROLES.PARTICIPANT, NOON - 600)),
+        slide(
+          tokenIssuedAt(ROLES.PARTICIPANT, START_OF_DAY - 60),
+          START_OF_DAY + 60
+        ),
         /write to login_history failed/
       );
     } finally {

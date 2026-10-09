@@ -47,7 +47,11 @@ export async function slideSession(
 
   if (claims.role === ROLES.PARTICIPANT) {
     if (!(await findCurrentParticipant(claims.pid))) return;
-    await recordDailyLogin(claims.pid, new Date(now * 1000));
+    // A token issued today means today's login is already recorded: login
+    // and slides both record it before signing.
+    if (issuedBeforeToday) {
+      await recordDailyLogin(claims.pid, new Date(now * 1000));
+    }
   }
   res.setHeader(SESSION_TOKEN_HEADER, signSessionToken(claims, now));
 }
