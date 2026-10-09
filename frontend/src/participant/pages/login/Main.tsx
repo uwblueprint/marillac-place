@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Flex, Text } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
-import { verifyRole } from "../../../helpers/verifyRole";
-import { storeToken } from "../../../helpers/session";
+import { getSession, storeToken } from "../../../helpers/session";
 import { PARTICIPANT } from "../../../constants/roles";
 import { PARTICIPANT_LOGIN } from "../../../gql/loginRequests";
 import * as ROUTES from "../../../constants/routes";
@@ -37,14 +36,11 @@ export default function ParticipantsLoginPage() {
   );
 
   useEffect(() => {
-    const authenticate = async () => {
-      const isAuthenticated = await verifyRole([PARTICIPANT]);
-      if (isAuthenticated) {
-        setLoggedIn(true);
-      }
-      setLoading(false);
-    };
-    authenticate();
+    const session = getSession();
+    if (session?.role === PARTICIPANT) {
+      setLoggedIn(true);
+    }
+    setLoading(false);
   }, []);
 
   const handleSubmit = () => {

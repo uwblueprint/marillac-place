@@ -3,8 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { Flex, Text } from "@chakra-ui/react";
 import { ADMIN_LOGIN } from "../../../gql/loginRequests";
-import { verifyRole } from "../../../helpers/verifyRole";
-import { storeToken } from "../../../helpers/session";
+import { getSession, storeToken } from "../../../helpers/session";
 import * as ROUTES from "../../../constants/routes";
 import LoadingScreen from "../../../ui/screens/LoadingScreen";
 import { ADMIN, RELIEF } from "../../../constants/roles";
@@ -37,14 +36,11 @@ export default function AdminLoginPage() {
   );
 
   useEffect(() => {
-    const authenticate = async () => {
-      const isAuthenticated = await verifyRole([ADMIN, RELIEF]);
-      if (isAuthenticated) {
-        setLoggedIn(true);
-      }
-      setLoading(false);
-    };
-    authenticate();
+    const session = getSession();
+    if (session?.role === ADMIN || session?.role === RELIEF) {
+      setLoggedIn(true);
+    }
+    setLoading(false);
   }, []);
 
   const handleSubmit = () => {

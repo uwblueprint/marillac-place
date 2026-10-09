@@ -1,5 +1,6 @@
 import { ApolloLink } from "@apollo/client";
 import { jwtDecode } from "jwt-decode";
+import { ADMIN, PARTICIPANT, RELIEF } from "../constants/roles";
 
 // Sessions are sliding: authenticated requests come back with a fresh token in
 // a response header (see backend/gql/slideSession.ts), and the session ends
@@ -47,6 +48,36 @@ export function msUntilExpiry(now: number): number {
   const expiresAt = Number(localStorage.getItem(EXPIRES_AT_KEY) ?? NaN);
   if (!Number.isFinite(expiresAt)) return 0;
   return expiresAt - now;
+}
+
+export type Session =
+  | { role: typeof ADMIN | typeof RELIEF }
+  | { role: typeof PARTICIPANT; pid: number };
+
+// Who's signed in, or null if no one is or the session has expired (measured
+// the same way as msUntilExpiry). The token is only read, not verified: the
+// backend checks it on every request, so this decides what to show, not what
+// is allowed.
+export function getSession(now = Date.now()): Session | null {
+  const token = getToken();
+  if (!token || msUntilExpiry(now) <= 0) return null;
+  let claims: { role?: unknown; pid?: unknown };
+  try {
+    claims = jwtDecode(token);
+  } catch {
+    return null;
+  }
+  switch (claims.role) {
+    case ADMIN:
+    case RELIEF:
+      return { role: claims.role };
+    case PARTICIPANT:
+      return typeof claims.pid === "number"
+        ? { role: PARTICIPANT, pid: claims.pid }
+        : null;
+    default:
+      return null;
+  }
 }
 
 // Saves the fresh tokens the backend sends back, and ends the session when the

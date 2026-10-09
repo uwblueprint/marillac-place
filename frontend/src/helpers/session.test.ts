@@ -10,6 +10,7 @@ import {
   clearSession,
   createSessionLink,
   endSession,
+  getSession,
   getToken,
   msUntilExpiry,
   storeToken,
@@ -147,6 +148,69 @@ describe("storeToken / msUntilExpiry", () => {
     clearSession();
     expect(getToken()).toBeNull();
     expect(localStorage.getItem("tokenExpiresAt")).toBeNull();
+  });
+});
+
+describe("getSession", () => {
+  // A token for `claims` that has `lifetimeMs` left, from a server whose clock
+  // is `skewMs` ahead of this device.
+  function storeClaims(claims: object, lifetimeMs = HOUR_MS, skewMs = 0) {
+    const iat = Math.floor((Date.now() + skewMs) / 1000);
+    storeToken(makeToken({ ...claims, iat, exp: iat + lifetimeMs / 1000 }));
+  }
+
+  it.each([
+    [{ role: "admin" }, { role: "admin" }],
+    [{ role: "relief" }, { role: "relief" }],
+    [
+      { role: "participant", pid: 7 },
+      { role: "participant", pid: 7 },
+    ],
+  ])("reads %j", (claims, session) => {
+    storeClaims(claims);
+    expect(getSession()).toEqual(session);
+  });
+
+  it.each([
+    ["10h ahead of", 10 * HOUR_MS],
+    ["10h behind", -10 * HOUR_MS],
+  ])(
+    "admits a fresh token when the server clock is %s the device",
+    (_label, skewMs) => {
+      storeClaims({ role: "admin" }, 8 * HOUR_MS, skewMs);
+      expect(getSession()).toEqual({ role: "admin" });
+    }
+  );
+
+  it("ends exactly when the session expires, like msUntilExpiry", () => {
+    storeClaims({ role: "admin" });
+    expect(getSession(T0 + HOUR_MS - 1)).toEqual({ role: "admin" });
+    expect(getSession(T0 + HOUR_MS)).toBeNull();
+  });
+
+  it("is null without a token", () => {
+    expect(getSession()).toBeNull();
+  });
+
+  it("is null for a token stored without an expiry (pre-deploy)", () => {
+    localStorage.setItem("token", makeToken({ role: "admin" }));
+    expect(getSession()).toBeNull();
+  });
+
+  it("is null for a malformed token", () => {
+    storeClaims({ role: "admin" });
+    localStorage.setItem("token", "not-a-jwt");
+    expect(getSession()).toBeNull();
+  });
+
+  it.each([
+    ["an unknown role", { role: "owner" }],
+    ["no role", {}],
+    ["a participant without a pid", { role: "participant" }],
+    ["a participant with a non-numeric pid", { role: "participant", pid: "7" }],
+  ])("is null for %s", (_label, claims) => {
+    storeClaims(claims);
+    expect(getSession()).toBeNull();
   });
 });
 
