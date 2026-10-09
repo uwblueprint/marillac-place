@@ -43,6 +43,30 @@ describe("getStartOfDay / getEndOfDay", () => {
       end: "2026-03-09T03:59:59.999Z",
     },
     {
+      name: "last millisecond before spring-forward (1:59:59.999am EST)",
+      at: "2026-03-08T06:59:59.999Z",
+      start: "2026-03-08T05:00:00.000Z",
+      end: "2026-03-09T03:59:59.999Z",
+    },
+    {
+      name: "spring-forward instant (2am EST becomes 3am EDT)",
+      at: "2026-03-08T07:00:00.000Z",
+      start: "2026-03-08T05:00:00.000Z",
+      end: "2026-03-09T03:59:59.999Z",
+    },
+    {
+      name: "first 1:30am on fall-back day (EDT)",
+      at: "2026-11-01T05:30:00.000Z",
+      start: "2026-11-01T04:00:00.000Z",
+      end: "2026-11-02T04:59:59.999Z",
+    },
+    {
+      name: "repeated 1:30am on fall-back day (EST)",
+      at: "2026-11-01T06:30:00.000Z",
+      start: "2026-11-01T04:00:00.000Z",
+      end: "2026-11-02T04:59:59.999Z",
+    },
+    {
       name: "fall-back day is 25 hours",
       at: "2026-11-01T12:00:00.000Z",
       start: "2026-11-01T04:00:00.000Z",
