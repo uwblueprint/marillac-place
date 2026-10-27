@@ -1,4 +1,4 @@
-import { Level } from "@prisma/client";
+import { Level, Prisma } from "@prisma/client";
 import db from "../prisma";
 import {
   SYSTEM_BADGES,
@@ -8,7 +8,11 @@ import {
 import processEarning from "./transactionUtils";
 import { getEndOfDay } from "./dateUtils";
 
-async function getNextBadgeLevel(name: string, level: Level) {
+async function getNextBadgeLevel(
+  name: string,
+  level: Level,
+  transactionClient: Prisma.TransactionClient = db
+) {
   const levels = [
     Level.NOVICE,
     Level.BRONZE,
@@ -19,7 +23,7 @@ async function getNextBadgeLevel(name: string, level: Level) {
   const index = levels.indexOf(level);
   if (index === levels.length - 1) return null;
   const nextLevel = levels[index + 1];
-  const nextBadgeLevel = await db.badgeLevel.findUnique({
+  const nextBadgeLevel = await transactionClient.badgeLevel.findUnique({
     where: { name_level: { name, level: nextLevel } },
   });
   return nextBadgeLevel?.level;
@@ -55,41 +59,44 @@ export async function initBadgeLevelProgress(pid: number) {
 export async function updateBadgeLevelProgress(
   name: string,
   pid: number,
-  inc: number
+  inc: number,
+  transactionClient: Prisma.TransactionClient = db
 ) {
-  const badgeLevelProgress = await db.badgeLevelProgress.findFirst({
-    where: { pid, name },
-    include: {
-      badge_level: true,
-    },
-  });
+  const badgeLevelProgress =
+    await transactionClient.badgeLevelProgress.findFirst({
+      where: { pid, name },
+      include: {
+        badge_level: true,
+      },
+    });
   if (!badgeLevelProgress) return;
 
   const newAmount = badgeLevelProgress.progress + inc;
   const reachedBenchmark =
     newAmount >= badgeLevelProgress.badge_level.benchmark;
   if (reachedBenchmark) {
-    await db.achievedBadgeLevel.create({
+    await transactionClient.achievedBadgeLevel.create({
       data: { name, level: badgeLevelProgress.level, pid },
     });
 
-    const prLeaderProgress = await db.badgeLevelProgress.findFirst({
-      where: {
-        pid,
-        name: PR_LEADER,
-        level: badgeLevelProgress.level,
-      },
-      include: {
-        badge_level: true,
-      },
-    });
+    const prLeaderProgress =
+      await transactionClient.badgeLevelProgress.findFirst({
+        where: {
+          pid,
+          name: PR_LEADER,
+          level: badgeLevelProgress.level,
+        },
+        include: {
+          badge_level: true,
+        },
+      });
 
     if (prLeaderProgress) {
       const newPrLeaderAmount = prLeaderProgress.progress + 1;
       const reachedPrLeaderBenchmark =
         newPrLeaderAmount >= prLeaderProgress.badge_level.benchmark;
       if (reachedPrLeaderBenchmark) {
-        await db.achievedBadgeLevel.create({
+        await transactionClient.achievedBadgeLevel.create({
           data: {
             name: PR_LEADER,
             level: prLeaderProgress.level,
@@ -97,7 +104,7 @@ export async function updateBadgeLevelProgress(
           },
         });
 
-        await db.badgeLevelProgress.delete({
+        await transactionClient.badgeLevelProgress.delete({
           where: {
             name_level_pid: {
               name: PR_LEADER,
@@ -107,7 +114,7 @@ export async function updateBadgeLevelProgress(
           },
         });
       } else {
-        await db.badgeLevelProgress.update({
+        await transactionClient.badgeLevelProgress.update({
           where: {
             name_level_pid: {
               name: PR_LEADER,
@@ -120,7 +127,7 @@ export async function updateBadgeLevelProgress(
       }
     }
 
-    await db.badgeLevelProgress.delete({
+    await transactionClient.badgeLevelProgress.delete({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },
     });
 
@@ -128,19 +135,21 @@ export async function updateBadgeLevelProgress(
     await processEarning(
       pid,
       badgeLevelProgress.badge_level.value,
-      reasonForEarning
+      reasonForEarning,
+      transactionClient
     );
 
     const nextBadgeLevel = await getNextBadgeLevel(
       name,
-      badgeLevelProgress.level
+      badgeLevelProgress.level,
+      transactionClient
     );
     if (!nextBadgeLevel) return;
-    await db.badgeLevelProgress.create({
+    await transactionClient.badgeLevelProgress.create({
       data: { name, level: nextBadgeLevel, pid, progress: newAmount },
     });
   } else {
-    await db.badgeLevelProgress.update({
+    await transactionClient.badgeLevelProgress.update({
       where: { name_level_pid: { name, level: badgeLevelProgress.level, pid } },
       data: { progress: newAmount },
     });
