@@ -213,24 +213,36 @@ const assignedTaskResolver = {
         status: TaskStatus;
       }
     ): Promise<AssignedTask> => {
-      if (status === TaskStatus.ASSIGNED) {
-        throw new Error("invalid status update");
-      } else if (status === TaskStatus.COMPLETE) {
-        const assignedTask = await db.assignedTask.findUnique({
+      return db.$transaction(async (transactionClient) => {
+        const assignedTask = await transactionClient.assignedTask.findUnique({
           where: { aid },
         });
         if (assignedTask === null) throw new Error("assigned task not found");
 
-        const reasonForEarning = `Required task ${assignedTask.name} completed!`;
-        await processEarning(
-          assignedTask.pid,
-          assignedTask.value,
-          reasonForEarning
-        );
+        if (assignedTask.status === TaskStatus.COMPLETE) {
+          if (status === TaskStatus.COMPLETE) return assignedTask;
+          throw new Error("completed task status cannot be changed");
+        }
 
+        if (status !== TaskStatus.COMPLETE) {
+          const updateResult = await transactionClient.assignedTask.updateMany({
+            where: { aid, status: { not: TaskStatus.COMPLETE } },
+            data: { status },
+          });
+          if (updateResult.count === 0) {
+            throw new Error("completed task status cannot be changed");
+          }
+          const updatedTask = await transactionClient.assignedTask.findUnique({
+            where: { aid },
+          });
+          if (updatedTask === null) throw new Error("assigned task not found");
+          return updatedTask;
+        }
+
+        let requiredTaskBadgeProgress = false;
         if (assignedTask.type === TaskType.REQUIRED) {
-          const weeklyRequiredTasksNotComplete = await db.assignedTask.findMany(
-            {
+          const weeklyRequiredTasksNotComplete =
+            await transactionClient.assignedTask.findMany({
               where: {
                 pid: assignedTask.pid,
                 status: { not: TaskStatus.COMPLETE },
@@ -238,37 +250,30 @@ const assignedTaskResolver = {
                 end_date: { gte: getStartOfWeek(new Date()) },
                 type: TaskType.REQUIRED,
               },
-            }
-          );
+            });
+          requiredTaskBadgeProgress =
+            weeklyRequiredTasksNotComplete.length === 1;
+        }
 
-          if (weeklyRequiredTasksNotComplete.length === 1) {
-            await updateBadgeLevelProgress(
-              PERFECT_SCORE_REQUIRED,
-              assignedTask.pid,
-              1
-            );
-          }
-        } else if (assignedTask.type === TaskType.OPTIONAL) {
-          const countCompletedOptionalTasks = await db.assignedTask.count({
-            where: {
-              pid: assignedTask.pid,
-              start_date: { lte: getEndOfWeek(new Date()) },
-              end_date: { gte: getStartOfWeek(new Date()) },
-              type: TaskType.OPTIONAL,
-              status: TaskStatus.COMPLETE,
-            },
-          });
+        let optionalTaskBadgeProgress = false;
+        if (assignedTask.type === TaskType.OPTIONAL) {
+          const countCompletedOptionalTasks =
+            await transactionClient.assignedTask.count({
+              where: {
+                pid: assignedTask.pid,
+                start_date: { lte: getEndOfWeek(new Date()) },
+                end_date: { gte: getStartOfWeek(new Date()) },
+                type: TaskType.OPTIONAL,
+                status: TaskStatus.COMPLETE,
+              },
+            });
+          optionalTaskBadgeProgress = countCompletedOptionalTasks === 2;
+        }
 
-          if (countCompletedOptionalTasks === 2) {
-            await updateBadgeLevelProgress(
-              PERFECT_SCORE_OPTIONAL,
-              assignedTask.pid,
-              1
-            );
-          }
-        } else if (assignedTask.type === TaskType.INDIVIDUAL_GOAL) {
-          const individualGoalTasksNotComplete = await db.assignedTask.findMany(
-            {
+        let individualGoalBadgeProgress = false;
+        if (assignedTask.type === TaskType.INDIVIDUAL_GOAL) {
+          const individualGoalTasksNotComplete =
+            await transactionClient.assignedTask.findMany({
               where: {
                 pid: assignedTask.pid,
                 type: TaskType.INDIVIDUAL_GOAL,
@@ -276,21 +281,12 @@ const assignedTaskResolver = {
                 start_date: { lte: getEndOfWeek(new Date()) },
                 end_date: { gte: getStartOfWeek(new Date()) },
               },
-            }
-          );
-
-          if (individualGoalTasksNotComplete.length === 1) {
-            await updateBadgeLevelProgress(
-              INDIVIDUAL_GOAL,
-              assignedTask.pid,
-              1
-            );
-          }
-
-          await updateBadgeLevelProgress(FIRST_GOAL, assignedTask.pid, 1);
+            });
+          individualGoalBadgeProgress =
+            individualGoalTasksNotComplete.length === 1;
         }
 
-        const hasPreviouslyCompleted = await db.assignedTask
+        const hasPreviouslyCompleted = await transactionClient.assignedTask
           .findFirst({
             where: {
               tid: assignedTask.tid,
@@ -299,18 +295,74 @@ const assignedTaskResolver = {
             },
           })
           .then((task) => task !== null);
+
+        const completionClaim = await transactionClient.assignedTask.updateMany(
+          {
+            where: { aid, status: { not: TaskStatus.COMPLETE } },
+            data: { status: TaskStatus.COMPLETE },
+          }
+        );
+        if (completionClaim.count === 0) {
+          const currentTask = await transactionClient.assignedTask.findUnique({
+            where: { aid },
+          });
+          if (currentTask?.status === TaskStatus.COMPLETE) return currentTask;
+          throw new Error("assigned task status changed; please retry");
+        }
+
+        const reasonForEarning = `Required task ${assignedTask.name} completed!`;
+        await processEarning(
+          assignedTask.pid,
+          assignedTask.value,
+          reasonForEarning,
+          transactionClient
+        );
+
+        if (requiredTaskBadgeProgress) {
+          await updateBadgeLevelProgress(
+            PERFECT_SCORE_REQUIRED,
+            assignedTask.pid,
+            1,
+            transactionClient
+          );
+        } else if (optionalTaskBadgeProgress) {
+          await updateBadgeLevelProgress(
+            PERFECT_SCORE_OPTIONAL,
+            assignedTask.pid,
+            1,
+            transactionClient
+          );
+        } else if (assignedTask.type === TaskType.INDIVIDUAL_GOAL) {
+          if (individualGoalBadgeProgress) {
+            await updateBadgeLevelProgress(
+              INDIVIDUAL_GOAL,
+              assignedTask.pid,
+              1,
+              transactionClient
+            );
+          }
+          await updateBadgeLevelProgress(
+            FIRST_GOAL,
+            assignedTask.pid,
+            1,
+            transactionClient
+          );
+        }
+
         if (!hasPreviouslyCompleted) {
           await updateBadgeLevelProgress(
             JACK_OF_ALL_TRADES,
             assignedTask.pid,
-            1
+            1,
+            transactionClient
           );
         }
-      }
 
-      return db.assignedTask.update({
-        where: { aid },
-        data: { status },
+        const completedTask = await transactionClient.assignedTask.findUnique({
+          where: { aid },
+        });
+        if (completedTask === null) throw new Error("assigned task not found");
+        return completedTask;
       });
     },
     deleteAssignedTask: async (

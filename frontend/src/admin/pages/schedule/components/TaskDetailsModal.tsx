@@ -63,8 +63,11 @@ export default function TaskDetailsModal({
       onClose();
       return;
     }
-    if (task.status !== TaskStatus.ASSIGNED) {
-      setError("Cannot update status of a non-assigned task");
+    if (
+      task.status === TaskStatus.COMPLETE &&
+      selectedStatus !== TaskStatus.COMPLETE
+    ) {
+      setError("Completed tasks cannot be changed");
       return;
     }
     try {
@@ -132,40 +135,45 @@ export default function TaskDetailsModal({
           Status
         </Text>
         <Flex gap="5px">
-          {task.status === TaskStatus.ASSIGNED && (
-            <BlackOutlineButton
-              label="Assigned"
-              action={() => setSelectedStatus(TaskStatus.ASSIGNED)}
-              is_active={selectedStatus === TaskStatus.ASSIGNED}
-              icon={<Assigned size={16} />}
-            />
-          )}
-          {(task.status === TaskStatus.ASSIGNED ||
-            task.status === TaskStatus.COMPLETE) && (
+          {task.status === TaskStatus.COMPLETE ? (
             <BlackOutlineButton
               label="Completed"
               action={() => setSelectedStatus(TaskStatus.COMPLETE)}
               is_active={selectedStatus === TaskStatus.COMPLETE}
+              active_color="#07545C"
               icon={<Complete size={16} />}
             />
-          )}
-          {(task.status === TaskStatus.ASSIGNED ||
-            task.status === TaskStatus.EXCUSED) && (
-            <BlackOutlineButton
-              label="Excused"
-              action={() => setSelectedStatus(TaskStatus.EXCUSED)}
-              is_active={selectedStatus === TaskStatus.EXCUSED}
-              icon={<Excused size={16} />}
-            />
-          )}
-          {(task.status === TaskStatus.ASSIGNED ||
-            task.status === TaskStatus.INCOMPLETE) && (
-            <BlackOutlineButton
-              label="Incomplete"
-              action={() => setSelectedStatus(TaskStatus.INCOMPLETE)}
-              is_active={selectedStatus === TaskStatus.INCOMPLETE}
-              icon={<Incomplete size={16} />}
-            />
+          ) : (
+            <>
+              <BlackOutlineButton
+                label="Assigned"
+                action={() => setSelectedStatus(TaskStatus.ASSIGNED)}
+                is_active={selectedStatus === TaskStatus.ASSIGNED}
+                active_color="#07545C"
+                icon={<Assigned size={16} />}
+              />
+              <BlackOutlineButton
+                label="Completed"
+                action={() => setSelectedStatus(TaskStatus.COMPLETE)}
+                is_active={selectedStatus === TaskStatus.COMPLETE}
+                active_color="#07545C"
+                icon={<Complete size={16} />}
+              />
+              <BlackOutlineButton
+                label="Excused"
+                action={() => setSelectedStatus(TaskStatus.EXCUSED)}
+                is_active={selectedStatus === TaskStatus.EXCUSED}
+                active_color="#07545C"
+                icon={<Excused size={16} />}
+              />
+              <BlackOutlineButton
+                label="Incomplete"
+                action={() => setSelectedStatus(TaskStatus.INCOMPLETE)}
+                is_active={selectedStatus === TaskStatus.INCOMPLETE}
+                active_color="#07545C"
+                icon={<Incomplete size={16} />}
+              />
+            </>
           )}
         </Flex>
       </Flex>
