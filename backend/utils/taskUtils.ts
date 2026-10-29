@@ -1,5 +1,18 @@
-import { addDays, endOfDay, startOfWeek, startOfDay } from "date-fns";
-import { Task, DayPreference, TimePreference, DayOfWeek } from "@prisma/client";
+import {
+  addDays,
+  differenceInCalendarDays,
+  endOfDay,
+  startOfWeek,
+  startOfDay,
+} from "date-fns";
+import {
+  Task,
+  DayPreference,
+  TimePreference,
+  DayOfWeek,
+  TaskStatus,
+  TaskType,
+} from "@prisma/client";
 import db from "../prisma";
 import { orderedDays } from "../constants/days";
 import {
@@ -7,6 +20,8 @@ import {
   getESTDate,
   getUTCDate,
   combineDayAndTime,
+  getStartOfWeek,
+  getEndOfWeek,
 } from "./dateUtils";
 
 type StartAndEndDates = {
@@ -14,7 +29,10 @@ type StartAndEndDates = {
   endDate: Date;
 };
 
-function buildStartAndEndDates(task: Task): StartAndEndDates[] {
+function buildStartAndEndDates(
+  task: Task,
+  weekDate: Date = new Date()
+): StartAndEndDates[] {
   const { day_preference, time_preference, days, start_time, end_time } = task;
 
   if (
@@ -26,7 +44,7 @@ function buildStartAndEndDates(task: Task): StartAndEndDates[] {
     );
   }
 
-  const estDate = getESTDate(new Date());
+  const estDate = getESTDate(weekDate);
   const startOfWeekEST = startOfWeek(estDate);
 
   let startTimeEST: Date;
@@ -79,34 +97,37 @@ function buildStartAndEndDates(task: Task): StartAndEndDates[] {
 
 export async function assignTasksToParticipants(
   tasks: Task[],
-  pids?: number[]
+  pids?: number[],
+  weekDate: Date = new Date()
 ) {
-  let participantPids: number[];
+  let participants: { pid: number; departure: Date | null }[];
   if (pids) {
-    participantPids = pids;
-  } else {
-    const participants = await db.participant.findMany({
-      where: {
-        OR: [
-          { departure: null },
-          { departure: { gt: getEndOfDay(new Date()) } },
-        ],
-      },
-      select: { pid: true },
+    participants = await db.participant.findMany({
+      where: { pid: { in: pids } },
+      select: { pid: true, departure: true },
     });
-    participantPids = participants.map((p) => p.pid);
+  } else {
+    participants = await db.participant.findMany({
+      where: {
+        OR: [{ departure: null }, { departure: { gt: getEndOfDay(weekDate) } }],
+      },
+      select: { pid: true, departure: true },
+    });
   }
 
   await Promise.all(
-    participantPids.map(async (pid) => {
+    participants.map(async (participant) => {
       await Promise.all(
         tasks.map(async (task) => {
-          const startAndEndDates = buildStartAndEndDates(task);
+          const startAndEndDates = buildStartAndEndDates(task, weekDate);
           await Promise.all(
             startAndEndDates.map(async ({ startDate, endDate }) => {
+              if (participant.departure && startDate >= participant.departure) {
+                return;
+              }
               await db.assignedTask.create({
                 data: {
-                  pid,
+                  pid: participant.pid,
                   tid: task.tid,
                   name: task.name,
                   type: task.type,
@@ -123,4 +144,138 @@ export async function assignTasksToParticipants(
       );
     })
   );
+}
+
+export async function carryOverTasks(
+  targetDate: Date = new Date()
+): Promise<void> {
+  const targetWeekStart = getStartOfWeek(targetDate);
+  const targetWeekEnd = getEndOfWeek(targetWeekStart);
+
+  const participants = await db.participant.findMany({
+    where: {
+      OR: [{ departure: null }, { departure: { gt: getEndOfDay(targetDate) } }],
+    },
+    select: {
+      pid: true,
+      departure: true,
+    },
+  });
+
+  const requiredTasks = await db.task.findMany({
+    where: { type: TaskType.REQUIRED },
+  });
+
+  await Promise.all(
+    participants.map(async (participant) => {
+      const existingCount = await db.assignedTask.count({
+        where: {
+          pid: participant.pid,
+          start_date: { lte: targetWeekEnd },
+          end_date: { gte: targetWeekStart },
+        },
+      });
+
+      if (existingCount > 0) {
+        return;
+      }
+
+      const lastTask = await db.assignedTask.findFirst({
+        where: {
+          pid: participant.pid,
+          start_date: { lt: targetWeekStart },
+        },
+        orderBy: { start_date: "desc" },
+      });
+
+      if (!lastTask) {
+        await assignTasksToParticipants(
+          requiredTasks,
+          [participant.pid],
+          targetWeekStart
+        );
+        return;
+      }
+
+      const sourceWeekStart = getStartOfWeek(lastTask.start_date);
+      const sourceWeekEnd = getEndOfWeek(sourceWeekStart);
+
+      const sourceTasks = await db.assignedTask.findMany({
+        where: {
+          pid: participant.pid,
+          start_date: { lte: sourceWeekEnd },
+          end_date: { gte: sourceWeekStart },
+        },
+        orderBy: { start_date: "asc" },
+      });
+
+      if (sourceTasks.length === 0) {
+        await assignTasksToParticipants(
+          requiredTasks,
+          [participant.pid],
+          targetWeekStart
+        );
+        return;
+      }
+
+      const sourceEST = getESTDate(sourceWeekStart);
+      const targetEST = getESTDate(targetWeekStart);
+      const dayDiff = differenceInCalendarDays(targetEST, sourceEST);
+
+      await Promise.all(
+        sourceTasks.map(async (task) => {
+          const taskStartEST = getESTDate(task.start_date);
+          const taskEndEST = getESTDate(task.end_date);
+          const newStartEST = addDays(taskStartEST, dayDiff);
+          const newEndEST = addDays(taskEndEST, dayDiff);
+          const newStartDate = getUTCDate(newStartEST);
+          const newEndDate = getUTCDate(newEndEST);
+
+          if (participant.departure && newStartDate >= participant.departure) {
+            return;
+          }
+
+          await db.assignedTask.create({
+            data: {
+              pid: participant.pid,
+              tid: task.tid,
+              name: task.name,
+              type: task.type,
+              value: task.value,
+              penalty: task.penalty,
+              comment: task.comment,
+              status: TaskStatus.ASSIGNED,
+              start_date: newStartDate,
+              end_date: newEndDate,
+            },
+          });
+        })
+      );
+    })
+  );
+}
+
+const processedWeeks = new Set<string>();
+const inFlightPromises = new Map<string, Promise<void>>();
+
+export async function ensureWeeklyTasksCarriedOver(
+  targetDate: Date = new Date()
+): Promise<void> {
+  const targetWeekStart = getStartOfWeek(targetDate).toISOString();
+  if (processedWeeks.has(targetWeekStart)) {
+    return;
+  }
+  let promise = inFlightPromises.get(targetWeekStart);
+  if (!promise) {
+    promise = (async () => {
+      try {
+        await carryOverTasks(targetDate);
+        processedWeeks.add(targetWeekStart);
+      } finally {
+        inFlightPromises.delete(targetWeekStart);
+      }
+    })();
+    inFlightPromises.set(targetWeekStart, promise);
+  }
+  await promise;
 }

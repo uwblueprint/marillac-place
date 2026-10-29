@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import getSchema from "./gql/schema";
+import { ensureWeeklyTasksCarriedOver } from "./utils/taskUtils";
 
 require("./crons/index");
 
@@ -42,7 +43,12 @@ app.get("*", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen({ port: PORT }, () => {
+app.listen({ port: PORT }, async () => {
   console.info(`Server is listening on port ${PORT}!`);
   console.info(`CORS enabled for origin: ${process.env.FRONTEND_URL}`);
+  try {
+    await ensureWeeklyTasksCarriedOver();
+  } catch (err) {
+    console.error("Failed to carry over weekly tasks on startup:", err);
+  }
 });
