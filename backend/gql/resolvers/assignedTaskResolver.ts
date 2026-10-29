@@ -15,10 +15,13 @@ import {
   getStartOfDay,
   getStartOfWeek,
 } from "../../utils/dateUtils";
+import { ensureWeeklyTasksCarriedOver } from "../../utils/taskUtils";
 
 const assignedTaskResolver = {
   Query: {
     getNumberOfAssignedTasksByRoom: async (): Promise<number[]> => {
+      await ensureWeeklyTasksCarriedOver(new Date());
+
       const currentParticipants = await db.participant.findMany({
         where: {
           OR: [
@@ -68,6 +71,8 @@ const assignedTaskResolver = {
         pid: number;
       }
     ): Promise<AssignedTask[]> => {
+      await ensureWeeklyTasksCarriedOver(new Date());
+
       return db.assignedTask.findMany({
         where: {
           pid,
@@ -90,6 +95,8 @@ const assignedTaskResolver = {
       }
     ): Promise<AssignedTask[]> => {
       const weekStartDate = new Date(weekStart);
+      await ensureWeeklyTasksCarriedOver(weekStartDate);
+
       return db.assignedTask.findMany({
         where: {
           pid,
@@ -109,6 +116,8 @@ const assignedTaskResolver = {
         pid: number;
       }
     ): Promise<boolean> => {
+      await ensureWeeklyTasksCarriedOver(new Date());
+
       const requiredTasksNotComplete = await db.assignedTask.findMany({
         where: {
           pid,

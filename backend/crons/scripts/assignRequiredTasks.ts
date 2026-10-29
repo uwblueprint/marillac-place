@@ -1,15 +1,10 @@
-import { Task, TaskType } from "@prisma/client";
-import db from "../../prisma";
-import { assignTasksToParticipants } from "../../utils/taskUtils";
+import { carryOverTasks } from "../../utils/taskUtils";
 
-// assigns all required tasks to each participant for the current week
+// carries over assigned tasks from the previous week to the current week for each participant
 async function assignRequiredTasks() {
   try {
-    const requiredTasks: Task[] = await db.task.findMany({
-      where: { type: TaskType.REQUIRED },
-    });
-    assignTasksToParticipants(requiredTasks);
-    console.log("successfully assigned required tasks to participants");
+    await carryOverTasks();
+    console.log("successfully carried over tasks for participants");
   } catch (err) {
     console.error(err);
   }
